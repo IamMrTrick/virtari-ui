@@ -20,6 +20,8 @@ import { Section, Row } from "../components";
 export function DrawerPage() {
   const [notifications, setNotifications] = useState(true);
   const [marketing, setMarketing] = useState(false);
+  const [adaptiveSnap, setAdaptiveSnap] = useState(1);
+  const [fullSnap, setFullSnap] = useState(1);
 
   return (
     <>
@@ -64,6 +66,91 @@ export function DrawerPage() {
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
+      </Section>
+
+      <Section
+        title="Snap Modes"
+        description="Adaptive, full-height, minimized, and step-by-step closing all share the same snap-point API."
+      >
+        <Row>
+          <Drawer
+            minimizedSize={76}
+            snapPoints={[0.5, 1]}
+            activeSnapPoint={adaptiveSnap}
+            onActiveSnapPointChange={setAdaptiveSnap}
+          >
+            <DrawerTrigger asChild>
+              <Button variant="outline">Adaptive + Minimized</Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHandle />
+              <DrawerTitle>Adaptive Sheet</DrawerTitle>
+              <DrawerDescription>
+                Full open, half stage, and minimized header. Pull down once to step smaller, then again to close.
+              </DrawerDescription>
+              <DrawerBody>
+                <div style={{ display: "grid", gap: "var(--vds-space-3)" }}>
+                  <div style={{ padding: "var(--vds-space-3)", border: "1px solid var(--vds-color-border-muted)", borderRadius: "var(--vds-radius-lg)" }}>
+                    Current snap value: {adaptiveSnap}
+                  </div>
+                  <Input placeholder="Search destinations" />
+                  <Input placeholder="Pickup location" />
+                  <Input placeholder="Notes for the driver" />
+                </div>
+              </DrawerBody>
+              <DrawerFooter>
+                <Button variant="outline" fullWidth onClick={() => setAdaptiveSnap(0.5)}>
+                  Half Stage
+                </Button>
+                <Button fullWidth onClick={() => setAdaptiveSnap(1)}>
+                  Full Stage
+                </Button>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+
+          <Drawer
+            sizeMode="full"
+            snapPoints={[0.45, 1]}
+            activeSnapPoint={fullSnap}
+            onActiveSnapPointChange={setFullSnap}
+          >
+            <DrawerTrigger asChild>
+              <Button variant="outline">Full Height</Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHandle />
+              <DrawerTitle>Full Height Sheet</DrawerTitle>
+              <DrawerDescription>
+                Opens to the viewport cap and can step back to a smaller stage before dismissing.
+              </DrawerDescription>
+              <DrawerBody>
+                <div style={{ display: "grid", gap: "var(--vds-space-3)" }}>
+                  {Array.from({ length: 8 }, (_, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        padding: "var(--vds-space-3)",
+                        borderRadius: "var(--vds-radius-lg)",
+                        border: "1px solid var(--vds-color-border-muted)",
+                      }}
+                    >
+                      Item {index + 1}
+                    </div>
+                  ))}
+                </div>
+              </DrawerBody>
+              <DrawerFooter>
+                <Button variant="outline" fullWidth onClick={() => setFullSnap(0.45)}>
+                  Half Height
+                </Button>
+                <Button fullWidth onClick={() => setFullSnap(1)}>
+                  Expand
+                </Button>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+        </Row>
       </Section>
 
       {/* ── All Directions ── */}
@@ -240,7 +327,7 @@ export function DrawerPage() {
   DrawerFooter, DrawerClose,
 } from "@virtari/react-drawer";
 
-// Bottom sheet with form
+// Adaptive sheet with minimize + staged close
 <Drawer direction="bottom">
   <DrawerTrigger asChild>
     <Button>Open</Button>
@@ -262,8 +349,28 @@ export function DrawerPage() {
   </DrawerContent>
 </Drawer>
 
+// Full-height staged sheet
+<Drawer
+  sizeMode="full"
+  minimizedSize={72}
+  snapPoints={[0.5, 1]}
+  defaultSnapPoint={1}
+>
+  <DrawerTrigger asChild>
+    <Button>Open</Button>
+  </DrawerTrigger>
+  <DrawerContent>
+    <DrawerHandle />
+    <DrawerTitle>Ride Options</DrawerTitle>
+    <DrawerDescription>
+      Pull to move between full, half, minimized, and closed states.
+    </DrawerDescription>
+    <DrawerBody>{/* scrollable content */}</DrawerBody>
+  </DrawerContent>
+</Drawer>
+
 // Directions: "bottom" | "top" | "left" | "right"
-// Scale background: add data-vds-drawer-wrapper to app root`}</pre>
+// sizeMode: "adaptive" | "full"`}</pre>
       </Section>
     </>
   );

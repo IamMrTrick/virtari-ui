@@ -1,43 +1,97 @@
 import {
-  useState,
-  useRef,
+  type ComponentPropsWithoutRef,
+  forwardRef,
   useCallback,
+  useEffect,
   useLayoutEffect,
-  type Ref,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentRef,
+  type ForwardedRef,
+  type MutableRefObject,
   type ReactNode,
 } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cn } from "@virtari/utils";
 import { DrawerProvider, useDrawerContext } from "./DrawerContext";
-import type { Direction } from "./utils";
+import { useDrawerGesture } from "./useDrawerGesture";
+import {
+  clamp,
+  getBackgroundStyles,
+  getElementSize,
+  getTranslateValue,
+  getViewportSize,
+  resolveSnapPoints,
+  type ResolvedSnapPoint,
+  type Direction,
+  type DrawerSizeMode,
+  type DrawerSnapPoint,
+} from "./utils";
 
-/* ── Constants (from vaul's proven values) ── */
-const DURATION = 0.5; // seconds
+const TRANSITION_MS = 280;
 const EASE_CSS = "cubic-bezier(0.32, 0.72, 0, 1)";
-const CLOSE_THRESHOLD = 0.25;
-const VELOCITY_THRESHOLD = 0.4; // px/ms
-const BORDER_RADIUS = 8;
+const VIEWPORT_SIZE_RATIO = 0.96;
 
-/** Apply inline styles, cache originals for reset */
-function setStyle(el: HTMLElement | null, styles: Record<string, string>) {
-  if (!el) return;
-  for (const [key, value] of Object.entries(styles)) {
-    if (key.startsWith("--")) {
-      el.style.setProperty(key, value);
-    } else {
-      (el.style as any)[key] = value;
+function composeEventHandlers<E>(
+  userHandler: ((event: E) => void) | undefined,
+  internalHandler: (event: E) => void,
+) {
+  return (event: E) => {
+    userHandler?.(event);
+
+    const defaultPrevented = typeof event === "object" &&
+      event !== null &&
+      "defaultPrevented" in event &&
+      Boolean((event as { defaultPrevented?: boolean }).defaultPrevented);
+
+    if (!defaultPrevented) {
+      internalHandler(event);
     }
+  };
+}
+
+function mergeRefs<T>(
+  ...refs: Array<ForwardedRef<T> | undefined>
+): (node: T | null) => void {
+  return (node) => {
+    for (const ref of refs) {
+      if (!ref) {
+        continue;
+      }
+
+      if (typeof ref === "function") {
+        ref(node);
+        continue;
+      }
+
+      (ref as MutableRefObject<T | null>).current = node;
+    }
+  };
+}
+
+function getWrapperElement(): HTMLElement | null {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  return document.querySelector("[data-vds-drawer-wrapper]");
+}
+
+function setTransition(element: HTMLElement | null, transition: string) {
+  if (element) {
+    element.style.transition = transition;
   }
 }
 
-/** Damping for overscroll (logarithmic) */
-function dampen(v: number): number {
-  return 8 * (Math.log(v + 1) - 2);
+function normalizeSnapPoints(
+  snapPoints: readonly DrawerSnapPoint[] | undefined,
+  minimizedSize: DrawerSnapPoint | undefined,
+): DrawerSnapPoint[] {
+  const basePoints = snapPoints?.length ? [...snapPoints] : [1];
+  const next = minimizedSize !== undefined ? [minimizedSize, ...basePoints] : basePoints;
+  return [...new Set(next)];
 }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * Drawer (Root)
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export interface DrawerProps {
   children: ReactNode;
@@ -45,10 +99,18 @@ export interface DrawerProps {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  sizeMode?: DrawerSizeMode;
+  snapPoints?: readonly DrawerSnapPoint[];
+  minimizedSize?: DrawerSnapPoint;
+  activeSnapPoint?: DrawerSnapPoint;
+  defaultSnapPoint?: DrawerSnapPoint;
+  onActiveSnapPointChange?: (value: DrawerSnapPoint) => void;
+  closeThreshold?: number;
+  velocityThreshold?: number;
+  dragHandleOnly?: boolean;
   scaleBackground?: boolean;
   modal?: boolean;
   dismissible?: boolean;
-  /** Prevent auto-focus on first focusable element (default: true) */
   preventAutoFocus?: boolean;
 }
 
@@ -58,343 +120,496 @@ export function Drawer({
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange: controlledOnOpenChange,
+  sizeMode = "adaptive",
+  snapPoints,
+  minimizedSize,
+  activeSnapPoint: controlledActiveSnapPoint,
+  defaultSnapPoint,
+  onActiveSnapPointChange,
+  closeThreshold = 0.5,
+  velocityThreshold = 0.45,
+  dragHandleOnly = false,
   scaleBackground = false,
   modal = true,
   dismissible = true,
   preventAutoFocus = true,
 }: DrawerProps) {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const isControlled = controlledOpen !== undefined;
-  const open = isControlled ? controlledOpen : internalOpen;
-
-  // Visible = keeps DOM mounted during close animation
-  const [visible, setVisible] = useState(open);
-  const [mounted, setMounted] = useState(false);
-  const [dragging, setDragging] = useState(false);
-
   const contentRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const handleRef = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<number>(0);
 
-  const onOpenChange = useCallback(
-    (value: boolean) => {
-      if (!dismissible && !value) return;
-
-      if (value) {
-        // Opening: show DOM immediately, animate in on next frame
-        setVisible(true);
-        if (!isControlled) setInternalOpen(true);
-        controlledOnOpenChange?.(true);
-      } else {
-        // Closing: animate out, then remove DOM after duration
-        setMounted(false);
-
-        // Reset background scale with transition
-        if (scaleBackground) {
-          const wrapper = document.querySelector("[data-vds-drawer-wrapper]") as HTMLElement;
-          if (wrapper) {
-            setStyle(wrapper, {
-              transition: `transform ${DURATION}s ${EASE_CSS}, border-radius ${DURATION}s ${EASE_CSS}`,
-              transform: "",
-              borderRadius: "",
-            });
-          }
-        }
-
-        // Wait for animation to finish, then unmount
-        setTimeout(() => {
-          setVisible(false);
-          if (!isControlled) setInternalOpen(false);
-          controlledOnOpenChange?.(false);
-        }, DURATION * 1000);
-      }
-    },
-    [isControlled, controlledOnOpenChange, dismissible, scaleBackground],
+  const resolvedSnapPoints = useMemo(
+    () => normalizeSnapPoints(snapPoints, minimizedSize),
+    [minimizedSize, snapPoints],
   );
+  const resolvedDefaultSnapPoint = defaultSnapPoint ?? snapPoints?.[snapPoints.length - 1] ?? 1;
 
-  // Trigger mount animation after DOM is rendered
-  useLayoutEffect(() => {
-    if (visible) {
-      // Double rAF: frame 1 = paint at closed position, frame 2 = trigger transition
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setMounted(true);
-        });
-      });
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const [internalSnapPoint, setInternalSnapPoint] = useState(resolvedDefaultSnapPoint);
+  const [present, setPresent] = useState(controlledOpen ?? defaultOpen);
+  const [dragging, setDragging] = useState(false);
+
+  const isOpenControlled = controlledOpen !== undefined;
+  const isSnapControlled = controlledActiveSnapPoint !== undefined;
+  const open = isOpenControlled ? controlledOpen : internalOpen;
+  const activeSnapPoint = isSnapControlled
+    ? controlledActiveSnapPoint ?? resolvedDefaultSnapPoint
+    : internalSnapPoint;
+
+  useEffect(() => {
+    window.clearTimeout(closeTimerRef.current);
+
+    if (open) {
+      setPresent(true);
+      return;
     }
-  }, [visible]);
+
+    if (!present) {
+      if (!isSnapControlled) {
+        setInternalSnapPoint(resolvedDefaultSnapPoint);
+      }
+      return;
+    }
+
+    closeTimerRef.current = window.setTimeout(() => {
+      setPresent(false);
+      setDragging(false);
+
+      if (!isSnapControlled) {
+        setInternalSnapPoint(resolvedDefaultSnapPoint);
+      }
+    }, TRANSITION_MS);
+
+    return () => {
+      window.clearTimeout(closeTimerRef.current);
+    };
+  }, [isSnapControlled, open, present, resolvedDefaultSnapPoint]);
+
+  useEffect(() => () => {
+    window.clearTimeout(closeTimerRef.current);
+  }, []);
+
+  const handleOpenChange = useCallback((nextOpen: boolean) => {
+    if (!dismissible && !nextOpen) {
+      return;
+    }
+
+    if (nextOpen) {
+      setPresent(true);
+    }
+
+    if (!isOpenControlled) {
+      setInternalOpen(nextOpen);
+    }
+
+    controlledOnOpenChange?.(nextOpen);
+  }, [controlledOnOpenChange, dismissible, isOpenControlled]);
+
+  const handleSnapPointChange = useCallback((nextValue: DrawerSnapPoint) => {
+    if (!isSnapControlled) {
+      setInternalSnapPoint(nextValue);
+    }
+
+    onActiveSnapPointChange?.(nextValue);
+  }, [isSnapControlled, onActiveSnapPointChange]);
 
   return (
     <DrawerProvider
       value={{
         direction,
-        open: visible,
+        open,
+        present,
         dragging,
-        snapIndex: 0,
-        contentRef,
-        overlayRef,
-        onOpenChange,
-        mounted,
-        setDragging,
+        dismissible,
+        dragHandleOnly,
         scaleBackground,
         preventAutoFocus,
+        sizeMode,
+        snapPoints: resolvedSnapPoints,
+        activeSnapPoint,
+        closeThreshold,
+        velocityThreshold,
+        contentRef,
+        overlayRef,
+        bodyRef,
+        handleRef,
+        onOpenChange: handleOpenChange,
+        onSnapPointChange: handleSnapPointChange,
+        setDragging,
       }}
     >
-      <DialogPrimitive.Root open={visible} onOpenChange={onOpenChange} modal={modal}>
+      <DialogPrimitive.Root open={open} onOpenChange={handleOpenChange} modal={modal}>
         {children}
       </DialogPrimitive.Root>
     </DrawerProvider>
   );
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * DrawerTrigger / DrawerClose
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
 export const DrawerTrigger = DialogPrimitive.Trigger;
 export const DrawerClose = DialogPrimitive.Close;
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * DrawerOverlay
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
 export interface DrawerOverlayProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> {
-  ref?: Ref<HTMLDivElement>;
-}
+  extends ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> {}
 
-export function DrawerOverlay({ className, ref, ...props }: DrawerOverlayProps) {
-  const { overlayRef, mounted } = useDrawerContext();
+export const DrawerOverlay = forwardRef<
+  ComponentRef<typeof DialogPrimitive.Overlay>,
+  DrawerOverlayProps
+>(function DrawerOverlay({ className, ...props }, forwardedRef) {
+  const { overlayRef, open } = useDrawerContext();
 
   return (
     <DialogPrimitive.Overlay
-      ref={(node) => {
-        (overlayRef as { current: HTMLDivElement | null }).current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) (ref as { current: HTMLDivElement | null }).current = node;
-      }}
+      ref={mergeRefs(overlayRef, forwardedRef)}
       className={cn("vds-drawer-overlay", className)}
-      data-mounted={mounted || undefined}
+      data-open={open || undefined}
       {...props}
     />
   );
-}
+});
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * DrawerContent — the main sliding panel with drag
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+interface DrawerLayout {
+  availableSize: number;
+  drawerSize: number;
+  snapEntries: ResolvedSnapPoint[];
+}
 
 export interface DrawerContentProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
-  ref?: Ref<HTMLDivElement>;
-}
+  extends ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {}
 
-export function DrawerContent({
-  className,
-  children,
-  ref,
-  ...props
-}: DrawerContentProps) {
+export const DrawerContent = forwardRef<
+  ComponentRef<typeof DialogPrimitive.Content>,
+  DrawerContentProps
+>(function DrawerContent(
+  {
+    className,
+    children,
+    onOpenAutoFocus,
+    onEscapeKeyDown,
+    onPointerDownOutside,
+    onInteractOutside,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
+    onPointerCancel,
+    onLostPointerCapture,
+    ...props
+  },
+  forwardedRef,
+) {
   const {
     direction,
+    open,
+    present,
     contentRef,
     overlayRef,
-    mounted,
+    bodyRef,
+    handleRef,
     dragging,
+    dismissible,
+    dragHandleOnly,
     setDragging,
     onOpenChange,
+    onSnapPointChange,
     scaleBackground,
     preventAutoFocus,
+    sizeMode,
+    snapPoints,
+    activeSnapPoint,
+    closeThreshold,
+    velocityThreshold,
   } = useDrawerContext();
 
-  // ── Drag state ──
-  const pointerStart = useRef({ x: 0, y: 0, time: 0 });
-  const dragDelta = useRef(0);
-  const isDraggingRef = useRef(false);
-  const drawerSizeRef = useRef(0);
+  const [layout, setLayout] = useState<DrawerLayout>({
+    availableSize: 0,
+    drawerSize: 0,
+    snapEntries: [],
+  });
+  const currentProgressRef = useRef(0);
+  const openAnimationRef = useRef<number>(0);
+  const resizeFrameRef = useRef<number>(0);
+  const hasOpenedRef = useRef(false);
 
-  // Measure drawer size
-  useLayoutEffect(() => {
-    const el = contentRef.current;
-    if (!el || !mounted) return;
-    drawerSizeRef.current =
-      direction === "left" || direction === "right" ? el.offsetWidth : el.offsetHeight;
-  }, [mounted, direction, contentRef]);
+  const activeSnapIndex = useMemo(() => {
+    const index = layout.snapEntries.findIndex((entry) => entry.value === activeSnapPoint);
 
-  /** Get drag delta in the drawer's axis, positive = closing direction */
-  const getDragDelta = (clientX: number, clientY: number): number => {
-    switch (direction) {
-      case "bottom": return clientY - pointerStart.current.y;
-      case "top": return pointerStart.current.y - clientY;
-      case "right": return clientX - pointerStart.current.x;
-      case "left": return pointerStart.current.x - clientX;
+    return index === -1 ? Math.max(layout.snapEntries.length - 1, 0) : index;
+  }, [activeSnapPoint, layout.snapEntries]);
+
+  const setAnimated = useCallback((enabled: boolean) => {
+    const contentEl = contentRef.current;
+    const overlayEl = overlayRef.current;
+    const wrapperEl = getWrapperElement();
+    const motion = enabled ? `transform ${TRANSITION_MS}ms ${EASE_CSS}` : "none";
+    const overlayMotion = enabled ? `opacity ${TRANSITION_MS}ms ${EASE_CSS}` : "none";
+    const wrapperMotion = enabled
+      ? `transform ${TRANSITION_MS}ms ${EASE_CSS}, border-radius ${TRANSITION_MS}ms ${EASE_CSS}`
+      : "none";
+
+    setTransition(contentEl, motion);
+    setTransition(overlayEl, overlayMotion);
+
+    if (scaleBackground) {
+      setTransition(wrapperEl, wrapperMotion);
     }
-  };
+  }, [contentRef, overlayRef, scaleBackground]);
 
-  /** Get the CSS translate value for a given drag offset */
-  const getTranslate = (offset: number): string => {
-    switch (direction) {
-      case "bottom": return `translate3d(0, ${offset}px, 0)`;
-      case "top": return `translate3d(0, ${-offset}px, 0)`;
-      case "right": return `translate3d(${offset}px, 0, 0)`;
-      case "left": return `translate3d(${-offset}px, 0, 0)`;
-    }
-  };
-
-  const handlePointerDown = (e: React.PointerEvent) => {
-    if (e.button !== 0) return;
-    pointerStart.current = { x: e.clientX, y: e.clientY, time: Date.now() };
-    isDraggingRef.current = false;
-    dragDelta.current = 0;
-
-    const el = contentRef.current;
-    if (el) {
-      el.style.transition = "none";
-      el.style.willChange = "transform";
-      el.setPointerCapture(e.pointerId);
-    }
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!pointerStart.current.time) return;
-
-    const delta = getDragDelta(e.clientX, e.clientY);
-
-    // Only start dragging after 8px in the correct direction
-    if (!isDraggingRef.current) {
-      if (delta < 8) return;
-      isDraggingRef.current = true;
-      setDragging(true);
-      // Reset start to current position for clean delta
-      pointerStart.current = { x: e.clientX, y: e.clientY, time: Date.now() };
+  const applyProgress = useCallback((progress: number) => {
+    if (layout.drawerSize <= 0) {
       return;
     }
 
-    e.preventDefault();
-    const rawDelta = getDragDelta(e.clientX, e.clientY);
-
-    // Clamp: allow closing direction fully, dampen opening overscroll
-    const clampedDelta = rawDelta > 0 ? rawDelta : dampen(-rawDelta) * -1;
-    dragDelta.current = rawDelta;
-
-    const el = contentRef.current;
-    if (el) {
-      el.style.transform = getTranslate(Math.max(0, clampedDelta));
-    }
-
-    // Fade overlay proportionally
+    const contentEl = contentRef.current;
     const overlayEl = overlayRef.current;
-    if (overlayEl && drawerSizeRef.current > 0) {
-      const progress = 1 - Math.max(0, clampedDelta) / drawerSizeRef.current;
-      overlayEl.style.opacity = String(Math.max(0, Math.min(1, progress)));
+    const wrapperEl = getWrapperElement();
+    const clampedProgress = clamp(progress, 0, 1);
+
+    if (contentEl) {
+      contentEl.style.transform = getTranslateValue(direction, layout.drawerSize, progress);
     }
 
-    // Scale background
-    if (scaleBackground && drawerSizeRef.current > 0) {
-      const progress = Math.max(0, clampedDelta) / drawerSizeRef.current;
-      const scale = 1 - (1 - progress) * 0.06;
-      const radius = (1 - progress) * BORDER_RADIUS;
-      const wrapper = document.querySelector("[data-vds-drawer-wrapper]") as HTMLElement;
-      if (wrapper) {
-        wrapper.style.transition = "none";
-        wrapper.style.transform = `scale(${Math.min(1, Math.max(0.94, scale))})`;
-        wrapper.style.borderRadius = `${radius}px`;
-      }
-    }
-  };
-
-  const handlePointerUp = (_e: React.PointerEvent) => {
-    if (!pointerStart.current.time) return;
-
-    const el = contentRef.current;
-    const elapsed = Math.max(Date.now() - pointerStart.current.time, 1);
-    const velocity = dragDelta.current / elapsed; // px/ms
-    const shouldClose =
-      velocity > VELOCITY_THRESHOLD ||
-      (dragDelta.current > 0 && dragDelta.current > drawerSizeRef.current * CLOSE_THRESHOLD);
-
-    // Reset
-    pointerStart.current = { x: 0, y: 0, time: 0 };
-    isDraggingRef.current = false;
-    setDragging(false);
-
-    if (el) {
-      el.style.willChange = "";
-      el.style.transition = `transform ${DURATION}s ${EASE_CSS}`;
+    if (overlayEl) {
+      overlayEl.style.opacity = String(clampedProgress);
     }
 
-    if (shouldClose) {
-      // Animate to closed position, then unmount
-      if (el) {
-        el.style.transform = getTranslate(drawerSizeRef.current);
+    if (scaleBackground && wrapperEl) {
+      if (clampedProgress <= 0) {
+        wrapperEl.style.transform = "";
+        wrapperEl.style.borderRadius = "";
+      } else {
+        const backgroundStyles = getBackgroundStyles(clampedProgress);
+        wrapperEl.style.transform = backgroundStyles.transform;
+        wrapperEl.style.borderRadius = backgroundStyles.borderRadius;
       }
-      const overlayEl = overlayRef.current;
-      if (overlayEl) {
-        overlayEl.style.transition = `opacity ${DURATION}s ${EASE_CSS}`;
-        overlayEl.style.opacity = "0";
-      }
+    }
+
+    currentProgressRef.current = progress;
+  }, [contentRef, direction, layout.drawerSize, overlayRef, scaleBackground]);
+
+  const syncToSnapPoint = useCallback((animated: boolean) => {
+    if (layout.drawerSize <= 0) {
+      return;
+    }
+
+    const targetSize = layout.snapEntries[activeSnapIndex]?.size ?? layout.drawerSize;
+    const progress = targetSize / layout.drawerSize;
+
+    setAnimated(animated);
+    applyProgress(progress);
+  }, [activeSnapIndex, applyProgress, layout.drawerSize, layout.snapEntries, setAnimated]);
+
+  const updateMeasurements = useCallback(() => {
+    const contentEl = contentRef.current;
+
+    if (!contentEl) {
+      return;
+    }
+
+    const availableSize = Math.max(getViewportSize(direction) * VIEWPORT_SIZE_RATIO, 1);
+    contentEl.style.setProperty("--vds-drawer-available-size", `${availableSize}px`);
+
+    const drawerSize = getElementSize(contentEl, direction);
+    if (drawerSize <= 0) {
+      return;
+    }
+
+    const snapEntries = resolveSnapPoints(snapPoints, drawerSize);
+
+    setLayout((current) => {
+      const next = { availableSize, drawerSize, snapEntries };
+      const unchanged = current.availableSize === next.availableSize &&
+        current.drawerSize === next.drawerSize &&
+        current.snapEntries.length === next.snapEntries.length &&
+        current.snapEntries.every((point, index) =>
+          point.value === next.snapEntries[index]?.value &&
+          point.size === next.snapEntries[index]?.size
+        );
+
+      return unchanged ? current : next;
+    });
+  }, [contentRef, direction, sizeMode, snapPoints]);
+
+  useLayoutEffect(() => {
+    if (!present) {
+      hasOpenedRef.current = false;
+      return;
+    }
+
+    updateMeasurements();
+
+    const scheduleMeasurement = () => {
+      cancelAnimationFrame(resizeFrameRef.current);
+      resizeFrameRef.current = requestAnimationFrame(updateMeasurements);
+    };
+
+    const contentEl = contentRef.current;
+    const resizeObserver = new ResizeObserver(scheduleMeasurement);
+
+    if (contentEl) {
+      resizeObserver.observe(contentEl);
+    }
+
+    if (bodyRef.current && bodyRef.current !== contentEl) {
+      resizeObserver.observe(bodyRef.current);
+    }
+
+    window.addEventListener("resize", scheduleMeasurement);
+    window.visualViewport?.addEventListener("resize", scheduleMeasurement);
+    window.visualViewport?.addEventListener("scroll", scheduleMeasurement);
+
+    return () => {
+      cancelAnimationFrame(resizeFrameRef.current);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", scheduleMeasurement);
+      window.visualViewport?.removeEventListener("resize", scheduleMeasurement);
+      window.visualViewport?.removeEventListener("scroll", scheduleMeasurement);
+    };
+  }, [bodyRef, contentRef, present, updateMeasurements]);
+
+  useLayoutEffect(() => {
+    if (!present || layout.drawerSize <= 0) {
+      return;
+    }
+
+    cancelAnimationFrame(openAnimationRef.current);
+
+    if (!open) {
+      hasOpenedRef.current = false;
+      setAnimated(true);
+      applyProgress(0);
+      return;
+    }
+
+    if (!hasOpenedRef.current) {
+      hasOpenedRef.current = true;
+      setAnimated(false);
+      applyProgress(0);
+
+      openAnimationRef.current = requestAnimationFrame(() => {
+        openAnimationRef.current = requestAnimationFrame(() => {
+          syncToSnapPoint(true);
+        });
+      });
+
+      return () => {
+        cancelAnimationFrame(openAnimationRef.current);
+      };
+    }
+
+    if (!dragging) {
+      syncToSnapPoint(true);
+    }
+  }, [applyProgress, dragging, layout.drawerSize, open, present, setAnimated, syncToSnapPoint]);
+
+  useEffect(() => {
+    if (present) {
+      return;
+    }
+
+    const wrapperEl = getWrapperElement();
+    if (!wrapperEl) {
+      return;
+    }
+
+    wrapperEl.style.transition = "";
+    wrapperEl.style.transform = "";
+    wrapperEl.style.borderRadius = "";
+  }, [present]);
+
+  const gesture = useDrawerGesture({
+    direction,
+    drawerSize: layout.drawerSize,
+    snapSizes: layout.snapEntries.map((entry) => entry.size),
+    currentSnapIndex: activeSnapIndex,
+    getCurrentProgress: () => currentProgressRef.current,
+    closeThreshold,
+    velocityThreshold,
+    dismissible,
+    dragHandleOnly,
+    onDragStart: () => {
+      setDragging(true);
+      setAnimated(false);
+    },
+    onDragProgress: (progress) => {
+      applyProgress(progress);
+    },
+    onDragCancel: () => {
+      syncToSnapPoint(true);
+    },
+    onDragEnd: () => {
+      setDragging(false);
+      setAnimated(true);
+    },
+    onSnap: (index) => {
+      onSnapPointChange(layout.snapEntries[index]?.value ?? activeSnapPoint);
+    },
+    onDismiss: () => {
       onOpenChange(false);
-    } else {
-      // Snap back to open
-      if (el) {
-        el.style.transform = getTranslate(0);
-      }
-      const overlayEl = overlayRef.current;
-      if (overlayEl) {
-        overlayEl.style.transition = `opacity ${DURATION}s ${EASE_CSS}`;
-        overlayEl.style.opacity = "1";
-      }
-      // Reset background
-      if (scaleBackground) {
-        const wrapper = document.querySelector("[data-vds-drawer-wrapper]") as HTMLElement;
-        if (wrapper) {
-          wrapper.style.transition = `transform ${DURATION}s ${EASE_CSS}, border-radius ${DURATION}s ${EASE_CSS}`;
-          wrapper.style.transform = "scale(0.94)";
-          wrapper.style.borderRadius = `${BORDER_RADIUS}px`;
-        }
-      }
-    }
-  };
+    },
+    getContentEl: () => contentRef.current,
+    getHandleEl: () => handleRef.current,
+    getScrollableEl: () => bodyRef.current ?? contentRef.current,
+  });
 
   return (
-    <DialogPrimitive.Portal forceMount={undefined}>
-      <DrawerOverlay />
+    <DialogPrimitive.Portal forceMount={present ? true : undefined}>
+      <DrawerOverlay forceMount={present ? true : undefined} />
       <DialogPrimitive.Content
-        ref={(node) => {
-          (contentRef as { current: HTMLDivElement | null }).current = node;
-          if (typeof ref === "function") ref(node);
-          else if (ref) (ref as { current: HTMLDivElement | null }).current = node;
-        }}
+        forceMount={present ? true : undefined}
+        ref={mergeRefs(contentRef, forwardedRef)}
         className={cn("vds-drawer-content", className)}
         data-direction={direction}
+        data-open={open || undefined}
         data-dragging={dragging || undefined}
-        data-mounted={mounted || undefined}
-        onOpenAutoFocus={(e) => {
-          if (preventAutoFocus) e.preventDefault();
-        }}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
+        data-size-mode={sizeMode}
+        onOpenAutoFocus={composeEventHandlers(onOpenAutoFocus, (event) => {
+          if (preventAutoFocus) {
+            event.preventDefault();
+          }
+        })}
+        onEscapeKeyDown={composeEventHandlers(onEscapeKeyDown, (event) => {
+          if (!dismissible) {
+            event.preventDefault();
+          }
+        })}
+        onPointerDownOutside={composeEventHandlers(onPointerDownOutside, (event) => {
+          if (!dismissible) {
+            event.preventDefault();
+          }
+        })}
+        onInteractOutside={composeEventHandlers(onInteractOutside, (event) => {
+          if (!dismissible) {
+            event.preventDefault();
+          }
+        })}
+        onPointerDown={composeEventHandlers(onPointerDown, gesture.onPointerDown)}
+        onPointerMove={composeEventHandlers(onPointerMove, gesture.onPointerMove)}
+        onPointerUp={composeEventHandlers(onPointerUp, gesture.onPointerUp)}
+        onPointerCancel={composeEventHandlers(onPointerCancel, gesture.onPointerCancel)}
+        onLostPointerCapture={composeEventHandlers(
+          onLostPointerCapture,
+          gesture.onLostPointerCapture,
+        )}
         {...props}
       >
         {children}
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>
   );
-}
+});
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * DrawerHandle — grab indicator bar
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+export interface DrawerHandleProps extends ComponentPropsWithoutRef<"div"> {}
 
-export interface DrawerHandleProps extends React.HTMLAttributes<HTMLDivElement> {
-  ref?: Ref<HTMLDivElement>;
-}
+export const DrawerHandle = forwardRef<HTMLDivElement, DrawerHandleProps>(function DrawerHandle(
+  { className, ...props },
+  forwardedRef,
+) {
+  const { direction, handleRef } = useDrawerContext();
 
-export function DrawerHandle({ className, ref, ...props }: DrawerHandleProps) {
-  const { direction } = useDrawerContext();
   return (
     <div
-      ref={ref}
+      ref={mergeRefs(handleRef, forwardedRef)}
       className={cn("vds-drawer-handle", className)}
       data-direction={direction}
       aria-hidden="true"
@@ -403,36 +618,69 @@ export function DrawerHandle({ className, ref, ...props }: DrawerHandleProps) {
       <div className="vds-drawer-handle-bar" />
     </div>
   );
-}
+});
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * DrawerTitle / Description / Body / Footer
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+export interface DrawerTitleProps
+  extends ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {}
 
-export interface DrawerTitleProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {
-  ref?: Ref<HTMLHeadingElement>;
-}
-export function DrawerTitle({ className, ref, ...props }: DrawerTitleProps) {
-  return <DialogPrimitive.Title ref={ref} className={cn("vds-drawer-title", className)} {...props} />;
-}
+export const DrawerTitle = forwardRef<
+  ComponentRef<typeof DialogPrimitive.Title>,
+  DrawerTitleProps
+>(function DrawerTitle({ className, ...props }, forwardedRef) {
+  return (
+    <DialogPrimitive.Title
+      ref={forwardedRef}
+      className={cn("vds-drawer-title", className)}
+      {...props}
+    />
+  );
+});
 
-export interface DrawerDescriptionProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> {
-  ref?: Ref<HTMLParagraphElement>;
-}
-export function DrawerDescription({ className, ref, ...props }: DrawerDescriptionProps) {
-  return <DialogPrimitive.Description ref={ref} className={cn("vds-drawer-description", className)} {...props} />;
-}
+export interface DrawerDescriptionProps
+  extends ComponentPropsWithoutRef<typeof DialogPrimitive.Description> {}
 
-export interface DrawerBodyProps extends React.HTMLAttributes<HTMLDivElement> {
-  ref?: Ref<HTMLDivElement>;
-}
-export function DrawerBody({ className, ref, ...props }: DrawerBodyProps) {
-  return <div ref={ref} className={cn("vds-drawer-body", className)} {...props} />;
-}
+export const DrawerDescription = forwardRef<
+  ComponentRef<typeof DialogPrimitive.Description>,
+  DrawerDescriptionProps
+>(function DrawerDescription({ className, ...props }, forwardedRef) {
+  return (
+    <DialogPrimitive.Description
+      ref={forwardedRef}
+      className={cn("vds-drawer-description", className)}
+      {...props}
+    />
+  );
+});
 
-export interface DrawerFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-  ref?: Ref<HTMLDivElement>;
-}
-export function DrawerFooter({ className, ref, ...props }: DrawerFooterProps) {
-  return <div ref={ref} className={cn("vds-drawer-footer", className)} {...props} />;
-}
+export interface DrawerBodyProps extends ComponentPropsWithoutRef<"div"> {}
+
+export const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>(function DrawerBody(
+  { className, ...props },
+  forwardedRef,
+) {
+  const { bodyRef } = useDrawerContext();
+
+  return (
+    <div
+      ref={mergeRefs(bodyRef, forwardedRef)}
+      className={cn("vds-drawer-body", className)}
+      data-vds-drawer-scroll-region=""
+      {...props}
+    />
+  );
+});
+
+export interface DrawerFooterProps extends ComponentPropsWithoutRef<"div"> {}
+
+export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(function DrawerFooter(
+  { className, ...props },
+  forwardedRef,
+) {
+  return (
+    <div
+      ref={forwardedRef}
+      className={cn("vds-drawer-footer", className)}
+      {...props}
+    />
+  );
+});

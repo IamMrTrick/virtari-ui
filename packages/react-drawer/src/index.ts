@@ -22,4 +22,4 @@ export type {
   DrawerBodyProps,
 } from "./Drawer";
 
-export type { Direction } from "./utils";
+export type { Direction, DrawerSizeMode, DrawerSnapPoint } from "./utils";

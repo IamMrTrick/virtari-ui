@@ -15,7 +15,7 @@
 @import "@virtari/react-tabs/styles";
 @import "@virtari/react-select/styles";
 @import "@virtari/react-dialog/styles";
-@import "@virtari/react-drawer/styles";
+@import "../../../../packages/react-drawer/dist/Drawer.css";
 @import "@virtari/react-tooltip/styles";
 @import "@virtari/react-popover/styles";
 @import "@virtari/react-dropdown-menu/styles";

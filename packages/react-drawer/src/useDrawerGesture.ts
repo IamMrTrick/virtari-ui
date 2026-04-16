@@ -1,302 +1,256 @@
 import { useCallback, useRef } from "react";
 import {
-  type Direction,
+  applyRubberband,
+  findNearestSnapIndex,
   getAxis,
-  deltaToProgress,
-  isScrolledToEdge,
-  findSnapTarget,
-  resolveSnapPoints,
-  getTranslateValue,
-  getBackgroundStyles,
-  clamp,
+  getCoordinate,
+  getCrossCoordinate,
+  getDirectionSign,
+  isScrolledToDragEdge,
 } from "./utils";
+import type { Direction } from "./utils";
+
+const AXIS_LOCK_THRESHOLD = 8;
+const PROJECTION_MS = 180;
 
 export interface GestureConfig {
   direction: Direction;
   drawerSize: number;
-  snapPoints: number[];
+  snapSizes: readonly number[];
   currentSnapIndex: number;
-  threshold: number;
+  getCurrentProgress: () => number;
+  closeThreshold: number;
   velocityThreshold: number;
   dismissible: boolean;
-  scaleBackground: boolean;
-  onProgressChange: (progress: number) => void;
+  dragHandleOnly: boolean;
+  onDragStart: () => void;
+  onDragProgress: (progress: number) => void;
+  onDragCancel: () => void;
+  onDragEnd: () => void;
   onSnap: (snapIndex: number) => void;
   onDismiss: () => void;
   getContentEl: () => HTMLElement | null;
-  getOverlayEl: () => HTMLElement | null;
+  getHandleEl: () => HTMLElement | null;
   getScrollableEl: () => HTMLElement | null;
-  getWrapperEl: () => HTMLElement | null;
 }
 
 interface PointerState {
   pointerId: number;
   startX: number;
   startY: number;
-  startTime: number;
-  currentX: number;
-  currentY: number;
-  isDragging: boolean;
-  isAxisLocked: boolean;
-  lockedAxis: "x" | "y" | null;
+  startCoord: number;
   startProgress: number;
-  lastMoveTime: number;
-  lastDelta: number;
+  startSnapIndex: number;
+  dragging: boolean;
+  axisLocked: boolean;
+  target: HTMLElement | null;
+  lastSampleCoord: number;
+  lastSampleTime: number;
+}
+
+function isTargetWithinElement(target: HTMLElement | null, element: HTMLElement | null): boolean {
+  if (!target || !element) {
+    return false;
+  }
+
+  return element.contains(target);
 }
 
 export function useDrawerGesture(config: GestureConfig) {
   const stateRef = useRef<PointerState | null>(null);
-  const scrollGraceRef = useRef(false);
-  const rafRef = useRef<number>(0);
 
-  const applyTransform = useCallback(
-    (progress: number) => {
-      const contentEl = config.getContentEl();
-      const overlayEl = config.getOverlayEl();
-      const wrapperEl = config.getWrapperEl();
+  const resetState = useCallback((pointerId?: number) => {
+    const state = stateRef.current;
 
-      if (contentEl) {
-        contentEl.style.transform = getTranslateValue(
-          config.direction,
-          config.drawerSize,
-          progress,
-        );
+    if (!state) {
+      return;
+    }
+
+    const contentEl = config.getContentEl();
+    if (contentEl && (pointerId === undefined || contentEl.hasPointerCapture(pointerId))) {
+      try {
+        contentEl.releasePointerCapture(pointerId ?? state.pointerId);
+      } catch {
+        // Pointer capture might already be released.
       }
+    }
 
-      if (overlayEl) {
-        overlayEl.style.opacity = String(clamp(progress, 0, 1));
-      }
+    stateRef.current = null;
+  }, [config]);
 
-      if (config.scaleBackground && wrapperEl) {
-        const bg = getBackgroundStyles(clamp(progress, 0, 1));
-        wrapperEl.style.transform = bg.transform;
-        wrapperEl.style.borderRadius = bg.borderRadius;
-      }
-    },
-    [config],
-  );
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    if (stateRef.current || e.button !== 0 || config.drawerSize <= 0) {
+      return;
+    }
 
-  const onPointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      // Only track primary pointer (ignore multi-touch after first)
-      if (stateRef.current) return;
-      if (e.button !== 0) return;
+    const target = e.target instanceof HTMLElement ? e.target : null;
+    const handleEl = config.getHandleEl();
 
-      const contentEl = config.getContentEl();
-      if (contentEl) {
-        contentEl.style.willChange = "transform";
-        contentEl.setAttribute("data-dragging", "");
-      }
+    if (config.dragHandleOnly && !isTargetWithinElement(target, handleEl)) {
+      return;
+    }
 
-      stateRef.current = {
-        pointerId: e.pointerId,
-        startX: e.clientX,
-        startY: e.clientY,
-        startTime: Date.now(),
-        currentX: e.clientX,
-        currentY: e.clientY,
-        isDragging: false,
-        isAxisLocked: false,
-        lockedAxis: null,
-        startProgress: 1, // fully open
-        lastMoveTime: Date.now(),
-        lastDelta: 0,
-      };
+    const contentEl = config.getContentEl();
+    if (!contentEl) {
+      return;
+    }
 
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    },
-    [config],
-  );
+    contentEl.setPointerCapture(e.pointerId);
 
-  const onPointerMove = useCallback(
-    (e: React.PointerEvent) => {
-      const state = stateRef.current;
-      if (!state || state.pointerId !== e.pointerId) return;
+    stateRef.current = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      startCoord: getCoordinate(config.direction, e.clientX, e.clientY),
+      startProgress: config.getCurrentProgress(),
+      startSnapIndex: config.currentSnapIndex,
+      dragging: false,
+      axisLocked: false,
+      target,
+      lastSampleCoord: getCoordinate(config.direction, e.clientX, e.clientY),
+      lastSampleTime: performance.now(),
+    };
+  }, [config]);
 
-      state.currentX = e.clientX;
-      state.currentY = e.clientY;
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    const state = stateRef.current;
 
-      const dx = e.clientX - state.startX;
-      const dy = e.clientY - state.startY;
-      const absDx = Math.abs(dx);
-      const absDy = Math.abs(dy);
+    if (!state || state.pointerId !== e.pointerId) {
+      return;
+    }
 
-      // Axis lock after 10px of movement
-      if (!state.isAxisLocked) {
-        const totalDist = Math.sqrt(dx * dx + dy * dy);
-        if (totalDist < 10) return;
+    const axis = getAxis(config.direction);
+    const mainDelta = axis === "x" ? e.clientX - state.startX : e.clientY - state.startY;
+    const crossDelta = getCrossCoordinate(config.direction, e.clientX, e.clientY) -
+      getCrossCoordinate(config.direction, state.startX, state.startY);
 
-        const drawerAxis = getAxis(config.direction);
-        const dominantAxis = absDx > absDy ? "x" : "y";
-
-        // If dominant axis doesn't match drawer axis, don't drag
-        if (dominantAxis !== drawerAxis) {
-          stateRef.current = null;
-          const contentEl = config.getContentEl();
-          if (contentEl) {
-            contentEl.style.willChange = "";
-            contentEl.removeAttribute("data-dragging");
-          }
-          return;
-        }
-
-        // Check if scrollable content is at edge
-        const scrollableEl = config.getScrollableEl();
-        if (!isScrolledToEdge(scrollableEl, config.direction)) {
-          if (!scrollGraceRef.current) {
-            stateRef.current = null;
-            const contentEl = config.getContentEl();
-            if (contentEl) {
-              contentEl.style.willChange = "";
-              contentEl.removeAttribute("data-dragging");
-            }
-            return;
-          }
-        }
-
-        state.isAxisLocked = true;
-        state.lockedAxis = drawerAxis;
-        state.startX = e.clientX;
-        state.startY = e.clientY;
-        state.startTime = Date.now();
-      }
-
-      if (!state.isAxisLocked) return;
-
-      e.preventDefault();
-      state.isDragging = true;
-
-      const delta = state.lockedAxis === "x"
-        ? e.clientX - state.startX
-        : e.clientY - state.startY;
-
-      state.lastDelta = delta;
-      state.lastMoveTime = Date.now();
-
-      // Calculate progress from snap point
-      const snapsPx = resolveSnapPoints(config.snapPoints, config.drawerSize);
-      const currentSnapPx = snapsPx[config.currentSnapIndex] ?? config.drawerSize;
-      const currentProgress = currentSnapPx / config.drawerSize;
-      const progress = deltaToProgress(config.direction, delta, config.drawerSize);
-      const adjustedProgress = clamp(
-        currentProgress - (currentProgress - progress),
-        0,
-        1.08,
-      );
-
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        applyTransform(adjustedProgress);
-        config.onProgressChange(adjustedProgress);
-      });
-    },
-    [config, applyTransform],
-  );
-
-  const onPointerUp = useCallback(
-    (e: React.PointerEvent) => {
-      const state = stateRef.current;
-      if (!state || state.pointerId !== e.pointerId) return;
-
-      cancelAnimationFrame(rafRef.current);
-
-      const contentEl = config.getContentEl();
-      if (contentEl) {
-        contentEl.style.willChange = "";
-        contentEl.removeAttribute("data-dragging");
-      }
-
-      if (!state.isDragging) {
-        stateRef.current = null;
+    if (!state.axisLocked) {
+      if (Math.abs(mainDelta) < AXIS_LOCK_THRESHOLD) {
         return;
       }
 
-      // Calculate velocity (px/ms)
-      const elapsed = Math.max(Date.now() - state.lastMoveTime, 1);
-      const velocity = state.lastDelta / elapsed;
-      const absVelocity = Math.abs(velocity);
-
-      // Current position as pixels
-      const delta = state.lockedAxis === "x"
-        ? e.clientX - state.startX
-        : e.clientY - state.startY;
-
-      const snapsPx = resolveSnapPoints(config.snapPoints, config.drawerSize);
-      const currentSnapPx = snapsPx[config.currentSnapIndex] ?? config.drawerSize;
-      const currentPosPx = currentSnapPx + delta * (config.direction === "bottom" || config.direction === "right" ? -1 : 1);
-
-      // Check velocity-based dismiss
-      const isClosingDirection =
-        (config.direction === "bottom" && velocity > 0) ||
-        (config.direction === "top" && velocity < 0) ||
-        (config.direction === "right" && velocity > 0) ||
-        (config.direction === "left" && velocity < 0);
-
-      if (
-        config.dismissible &&
-        isClosingDirection &&
-        absVelocity > config.velocityThreshold
-      ) {
-        stateRef.current = null;
-        config.onDismiss();
+      if (Math.abs(crossDelta) > Math.abs(mainDelta)) {
+        resetState(e.pointerId);
         return;
       }
 
-      // Check threshold-based dismiss
-      if (
-        config.dismissible &&
-        currentPosPx < config.drawerSize * config.threshold
-      ) {
-        stateRef.current = null;
-        config.onDismiss();
+      const handleEl = config.getHandleEl();
+      const scrollableEl = config.getScrollableEl();
+      const shouldBypassScrollGuard = isTargetWithinElement(state.target, handleEl);
+
+      if (!shouldBypassScrollGuard && !isScrolledToDragEdge(scrollableEl, config.direction)) {
+        resetState(e.pointerId);
         return;
       }
 
-      // Find snap target
-      const targetPx = findSnapTarget(
-        currentPosPx,
-        velocity * (config.direction === "bottom" || config.direction === "right" ? -1 : 1),
-        snapsPx,
-      );
-      const targetIndex = snapsPx.indexOf(targetPx);
+      state.axisLocked = true;
+    }
 
-      stateRef.current = null;
+    e.preventDefault();
 
-      if (targetIndex !== -1) {
-        config.onSnap(targetIndex);
-      }
-    },
-    [config],
-  );
+    if (!state.dragging) {
+      state.dragging = true;
+      config.onDragStart();
+    }
 
-  const onPointerCancel = useCallback(
-    (e: React.PointerEvent) => {
-      if (stateRef.current?.pointerId === e.pointerId) {
-        const contentEl = config.getContentEl();
-        if (contentEl) {
-          contentEl.style.willChange = "";
-          contentEl.removeAttribute("data-dragging");
-        }
-        stateRef.current = null;
-      }
-    },
-    [config],
-  );
+    const coord = getCoordinate(config.direction, e.clientX, e.clientY);
+    const progress = state.startProgress +
+      ((coord - state.startCoord) * getDirectionSign(config.direction)) / config.drawerSize;
 
-  /** Call when scroll velocity is high (prevent accidental close for 100ms) */
-  const setScrollGrace = useCallback(() => {
-    scrollGraceRef.current = true;
-    setTimeout(() => {
-      scrollGraceRef.current = false;
-    }, 100);
-  }, []);
+    state.lastSampleCoord = coord;
+    state.lastSampleTime = performance.now();
+
+    config.onDragProgress(applyRubberband(progress, config.drawerSize));
+  }, [config, resetState]);
+
+  const onPointerUp = useCallback((e: React.PointerEvent) => {
+    const state = stateRef.current;
+
+    if (!state || state.pointerId !== e.pointerId) {
+      return;
+    }
+
+    const now = performance.now();
+    const coord = getCoordinate(config.direction, e.clientX, e.clientY);
+    const velocity = (coord - state.lastSampleCoord) / Math.max(now - state.lastSampleTime, 1);
+    const openVelocity = velocity * getDirectionSign(config.direction);
+    const rawProgress = state.startProgress +
+      ((coord - state.startCoord) * getDirectionSign(config.direction)) / config.drawerSize;
+    const clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
+    const currentSize = clampedProgress * config.drawerSize;
+    const projectedSize = currentSize + openVelocity * PROJECTION_MS;
+    const smallestSnap = config.snapSizes[0] ?? config.drawerSize;
+
+    resetState(e.pointerId);
+
+    if (!state.dragging) {
+      return;
+    }
+
+    config.onDragEnd();
+
+    const canDismiss = config.dismissible &&
+      (config.snapSizes.length <= 1 || state.startSnapIndex === 0);
+    const dismissThreshold = smallestSnap * config.closeThreshold;
+    const isFastDismiss = openVelocity < -config.velocityThreshold &&
+      currentSize < smallestSnap * 0.9;
+
+    if (canDismiss && (projectedSize <= dismissThreshold || isFastDismiss)) {
+      config.onDismiss();
+      return;
+    }
+
+    const candidateIndexes = [state.startSnapIndex];
+    if (projectedSize > (config.snapSizes[state.startSnapIndex] ?? config.drawerSize) &&
+      state.startSnapIndex < config.snapSizes.length - 1) {
+      candidateIndexes.push(state.startSnapIndex + 1);
+    }
+    if (projectedSize < (config.snapSizes[state.startSnapIndex] ?? config.drawerSize) &&
+      state.startSnapIndex > 0) {
+      candidateIndexes.push(state.startSnapIndex - 1);
+    }
+
+    const targetIndex = findNearestSnapIndex(projectedSize, config.snapSizes, candidateIndexes);
+    config.onSnap(targetIndex);
+  }, [config, resetState]);
+
+  const onPointerCancel = useCallback((e: React.PointerEvent) => {
+    const state = stateRef.current;
+
+    if (!state || state.pointerId !== e.pointerId) {
+      return;
+    }
+
+    const wasDragging = state.dragging;
+    resetState(e.pointerId);
+
+    if (wasDragging) {
+      config.onDragEnd();
+      config.onDragCancel();
+    }
+  }, [config, resetState]);
+
+  const onLostPointerCapture = useCallback((e: React.PointerEvent) => {
+    const state = stateRef.current;
+
+    if (!state || state.pointerId !== e.pointerId) {
+      return;
+    }
+
+    const wasDragging = state.dragging;
+    resetState(e.pointerId);
+
+    if (wasDragging) {
+      config.onDragEnd();
+      config.onDragCancel();
+    }
+  }, [config, resetState]);
 
   return {
     onPointerDown,
     onPointerMove,
     onPointerUp,
     onPointerCancel,
-    applyTransform,
-    setScrollGrace,
+    onLostPointerCapture,
   };
 }

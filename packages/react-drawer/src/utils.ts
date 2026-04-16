@@ -1,38 +1,79 @@
 export type Direction = "bottom" | "top" | "left" | "right";
 
+export type DrawerSizeMode = "adaptive" | "full";
+
+export type DrawerSnapPoint = number;
+
+export interface ResolvedSnapPoint {
+  size: number;
+  value: DrawerSnapPoint;
+}
+
+const RUBBERBAND_CONSTANT = 0.2;
+
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
-export function lerp(a: number, b: number, t: number): number {
-  return a + (b - a) * t;
-}
-
-/** Returns the axis that this direction moves on */
 export function getAxis(direction: Direction): "x" | "y" {
   return direction === "left" || direction === "right" ? "x" : "y";
 }
 
-/** Returns +1 or -1 based on the direction the drawer opens toward */
-export function getDirectionSign(direction: Direction): number {
+export function getDirectionSign(direction: Direction): 1 | -1 {
   return direction === "bottom" || direction === "right" ? -1 : 1;
 }
 
-/**
- * Compute the translate value to position the drawer.
- * `progress` 0 = fully closed (off-screen), 1 = fully open.
- */
+export function getCoordinate(
+  direction: Direction,
+  clientX: number,
+  clientY: number,
+): number {
+  return getAxis(direction) === "x" ? clientX : clientY;
+}
+
+export function getCrossCoordinate(
+  direction: Direction,
+  clientX: number,
+  clientY: number,
+): number {
+  return getAxis(direction) === "x" ? clientY : clientX;
+}
+
+export function getViewportSize(direction: Direction): number {
+  if (typeof window === "undefined") {
+    return 0;
+  }
+
+  const viewport = window.visualViewport;
+  const size = getAxis(direction) === "x"
+    ? viewport?.width ?? window.innerWidth
+    : viewport?.height ?? window.innerHeight;
+
+  return Math.max(size, 0);
+}
+
+export function getElementSize(
+  element: HTMLElement | null,
+  direction: Direction,
+): number {
+  if (!element) {
+    return 0;
+  }
+
+  return getAxis(direction) === "x" ? element.offsetWidth : element.offsetHeight;
+}
+
 export function getTranslateValue(
   direction: Direction,
   drawerSize: number,
   progress: number,
 ): string {
-  const offset = drawerSize * (1 - progress);
-  const axis = getAxis(direction);
+  const clampedProgress = clamp(progress, -0.15, 1.15);
+  const offset = drawerSize * (1 - clampedProgress);
 
   switch (direction) {
     case "bottom":
-      return axis === "y" ? `translate3d(0, ${offset}px, 0)` : "";
+      return `translate3d(0, ${offset}px, 0)`;
     case "top":
       return `translate3d(0, ${-offset}px, 0)`;
     case "right":
@@ -42,92 +83,107 @@ export function getTranslateValue(
   }
 }
 
-/**
- * Given a pointer delta (in the drawer's axis), return 0-1 progress.
- * Positive delta = closing direction for bottom/right drawers.
- */
-export function deltaToProgress(
-  direction: Direction,
-  delta: number,
-  drawerSize: number,
-): number {
-  if (drawerSize === 0) return 0;
-  const sign = getDirectionSign(direction);
-  return clamp(1 - (delta * sign) / drawerSize, 0, 1.15); // allow slight overscroll
-}
-
-/**
- * Resolve snap points to pixel values.
- * Values 0-1 are fractions of drawer size. Values > 1 are pixels.
- */
 export function resolveSnapPoints(
-  snapPoints: number[],
+  snapPoints: readonly DrawerSnapPoint[] | undefined,
   drawerSize: number,
-): number[] {
-  return snapPoints
-    .map((sp) => (sp <= 1 ? sp * drawerSize : sp))
-    .sort((a, b) => a - b);
-}
+): ResolvedSnapPoint[] {
+  if (drawerSize <= 0) {
+    return [];
+  }
 
-/**
- * Find the nearest snap point, factoring in velocity.
- * Returns the pixel value of the target snap point.
- */
-export function findSnapTarget(
-  currentPosition: number,
-  velocity: number,
-  snapPointsPx: number[],
-  velocityWeight: number = 300,
-): number {
-  // Project position based on velocity
-  const projected = currentPosition + velocity * velocityWeight;
+  const resolved = (snapPoints?.length ? snapPoints : [1])
+    .map((point) => {
+      const size = point <= 1 ? point * drawerSize : point;
 
-  let closest = snapPointsPx[0];
-  let minDist = Math.abs(projected - closest);
+      return {
+        value: point,
+        size: clamp(size, 1, drawerSize),
+      };
+    })
+    .sort((a, b) => a.size - b.size);
 
-  for (let i = 1; i < snapPointsPx.length; i++) {
-    const dist = Math.abs(projected - snapPointsPx[i]);
-    if (dist < minDist) {
-      minDist = dist;
-      closest = snapPointsPx[i];
+  const unique: ResolvedSnapPoint[] = [];
+
+  for (const point of resolved) {
+    if (unique.length === 0 || Math.abs(point.size - unique[unique.length - 1].size) > 0.5) {
+      unique.push(point);
     }
   }
 
-  return closest;
+  return unique.length ? unique : [{ value: 1, size: drawerSize }];
 }
 
-/**
- * Calculate background scale and border-radius based on drawer progress.
- */
 export function getBackgroundStyles(progress: number): {
   transform: string;
   borderRadius: string;
 } {
-  const scale = lerp(1, 0.94, progress);
-  const radius = lerp(0, 8, progress);
+  const clampedProgress = clamp(progress, 0, 1);
+  const scale = 1 - clampedProgress * 0.06;
+  const radius = clampedProgress * 18;
+
   return {
     transform: `scale(${scale})`,
     borderRadius: `${radius}px`,
   };
 }
 
-/**
- * Check if the scrollable content is at the edge where dragging should start.
- */
-export function isScrolledToEdge(
+export function rubberband(distance: number, dimension: number): number {
+  if (dimension <= 0 || distance <= 0) {
+    return 0;
+  }
+
+  return (distance * dimension * RUBBERBAND_CONSTANT) /
+    (dimension + RUBBERBAND_CONSTANT * distance);
+}
+
+export function applyRubberband(progress: number, drawerSize: number): number {
+  if (progress < 0) {
+    return -rubberband(Math.abs(progress) * drawerSize, drawerSize) / drawerSize;
+  }
+
+  if (progress > 1) {
+    return 1 + rubberband((progress - 1) * drawerSize, drawerSize) / drawerSize;
+  }
+
+  return progress;
+}
+
+export function findNearestSnapIndex(
+  targetSize: number,
+  snapSizes: readonly number[],
+  candidates?: readonly number[],
+): number {
+  const pool = candidates?.length ? candidates : snapSizes.map((_, index) => index);
+  let closestIndex = pool[0] ?? 0;
+  let closestDistance = Math.abs(targetSize - (snapSizes[closestIndex] ?? 0));
+
+  for (const index of pool.slice(1)) {
+    const distance = Math.abs(targetSize - (snapSizes[index] ?? 0));
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestIndex = index;
+    }
+  }
+
+  return closestIndex;
+}
+
+export function isScrolledToDragEdge(
   element: HTMLElement | null,
   direction: Direction,
 ): boolean {
-  if (!element) return true;
+  if (!element) {
+    return true;
+  }
 
   switch (direction) {
     case "bottom":
-      return element.scrollTop <= 0;
+      return element.scrollTop <= 1;
     case "top":
       return element.scrollTop + element.clientHeight >= element.scrollHeight - 1;
     case "left":
       return element.scrollLeft + element.clientWidth >= element.scrollWidth - 1;
     case "right":
-      return element.scrollLeft <= 0;
+      return element.scrollLeft <= 1;
   }
 }
