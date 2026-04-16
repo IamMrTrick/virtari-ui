@@ -1,0 +1,133 @@
+@layer components {
+  .vds-toggle {
+    /*
+     * ── Config ──
+     * Height uses shared --vds-size-* tokens (same as Button, Input, Select).
+     */
+    --_toggle-height: var(--vds-size-md);
+    --_toggle-px: var(--vds-space-3);
+    --_toggle-font-size: var(--vds-text-sm);
+    --_toggle-radius: var(--vds-radius-element);
+    --_toggle-gap: var(--vds-space-2);
+    --_toggle-icon-size: 1.125rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--_toggle-gap);
+    font-family: var(--vds-font-sans);
+    font-weight: var(--vds-font-weight-medium);
+    border-radius: var(--_toggle-radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out);
+
+    block-size: var(--_toggle-height);
+    padding-inline: var(--_toggle-px);
+    font-size: var(--_toggle-font-size);
+    background-color: transparent;
+    color: var(--vds-color-text-muted);
+
+    &:hover:not(:disabled) {
+      background-color: var(--vds-color-bg-muted);
+      color: var(--vds-color-text);
+    }
+
+    &[data-state="on"] {
+      background-color: var(--vds-color-bg-muted);
+      color: var(--vds-color-text);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--vds-color-ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ── Variant: outline ── */
+    &[data-variant="outline"] {
+      border-color: var(--vds-color-border);
+
+      &[data-state="on"] {
+        background-color: var(--vds-color-bg-subtle);
+      }
+    }
+
+    /* ── Sizes ── */
+
+    &[data-size="2xs"] {
+      --_toggle-height: var(--vds-size-2xs);
+      --_toggle-px: var(--vds-space-1-5);
+      --_toggle-font-size: var(--vds-text-xs);
+      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-gap: var(--vds-space-1);
+      --_toggle-icon-size: 0.875rem;
+    }
+
+    &[data-size="xs"] {
+      --_toggle-height: var(--vds-size-xs);
+      --_toggle-px: var(--vds-space-2);
+      --_toggle-font-size: var(--vds-text-xs);
+      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-gap: var(--vds-space-1);
+      --_toggle-icon-size: 0.875rem;
+    }
+
+    &[data-size="sm"] {
+      --_toggle-height: var(--vds-size-sm);
+      --_toggle-px: var(--vds-space-2);
+      --_toggle-font-size: var(--vds-text-sm);
+      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-gap: var(--vds-space-1-5);
+      --_toggle-icon-size: 1rem;
+    }
+
+    /* md uses defaults */
+
+    &[data-size="lg"] {
+      --_toggle-height: var(--vds-size-lg);
+      --_toggle-px: var(--vds-space-4);
+      --_toggle-font-size: var(--vds-text-base);
+      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-gap: var(--vds-space-2);
+      --_toggle-icon-size: 1.25rem;
+    }
+
+    &[data-size="xl"] {
+      --_toggle-height: var(--vds-size-xl);
+      --_toggle-px: var(--vds-space-5);
+      --_toggle-font-size: var(--vds-text-lg);
+      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-gap: var(--vds-space-2);
+      --_toggle-icon-size: 1.25rem;
+    }
+
+    &[data-size="2xl"] {
+      --_toggle-height: var(--vds-size-2xl);
+      --_toggle-px: var(--vds-space-6);
+      --_toggle-font-size: var(--vds-text-xl);
+      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-gap: var(--vds-space-3);
+      --_toggle-icon-size: 1.5rem;
+    }
+
+    /* ── Icon-only ── */
+    &:has(> svg:only-child),
+    &[data-icon-only] {
+      padding-inline: 0;
+      aspect-ratio: 1;
+    }
+
+    & > svg {
+      inline-size: var(--_toggle-icon-size);
+      block-size: var(--_toggle-icon-size);
+    }
+  }
+}

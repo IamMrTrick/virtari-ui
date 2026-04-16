@@ -1,0 +1,15 @@
+@layer tokens {
+  :root {
+    --vds-z-hide: -1;
+    --vds-z-base: 0;
+    --vds-z-docked: 10;
+    --vds-z-dropdown: 1000;
+    --vds-z-sticky: 1100;
+    --vds-z-banner: 1200;
+    --vds-z-overlay: 1300;
+    --vds-z-modal: 1400;
+    --vds-z-popover: 1500;
+    --vds-z-toast: 1600;
+    --vds-z-tooltip: 1700;
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@virtari/tokens",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./dist/tokens.css",
+    "./colors": "./src/colors.css",
+    "./spacing": "./src/spacing.css",
+    "./typography": "./src/typography.css",
+    "./radii": "./src/radii.css",
+    "./shadows": "./src/shadows.css",
+    "./motion": "./src/motion.css"
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "postcss src/index.css -o dist/tokens.css",
+    "clean": "rm -rf dist"
+  }
+}

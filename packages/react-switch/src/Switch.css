@@ -1,0 +1,74 @@
+@layer components {
+  .vds-switch {
+    /*
+     * ── Config (Proportional) ──
+     * Switch has its own proportional scale — NOT on the height ramp.
+     * Track width is ~1.8x height. Thumb is height minus border offset.
+     */
+    --_switch-width: 2.75rem;
+    --_switch-height: 1.5rem;
+    --_switch-thumb-size: 1.25rem;
+    --_switch-thumb-offset: 1px;
+
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: var(--vds-radius-full);
+    border: 2px solid transparent;
+    transition: background-color var(--vds-duration-normal) var(--vds-ease-out);
+
+    inline-size: var(--_switch-width);
+    block-size: var(--_switch-height);
+    background-color: var(--vds-color-gray-300);
+
+    &[data-state="checked"] {
+      background-color: var(--vds-color-primary-500);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--vds-color-ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ── Sizes ── */
+
+    &[data-size="sm"] {
+      --_switch-width: 2rem;
+      --_switch-height: 1.125rem;
+      --_switch-thumb-size: 0.875rem;
+    }
+
+    /* md uses defaults */
+
+    &[data-size="lg"] {
+      --_switch-width: 3.5rem;
+      --_switch-height: 2rem;
+      --_switch-thumb-size: 1.75rem;
+    }
+  }
+
+  .vds-switch-thumb {
+    display: block;
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-color-on-solid);
+    box-shadow: var(--vds-shadow-sm);
+    inline-size: var(--_switch-thumb-size);
+    block-size: var(--_switch-thumb-size);
+    transition: translate var(--vds-duration-normal) var(--vds-ease-spring);
+    translate: var(--_switch-thumb-offset) 0;
+
+    .vds-switch[data-state="checked"] > & {
+      translate: calc(
+          var(--_switch-width) - var(--_switch-thumb-size) -
+            var(--_switch-thumb-offset) - 4px
+        )
+        0;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+@layer components {
+  .vds-popover-content {
+    z-index: var(--vds-z-popover);
+    background-color: var(--vds-color-surface);
+    border: 1px solid var(--vds-color-border-muted);
+    border-radius: var(--vds-radius-surface);
+    box-shadow: var(--vds-shadow-lg);
+    padding: var(--vds-space-4);
+    min-inline-size: 12rem;
+    max-inline-size: 20rem;
+    animation: vds-fade-in var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+    .vds-popover-content[data-state="closed"] {
+      animation: vds-fade-out var(--vds-duration-fastest) var(--vds-ease-in);
+    }
+
+    .vds-popover-content[data-side="bottom"] {
+      animation: vds-slide-in-from-top var(--vds-duration-fast) var(--vds-ease-out);
+    }
+
+    .vds-popover-content[data-side="top"] {
+      animation: vds-slide-in-from-bottom var(--vds-duration-fast) var(--vds-ease-out);
+    }
+
+    .vds-popover-content[data-side="left"] {
+      animation: vds-slide-in-from-right var(--vds-duration-fast) var(--vds-ease-out);
+    }
+
+    .vds-popover-content[data-side="right"] {
+      animation: vds-slide-in-from-left var(--vds-duration-fast) var(--vds-ease-out);
+    }
+
+    .vds-popover-content:focus-visible {
+      outline: none;
+    }
+}

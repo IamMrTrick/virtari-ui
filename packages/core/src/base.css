@@ -1,0 +1,24 @@
+@layer base {
+  body {
+    font-family: var(--vds-font-sans);
+    font-size: var(--vds-text-base);
+    line-height: var(--vds-leading-normal);
+    color: var(--vds-color-text);
+    background-color: var(--vds-color-bg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--vds-color-ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--vds-color-primary-200);
+    color: var(--vds-color-primary-900);
+  }
+
+  [data-theme="dark"] ::selection {
+    background-color: var(--vds-color-primary-800);
+    color: var(--vds-color-primary-100);
+  }
+}

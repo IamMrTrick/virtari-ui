@@ -1,0 +1,41 @@
+@layer tokens {
+  :root {
+    /* ─── Font weights ─── */
+    --vds-font-weight-normal: 400;
+    --vds-font-weight-medium: 500;
+    --vds-font-weight-semibold: 600;
+    --vds-font-weight-bold: 700;
+
+    /* ─── Font families ─── */
+    --vds-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --vds-font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+
+    /* ─── Font sizes ─── */
+    --vds-text-xs: 0.75rem;
+    --vds-text-sm: 0.875rem;
+    --vds-text-base: 1rem;
+    --vds-text-lg: 1.125rem;
+    --vds-text-xl: 1.25rem;
+    --vds-text-2xl: 1.5rem;
+    --vds-text-3xl: 1.875rem;
+    --vds-text-4xl: 2.25rem;
+    --vds-text-5xl: 3rem;
+    --vds-text-6xl: 3.75rem;
+
+    /* ─── Line heights ─── */
+    --vds-leading-none: 1;
+    --vds-leading-tight: 1.25;
+    --vds-leading-snug: 1.375;
+    --vds-leading-normal: 1.5;
+    --vds-leading-relaxed: 1.625;
+    --vds-leading-loose: 2;
+
+    /* ─── Letter spacing ─── */
+    --vds-tracking-tighter: -0.05em;
+    --vds-tracking-tight: -0.025em;
+    --vds-tracking-normal: 0em;
+    --vds-tracking-wide: 0.025em;
+    --vds-tracking-wider: 0.05em;
+    --vds-tracking-widest: 0.1em;
+  }
+}

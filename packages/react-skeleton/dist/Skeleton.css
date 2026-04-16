@@ -1,0 +1,24 @@
+@layer components {
+  @keyframes vds-skeleton-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  .vds-skeleton {
+    display: block;
+    background-color: var(--vds-color-skeleton);
+    border-radius: var(--vds-radius-element);
+    animation: vds-skeleton-pulse 2s ease-in-out infinite;
+    inline-size: var(--_skeleton-w, 100%);
+    block-size: var(--_skeleton-h, 1rem);
+  }
+
+    .vds-skeleton[data-circle] {
+      border-radius: 9999px;
+    }
+}

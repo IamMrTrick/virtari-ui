@@ -1,0 +1,53 @@
+{
+  "name": "@virtari/docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@radix-ui/react-select": "^2.2.6",
+    "@virtari/core": "workspace:*",
+    "@virtari/react-avatar": "workspace:*",
+    "@virtari/react-badge": "workspace:*",
+    "@virtari/react-button": "workspace:*",
+    "@virtari/react-checkbox": "workspace:*",
+    "@virtari/react-dialog": "workspace:*",
+    "@virtari/react-input": "workspace:*",
+    "@virtari/react-select": "workspace:*",
+    "@virtari/react-switch": "workspace:*",
+    "@virtari/react-tabs": "workspace:*",
+    "@virtari/react-toggle": "workspace:*",
+    "@virtari/tokens": "workspace:*",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "@virtari/react-drawer": "workspace:*",
+    "@virtari/react-tooltip": "workspace:*",
+    "@virtari/react-popover": "workspace:*",
+    "@virtari/react-dropdown-menu": "workspace:*",
+    "@virtari/react-alert-dialog": "workspace:*",
+    "@virtari/react-toast": "workspace:*",
+    "@virtari/react-radio-group": "workspace:*",
+    "@virtari/react-label": "workspace:*",
+    "@virtari/react-separator": "workspace:*",
+    "@virtari/react-slider": "workspace:*",
+    "@virtari/react-progress": "workspace:*",
+    "@virtari/react-scroll-area": "workspace:*",
+    "@virtari/react-accordion": "workspace:*",
+    "@virtari/react-collapsible": "workspace:*",
+    "@virtari/react-textarea": "workspace:*",
+    "@virtari/react-skeleton": "workspace:*",
+    "@virtari/react-spinner": "workspace:*",
+    "@virtari/react-card": "workspace:*",
+    "@virtari/react-kbd": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "typescript": "^5.5.0",
+    "vite": "^8.0.8"
+  }
+}

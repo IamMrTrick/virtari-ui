@@ -1,0 +1,46 @@
+@layer components {
+  .vds-scroll-area {
+    overflow: hidden;
+  }
+
+  .vds-scroll-area-viewport {
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: inherit;
+  }
+
+  .vds-scrollbar {
+    display: flex;
+    touch-action: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    padding: 2px;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+    .vds-scrollbar:hover {
+      background-color: var(--vds-color-bg-subtle);
+    }
+
+    .vds-scrollbar[data-orientation="vertical"] {
+      inline-size: 0.625rem;
+    }
+
+    .vds-scrollbar[data-orientation="horizontal"] {
+      flex-direction: column;
+      block-size: 0.625rem;
+    }
+
+  .vds-scrollbar-thumb {
+    position: relative;
+    flex: 1;
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-color-gray-300);
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+    .vds-scrollbar-thumb:hover {
+      background-color: var(--vds-color-gray-400);
+    }
+}

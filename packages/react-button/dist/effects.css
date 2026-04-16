@@ -1,0 +1,147 @@
+@layer components {
+
+  /* ━━━ Effect: Shine ━━━
+   * A glossy light sweep on hover.
+   * Usage: <Button effect="shine">
+   */
+  .vds-button[data-effect="shine"] {
+    overflow: hidden;
+    position: relative;
+  }
+
+    .vds-button[data-effect="shine"]::before {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inline-size: 50%;
+      background: linear-gradient(
+        105deg,
+        transparent 0%,
+        transparent 35%,
+        color-mix(in oklch, var(--vds-color-white), transparent 88%) 42%,
+        color-mix(in oklch, var(--vds-color-white), transparent 78%) 48%,
+        color-mix(in oklch, var(--vds-color-white), transparent 70%) 50%,
+        color-mix(in oklch, var(--vds-color-white), transparent 78%) 52%,
+        color-mix(in oklch, var(--vds-color-white), transparent 88%) 58%,
+        transparent 65%,
+        transparent 100%
+      );
+      translate: -150% 0;
+      pointer-events: none;
+    }
+
+    .vds-button[data-effect="shine"]:hover::before {
+      translate: 200% 0;
+      transition: translate 0.6s var(--vds-ease-out);
+    }
+
+  /* ━━━ Effect: Raised 3D ━━━
+   * Elevated with deep shadow. Presses down on click.
+   * Usage: <Button effect="raised">
+   */
+  .vds-button[data-effect="raised"] {
+    box-shadow:
+      0 4px 0 0 color-mix(in oklch, var(--_button-bg), var(--vds-color-black) 35%),
+      0 6px 12px -2px color-mix(in oklch, var(--_button-bg), transparent 60%);
+    translate: 0 -2px;
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow var(--vds-duration-fast) var(--vds-ease-out),
+      translate var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+    .vds-button[data-effect="raised"]:hover:not(:disabled) {
+      translate: 0 -3px;
+      box-shadow:
+        0 5px 0 0 color-mix(in oklch, var(--_button-bg), var(--vds-color-black) 35%),
+        0 10px 20px -4px color-mix(in oklch, var(--_button-bg), transparent 50%);
+    }
+
+    .vds-button[data-effect="raised"]:active:not(:disabled) {
+      translate: 0 2px;
+      box-shadow:
+        0 0 0 0 transparent,
+        0 1px 3px 0 color-mix(in oklch, var(--_button-bg), transparent 70%);
+      scale: 1;
+    }
+
+  /* ━━━ Effect: Glow ━━━
+   * Soft color aura on hover. Pulses subtly.
+   * Usage: <Button effect="glow">
+   */
+  .vds-button[data-effect="glow"] {
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow var(--vds-duration-normal) var(--vds-ease-out);
+  }
+
+    .vds-button[data-effect="glow"]:hover:not(:disabled) {
+      box-shadow:
+        0 0 10px 2px color-mix(in oklch, var(--_button-bg), transparent 40%),
+        0 0 30px 6px color-mix(in oklch, var(--_button-bg), transparent 70%),
+        0 0 60px 12px color-mix(in oklch, var(--_button-bg), transparent 85%);
+    }
+
+    .vds-button[data-effect="glow"]:active:not(:disabled) {
+      box-shadow:
+        0 0 6px 1px color-mix(in oklch, var(--_button-bg), transparent 50%),
+        0 0 16px 3px color-mix(in oklch, var(--_button-bg), transparent 75%);
+    }
+
+  /* ━━━ Effect: Glass ━━━
+   * Glassmorphism: frosted translucent surface.
+   * Best on dark/image backgrounds — use inside a colored container.
+   * Usage: <Button effect="glass">
+   */
+  .vds-button[data-effect="glass"] {
+    --_button-bg: color-mix(in oklch, var(--vds-color-white), transparent 92%);
+    --_button-text: var(--vds-color-on-solid);
+    --_button-border: color-mix(in oklch, var(--vds-color-white), transparent 82%);
+    backdrop-filter: blur(16px) saturate(1.8);
+    box-shadow:
+      inset 0 1px 0 0 color-mix(in oklch, var(--vds-color-white), transparent 80%),
+      inset 0 -1px 0 0 color-mix(in oklch, var(--vds-color-black), transparent 95%),
+      0 2px 8px 0 color-mix(in oklch, var(--vds-color-black), transparent 90%);
+  }
+
+    .vds-button[data-effect="glass"]:hover:not(:disabled) {
+      --_button-bg: color-mix(in oklch, var(--vds-color-white), transparent 86%);
+      --_button-border: color-mix(in oklch, var(--vds-color-white), transparent 72%);
+      box-shadow:
+        inset 0 1px 0 0 color-mix(in oklch, var(--vds-color-white), transparent 75%),
+        inset 0 -1px 0 0 color-mix(in oklch, var(--vds-color-black), transparent 95%),
+        0 4px 16px 0 color-mix(in oklch, var(--vds-color-black), transparent 85%);
+    }
+
+    .vds-button[data-effect="glass"]:active:not(:disabled) {
+      --_button-bg: color-mix(in oklch, var(--vds-color-white), transparent 82%);
+      box-shadow:
+        inset 0 1px 0 0 color-mix(in oklch, var(--vds-color-white), transparent 85%),
+        inset 0 2px 4px 0 color-mix(in oklch, var(--vds-color-black), transparent 92%);
+      scale: 1;
+    }
+
+  /* ━━━ Effect: Outline Glow ━━━
+   * Border lights up on hover with matching glow.
+   * Usage: <Button effect="outline-glow" variant="outline">
+   */
+  .vds-button[data-effect="outline-glow"] {
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow var(--vds-duration-normal) var(--vds-ease-out);
+  }
+
+    .vds-button[data-effect="outline-glow"]:hover:not(:disabled) {
+      --_button-border: var(--vds-color-primary-400);
+      box-shadow:
+        0 0 8px 0 color-mix(in oklch, var(--vds-color-primary-400), transparent 50%),
+        0 0 20px 0 color-mix(in oklch, var(--vds-color-primary-400), transparent 75%),
+        inset 0 0 8px 0 color-mix(in oklch, var(--vds-color-primary-400), transparent 85%);
+    }
+}

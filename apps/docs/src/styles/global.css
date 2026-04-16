@@ -1,0 +1,39 @@
+/* Foundation — imported once at app root */
+@import "@virtari/core";
+@import "@virtari/tokens";
+
+/* Component styles */
+@import "@virtari/react-button/styles";
+@import "@virtari/react-button/styles/effects";
+@import "@virtari/react-button/styles/animations";
+@import "@virtari/react-badge/styles";
+@import "@virtari/react-input/styles";
+@import "@virtari/react-switch/styles";
+@import "@virtari/react-checkbox/styles";
+@import "@virtari/react-toggle/styles";
+@import "@virtari/react-avatar/styles";
+@import "@virtari/react-tabs/styles";
+@import "@virtari/react-select/styles";
+@import "@virtari/react-dialog/styles";
+@import "@virtari/react-drawer/styles";
+@import "@virtari/react-tooltip/styles";
+@import "@virtari/react-popover/styles";
+@import "@virtari/react-dropdown-menu/styles";
+@import "@virtari/react-alert-dialog/styles";
+@import "@virtari/react-toast/styles";
+@import "@virtari/react-radio-group/styles";
+@import "@virtari/react-label/styles";
+@import "@virtari/react-separator/styles";
+@import "@virtari/react-slider/styles";
+@import "@virtari/react-progress/styles";
+@import "@virtari/react-scroll-area/styles";
+@import "@virtari/react-accordion/styles";
+@import "@virtari/react-collapsible/styles";
+@import "@virtari/react-textarea/styles";
+@import "@virtari/react-skeleton/styles";
+@import "@virtari/react-spinner/styles";
+@import "@virtari/react-card/styles";
+@import "@virtari/react-kbd/styles";
+
+/* Docs app styles */
+@import "./docs.css";

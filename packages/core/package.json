@@ -1,0 +1,16 @@
+{
+  "name": "@virtari/core",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./dist/core.css"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "postcss src/index.css -o dist/core.css",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@virtari/tokens": "workspace:*"
+  }
+}

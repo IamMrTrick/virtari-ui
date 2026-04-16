@@ -1,0 +1,92 @@
+@layer components {
+  .vds-textarea {
+    --_textarea-px: var(--vds-space-3);
+    --_textarea-py: var(--vds-space-2);
+    --_textarea-font-size: var(--vds-text-sm);
+    --_textarea-radius: var(--vds-radius-element);
+
+    display: flex;
+    inline-size: 100%;
+    min-block-size: 5rem;
+    resize: vertical;
+    font-family: var(--vds-font-sans);
+    border: 1px solid var(--vds-color-border);
+    background-color: var(--vds-color-surface);
+    color: var(--vds-color-text);
+    transition:
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow var(--vds-duration-fast) var(--vds-ease-out);
+
+    padding-inline: var(--_textarea-px);
+    padding-block: var(--_textarea-py);
+    font-size: var(--_textarea-font-size);
+    border-radius: var(--_textarea-radius);
+  }
+
+    .vds-textarea::-moz-placeholder {
+      color: var(--vds-color-text-subtle);
+    }
+
+    .vds-textarea::placeholder {
+      color: var(--vds-color-text-subtle);
+    }
+
+    .vds-textarea:focus-visible {
+      outline: 2px solid var(--vds-color-ring);
+      outline-offset: -1px;
+      border-color: var(--vds-color-primary-500);
+    }
+
+    .vds-textarea:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .vds-textarea[aria-invalid="true"] {
+      border-color: var(--vds-color-danger-500);
+    }
+
+      .vds-textarea[aria-invalid="true"]:focus-visible {
+        outline-color: var(--vds-color-danger-500);
+      }
+
+    /* ── Sizes ── */
+
+    .vds-textarea[data-size="2xs"] {
+      --_textarea-px: var(--vds-space-1-5);
+      --_textarea-py: var(--vds-space-1);
+      --_textarea-font-size: var(--vds-text-xs);
+    }
+
+    .vds-textarea[data-size="xs"] {
+      --_textarea-px: var(--vds-space-2);
+      --_textarea-py: var(--vds-space-1);
+      --_textarea-font-size: var(--vds-text-xs);
+    }
+
+    .vds-textarea[data-size="sm"] {
+      --_textarea-px: var(--vds-space-2-5);
+      --_textarea-py: var(--vds-space-1-5);
+      --_textarea-font-size: var(--vds-text-sm);
+    }
+
+    /* md uses defaults above */
+
+    .vds-textarea[data-size="lg"] {
+      --_textarea-px: var(--vds-space-4);
+      --_textarea-py: var(--vds-space-3);
+      --_textarea-font-size: var(--vds-text-base);
+    }
+
+    .vds-textarea[data-size="xl"] {
+      --_textarea-px: var(--vds-space-5);
+      --_textarea-py: var(--vds-space-3-5);
+      --_textarea-font-size: var(--vds-text-lg);
+    }
+
+    .vds-textarea[data-size="2xl"] {
+      --_textarea-px: var(--vds-space-6);
+      --_textarea-py: var(--vds-space-4);
+      --_textarea-font-size: var(--vds-text-xl);
+    }
+}

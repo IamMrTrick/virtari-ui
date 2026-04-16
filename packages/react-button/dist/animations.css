@@ -1,0 +1,68 @@
+@layer components {
+
+  /* ━━━ Animation: Pulse ━━━
+   * Gentle breathing glow to draw attention. Great for primary CTAs.
+   * Usage: <Button animation="pulse">
+   */
+  .vds-button[data-animation="pulse"] {
+    animation: vds-button-pulse 2s var(--vds-ease-in-out) infinite;
+  }
+
+  @keyframes vds-button-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 color-mix(in oklch, var(--_button-bg), transparent 30%);
+    }
+    50% {
+      box-shadow: 0 0 0 8px color-mix(in oklch, var(--_button-bg), transparent 100%);
+    }
+  }
+
+  /* ━━━ Animation: Bounce ━━━
+   * Subtle vertical bounce to draw attention.
+   * Usage: <Button animation="bounce">
+   */
+  .vds-button[data-animation="bounce"] {
+    animation: vds-button-bounce 1s var(--vds-ease-bounce) infinite;
+  }
+
+  @keyframes vds-button-bounce {
+    0%, 100% { translate: 0 0; }
+    30% { translate: 0 -6px; }
+    50% { translate: 0 -2px; }
+  }
+
+  /* ━━━ Animation: Shake ━━━
+   * Horizontal shake for error/attention.
+   * Usage: <Button animation="shake">
+   */
+  .vds-button[data-animation="shake"] {
+    animation: vds-button-shake 0.5s var(--vds-ease-out);
+  }
+
+  @keyframes vds-button-shake {
+    0%, 100% { translate: 0 0; }
+    10%, 50%, 90% { translate: -3px 0; }
+    30%, 70% { translate: 3px 0; }
+  }
+
+  /* ━━━ Animation: Jiggle ━━━
+   * Playful wiggle rotation.
+   * Usage: <Button animation="jiggle">
+   */
+  .vds-button[data-animation="jiggle"] {
+    animation: vds-button-jiggle 0.4s var(--vds-ease-out);
+  }
+
+  @keyframes vds-button-jiggle {
+    0%, 100% { rotate: 0deg; }
+    25% { rotate: -2deg; }
+    75% { rotate: 2deg; }
+  }
+
+  /* ━━━ Stop animations when reduced motion is preferred ━━━ */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-button[data-animation] {
+      animation: none;
+    }
+  }
+}

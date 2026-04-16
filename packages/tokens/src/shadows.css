@@ -1,0 +1,12 @@
+@layer tokens {
+  :root {
+    --vds-shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+    --vds-shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+    --vds-shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
+    --vds-shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1);
+    --vds-shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.1), 0 8px 10px -6px oklch(0 0 0 / 0.1);
+    --vds-shadow-2xl: 0 25px 50px -12px oklch(0 0 0 / 0.25);
+    --vds-shadow-inner: inset 0 2px 4px 0 oklch(0 0 0 / 0.05);
+    --vds-shadow-none: 0 0 0 0 transparent;
+  }
+}

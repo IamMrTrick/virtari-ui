@@ -1,0 +1,54 @@
+@layer components {
+  .vds-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-2);
+  }
+
+  .vds-radio-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    border: 2px solid var(--vds-color-border);
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-color-surface);
+    cursor: pointer;
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      border-color var(--vds-duration-fast) var(--vds-ease-out);
+
+    &[data-state="checked"] {
+      border-color: var(--vds-color-primary-500);
+      background-color: var(--vds-color-primary-500);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--vds-color-ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .vds-radio-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::after {
+      content: "";
+      display: block;
+      inline-size: 0.5rem;
+      block-size: 0.5rem;
+      border-radius: var(--vds-radius-full);
+      background-color: var(--vds-color-on-solid);
+      animation: vds-scale-in var(--vds-duration-fast) var(--vds-ease-out);
+    }
+  }
+}

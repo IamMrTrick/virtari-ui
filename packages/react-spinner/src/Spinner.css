@@ -1,0 +1,30 @@
+@layer components {
+  @keyframes vds-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .vds-spinner {
+    --_spinner-size: 1.25rem;
+    --_spinner-border: 2px;
+
+    display: inline-block;
+    inline-size: var(--_spinner-size);
+    block-size: var(--_spinner-size);
+    border: var(--_spinner-border) solid var(--vds-color-primary-500);
+    border-right-color: transparent;
+    border-radius: 9999px;
+    animation: vds-spin 0.6s linear infinite;
+
+    &[data-size="sm"] {
+      --_spinner-size: 0.875rem;
+      --_spinner-border: 1.5px;
+    }
+
+    &[data-size="lg"] {
+      --_spinner-size: 2rem;
+      --_spinner-border: 3px;
+    }
+  }
+}

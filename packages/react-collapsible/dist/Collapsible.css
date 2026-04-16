@@ -1,0 +1,23 @@
+@layer components {
+  .vds-collapsible-content {
+    overflow: hidden;
+  }
+
+    .vds-collapsible-content[data-state="open"] {
+      animation: vds-collapsible-expand var(--vds-duration-normal) var(--vds-ease-out);
+    }
+
+    .vds-collapsible-content[data-state="closed"] {
+      animation: vds-collapsible-collapse var(--vds-duration-normal) var(--vds-ease-out);
+    }
+
+  @keyframes vds-collapsible-expand {
+    from { block-size: 0; }
+    to { block-size: var(--radix-collapsible-content-height); }
+  }
+
+  @keyframes vds-collapsible-collapse {
+    from { block-size: var(--radix-collapsible-content-height); }
+    to { block-size: 0; }
+  }
+}

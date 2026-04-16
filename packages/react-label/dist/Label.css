@@ -1,0 +1,18 @@
+@layer components {
+  .vds-label {
+    font-family: var(--vds-font-sans);
+    font-size: var(--vds-text-sm);
+    font-weight: var(--vds-font-weight-medium);
+    line-height: var(--vds-leading-normal);
+    color: var(--vds-color-text);
+    cursor: pointer;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+
+    .vds-label[data-disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+}

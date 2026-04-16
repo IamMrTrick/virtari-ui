@@ -1,0 +1,20 @@
+@layer components {
+  .vds-tooltip-content {
+    z-index: var(--vds-z-tooltip);
+    background-color: var(--vds-color-gray-900);
+    color: var(--vds-color-white);
+    font-family: var(--vds-font-sans);
+    font-size: var(--vds-text-xs);
+    line-height: var(--vds-leading-normal);
+    padding-inline: var(--vds-space-3);
+    padding-block: var(--vds-space-1-5);
+    border-radius: var(--vds-radius-element);
+    box-shadow: var(--vds-shadow-md);
+    animation: vds-fade-in var(--vds-duration-fast) var(--vds-ease-out);
+    user-select: none;
+
+    &[data-state="closed"] {
+      animation: vds-fade-out var(--vds-duration-fastest) var(--vds-ease-in);
+    }
+  }
+}

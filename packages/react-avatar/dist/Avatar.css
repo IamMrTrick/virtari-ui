@@ -1,0 +1,70 @@
+@layer components {
+  .vds-avatar {
+    /*
+     * ── Config (Proportional) ──
+     * Avatar is circular with its own scale — NOT on the height ramp.
+     * Sizes are designed for profile pictures: inline text (xs) to hero (xl).
+     */
+    --_avatar-size: var(--vds-size-md);
+    --_avatar-font-size: var(--vds-text-sm);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: var(--vds-radius-full);
+    flex-shrink: 0;
+
+    inline-size: var(--_avatar-size);
+    block-size: var(--_avatar-size);
+
+    /* ── Sizes ── */
+  }
+
+    .vds-avatar[data-size="xs"] {
+      --_avatar-size: var(--vds-size-2xs);
+      --_avatar-font-size: var(--vds-text-xs);
+    }
+
+    .vds-avatar[data-size="sm"] {
+      --_avatar-size: var(--vds-size-sm);
+      --_avatar-font-size: var(--vds-text-xs);
+    }
+
+    /* md uses defaults (2.5rem / 40px) */
+
+    .vds-avatar[data-size="lg"] {
+      --_avatar-size: 3rem;
+      --_avatar-font-size: var(--vds-text-base);
+    }
+
+    .vds-avatar[data-size="xl"] {
+      --_avatar-size: var(--vds-size-2xl);
+      --_avatar-font-size: var(--vds-text-lg);
+    }
+
+    .vds-avatar:focus-visible {
+      outline: 2px solid var(--vds-color-ring);
+      outline-offset: 2px;
+    }
+
+  .vds-avatar-image {
+    inline-size: 100%;
+    block-size: 100%;
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
+
+  .vds-avatar-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    block-size: 100%;
+    font-family: var(--vds-font-sans);
+    font-size: var(--_avatar-font-size);
+    font-weight: var(--vds-font-weight-medium);
+    background-color: var(--vds-color-primary-muted);
+    color: var(--vds-color-primary-muted-text);
+  }
+}

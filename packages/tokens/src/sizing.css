@@ -1,0 +1,26 @@
+@layer tokens {
+  :root {
+    /*
+     * ── Component Size Scale ──
+     * Shared height ramp for interactive components (buttons, inputs, selects, etc.)
+     * Change these to resize all components globally.
+     *
+     * Size  Height  Pixels  WCAG AA (24px)  WCAG AAA (44px)  Apple HIG  Google MD
+     * ───── ─────── ─────── ─────────────── ──────────────── ────────── ─────────
+     * 2xs   1.5rem  24px    ⚠ minimum        ✗                ✗          ✗
+     * xs    1.75rem 28px    ✓                ✗                ✗          ✗
+     * sm    2rem    32px    ✓                ✗                ✗          ✗
+     * md    2.5rem  40px    ✓                ✗                ✗          ✗
+     * lg    2.75rem 44px    ✓                ✓                ✓ (44pt)   ✗
+     * xl    3.25rem 52px    ✓                ✓                ✓          ✓ (48dp)
+     * 2xl   4rem    64px    ✓                ✓                ✓          ✓
+     */
+    --vds-size-2xs: 1.5rem;
+    --vds-size-xs: 1.75rem;
+    --vds-size-sm: 2rem;
+    --vds-size-md: 2.5rem;
+    --vds-size-lg: 2.75rem;
+    --vds-size-xl: 3.25rem;
+    --vds-size-2xl: 4rem;
+  }
+}

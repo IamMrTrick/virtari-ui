@@ -1,0 +1,136 @@
+@layer components {
+  .vds-input {
+    /*
+     * ── Config ──
+     * Height uses shared --vds-size-* tokens (same as Button, Select, Toggle).
+     * Override these to customize.
+     */
+    --_input-height: var(--vds-size-md);
+    --_input-px: var(--vds-space-3);
+    --_input-font-size: var(--vds-text-sm);
+    --_input-radius: var(--vds-radius-element);
+
+    display: flex;
+    inline-size: 100%;
+    font-family: var(--vds-font-sans);
+    border: 1px solid var(--vds-color-border);
+    background-color: var(--vds-color-surface);
+    color: var(--vds-color-text);
+    transition:
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow var(--vds-duration-fast) var(--vds-ease-out);
+
+    block-size: var(--_input-height);
+    padding-inline: var(--_input-px);
+    font-size: var(--_input-font-size);
+    border-radius: var(--_input-radius);
+  }
+
+    .vds-input::-moz-placeholder {
+      color: var(--vds-color-text-subtle);
+    }
+
+    .vds-input::placeholder {
+      color: var(--vds-color-text-subtle);
+    }
+
+    .vds-input:focus-visible {
+      outline: 2px solid var(--vds-color-ring);
+      outline-offset: -1px;
+      border-color: var(--vds-color-primary-500);
+    }
+
+    .vds-input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .vds-input[aria-invalid="true"] {
+      border-color: var(--vds-color-danger-500);
+    }
+
+      .vds-input[aria-invalid="true"]:focus-visible {
+        outline-color: var(--vds-color-danger-500);
+      }
+
+    /* ── Sizes (same ramp as Button) ── */
+
+    .vds-input[data-size="2xs"] {
+      --_input-height: var(--vds-size-2xs);
+      --_input-px: var(--vds-space-1-5);
+      --_input-font-size: var(--vds-text-xs);
+      --_input-radius: var(--vds-radius-element);
+    }
+
+    .vds-input[data-size="xs"] {
+      --_input-height: var(--vds-size-xs);
+      --_input-px: var(--vds-space-2);
+      --_input-font-size: var(--vds-text-xs);
+      --_input-radius: var(--vds-radius-element);
+    }
+
+    .vds-input[data-size="sm"] {
+      --_input-height: var(--vds-size-sm);
+      --_input-px: var(--vds-space-2-5);
+      --_input-font-size: var(--vds-text-sm);
+      --_input-radius: var(--vds-radius-element);
+    }
+
+    /* md uses defaults above */
+
+    .vds-input[data-size="lg"] {
+      --_input-height: var(--vds-size-lg);
+      --_input-px: var(--vds-space-4);
+      --_input-font-size: var(--vds-text-base);
+      --_input-radius: var(--vds-radius-element);
+    }
+
+    .vds-input[data-size="xl"] {
+      --_input-height: var(--vds-size-xl);
+      --_input-px: var(--vds-space-5);
+      --_input-font-size: var(--vds-text-lg);
+      --_input-radius: var(--vds-radius-element);
+    }
+
+    .vds-input[data-size="2xl"] {
+      --_input-height: var(--vds-size-2xl);
+      --_input-px: var(--vds-space-6);
+      --_input-font-size: var(--vds-text-xl);
+      --_input-radius: var(--vds-radius-element);
+    }
+
+  /* ── Input wrapper with icon support ── */
+  .vds-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+  }
+
+    .vds-input-wrapper .vds-input-icon {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      block-size: 100%;
+      inline-size: var(--vds-space-10);
+      color: var(--vds-color-text-muted);
+      pointer-events: none;
+    }
+
+    .vds-input-wrapper .vds-input-icon:first-child {
+      inset-inline-start: 0;
+    }
+
+    .vds-input-wrapper .vds-input-icon:last-child {
+      inset-inline-end: 0;
+    }
+
+    .vds-input-wrapper:has( > .vds-input-icon:first-child) > .vds-input,.vds-input-wrapper[data-icon-start] > .vds-input {
+      padding-inline-start: var(--vds-space-10);
+    }
+
+    .vds-input-wrapper:has( > .vds-input-icon:last-child) > .vds-input,.vds-input-wrapper[data-icon-end] > .vds-input {
+      padding-inline-end: var(--vds-space-10);
+    }
+}

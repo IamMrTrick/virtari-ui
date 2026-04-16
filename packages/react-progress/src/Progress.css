@@ -1,0 +1,17 @@
+@layer components {
+  .vds-progress {
+    position: relative;
+    inline-size: 100%;
+    block-size: 0.5rem;
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-color-bg-muted);
+    overflow: hidden;
+  }
+
+  .vds-progress-indicator {
+    block-size: 100%;
+    background-color: var(--vds-color-primary-emphasis);
+    border-radius: inherit;
+    transition: inline-size var(--vds-duration-slow) var(--vds-ease-out);
+  }
+}

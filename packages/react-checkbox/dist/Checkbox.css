@@ -1,0 +1,83 @@
+@layer components {
+  .vds-checkbox {
+    /*
+     * ── Config (Proportional) ──
+     * Checkbox is square and proportional to text — NOT on the height ramp.
+     * sm (14px) pairs with small text, md (18px) with body, lg (22px) with headings.
+     */
+    --_checkbox-size: 1.125rem;
+    --_checkbox-radius: var(--vds-radius-element);
+    --_checkbox-icon-size: 0.75rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    inline-size: var(--_checkbox-size);
+    block-size: var(--_checkbox-size);
+    border: 2px solid var(--vds-color-border);
+    border-radius: var(--_checkbox-radius);
+    background-color: var(--vds-color-surface);
+    color: var(--vds-color-on-solid);
+    cursor: pointer;
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      border-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+    .vds-checkbox[data-state="checked"],.vds-checkbox[data-state="indeterminate"] {
+      background-color: var(--vds-color-primary-500);
+      border-color: var(--vds-color-primary-500);
+    }
+
+    .vds-checkbox:focus-visible {
+      outline: 2px solid var(--vds-color-ring);
+      outline-offset: 2px;
+    }
+
+    .vds-checkbox:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ── Sizes ── */
+
+    .vds-checkbox[data-size="sm"] {
+      --_checkbox-size: 0.875rem;
+      --_checkbox-radius: var(--vds-radius-element);
+      --_checkbox-icon-size: 0.625rem;
+    }
+
+    /* md uses defaults */
+
+    .vds-checkbox[data-size="lg"] {
+      --_checkbox-size: 1.375rem;
+      --_checkbox-radius: var(--vds-radius-element);
+      --_checkbox-icon-size: 0.875rem;
+    }
+
+  .vds-checkbox-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .vds-checkbox-check,
+  .vds-checkbox-indeterminate {
+    inline-size: var(--_checkbox-icon-size);
+    block-size: var(--_checkbox-icon-size);
+    display: none;
+  }
+
+  .vds-checkbox[data-state="checked"] .vds-checkbox-check {
+    display: block;
+    animation: vds-scale-in var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-checkbox[data-state="indeterminate"] .vds-checkbox-indeterminate {
+    display: block;
+    animation: vds-scale-in var(--vds-duration-fast) var(--vds-ease-out);
+  }
+}

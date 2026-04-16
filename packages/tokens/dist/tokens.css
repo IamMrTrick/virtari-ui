@@ -1,0 +1,563 @@
+@layer tokens {
+  :root {
+    /* ─── Primitive: Absolute ─── */
+    --vds-color-white: oklch(1 0 0);
+    --vds-color-black: oklch(0 0 0);
+
+    /* ─── Primitive: Gray ─── */
+    --vds-color-gray-50: oklch(0.98 0.005 264);
+    --vds-color-gray-100: oklch(0.95 0.007 264);
+    --vds-color-gray-200: oklch(0.90 0.010 264);
+    --vds-color-gray-300: oklch(0.80 0.012 264);
+    --vds-color-gray-400: oklch(0.65 0.015 264);
+    --vds-color-gray-500: oklch(0.50 0.018 264);
+    --vds-color-gray-600: oklch(0.40 0.020 264);
+    --vds-color-gray-700: oklch(0.30 0.018 264);
+    --vds-color-gray-800: oklch(0.20 0.015 264);
+    --vds-color-gray-900: oklch(0.13 0.012 264);
+    --vds-color-gray-950: oklch(0.08 0.010 264);
+
+    /* ─── Primitive: Gray Alpha ─── */
+    --vds-color-gray-a3: oklch(0.50 0.018 264 / 0.05);
+    --vds-color-gray-a4: oklch(0.50 0.018 264 / 0.07);
+    --vds-color-gray-a5: oklch(0.50 0.018 264 / 0.09);
+    --vds-color-gray-a6: oklch(0.50 0.018 264 / 0.12);
+    --vds-color-gray-a7: oklch(0.50 0.018 264 / 0.18);
+    --vds-color-gray-a8: oklch(0.50 0.018 264 / 0.28);
+    --vds-color-gray-a9: oklch(0.50 0.018 264 / 0.44);
+    --vds-color-gray-a10: oklch(0.50 0.018 264 / 0.56);
+    --vds-color-gray-a11: oklch(0.50 0.018 264 / 0.72);
+    --vds-color-gray-a12: oklch(0.50 0.018 264 / 0.91);
+
+    /* ─── Primitive: Primary (Indigo) ─── */
+    --vds-color-primary-50: oklch(0.97 0.02 265);
+    --vds-color-primary-100: oklch(0.93 0.04 265);
+    --vds-color-primary-200: oklch(0.87 0.08 265);
+    --vds-color-primary-300: oklch(0.77 0.13 265);
+    --vds-color-primary-400: oklch(0.66 0.18 265);
+    --vds-color-primary-500: oklch(0.55 0.20 265);
+    --vds-color-primary-600: oklch(0.47 0.20 265);
+    --vds-color-primary-700: oklch(0.40 0.18 265);
+    --vds-color-primary-800: oklch(0.33 0.15 265);
+    --vds-color-primary-900: oklch(0.27 0.12 265);
+    --vds-color-primary-950: oklch(0.20 0.09 265);
+
+    /* ─── Primitive: Primary Alpha ─── */
+    --vds-color-primary-a3: oklch(0.55 0.20 265 / 0.05);
+    --vds-color-primary-a4: oklch(0.55 0.20 265 / 0.07);
+    --vds-color-primary-a5: oklch(0.55 0.20 265 / 0.09);
+    --vds-color-primary-a6: oklch(0.55 0.20 265 / 0.12);
+    --vds-color-primary-a7: oklch(0.55 0.20 265 / 0.18);
+    --vds-color-primary-a8: oklch(0.55 0.20 265 / 0.28);
+    --vds-color-primary-a9: oklch(0.55 0.20 265 / 0.44);
+    --vds-color-primary-a10: oklch(0.55 0.20 265 / 0.56);
+    --vds-color-primary-a11: oklch(0.55 0.20 265 / 0.72);
+    --vds-color-primary-a12: oklch(0.55 0.20 265 / 0.91);
+
+    /* ─── Primitive: Success (Green) ─── */
+    --vds-color-success-50: oklch(0.97 0.02 155);
+    --vds-color-success-100: oklch(0.93 0.05 155);
+    --vds-color-success-200: oklch(0.87 0.10 155);
+    --vds-color-success-300: oklch(0.77 0.15 155);
+    --vds-color-success-400: oklch(0.66 0.18 155);
+    --vds-color-success-500: oklch(0.55 0.17 155);
+    --vds-color-success-600: oklch(0.47 0.15 155);
+    --vds-color-success-700: oklch(0.40 0.13 155);
+    --vds-color-success-800: oklch(0.33 0.10 155);
+    --vds-color-success-900: oklch(0.27 0.08 155);
+    --vds-color-success-950: oklch(0.20 0.06 155);
+
+    /* ─── Primitive: Warning (Amber) ─── */
+    --vds-color-warning-50: oklch(0.97 0.02 85);
+    --vds-color-warning-100: oklch(0.93 0.05 85);
+    --vds-color-warning-200: oklch(0.87 0.10 85);
+    --vds-color-warning-300: oklch(0.80 0.14 85);
+    --vds-color-warning-400: oklch(0.75 0.16 85);
+    --vds-color-warning-500: oklch(0.70 0.16 85);
+    --vds-color-warning-600: oklch(0.60 0.15 85);
+    --vds-color-warning-700: oklch(0.50 0.13 85);
+    --vds-color-warning-800: oklch(0.42 0.10 85);
+    --vds-color-warning-900: oklch(0.35 0.08 85);
+    --vds-color-warning-950: oklch(0.25 0.06 85);
+
+    /* ─── Primitive: Danger (Red) ─── */
+    --vds-color-danger-50: oklch(0.97 0.02 25);
+    --vds-color-danger-100: oklch(0.93 0.04 25);
+    --vds-color-danger-200: oklch(0.87 0.08 25);
+    --vds-color-danger-300: oklch(0.77 0.14 25);
+    --vds-color-danger-400: oklch(0.66 0.18 25);
+    --vds-color-danger-500: oklch(0.55 0.20 25);
+    --vds-color-danger-600: oklch(0.47 0.19 25);
+    --vds-color-danger-700: oklch(0.40 0.16 25);
+    --vds-color-danger-800: oklch(0.33 0.13 25);
+    --vds-color-danger-900: oklch(0.27 0.10 25);
+    --vds-color-danger-950: oklch(0.20 0.08 25);
+
+    /* ─── Primitive: Info (Cyan) ─── */
+    --vds-color-info-50: oklch(0.97 0.02 210);
+    --vds-color-info-100: oklch(0.93 0.04 210);
+    --vds-color-info-200: oklch(0.87 0.08 210);
+    --vds-color-info-300: oklch(0.77 0.12 210);
+    --vds-color-info-400: oklch(0.66 0.14 210);
+    --vds-color-info-500: oklch(0.55 0.14 210);
+    --vds-color-info-600: oklch(0.47 0.13 210);
+    --vds-color-info-700: oklch(0.40 0.11 210);
+    --vds-color-info-800: oklch(0.33 0.09 210);
+    --vds-color-info-900: oklch(0.27 0.07 210);
+    --vds-color-info-950: oklch(0.20 0.05 210);
+
+    /* ─── Primitive: Data Visualization ─── */
+    --vds-color-chart-1: oklch(0.55 0.20 265);
+    --vds-color-chart-2: oklch(0.60 0.18 155);
+    --vds-color-chart-3: oklch(0.65 0.16 45);
+    --vds-color-chart-4: oklch(0.55 0.18 310);
+    --vds-color-chart-5: oklch(0.60 0.15 195);
+    --vds-color-chart-6: oklch(0.65 0.17 75);
+    --vds-color-chart-7: oklch(0.55 0.19 350);
+    --vds-color-chart-8: oklch(0.60 0.14 230);
+
+    /* ═══════════════════════════════════════
+       Semantic: Light theme (default)
+       ═══════════════════════════════════════ */
+
+    /* ─── Background ─── */
+    --vds-color-bg: var(--vds-color-gray-50);
+    --vds-color-bg-subtle: var(--vds-color-gray-100);
+    --vds-color-bg-muted: var(--vds-color-gray-200);
+    --vds-color-bg-disabled: var(--vds-color-gray-100);
+
+    /* ─── Surface / Elevation ─── */
+    --vds-color-surface-sunken: var(--vds-color-gray-100);
+    --vds-color-surface: var(--vds-color-white);
+    --vds-color-surface-raised: var(--vds-color-white);
+    --vds-color-surface-overlay: var(--vds-color-white);
+    --vds-color-surface-hover: var(--vds-color-gray-100);
+    --vds-color-surface-active: var(--vds-color-gray-200);
+    --vds-color-surface-selected: var(--vds-color-primary-50);
+
+    /* ─── Overlay / Scrim ─── */
+    --vds-color-overlay: oklch(0.08 0.01 264 / 0.6);
+    --vds-color-overlay-light: oklch(0.08 0.01 264 / 0.3);
+
+    /* ─── Text ─── */
+    --vds-color-text: var(--vds-color-gray-900);
+    --vds-color-text-muted: var(--vds-color-gray-500);
+    --vds-color-text-subtle: var(--vds-color-gray-400);
+    --vds-color-text-disabled: var(--vds-color-gray-400);
+    --vds-color-on-solid: var(--vds-color-white);
+
+    /* ─── Border ─── */
+    --vds-color-border: var(--vds-color-gray-300);
+    --vds-color-border-muted: var(--vds-color-gray-200);
+    --vds-color-border-disabled: var(--vds-color-gray-200);
+
+    /* ─── Focus ─── */
+    --vds-color-ring: var(--vds-color-primary-500);
+    --vds-color-ring-offset: var(--vds-color-white);
+
+    /* ─── Skeleton / Loading ─── */
+    --vds-color-skeleton: var(--vds-color-gray-200);
+    --vds-color-skeleton-shimmer: var(--vds-color-gray-300);
+
+    /* ─── Intent: On-color (text on emphasis backgrounds) ─── */
+    --vds-color-on-primary: var(--vds-color-white);
+    --vds-color-on-success: var(--vds-color-white);
+    --vds-color-on-warning: var(--vds-color-gray-900);
+    --vds-color-on-danger: var(--vds-color-white);
+    --vds-color-on-info: var(--vds-color-white);
+
+    /* ─── Intent: Emphasis backgrounds (badges, banners, indicators) ─── */
+    --vds-color-primary-emphasis: var(--vds-color-primary-500);
+    --vds-color-success-emphasis: var(--vds-color-success-500);
+    --vds-color-warning-emphasis: var(--vds-color-warning-500);
+    --vds-color-danger-emphasis: var(--vds-color-danger-500);
+    --vds-color-info-emphasis: var(--vds-color-info-500);
+
+    /* ─── Intent: Muted backgrounds (light badges, alerts, callouts) ─── */
+    --vds-color-primary-muted: var(--vds-color-primary-100);
+    --vds-color-success-muted: var(--vds-color-success-100);
+    --vds-color-warning-muted: var(--vds-color-warning-100);
+    --vds-color-danger-muted: var(--vds-color-danger-100);
+    --vds-color-info-muted: var(--vds-color-info-100);
+
+    /* ─── Intent: Text on muted backgrounds ─── */
+    --vds-color-primary-muted-text: var(--vds-color-primary-800);
+    --vds-color-success-muted-text: var(--vds-color-success-800);
+    --vds-color-warning-muted-text: var(--vds-color-warning-900);
+    --vds-color-danger-muted-text: var(--vds-color-danger-800);
+    --vds-color-info-muted-text: var(--vds-color-info-800);
+
+    /* ─── Intent: Interactive states via color-mix() ─── */
+    --vds-color-primary-hover: color-mix(in oklch, var(--vds-color-primary-500), var(--vds-color-black) 10%);
+    --vds-color-primary-active: color-mix(in oklch, var(--vds-color-primary-500), var(--vds-color-black) 20%);
+    --vds-color-danger-hover: color-mix(in oklch, var(--vds-color-danger-500), var(--vds-color-black) 10%);
+    --vds-color-danger-active: color-mix(in oklch, var(--vds-color-danger-500), var(--vds-color-black) 20%);
+    --vds-color-success-hover: color-mix(in oklch, var(--vds-color-success-500), var(--vds-color-black) 10%);
+    --vds-color-success-active: color-mix(in oklch, var(--vds-color-success-500), var(--vds-color-black) 20%);
+    --vds-color-warning-hover: color-mix(in oklch, var(--vds-color-warning-500), var(--vds-color-black) 10%);
+    --vds-color-warning-active: color-mix(in oklch, var(--vds-color-warning-500), var(--vds-color-black) 20%);
+    --vds-color-info-hover: color-mix(in oklch, var(--vds-color-info-500), var(--vds-color-black) 10%);
+    --vds-color-info-active: color-mix(in oklch, var(--vds-color-info-500), var(--vds-color-black) 20%);
+  }
+
+  /* ═══════════════════════════════════════
+     Dark theme
+     ═══════════════════════════════════════ */
+  [data-theme="dark"] {
+    /* ─── Background ─── */
+    --vds-color-bg: var(--vds-color-gray-950);
+    --vds-color-bg-subtle: var(--vds-color-gray-900);
+    --vds-color-bg-muted: var(--vds-color-gray-800);
+    --vds-color-bg-disabled: var(--vds-color-gray-800);
+
+    /* ─── Surface / Elevation ─── */
+    --vds-color-surface-sunken: var(--vds-color-gray-950);
+    --vds-color-surface: var(--vds-color-gray-900);
+    --vds-color-surface-raised: var(--vds-color-gray-800);
+    --vds-color-surface-overlay: var(--vds-color-gray-800);
+    --vds-color-surface-hover: var(--vds-color-gray-800);
+    --vds-color-surface-active: var(--vds-color-gray-700);
+    --vds-color-surface-selected: var(--vds-color-primary-950);
+
+    /* ─── Overlay / Scrim ─── */
+    --vds-color-overlay: oklch(0 0 0 / 0.7);
+    --vds-color-overlay-light: oklch(0 0 0 / 0.4);
+
+    /* ─── Text ─── */
+    --vds-color-text: var(--vds-color-gray-50);
+    --vds-color-text-muted: var(--vds-color-gray-400);
+    --vds-color-text-subtle: var(--vds-color-gray-500);
+    --vds-color-text-disabled: var(--vds-color-gray-600);
+
+    /* ─── Border ─── */
+    --vds-color-border: var(--vds-color-gray-700);
+    --vds-color-border-muted: var(--vds-color-gray-800);
+    --vds-color-border-disabled: var(--vds-color-gray-800);
+
+    /* ─── Focus ─── */
+    --vds-color-ring: var(--vds-color-primary-400);
+    --vds-color-ring-offset: var(--vds-color-gray-950);
+
+    /* ─── Skeleton / Loading ─── */
+    --vds-color-skeleton: var(--vds-color-gray-800);
+    --vds-color-skeleton-shimmer: var(--vds-color-gray-700);
+
+    /* ─── Intent: On-color ─── */
+    --vds-color-on-primary: var(--vds-color-white);
+    --vds-color-on-success: var(--vds-color-white);
+    --vds-color-on-warning: var(--vds-color-gray-900);
+    --vds-color-on-danger: var(--vds-color-white);
+    --vds-color-on-info: var(--vds-color-white);
+
+    /* ─── Intent: Emphasis backgrounds ─── */
+    --vds-color-primary-emphasis: var(--vds-color-primary-400);
+    --vds-color-success-emphasis: var(--vds-color-success-400);
+    --vds-color-warning-emphasis: var(--vds-color-warning-400);
+    --vds-color-danger-emphasis: var(--vds-color-danger-400);
+    --vds-color-info-emphasis: var(--vds-color-info-400);
+
+    /* ─── Intent: Muted backgrounds ─── */
+    --vds-color-primary-muted: var(--vds-color-primary-950);
+    --vds-color-success-muted: var(--vds-color-success-950);
+    --vds-color-warning-muted: var(--vds-color-warning-950);
+    --vds-color-danger-muted: var(--vds-color-danger-950);
+    --vds-color-info-muted: var(--vds-color-info-950);
+
+    /* ─── Intent: Text on muted backgrounds ─── */
+    --vds-color-primary-muted-text: var(--vds-color-primary-200);
+    --vds-color-success-muted-text: var(--vds-color-success-200);
+    --vds-color-warning-muted-text: var(--vds-color-warning-200);
+    --vds-color-danger-muted-text: var(--vds-color-danger-200);
+    --vds-color-info-muted-text: var(--vds-color-info-200);
+
+    /* ─── Intent: Interactive states ─── */
+    --vds-color-primary-hover: color-mix(in oklch, var(--vds-color-primary-400), var(--vds-color-white) 10%);
+    --vds-color-primary-active: color-mix(in oklch, var(--vds-color-primary-400), var(--vds-color-white) 20%);
+    --vds-color-danger-hover: color-mix(in oklch, var(--vds-color-danger-400), var(--vds-color-white) 10%);
+    --vds-color-danger-active: color-mix(in oklch, var(--vds-color-danger-400), var(--vds-color-white) 20%);
+    --vds-color-success-hover: color-mix(in oklch, var(--vds-color-success-400), var(--vds-color-white) 10%);
+    --vds-color-success-active: color-mix(in oklch, var(--vds-color-success-400), var(--vds-color-white) 20%);
+    --vds-color-warning-hover: color-mix(in oklch, var(--vds-color-warning-400), var(--vds-color-white) 10%);
+    --vds-color-warning-active: color-mix(in oklch, var(--vds-color-warning-400), var(--vds-color-white) 20%);
+    --vds-color-info-hover: color-mix(in oklch, var(--vds-color-info-400), var(--vds-color-white) 10%);
+    --vds-color-info-active: color-mix(in oklch, var(--vds-color-info-400), var(--vds-color-white) 20%);
+  }
+}
+@layer tokens {
+  :root {
+    --vds-space-0: 0;
+    --vds-space-px: 1px;
+    --vds-space-0-5: 0.125rem;
+    --vds-space-1: 0.25rem;
+    --vds-space-1-5: 0.375rem;
+    --vds-space-2: 0.5rem;
+    --vds-space-2-5: 0.625rem;
+    --vds-space-3: 0.75rem;
+    --vds-space-3-5: 0.875rem;
+    --vds-space-4: 1rem;
+    --vds-space-5: 1.25rem;
+    --vds-space-6: 1.5rem;
+    --vds-space-7: 1.75rem;
+    --vds-space-8: 2rem;
+    --vds-space-9: 2.25rem;
+    --vds-space-10: 2.5rem;
+    --vds-space-11: 2.75rem;
+    --vds-space-12: 3rem;
+    --vds-space-14: 3.5rem;
+    --vds-space-16: 4rem;
+    --vds-space-20: 5rem;
+    --vds-space-24: 6rem;
+    --vds-space-28: 7rem;
+    --vds-space-32: 8rem;
+    --vds-space-36: 9rem;
+    --vds-space-40: 10rem;
+    --vds-space-44: 11rem;
+    --vds-space-48: 12rem;
+    --vds-space-52: 13rem;
+    --vds-space-56: 14rem;
+    --vds-space-60: 15rem;
+    --vds-space-64: 16rem;
+    --vds-space-72: 18rem;
+    --vds-space-80: 20rem;
+    --vds-space-96: 24rem;
+  }
+}
+@layer tokens {
+  :root {
+    /*
+     * ── Component Size Scale ──
+     * Shared height ramp for interactive components (buttons, inputs, selects, etc.)
+     * Change these to resize all components globally.
+     *
+     * Size  Height  Pixels  WCAG AA (24px)  WCAG AAA (44px)  Apple HIG  Google MD
+     * ───── ─────── ─────── ─────────────── ──────────────── ────────── ─────────
+     * 2xs   1.5rem  24px    ⚠ minimum        ✗                ✗          ✗
+     * xs    1.75rem 28px    ✓                ✗                ✗          ✗
+     * sm    2rem    32px    ✓                ✗                ✗          ✗
+     * md    2.5rem  40px    ✓                ✗                ✗          ✗
+     * lg    2.75rem 44px    ✓                ✓                ✓ (44pt)   ✗
+     * xl    3.25rem 52px    ✓                ✓                ✓          ✓ (48dp)
+     * 2xl   4rem    64px    ✓                ✓                ✓          ✓
+     */
+    --vds-size-2xs: 1.5rem;
+    --vds-size-xs: 1.75rem;
+    --vds-size-sm: 2rem;
+    --vds-size-md: 2.5rem;
+    --vds-size-lg: 2.75rem;
+    --vds-size-xl: 3.25rem;
+    --vds-size-2xl: 4rem;
+  }
+}
+@layer tokens {
+  :root {
+    /* ─── Font weights ─── */
+    --vds-font-weight-normal: 400;
+    --vds-font-weight-medium: 500;
+    --vds-font-weight-semibold: 600;
+    --vds-font-weight-bold: 700;
+
+    /* ─── Font families ─── */
+    --vds-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --vds-font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+
+    /* ─── Font sizes ─── */
+    --vds-text-xs: 0.75rem;
+    --vds-text-sm: 0.875rem;
+    --vds-text-base: 1rem;
+    --vds-text-lg: 1.125rem;
+    --vds-text-xl: 1.25rem;
+    --vds-text-2xl: 1.5rem;
+    --vds-text-3xl: 1.875rem;
+    --vds-text-4xl: 2.25rem;
+    --vds-text-5xl: 3rem;
+    --vds-text-6xl: 3.75rem;
+
+    /* ─── Line heights ─── */
+    --vds-leading-none: 1;
+    --vds-leading-tight: 1.25;
+    --vds-leading-snug: 1.375;
+    --vds-leading-normal: 1.5;
+    --vds-leading-relaxed: 1.625;
+    --vds-leading-loose: 2;
+
+    /* ─── Letter spacing ─── */
+    --vds-tracking-tighter: -0.05em;
+    --vds-tracking-tight: -0.025em;
+    --vds-tracking-normal: 0em;
+    --vds-tracking-wide: 0.025em;
+    --vds-tracking-wider: 0.05em;
+    --vds-tracking-widest: 0.1em;
+  }
+}
+@layer tokens {
+  :root {
+    /*
+     * ── Primitive Radius Scale ──
+     * Raw values. Components should use semantic tokens below.
+     */
+    --vds-radius-0: 0;
+    --vds-radius-1: 0.125rem;  /* 2px */
+    --vds-radius-2: 0.25rem;   /* 4px */
+    --vds-radius-3: 0.375rem;  /* 6px */
+    --vds-radius-4: 0.5rem;    /* 8px */
+    --vds-radius-5: 0.75rem;   /* 12px */
+    --vds-radius-6: 1rem;      /* 16px */
+    --vds-radius-7: 1.5rem;    /* 24px */
+    --vds-radius-full: 9999px;
+
+    /*
+     * ── Radius Mode System ──
+     * Set `data-radius` on <html> or any container to change the personality.
+     *
+     * Modes:
+     *   sharp  — minimal rounding → enterprise, technical, dense
+     *   soft   — gentle rounding  → default, industry standard
+     *   round  — noticeable rounding → friendly, modern, consumer
+     *   pill   — fully rounded    → playful, bold, marketing
+     *
+     * Only 3 semantic levels needed:
+     *   element   — small interactive elements (button, input, select, toggle, checkbox)
+     *   surface   — containers (card, dialog, popover, dropdown, toast)
+     *   badge     — always full-round regardless of mode (except sharp)
+     *
+     * Rule: surface radius = element radius + padding (outer = inner + gap)
+     * Exception: checkbox never goes full-round (even in pill mode)
+     */
+    --vds-radius-element: var(--vds-radius-3);
+    --vds-radius-surface: var(--vds-radius-5);
+    --vds-radius-badge: var(--vds-radius-full);
+  }
+
+  /* ── Mode: Sharp ── */
+  [data-radius="sharp"] {
+    --vds-radius-element: var(--vds-radius-1);
+    --vds-radius-surface: var(--vds-radius-2);
+    --vds-radius-badge: var(--vds-radius-2);
+  }
+
+  /* ── Mode: Soft (default — same as :root) ── */
+
+  /* ── Mode: Round ── */
+  [data-radius="round"] {
+    --vds-radius-element: var(--vds-radius-4);
+    --vds-radius-surface: var(--vds-radius-6);
+    --vds-radius-badge: var(--vds-radius-full);
+  }
+
+  /* ── Mode: Pill ── */
+  [data-radius="pill"] {
+    --vds-radius-element: var(--vds-radius-full);
+    --vds-radius-surface: var(--vds-radius-7);
+    --vds-radius-badge: var(--vds-radius-full);
+  }
+}
+@layer tokens {
+  :root {
+    --vds-shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+    --vds-shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+    --vds-shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
+    --vds-shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1);
+    --vds-shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.1), 0 8px 10px -6px oklch(0 0 0 / 0.1);
+    --vds-shadow-2xl: 0 25px 50px -12px oklch(0 0 0 / 0.25);
+    --vds-shadow-inner: inset 0 2px 4px 0 oklch(0 0 0 / 0.05);
+    --vds-shadow-none: 0 0 0 0 transparent;
+  }
+}
+@layer tokens {
+  :root {
+    /* ─── Durations ─── */
+    --vds-duration-fastest: 50ms;
+    --vds-duration-fast: 100ms;
+    --vds-duration-normal: 200ms;
+    --vds-duration-slow: 300ms;
+    --vds-duration-slower: 400ms;
+    --vds-duration-slowest: 500ms;
+
+    /* ─── Easing ─── */
+    --vds-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --vds-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --vds-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --vds-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --vds-ease-spring: cubic-bezier(0.22, 1.2, 0.36, 1);
+  }
+
+  /* ─── Keyframes ─── */
+  @keyframes vds-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes vds-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes vds-scale-in {
+    from {
+      opacity: 0;
+      scale: 0.95;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  @keyframes vds-scale-out {
+    from {
+      opacity: 1;
+      scale: 1;
+    }
+    to {
+      opacity: 0;
+      scale: 0.95;
+    }
+  }
+
+  @keyframes vds-slide-in-from-top {
+    from { translate: 0 -0.5rem; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-in-from-bottom {
+    from { translate: 0 0.5rem; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-in-from-left {
+    from { translate: -0.5rem 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-in-from-right {
+    from { translate: 0.5rem 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  /* ─── Respect reduced motion ─── */
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --vds-duration-fastest: 0ms;
+      --vds-duration-fast: 0ms;
+      --vds-duration-normal: 0ms;
+      --vds-duration-slow: 0ms;
+      --vds-duration-slower: 0ms;
+      --vds-duration-slowest: 0ms;
+    }
+  }
+}
+@layer tokens {
+  :root {
+    --vds-z-hide: -1;
+    --vds-z-base: 0;
+    --vds-z-docked: 10;
+    --vds-z-dropdown: 1000;
+    --vds-z-sticky: 1100;
+    --vds-z-banner: 1200;
+    --vds-z-overlay: 1300;
+    --vds-z-modal: 1400;
+    --vds-z-popover: 1500;
+    --vds-z-toast: 1600;
+    --vds-z-tooltip: 1700;
+  }
+}

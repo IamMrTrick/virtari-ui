@@ -1,0 +1,23 @@
+{
+  "name": "virtari-design-system",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r --filter \"./packages/**\" run build",
+    "build:tokens": "pnpm --filter @virtari/tokens run build",
+    "build:core": "pnpm --filter @virtari/core run build",
+    "dev": "pnpm --filter @virtari/docs run dev",
+    "clean": "pnpm -r run clean",
+    "typecheck": "pnpm -r run typecheck"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.10",
+    "postcss-cli": "^11.0.1",
+    "postcss-custom-media": "^11.0.0",
+    "postcss-import": "^16.1.1",
+    "postcss-nesting": "^14.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  }
+}
