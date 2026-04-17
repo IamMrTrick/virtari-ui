@@ -131,6 +131,23 @@ export function getTranslate(direction: Direction, openPx: number, totalPx: numb
   }
 }
 
+export function getStretchScale(openPx: number, totalPx: number): number {
+  if (totalPx <= 0 || openPx <= totalPx) return 1;
+  const extraOpen = openPx - totalPx;
+  const maxStretchPx = clamp(totalPx * 0.035, 8, 16);
+  const stretchPx = Math.min(extraOpen, maxStretchPx);
+  return (totalPx + stretchPx) / totalPx;
+}
+
+export function getVisualTransform(direction: Direction, openPx: number, totalPx: number): string {
+  const translate = getTranslate(direction, openPx, totalPx);
+  const stretchScale = getStretchScale(openPx, totalPx);
+  if (getAxis(direction) === "x") {
+    return `${translate} scale3d(${stretchScale}, 1, 1)`;
+  }
+  return `${translate} scale3d(1, ${stretchScale}, 1)`;
+}
+
 function resolveSnapSize(value: SnapPoint, drawerSize: number): number {
   const size = value <= 1 && value >= 0 ? value * drawerSize : value;
   return clamp(size, 1, drawerSize);

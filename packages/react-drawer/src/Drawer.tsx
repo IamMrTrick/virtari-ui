@@ -24,7 +24,7 @@ import {
   getDefaultAdaptiveSize,
   getElementSize,
   getOverlayProgress,
-  getTranslate,
+  getVisualTransform,
   getViewportInfo,
   getViewportSize,
   resolveDeclaredSize,
@@ -424,7 +424,7 @@ export const DrawerContent = forwardRef<
 
     contentEl.style.setProperty(
       "--vds-drawer-transform",
-      getTranslate(direction, sizePx, layout.totalSize),
+      getVisualTransform(direction, sizePx, layout.totalSize),
     );
 
     const overlayProgress = getOverlayProgress(sizePx, layout.totalSize, layout.overlayStartSize);
@@ -553,7 +553,7 @@ export const DrawerContent = forwardRef<
     if (totalSize <= 0) return;
 
     if (currentSizeRef.current <= 0) {
-      contentEl.style.setProperty("--vds-drawer-transform", getTranslate(direction, 0, totalSize));
+      contentEl.style.setProperty("--vds-drawer-transform", getVisualTransform(direction, 0, totalSize));
       if (overlayRef.current) {
         overlayRef.current.style.setProperty("--vds-drawer-overlay-opacity", "0");
       }

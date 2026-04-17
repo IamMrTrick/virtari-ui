@@ -92,6 +92,21 @@ function getTranslate(direction, openPx, totalPx) {
       return `translate3d(${-offset}px, 0, 0)`;
   }
 }
+function getStretchScale(openPx, totalPx) {
+  if (totalPx <= 0 || openPx <= totalPx) return 1;
+  const extraOpen = openPx - totalPx;
+  const maxStretchPx = clamp(totalPx * 0.035, 8, 16);
+  const stretchPx = Math.min(extraOpen, maxStretchPx);
+  return (totalPx + stretchPx) / totalPx;
+}
+function getVisualTransform(direction, openPx, totalPx) {
+  const translate = getTranslate(direction, openPx, totalPx);
+  const stretchScale = getStretchScale(openPx, totalPx);
+  if (getAxis(direction) === "x") {
+    return `${translate} scale3d(${stretchScale}, 1, 1)`;
+  }
+  return `${translate} scale3d(1, ${stretchScale}, 1)`;
+}
 function resolveSnapSize(value, drawerSize) {
   const size = value <= 1 && value >= 0 ? value * drawerSize : value;
   return clamp(size, 1, drawerSize);
@@ -1004,7 +1019,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
     if (layout.totalSize <= 0 || !contentEl) return;
     contentEl.style.setProperty(
       "--vds-drawer-transform",
-      getTranslate(direction, sizePx, layout.totalSize)
+      getVisualTransform(direction, sizePx, layout.totalSize)
     );
     const overlayProgress = getOverlayProgress(sizePx, layout.totalSize, layout.overlayStartSize);
     if (overlayEl) {
@@ -1113,7 +1128,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
     const totalSize = getElementSize(contentEl, direction);
     if (totalSize <= 0) return;
     if (currentSizeRef.current <= 0) {
-      contentEl.style.setProperty("--vds-drawer-transform", getTranslate(direction, 0, totalSize));
+      contentEl.style.setProperty("--vds-drawer-transform", getVisualTransform(direction, 0, totalSize));
       if (overlayRef.current) {
         overlayRef.current.style.setProperty("--vds-drawer-overlay-opacity", "0");
       }
