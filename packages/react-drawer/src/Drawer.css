@@ -325,6 +325,23 @@
     }
   }
 
+  .vds-drawer-content[data-keyboard-open][data-direction="bottom"],
+  .vds-drawer-content[data-keyboard-open][data-direction="top"] {
+    overflow-y: auto;
+  }
+
+  .vds-drawer-content[data-keyboard-open][data-direction="bottom"] .vds-drawer-body,
+  .vds-drawer-content[data-keyboard-open][data-direction="top"] .vds-drawer-body {
+    flex: 0 0 auto;
+    min-block-size: auto;
+    overflow: visible;
+  }
+
+  .vds-drawer-content[data-keyboard-open][data-direction="bottom"] .vds-drawer-footer,
+  .vds-drawer-content[data-keyboard-open][data-direction="top"] .vds-drawer-footer {
+    margin-block-start: 0;
+  }
+
   [data-vds-drawer-wrapper] {
     --vds-drawer-duration: var(--vds-duration-slower);
     --vds-drawer-ease: var(--vds-ease-ios);

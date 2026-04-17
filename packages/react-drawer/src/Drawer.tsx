@@ -370,6 +370,7 @@ export const DrawerContent = forwardRef<
     minimized: null,
     overlayStartSize: 0,
   });
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
   const currentSizeRef = useRef(0);
   const pendingSizeRef = useRef(0);
   const measureFrameRef = useRef(0);
@@ -595,6 +596,54 @@ export const DrawerContent = forwardRef<
     cancelAnimationFrame(openAnimRef.current);
   }, []);
 
+  useEffect(() => {
+    if (!present) {
+      setKeyboardOpen(false);
+      return;
+    }
+
+    const syncKeyboardOpen = () => {
+      if (typeof window === "undefined") {
+        setKeyboardOpen(false);
+        return;
+      }
+      const activeElement = typeof document === "undefined" ? null : document.activeElement;
+      const hasFocusedEditable = Boolean(
+        contentRef.current?.contains(activeElement) && isEditableElement(activeElement),
+      );
+      if (!hasFocusedEditable) {
+        setKeyboardOpen(false);
+        return;
+      }
+      const vv = window.visualViewport;
+      if (!vv) {
+        setKeyboardOpen(false);
+        return;
+      }
+      const keyboardDelta = window.innerHeight - vv.height;
+      const keyboardThreshold = Math.max(120, window.innerHeight * 0.18);
+      setKeyboardOpen(keyboardDelta > keyboardThreshold);
+    };
+
+    syncKeyboardOpen();
+    const contentEl = contentRef.current;
+    const onFocusIn = () => syncKeyboardOpen();
+    const onFocusOut = () => requestAnimationFrame(syncKeyboardOpen);
+    contentEl?.addEventListener("focusin", onFocusIn);
+    contentEl?.addEventListener("focusout", onFocusOut);
+    window.visualViewport?.addEventListener("resize", syncKeyboardOpen);
+    window.visualViewport?.addEventListener("scroll", syncKeyboardOpen);
+    window.addEventListener("resize", syncKeyboardOpen);
+
+    return () => {
+      contentEl?.removeEventListener("focusin", onFocusIn);
+      contentEl?.removeEventListener("focusout", onFocusOut);
+      window.visualViewport?.removeEventListener("resize", syncKeyboardOpen);
+      window.visualViewport?.removeEventListener("scroll", syncKeyboardOpen);
+      window.removeEventListener("resize", syncKeyboardOpen);
+    };
+  }, [contentRef, present]);
+
   useLayoutEffect(() => {
     if (!present) {
       hasOpenedRef.current = false;
@@ -745,6 +794,7 @@ export const DrawerContent = forwardRef<
         data-direction={direction}
         data-open={open || undefined}
         data-dragging={dragging || undefined}
+        data-keyboard-open={keyboardOpen || undefined}
         data-size-mode={sizeMode}
         data-stage={activeStageKind}
         data-measured={layout.totalSize > 0 || undefined}

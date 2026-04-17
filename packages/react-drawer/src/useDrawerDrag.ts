@@ -23,19 +23,34 @@ import {
 const AXIS_LOCK_THRESHOLD = 6;
 const VELOCITY_WINDOW_MS = 80;
 const MAX_SAMPLES = 6;
-const INTERACTIVE_SELECTOR = [
+const INPUT_HARD_BLOCK_TYPES = new Set([
   "button",
-  "a[href]",
-  "input",
+  "checkbox",
+  "color",
+  "file",
+  "hidden",
+  "image",
+  "radio",
+  "range",
+  "reset",
+  "submit",
+]);
+
+const HARD_BLOCK_SELECTOR = [
   "select",
   "textarea",
   "[contenteditable='true']",
-  "[role='button']",
-  "[role='link']",
   "[data-vds-drawer-no-drag]",
 ].join(",");
 
-type DragSource = "handle" | "header" | "scroll";
+const SOFT_BLOCK_SELECTOR = [
+  "button",
+  "a[href]",
+  "[role='button']",
+  "[role='link']",
+].join(",");
+
+type DragSource = "handle" | "header" | "scroll" | "content";
 type InputType = "mouse" | "pen" | "touch";
 
 export interface DragConfig {
@@ -90,7 +105,32 @@ function isInside(target: HTMLElement | null, parent: HTMLElement | null): boole
 
 function isInteractiveTarget(target: HTMLElement | null): boolean {
   if (!target) return false;
-  return Boolean(target.closest(INTERACTIVE_SELECTOR));
+  return Boolean(target.closest(`${HARD_BLOCK_SELECTOR},${SOFT_BLOCK_SELECTOR}`));
+}
+
+function isHardBlockedTarget(target: HTMLElement | null): boolean {
+  if (!target) return false;
+  if (target.closest(HARD_BLOCK_SELECTOR)) return true;
+  return Boolean(target.closest("input"));
+}
+
+function isTouchDraggableInputTarget(target: HTMLElement | null): boolean {
+  if (!target) return false;
+  const input = target.closest("input");
+  if (!(input instanceof HTMLInputElement)) return false;
+  const type = input.type.toLowerCase();
+  return !INPUT_HARD_BLOCK_TYPES.has(type);
+}
+
+function blocksSurfaceDrag(target: HTMLElement | null, inputType: InputType): boolean {
+  if (!target) return false;
+  if (target.closest("[data-vds-drawer-no-drag]")) return true;
+  if (inputType !== "mouse" && isTouchDraggableInputTarget(target)) return false;
+  if (isHardBlockedTarget(target)) return true;
+  if (inputType === "mouse") {
+    return Boolean(target.closest(SOFT_BLOCK_SELECTOR));
+  }
+  return false;
 }
 
 function getTouchById(list: TouchList, touchId: number): Touch | null {
@@ -103,10 +143,12 @@ function getTouchById(list: TouchList, touchId: number): Touch | null {
 
 function getDragSurface(
   target: HTMLElement | null,
+  contentEl: HTMLElement | null,
   handleEl: HTMLElement | null,
   headerEl: HTMLElement | null,
   scrollableEl: HTMLElement | null,
   dragHandleOnly: boolean,
+  direction: Direction,
   inputType: InputType,
 ): { el: HTMLElement; source: DragSource } | null {
   if (isInside(target, handleEl) && handleEl) {
@@ -117,12 +159,24 @@ function getDragSurface(
     return { el: headerEl, source: "header" };
   }
 
+  const horizontal = direction === "left" || direction === "right";
+
   if (
-    inputType === "touch" &&
+    !dragHandleOnly &&
+    horizontal &&
+    isInside(target, contentEl) &&
+    contentEl &&
+    !blocksSurfaceDrag(target, inputType)
+  ) {
+    return { el: contentEl, source: "content" };
+  }
+
+  if (
+    inputType !== "mouse" &&
     !dragHandleOnly &&
     isInside(target, scrollableEl) &&
     scrollableEl &&
-    !isInteractiveTarget(target)
+    !blocksSurfaceDrag(target, inputType)
   ) {
     return { el: scrollableEl, source: "scroll" };
   }
@@ -442,10 +496,12 @@ export function useDrawerDrag(config: DragConfig) {
     const resolvedConfig = configRef.current;
     const surface = getDragSurface(
       target,
+      resolvedConfig.getContentEl(),
       resolvedConfig.getHandleEl(),
       resolvedConfig.getHeaderEl?.() ?? null,
       resolvedConfig.getScrollableEl(),
       resolvedConfig.dragHandleOnly,
+      resolvedConfig.direction,
       "mouse",
     );
 
@@ -478,10 +534,12 @@ export function useDrawerDrag(config: DragConfig) {
     const resolvedConfig = configRef.current;
     const surface = getDragSurface(
       target,
+      resolvedConfig.getContentEl(),
       resolvedConfig.getHandleEl(),
       resolvedConfig.getHeaderEl?.() ?? null,
       resolvedConfig.getScrollableEl(),
       resolvedConfig.dragHandleOnly,
+      resolvedConfig.direction,
       "pen",
     );
 
@@ -516,10 +574,12 @@ export function useDrawerDrag(config: DragConfig) {
     const resolvedConfig = configRef.current;
     const surface = getDragSurface(
       target,
+      resolvedConfig.getContentEl(),
       resolvedConfig.getHandleEl(),
       resolvedConfig.getHeaderEl?.() ?? null,
       resolvedConfig.getScrollableEl(),
       resolvedConfig.dragHandleOnly,
+      resolvedConfig.direction,
       "touch",
     );
 

@@ -324,16 +324,29 @@ function pickSettleTarget(args) {
 var AXIS_LOCK_THRESHOLD = 6;
 var VELOCITY_WINDOW_MS = 80;
 var MAX_SAMPLES = 6;
-var INTERACTIVE_SELECTOR = [
+var INPUT_HARD_BLOCK_TYPES = /* @__PURE__ */ new Set([
   "button",
-  "a[href]",
-  "input",
+  "checkbox",
+  "color",
+  "file",
+  "hidden",
+  "image",
+  "radio",
+  "range",
+  "reset",
+  "submit"
+]);
+var HARD_BLOCK_SELECTOR = [
   "select",
   "textarea",
   "[contenteditable='true']",
-  "[role='button']",
-  "[role='link']",
   "[data-vds-drawer-no-drag]"
+].join(",");
+var SOFT_BLOCK_SELECTOR = [
+  "button",
+  "a[href]",
+  "[role='button']",
+  "[role='link']"
 ].join(",");
 function isInside(target, parent) {
   if (!target || !parent) return false;
@@ -341,7 +354,29 @@ function isInside(target, parent) {
 }
 function isInteractiveTarget(target) {
   if (!target) return false;
-  return Boolean(target.closest(INTERACTIVE_SELECTOR));
+  return Boolean(target.closest(`${HARD_BLOCK_SELECTOR},${SOFT_BLOCK_SELECTOR}`));
+}
+function isHardBlockedTarget(target) {
+  if (!target) return false;
+  if (target.closest(HARD_BLOCK_SELECTOR)) return true;
+  return Boolean(target.closest("input"));
+}
+function isTouchDraggableInputTarget(target) {
+  if (!target) return false;
+  const input = target.closest("input");
+  if (!(input instanceof HTMLInputElement)) return false;
+  const type = input.type.toLowerCase();
+  return !INPUT_HARD_BLOCK_TYPES.has(type);
+}
+function blocksSurfaceDrag(target, inputType) {
+  if (!target) return false;
+  if (target.closest("[data-vds-drawer-no-drag]")) return true;
+  if (inputType !== "mouse" && isTouchDraggableInputTarget(target)) return false;
+  if (isHardBlockedTarget(target)) return true;
+  if (inputType === "mouse") {
+    return Boolean(target.closest(SOFT_BLOCK_SELECTOR));
+  }
+  return false;
 }
 function getTouchById(list, touchId) {
   for (let index = 0; index < list.length; index++) {
@@ -350,14 +385,18 @@ function getTouchById(list, touchId) {
   }
   return null;
 }
-function getDragSurface(target, handleEl, headerEl, scrollableEl, dragHandleOnly, inputType) {
+function getDragSurface(target, contentEl, handleEl, headerEl, scrollableEl, dragHandleOnly, direction, inputType) {
   if (isInside(target, handleEl) && handleEl) {
     return { el: handleEl, source: "handle" };
   }
   if (!dragHandleOnly && isInside(target, headerEl) && headerEl && !isInteractiveTarget(target)) {
     return { el: headerEl, source: "header" };
   }
-  if (inputType === "touch" && !dragHandleOnly && isInside(target, scrollableEl) && scrollableEl && !isInteractiveTarget(target)) {
+  const horizontal = direction === "left" || direction === "right";
+  if (!dragHandleOnly && horizontal && isInside(target, contentEl) && contentEl && !blocksSurfaceDrag(target, inputType)) {
+    return { el: contentEl, source: "content" };
+  }
+  if (inputType !== "mouse" && !dragHandleOnly && isInside(target, scrollableEl) && scrollableEl && !blocksSurfaceDrag(target, inputType)) {
     return { el: scrollableEl, source: "scroll" };
   }
   return null;
@@ -625,10 +664,12 @@ function useDrawerDrag(config) {
     const resolvedConfig = configRef.current;
     const surface = getDragSurface(
       target,
+      resolvedConfig.getContentEl(),
       resolvedConfig.getHandleEl(),
       resolvedConfig.getHeaderEl?.() ?? null,
       resolvedConfig.getScrollableEl(),
       resolvedConfig.dragHandleOnly,
+      resolvedConfig.direction,
       "mouse"
     );
     if (!surface) return;
@@ -656,10 +697,12 @@ function useDrawerDrag(config) {
     const resolvedConfig = configRef.current;
     const surface = getDragSurface(
       target,
+      resolvedConfig.getContentEl(),
       resolvedConfig.getHandleEl(),
       resolvedConfig.getHeaderEl?.() ?? null,
       resolvedConfig.getScrollableEl(),
       resolvedConfig.dragHandleOnly,
+      resolvedConfig.direction,
       "pen"
     );
     if (!surface) return;
@@ -689,10 +732,12 @@ function useDrawerDrag(config) {
     const resolvedConfig = configRef.current;
     const surface = getDragSurface(
       target,
+      resolvedConfig.getContentEl(),
       resolvedConfig.getHandleEl(),
       resolvedConfig.getHeaderEl?.() ?? null,
       resolvedConfig.getScrollableEl(),
       resolvedConfig.dragHandleOnly,
+      resolvedConfig.direction,
       "touch"
     );
     if (!surface) return;
@@ -976,6 +1021,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
     minimized: null,
     overlayStartSize: 0
   });
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
   const currentSizeRef = useRef(0);
   const pendingSizeRef = useRef(0);
   const measureFrameRef = useRef(0);
@@ -1155,6 +1201,50 @@ var DrawerContent = forwardRef(function DrawerContent2({
     cancelAnimationFrame(writeFrameRef.current);
     cancelAnimationFrame(openAnimRef.current);
   }, []);
+  useEffect(() => {
+    if (!present) {
+      setKeyboardOpen(false);
+      return;
+    }
+    const syncKeyboardOpen = () => {
+      if (typeof window === "undefined") {
+        setKeyboardOpen(false);
+        return;
+      }
+      const activeElement = typeof document === "undefined" ? null : document.activeElement;
+      const hasFocusedEditable = Boolean(
+        contentRef.current?.contains(activeElement) && isEditableElement(activeElement)
+      );
+      if (!hasFocusedEditable) {
+        setKeyboardOpen(false);
+        return;
+      }
+      const vv = window.visualViewport;
+      if (!vv) {
+        setKeyboardOpen(false);
+        return;
+      }
+      const keyboardDelta = window.innerHeight - vv.height;
+      const keyboardThreshold = Math.max(120, window.innerHeight * 0.18);
+      setKeyboardOpen(keyboardDelta > keyboardThreshold);
+    };
+    syncKeyboardOpen();
+    const contentEl = contentRef.current;
+    const onFocusIn = () => syncKeyboardOpen();
+    const onFocusOut = () => requestAnimationFrame(syncKeyboardOpen);
+    contentEl?.addEventListener("focusin", onFocusIn);
+    contentEl?.addEventListener("focusout", onFocusOut);
+    window.visualViewport?.addEventListener("resize", syncKeyboardOpen);
+    window.visualViewport?.addEventListener("scroll", syncKeyboardOpen);
+    window.addEventListener("resize", syncKeyboardOpen);
+    return () => {
+      contentEl?.removeEventListener("focusin", onFocusIn);
+      contentEl?.removeEventListener("focusout", onFocusOut);
+      window.visualViewport?.removeEventListener("resize", syncKeyboardOpen);
+      window.visualViewport?.removeEventListener("scroll", syncKeyboardOpen);
+      window.removeEventListener("resize", syncKeyboardOpen);
+    };
+  }, [contentRef, present]);
   useLayoutEffect(() => {
     if (!present) {
       hasOpenedRef.current = false;
@@ -1287,6 +1377,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
         "data-direction": direction,
         "data-open": open || void 0,
         "data-dragging": dragging || void 0,
+        "data-keyboard-open": keyboardOpen || void 0,
         "data-size-mode": sizeMode,
         "data-stage": activeStageKind,
         "data-measured": layout.totalSize > 0 || void 0,
