@@ -6,10 +6,30 @@ export type DrawerSnapBehavior = "staged" | "closest";
 
 export type SnapPoint = number;
 
+export type DrawerIndicatorPlacement = "inside" | "outside" | "hidden";
+
+export type DrawerHeaderVariant = "plain" | "bordered";
+
 export type DrawerDeclaredSize =
   | number
   | string
   | ((info: DrawerViewportInfo) => number | string);
+
+export type DrawerDirectionalValue<T> = T | Partial<Record<Direction, T>>;
+
+export type DrawerOffset = DrawerDirectionalValue<DrawerDeclaredSize>;
+
+export interface DrawerOpenState {
+  id: string;
+  size: SnapPoint;
+  label?: string;
+}
+
+export interface DrawerMinimizedState {
+  id?: string;
+  size: SnapPoint;
+  label?: string;
+}
 
 export interface DrawerViewportInfo {
   direction: Direction;
@@ -234,6 +254,57 @@ export function resolveDeclaredSize(
   if (value === undefined) return undefined;
   const resolved = typeof value === "function" ? value(info) : value;
   return typeof resolved === "number" ? `${resolved}px` : resolved;
+}
+
+export function resolveDirectionalValue<T>(
+  value: DrawerDirectionalValue<T> | undefined,
+  direction: Direction,
+): T | undefined {
+  if (value === undefined) return undefined;
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    return (value as Partial<Record<Direction, T>>)[direction];
+  }
+  return value;
+}
+
+export function resolveDeclaredPixels(
+  value: DrawerDeclaredSize | undefined,
+  info: DrawerViewportInfo,
+  direction: Direction,
+): number {
+  const resolved = resolveDeclaredSize(value, info);
+  if (!resolved) return 0;
+
+  const trimmed = resolved.trim();
+  if (!trimmed) return 0;
+  if (/^-?\d+(\.\d+)?px$/i.test(trimmed)) return parseFloat(trimmed);
+  if (/^-?\d+(\.\d+)?$/i.test(trimmed)) return parseFloat(trimmed);
+  if (typeof document === "undefined") {
+    const parsed = parseFloat(trimmed);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  const probe = document.createElement("div");
+  probe.style.position = "fixed";
+  probe.style.inset = "0 auto auto 0";
+  probe.style.visibility = "hidden";
+  probe.style.pointerEvents = "none";
+  probe.style.padding = "0";
+  probe.style.margin = "0";
+  probe.style.border = "0";
+
+  if (getAxis(direction) === "x") {
+    probe.style.width = trimmed;
+    probe.style.height = "0";
+  } else {
+    probe.style.height = trimmed;
+    probe.style.width = "0";
+  }
+
+  document.body.appendChild(probe);
+  const rect = probe.getBoundingClientRect();
+  probe.remove();
+  return getAxis(direction) === "x" ? rect.width : rect.height;
 }
 
 export function getDefaultAdaptiveSize(direction: Direction): string {

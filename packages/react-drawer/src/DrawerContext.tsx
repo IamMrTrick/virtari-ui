@@ -2,6 +2,9 @@ import { createContext, useContext, type RefObject } from "react";
 import type {
   Direction,
   DrawerDeclaredSize,
+  DrawerHeaderVariant,
+  DrawerIndicatorPlacement,
+  DrawerOffset,
   DrawerSizeMode,
   DrawerSnapBehavior,
   SnapPoint,
@@ -18,6 +21,9 @@ export interface DrawerContextValue {
   preventAutoFocus: boolean;
   sizeMode: DrawerSizeMode;
   size?: DrawerDeclaredSize;
+  offset?: DrawerOffset;
+  indicator: DrawerIndicatorPlacement;
+  headerVariant: DrawerHeaderVariant;
   snapPoints: readonly SnapPoint[];
   activeSnapPoint: SnapPoint;
   minimizedSize?: SnapPoint;

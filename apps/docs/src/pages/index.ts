@@ -53,7 +53,10 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   avatar: { title: "Avatar", description: "Profile image with fallback initials." },
   tabs: { title: "Tabs", description: "Tabbed navigation panels." },
   dialog: { title: "Dialog", description: "Modal dialog with overlay." },
-  drawer: { title: "Drawer", description: "Touch-friendly sliding panel." },
+  drawer: {
+    title: "Drawer",
+    description: "Named stages, edge offsets, indicator placement, and touch-friendly drag behavior.",
+  },
   "alert-dialog": { title: "Alert Dialog", description: "Confirmation dialog for destructive actions." },
   "dropdown-menu": { title: "Dropdown Menu", description: "Action menu with items and groups." },
   popover: { title: "Popover", description: "Positioned popup content." },

@@ -27,6 +27,11 @@ export type {
 export type {
   Direction,
   DrawerDeclaredSize,
+  DrawerHeaderVariant,
+  DrawerIndicatorPlacement,
+  DrawerMinimizedState,
+  DrawerOffset,
+  DrawerOpenState,
   DrawerSizeMode,
   DrawerSnapBehavior,
   SnapPoint,

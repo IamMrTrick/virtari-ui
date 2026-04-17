@@ -27,10 +27,17 @@ import {
   getVisualTransform,
   getViewportInfo,
   getViewportSize,
+  resolveDeclaredPixels,
   resolveDeclaredSize,
+  resolveDirectionalValue,
   resolveSnaps,
   type Direction,
   type DrawerDeclaredSize,
+  type DrawerHeaderVariant,
+  type DrawerIndicatorPlacement,
+  type DrawerMinimizedState,
+  type DrawerOffset,
+  type DrawerOpenState,
   type DrawerSizeMode,
   type DrawerSnapBehavior,
   type ResolvedSnap,
@@ -40,6 +47,7 @@ import {
 const DEFAULT_SPRING_MS = 380;
 const DEFAULT_SPRING_EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
 const VIEWPORT_RATIO = 0.96;
+const DEFAULT_MINIMIZED_STATE_ID = "minimized";
 
 function parseDurationMs(value: string, fallback: number): number {
   const trimmed = value.trim();
@@ -109,6 +117,32 @@ function dedupeSnaps(
   return [...new Set(snapPoints)];
 }
 
+function resolveOpenStates(
+  openStates: readonly DrawerOpenState[] | undefined,
+  snapPoints: readonly SnapPoint[] | undefined,
+): DrawerOpenState[] {
+  if (openStates?.length) return [...openStates];
+  return dedupeSnaps(snapPoints).map((size, index) => ({
+    id: `state-${index + 1}`,
+    size,
+  }));
+}
+
+function findOpenStateById(
+  openStates: readonly DrawerOpenState[],
+  id: string | null | undefined,
+): DrawerOpenState | undefined {
+  if (!id) return undefined;
+  return openStates.find((state) => state.id === id);
+}
+
+function findOpenStateByValue(
+  openStates: readonly DrawerOpenState[],
+  value: SnapPoint,
+): DrawerOpenState | undefined {
+  return openStates.find((state) => state.size === value);
+}
+
 export interface DrawerProps {
   children: ReactNode;
   direction?: Direction;
@@ -117,11 +151,19 @@ export interface DrawerProps {
   onOpenChange?: (open: boolean) => void;
   sizeMode?: DrawerSizeMode;
   size?: DrawerDeclaredSize;
+  offset?: DrawerOffset;
   snapPoints?: readonly SnapPoint[];
+  openStates?: readonly DrawerOpenState[];
+  activeOpenState?: string | null;
+  defaultOpenState?: string;
+  onActiveOpenStateChange?: (value: string | null) => void;
   activeSnapPoint?: SnapPoint;
   defaultSnapPoint?: SnapPoint;
   onActiveSnapPointChange?: (value: SnapPoint) => void;
   minimizedSize?: SnapPoint;
+  minimizedState?: DrawerMinimizedState | SnapPoint;
+  indicator?: DrawerIndicatorPlacement;
+  headerVariant?: DrawerHeaderVariant;
   snapBehavior?: DrawerSnapBehavior;
   snapStepThreshold?: number;
   snapSkipThreshold?: number;
@@ -142,11 +184,19 @@ export function Drawer({
   onOpenChange: controlledOnOpenChange,
   sizeMode = "adaptive",
   size,
+  offset,
   snapPoints,
+  openStates,
+  activeOpenState,
+  defaultOpenState,
+  onActiveOpenStateChange,
   activeSnapPoint: controlledSnap,
   defaultSnapPoint,
   onActiveSnapPointChange,
   minimizedSize,
+  minimizedState,
+  indicator = "inside",
+  headerVariant = "plain",
   snapBehavior = "staged",
   snapStepThreshold = 0.28,
   snapSkipThreshold = 0.86,
@@ -165,8 +215,35 @@ export function Drawer({
   const handleRef = useRef<HTMLDivElement>(null);
   const closeTimerRef = useRef<number>(0);
 
-  const resolvedSnaps = useMemo(() => dedupeSnaps(snapPoints), [snapPoints]);
-  const resolvedDefaultSnap = defaultSnapPoint ?? resolvedSnaps[resolvedSnaps.length - 1];
+  const resolvedOpenStates = useMemo(
+    () => resolveOpenStates(openStates, snapPoints),
+    [openStates, snapPoints],
+  );
+  const resolvedMinimizedState = typeof minimizedState === "number"
+    ? { id: DEFAULT_MINIMIZED_STATE_ID, size: minimizedState }
+    : minimizedState;
+  const resolvedMinimizedSize = resolvedMinimizedState?.size ?? minimizedSize;
+  const resolvedMinimizedStateId = resolvedMinimizedState?.id ?? DEFAULT_MINIMIZED_STATE_ID;
+  const resolvedSnaps = useMemo(
+    () => dedupeSnaps(resolvedOpenStates.map((state) => state.size)),
+    [resolvedOpenStates],
+  );
+  const controlledStateSnap = useMemo(
+    () => activeOpenState === resolvedMinimizedStateId
+      ? resolvedMinimizedSize
+      : findOpenStateById(resolvedOpenStates, activeOpenState)?.size,
+    [activeOpenState, resolvedMinimizedSize, resolvedMinimizedStateId, resolvedOpenStates],
+  );
+  const defaultStateSnap = useMemo(
+    () => defaultOpenState === resolvedMinimizedStateId
+      ? resolvedMinimizedSize
+      : findOpenStateById(resolvedOpenStates, defaultOpenState)?.size,
+    [defaultOpenState, resolvedMinimizedSize, resolvedMinimizedStateId, resolvedOpenStates],
+  );
+  const resolvedDefaultSnap =
+    defaultStateSnap ??
+    defaultSnapPoint ??
+    resolvedSnaps[resolvedSnaps.length - 1];
 
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const [internalSnap, setInternalSnap] = useState<SnapPoint>(resolvedDefaultSnap);
@@ -174,18 +251,35 @@ export function Drawer({
   const [dragging, setDragging] = useState(false);
 
   const isOpenControlled = controlledOpen !== undefined;
-  const isSnapControlled = controlledSnap !== undefined;
-  const committedSnapPoint = isSnapControlled ? controlledSnap : internalSnap;
+  const isSnapControlled = controlledStateSnap !== undefined || controlledSnap !== undefined;
+  const committedSnapPoint = controlledStateSnap ?? controlledSnap ?? internalSnap;
   const [visualSnapPoint, setVisualSnapPoint] = useState<SnapPoint>(committedSnapPoint);
   const open = isOpenControlled ? controlledOpen : internalOpen;
   const activeSnapPoint = visualSnapPoint;
-  const isMinimized = minimizedSize !== undefined && activeSnapPoint === minimizedSize;
+  const isMinimized = resolvedMinimizedSize !== undefined && activeSnapPoint === resolvedMinimizedSize;
   const isModal = modal && !isMinimized;
 
   useEffect(() => {
     if (dragging) return;
     setVisualSnapPoint(committedSnapPoint);
   }, [committedSnapPoint, dragging]);
+
+  useEffect(() => {
+    const snapStillExists = resolvedSnaps.includes(committedSnapPoint) ||
+      (resolvedMinimizedSize !== undefined && committedSnapPoint === resolvedMinimizedSize);
+    if (snapStillExists) return;
+
+    setVisualSnapPoint(resolvedDefaultSnap);
+    if (!isSnapControlled) {
+      setInternalSnap(resolvedDefaultSnap);
+    }
+  }, [
+    committedSnapPoint,
+    isSnapControlled,
+    resolvedDefaultSnap,
+    resolvedMinimizedSize,
+    resolvedSnaps,
+  ]);
 
   useEffect(() => {
     window.clearTimeout(closeTimerRef.current);
@@ -219,7 +313,19 @@ export function Drawer({
     setVisualSnapPoint(next);
     if (!isSnapControlled) setInternalSnap(next);
     onActiveSnapPointChange?.(next);
-  }, [isSnapControlled, onActiveSnapPointChange]);
+    if (next === resolvedMinimizedSize) {
+      onActiveOpenStateChange?.(resolvedMinimizedStateId);
+      return;
+    }
+    onActiveOpenStateChange?.(findOpenStateByValue(resolvedOpenStates, next)?.id ?? null);
+  }, [
+    isSnapControlled,
+    onActiveOpenStateChange,
+    onActiveSnapPointChange,
+    resolvedMinimizedSize,
+    resolvedMinimizedStateId,
+    resolvedOpenStates,
+  ]);
 
   const ctxValue = useMemo(() => ({
     direction,
@@ -232,9 +338,12 @@ export function Drawer({
     preventAutoFocus,
     sizeMode,
     size,
+    offset,
+    indicator,
+    headerVariant,
     snapPoints: resolvedSnaps,
     activeSnapPoint,
-    minimizedSize,
+    minimizedSize: resolvedMinimizedSize,
     snapBehavior,
     closeThreshold,
     velocityThreshold,
@@ -259,9 +368,12 @@ export function Drawer({
     preventAutoFocus,
     sizeMode,
     size,
+    offset,
+    indicator,
+    headerVariant,
     resolvedSnaps,
     activeSnapPoint,
-    minimizedSize,
+    resolvedMinimizedSize,
     snapBehavior,
     closeThreshold,
     velocityThreshold,
@@ -355,6 +467,9 @@ export const DrawerContent = forwardRef<
     minimizedSize,
     sizeMode,
     size,
+    offset,
+    indicator,
+    headerVariant,
     snapPoints,
     activeSnapPoint,
     snapBehavior,
@@ -538,7 +653,14 @@ export const DrawerContent = forwardRef<
     const contentEl = contentRef.current;
     if (!contentEl) return;
 
-    const availableSize = Math.max(getViewportSize(direction) * VIEWPORT_RATIO, 1);
+    const viewportSize = getViewportSize(direction);
+    const viewportInfo = getViewportInfo(direction, viewportSize);
+    const resolvedOffset = resolveDirectionalValue(offset, direction);
+    const edgeOffsetPx = resolveDeclaredPixels(resolvedOffset, viewportInfo, direction);
+    const availableSize = Math.max(viewportSize * VIEWPORT_RATIO - edgeOffsetPx, 1);
+    const resolvedOffsetCss = resolveDeclaredSize(resolvedOffset, viewportInfo) ?? "0px";
+
+    contentEl.style.setProperty("--vds-drawer-edge-offset", resolvedOffsetCss);
     contentEl.style.setProperty("--vds-drawer-available-size", `${availableSize}px`);
     contentEl.style.setProperty("--vds-drawer-adaptive-size", getDefaultAdaptiveSize(direction));
 
@@ -586,9 +708,9 @@ export const DrawerContent = forwardRef<
         snaps,
         minimized,
         overlayStartSize,
-      };
+        };
     });
-  }, [contentRef, direction, minimizedSize, size, sizeMode, snapPoints]);
+  }, [contentRef, direction, minimizedSize, offset, size, sizeMode, snapPoints]);
 
   useEffect(() => () => {
     cancelAnimationFrame(measureFrameRef.current);
@@ -795,6 +917,8 @@ export const DrawerContent = forwardRef<
         data-open={open || undefined}
         data-dragging={dragging || undefined}
         data-keyboard-open={keyboardOpen || undefined}
+        data-indicator={indicator}
+        data-header-variant={headerVariant}
         data-size-mode={sizeMode}
         data-stage={activeStageKind}
         data-measured={layout.totalSize > 0 || undefined}
@@ -831,20 +955,26 @@ export const DrawerContent = forwardRef<
   );
 });
 
-export interface DrawerHandleProps extends ComponentPropsWithoutRef<"div"> {}
+export interface DrawerHandleProps extends ComponentPropsWithoutRef<"div"> {
+  placement?: DrawerIndicatorPlacement;
+}
 
 export const DrawerHandle = forwardRef<HTMLDivElement, DrawerHandleProps>(function DrawerHandle(
-  { className, ...props },
+  { className, placement, ...props },
   forwardedRef,
 ) {
-  const { direction, handleRef, activeSnapPoint, minimizedSize } = useDrawerContext();
+  const { direction, handleRef, activeSnapPoint, minimizedSize, indicator } = useDrawerContext();
   const minimized = minimizedSize !== undefined && activeSnapPoint === minimizedSize;
+  const resolvedPlacement = placement ?? indicator;
+
+  if (resolvedPlacement === "hidden") return null;
 
   return (
     <div
       ref={mergeRefs(handleRef, forwardedRef)}
       className={cn("vds-drawer-handle", className)}
       data-direction={direction}
+      data-placement={resolvedPlacement}
       data-stage={minimized ? "minimized" : "snap"}
       aria-hidden="true"
       {...props}
@@ -854,17 +984,20 @@ export const DrawerHandle = forwardRef<HTMLDivElement, DrawerHandleProps>(functi
   );
 });
 
-export interface DrawerHeaderProps extends ComponentPropsWithoutRef<"div"> {}
+export interface DrawerHeaderProps extends ComponentPropsWithoutRef<"div"> {
+  variant?: DrawerHeaderVariant;
+}
 
 export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(function DrawerHeader(
-  { className, ...props },
+  { className, variant, ...props },
   forwardedRef,
 ) {
-  const { headerRef } = useDrawerContext();
+  const { headerRef, headerVariant } = useDrawerContext();
   return (
     <div
       ref={mergeRefs(headerRef, forwardedRef)}
       className={cn("vds-drawer-header", className)}
+      data-variant={variant ?? headerVariant}
       {...props}
     />
   );
