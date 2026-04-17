@@ -17,6 +17,10 @@
     border-radius: var(--vds-radius-full);
     border: 2px solid transparent;
     transition: background-color var(--vds-duration-normal) var(--vds-ease-out);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
 
     inline-size: var(--_switch-width);
     block-size: var(--_switch-height);
@@ -62,6 +66,7 @@
     block-size: var(--_switch-thumb-size);
     transition: translate var(--vds-duration-normal) var(--vds-ease-spring);
     translate: var(--_switch-thumb-offset) 0;
+    pointer-events: none;
 
     .vds-switch[data-state="checked"] > & {
       translate: calc(
@@ -69,6 +74,10 @@
             var(--_switch-thumb-offset) - 4px
         )
         0;
+    }
+
+    .vds-switch[data-dragging] > & {
+      transition: none;
     }
   }
 }
