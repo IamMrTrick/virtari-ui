@@ -25,11 +25,36 @@ export interface ResolvedSnap {
   kind: "snap" | "minimized";
 }
 
+export interface ResolvedSnapLayout {
+  snaps: ResolvedSnap[];
+  minimized: ResolvedSnap | null;
+}
+
+export type SettleTarget =
+  | { kind: "snap"; index: number }
+  | { kind: "minimized" }
+  | { kind: "close" };
+
+declare global {
+  interface Window {
+    __VDS_DRAWER_DEBUG__?: boolean;
+  }
+}
+
 const RUBBERBAND_K = 0.55;
 const DEFAULT_SIDE_ADAPTIVE_SIZE = "clamp(18rem, 32vw, 28rem)";
 
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
+}
+
+export function isDrawerDebugEnabled(): boolean {
+  return typeof window !== "undefined" && window.__VDS_DRAWER_DEBUG__ === true;
+}
+
+export function debugDrawer(event: string, payload: Record<string, unknown>) {
+  if (!isDrawerDebugEnabled()) return;
+  console.info(`[vds-drawer] ${event}`, payload);
 }
 
 export function getAxis(direction: Direction): "x" | "y" {
@@ -115,33 +140,40 @@ export function resolveSnaps(
   snapPoints: readonly SnapPoint[] | undefined,
   drawerSize: number,
   minimizedSize?: SnapPoint,
-): ResolvedSnap[] {
-  if (drawerSize <= 0) return [];
+): ResolvedSnapLayout {
+  if (drawerSize <= 0) return { snaps: [], minimized: null };
 
   const points = snapPoints?.length ? [...snapPoints] : [1];
-  if (minimizedSize !== undefined) points.push(minimizedSize);
 
-  const resolved = points
+  const resolvedSnaps = points
     .map((value) => {
       const size = resolveSnapSize(value, drawerSize);
-      const kind = minimizedSize !== undefined && value === minimizedSize
-        ? "minimized"
-        : "snap";
-      return { value, size, kind } satisfies ResolvedSnap;
+      return { value, size, kind: "snap" as const } satisfies ResolvedSnap;
     })
     .sort((a, b) => a.size - b.size);
 
-  const unique: ResolvedSnap[] = [];
-  for (const point of resolved) {
-    const last = unique[unique.length - 1];
+  const uniqueSnaps: ResolvedSnap[] = [];
+  for (const point of resolvedSnaps) {
+    const last = uniqueSnaps[uniqueSnaps.length - 1];
     if (!last || Math.abs(point.size - last.size) > 1) {
-      unique.push(point);
-      continue;
+      uniqueSnaps.push(point);
     }
-    if (point.kind === "minimized") unique[unique.length - 1] = point;
   }
 
-  return unique.length ? unique : [{ value: 1, size: drawerSize, kind: "snap" }];
+  const snaps = uniqueSnaps.length
+    ? uniqueSnaps
+    : [{ value: 1, size: drawerSize, kind: "snap" as const }];
+
+  let minimized: ResolvedSnap | null = null;
+  if (minimizedSize !== undefined) {
+    const size = resolveSnapSize(minimizedSize, drawerSize);
+    const collidesWithSnap = snaps.some((snap) => Math.abs(snap.size - size) <= 1);
+    if (!collidesWithSnap) {
+      minimized = { value: minimizedSize, size, kind: "minimized" };
+    }
+  }
+
+  return { snaps, minimized };
 }
 
 export function findSnapIndexByValue(
@@ -243,25 +275,29 @@ export function isAtScrollEdge(
     : el.scrollLeft <= tolerance;
 }
 
-export function pickTargetSnap(args: {
+export function pickSettleTarget(args: {
   currentSize: number;
   startSize: number;
   startSnapIndex: number;
+  fromMinimized: boolean;
   velocity: number;
   snaps: readonly number[];
+  minimizedSize: number | null;
   velocityThreshold: number;
   closeThreshold: number;
   dismissible: boolean;
   snapBehavior: DrawerSnapBehavior;
   snapStepThreshold: number;
   snapSkipThreshold: number;
-}): number {
+}): SettleTarget {
   const {
     currentSize,
     startSize,
     startSnapIndex,
+    fromMinimized,
     velocity,
     snaps,
+    minimizedSize,
     velocityThreshold,
     closeThreshold,
     dismissible,
@@ -270,69 +306,131 @@ export function pickTargetSnap(args: {
     snapSkipThreshold,
   } = args;
 
-  if (!snaps.length) return 0;
-
   const projectionMs = 220;
   const projected = currentSize + velocity * projectionMs;
-  const smallest = snaps[0];
   const fastSwipe = Math.abs(velocity) >= velocityThreshold;
-  const closestIndex = findNearestSnapIndex(snaps, projected);
-  const closeCutoff = smallest * closeThreshold;
+  const decide = (target: SettleTarget, reason: string): SettleTarget => {
+    debugDrawer("pickSettleTarget", {
+      reason,
+      target,
+      startSize,
+      currentSize,
+      projected,
+      velocity,
+      fastSwipe,
+      startSnapIndex,
+      fromMinimized,
+      minimizedSize,
+      snaps,
+      snapBehavior,
+    });
+    return target;
+  };
 
-  if (snapBehavior === "closest") {
-    if (dismissible) {
-      if (projected <= closeCutoff) return -1;
-      if (fastSwipe && velocity < 0 && currentSize <= smallest + Math.max(24, smallest * 0.25)) {
-        return -1;
-      }
+  // ── Minimized origin ─────────────────────────────────────────
+  if (fromMinimized) {
+    if (minimizedSize === null) {
+      // shouldn't happen, but stay safe
+      if (!snaps.length) return decide({ kind: "close" }, "minimized-origin-without-stages");
+      return decide({ kind: "snap", index: 0 }, "minimized-origin-fallback-first-snap");
     }
-    return closestIndex;
+
+    const UP_DEADZONE = 12;
+    const delta = projected - minimizedSize;
+
+    // Dragged up with meaningful intent → always expand, never bounce back
+    if (delta > UP_DEADZONE || (fastSwipe && velocity > 0)) {
+      if (!snaps.length) return decide({ kind: "minimized" }, "minimized-origin-no-snaps");
+      if (snapBehavior === "closest") {
+        return decide(
+          { kind: "snap", index: findNearestSnapIndex(snaps, projected) },
+          "minimized-expand-closest",
+        );
+      }
+      // staged from minimized: step to snaps[0] unless projection/velocity overshoots past it
+      const gap = Math.abs(snaps[0] - minimizedSize);
+      const skipThreshold = Math.max(56, gap * snapSkipThreshold);
+      if (fastSwipe || delta >= skipThreshold) {
+        return decide(
+          { kind: "snap", index: findNearestSnapIndex(snaps, projected) },
+          "minimized-expand-skip",
+        );
+      }
+      return decide({ kind: "snap", index: 0 }, "minimized-expand-step");
+    }
+
+    // Dragged down → close (minimized is pre-close)
+    if (dismissible) {
+      const closeCutoff = minimizedSize * closeThreshold;
+      if (projected <= closeCutoff) return decide({ kind: "close" }, "minimized-close-cutoff");
+      if (fastSwipe && velocity < 0) return decide({ kind: "close" }, "minimized-close-fast-swipe");
+    }
+
+    return decide({ kind: "minimized" }, "minimized-rest");
   }
 
-  const delta = projected - startSize;
-  const deadZone = 14;
-  if (Math.abs(delta) <= deadZone) return startSnapIndex;
+  // ── Real-snap origin ─────────────────────────────────────────
+  if (!snaps.length) {
+    return minimizedSize !== null
+      ? decide({ kind: "minimized" }, "no-snaps-rest-minimized")
+      : decide({ kind: "close" }, "no-snaps-close");
+  }
 
+  const smallest = snaps[0];
+  const delta = projected - startSize;
   const direction = delta > 0 ? 1 : -1;
+  const movingDown = delta < 0;
+  const belowSmallest = projected < smallest;
+
+  // Transitions below smallest snap: minimized or close
+  if (movingDown && belowSmallest) {
+    const closeCutoff = (minimizedSize ?? smallest) * closeThreshold;
+    if (dismissible) {
+      if (projected <= closeCutoff) return decide({ kind: "close" }, "below-smallest-close-cutoff");
+      if (fastSwipe && velocity < 0 && minimizedSize === null) {
+        // no minimized lane — fast-swipe down closes directly
+        return decide({ kind: "close" }, "below-smallest-fast-close");
+      }
+    }
+    if (minimizedSize !== null) {
+      // settle at minimized (pre-close rest)
+      return decide({ kind: "minimized" }, "below-smallest-minimized");
+    }
+    if (!dismissible) return decide({ kind: "snap", index: 0 }, "below-smallest-clamp-first-snap");
+    return decide({ kind: "close" }, "below-smallest-close");
+  }
+
+  // Same-direction / cross-snap logic (unchanged semantics, minimized excluded)
+  if (snapBehavior === "closest") {
+    return decide(
+      { kind: "snap", index: findNearestSnapIndex(snaps, projected) },
+      "closest-snap",
+    );
+  }
+
+  const deadZone = 14;
+  if (Math.abs(delta) <= deadZone) {
+    return decide({ kind: "snap", index: startSnapIndex }, "dead-zone");
+  }
+
   const adjacentIndex = clamp(startSnapIndex + direction, 0, snaps.length - 1);
   if (adjacentIndex === startSnapIndex) {
-    if (
-      dismissible &&
-      direction < 0 &&
-      (projected <= closeCutoff ||
-        (fastSwipe && velocity < 0 && currentSize <= smallest + Math.max(24, smallest * 0.25)))
-    ) {
-      return -1;
-    }
-    return startSnapIndex;
+    return decide({ kind: "snap", index: startSnapIndex }, "clamped-adjacent");
   }
 
   const adjacentGap = Math.abs(snaps[adjacentIndex] - startSize);
   const stepThreshold = Math.max(24, adjacentGap * snapStepThreshold);
-  if (!fastSwipe && Math.abs(delta) < stepThreshold) return startSnapIndex;
-
-  if (dismissible && direction < 0) {
-    const distancePastSmallest = Math.max(smallest - projected, 0);
-    if (startSnapIndex === 0) {
-      if (projected <= closeCutoff) return -1;
-      if (fastSwipe && velocity < 0 && currentSize <= smallest + Math.max(24, smallest * 0.25)) {
-        return -1;
-      }
-    } else {
-      const dismissSkipThreshold = Math.max(
-        72,
-        Math.max(startSize - smallest, adjacentGap) * snapSkipThreshold,
-      );
-      if (distancePastSmallest >= dismissSkipThreshold) {
-        return -1;
-      }
-    }
+  if (!fastSwipe && Math.abs(delta) < stepThreshold) {
+    return decide({ kind: "snap", index: startSnapIndex }, "below-step-threshold");
   }
 
   const skipThreshold = Math.max(56, adjacentGap * snapSkipThreshold);
   if (fastSwipe || Math.abs(delta) >= skipThreshold) {
-    return closestIndex;
+    return decide(
+      { kind: "snap", index: findNearestSnapIndex(snaps, projected) },
+      "skip-to-nearest",
+    );
   }
 
-  return adjacentIndex;
+  return decide({ kind: "snap", index: adjacentIndex }, "step-to-adjacent");
 }

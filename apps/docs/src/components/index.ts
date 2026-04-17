@@ -1,3 +1,3 @@
 export { Section, Row, Stack } from "./Section";
-export { Sidebar } from "./Sidebar";
+export { Sidebar, MobileSidebar } from "./Sidebar";
 export { Layout } from "./Layout";

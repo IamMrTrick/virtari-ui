@@ -14,6 +14,18 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     tab-size: 4;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  a,
+  button,
+  [role="button"],
+  input,
+  label,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
   }
 
   body {

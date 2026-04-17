@@ -15,6 +15,11 @@ interface DrawerViewportInfo {
     availableSize: number;
     orientation: "portrait" | "landscape";
 }
+declare global {
+    interface Window {
+        __VDS_DRAWER_DEBUG__?: boolean;
+    }
+}
 
 interface DrawerProps {
     children: ReactNode;

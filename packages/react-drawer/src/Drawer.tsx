@@ -18,6 +18,7 @@ import { DrawerProvider, useDrawerContext } from "./DrawerContext";
 import { useDrawerDrag } from "./useDrawerDrag";
 import {
   clamp,
+  debugDrawer,
   findSnapIndexByValue,
   getBackgroundStyles,
   getDefaultAdaptiveSize,
@@ -174,10 +175,17 @@ export function Drawer({
 
   const isOpenControlled = controlledOpen !== undefined;
   const isSnapControlled = controlledSnap !== undefined;
+  const committedSnapPoint = isSnapControlled ? controlledSnap : internalSnap;
+  const [visualSnapPoint, setVisualSnapPoint] = useState<SnapPoint>(committedSnapPoint);
   const open = isOpenControlled ? controlledOpen : internalOpen;
-  const activeSnapPoint = isSnapControlled ? controlledSnap : internalSnap;
+  const activeSnapPoint = visualSnapPoint;
   const isMinimized = minimizedSize !== undefined && activeSnapPoint === minimizedSize;
   const isModal = modal && !isMinimized;
+
+  useEffect(() => {
+    if (dragging) return;
+    setVisualSnapPoint(committedSnapPoint);
+  }, [committedSnapPoint, dragging]);
 
   useEffect(() => {
     window.clearTimeout(closeTimerRef.current);
@@ -208,6 +216,7 @@ export function Drawer({
   }, [controlledOnOpenChange, dismissible, isOpenControlled]);
 
   const handleSnapChange = useCallback((next: SnapPoint) => {
+    setVisualSnapPoint(next);
     if (!isSnapControlled) setInternalSnap(next);
     onActiveSnapPointChange?.(next);
   }, [isSnapControlled, onActiveSnapPointChange]);
@@ -296,6 +305,7 @@ export const DrawerOverlay = forwardRef<
 interface DrawerLayout {
   totalSize: number;
   snaps: ResolvedSnap[];
+  minimized: ResolvedSnap | null;
   overlayStartSize: number;
 }
 
@@ -357,6 +367,7 @@ export const DrawerContent = forwardRef<
   const [layout, setLayout] = useState<DrawerLayout>({
     totalSize: 0,
     snaps: [],
+    minimized: null,
     overlayStartSize: 0,
   });
   const currentSizeRef = useRef(0);
@@ -366,13 +377,20 @@ export const DrawerContent = forwardRef<
   const openAnimRef = useRef(0);
   const hasOpenedRef = useRef(false);
 
-  const activeSnapIndex = useMemo(() => {
-    const index = findSnapIndexByValue(layout.snaps, activeSnapPoint);
-    return index === -1 ? Math.max(layout.snaps.length - 1, 0) : index;
-  }, [activeSnapPoint, layout.snaps]);
-
-  const activeStage = layout.snaps[activeSnapIndex];
   const minimizedStage = minimizedSize !== undefined && activeSnapPoint === minimizedSize;
+
+  const activeState = useMemo<
+    | { kind: "minimized" }
+    | { kind: "snap"; index: number }
+  >(() => {
+    if (minimizedStage && layout.minimized) {
+      return { kind: "minimized" };
+    }
+    const index = findSnapIndexByValue(layout.snaps, activeSnapPoint);
+    return { kind: "snap", index: index === -1 ? Math.max(layout.snaps.length - 1, 0) : index };
+  }, [activeSnapPoint, layout.minimized, layout.snaps, minimizedStage]);
+
+  const activeStageKind: "snap" | "minimized" = activeState.kind === "minimized" ? "minimized" : "snap";
 
   const setAnimated = useCallback((animated: boolean) => {
     const contentEl = contentRef.current;
@@ -432,9 +450,15 @@ export const DrawerContent = forwardRef<
     writeVisualSize(pendingSizeRef.current);
   }, [writeVisualSize]);
 
+  const flushPendingSize = useCallback(() => {
+    if (!writeFrameRef.current) return;
+    cancelAnimationFrame(writeFrameRef.current);
+    writeFrameRef.current = 0;
+    writeVisualSize(pendingSizeRef.current);
+  }, [writeVisualSize]);
+
   const applySize = useCallback((sizePx: number, immediate = false) => {
     pendingSizeRef.current = sizePx;
-    currentSizeRef.current = sizePx;
 
     if (immediate || typeof window === "undefined") {
       if (writeFrameRef.current) {
@@ -452,10 +476,62 @@ export const DrawerContent = forwardRef<
 
   const settleToSnap = useCallback((animated: boolean) => {
     if (layout.totalSize <= 0) return;
-    const target = layout.snaps[activeSnapIndex]?.size ?? layout.totalSize;
-    setAnimated(animated);
-    applySize(target, true);
-  }, [activeSnapIndex, applySize, layout.snaps, layout.totalSize, setAnimated]);
+    const target = activeState.kind === "minimized"
+      ? layout.minimized?.size ?? layout.totalSize
+      : layout.snaps[activeState.index]?.size ?? layout.totalSize;
+    const current = writeFrameRef.current ? pendingSizeRef.current : currentSizeRef.current;
+
+    debugDrawer("settle:request", {
+      animated,
+      activeState,
+      target,
+      currentSize: current,
+      pendingSize: pendingSizeRef.current,
+    });
+
+    if (!animated) {
+      setAnimated(false);
+      applySize(target, true);
+      return;
+    }
+
+    if (Math.abs(target - current) < 0.5) {
+      setAnimated(false);
+      applySize(target, true);
+      return;
+    }
+
+    flushPendingSize();
+    setAnimated(false);
+    writeVisualSize(current);
+    const contentEl = contentRef.current;
+    if (contentEl) void contentEl.offsetHeight;
+
+    setAnimated(true);
+    if (contentEl) void contentEl.offsetHeight;
+    if (openAnimRef.current) cancelAnimationFrame(openAnimRef.current);
+    openAnimRef.current = requestAnimationFrame(() => {
+      openAnimRef.current = requestAnimationFrame(() => {
+        openAnimRef.current = 0;
+        debugDrawer("settle:commit", {
+          activeState,
+          target,
+          currentSize: currentSizeRef.current,
+        });
+        applySize(target, true);
+      });
+    });
+  }, [
+    activeState,
+    applySize,
+    contentRef,
+    flushPendingSize,
+    layout.minimized,
+    layout.snaps,
+    layout.totalSize,
+    setAnimated,
+    writeVisualSize,
+  ]);
 
   const measure = useCallback(() => {
     const contentEl = contentRef.current;
@@ -483,12 +559,11 @@ export const DrawerContent = forwardRef<
       }
     }
 
-    const snaps = resolveSnaps(snapPoints, totalSize, minimizedSize);
-    const overlayStartSize = snaps[0]?.kind === "minimized" ? snaps[0].size : 0;
+    const { snaps, minimized } = resolveSnaps(snapPoints, totalSize, minimizedSize);
+    const overlayStartSize = minimized?.size ?? 0;
 
     setLayout((previous) => {
-      const same = previous.totalSize === totalSize &&
-        previous.overlayStartSize === overlayStartSize &&
+      const snapsSame =
         previous.snaps.length === snaps.length &&
         previous.snaps.every((snap, index) => {
           const next = snaps[index];
@@ -496,10 +571,19 @@ export const DrawerContent = forwardRef<
             snap.kind === next?.kind &&
             Math.abs(snap.size - (next?.size ?? 0)) < 1;
         });
+      const minimizedSame =
+        (previous.minimized === null && minimized === null) ||
+        (previous.minimized !== null && minimized !== null &&
+          previous.minimized.value === minimized.value &&
+          Math.abs(previous.minimized.size - minimized.size) < 1);
+      const same = previous.totalSize === totalSize &&
+        previous.overlayStartSize === overlayStartSize &&
+        snapsSame && minimizedSame;
 
       return same ? previous : {
         totalSize,
         snaps,
+        minimized,
         overlayStartSize,
       };
     });
@@ -575,8 +659,11 @@ export const DrawerContent = forwardRef<
       return () => cancelAnimationFrame(openAnimRef.current);
     }
 
-    if (!dragging) settleToSnap(true);
-  }, [applySize, dragging, layout.totalSize, open, present, setAnimated, settleToSnap]);
+    if (!dragging) {
+      flushPendingSize();
+      settleToSnap(true);
+    }
+  }, [applySize, dragging, flushPendingSize, layout.totalSize, open, present, setAnimated, settleToSnap]);
 
   useEffect(() => {
     if (present) return;
@@ -591,8 +678,10 @@ export const DrawerContent = forwardRef<
     direction,
     drawerSize: layout.totalSize,
     snapSizes: layout.snaps.map((snap) => snap.size),
-    currentSnapIndex: activeSnapIndex,
-    getCurrentSize: () => currentSizeRef.current,
+    currentSnapIndex: activeState.kind === "snap" ? activeState.index : 0,
+    fromMinimized: activeState.kind === "minimized",
+    minimizedSize: layout.minimized?.size ?? null,
+    getCurrentSize: () => writeFrameRef.current ? pendingSizeRef.current : currentSizeRef.current,
     closeThreshold,
     velocityThreshold,
     snapBehavior,
@@ -605,19 +694,36 @@ export const DrawerContent = forwardRef<
       setAnimated(false);
     },
     onDragMove: (sizePx) => applySize(sizePx),
-    onDragEnd: (snapIndex, dismiss) => {
+    onDragEnd: (target) => {
+      flushPendingSize();
       setDragging(false);
-      setAnimated(true);
 
-      if (dismiss) {
+      debugDrawer("drag:apply-target", {
+        target,
+        activeSnapPoint,
+        currentSize: currentSizeRef.current,
+        pendingSize: pendingSizeRef.current,
+        minimizedSize,
+      });
+
+      if (target.kind === "close") {
+        setAnimated(true);
         applySize(0, true);
         onOpenChange(false);
         return;
       }
 
-      const snap = layout.snaps[snapIndex];
+      if (target.kind === "minimized") {
+        if (minimizedSize !== undefined) {
+          onSnapPointChange(minimizedSize);
+        } else {
+          settleToSnap(true);
+        }
+        return;
+      }
+
+      const snap = layout.snaps[target.index];
       if (snap) {
-        applySize(snap.size, true);
         onSnapPointChange(snap.value);
       } else {
         settleToSnap(true);
@@ -640,7 +746,7 @@ export const DrawerContent = forwardRef<
         data-open={open || undefined}
         data-dragging={dragging || undefined}
         data-size-mode={sizeMode}
-        data-stage={activeStage?.kind ?? "snap"}
+        data-stage={activeStageKind}
         data-measured={layout.totalSize > 0 || undefined}
         tabIndex={-1}
         style={style}

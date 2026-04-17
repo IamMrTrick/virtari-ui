@@ -64,7 +64,7 @@
     }
 
     &[data-dragging] {
-      transition: none !important;
+      transition: none;
     }
 
     &[data-stage="minimized"] {

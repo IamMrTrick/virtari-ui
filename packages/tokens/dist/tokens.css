@@ -1,10 +1,18 @@
+/*
+ * Colors — three-tier architecture.
+ *
+ * primitives.css   Raw scales (theme-independent). Change to rebrand.
+ * semantic.css     Purpose-based aliases using light-dark(). Change to retheme.
+ *
+ * Components should consume semantic tokens only.
+ */
 @layer tokens {
   :root {
-    /* ─── Primitive: Absolute ─── */
+    /* ─── Absolute ─── */
     --vds-color-white: oklch(1 0 0);
     --vds-color-black: oklch(0 0 0);
 
-    /* ─── Primitive: Gray ─── */
+    /* ─── Gray ─── */
     --vds-color-gray-50: oklch(0.98 0.005 264);
     --vds-color-gray-100: oklch(0.95 0.007 264);
     --vds-color-gray-200: oklch(0.90 0.010 264);
@@ -17,7 +25,7 @@
     --vds-color-gray-900: oklch(0.13 0.012 264);
     --vds-color-gray-950: oklch(0.08 0.010 264);
 
-    /* ─── Primitive: Gray Alpha ─── */
+    /* ─── Gray Alpha ─── */
     --vds-color-gray-a3: oklch(0.50 0.018 264 / 0.05);
     --vds-color-gray-a4: oklch(0.50 0.018 264 / 0.07);
     --vds-color-gray-a5: oklch(0.50 0.018 264 / 0.09);
@@ -29,7 +37,7 @@
     --vds-color-gray-a11: oklch(0.50 0.018 264 / 0.72);
     --vds-color-gray-a12: oklch(0.50 0.018 264 / 0.91);
 
-    /* ─── Primitive: Primary (Indigo) ─── */
+    /* ─── Primary (Indigo) ─── */
     --vds-color-primary-50: oklch(0.97 0.02 265);
     --vds-color-primary-100: oklch(0.93 0.04 265);
     --vds-color-primary-200: oklch(0.87 0.08 265);
@@ -42,7 +50,7 @@
     --vds-color-primary-900: oklch(0.27 0.12 265);
     --vds-color-primary-950: oklch(0.20 0.09 265);
 
-    /* ─── Primitive: Primary Alpha ─── */
+    /* ─── Primary Alpha ─── */
     --vds-color-primary-a3: oklch(0.55 0.20 265 / 0.05);
     --vds-color-primary-a4: oklch(0.55 0.20 265 / 0.07);
     --vds-color-primary-a5: oklch(0.55 0.20 265 / 0.09);
@@ -54,7 +62,7 @@
     --vds-color-primary-a11: oklch(0.55 0.20 265 / 0.72);
     --vds-color-primary-a12: oklch(0.55 0.20 265 / 0.91);
 
-    /* ─── Primitive: Success (Green) ─── */
+    /* ─── Success (Green) ─── */
     --vds-color-success-50: oklch(0.97 0.02 155);
     --vds-color-success-100: oklch(0.93 0.05 155);
     --vds-color-success-200: oklch(0.87 0.10 155);
@@ -67,7 +75,7 @@
     --vds-color-success-900: oklch(0.27 0.08 155);
     --vds-color-success-950: oklch(0.20 0.06 155);
 
-    /* ─── Primitive: Warning (Amber) ─── */
+    /* ─── Warning (Amber) ─── */
     --vds-color-warning-50: oklch(0.97 0.02 85);
     --vds-color-warning-100: oklch(0.93 0.05 85);
     --vds-color-warning-200: oklch(0.87 0.10 85);
@@ -80,7 +88,7 @@
     --vds-color-warning-900: oklch(0.35 0.08 85);
     --vds-color-warning-950: oklch(0.25 0.06 85);
 
-    /* ─── Primitive: Danger (Red) ─── */
+    /* ─── Danger (Red) ─── */
     --vds-color-danger-50: oklch(0.97 0.02 25);
     --vds-color-danger-100: oklch(0.93 0.04 25);
     --vds-color-danger-200: oklch(0.87 0.08 25);
@@ -93,7 +101,7 @@
     --vds-color-danger-900: oklch(0.27 0.10 25);
     --vds-color-danger-950: oklch(0.20 0.08 25);
 
-    /* ─── Primitive: Info (Cyan) ─── */
+    /* ─── Info (Cyan) ─── */
     --vds-color-info-50: oklch(0.97 0.02 210);
     --vds-color-info-100: oklch(0.93 0.04 210);
     --vds-color-info-200: oklch(0.87 0.08 210);
@@ -106,7 +114,7 @@
     --vds-color-info-900: oklch(0.27 0.07 210);
     --vds-color-info-950: oklch(0.20 0.05 210);
 
-    /* ─── Primitive: Data Visualization ─── */
+    /* ─── Data Visualization ─── */
     --vds-color-chart-1: oklch(0.55 0.20 265);
     --vds-color-chart-2: oklch(0.60 0.18 155);
     --vds-color-chart-3: oklch(0.65 0.16 45);
@@ -115,49 +123,64 @@
     --vds-color-chart-6: oklch(0.65 0.17 75);
     --vds-color-chart-7: oklch(0.55 0.19 350);
     --vds-color-chart-8: oklch(0.60 0.14 230);
+  }
+}
+@layer tokens {
+  /*
+   * Theme switching via `color-scheme`.
+   * `light-dark()` resolves each color based on the computed color-scheme
+   * of the element where the property is used, so variables are declared
+   * once on :root and inherited everywhere.
+   */
+  :root {
+    color-scheme: light;
+  }
+  [data-theme="dark"] {
+    color-scheme: dark;
+  }
+  [data-theme="light"] {
+    color-scheme: light;
+  }
 
-    /* ═══════════════════════════════════════
-       Semantic: Light theme (default)
-       ═══════════════════════════════════════ */
-
+  :root {
     /* ─── Background ─── */
-    --vds-color-bg: var(--vds-color-gray-50);
-    --vds-color-bg-subtle: var(--vds-color-gray-100);
-    --vds-color-bg-muted: var(--vds-color-gray-200);
-    --vds-color-bg-disabled: var(--vds-color-gray-100);
+    --vds-color-bg: light-dark(var(--vds-color-gray-50), var(--vds-color-gray-950));
+    --vds-color-bg-subtle: light-dark(var(--vds-color-gray-100), var(--vds-color-gray-900));
+    --vds-color-bg-muted: light-dark(var(--vds-color-gray-200), var(--vds-color-gray-800));
+    --vds-color-bg-disabled: light-dark(var(--vds-color-gray-100), var(--vds-color-gray-800));
 
     /* ─── Surface / Elevation ─── */
-    --vds-color-surface-sunken: var(--vds-color-gray-100);
-    --vds-color-surface: var(--vds-color-white);
-    --vds-color-surface-raised: var(--vds-color-white);
-    --vds-color-surface-overlay: var(--vds-color-white);
-    --vds-color-surface-hover: var(--vds-color-gray-100);
-    --vds-color-surface-active: var(--vds-color-gray-200);
-    --vds-color-surface-selected: var(--vds-color-primary-50);
+    --vds-color-surface-sunken: light-dark(var(--vds-color-gray-100), var(--vds-color-gray-950));
+    --vds-color-surface: light-dark(var(--vds-color-white), var(--vds-color-gray-900));
+    --vds-color-surface-raised: light-dark(var(--vds-color-white), var(--vds-color-gray-800));
+    --vds-color-surface-overlay: light-dark(var(--vds-color-white), var(--vds-color-gray-800));
+    --vds-color-surface-hover: light-dark(var(--vds-color-gray-100), var(--vds-color-gray-800));
+    --vds-color-surface-active: light-dark(var(--vds-color-gray-200), var(--vds-color-gray-700));
+    --vds-color-surface-selected: light-dark(var(--vds-color-primary-50), var(--vds-color-primary-950));
 
     /* ─── Overlay / Scrim ─── */
-    --vds-color-overlay: oklch(0.08 0.01 264 / 0.6);
-    --vds-color-overlay-light: oklch(0.08 0.01 264 / 0.3);
+    --vds-color-overlay: light-dark(oklch(0.08 0.01 264 / 0.6), oklch(0 0 0 / 0.7));
+    --vds-color-overlay-light: light-dark(oklch(0.08 0.01 264 / 0.3), oklch(0 0 0 / 0.4));
 
     /* ─── Text ─── */
-    --vds-color-text: var(--vds-color-gray-900);
-    --vds-color-text-muted: var(--vds-color-gray-500);
-    --vds-color-text-subtle: var(--vds-color-gray-400);
-    --vds-color-text-disabled: var(--vds-color-gray-400);
+    --vds-color-text: light-dark(var(--vds-color-gray-900), var(--vds-color-gray-50));
+    --vds-color-text-muted: light-dark(var(--vds-color-gray-500), var(--vds-color-gray-400));
+    --vds-color-text-subtle: light-dark(var(--vds-color-gray-400), var(--vds-color-gray-500));
+    --vds-color-text-disabled: light-dark(var(--vds-color-gray-400), var(--vds-color-gray-600));
     --vds-color-on-solid: var(--vds-color-white);
 
     /* ─── Border ─── */
-    --vds-color-border: var(--vds-color-gray-300);
-    --vds-color-border-muted: var(--vds-color-gray-200);
-    --vds-color-border-disabled: var(--vds-color-gray-200);
+    --vds-color-border: light-dark(var(--vds-color-gray-300), var(--vds-color-gray-700));
+    --vds-color-border-muted: light-dark(var(--vds-color-gray-200), var(--vds-color-gray-800));
+    --vds-color-border-disabled: light-dark(var(--vds-color-gray-200), var(--vds-color-gray-800));
 
     /* ─── Focus ─── */
-    --vds-color-ring: var(--vds-color-primary-500);
-    --vds-color-ring-offset: var(--vds-color-white);
+    --vds-color-ring: light-dark(var(--vds-color-primary-500), var(--vds-color-primary-400));
+    --vds-color-ring-offset: light-dark(var(--vds-color-white), var(--vds-color-gray-950));
 
     /* ─── Skeleton / Loading ─── */
-    --vds-color-skeleton: var(--vds-color-gray-200);
-    --vds-color-skeleton-shimmer: var(--vds-color-gray-300);
+    --vds-color-skeleton: light-dark(var(--vds-color-gray-200), var(--vds-color-gray-800));
+    --vds-color-skeleton-shimmer: light-dark(var(--vds-color-gray-300), var(--vds-color-gray-700));
 
     /* ─── Intent: On-color (text on emphasis backgrounds) ─── */
     --vds-color-on-primary: var(--vds-color-white);
@@ -167,120 +190,67 @@
     --vds-color-on-info: var(--vds-color-white);
 
     /* ─── Intent: Emphasis backgrounds (badges, banners, indicators) ─── */
-    --vds-color-primary-emphasis: var(--vds-color-primary-500);
-    --vds-color-success-emphasis: var(--vds-color-success-500);
-    --vds-color-warning-emphasis: var(--vds-color-warning-500);
-    --vds-color-danger-emphasis: var(--vds-color-danger-500);
-    --vds-color-info-emphasis: var(--vds-color-info-500);
+    --vds-color-primary-emphasis: light-dark(var(--vds-color-primary-500), var(--vds-color-primary-400));
+    --vds-color-success-emphasis: light-dark(var(--vds-color-success-500), var(--vds-color-success-400));
+    --vds-color-warning-emphasis: light-dark(var(--vds-color-warning-500), var(--vds-color-warning-400));
+    --vds-color-danger-emphasis: light-dark(var(--vds-color-danger-500), var(--vds-color-danger-400));
+    --vds-color-info-emphasis: light-dark(var(--vds-color-info-500), var(--vds-color-info-400));
 
     /* ─── Intent: Muted backgrounds (light badges, alerts, callouts) ─── */
-    --vds-color-primary-muted: var(--vds-color-primary-100);
-    --vds-color-success-muted: var(--vds-color-success-100);
-    --vds-color-warning-muted: var(--vds-color-warning-100);
-    --vds-color-danger-muted: var(--vds-color-danger-100);
-    --vds-color-info-muted: var(--vds-color-info-100);
+    --vds-color-primary-muted: light-dark(var(--vds-color-primary-100), var(--vds-color-primary-950));
+    --vds-color-success-muted: light-dark(var(--vds-color-success-100), var(--vds-color-success-950));
+    --vds-color-warning-muted: light-dark(var(--vds-color-warning-100), var(--vds-color-warning-950));
+    --vds-color-danger-muted: light-dark(var(--vds-color-danger-100), var(--vds-color-danger-950));
+    --vds-color-info-muted: light-dark(var(--vds-color-info-100), var(--vds-color-info-950));
 
     /* ─── Intent: Text on muted backgrounds ─── */
-    --vds-color-primary-muted-text: var(--vds-color-primary-800);
-    --vds-color-success-muted-text: var(--vds-color-success-800);
-    --vds-color-warning-muted-text: var(--vds-color-warning-900);
-    --vds-color-danger-muted-text: var(--vds-color-danger-800);
-    --vds-color-info-muted-text: var(--vds-color-info-800);
+    --vds-color-primary-muted-text: light-dark(var(--vds-color-primary-800), var(--vds-color-primary-200));
+    --vds-color-success-muted-text: light-dark(var(--vds-color-success-800), var(--vds-color-success-200));
+    --vds-color-warning-muted-text: light-dark(var(--vds-color-warning-900), var(--vds-color-warning-200));
+    --vds-color-danger-muted-text: light-dark(var(--vds-color-danger-800), var(--vds-color-danger-200));
+    --vds-color-info-muted-text: light-dark(var(--vds-color-info-800), var(--vds-color-info-200));
 
     /* ─── Intent: Interactive states via color-mix() ─── */
-    --vds-color-primary-hover: color-mix(in oklch, var(--vds-color-primary-500), var(--vds-color-black) 10%);
-    --vds-color-primary-active: color-mix(in oklch, var(--vds-color-primary-500), var(--vds-color-black) 20%);
-    --vds-color-danger-hover: color-mix(in oklch, var(--vds-color-danger-500), var(--vds-color-black) 10%);
-    --vds-color-danger-active: color-mix(in oklch, var(--vds-color-danger-500), var(--vds-color-black) 20%);
-    --vds-color-success-hover: color-mix(in oklch, var(--vds-color-success-500), var(--vds-color-black) 10%);
-    --vds-color-success-active: color-mix(in oklch, var(--vds-color-success-500), var(--vds-color-black) 20%);
-    --vds-color-warning-hover: color-mix(in oklch, var(--vds-color-warning-500), var(--vds-color-black) 10%);
-    --vds-color-warning-active: color-mix(in oklch, var(--vds-color-warning-500), var(--vds-color-black) 20%);
-    --vds-color-info-hover: color-mix(in oklch, var(--vds-color-info-500), var(--vds-color-black) 10%);
-    --vds-color-info-active: color-mix(in oklch, var(--vds-color-info-500), var(--vds-color-black) 20%);
-  }
-
-  /* ═══════════════════════════════════════
-     Dark theme
-     ═══════════════════════════════════════ */
-  [data-theme="dark"] {
-    /* ─── Background ─── */
-    --vds-color-bg: var(--vds-color-gray-950);
-    --vds-color-bg-subtle: var(--vds-color-gray-900);
-    --vds-color-bg-muted: var(--vds-color-gray-800);
-    --vds-color-bg-disabled: var(--vds-color-gray-800);
-
-    /* ─── Surface / Elevation ─── */
-    --vds-color-surface-sunken: var(--vds-color-gray-950);
-    --vds-color-surface: var(--vds-color-gray-900);
-    --vds-color-surface-raised: var(--vds-color-gray-800);
-    --vds-color-surface-overlay: var(--vds-color-gray-800);
-    --vds-color-surface-hover: var(--vds-color-gray-800);
-    --vds-color-surface-active: var(--vds-color-gray-700);
-    --vds-color-surface-selected: var(--vds-color-primary-950);
-
-    /* ─── Overlay / Scrim ─── */
-    --vds-color-overlay: oklch(0 0 0 / 0.7);
-    --vds-color-overlay-light: oklch(0 0 0 / 0.4);
-
-    /* ─── Text ─── */
-    --vds-color-text: var(--vds-color-gray-50);
-    --vds-color-text-muted: var(--vds-color-gray-400);
-    --vds-color-text-subtle: var(--vds-color-gray-500);
-    --vds-color-text-disabled: var(--vds-color-gray-600);
-
-    /* ─── Border ─── */
-    --vds-color-border: var(--vds-color-gray-700);
-    --vds-color-border-muted: var(--vds-color-gray-800);
-    --vds-color-border-disabled: var(--vds-color-gray-800);
-
-    /* ─── Focus ─── */
-    --vds-color-ring: var(--vds-color-primary-400);
-    --vds-color-ring-offset: var(--vds-color-gray-950);
-
-    /* ─── Skeleton / Loading ─── */
-    --vds-color-skeleton: var(--vds-color-gray-800);
-    --vds-color-skeleton-shimmer: var(--vds-color-gray-700);
-
-    /* ─── Intent: On-color ─── */
-    --vds-color-on-primary: var(--vds-color-white);
-    --vds-color-on-success: var(--vds-color-white);
-    --vds-color-on-warning: var(--vds-color-gray-900);
-    --vds-color-on-danger: var(--vds-color-white);
-    --vds-color-on-info: var(--vds-color-white);
-
-    /* ─── Intent: Emphasis backgrounds ─── */
-    --vds-color-primary-emphasis: var(--vds-color-primary-400);
-    --vds-color-success-emphasis: var(--vds-color-success-400);
-    --vds-color-warning-emphasis: var(--vds-color-warning-400);
-    --vds-color-danger-emphasis: var(--vds-color-danger-400);
-    --vds-color-info-emphasis: var(--vds-color-info-400);
-
-    /* ─── Intent: Muted backgrounds ─── */
-    --vds-color-primary-muted: var(--vds-color-primary-950);
-    --vds-color-success-muted: var(--vds-color-success-950);
-    --vds-color-warning-muted: var(--vds-color-warning-950);
-    --vds-color-danger-muted: var(--vds-color-danger-950);
-    --vds-color-info-muted: var(--vds-color-info-950);
-
-    /* ─── Intent: Text on muted backgrounds ─── */
-    --vds-color-primary-muted-text: var(--vds-color-primary-200);
-    --vds-color-success-muted-text: var(--vds-color-success-200);
-    --vds-color-warning-muted-text: var(--vds-color-warning-200);
-    --vds-color-danger-muted-text: var(--vds-color-danger-200);
-    --vds-color-info-muted-text: var(--vds-color-info-200);
-
-    /* ─── Intent: Interactive states ─── */
-    --vds-color-primary-hover: color-mix(in oklch, var(--vds-color-primary-400), var(--vds-color-white) 10%);
-    --vds-color-primary-active: color-mix(in oklch, var(--vds-color-primary-400), var(--vds-color-white) 20%);
-    --vds-color-danger-hover: color-mix(in oklch, var(--vds-color-danger-400), var(--vds-color-white) 10%);
-    --vds-color-danger-active: color-mix(in oklch, var(--vds-color-danger-400), var(--vds-color-white) 20%);
-    --vds-color-success-hover: color-mix(in oklch, var(--vds-color-success-400), var(--vds-color-white) 10%);
-    --vds-color-success-active: color-mix(in oklch, var(--vds-color-success-400), var(--vds-color-white) 20%);
-    --vds-color-warning-hover: color-mix(in oklch, var(--vds-color-warning-400), var(--vds-color-white) 10%);
-    --vds-color-warning-active: color-mix(in oklch, var(--vds-color-warning-400), var(--vds-color-white) 20%);
-    --vds-color-info-hover: color-mix(in oklch, var(--vds-color-info-400), var(--vds-color-white) 10%);
-    --vds-color-info-active: color-mix(in oklch, var(--vds-color-info-400), var(--vds-color-white) 20%);
+    --vds-color-primary-hover: light-dark(
+      color-mix(in oklch, var(--vds-color-primary-500), var(--vds-color-black) 10%),
+      color-mix(in oklch, var(--vds-color-primary-400), var(--vds-color-white) 10%)
+    );
+    --vds-color-primary-active: light-dark(
+      color-mix(in oklch, var(--vds-color-primary-500), var(--vds-color-black) 20%),
+      color-mix(in oklch, var(--vds-color-primary-400), var(--vds-color-white) 20%)
+    );
+    --vds-color-success-hover: light-dark(
+      color-mix(in oklch, var(--vds-color-success-500), var(--vds-color-black) 10%),
+      color-mix(in oklch, var(--vds-color-success-400), var(--vds-color-white) 10%)
+    );
+    --vds-color-success-active: light-dark(
+      color-mix(in oklch, var(--vds-color-success-500), var(--vds-color-black) 20%),
+      color-mix(in oklch, var(--vds-color-success-400), var(--vds-color-white) 20%)
+    );
+    --vds-color-warning-hover: light-dark(
+      color-mix(in oklch, var(--vds-color-warning-500), var(--vds-color-black) 10%),
+      color-mix(in oklch, var(--vds-color-warning-400), var(--vds-color-white) 10%)
+    );
+    --vds-color-warning-active: light-dark(
+      color-mix(in oklch, var(--vds-color-warning-500), var(--vds-color-black) 20%),
+      color-mix(in oklch, var(--vds-color-warning-400), var(--vds-color-white) 20%)
+    );
+    --vds-color-danger-hover: light-dark(
+      color-mix(in oklch, var(--vds-color-danger-500), var(--vds-color-black) 10%),
+      color-mix(in oklch, var(--vds-color-danger-400), var(--vds-color-white) 10%)
+    );
+    --vds-color-danger-active: light-dark(
+      color-mix(in oklch, var(--vds-color-danger-500), var(--vds-color-black) 20%),
+      color-mix(in oklch, var(--vds-color-danger-400), var(--vds-color-white) 20%)
+    );
+    --vds-color-info-hover: light-dark(
+      color-mix(in oklch, var(--vds-color-info-500), var(--vds-color-black) 10%),
+      color-mix(in oklch, var(--vds-color-info-400), var(--vds-color-white) 10%)
+    );
+    --vds-color-info-active: light-dark(
+      color-mix(in oklch, var(--vds-color-info-500), var(--vds-color-black) 20%),
+      color-mix(in oklch, var(--vds-color-info-400), var(--vds-color-white) 20%)
+    );
   }
 }
 @layer tokens {
@@ -479,6 +449,7 @@
     --vds-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --vds-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
     --vds-ease-spring: cubic-bezier(0.22, 1.2, 0.36, 1);
+    --vds-ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
   }
 
   /* ─── Keyframes ─── */

@@ -9,13 +9,15 @@ import {
 import {
   applyRubberband,
   clamp,
+  debugDrawer,
   getCrossCoord,
   getMainCoord,
   getOpenSign,
   isAtScrollEdge,
-  pickTargetSnap,
+  pickSettleTarget,
   type Direction,
   type DrawerSnapBehavior,
+  type SettleTarget,
 } from "./utils";
 
 const AXIS_LOCK_THRESHOLD = 6;
@@ -41,6 +43,8 @@ export interface DragConfig {
   drawerSize: number;
   snapSizes: readonly number[];
   currentSnapIndex: number;
+  fromMinimized: boolean;
+  minimizedSize: number | null;
   getCurrentSize: () => number;
   closeThreshold: number;
   velocityThreshold: number;
@@ -51,7 +55,7 @@ export interface DragConfig {
   dragHandleOnly: boolean;
   onDragStart: () => void;
   onDragMove: (sizePx: number) => void;
-  onDragEnd: (targetSnapIndex: number, dismiss: boolean) => void;
+  onDragEnd: (target: SettleTarget) => void;
   getContentEl: () => HTMLElement | null;
   getHeaderEl?: () => HTMLElement | null;
   getHandleEl: () => HTMLElement | null;
@@ -73,6 +77,7 @@ interface DragState {
   startCross: number;
   startSize: number;
   startSnapIndex: number;
+  fromMinimized: boolean;
   axisLocked: boolean;
   dragging: boolean;
   samples: VelocitySample[];
@@ -180,6 +185,13 @@ export function useDrawerDrag(config: DragConfig) {
 
   const beginSession = useCallback((state: DragState) => {
     stateRef.current = state;
+    debugDrawer("drag:start", {
+      source: state.source,
+      inputType: state.inputType,
+      startSize: state.startSize,
+      startSnapIndex: state.startSnapIndex,
+      fromMinimized: state.fromMinimized,
+    });
     if (state.inputType === "pen" && state.captureEl && state.pointerId !== undefined) {
       try {
         state.captureEl.setPointerCapture(state.pointerId);
@@ -250,21 +262,36 @@ export function useDrawerDrag(config: DragConfig) {
 
     const velocity = wasDragging ? computeVelocity() : 0;
     const currentSize = resolvedConfig.getCurrentSize();
+    const fromMinimized = state.fromMinimized;
 
     reset(state.pointerId);
 
     if (!wasDragging) return;
     if (cancelled) {
-      resolvedConfig.onDragEnd(startSnapIndex, false);
+      debugDrawer("drag:end", {
+        cancelled: true,
+        startSize: state.startSize,
+        currentSize,
+        velocity,
+        startSnapIndex,
+        fromMinimized,
+      });
+      resolvedConfig.onDragEnd(
+        fromMinimized
+          ? { kind: "minimized" }
+          : { kind: "snap", index: startSnapIndex },
+      );
       return;
     }
 
-    const targetIndex = pickTargetSnap({
+    const target = pickSettleTarget({
       currentSize,
       startSize: state.startSize,
       startSnapIndex,
+      fromMinimized,
       velocity,
       snaps: resolvedConfig.snapSizes,
+      minimizedSize: resolvedConfig.minimizedSize,
       velocityThreshold: resolvedConfig.velocityThreshold,
       closeThreshold: resolvedConfig.closeThreshold,
       dismissible: resolvedConfig.dismissible,
@@ -273,11 +300,16 @@ export function useDrawerDrag(config: DragConfig) {
       snapSkipThreshold: resolvedConfig.snapSkipThreshold,
     });
 
-    if (targetIndex === -1) {
-      resolvedConfig.onDragEnd(0, true);
-    } else {
-      resolvedConfig.onDragEnd(targetIndex, false);
-    }
+    debugDrawer("drag:end", {
+      cancelled: false,
+      startSize: state.startSize,
+      currentSize,
+      velocity,
+      startSnapIndex,
+      fromMinimized,
+      target,
+    });
+    resolvedConfig.onDragEnd(target);
   }, [computeVelocity, recordSample, reset]);
 
   const bindMouseListeners = useCallback(() => {
@@ -428,6 +460,7 @@ export function useDrawerDrag(config: DragConfig) {
       startCross: getCrossCoord(resolvedConfig.direction, event.clientX, event.clientY),
       startSize: resolvedConfig.getCurrentSize(),
       startSnapIndex: resolvedConfig.currentSnapIndex,
+      fromMinimized: resolvedConfig.fromMinimized,
       axisLocked: false,
       dragging: false,
       samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
@@ -464,6 +497,7 @@ export function useDrawerDrag(config: DragConfig) {
       startCross: getCrossCoord(resolvedConfig.direction, event.clientX, event.clientY),
       startSize: resolvedConfig.getCurrentSize(),
       startSnapIndex: resolvedConfig.currentSnapIndex,
+      fromMinimized: resolvedConfig.fromMinimized,
       axisLocked: false,
       dragging: false,
       samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
@@ -500,6 +534,7 @@ export function useDrawerDrag(config: DragConfig) {
       startCross: getCrossCoord(resolvedConfig.direction, touch.clientX, touch.clientY),
       startSize: resolvedConfig.getCurrentSize(),
       startSnapIndex: resolvedConfig.currentSnapIndex,
+      fromMinimized: resolvedConfig.fromMinimized,
       axisLocked: false,
       dragging: false,
       samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],

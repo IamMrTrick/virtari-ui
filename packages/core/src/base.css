@@ -13,13 +13,38 @@
   }
 
   ::selection {
-    background-color: var(--vds-color-primary-200);
-    color: var(--vds-color-primary-900);
+    background-color: var(--vds-color-primary-500);
+    color: white;
   }
 
-  [data-theme="dark"] ::selection {
-    background-color: var(--vds-color-primary-800);
-    color: var(--vds-color-primary-100);
+  /* Scrollbar — themed, cross-browser
+     Standard CSS (Firefox, Chrome 121+, Safari 18.2+, Edge) */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--vds-color-border) transparent;
+  }
+
+  /* WebKit/Blink fallback (older Chrome, Safari <18.2, iOS) */
+  *::-webkit-scrollbar {
+    inline-size: 8px;
+    block-size: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--vds-color-border);
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--vds-color-border-strong, var(--vds-color-text-subtle));
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
   }
 }
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useSyncExternalStore } from "react";
-import { Sidebar, Layout } from "./components";
+import { Sidebar, MobileSidebar, Layout } from "./components";
 import {
   PAGE_META,
   IntroductionPage,
@@ -130,12 +130,14 @@ export default function App() {
       data-theme={dark ? "dark" : "light"}
       data-radius={radius !== "soft" ? radius : undefined}
       className="docs-app"
-      data-sidebar-open={sidebarOpen || undefined}
     >
       <Sidebar activePage={activePage} onNavigate={handleNavigate} />
-      {sidebarOpen && (
-        <div className="docs-sidebar-backdrop" onClick={() => setSidebarOpen(false)} />
-      )}
+      <MobileSidebar
+        open={sidebarOpen}
+        onOpenChange={setSidebarOpen}
+        activePage={activePage}
+        onNavigate={handleNavigate}
+      />
       <Layout
         dark={dark}
         onToggleDark={setDark}
