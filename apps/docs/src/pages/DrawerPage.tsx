@@ -9,6 +9,7 @@ import {
   DrawerTrigger,
   DrawerContent,
   DrawerHandle,
+  DrawerHeader,
   DrawerTitle,
   DrawerDescription,
   DrawerBody,
@@ -20,11 +21,143 @@ import { Section, Row } from "../components";
 export function DrawerPage() {
   const [notifications, setNotifications] = useState(true);
   const [marketing, setMarketing] = useState(false);
-  const [adaptiveSnap, setAdaptiveSnap] = useState(1);
-  const [fullSnap, setFullSnap] = useState(1);
+  const [adaptiveSnap, setAdaptiveSnap] = useState(0.5);
+  const [fullSnap, setFullSnap] = useState(0.45);
 
   return (
     <>
+      <Section
+        title="Live Playground"
+        description="Cleaner test surface for drawer behavior. Start here when checking open, close, and drag."
+      >
+        <div
+          data-vds-drawer-wrapper
+          style={{
+            position: "relative",
+            minHeight: "24rem",
+            overflow: "hidden",
+            borderRadius: "calc(var(--vds-radius-xl) + var(--vds-space-1))",
+            border: "1px solid var(--vds-color-border-muted)",
+            background:
+              "radial-gradient(circle at top left, color-mix(in oklch, var(--vds-color-primary-500), transparent 82%), transparent 38%), linear-gradient(180deg, var(--vds-color-bg-subtle), var(--vds-color-surface))",
+            boxShadow: "var(--vds-shadow-lg)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "var(--vds-space-5)",
+              padding: "var(--vds-space-6)",
+              minHeight: "24rem",
+            }}
+          >
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--vds-space-3)" }}>
+              <Drawer snapPoints={[0.45, 1]} defaultSnapPoint={0.45} minimizedSize={76} snapBehavior="staged">
+                <DrawerTrigger asChild>
+                  <Button>Open Bottom Sheet</Button>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <DrawerHeader>
+                    <DrawerHandle />
+                    <DrawerTitle>Quick Actions</DrawerTitle>
+                    <DrawerDescription>
+                      Drag the header or handle to expand. When the list is at the top, pull down from the body to stage smaller or close.
+                    </DrawerDescription>
+                  </DrawerHeader>
+                  <DrawerBody>
+                    <div style={{ display: "grid", gap: "var(--vds-space-3)" }}>
+                      {["Recent Orders", "Saved Addresses", "Payment Methods", "Support"].map((item) => (
+                        <div
+                          key={item}
+                          style={{
+                            padding: "var(--vds-space-3)",
+                            borderRadius: "var(--vds-radius-lg)",
+                            border: "1px solid var(--vds-color-border-muted)",
+                            background: "color-mix(in oklch, var(--vds-color-surface), white 2%)",
+                          }}
+                        >
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </DrawerBody>
+                  <DrawerFooter>
+                    <DrawerClose asChild>
+                      <Button variant="outline" fullWidth>Dismiss</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+
+              <Drawer
+                direction="right"
+                sizeMode="fixed"
+                size={({ viewportWidth }) => viewportWidth >= 1080 ? 420 : "min(100vw, 24rem)"}
+              >
+                <DrawerTrigger asChild>
+                  <Button variant="outline">Open Side Drawer</Button>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <DrawerHeader>
+                    <DrawerHandle />
+                    <DrawerTitle>Desktop Panel</DrawerTitle>
+                    <DrawerDescription>
+                      Use the header as the drag surface on desktop. The body stays scrollable.
+                    </DrawerDescription>
+                  </DrawerHeader>
+                  <DrawerBody>
+                    <div style={{ display: "grid", gap: "var(--vds-space-3)" }}>
+                      {["Overview", "Team Activity", "Alerts", "System Status"].map((item) => (
+                        <div
+                          key={item}
+                          style={{
+                            padding: "var(--vds-space-3)",
+                            borderRadius: "var(--vds-radius-lg)",
+                            border: "1px solid var(--vds-color-border-muted)",
+                          }}
+                        >
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </DrawerBody>
+                </DrawerContent>
+              </Drawer>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gap: "var(--vds-space-4)",
+                gridTemplateColumns: "repeat(auto-fit, minmax(12rem, 1fr))",
+                marginTop: "auto",
+              }}
+            >
+              {[
+                { title: "Desktop Header Drag", text: "Mouse drag starts from the header or handle so body content can keep text selection and scrolling." },
+                { title: "Touch Handoff", text: "On touch, the header always drags, and the body can pull the sheet down once the scroll region is back at its edge." },
+                { title: "Viewport Safe", text: "Input focus stays on the drawer container and skips keyboard-driven remeasure jumps." },
+              ].map((card) => (
+                <div
+                  key={card.title}
+                  style={{
+                    padding: "var(--vds-space-4)",
+                    borderRadius: "var(--vds-radius-xl)",
+                    border: "1px solid var(--vds-color-border-muted)",
+                    background: "color-mix(in oklch, var(--vds-color-surface), transparent 4%)",
+                    backdropFilter: "blur(12px)",
+                  }}
+                >
+                  <p style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-semibold)" }}>{card.title}</p>
+                  <p style={{ marginTop: "var(--vds-space-1)", fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text-muted)" }}>{card.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Section>
+
       {/* ── Basic Bottom ── */}
       <Section
         title="Bottom Sheet"
@@ -35,24 +168,26 @@ export function DrawerPage() {
             <Button>Open Bottom Drawer</Button>
           </DrawerTrigger>
           <DrawerContent>
-            <DrawerHandle />
-            <DrawerTitle>Edit Profile</DrawerTitle>
-            <DrawerDescription>
-              Make changes to your profile. Click save when you're done.
-            </DrawerDescription>
+            <DrawerHeader>
+              <DrawerHandle />
+              <DrawerTitle>Edit Profile</DrawerTitle>
+              <DrawerDescription>
+                Make changes to your profile. Click save when you're done.
+              </DrawerDescription>
+            </DrawerHeader>
             <DrawerBody>
               <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-4)" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)" }}>
-                  <label style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>Name</label>
-                  <Input placeholder="John Doe" />
+                  <label htmlFor="drawer-profile-name" style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>Name</label>
+                  <Input id="drawer-profile-name" name="name" placeholder="John Doe" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)" }}>
-                  <label style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>Email</label>
-                  <Input placeholder="john@example.com" type="email" />
+                  <label htmlFor="drawer-profile-email" style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>Email</label>
+                  <Input id="drawer-profile-email" name="email" placeholder="john@example.com" type="email" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)" }}>
-                  <label style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>Bio</label>
-                  <Input placeholder="Tell us about yourself..." />
+                  <label htmlFor="drawer-profile-bio" style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>Bio</label>
+                  <Input id="drawer-profile-bio" name="bio" placeholder="Tell us about yourself..." />
                 </div>
               </div>
             </DrawerBody>
@@ -76,6 +211,8 @@ export function DrawerPage() {
           <Drawer
             minimizedSize={76}
             snapPoints={[0.5, 1]}
+            defaultSnapPoint={0.5}
+            snapBehavior="staged"
             activeSnapPoint={adaptiveSnap}
             onActiveSnapPointChange={setAdaptiveSnap}
           >
@@ -83,22 +220,27 @@ export function DrawerPage() {
               <Button variant="outline">Adaptive + Minimized</Button>
             </DrawerTrigger>
             <DrawerContent>
-              <DrawerHandle />
-              <DrawerTitle>Adaptive Sheet</DrawerTitle>
-              <DrawerDescription>
-                Full open, half stage, and minimized header. Pull down once to step smaller, then again to close.
-              </DrawerDescription>
+              <DrawerHeader>
+                <DrawerHandle />
+                <DrawerTitle>Adaptive Sheet</DrawerTitle>
+                <DrawerDescription>
+                  Opens at a smaller stage, expands on drag, then steps back to a minimized peek before fully closing.
+                </DrawerDescription>
+              </DrawerHeader>
               <DrawerBody>
                 <div style={{ display: "grid", gap: "var(--vds-space-3)" }}>
                   <div style={{ padding: "var(--vds-space-3)", border: "1px solid var(--vds-color-border-muted)", borderRadius: "var(--vds-radius-lg)" }}>
                     Current snap value: {adaptiveSnap}
                   </div>
-                  <Input placeholder="Search destinations" />
-                  <Input placeholder="Pickup location" />
-                  <Input placeholder="Notes for the driver" />
+                  <Input name="search-destinations" placeholder="Search destinations" />
+                  <Input name="pickup-location" placeholder="Pickup location" />
+                  <Input name="driver-notes" placeholder="Notes for the driver" />
                 </div>
               </DrawerBody>
               <DrawerFooter>
+                <Button variant="outline" fullWidth onClick={() => setAdaptiveSnap(76)}>
+                  Peek
+                </Button>
                 <Button variant="outline" fullWidth onClick={() => setAdaptiveSnap(0.5)}>
                   Half Stage
                 </Button>
@@ -112,6 +254,8 @@ export function DrawerPage() {
           <Drawer
             sizeMode="full"
             snapPoints={[0.45, 1]}
+            defaultSnapPoint={0.45}
+            snapBehavior="staged"
             activeSnapPoint={fullSnap}
             onActiveSnapPointChange={setFullSnap}
           >
@@ -119,11 +263,13 @@ export function DrawerPage() {
               <Button variant="outline">Full Height</Button>
             </DrawerTrigger>
             <DrawerContent>
-              <DrawerHandle />
-              <DrawerTitle>Full Height Sheet</DrawerTitle>
-              <DrawerDescription>
-                Opens to the viewport cap and can step back to a smaller stage before dismissing.
-              </DrawerDescription>
+              <DrawerHeader>
+                <DrawerHandle />
+                <DrawerTitle>Full Height Sheet</DrawerTitle>
+                <DrawerDescription>
+                  Uses a staged drag model: open small, pull up to expand, pull down to shrink, and pull again to dismiss.
+                </DrawerDescription>
+              </DrawerHeader>
               <DrawerBody>
                 <div style={{ display: "grid", gap: "var(--vds-space-3)" }}>
                   {Array.from({ length: 8 }, (_, index) => (
@@ -148,6 +294,65 @@ export function DrawerPage() {
                   Expand
                 </Button>
               </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+        </Row>
+      </Section>
+
+      {/* ── Per-instance Theming ── */}
+      <Section
+        title="Theming"
+        description="Override --vds-drawer-* variables on DrawerContent to theme a single drawer without touching global tokens."
+      >
+        <Row>
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="outline">Sharper Radius</Button>
+            </DrawerTrigger>
+            <DrawerContent
+              style={{
+                ["--vds-drawer-radius" as string]: "var(--vds-radius-2)",
+              }}
+            >
+              <DrawerHeader>
+                <DrawerHandle />
+                <DrawerTitle>Sharp Corners</DrawerTitle>
+                <DrawerDescription>
+                  This drawer overrides <code>--vds-drawer-radius</code> to a 4px token.
+                </DrawerDescription>
+              </DrawerHeader>
+              <DrawerBody>
+                <p style={{ color: "var(--vds-color-text-muted)", fontSize: "var(--vds-text-sm)" }}>
+                  All other drawers keep the default surface radius. Swap <code>data-radius="pill"</code> on{" "}
+                  <code>&lt;html&gt;</code> to re-theme globally instead.
+                </p>
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="outline">Slow Motion</Button>
+            </DrawerTrigger>
+            <DrawerContent
+              style={{
+                ["--vds-drawer-duration" as string]: "700ms",
+                ["--vds-drawer-ease" as string]: "var(--vds-ease-bounce)",
+              }}
+            >
+              <DrawerHeader>
+                <DrawerHandle />
+                <DrawerTitle>Slow Bounce</DrawerTitle>
+                <DrawerDescription>
+                  Overrides <code>--vds-drawer-duration</code> and <code>--vds-drawer-ease</code>. JS picks these up via{" "}
+                  <code>getComputedStyle</code>.
+                </DrawerDescription>
+              </DrawerHeader>
+              <DrawerBody>
+                <p style={{ color: "var(--vds-color-text-muted)", fontSize: "var(--vds-text-sm)" }}>
+                  Open / close timing, drag-release spring, and overlay fade all respect the override.
+                </p>
+              </DrawerBody>
             </DrawerContent>
           </Drawer>
         </Row>
@@ -195,6 +400,9 @@ export function DrawerPage() {
             <DrawerContent>
               <DrawerHandle />
               <DrawerTitle>Navigation</DrawerTitle>
+              <DrawerDescription>
+                Side navigation drawer for desktop and tablet layouts.
+              </DrawerDescription>
               <DrawerBody>
                 <nav style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)" }}>
                   {["Dashboard", "Projects", "Team", "Settings", "Help"].map((item) => (
@@ -213,11 +421,20 @@ export function DrawerPage() {
             </DrawerContent>
           </Drawer>
 
-          <Drawer direction="right">
+          <Drawer
+            direction="right"
+            sizeMode="fixed"
+            size={({ viewportWidth }) => viewportWidth >= 1080 ? 480 : "min(100vw, 28rem)"}
+          >
             <DrawerTrigger asChild><Button variant="outline">Right</Button></DrawerTrigger>
             <DrawerContent>
-              <DrawerHandle />
-              <DrawerTitle>Notifications</DrawerTitle>
+              <DrawerHeader>
+                <DrawerHandle />
+                <DrawerTitle>Notifications</DrawerTitle>
+                <DrawerDescription>
+                  Fixed-size desktop drawer with mouse drag support and responsive fallback sizing.
+                </DrawerDescription>
+              </DrawerHeader>
               <DrawerBody>
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-4)" }}>
                   {[
@@ -254,17 +471,17 @@ export function DrawerPage() {
             <DrawerBody>
               <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-5)" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)" }}>
-                  <label style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>
+                  <label htmlFor="drawer-settings-display-name" style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>
                     Display Name
                   </label>
-                  <Input placeholder="Your name" />
+                  <Input id="drawer-settings-display-name" name="displayName" placeholder="Your name" />
                 </div>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)" }}>
-                  <label style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>
+                  <label htmlFor="drawer-settings-email" style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-medium)" }}>
                     Email Address
                   </label>
-                  <Input placeholder="you@example.com" type="email" />
+                  <Input id="drawer-settings-email" name="settingsEmail" placeholder="you@example.com" type="email" />
                 </div>
 
                 <div style={{
@@ -323,19 +540,27 @@ export function DrawerPage() {
       <Section title="Usage">
         <pre className="docs-code">{`import {
   Drawer, DrawerTrigger, DrawerContent, DrawerHandle,
-  DrawerTitle, DrawerDescription, DrawerBody,
-  DrawerFooter, DrawerClose,
+  DrawerHeader, DrawerTitle, DrawerDescription,
+  DrawerBody, DrawerFooter, DrawerClose,
 } from "@virtari/react-drawer";
 
 // Adaptive sheet with minimize + staged close
-<Drawer direction="bottom">
+<Drawer
+  direction="bottom"
+  minimizedSize={72}
+  snapPoints={[0.5, 1]}
+  defaultSnapPoint={0.5}
+  snapBehavior="staged"
+>
   <DrawerTrigger asChild>
     <Button>Open</Button>
   </DrawerTrigger>
   <DrawerContent>
-    <DrawerHandle />
-    <DrawerTitle>Edit Profile</DrawerTitle>
-    <DrawerDescription>Update your info.</DrawerDescription>
+    <DrawerHeader>
+      <DrawerHandle />
+      <DrawerTitle>Edit Profile</DrawerTitle>
+      <DrawerDescription>Update your info.</DrawerDescription>
+    </DrawerHeader>
     <DrawerBody>
       <Input placeholder="Name" />
       <Input placeholder="Email" type="email" />
@@ -349,28 +574,29 @@ export function DrawerPage() {
   </DrawerContent>
 </Drawer>
 
-// Full-height staged sheet
+// Fixed-size desktop drawer with responsive fallback
 <Drawer
-  sizeMode="full"
-  minimizedSize={72}
-  snapPoints={[0.5, 1]}
-  defaultSnapPoint={1}
+  direction="right"
+  sizeMode="fixed"
+  size={({ viewportWidth }) => viewportWidth >= 1080 ? 480 : "min(100vw, 28rem)"}
 >
   <DrawerTrigger asChild>
     <Button>Open</Button>
   </DrawerTrigger>
   <DrawerContent>
-    <DrawerHandle />
-    <DrawerTitle>Ride Options</DrawerTitle>
-    <DrawerDescription>
-      Pull to move between full, half, minimized, and closed states.
-    </DrawerDescription>
+    <DrawerHeader>
+      <DrawerHandle />
+      <DrawerTitle>Ride Options</DrawerTitle>
+      <DrawerDescription>
+        Mouse drag and touch drag use the same pointer-based snap system.
+      </DrawerDescription>
+    </DrawerHeader>
     <DrawerBody>{/* scrollable content */}</DrawerBody>
   </DrawerContent>
 </Drawer>
 
 // Directions: "bottom" | "top" | "left" | "right"
-// sizeMode: "adaptive" | "full"`}</pre>
+// sizeMode: "adaptive" | "full" | "fixed"`}</pre>
       </Section>
     </>
   );

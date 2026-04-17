@@ -19,6 +19,6 @@
   }
 
     .vds-skeleton[data-circle] {
-      border-radius: 9999px;
+      border-radius: var(--vds-radius-full);
     }
 }

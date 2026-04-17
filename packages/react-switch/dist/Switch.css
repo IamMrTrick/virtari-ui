@@ -5,9 +5,9 @@
      * Switch has its own proportional scale — NOT on the height ramp.
      * Track width is ~1.8x height. Thumb is height minus border offset.
      */
-    --_switch-width: 2.75rem;
-    --_switch-height: 1.5rem;
-    --_switch-thumb-size: 1.25rem;
+    --_switch-width: var(--vds-space-11);
+    --_switch-height: var(--vds-space-6);
+    --_switch-thumb-size: var(--vds-space-5);
     --_switch-thumb-offset: 1px;
 
     display: inline-flex;
@@ -40,17 +40,17 @@
     /* ── Sizes ── */
 
     .vds-switch[data-size="sm"] {
-      --_switch-width: 2rem;
-      --_switch-height: 1.125rem;
-      --_switch-thumb-size: 0.875rem;
+      --_switch-width: var(--vds-space-8);
+      --_switch-height: 1.125rem; /* intentional: no matching space token */
+      --_switch-thumb-size: var(--vds-space-3-5);
     }
 
     /* md uses defaults */
 
     .vds-switch[data-size="lg"] {
-      --_switch-width: 3.5rem;
-      --_switch-height: 2rem;
-      --_switch-thumb-size: 1.75rem;
+      --_switch-width: var(--vds-space-14);
+      --_switch-height: var(--vds-space-8);
+      --_switch-thumb-size: var(--vds-space-7);
     }
 
   .vds-switch-thumb {

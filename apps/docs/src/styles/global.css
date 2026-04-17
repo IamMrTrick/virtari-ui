@@ -34,6 +34,7 @@
 @import "@virtari/react-spinner/styles";
 @import "@virtari/react-card/styles";
 @import "@virtari/react-kbd/styles";
+@import "../../../../packages/react-layout/dist/index.css";
 
 /* Docs app styles */
 @import "./docs.css";

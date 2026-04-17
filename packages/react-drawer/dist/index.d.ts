@@ -3,9 +3,18 @@ import { ReactNode, ComponentPropsWithoutRef } from 'react';
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
-type Direction = "bottom" | "top" | "left" | "right";
-type DrawerSizeMode = "adaptive" | "full";
-type DrawerSnapPoint = number;
+type Direction = "top" | "bottom" | "left" | "right";
+type DrawerSizeMode = "adaptive" | "full" | "fixed";
+type DrawerSnapBehavior = "staged" | "closest";
+type SnapPoint = number;
+type DrawerDeclaredSize = number | string | ((info: DrawerViewportInfo) => number | string);
+interface DrawerViewportInfo {
+    direction: Direction;
+    viewportWidth: number;
+    viewportHeight: number;
+    availableSize: number;
+    orientation: "portrait" | "landscape";
+}
 
 interface DrawerProps {
     children: ReactNode;
@@ -14,11 +23,15 @@ interface DrawerProps {
     defaultOpen?: boolean;
     onOpenChange?: (open: boolean) => void;
     sizeMode?: DrawerSizeMode;
-    snapPoints?: readonly DrawerSnapPoint[];
-    minimizedSize?: DrawerSnapPoint;
-    activeSnapPoint?: DrawerSnapPoint;
-    defaultSnapPoint?: DrawerSnapPoint;
-    onActiveSnapPointChange?: (value: DrawerSnapPoint) => void;
+    size?: DrawerDeclaredSize;
+    snapPoints?: readonly SnapPoint[];
+    activeSnapPoint?: SnapPoint;
+    defaultSnapPoint?: SnapPoint;
+    onActiveSnapPointChange?: (value: SnapPoint) => void;
+    minimizedSize?: SnapPoint;
+    snapBehavior?: DrawerSnapBehavior;
+    snapStepThreshold?: number;
+    snapSkipThreshold?: number;
     closeThreshold?: number;
     velocityThreshold?: number;
     dragHandleOnly?: boolean;
@@ -27,7 +40,7 @@ interface DrawerProps {
     dismissible?: boolean;
     preventAutoFocus?: boolean;
 }
-declare function Drawer({ children, direction, open: controlledOpen, defaultOpen, onOpenChange: controlledOnOpenChange, sizeMode, snapPoints, minimizedSize, activeSnapPoint: controlledActiveSnapPoint, defaultSnapPoint, onActiveSnapPointChange, closeThreshold, velocityThreshold, dragHandleOnly, scaleBackground, modal, dismissible, preventAutoFocus, }: DrawerProps): react_jsx_runtime.JSX.Element;
+declare function Drawer({ children, direction, open: controlledOpen, defaultOpen, onOpenChange: controlledOnOpenChange, sizeMode, size, snapPoints, activeSnapPoint: controlledSnap, defaultSnapPoint, onActiveSnapPointChange, minimizedSize, snapBehavior, snapStepThreshold, snapSkipThreshold, closeThreshold, velocityThreshold, dragHandleOnly, scaleBackground, modal, dismissible, preventAutoFocus, }: DrawerProps): react_jsx_runtime.JSX.Element;
 declare const DrawerTrigger: react.ForwardRefExoticComponent<DialogPrimitive.DialogTriggerProps & react.RefAttributes<HTMLButtonElement>>;
 declare const DrawerClose: react.ForwardRefExoticComponent<DialogPrimitive.DialogCloseProps & react.RefAttributes<HTMLButtonElement>>;
 interface DrawerOverlayProps extends ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> {
@@ -39,6 +52,9 @@ declare const DrawerContent: react.ForwardRefExoticComponent<DrawerContentProps 
 interface DrawerHandleProps extends ComponentPropsWithoutRef<"div"> {
 }
 declare const DrawerHandle: react.ForwardRefExoticComponent<DrawerHandleProps & react.RefAttributes<HTMLDivElement>>;
+interface DrawerHeaderProps extends ComponentPropsWithoutRef<"div"> {
+}
+declare const DrawerHeader: react.ForwardRefExoticComponent<DrawerHeaderProps & react.RefAttributes<HTMLDivElement>>;
 interface DrawerTitleProps extends ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {
 }
 declare const DrawerTitle: react.ForwardRefExoticComponent<DrawerTitleProps & react.RefAttributes<HTMLHeadingElement>>;
@@ -52,4 +68,4 @@ interface DrawerFooterProps extends ComponentPropsWithoutRef<"div"> {
 }
 declare const DrawerFooter: react.ForwardRefExoticComponent<DrawerFooterProps & react.RefAttributes<HTMLDivElement>>;
 
-export { type Direction, Drawer, DrawerBody, type DrawerBodyProps, DrawerClose, DrawerContent, type DrawerContentProps, DrawerDescription, type DrawerDescriptionProps, DrawerFooter, type DrawerFooterProps, DrawerHandle, type DrawerHandleProps, DrawerOverlay, type DrawerOverlayProps, type DrawerProps, type DrawerSizeMode, type DrawerSnapPoint, DrawerTitle, type DrawerTitleProps, DrawerTrigger };
+export { type Direction, Drawer, DrawerBody, type DrawerBodyProps, DrawerClose, DrawerContent, type DrawerContentProps, type DrawerDeclaredSize, DrawerDescription, type DrawerDescriptionProps, DrawerFooter, type DrawerFooterProps, DrawerHandle, type DrawerHandleProps, DrawerHeader, type DrawerHeaderProps, DrawerOverlay, type DrawerOverlayProps, type DrawerProps, type DrawerSizeMode, type DrawerSnapBehavior, type SnapPoint as DrawerSnapPoint, DrawerTitle, type DrawerTitleProps, DrawerTrigger, type SnapPoint };

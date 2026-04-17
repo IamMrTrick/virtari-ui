@@ -1,0 +1,29 @@
+@layer components {
+  .vds-cluster {
+    --vds-cluster-gap: var(--vds-space-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vds-cluster-gap);
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .vds-cluster[data-gap="xs"] { --vds-cluster-gap: var(--vds-space-1); }
+  .vds-cluster[data-gap="sm"] { --vds-cluster-gap: var(--vds-space-2); }
+  .vds-cluster[data-gap="md"] { --vds-cluster-gap: var(--vds-space-3); }
+  .vds-cluster[data-gap="lg"] { --vds-cluster-gap: var(--vds-space-4); }
+  .vds-cluster[data-gap="xl"] { --vds-cluster-gap: var(--vds-space-6); }
+
+  .vds-cluster[data-align="start"]    { align-items: flex-start; }
+  .vds-cluster[data-align="center"]   { align-items: center; }
+  .vds-cluster[data-align="end"]      { align-items: flex-end; }
+  .vds-cluster[data-align="baseline"] { align-items: baseline; }
+  .vds-cluster[data-align="stretch"]  { align-items: stretch; }
+
+  .vds-cluster[data-justify="start"]   { justify-content: flex-start; }
+  .vds-cluster[data-justify="center"]  { justify-content: center; }
+  .vds-cluster[data-justify="end"]     { justify-content: flex-end; }
+  .vds-cluster[data-justify="between"] { justify-content: space-between; }
+  .vds-cluster[data-justify="around"]  { justify-content: space-around; }
+  .vds-cluster[data-justify="evenly"]  { justify-content: space-evenly; }
+}

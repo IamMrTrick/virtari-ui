@@ -7,7 +7,7 @@
 
     display: flex;
     inline-size: 100%;
-    min-block-size: 5rem;
+    min-block-size: var(--vds-space-20);
     resize: vertical;
     font-family: var(--vds-font-sans);
     border: 1px solid var(--vds-color-border);

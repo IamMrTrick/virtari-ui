@@ -8,7 +8,7 @@
     flex-direction: column;
     gap: var(--vds-space-2);
     padding: var(--vds-space-6);
-    max-inline-size: 25rem;
+    max-inline-size: 25rem; /* intentional: no matching space token */
     inline-size: 100%;
     list-style: none;
     outline: none;
@@ -89,8 +89,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    inline-size: 1.5rem;
-    block-size: 1.5rem;
+    inline-size: var(--vds-space-6);
+    block-size: var(--vds-space-6);
     border-radius: var(--vds-radius-element);
     border: none;
     background: transparent;

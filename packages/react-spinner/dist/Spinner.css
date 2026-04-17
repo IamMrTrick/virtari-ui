@@ -6,7 +6,7 @@
   }
 
   .vds-spinner {
-    --_spinner-size: 1.25rem;
+    --_spinner-size: var(--vds-space-5);
     --_spinner-border: 2px;
 
     display: inline-block;
@@ -14,17 +14,17 @@
     block-size: var(--_spinner-size);
     border: var(--_spinner-border) solid var(--vds-color-primary-500);
     border-right-color: transparent;
-    border-radius: 9999px;
+    border-radius: var(--vds-radius-full);
     animation: vds-spin 0.6s linear infinite;
   }
 
     .vds-spinner[data-size="sm"] {
-      --_spinner-size: 0.875rem;
+      --_spinner-size: var(--vds-space-3-5);
       --_spinner-border: 1.5px;
     }
 
     .vds-spinner[data-size="lg"] {
-      --_spinner-size: 2rem;
+      --_spinner-size: var(--vds-space-8);
       --_spinner-border: 3px;
     }
 }

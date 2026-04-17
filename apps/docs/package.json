@@ -41,7 +41,8 @@
     "@virtari/react-skeleton": "workspace:*",
     "@virtari/react-spinner": "workspace:*",
     "@virtari/react-card": "workspace:*",
-    "@virtari/react-kbd": "workspace:*"
+    "@virtari/react-kbd": "workspace:*",
+    "@virtari/react-layout": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",

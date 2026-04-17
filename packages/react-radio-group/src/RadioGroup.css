@@ -10,8 +10,8 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    inline-size: 1.25rem;
-    block-size: 1.25rem;
+    inline-size: var(--vds-space-5);
+    block-size: var(--vds-space-5);
     border: 2px solid var(--vds-color-border);
     border-radius: var(--vds-radius-full);
     background-color: var(--vds-color-surface);
@@ -44,8 +44,8 @@
     &::after {
       content: "";
       display: block;
-      inline-size: 0.5rem;
-      block-size: 0.5rem;
+      inline-size: var(--vds-space-2);
+      block-size: var(--vds-space-2);
       border-radius: var(--vds-radius-full);
       background-color: var(--vds-color-on-solid);
       animation: vds-scale-in var(--vds-duration-fast) var(--vds-ease-out);

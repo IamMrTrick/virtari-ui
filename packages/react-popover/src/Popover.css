@@ -6,8 +6,8 @@
     border-radius: var(--vds-radius-surface);
     box-shadow: var(--vds-shadow-lg);
     padding: var(--vds-space-4);
-    min-inline-size: 12rem;
-    max-inline-size: 20rem;
+    min-inline-size: var(--vds-space-48);
+    max-inline-size: var(--vds-space-80);
     animation: vds-fade-in var(--vds-duration-fast) var(--vds-ease-out);
 
     &[data-state="closed"] {

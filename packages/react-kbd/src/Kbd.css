@@ -3,7 +3,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: 1.25rem;
+    min-inline-size: var(--vds-space-5);
     padding-inline: var(--vds-space-1-5);
     padding-block: var(--vds-space-0-5);
     font-family: var(--vds-font-mono);
@@ -13,7 +13,7 @@
     background-color: var(--vds-color-bg-subtle);
     border: 1px solid var(--vds-color-border);
     border-bottom-width: 2px;
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-radius-element);
     white-space: nowrap;
     user-select: none;
   }

@@ -1,5 +1,11 @@
-import { createContext, useContext } from "react";
-import type { Direction, DrawerSizeMode, DrawerSnapPoint } from "./utils";
+import { createContext, useContext, type RefObject } from "react";
+import type {
+  Direction,
+  DrawerDeclaredSize,
+  DrawerSizeMode,
+  DrawerSnapBehavior,
+  SnapPoint,
+} from "./utils";
 
 export interface DrawerContextValue {
   direction: Direction;
@@ -11,16 +17,22 @@ export interface DrawerContextValue {
   scaleBackground: boolean;
   preventAutoFocus: boolean;
   sizeMode: DrawerSizeMode;
-  snapPoints: readonly DrawerSnapPoint[];
-  activeSnapPoint: DrawerSnapPoint;
+  size?: DrawerDeclaredSize;
+  snapPoints: readonly SnapPoint[];
+  activeSnapPoint: SnapPoint;
+  minimizedSize?: SnapPoint;
+  snapBehavior: DrawerSnapBehavior;
   closeThreshold: number;
   velocityThreshold: number;
-  contentRef: React.RefObject<HTMLDivElement | null>;
-  overlayRef: React.RefObject<HTMLDivElement | null>;
-  bodyRef: React.RefObject<HTMLDivElement | null>;
-  handleRef: React.RefObject<HTMLDivElement | null>;
+  snapStepThreshold: number;
+  snapSkipThreshold: number;
+  contentRef: RefObject<HTMLDivElement | null>;
+  overlayRef: RefObject<HTMLDivElement | null>;
+  headerRef: RefObject<HTMLDivElement | null>;
+  bodyRef: RefObject<HTMLDivElement | null>;
+  handleRef: RefObject<HTMLDivElement | null>;
   onOpenChange: (open: boolean) => void;
-  onSnapPointChange: (value: DrawerSnapPoint) => void;
+  onSnapPointChange: (value: SnapPoint) => void;
   setDragging: (value: boolean) => void;
 }
 
@@ -30,10 +42,8 @@ export const DrawerProvider = DrawerCtx.Provider;
 
 export function useDrawerContext(): DrawerContextValue {
   const ctx = useContext(DrawerCtx);
-
   if (!ctx) {
     throw new Error("Drawer compound components must be used within <Drawer>");
   }
-
   return ctx;
 }

@@ -6,6 +6,7 @@ const NAV_ITEMS = [
       { label: "Sizing", path: "sizing" },
       { label: "Colors", path: "colors" },
       { label: "Typography", path: "typography" },
+      { label: "Composition", path: "composition" },
     ],
   },
   {

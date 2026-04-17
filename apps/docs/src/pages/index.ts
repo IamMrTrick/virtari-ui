@@ -31,6 +31,7 @@ export { SkeletonPage } from "./SkeletonPage";
 export { SpinnerPage } from "./SpinnerPage";
 export { CardPage } from "./CardPage";
 export { KbdPage } from "./KbdPage";
+export { CompositionPage } from "./CompositionPage";
 
 export const PAGE_META: Record<string, { title: string; description: string }> = {
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },
@@ -66,4 +67,8 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   skeleton: { title: "Skeleton", description: "Loading placeholder." },
   spinner: { title: "Spinner", description: "Loading indicator." },
   kbd: { title: "Kbd", description: "Keyboard shortcut badge." },
+  composition: {
+    title: "Composition",
+    description: "Layout primitives — Stack, Cluster, Grid, Sidebar, Center.",
+  },
 };

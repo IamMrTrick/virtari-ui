@@ -114,6 +114,15 @@
     color: var(--vds-color-primary-100);
   }
 }
+/* Prevent iOS Safari auto-zoom on focus (triggers when font-size < 16px).
+   Unlayered so it beats @layer components specificity. */
+@supports (-webkit-touch-callout: none) {
+  .vds-input,
+  .vds-textarea,
+  .vds-select-trigger {
+    font-size: max(1rem, var(--_input-font-size, var(--_textarea-font-size, var(--_select-font-size, 1rem))));
+  }
+}
 @layer utilities {
   .vds-sr-only {
     position: absolute;

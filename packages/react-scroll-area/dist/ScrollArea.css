@@ -24,12 +24,12 @@
     }
 
     .vds-scrollbar[data-orientation="vertical"] {
-      inline-size: 0.625rem;
+      inline-size: var(--vds-space-2-5);
     }
 
     .vds-scrollbar[data-orientation="horizontal"] {
       flex-direction: column;
-      block-size: 0.625rem;
+      block-size: var(--vds-space-2-5);
     }
 
   .vds-scrollbar-thumb {

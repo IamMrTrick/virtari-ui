@@ -5,6 +5,7 @@ export {
   DrawerOverlay,
   DrawerContent,
   DrawerHandle,
+  DrawerHeader,
   DrawerTitle,
   DrawerDescription,
   DrawerFooter,
@@ -16,10 +17,18 @@ export type {
   DrawerOverlayProps,
   DrawerContentProps,
   DrawerHandleProps,
+  DrawerHeaderProps,
   DrawerTitleProps,
   DrawerDescriptionProps,
   DrawerFooterProps,
   DrawerBodyProps,
 } from "./Drawer";
 
-export type { Direction, DrawerSizeMode, DrawerSnapPoint } from "./utils";
+export type {
+  Direction,
+  DrawerDeclaredSize,
+  DrawerSizeMode,
+  DrawerSnapBehavior,
+  SnapPoint,
+} from "./utils";
+export type { SnapPoint as DrawerSnapPoint } from "./utils";

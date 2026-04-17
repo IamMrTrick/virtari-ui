@@ -1,0 +1,18 @@
+@layer components {
+  .vds-grid {
+    --vds-grid-min-item-width: 16rem;
+    --vds-grid-gap: var(--vds-space-4);
+    display: grid;
+    gap: var(--vds-grid-gap);
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(var(--vds-grid-min-item-width), 100%), 1fr)
+    );
+  }
+
+  .vds-grid[data-gap="xs"] { --vds-grid-gap: var(--vds-space-1); }
+  .vds-grid[data-gap="sm"] { --vds-grid-gap: var(--vds-space-2); }
+  .vds-grid[data-gap="md"] { --vds-grid-gap: var(--vds-space-4); }
+  .vds-grid[data-gap="lg"] { --vds-grid-gap: var(--vds-space-6); }
+  .vds-grid[data-gap="xl"] { --vds-grid-gap: var(--vds-space-8); }
+}

@@ -30,8 +30,8 @@
     }
 
     .vds-accordion-trigger > svg {
-      inline-size: 1rem;
-      block-size: 1rem;
+      inline-size: var(--vds-space-4);
+      block-size: var(--vds-space-4);
       flex-shrink: 0;
       color: var(--vds-color-text-muted);
       transition: rotate var(--vds-duration-normal) var(--vds-ease-out);

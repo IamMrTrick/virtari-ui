@@ -35,6 +35,7 @@ import {
   SpinnerPage,
   CardPage,
   KbdPage,
+  CompositionPage,
 } from "./pages";
 
 const PAGES: Record<string, () => React.JSX.Element> = {
@@ -71,6 +72,7 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   skeleton: SkeletonPage,
   spinner: SpinnerPage,
   kbd: KbdPage,
+  composition: CompositionPage,
 };
 
 function getHashPage(): string {
@@ -97,7 +99,7 @@ function navigate(page: string) {
 export type RadiusMode = "sharp" | "soft" | "round" | "pill";
 
 export default function App() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   const [radius, setRadius] = useState<RadiusMode>("soft");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const activePage = useHashRoute();
@@ -110,6 +112,13 @@ export default function App() {
       window.location.hash = "#/introduction";
     }
   }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute("data-theme", dark ? "dark" : "light");
+    if (radius !== "soft") root.setAttribute("data-radius", radius);
+    else root.removeAttribute("data-radius");
+  }, [dark, radius]);
 
   function handleNavigate(page: string) {
     navigate(page);

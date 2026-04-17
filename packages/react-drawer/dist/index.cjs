@@ -37,39 +37,65 @@ function useDrawerContext() {
 }
 
 // src/utils.ts
-var RUBBERBAND_CONSTANT = 0.2;
+var RUBBERBAND_K = 0.55;
+var DEFAULT_SIDE_ADAPTIVE_SIZE = "clamp(18rem, 32vw, 28rem)";
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 function getAxis(direction) {
   return direction === "left" || direction === "right" ? "x" : "y";
 }
-function getDirectionSign(direction) {
-  return direction === "bottom" || direction === "right" ? -1 : 1;
+function getMainCoord(direction, x, y) {
+  return getAxis(direction) === "x" ? x : y;
 }
-function getCoordinate(direction, clientX, clientY) {
-  return getAxis(direction) === "x" ? clientX : clientY;
+function getCrossCoord(direction, x, y) {
+  return getAxis(direction) === "x" ? y : x;
 }
-function getCrossCoordinate(direction, clientX, clientY) {
-  return getAxis(direction) === "x" ? clientY : clientX;
+function getOpenSign(direction) {
+  return direction === "top" || direction === "left" ? 1 : -1;
+}
+function getViewportRect() {
+  if (typeof window === "undefined") return { width: 0, height: 0 };
+  const vv = window.visualViewport;
+  return {
+    width: vv?.width ?? window.innerWidth,
+    height: vv?.height ?? window.innerHeight
+  };
 }
 function getViewportSize(direction) {
-  if (typeof window === "undefined") {
-    return 0;
-  }
-  const viewport = window.visualViewport;
-  const size = getAxis(direction) === "x" ? viewport?.width ?? window.innerWidth : viewport?.height ?? window.innerHeight;
-  return Math.max(size, 0);
+  const viewport = getViewportRect();
+  return getAxis(direction) === "x" ? viewport.width : viewport.height;
 }
-function getElementSize(element, direction) {
-  if (!element) {
-    return 0;
-  }
-  return getAxis(direction) === "x" ? element.offsetWidth : element.offsetHeight;
+function getViewportInfo(direction, availableSize) {
+  const viewport = getViewportRect();
+  return {
+    direction,
+    viewportWidth: viewport.width,
+    viewportHeight: viewport.height,
+    availableSize,
+    orientation: viewport.width >= viewport.height ? "landscape" : "portrait"
+  };
 }
-function getTranslateValue(direction, drawerSize, progress) {
-  const clampedProgress = clamp(progress, -0.15, 1.15);
-  const offset = drawerSize * (1 - clampedProgress);
+function getElementSize(el, direction) {
+  if (!el) return 0;
+  const axis = getAxis(direction);
+  const rect = el.getBoundingClientRect();
+  const computed = getComputedStyle(el);
+  const rectSize = axis === "x" ? rect.width : rect.height;
+  const offsetSize = axis === "x" ? el.offsetWidth : el.offsetHeight;
+  const clientSize = axis === "x" ? el.clientWidth : el.clientHeight;
+  const scrollSize = axis === "x" ? el.scrollWidth : el.scrollHeight;
+  const computedSize = parseFloat(axis === "x" ? computed.width : computed.height);
+  return Math.max(
+    rectSize || 0,
+    offsetSize || 0,
+    clientSize || 0,
+    scrollSize || 0,
+    Number.isFinite(computedSize) ? computedSize : 0
+  );
+}
+function getTranslate(direction, openPx, totalPx) {
+  const offset = Math.max(totalPx - openPx, 0);
   switch (direction) {
     case "bottom":
       return `translate3d(0, ${offset}px, 0)`;
@@ -81,276 +107,595 @@ function getTranslateValue(direction, drawerSize, progress) {
       return `translate3d(${-offset}px, 0, 0)`;
   }
 }
-function resolveSnapPoints(snapPoints, drawerSize) {
-  if (drawerSize <= 0) {
-    return [];
-  }
-  const resolved = (snapPoints?.length ? snapPoints : [1]).map((point) => {
-    const size = point <= 1 ? point * drawerSize : point;
-    return {
-      value: point,
-      size: clamp(size, 1, drawerSize)
-    };
+function resolveSnapSize(value, drawerSize) {
+  const size = value <= 1 && value >= 0 ? value * drawerSize : value;
+  return clamp(size, 1, drawerSize);
+}
+function resolveSnaps(snapPoints, drawerSize, minimizedSize) {
+  if (drawerSize <= 0) return [];
+  const points = snapPoints?.length ? [...snapPoints] : [1];
+  if (minimizedSize !== void 0) points.push(minimizedSize);
+  const resolved = points.map((value) => {
+    const size = resolveSnapSize(value, drawerSize);
+    const kind = minimizedSize !== void 0 && value === minimizedSize ? "minimized" : "snap";
+    return { value, size, kind };
   }).sort((a, b) => a.size - b.size);
   const unique = [];
   for (const point of resolved) {
-    if (unique.length === 0 || Math.abs(point.size - unique[unique.length - 1].size) > 0.5) {
+    const last = unique[unique.length - 1];
+    if (!last || Math.abs(point.size - last.size) > 1) {
       unique.push(point);
+      continue;
+    }
+    if (point.kind === "minimized") unique[unique.length - 1] = point;
+  }
+  return unique.length ? unique : [{ value: 1, size: drawerSize, kind: "snap" }];
+}
+function findSnapIndexByValue(snaps, value) {
+  return snaps.findIndex((snap) => snap.value === value);
+}
+function findNearestSnapIndex(snaps, size) {
+  if (!snaps.length) return 0;
+  let bestIndex = 0;
+  let bestDistance = Math.abs(snaps[0] - size);
+  for (let index = 1; index < snaps.length; index++) {
+    const distance = Math.abs(snaps[index] - size);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestIndex = index;
     }
   }
-  return unique.length ? unique : [{ value: 1, size: drawerSize }];
+  return bestIndex;
 }
-function getBackgroundStyles(progress) {
-  const clampedProgress = clamp(progress, 0, 1);
-  const scale = 1 - clampedProgress * 0.06;
-  const radius = clampedProgress * 18;
-  return {
-    transform: `scale(${scale})`,
-    borderRadius: `${radius}px`
-  };
+function getOverlayProgress(size, totalSize, startSize = 0) {
+  if (totalSize <= 0) return 0;
+  if (totalSize <= startSize + 1) return size > startSize ? 1 : 0;
+  return clamp((size - startSize) / (totalSize - startSize), 0, 1);
+}
+function resolveDeclaredSize(value, info) {
+  if (value === void 0) return void 0;
+  const resolved = typeof value === "function" ? value(info) : value;
+  return typeof resolved === "number" ? `${resolved}px` : resolved;
+}
+function getDefaultAdaptiveSize(direction) {
+  return getAxis(direction) === "x" ? DEFAULT_SIDE_ADAPTIVE_SIZE : "auto";
 }
 function rubberband(distance, dimension) {
-  if (dimension <= 0 || distance <= 0) {
-    return 0;
-  }
-  return distance * dimension * RUBBERBAND_CONSTANT / (dimension + RUBBERBAND_CONSTANT * distance);
+  if (dimension <= 0 || distance <= 0) return 0;
+  return distance * dimension * RUBBERBAND_K / (dimension + RUBBERBAND_K * distance);
 }
-function applyRubberband(progress, drawerSize) {
-  if (progress < 0) {
-    return -rubberband(Math.abs(progress) * drawerSize, drawerSize) / drawerSize;
+function applyRubberband(openPx, drawerSize) {
+  if (openPx > drawerSize) {
+    return drawerSize + rubberband(openPx - drawerSize, drawerSize);
   }
-  if (progress > 1) {
-    return 1 + rubberband((progress - 1) * drawerSize, drawerSize) / drawerSize;
+  if (openPx < 0) {
+    return -rubberband(-openPx, drawerSize);
   }
-  return progress;
+  return openPx;
 }
-function findNearestSnapIndex(targetSize, snapSizes, candidates) {
-  const pool = candidates?.length ? candidates : snapSizes.map((_, index) => index);
-  let closestIndex = pool[0] ?? 0;
-  let closestDistance = Math.abs(targetSize - (snapSizes[closestIndex] ?? 0));
-  for (const index of pool.slice(1)) {
-    const distance = Math.abs(targetSize - (snapSizes[index] ?? 0));
-    if (distance < closestDistance) {
-      closestDistance = distance;
-      closestIndex = index;
+function getBackgroundStyles(progress) {
+  const p = clamp(progress, 0, 1);
+  return {
+    transform: `scale(${1 - p * 0.06})`,
+    borderRadius: `${p * 24}px`
+  };
+}
+function isAtScrollEdge(el, direction, closingDelta) {
+  if (!el) return true;
+  const tolerance = 1;
+  if (getAxis(direction) === "y") {
+    if (el.scrollHeight <= el.clientHeight + tolerance) return true;
+    if (direction === "bottom") {
+      return closingDelta >= 0 ? el.scrollTop <= tolerance : el.scrollTop + el.clientHeight >= el.scrollHeight - tolerance;
+    }
+    return closingDelta >= 0 ? el.scrollTop + el.clientHeight >= el.scrollHeight - tolerance : el.scrollTop <= tolerance;
+  }
+  if (el.scrollWidth <= el.clientWidth + tolerance) return true;
+  if (direction === "right") {
+    return closingDelta >= 0 ? el.scrollLeft <= tolerance : el.scrollLeft + el.clientWidth >= el.scrollWidth - tolerance;
+  }
+  return closingDelta >= 0 ? el.scrollLeft + el.clientWidth >= el.scrollWidth - tolerance : el.scrollLeft <= tolerance;
+}
+function pickTargetSnap(args) {
+  const {
+    currentSize,
+    startSize,
+    startSnapIndex,
+    velocity,
+    snaps,
+    velocityThreshold,
+    closeThreshold,
+    dismissible,
+    snapBehavior,
+    snapStepThreshold,
+    snapSkipThreshold
+  } = args;
+  if (!snaps.length) return 0;
+  const projectionMs = 220;
+  const projected = currentSize + velocity * projectionMs;
+  const smallest = snaps[0];
+  const fastSwipe = Math.abs(velocity) >= velocityThreshold;
+  const closestIndex = findNearestSnapIndex(snaps, projected);
+  const closeCutoff = smallest * closeThreshold;
+  if (snapBehavior === "closest") {
+    if (dismissible) {
+      if (projected <= closeCutoff) return -1;
+      if (fastSwipe && velocity < 0 && currentSize <= smallest + Math.max(24, smallest * 0.25)) {
+        return -1;
+      }
+    }
+    return closestIndex;
+  }
+  const delta = projected - startSize;
+  const deadZone = 14;
+  if (Math.abs(delta) <= deadZone) return startSnapIndex;
+  const direction = delta > 0 ? 1 : -1;
+  const adjacentIndex = clamp(startSnapIndex + direction, 0, snaps.length - 1);
+  if (adjacentIndex === startSnapIndex) {
+    if (dismissible && direction < 0 && (projected <= closeCutoff || fastSwipe && velocity < 0 && currentSize <= smallest + Math.max(24, smallest * 0.25))) {
+      return -1;
+    }
+    return startSnapIndex;
+  }
+  const adjacentGap = Math.abs(snaps[adjacentIndex] - startSize);
+  const stepThreshold = Math.max(24, adjacentGap * snapStepThreshold);
+  if (!fastSwipe && Math.abs(delta) < stepThreshold) return startSnapIndex;
+  if (dismissible && direction < 0) {
+    const distancePastSmallest = Math.max(smallest - projected, 0);
+    if (startSnapIndex === 0) {
+      if (projected <= closeCutoff) return -1;
+      if (fastSwipe && velocity < 0 && currentSize <= smallest + Math.max(24, smallest * 0.25)) {
+        return -1;
+      }
+    } else {
+      const dismissSkipThreshold = Math.max(
+        72,
+        Math.max(startSize - smallest, adjacentGap) * snapSkipThreshold
+      );
+      if (distancePastSmallest >= dismissSkipThreshold) {
+        return -1;
+      }
     }
   }
-  return closestIndex;
-}
-function isScrolledToDragEdge(element, direction) {
-  if (!element) {
-    return true;
+  const skipThreshold = Math.max(56, adjacentGap * snapSkipThreshold);
+  if (fastSwipe || Math.abs(delta) >= skipThreshold) {
+    return closestIndex;
   }
-  switch (direction) {
-    case "bottom":
-      return element.scrollTop <= 1;
-    case "top":
-      return element.scrollTop + element.clientHeight >= element.scrollHeight - 1;
-    case "left":
-      return element.scrollLeft + element.clientWidth >= element.scrollWidth - 1;
-    case "right":
-      return element.scrollLeft <= 1;
-  }
+  return adjacentIndex;
 }
 
-// src/useDrawerGesture.ts
-var AXIS_LOCK_THRESHOLD = 8;
-var PROJECTION_MS = 180;
-function isTargetWithinElement(target, element) {
-  if (!target || !element) {
-    return false;
-  }
-  return element.contains(target);
+// src/useDrawerDrag.ts
+var AXIS_LOCK_THRESHOLD = 6;
+var VELOCITY_WINDOW_MS = 80;
+var MAX_SAMPLES = 6;
+var INTERACTIVE_SELECTOR = [
+  "button",
+  "a[href]",
+  "input",
+  "select",
+  "textarea",
+  "[contenteditable='true']",
+  "[role='button']",
+  "[role='link']",
+  "[data-vds-drawer-no-drag]"
+].join(",");
+function isInside(target, parent) {
+  if (!target || !parent) return false;
+  return parent.contains(target);
 }
-function useDrawerGesture(config) {
+function isInteractiveTarget(target) {
+  if (!target) return false;
+  return Boolean(target.closest(INTERACTIVE_SELECTOR));
+}
+function getTouchById(list, touchId) {
+  for (let index = 0; index < list.length; index++) {
+    const touch = list.item(index);
+    if (touch?.identifier === touchId) return touch;
+  }
+  return null;
+}
+function getDragSurface(target, handleEl, headerEl, scrollableEl, dragHandleOnly, inputType) {
+  if (isInside(target, handleEl) && handleEl) {
+    return { el: handleEl, source: "handle" };
+  }
+  if (!dragHandleOnly && isInside(target, headerEl) && headerEl && !isInteractiveTarget(target)) {
+    return { el: headerEl, source: "header" };
+  }
+  if (inputType === "touch" && !dragHandleOnly && isInside(target, scrollableEl) && scrollableEl && !isInteractiveTarget(target)) {
+    return { el: scrollableEl, source: "scroll" };
+  }
+  return null;
+}
+function useDrawerDrag(config) {
   const stateRef = react.useRef(null);
-  const resetState = react.useCallback((pointerId) => {
+  const configRef = react.useRef(config);
+  const removeWindowListenersRef = react.useRef(null);
+  configRef.current = config;
+  const recordSample = react.useCallback((size) => {
     const state = stateRef.current;
-    if (!state) {
-      return;
+    if (!state) return;
+    const now = performance.now();
+    state.samples.push({ size, time: now });
+    while (state.samples.length > MAX_SAMPLES) state.samples.shift();
+  }, []);
+  const computeVelocity = react.useCallback(() => {
+    const state = stateRef.current;
+    if (!state || state.samples.length < 2) return 0;
+    const now = performance.now();
+    const recent = state.samples.filter((sample) => now - sample.time <= VELOCITY_WINDOW_MS);
+    if (recent.length < 2) {
+      const a2 = state.samples[state.samples.length - 2];
+      const b2 = state.samples[state.samples.length - 1];
+      const dt2 = Math.max(b2.time - a2.time, 1);
+      return (b2.size - a2.size) / dt2;
     }
-    const contentEl = config.getContentEl();
-    if (contentEl && (pointerId === void 0 || contentEl.hasPointerCapture(pointerId))) {
+    const a = recent[0];
+    const b = recent[recent.length - 1];
+    const dt = Math.max(b.time - a.time, 1);
+    return (b.size - a.size) / dt;
+  }, []);
+  const releasePointerCapture = react.useCallback((el, pointerId) => {
+    if (!el || pointerId === void 0 || !el.hasPointerCapture(pointerId)) return;
+    try {
+      el.releasePointerCapture(pointerId);
+    } catch {
+    }
+  }, []);
+  const clearWindowListeners = react.useCallback(() => {
+    removeWindowListenersRef.current?.();
+    removeWindowListenersRef.current = null;
+  }, []);
+  const reset = react.useCallback((pointerId) => {
+    const state = stateRef.current;
+    if (!state) return;
+    clearWindowListeners();
+    releasePointerCapture(state.captureEl, pointerId ?? state.pointerId);
+    stateRef.current = null;
+  }, [clearWindowListeners, releasePointerCapture]);
+  const beginSession = react.useCallback((state) => {
+    stateRef.current = state;
+    if (state.inputType === "pen" && state.captureEl && state.pointerId !== void 0) {
       try {
-        contentEl.releasePointerCapture(pointerId ?? state.pointerId);
+        state.captureEl.setPointerCapture(state.pointerId);
       } catch {
       }
     }
-    stateRef.current = null;
-  }, [config]);
-  const onPointerDown = react.useCallback((e) => {
-    if (stateRef.current || e.button !== 0 || config.drawerSize <= 0) {
-      return;
-    }
-    const target = e.target instanceof HTMLElement ? e.target : null;
-    const handleEl = config.getHandleEl();
-    if (config.dragHandleOnly && !isTargetWithinElement(target, handleEl)) {
-      return;
-    }
-    const contentEl = config.getContentEl();
-    if (!contentEl) {
-      return;
-    }
-    contentEl.setPointerCapture(e.pointerId);
-    stateRef.current = {
-      pointerId: e.pointerId,
-      startX: e.clientX,
-      startY: e.clientY,
-      startCoord: getCoordinate(config.direction, e.clientX, e.clientY),
-      startProgress: config.getCurrentProgress(),
-      startSnapIndex: config.currentSnapIndex,
-      dragging: false,
-      axisLocked: false,
-      target,
-      lastSampleCoord: getCoordinate(config.direction, e.clientX, e.clientY),
-      lastSampleTime: performance.now()
-    };
-  }, [config]);
-  const onPointerMove = react.useCallback((e) => {
+  }, []);
+  const moveSession = react.useCallback((main, cross, prevent) => {
     const state = stateRef.current;
-    if (!state || state.pointerId !== e.pointerId) {
-      return;
-    }
-    const axis = getAxis(config.direction);
-    const mainDelta = axis === "x" ? e.clientX - state.startX : e.clientY - state.startY;
-    const crossDelta = getCrossCoordinate(config.direction, e.clientX, e.clientY) - getCrossCoordinate(config.direction, state.startX, state.startY);
+    const resolvedConfig = configRef.current;
+    if (!state) return;
+    const mainDelta = main - state.startMain;
+    const crossDelta = cross - state.startCross;
+    const openSign = getOpenSign(resolvedConfig.direction);
+    const sizeDelta = mainDelta * openSign;
     if (!state.axisLocked) {
-      if (Math.abs(mainDelta) < AXIS_LOCK_THRESHOLD) {
-        return;
-      }
+      if (Math.abs(mainDelta) < AXIS_LOCK_THRESHOLD) return;
       if (Math.abs(crossDelta) > Math.abs(mainDelta)) {
-        resetState(e.pointerId);
-        return;
-      }
-      const handleEl = config.getHandleEl();
-      const scrollableEl = config.getScrollableEl();
-      const shouldBypassScrollGuard = isTargetWithinElement(state.target, handleEl);
-      if (!shouldBypassScrollGuard && !isScrolledToDragEdge(scrollableEl, config.direction)) {
-        resetState(e.pointerId);
+        reset(state.pointerId);
         return;
       }
       state.axisLocked = true;
     }
-    e.preventDefault();
+    if (state.source === "scroll" && !state.dragging && !isAtScrollEdge(resolvedConfig.getScrollableEl(), resolvedConfig.direction, -sizeDelta)) {
+      reset(state.pointerId);
+      return;
+    }
+    prevent?.();
     if (!state.dragging) {
       state.dragging = true;
-      config.onDragStart();
+      resolvedConfig.onDragStart();
     }
-    const coord = getCoordinate(config.direction, e.clientX, e.clientY);
-    const progress = state.startProgress + (coord - state.startCoord) * getDirectionSign(config.direction) / config.drawerSize;
-    state.lastSampleCoord = coord;
-    state.lastSampleTime = performance.now();
-    config.onDragProgress(applyRubberband(progress, config.drawerSize));
-  }, [config, resetState]);
-  const onPointerUp = react.useCallback((e) => {
+    const rawSize = state.startSize + sizeDelta;
+    const cappedSize = applyRubberband(rawSize, resolvedConfig.drawerSize);
+    const finalSize = clamp(
+      cappedSize,
+      -resolvedConfig.drawerSize * 0.15,
+      resolvedConfig.drawerSize * 1.15
+    );
+    recordSample(finalSize);
+    resolvedConfig.onDragMove(finalSize);
+  }, [recordSample, reset]);
+  const endSession = react.useCallback((cancelled) => {
     const state = stateRef.current;
-    if (!state || state.pointerId !== e.pointerId) {
-      return;
-    }
-    const now = performance.now();
-    const coord = getCoordinate(config.direction, e.clientX, e.clientY);
-    const velocity = (coord - state.lastSampleCoord) / Math.max(now - state.lastSampleTime, 1);
-    const openVelocity = velocity * getDirectionSign(config.direction);
-    const rawProgress = state.startProgress + (coord - state.startCoord) * getDirectionSign(config.direction) / config.drawerSize;
-    const clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
-    const currentSize = clampedProgress * config.drawerSize;
-    const projectedSize = currentSize + openVelocity * PROJECTION_MS;
-    const smallestSnap = config.snapSizes[0] ?? config.drawerSize;
-    resetState(e.pointerId);
-    if (!state.dragging) {
-      return;
-    }
-    config.onDragEnd();
-    const canDismiss = config.dismissible && (config.snapSizes.length <= 1 || state.startSnapIndex === 0);
-    const dismissThreshold = smallestSnap * config.closeThreshold;
-    const isFastDismiss = openVelocity < -config.velocityThreshold && currentSize < smallestSnap * 0.9;
-    if (canDismiss && (projectedSize <= dismissThreshold || isFastDismiss)) {
-      config.onDismiss();
-      return;
-    }
-    const candidateIndexes = [state.startSnapIndex];
-    if (projectedSize > (config.snapSizes[state.startSnapIndex] ?? config.drawerSize) && state.startSnapIndex < config.snapSizes.length - 1) {
-      candidateIndexes.push(state.startSnapIndex + 1);
-    }
-    if (projectedSize < (config.snapSizes[state.startSnapIndex] ?? config.drawerSize) && state.startSnapIndex > 0) {
-      candidateIndexes.push(state.startSnapIndex - 1);
-    }
-    const targetIndex = findNearestSnapIndex(projectedSize, config.snapSizes, candidateIndexes);
-    config.onSnap(targetIndex);
-  }, [config, resetState]);
-  const onPointerCancel = react.useCallback((e) => {
-    const state = stateRef.current;
-    if (!state || state.pointerId !== e.pointerId) {
-      return;
-    }
+    const resolvedConfig = configRef.current;
+    if (!state) return;
     const wasDragging = state.dragging;
-    resetState(e.pointerId);
+    const startSnapIndex = state.startSnapIndex;
     if (wasDragging) {
-      config.onDragEnd();
-      config.onDragCancel();
+      recordSample(resolvedConfig.getCurrentSize());
     }
-  }, [config, resetState]);
-  const onLostPointerCapture = react.useCallback((e) => {
-    const state = stateRef.current;
-    if (!state || state.pointerId !== e.pointerId) {
+    const velocity = wasDragging ? computeVelocity() : 0;
+    const currentSize = resolvedConfig.getCurrentSize();
+    reset(state.pointerId);
+    if (!wasDragging) return;
+    if (cancelled) {
+      resolvedConfig.onDragEnd(startSnapIndex, false);
       return;
     }
-    const wasDragging = state.dragging;
-    resetState(e.pointerId);
-    if (wasDragging) {
-      config.onDragEnd();
-      config.onDragCancel();
+    const targetIndex = pickTargetSnap({
+      currentSize,
+      startSize: state.startSize,
+      startSnapIndex,
+      velocity,
+      snaps: resolvedConfig.snapSizes,
+      velocityThreshold: resolvedConfig.velocityThreshold,
+      closeThreshold: resolvedConfig.closeThreshold,
+      dismissible: resolvedConfig.dismissible,
+      snapBehavior: resolvedConfig.snapBehavior,
+      snapStepThreshold: resolvedConfig.snapStepThreshold,
+      snapSkipThreshold: resolvedConfig.snapSkipThreshold
+    });
+    if (targetIndex === -1) {
+      resolvedConfig.onDragEnd(0, true);
+    } else {
+      resolvedConfig.onDragEnd(targetIndex, false);
     }
-  }, [config, resetState]);
+  }, [computeVelocity, recordSample, reset]);
+  const bindMouseListeners = react.useCallback(() => {
+    const onMouseMove = (event) => {
+      moveSession(
+        getMainCoord(configRef.current.direction, event.clientX, event.clientY),
+        getCrossCoord(configRef.current.direction, event.clientX, event.clientY),
+        () => event.preventDefault()
+      );
+    };
+    const onMouseUp = () => endSession(false);
+    const onWindowBlur = () => {
+      if (!stateRef.current) return;
+      endSession(true);
+    };
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("blur", onWindowBlur);
+    removeWindowListenersRef.current = () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("blur", onWindowBlur);
+    };
+  }, [endSession, moveSession]);
+  const bindPointerListeners = react.useCallback(() => {
+    const onPointerMove = (event) => {
+      const state = stateRef.current;
+      if (!state || state.pointerId !== event.pointerId) return;
+      moveSession(
+        getMainCoord(configRef.current.direction, event.clientX, event.clientY),
+        getCrossCoord(configRef.current.direction, event.clientX, event.clientY),
+        () => {
+          if (event.cancelable) event.preventDefault();
+        }
+      );
+    };
+    const onPointerUp = (event) => {
+      const state = stateRef.current;
+      if (!state || state.pointerId !== event.pointerId) return;
+      endSession(false);
+    };
+    const onPointerCancel = (event) => {
+      const state = stateRef.current;
+      if (!state || state.pointerId !== event.pointerId) return;
+      endSession(true);
+    };
+    const onWindowBlur = () => {
+      if (!stateRef.current) return;
+      endSession(true);
+    };
+    window.addEventListener("pointermove", onPointerMove, { passive: false });
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerCancel);
+    window.addEventListener("blur", onWindowBlur);
+    removeWindowListenersRef.current = () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerCancel);
+      window.removeEventListener("blur", onWindowBlur);
+    };
+  }, [endSession, moveSession]);
+  const bindTouchListeners = react.useCallback(() => {
+    const onTouchMove = (event) => {
+      const state = stateRef.current;
+      if (!state || state.touchId === void 0) return;
+      const touch = getTouchById(event.touches, state.touchId) ?? getTouchById(event.changedTouches, state.touchId);
+      if (!touch) return;
+      moveSession(
+        getMainCoord(configRef.current.direction, touch.clientX, touch.clientY),
+        getCrossCoord(configRef.current.direction, touch.clientX, touch.clientY),
+        () => {
+          if (event.cancelable) event.preventDefault();
+        }
+      );
+    };
+    const onTouchEnd = (event) => {
+      const state = stateRef.current;
+      if (!state || state.touchId === void 0) return;
+      if (!getTouchById(event.changedTouches, state.touchId)) return;
+      endSession(false);
+    };
+    const onTouchCancel = (event) => {
+      const state = stateRef.current;
+      if (!state || state.touchId === void 0) return;
+      if (!getTouchById(event.changedTouches, state.touchId)) return;
+      endSession(true);
+    };
+    const onWindowBlur = () => {
+      if (!stateRef.current) return;
+      endSession(true);
+    };
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("touchcancel", onTouchCancel);
+    window.addEventListener("blur", onWindowBlur);
+    removeWindowListenersRef.current = () => {
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchCancel);
+      window.removeEventListener("blur", onWindowBlur);
+    };
+  }, [endSession, moveSession]);
+  react.useEffect(() => () => {
+    clearWindowListeners();
+    stateRef.current = null;
+  }, [clearWindowListeners]);
+  const onMouseDown = react.useCallback((event) => {
+    if (stateRef.current) return;
+    if (event.button !== 0) return;
+    if (configRef.current.drawerSize <= 0) return;
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    const resolvedConfig = configRef.current;
+    const surface = getDragSurface(
+      target,
+      resolvedConfig.getHandleEl(),
+      resolvedConfig.getHeaderEl?.() ?? null,
+      resolvedConfig.getScrollableEl(),
+      resolvedConfig.dragHandleOnly,
+      "mouse"
+    );
+    if (!surface) return;
+    event.preventDefault();
+    beginSession({
+      inputType: "mouse",
+      source: surface.source,
+      captureEl: null,
+      startMain: getMainCoord(resolvedConfig.direction, event.clientX, event.clientY),
+      startCross: getCrossCoord(resolvedConfig.direction, event.clientX, event.clientY),
+      startSize: resolvedConfig.getCurrentSize(),
+      startSnapIndex: resolvedConfig.currentSnapIndex,
+      axisLocked: false,
+      dragging: false,
+      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }]
+    });
+    bindMouseListeners();
+  }, [beginSession, bindMouseListeners]);
+  const onPointerDown = react.useCallback((event) => {
+    if (stateRef.current) return;
+    if (event.pointerType === "mouse" || event.pointerType === "touch") return;
+    if (configRef.current.drawerSize <= 0) return;
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    const resolvedConfig = configRef.current;
+    const surface = getDragSurface(
+      target,
+      resolvedConfig.getHandleEl(),
+      resolvedConfig.getHeaderEl?.() ?? null,
+      resolvedConfig.getScrollableEl(),
+      resolvedConfig.dragHandleOnly,
+      "pen"
+    );
+    if (!surface) return;
+    if (event.cancelable) event.preventDefault();
+    beginSession({
+      inputType: "pen",
+      source: surface.source,
+      pointerId: event.pointerId,
+      captureEl: surface.el,
+      startMain: getMainCoord(resolvedConfig.direction, event.clientX, event.clientY),
+      startCross: getCrossCoord(resolvedConfig.direction, event.clientX, event.clientY),
+      startSize: resolvedConfig.getCurrentSize(),
+      startSnapIndex: resolvedConfig.currentSnapIndex,
+      axisLocked: false,
+      dragging: false,
+      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }]
+    });
+    bindPointerListeners();
+  }, [beginSession, bindPointerListeners]);
+  const onTouchStart = react.useCallback((event) => {
+    if (stateRef.current) return;
+    if (event.touches.length !== 1) return;
+    if (configRef.current.drawerSize <= 0) return;
+    const touch = event.touches[0];
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    const resolvedConfig = configRef.current;
+    const surface = getDragSurface(
+      target,
+      resolvedConfig.getHandleEl(),
+      resolvedConfig.getHeaderEl?.() ?? null,
+      resolvedConfig.getScrollableEl(),
+      resolvedConfig.dragHandleOnly,
+      "touch"
+    );
+    if (!surface) return;
+    beginSession({
+      inputType: "touch",
+      source: surface.source,
+      touchId: touch.identifier,
+      captureEl: null,
+      startMain: getMainCoord(resolvedConfig.direction, touch.clientX, touch.clientY),
+      startCross: getCrossCoord(resolvedConfig.direction, touch.clientX, touch.clientY),
+      startSize: resolvedConfig.getCurrentSize(),
+      startSnapIndex: resolvedConfig.currentSnapIndex,
+      axisLocked: false,
+      dragging: false,
+      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }]
+    });
+    bindTouchListeners();
+  }, [beginSession, bindTouchListeners]);
+  const noop = react.useCallback(() => {
+  }, []);
   return {
+    onMouseDown,
     onPointerDown,
-    onPointerMove,
-    onPointerUp,
-    onPointerCancel,
-    onLostPointerCapture
+    onTouchStart,
+    onPointerMove: noop,
+    onPointerUp: noop,
+    onPointerCancel: noop,
+    onLostPointerCapture: noop
   };
 }
-var TRANSITION_MS = 280;
-var EASE_CSS = "cubic-bezier(0.32, 0.72, 0, 1)";
-var VIEWPORT_SIZE_RATIO = 0.96;
-function composeEventHandlers(userHandler, internalHandler) {
+var DEFAULT_SPRING_MS = 380;
+var DEFAULT_SPRING_EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
+var VIEWPORT_RATIO = 0.96;
+function parseDurationMs(value, fallback) {
+  const trimmed = value.trim();
+  if (!trimmed) return fallback;
+  const n = parseFloat(trimmed);
+  if (!Number.isFinite(n)) return fallback;
+  if (trimmed.endsWith("ms")) return n;
+  if (trimmed.endsWith("s")) return n * 1e3;
+  return n;
+}
+function readDrawerTiming(el) {
+  if (!el || typeof window === "undefined") {
+    return { ms: DEFAULT_SPRING_MS, ease: DEFAULT_SPRING_EASE };
+  }
+  const cs = getComputedStyle(el);
+  const rawDuration = cs.getPropertyValue("--vds-drawer-duration");
+  const rawEase = cs.getPropertyValue("--vds-drawer-ease").trim();
+  return {
+    ms: parseDurationMs(rawDuration, DEFAULT_SPRING_MS),
+    ease: rawEase || DEFAULT_SPRING_EASE
+  };
+}
+function composeHandlers(user, internal) {
   return (event) => {
-    userHandler?.(event);
-    const defaultPrevented = typeof event === "object" && event !== null && "defaultPrevented" in event && Boolean(event.defaultPrevented);
-    if (!defaultPrevented) {
-      internalHandler(event);
-    }
+    user?.(event);
+    const prevented = typeof event === "object" && event !== null && "defaultPrevented" in event && Boolean(event.defaultPrevented);
+    if (!prevented) internal(event);
   };
 }
 function mergeRefs(...refs) {
   return (node) => {
     for (const ref of refs) {
-      if (!ref) {
-        continue;
-      }
-      if (typeof ref === "function") {
-        ref(node);
-        continue;
-      }
-      ref.current = node;
+      if (!ref) continue;
+      if (typeof ref === "function") ref(node);
+      else ref.current = node;
     }
   };
 }
-function getWrapperElement() {
-  if (typeof document === "undefined") {
-    return null;
-  }
+function getWrapperEl() {
+  if (typeof document === "undefined") return null;
   return document.querySelector("[data-vds-drawer-wrapper]");
 }
-function setTransition(element, transition) {
-  if (element) {
-    element.style.transition = transition;
-  }
+function setTransition(el, value) {
+  if (el) el.style.transition = value;
 }
-function normalizeSnapPoints(snapPoints, minimizedSize) {
-  const basePoints = snapPoints?.length ? [...snapPoints] : [1];
-  const next = minimizedSize !== void 0 ? [minimizedSize, ...basePoints] : basePoints;
-  return [...new Set(next)];
+function isEditableElement(node) {
+  if (!(node instanceof HTMLElement)) return false;
+  if (node.isContentEditable) return true;
+  const tagName = node.tagName;
+  return tagName === "INPUT" || tagName === "TEXTAREA" || tagName === "SELECT";
+}
+function dedupeSnaps(snapPoints) {
+  if (!snapPoints?.length) return [1];
+  return [...new Set(snapPoints)];
 }
 function Drawer({
   children,
@@ -359,13 +704,17 @@ function Drawer({
   defaultOpen = false,
   onOpenChange: controlledOnOpenChange,
   sizeMode = "adaptive",
+  size,
   snapPoints,
-  minimizedSize,
-  activeSnapPoint: controlledActiveSnapPoint,
+  activeSnapPoint: controlledSnap,
   defaultSnapPoint,
   onActiveSnapPointChange,
+  minimizedSize,
+  snapBehavior = "staged",
+  snapStepThreshold = 0.28,
+  snapSkipThreshold = 0.86,
   closeThreshold = 0.5,
-  velocityThreshold = 0.45,
+  velocityThreshold = 0.5,
   dragHandleOnly = false,
   scaleBackground = false,
   modal = true,
@@ -374,22 +723,22 @@ function Drawer({
 }) {
   const contentRef = react.useRef(null);
   const overlayRef = react.useRef(null);
+  const headerRef = react.useRef(null);
   const bodyRef = react.useRef(null);
   const handleRef = react.useRef(null);
   const closeTimerRef = react.useRef(0);
-  const resolvedSnapPoints = react.useMemo(
-    () => normalizeSnapPoints(snapPoints, minimizedSize),
-    [minimizedSize, snapPoints]
-  );
-  const resolvedDefaultSnapPoint = defaultSnapPoint ?? snapPoints?.[snapPoints.length - 1] ?? 1;
+  const resolvedSnaps = react.useMemo(() => dedupeSnaps(snapPoints), [snapPoints]);
+  const resolvedDefaultSnap = defaultSnapPoint ?? resolvedSnaps[resolvedSnaps.length - 1];
   const [internalOpen, setInternalOpen] = react.useState(defaultOpen);
-  const [internalSnapPoint, setInternalSnapPoint] = react.useState(resolvedDefaultSnapPoint);
+  const [internalSnap, setInternalSnap] = react.useState(resolvedDefaultSnap);
   const [present, setPresent] = react.useState(controlledOpen ?? defaultOpen);
   const [dragging, setDragging] = react.useState(false);
   const isOpenControlled = controlledOpen !== void 0;
-  const isSnapControlled = controlledActiveSnapPoint !== void 0;
+  const isSnapControlled = controlledSnap !== void 0;
   const open = isOpenControlled ? controlledOpen : internalOpen;
-  const activeSnapPoint = isSnapControlled ? controlledActiveSnapPoint ?? resolvedDefaultSnapPoint : internalSnapPoint;
+  const activeSnapPoint = isSnapControlled ? controlledSnap : internalSnap;
+  const isMinimized = minimizedSize !== void 0 && activeSnapPoint === minimizedSize;
+  const isModal = modal && !isMinimized;
   react.useEffect(() => {
     window.clearTimeout(closeTimerRef.current);
     if (open) {
@@ -397,82 +746,90 @@ function Drawer({
       return;
     }
     if (!present) {
-      if (!isSnapControlled) {
-        setInternalSnapPoint(resolvedDefaultSnapPoint);
-      }
+      if (!isSnapControlled) setInternalSnap(resolvedDefaultSnap);
       return;
     }
+    const { ms } = readDrawerTiming(contentRef.current);
     closeTimerRef.current = window.setTimeout(() => {
       setPresent(false);
       setDragging(false);
-      if (!isSnapControlled) {
-        setInternalSnapPoint(resolvedDefaultSnapPoint);
-      }
-    }, TRANSITION_MS);
-    return () => {
-      window.clearTimeout(closeTimerRef.current);
-    };
-  }, [isSnapControlled, open, present, resolvedDefaultSnapPoint]);
-  react.useEffect(() => () => {
-    window.clearTimeout(closeTimerRef.current);
-  }, []);
-  const handleOpenChange = react.useCallback((nextOpen) => {
-    if (!dismissible && !nextOpen) {
-      return;
-    }
-    if (nextOpen) {
-      setPresent(true);
-    }
-    if (!isOpenControlled) {
-      setInternalOpen(nextOpen);
-    }
-    controlledOnOpenChange?.(nextOpen);
+      if (!isSnapControlled) setInternalSnap(resolvedDefaultSnap);
+    }, ms);
+    return () => window.clearTimeout(closeTimerRef.current);
+  }, [isSnapControlled, open, present, resolvedDefaultSnap]);
+  react.useEffect(() => () => window.clearTimeout(closeTimerRef.current), []);
+  const handleOpenChange = react.useCallback((next) => {
+    if (!dismissible && !next) return;
+    if (next) setPresent(true);
+    if (!isOpenControlled) setInternalOpen(next);
+    controlledOnOpenChange?.(next);
   }, [controlledOnOpenChange, dismissible, isOpenControlled]);
-  const handleSnapPointChange = react.useCallback((nextValue) => {
-    if (!isSnapControlled) {
-      setInternalSnapPoint(nextValue);
-    }
-    onActiveSnapPointChange?.(nextValue);
+  const handleSnapChange = react.useCallback((next) => {
+    if (!isSnapControlled) setInternalSnap(next);
+    onActiveSnapPointChange?.(next);
   }, [isSnapControlled, onActiveSnapPointChange]);
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    DrawerProvider,
-    {
-      value: {
-        direction,
-        open,
-        present,
-        dragging,
-        dismissible,
-        dragHandleOnly,
-        scaleBackground,
-        preventAutoFocus,
-        sizeMode,
-        snapPoints: resolvedSnapPoints,
-        activeSnapPoint,
-        closeThreshold,
-        velocityThreshold,
-        contentRef,
-        overlayRef,
-        bodyRef,
-        handleRef,
-        onOpenChange: handleOpenChange,
-        onSnapPointChange: handleSnapPointChange,
-        setDragging
-      },
-      children: /* @__PURE__ */ jsxRuntime.jsx(DialogPrimitive__namespace.Root, { open, onOpenChange: handleOpenChange, modal, children })
-    }
-  );
+  const ctxValue = react.useMemo(() => ({
+    direction,
+    open,
+    present,
+    dragging,
+    dismissible,
+    dragHandleOnly,
+    scaleBackground,
+    preventAutoFocus,
+    sizeMode,
+    size,
+    snapPoints: resolvedSnaps,
+    activeSnapPoint,
+    minimizedSize,
+    snapBehavior,
+    closeThreshold,
+    velocityThreshold,
+    snapStepThreshold,
+    snapSkipThreshold,
+    contentRef,
+    overlayRef,
+    headerRef,
+    bodyRef,
+    handleRef,
+    onOpenChange: handleOpenChange,
+    onSnapPointChange: handleSnapChange,
+    setDragging
+  }), [
+    direction,
+    open,
+    present,
+    dragging,
+    dismissible,
+    dragHandleOnly,
+    scaleBackground,
+    preventAutoFocus,
+    sizeMode,
+    size,
+    resolvedSnaps,
+    activeSnapPoint,
+    minimizedSize,
+    snapBehavior,
+    closeThreshold,
+    velocityThreshold,
+    snapStepThreshold,
+    snapSkipThreshold,
+    handleOpenChange,
+    handleSnapChange
+  ]);
+  return /* @__PURE__ */ jsxRuntime.jsx(DrawerProvider, { value: ctxValue, children: /* @__PURE__ */ jsxRuntime.jsx(DialogPrimitive__namespace.Root, { open, onOpenChange: handleOpenChange, modal: isModal, children }) });
 }
 var DrawerTrigger = DialogPrimitive__namespace.Trigger;
 var DrawerClose = DialogPrimitive__namespace.Close;
 var DrawerOverlay = react.forwardRef(function DrawerOverlay2({ className, ...props }, forwardedRef) {
-  const { overlayRef, open } = useDrawerContext();
+  const { overlayRef, open, activeSnapPoint, minimizedSize } = useDrawerContext();
+  const overlayVisible = open && (minimizedSize === void 0 || activeSnapPoint !== minimizedSize);
   return /* @__PURE__ */ jsxRuntime.jsx(
     DialogPrimitive__namespace.Overlay,
     {
       ref: mergeRefs(overlayRef, forwardedRef),
       className: utils.cn("vds-drawer-overlay", className),
-      "data-open": open || void 0,
+      "data-open": overlayVisible || void 0,
       ...props
     }
   );
@@ -484,11 +841,14 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
   onEscapeKeyDown,
   onPointerDownOutside,
   onInteractOutside,
+  onMouseDown,
   onPointerDown,
   onPointerMove,
   onPointerUp,
   onPointerCancel,
   onLostPointerCapture,
+  onTouchStart,
+  style,
   ...props
 }, forwardedRef) {
   const {
@@ -497,6 +857,7 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     present,
     contentRef,
     overlayRef,
+    headerRef,
     bodyRef,
     handleRef,
     dragging,
@@ -507,193 +868,243 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     onSnapPointChange,
     scaleBackground,
     preventAutoFocus,
+    minimizedSize,
     sizeMode,
+    size,
     snapPoints,
     activeSnapPoint,
+    snapBehavior,
     closeThreshold,
-    velocityThreshold
+    velocityThreshold,
+    snapStepThreshold,
+    snapSkipThreshold
   } = useDrawerContext();
   const [layout, setLayout] = react.useState({
-    availableSize: 0,
-    drawerSize: 0,
-    snapEntries: []
+    totalSize: 0,
+    snaps: [],
+    overlayStartSize: 0
   });
-  const currentProgressRef = react.useRef(0);
-  const openAnimationRef = react.useRef(0);
-  const resizeFrameRef = react.useRef(0);
+  const currentSizeRef = react.useRef(0);
+  const pendingSizeRef = react.useRef(0);
+  const measureFrameRef = react.useRef(0);
+  const writeFrameRef = react.useRef(0);
+  const openAnimRef = react.useRef(0);
   const hasOpenedRef = react.useRef(false);
   const activeSnapIndex = react.useMemo(() => {
-    const index = layout.snapEntries.findIndex((entry) => entry.value === activeSnapPoint);
-    return index === -1 ? Math.max(layout.snapEntries.length - 1, 0) : index;
-  }, [activeSnapPoint, layout.snapEntries]);
-  const setAnimated = react.useCallback((enabled) => {
+    const index = findSnapIndexByValue(layout.snaps, activeSnapPoint);
+    return index === -1 ? Math.max(layout.snaps.length - 1, 0) : index;
+  }, [activeSnapPoint, layout.snaps]);
+  const activeStage = layout.snaps[activeSnapIndex];
+  const minimizedStage = minimizedSize !== void 0 && activeSnapPoint === minimizedSize;
+  const setAnimated = react.useCallback((animated) => {
     const contentEl = contentRef.current;
     const overlayEl = overlayRef.current;
-    const wrapperEl = getWrapperElement();
-    const motion = enabled ? `transform ${TRANSITION_MS}ms ${EASE_CSS}` : "none";
-    const overlayMotion = enabled ? `opacity ${TRANSITION_MS}ms ${EASE_CSS}` : "none";
-    const wrapperMotion = enabled ? `transform ${TRANSITION_MS}ms ${EASE_CSS}, border-radius ${TRANSITION_MS}ms ${EASE_CSS}` : "none";
-    setTransition(contentEl, motion);
-    setTransition(overlayEl, overlayMotion);
-    if (scaleBackground) {
-      setTransition(wrapperEl, wrapperMotion);
-    }
-  }, [contentRef, overlayRef, scaleBackground]);
-  const applyProgress = react.useCallback((progress) => {
-    if (layout.drawerSize <= 0) {
+    const wrapperEl = getWrapperEl();
+    if (!animated) {
+      setTransition(contentEl, "none");
+      setTransition(overlayEl, "none");
+      if (scaleBackground) setTransition(wrapperEl, "none");
       return;
     }
+    const { ms, ease } = readDrawerTiming(contentEl);
+    setTransition(contentEl, `transform ${ms}ms ${ease}`);
+    setTransition(overlayEl, `opacity ${ms}ms ${ease}`);
+    if (scaleBackground) {
+      setTransition(
+        wrapperEl,
+        `transform ${ms}ms ${ease}, border-radius ${ms}ms ${ease}`
+      );
+    }
+  }, [contentRef, overlayRef, scaleBackground]);
+  const writeVisualSize = react.useCallback((sizePx) => {
     const contentEl = contentRef.current;
     const overlayEl = overlayRef.current;
-    const wrapperEl = getWrapperElement();
-    const clampedProgress = clamp(progress, 0, 1);
-    if (contentEl) {
-      contentEl.style.transform = getTranslateValue(direction, layout.drawerSize, progress);
-    }
+    const wrapperEl = getWrapperEl();
+    currentSizeRef.current = sizePx;
+    if (layout.totalSize <= 0 || !contentEl) return;
+    contentEl.style.setProperty(
+      "--vds-drawer-transform",
+      getTranslate(direction, sizePx, layout.totalSize)
+    );
+    const overlayProgress = getOverlayProgress(sizePx, layout.totalSize, layout.overlayStartSize);
     if (overlayEl) {
-      overlayEl.style.opacity = String(clampedProgress);
+      overlayEl.style.setProperty("--vds-drawer-overlay-opacity", String(overlayProgress));
+      overlayEl.style.pointerEvents = overlayProgress > 1e-3 ? "auto" : "none";
     }
     if (scaleBackground && wrapperEl) {
-      if (clampedProgress <= 0) {
+      if (overlayProgress <= 1e-3) {
         wrapperEl.style.transform = "";
         wrapperEl.style.borderRadius = "";
       } else {
-        const backgroundStyles = getBackgroundStyles(clampedProgress);
+        const backgroundStyles = getBackgroundStyles(overlayProgress);
         wrapperEl.style.transform = backgroundStyles.transform;
         wrapperEl.style.borderRadius = backgroundStyles.borderRadius;
       }
     }
-    currentProgressRef.current = progress;
-  }, [contentRef, direction, layout.drawerSize, overlayRef, scaleBackground]);
-  const syncToSnapPoint = react.useCallback((animated) => {
-    if (layout.drawerSize <= 0) {
+  }, [contentRef, direction, layout.overlayStartSize, layout.totalSize, overlayRef, scaleBackground]);
+  const flushVisualSize = react.useCallback(() => {
+    writeFrameRef.current = 0;
+    writeVisualSize(pendingSizeRef.current);
+  }, [writeVisualSize]);
+  const applySize = react.useCallback((sizePx, immediate = false) => {
+    pendingSizeRef.current = sizePx;
+    currentSizeRef.current = sizePx;
+    if (immediate || typeof window === "undefined") {
+      if (writeFrameRef.current) {
+        cancelAnimationFrame(writeFrameRef.current);
+        writeFrameRef.current = 0;
+      }
+      writeVisualSize(sizePx);
       return;
     }
-    const targetSize = layout.snapEntries[activeSnapIndex]?.size ?? layout.drawerSize;
-    const progress = targetSize / layout.drawerSize;
+    if (!writeFrameRef.current) {
+      writeFrameRef.current = requestAnimationFrame(flushVisualSize);
+    }
+  }, [flushVisualSize, writeVisualSize]);
+  const settleToSnap = react.useCallback((animated) => {
+    if (layout.totalSize <= 0) return;
+    const target = layout.snaps[activeSnapIndex]?.size ?? layout.totalSize;
     setAnimated(animated);
-    applyProgress(progress);
-  }, [activeSnapIndex, applyProgress, layout.drawerSize, layout.snapEntries, setAnimated]);
-  const updateMeasurements = react.useCallback(() => {
+    applySize(target, true);
+  }, [activeSnapIndex, applySize, layout.snaps, layout.totalSize, setAnimated]);
+  const measure = react.useCallback(() => {
     const contentEl = contentRef.current;
-    if (!contentEl) {
-      return;
-    }
-    const availableSize = Math.max(getViewportSize(direction) * VIEWPORT_SIZE_RATIO, 1);
+    if (!contentEl) return;
+    const availableSize = Math.max(getViewportSize(direction) * VIEWPORT_RATIO, 1);
     contentEl.style.setProperty("--vds-drawer-available-size", `${availableSize}px`);
-    const drawerSize = getElementSize(contentEl, direction);
-    if (drawerSize <= 0) {
-      return;
+    contentEl.style.setProperty("--vds-drawer-adaptive-size", getDefaultAdaptiveSize(direction));
+    if (sizeMode === "fixed") {
+      const resolvedSize = resolveDeclaredSize(size, getViewportInfo(direction, availableSize));
+      if (resolvedSize) contentEl.style.setProperty("--vds-drawer-fixed-size", resolvedSize);
+      else contentEl.style.removeProperty("--vds-drawer-fixed-size");
+    } else {
+      contentEl.style.removeProperty("--vds-drawer-fixed-size");
     }
-    const snapEntries = resolveSnapPoints(snapPoints, drawerSize);
-    setLayout((current) => {
-      const next = { availableSize, drawerSize, snapEntries };
-      const unchanged = current.availableSize === next.availableSize && current.drawerSize === next.drawerSize && current.snapEntries.length === next.snapEntries.length && current.snapEntries.every(
-        (point, index) => point.value === next.snapEntries[index]?.value && point.size === next.snapEntries[index]?.size
-      );
-      return unchanged ? current : next;
+    const totalSize = getElementSize(contentEl, direction);
+    if (totalSize <= 0) return;
+    if (currentSizeRef.current <= 0) {
+      contentEl.style.setProperty("--vds-drawer-transform", getTranslate(direction, 0, totalSize));
+      if (overlayRef.current) {
+        overlayRef.current.style.setProperty("--vds-drawer-overlay-opacity", "0");
+      }
+    }
+    const snaps = resolveSnaps(snapPoints, totalSize, minimizedSize);
+    const overlayStartSize = snaps[0]?.kind === "minimized" ? snaps[0].size : 0;
+    setLayout((previous) => {
+      const same = previous.totalSize === totalSize && previous.overlayStartSize === overlayStartSize && previous.snaps.length === snaps.length && previous.snaps.every((snap, index) => {
+        const next = snaps[index];
+        return snap.value === next?.value && snap.kind === next?.kind && Math.abs(snap.size - (next?.size ?? 0)) < 1;
+      });
+      return same ? previous : {
+        totalSize,
+        snaps,
+        overlayStartSize
+      };
     });
-  }, [contentRef, direction, sizeMode, snapPoints]);
+  }, [contentRef, direction, minimizedSize, size, sizeMode, snapPoints]);
+  react.useEffect(() => () => {
+    cancelAnimationFrame(measureFrameRef.current);
+    cancelAnimationFrame(writeFrameRef.current);
+    cancelAnimationFrame(openAnimRef.current);
+  }, []);
   react.useLayoutEffect(() => {
     if (!present) {
       hasOpenedRef.current = false;
       return;
     }
-    updateMeasurements();
-    const scheduleMeasurement = () => {
-      cancelAnimationFrame(resizeFrameRef.current);
-      resizeFrameRef.current = requestAnimationFrame(updateMeasurements);
+    measure();
+    const scheduleMeasure = () => {
+      cancelAnimationFrame(measureFrameRef.current);
+      measureFrameRef.current = requestAnimationFrame(measure);
+    };
+    const scheduleViewportMeasure = () => {
+      const activeElement = typeof document === "undefined" ? null : document.activeElement;
+      if (contentRef.current?.contains(activeElement) && isEditableElement(activeElement)) return;
+      scheduleMeasure();
     };
     const contentEl = contentRef.current;
-    const resizeObserver = new ResizeObserver(scheduleMeasurement);
-    if (contentEl) {
-      resizeObserver.observe(contentEl);
-    }
-    if (bodyRef.current && bodyRef.current !== contentEl) {
-      resizeObserver.observe(bodyRef.current);
-    }
-    window.addEventListener("resize", scheduleMeasurement);
-    window.visualViewport?.addEventListener("resize", scheduleMeasurement);
-    window.visualViewport?.addEventListener("scroll", scheduleMeasurement);
+    const resizeObserver = new ResizeObserver(scheduleMeasure);
+    if (contentEl) resizeObserver.observe(contentEl);
+    if (bodyRef.current && bodyRef.current !== contentEl) resizeObserver.observe(bodyRef.current);
+    scheduleMeasure();
+    const settleMeasureFrame = requestAnimationFrame(() => {
+      scheduleMeasure();
+      requestAnimationFrame(scheduleMeasure);
+    });
+    window.addEventListener("resize", scheduleMeasure);
+    window.visualViewport?.addEventListener("resize", scheduleViewportMeasure);
     return () => {
-      cancelAnimationFrame(resizeFrameRef.current);
+      cancelAnimationFrame(settleMeasureFrame);
+      cancelAnimationFrame(measureFrameRef.current);
       resizeObserver.disconnect();
-      window.removeEventListener("resize", scheduleMeasurement);
-      window.visualViewport?.removeEventListener("resize", scheduleMeasurement);
-      window.visualViewport?.removeEventListener("scroll", scheduleMeasurement);
+      window.removeEventListener("resize", scheduleMeasure);
+      window.visualViewport?.removeEventListener("resize", scheduleViewportMeasure);
     };
-  }, [bodyRef, contentRef, present, updateMeasurements]);
+  }, [bodyRef, contentRef, measure, present]);
   react.useLayoutEffect(() => {
-    if (!present || layout.drawerSize <= 0) {
-      return;
-    }
-    cancelAnimationFrame(openAnimationRef.current);
+    if (!present || layout.totalSize <= 0) return;
+    cancelAnimationFrame(openAnimRef.current);
     if (!open) {
       hasOpenedRef.current = false;
       setAnimated(true);
-      applyProgress(0);
+      applySize(0, true);
       return;
     }
     if (!hasOpenedRef.current) {
       hasOpenedRef.current = true;
       setAnimated(false);
-      applyProgress(0);
-      openAnimationRef.current = requestAnimationFrame(() => {
-        openAnimationRef.current = requestAnimationFrame(() => {
-          syncToSnapPoint(true);
-        });
+      applySize(0, true);
+      openAnimRef.current = requestAnimationFrame(() => {
+        openAnimRef.current = requestAnimationFrame(() => settleToSnap(true));
       });
-      return () => {
-        cancelAnimationFrame(openAnimationRef.current);
-      };
+      return () => cancelAnimationFrame(openAnimRef.current);
     }
-    if (!dragging) {
-      syncToSnapPoint(true);
-    }
-  }, [applyProgress, dragging, layout.drawerSize, open, present, setAnimated, syncToSnapPoint]);
+    if (!dragging) settleToSnap(true);
+  }, [applySize, dragging, layout.totalSize, open, present, setAnimated, settleToSnap]);
   react.useEffect(() => {
-    if (present) {
-      return;
-    }
-    const wrapperEl = getWrapperElement();
-    if (!wrapperEl) {
-      return;
-    }
+    if (present) return;
+    const wrapperEl = getWrapperEl();
+    if (!wrapperEl) return;
     wrapperEl.style.transition = "";
     wrapperEl.style.transform = "";
     wrapperEl.style.borderRadius = "";
   }, [present]);
-  const gesture = useDrawerGesture({
+  const drag = useDrawerDrag({
     direction,
-    drawerSize: layout.drawerSize,
-    snapSizes: layout.snapEntries.map((entry) => entry.size),
+    drawerSize: layout.totalSize,
+    snapSizes: layout.snaps.map((snap) => snap.size),
     currentSnapIndex: activeSnapIndex,
-    getCurrentProgress: () => currentProgressRef.current,
+    getCurrentSize: () => currentSizeRef.current,
     closeThreshold,
     velocityThreshold,
+    snapBehavior,
+    snapStepThreshold,
+    snapSkipThreshold,
     dismissible,
     dragHandleOnly,
     onDragStart: () => {
       setDragging(true);
       setAnimated(false);
     },
-    onDragProgress: (progress) => {
-      applyProgress(progress);
-    },
-    onDragCancel: () => {
-      syncToSnapPoint(true);
-    },
-    onDragEnd: () => {
+    onDragMove: (sizePx) => applySize(sizePx),
+    onDragEnd: (snapIndex, dismiss) => {
       setDragging(false);
       setAnimated(true);
-    },
-    onSnap: (index) => {
-      onSnapPointChange(layout.snapEntries[index]?.value ?? activeSnapPoint);
-    },
-    onDismiss: () => {
-      onOpenChange(false);
+      if (dismiss) {
+        applySize(0, true);
+        onOpenChange(false);
+        return;
+      }
+      const snap = layout.snaps[snapIndex];
+      if (snap) {
+        applySize(snap.size, true);
+        onSnapPointChange(snap.value);
+      } else {
+        settleToSnap(true);
+      }
     },
     getContentEl: () => contentRef.current,
+    getHeaderEl: () => headerRef.current,
     getHandleEl: () => handleRef.current,
     getScrollableEl: () => bodyRef.current ?? contentRef.current
   });
@@ -709,34 +1120,33 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
         "data-open": open || void 0,
         "data-dragging": dragging || void 0,
         "data-size-mode": sizeMode,
-        onOpenAutoFocus: composeEventHandlers(onOpenAutoFocus, (event) => {
-          if (preventAutoFocus) {
-            event.preventDefault();
+        "data-stage": activeStage?.kind ?? "snap",
+        "data-measured": layout.totalSize > 0 || void 0,
+        tabIndex: -1,
+        style,
+        onOpenAutoFocus: composeHandlers(onOpenAutoFocus, (event) => {
+          if (!preventAutoFocus) return;
+          event.preventDefault();
+          if (!minimizedStage) {
+            contentRef.current?.focus({ preventScroll: true });
           }
         }),
-        onEscapeKeyDown: composeEventHandlers(onEscapeKeyDown, (event) => {
-          if (!dismissible) {
-            event.preventDefault();
-          }
+        onEscapeKeyDown: composeHandlers(onEscapeKeyDown, (event) => {
+          if (!dismissible) event.preventDefault();
         }),
-        onPointerDownOutside: composeEventHandlers(onPointerDownOutside, (event) => {
-          if (!dismissible) {
-            event.preventDefault();
-          }
+        onPointerDownOutside: composeHandlers(onPointerDownOutside, (event) => {
+          if (!dismissible) event.preventDefault();
         }),
-        onInteractOutside: composeEventHandlers(onInteractOutside, (event) => {
-          if (!dismissible) {
-            event.preventDefault();
-          }
+        onInteractOutside: composeHandlers(onInteractOutside, (event) => {
+          if (!dismissible) event.preventDefault();
         }),
-        onPointerDown: composeEventHandlers(onPointerDown, gesture.onPointerDown),
-        onPointerMove: composeEventHandlers(onPointerMove, gesture.onPointerMove),
-        onPointerUp: composeEventHandlers(onPointerUp, gesture.onPointerUp),
-        onPointerCancel: composeEventHandlers(onPointerCancel, gesture.onPointerCancel),
-        onLostPointerCapture: composeEventHandlers(
-          onLostPointerCapture,
-          gesture.onLostPointerCapture
-        ),
+        onMouseDown: composeHandlers(onMouseDown, drag.onMouseDown),
+        onPointerDown: composeHandlers(onPointerDown, drag.onPointerDown),
+        onPointerMove: composeHandlers(onPointerMove, drag.onPointerMove),
+        onPointerUp: composeHandlers(onPointerUp, drag.onPointerUp),
+        onPointerCancel: composeHandlers(onPointerCancel, drag.onPointerCancel),
+        onLostPointerCapture: composeHandlers(onLostPointerCapture, drag.onLostPointerCapture),
+        onTouchStart: composeHandlers(onTouchStart, drag.onTouchStart),
         ...props,
         children
       }
@@ -744,16 +1154,29 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
   ] });
 });
 var DrawerHandle = react.forwardRef(function DrawerHandle2({ className, ...props }, forwardedRef) {
-  const { direction, handleRef } = useDrawerContext();
+  const { direction, handleRef, activeSnapPoint, minimizedSize } = useDrawerContext();
+  const minimized = minimizedSize !== void 0 && activeSnapPoint === minimizedSize;
   return /* @__PURE__ */ jsxRuntime.jsx(
     "div",
     {
       ref: mergeRefs(handleRef, forwardedRef),
       className: utils.cn("vds-drawer-handle", className),
       "data-direction": direction,
+      "data-stage": minimized ? "minimized" : "snap",
       "aria-hidden": "true",
       ...props,
       children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "vds-drawer-handle-bar" })
+    }
+  );
+});
+var DrawerHeader = react.forwardRef(function DrawerHeader2({ className, ...props }, forwardedRef) {
+  const { headerRef } = useDrawerContext();
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      ref: mergeRefs(headerRef, forwardedRef),
+      className: utils.cn("vds-drawer-header", className),
+      ...props
     }
   );
 });
@@ -807,6 +1230,7 @@ exports.DrawerContent = DrawerContent;
 exports.DrawerDescription = DrawerDescription;
 exports.DrawerFooter = DrawerFooter;
 exports.DrawerHandle = DrawerHandle;
+exports.DrawerHeader = DrawerHeader;
 exports.DrawerOverlay = DrawerOverlay;
 exports.DrawerTitle = DrawerTitle;
 exports.DrawerTrigger = DrawerTrigger;

@@ -1,0 +1,522 @@
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  type MouseEvent as ReactMouseEvent,
+  type PointerEvent as ReactPointerEvent,
+  type TouchEvent as ReactTouchEvent,
+} from "react";
+import {
+  applyRubberband,
+  clamp,
+  getCrossCoord,
+  getMainCoord,
+  getOpenSign,
+  isAtScrollEdge,
+  pickTargetSnap,
+  type Direction,
+  type DrawerSnapBehavior,
+} from "./utils";
+
+const AXIS_LOCK_THRESHOLD = 6;
+const VELOCITY_WINDOW_MS = 80;
+const MAX_SAMPLES = 6;
+const INTERACTIVE_SELECTOR = [
+  "button",
+  "a[href]",
+  "input",
+  "select",
+  "textarea",
+  "[contenteditable='true']",
+  "[role='button']",
+  "[role='link']",
+  "[data-vds-drawer-no-drag]",
+].join(",");
+
+type DragSource = "handle" | "header" | "scroll";
+type InputType = "mouse" | "pen" | "touch";
+
+export interface DragConfig {
+  direction: Direction;
+  drawerSize: number;
+  snapSizes: readonly number[];
+  currentSnapIndex: number;
+  getCurrentSize: () => number;
+  closeThreshold: number;
+  velocityThreshold: number;
+  snapBehavior: DrawerSnapBehavior;
+  snapStepThreshold: number;
+  snapSkipThreshold: number;
+  dismissible: boolean;
+  dragHandleOnly: boolean;
+  onDragStart: () => void;
+  onDragMove: (sizePx: number) => void;
+  onDragEnd: (targetSnapIndex: number, dismiss: boolean) => void;
+  getContentEl: () => HTMLElement | null;
+  getHeaderEl?: () => HTMLElement | null;
+  getHandleEl: () => HTMLElement | null;
+  getScrollableEl: () => HTMLElement | null;
+}
+
+interface VelocitySample {
+  size: number;
+  time: number;
+}
+
+interface DragState {
+  inputType: InputType;
+  source: DragSource;
+  pointerId?: number;
+  touchId?: number;
+  captureEl: HTMLElement | null;
+  startMain: number;
+  startCross: number;
+  startSize: number;
+  startSnapIndex: number;
+  axisLocked: boolean;
+  dragging: boolean;
+  samples: VelocitySample[];
+}
+
+function isInside(target: HTMLElement | null, parent: HTMLElement | null): boolean {
+  if (!target || !parent) return false;
+  return parent.contains(target);
+}
+
+function isInteractiveTarget(target: HTMLElement | null): boolean {
+  if (!target) return false;
+  return Boolean(target.closest(INTERACTIVE_SELECTOR));
+}
+
+function getTouchById(list: TouchList, touchId: number): Touch | null {
+  for (let index = 0; index < list.length; index++) {
+    const touch = list.item(index);
+    if (touch?.identifier === touchId) return touch;
+  }
+  return null;
+}
+
+function getDragSurface(
+  target: HTMLElement | null,
+  handleEl: HTMLElement | null,
+  headerEl: HTMLElement | null,
+  scrollableEl: HTMLElement | null,
+  dragHandleOnly: boolean,
+  inputType: InputType,
+): { el: HTMLElement; source: DragSource } | null {
+  if (isInside(target, handleEl) && handleEl) {
+    return { el: handleEl, source: "handle" };
+  }
+
+  if (!dragHandleOnly && isInside(target, headerEl) && headerEl && !isInteractiveTarget(target)) {
+    return { el: headerEl, source: "header" };
+  }
+
+  if (
+    inputType === "touch" &&
+    !dragHandleOnly &&
+    isInside(target, scrollableEl) &&
+    scrollableEl &&
+    !isInteractiveTarget(target)
+  ) {
+    return { el: scrollableEl, source: "scroll" };
+  }
+
+  return null;
+}
+
+export function useDrawerDrag(config: DragConfig) {
+  const stateRef = useRef<DragState | null>(null);
+  const configRef = useRef(config);
+  const removeWindowListenersRef = useRef<(() => void) | null>(null);
+  configRef.current = config;
+
+  const recordSample = useCallback((size: number) => {
+    const state = stateRef.current;
+    if (!state) return;
+    const now = performance.now();
+    state.samples.push({ size, time: now });
+    while (state.samples.length > MAX_SAMPLES) state.samples.shift();
+  }, []);
+
+  const computeVelocity = useCallback((): number => {
+    const state = stateRef.current;
+    if (!state || state.samples.length < 2) return 0;
+    const now = performance.now();
+    const recent = state.samples.filter((sample) => now - sample.time <= VELOCITY_WINDOW_MS);
+    if (recent.length < 2) {
+      const a = state.samples[state.samples.length - 2];
+      const b = state.samples[state.samples.length - 1];
+      const dt = Math.max(b.time - a.time, 1);
+      return (b.size - a.size) / dt;
+    }
+    const a = recent[0];
+    const b = recent[recent.length - 1];
+    const dt = Math.max(b.time - a.time, 1);
+    return (b.size - a.size) / dt;
+  }, []);
+
+  const releasePointerCapture = useCallback((el: HTMLElement | null, pointerId?: number) => {
+    if (!el || pointerId === undefined || !el.hasPointerCapture(pointerId)) return;
+    try {
+      el.releasePointerCapture(pointerId);
+    } catch {
+      /* noop */
+    }
+  }, []);
+
+  const clearWindowListeners = useCallback(() => {
+    removeWindowListenersRef.current?.();
+    removeWindowListenersRef.current = null;
+  }, []);
+
+  const reset = useCallback((pointerId?: number) => {
+    const state = stateRef.current;
+    if (!state) return;
+    clearWindowListeners();
+    releasePointerCapture(state.captureEl, pointerId ?? state.pointerId);
+    stateRef.current = null;
+  }, [clearWindowListeners, releasePointerCapture]);
+
+  const beginSession = useCallback((state: DragState) => {
+    stateRef.current = state;
+    if (state.inputType === "pen" && state.captureEl && state.pointerId !== undefined) {
+      try {
+        state.captureEl.setPointerCapture(state.pointerId);
+      } catch {
+        /* noop */
+      }
+    }
+  }, []);
+
+  const moveSession = useCallback((main: number, cross: number, prevent?: () => void) => {
+    const state = stateRef.current;
+    const resolvedConfig = configRef.current;
+    if (!state) return;
+
+    const mainDelta = main - state.startMain;
+    const crossDelta = cross - state.startCross;
+    const openSign = getOpenSign(resolvedConfig.direction);
+    const sizeDelta = mainDelta * openSign;
+
+    if (!state.axisLocked) {
+      if (Math.abs(mainDelta) < AXIS_LOCK_THRESHOLD) return;
+      if (Math.abs(crossDelta) > Math.abs(mainDelta)) {
+        reset(state.pointerId);
+        return;
+      }
+      state.axisLocked = true;
+    }
+
+    if (
+      state.source === "scroll" &&
+      !state.dragging &&
+      !isAtScrollEdge(resolvedConfig.getScrollableEl(), resolvedConfig.direction, -sizeDelta)
+    ) {
+      reset(state.pointerId);
+      return;
+    }
+
+    prevent?.();
+
+    if (!state.dragging) {
+      state.dragging = true;
+      resolvedConfig.onDragStart();
+    }
+
+    const rawSize = state.startSize + sizeDelta;
+    const cappedSize = applyRubberband(rawSize, resolvedConfig.drawerSize);
+    const finalSize = clamp(
+      cappedSize,
+      -resolvedConfig.drawerSize * 0.15,
+      resolvedConfig.drawerSize * 1.15,
+    );
+
+    recordSample(finalSize);
+    resolvedConfig.onDragMove(finalSize);
+  }, [recordSample, reset]);
+
+  const endSession = useCallback((cancelled: boolean) => {
+    const state = stateRef.current;
+    const resolvedConfig = configRef.current;
+    if (!state) return;
+
+    const wasDragging = state.dragging;
+    const startSnapIndex = state.startSnapIndex;
+
+    if (wasDragging) {
+      recordSample(resolvedConfig.getCurrentSize());
+    }
+
+    const velocity = wasDragging ? computeVelocity() : 0;
+    const currentSize = resolvedConfig.getCurrentSize();
+
+    reset(state.pointerId);
+
+    if (!wasDragging) return;
+    if (cancelled) {
+      resolvedConfig.onDragEnd(startSnapIndex, false);
+      return;
+    }
+
+    const targetIndex = pickTargetSnap({
+      currentSize,
+      startSize: state.startSize,
+      startSnapIndex,
+      velocity,
+      snaps: resolvedConfig.snapSizes,
+      velocityThreshold: resolvedConfig.velocityThreshold,
+      closeThreshold: resolvedConfig.closeThreshold,
+      dismissible: resolvedConfig.dismissible,
+      snapBehavior: resolvedConfig.snapBehavior,
+      snapStepThreshold: resolvedConfig.snapStepThreshold,
+      snapSkipThreshold: resolvedConfig.snapSkipThreshold,
+    });
+
+    if (targetIndex === -1) {
+      resolvedConfig.onDragEnd(0, true);
+    } else {
+      resolvedConfig.onDragEnd(targetIndex, false);
+    }
+  }, [computeVelocity, recordSample, reset]);
+
+  const bindMouseListeners = useCallback(() => {
+    const onMouseMove = (event: MouseEvent) => {
+      moveSession(
+        getMainCoord(configRef.current.direction, event.clientX, event.clientY),
+        getCrossCoord(configRef.current.direction, event.clientX, event.clientY),
+        () => event.preventDefault(),
+      );
+    };
+
+    const onMouseUp = () => endSession(false);
+    const onWindowBlur = () => {
+      if (!stateRef.current) return;
+      endSession(true);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("blur", onWindowBlur);
+
+    removeWindowListenersRef.current = () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("blur", onWindowBlur);
+    };
+  }, [endSession, moveSession]);
+
+  const bindPointerListeners = useCallback(() => {
+    const onPointerMove = (event: PointerEvent) => {
+      const state = stateRef.current;
+      if (!state || state.pointerId !== event.pointerId) return;
+      moveSession(
+        getMainCoord(configRef.current.direction, event.clientX, event.clientY),
+        getCrossCoord(configRef.current.direction, event.clientX, event.clientY),
+        () => {
+          if (event.cancelable) event.preventDefault();
+        },
+      );
+    };
+
+    const onPointerUp = (event: PointerEvent) => {
+      const state = stateRef.current;
+      if (!state || state.pointerId !== event.pointerId) return;
+      endSession(false);
+    };
+
+    const onPointerCancel = (event: PointerEvent) => {
+      const state = stateRef.current;
+      if (!state || state.pointerId !== event.pointerId) return;
+      endSession(true);
+    };
+
+    const onWindowBlur = () => {
+      if (!stateRef.current) return;
+      endSession(true);
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: false });
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerCancel);
+    window.addEventListener("blur", onWindowBlur);
+
+    removeWindowListenersRef.current = () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerCancel);
+      window.removeEventListener("blur", onWindowBlur);
+    };
+  }, [endSession, moveSession]);
+
+  const bindTouchListeners = useCallback(() => {
+    const onTouchMove = (event: TouchEvent) => {
+      const state = stateRef.current;
+      if (!state || state.touchId === undefined) return;
+      const touch = getTouchById(event.touches, state.touchId) ?? getTouchById(event.changedTouches, state.touchId);
+      if (!touch) return;
+      moveSession(
+        getMainCoord(configRef.current.direction, touch.clientX, touch.clientY),
+        getCrossCoord(configRef.current.direction, touch.clientX, touch.clientY),
+        () => {
+          if (event.cancelable) event.preventDefault();
+        },
+      );
+    };
+
+    const onTouchEnd = (event: TouchEvent) => {
+      const state = stateRef.current;
+      if (!state || state.touchId === undefined) return;
+      if (!getTouchById(event.changedTouches, state.touchId)) return;
+      endSession(false);
+    };
+
+    const onTouchCancel = (event: TouchEvent) => {
+      const state = stateRef.current;
+      if (!state || state.touchId === undefined) return;
+      if (!getTouchById(event.changedTouches, state.touchId)) return;
+      endSession(true);
+    };
+
+    const onWindowBlur = () => {
+      if (!stateRef.current) return;
+      endSession(true);
+    };
+
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("touchcancel", onTouchCancel);
+    window.addEventListener("blur", onWindowBlur);
+
+    removeWindowListenersRef.current = () => {
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchCancel);
+      window.removeEventListener("blur", onWindowBlur);
+    };
+  }, [endSession, moveSession]);
+
+  useEffect(() => () => {
+    clearWindowListeners();
+    stateRef.current = null;
+  }, [clearWindowListeners]);
+
+  const onMouseDown = useCallback((event: ReactMouseEvent) => {
+    if (stateRef.current) return;
+    if (event.button !== 0) return;
+    if (configRef.current.drawerSize <= 0) return;
+
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    const resolvedConfig = configRef.current;
+    const surface = getDragSurface(
+      target,
+      resolvedConfig.getHandleEl(),
+      resolvedConfig.getHeaderEl?.() ?? null,
+      resolvedConfig.getScrollableEl(),
+      resolvedConfig.dragHandleOnly,
+      "mouse",
+    );
+
+    if (!surface) return;
+    event.preventDefault();
+
+    beginSession({
+      inputType: "mouse",
+      source: surface.source,
+      captureEl: null,
+      startMain: getMainCoord(resolvedConfig.direction, event.clientX, event.clientY),
+      startCross: getCrossCoord(resolvedConfig.direction, event.clientX, event.clientY),
+      startSize: resolvedConfig.getCurrentSize(),
+      startSnapIndex: resolvedConfig.currentSnapIndex,
+      axisLocked: false,
+      dragging: false,
+      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
+    });
+
+    bindMouseListeners();
+  }, [beginSession, bindMouseListeners]);
+
+  const onPointerDown = useCallback((event: ReactPointerEvent) => {
+    if (stateRef.current) return;
+    if (event.pointerType === "mouse" || event.pointerType === "touch") return;
+    if (configRef.current.drawerSize <= 0) return;
+
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    const resolvedConfig = configRef.current;
+    const surface = getDragSurface(
+      target,
+      resolvedConfig.getHandleEl(),
+      resolvedConfig.getHeaderEl?.() ?? null,
+      resolvedConfig.getScrollableEl(),
+      resolvedConfig.dragHandleOnly,
+      "pen",
+    );
+
+    if (!surface) return;
+    if (event.cancelable) event.preventDefault();
+
+    beginSession({
+      inputType: "pen",
+      source: surface.source,
+      pointerId: event.pointerId,
+      captureEl: surface.el,
+      startMain: getMainCoord(resolvedConfig.direction, event.clientX, event.clientY),
+      startCross: getCrossCoord(resolvedConfig.direction, event.clientX, event.clientY),
+      startSize: resolvedConfig.getCurrentSize(),
+      startSnapIndex: resolvedConfig.currentSnapIndex,
+      axisLocked: false,
+      dragging: false,
+      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
+    });
+
+    bindPointerListeners();
+  }, [beginSession, bindPointerListeners]);
+
+  const onTouchStart = useCallback((event: ReactTouchEvent) => {
+    if (stateRef.current) return;
+    if (event.touches.length !== 1) return;
+    if (configRef.current.drawerSize <= 0) return;
+
+    const touch = event.touches[0];
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    const resolvedConfig = configRef.current;
+    const surface = getDragSurface(
+      target,
+      resolvedConfig.getHandleEl(),
+      resolvedConfig.getHeaderEl?.() ?? null,
+      resolvedConfig.getScrollableEl(),
+      resolvedConfig.dragHandleOnly,
+      "touch",
+    );
+
+    if (!surface) return;
+
+    beginSession({
+      inputType: "touch",
+      source: surface.source,
+      touchId: touch.identifier,
+      captureEl: null,
+      startMain: getMainCoord(resolvedConfig.direction, touch.clientX, touch.clientY),
+      startCross: getCrossCoord(resolvedConfig.direction, touch.clientX, touch.clientY),
+      startSize: resolvedConfig.getCurrentSize(),
+      startSnapIndex: resolvedConfig.currentSnapIndex,
+      axisLocked: false,
+      dragging: false,
+      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
+    });
+
+    bindTouchListeners();
+  }, [beginSession, bindTouchListeners]);
+
+  const noop = useCallback(() => {}, []);
+
+  return {
+    onMouseDown,
+    onPointerDown,
+    onTouchStart,
+    onPointerMove: noop,
+    onPointerUp: noop,
+    onPointerCancel: noop,
+    onLostPointerCapture: noop,
+  };
+}

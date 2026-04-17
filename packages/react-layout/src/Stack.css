@@ -1,0 +1,22 @@
+@layer components {
+  .vds-stack {
+    --vds-stack-gap: var(--vds-space-4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .vds-stack > * + * {
+    margin-block-start: var(--vds-stack-gap);
+  }
+
+  .vds-stack[data-gap="xs"] { --vds-stack-gap: var(--vds-space-1); }
+  .vds-stack[data-gap="sm"] { --vds-stack-gap: var(--vds-space-2); }
+  .vds-stack[data-gap="md"] { --vds-stack-gap: var(--vds-space-4); }
+  .vds-stack[data-gap="lg"] { --vds-stack-gap: var(--vds-space-6); }
+  .vds-stack[data-gap="xl"] { --vds-stack-gap: var(--vds-space-8); }
+
+  .vds-stack[data-recursive] * + * {
+    margin-block-start: var(--vds-stack-gap);
+  }
+}
