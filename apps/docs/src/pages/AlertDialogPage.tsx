@@ -40,7 +40,6 @@ const BACKDROPS: AlertDialogBackdrop[] = [
   "blur",
   "blur-strong",
   "light",
-  "transparent",
   "none",
 ];
 const INTENTS: AlertDialogIntent[] = ["default", "destructive", "warning", "success", "info"];
