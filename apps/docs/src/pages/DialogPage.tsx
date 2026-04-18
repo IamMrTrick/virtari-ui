@@ -92,7 +92,6 @@ const BACKDROPS: DialogBackdrop[] = [
   "blur",
   "blur-strong",
   "light",
-  "transparent",
   "none",
 ];
 const INTENTS: DialogIntent[] = ["default", "destructive", "warning", "success", "info"];
