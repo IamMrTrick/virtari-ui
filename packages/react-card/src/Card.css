@@ -4,7 +4,7 @@
     flex-direction: column;
     background-color: var(--vds-color-surface);
     border: 1px solid var(--vds-color-border);
-    border-radius: var(--vds-radius-surface);
+    border-radius: var(--vds-radius-card);
     box-shadow: var(--vds-shadow-sm);
     color: var(--vds-color-text);
     overflow: hidden;

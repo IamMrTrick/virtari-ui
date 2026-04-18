@@ -809,7 +809,7 @@ function useDrawerDrag(config) {
 }
 var DEFAULT_SPRING_MS = 380;
 var DEFAULT_SPRING_EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
-var VIEWPORT_RATIO = 0.96;
+var VIEWPORT_RATIO = 1;
 var DEFAULT_MINIMIZED_STATE_ID = "minimized";
 function parseDurationMs(value, fallback) {
   const trimmed = value.trim();
@@ -1136,6 +1136,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
     overlayStartSize: 0
   });
   const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const keyboardOpenRef = useRef(false);
   const currentSizeRef = useRef(0);
   const pendingSizeRef = useRef(0);
   const measureFrameRef = useRef(0);
@@ -1275,6 +1276,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
   const measure = useCallback(() => {
     const contentEl = contentRef.current;
     if (!contentEl) return;
+    if (keyboardOpenRef.current) return;
     const viewportSize = getViewportSize(direction);
     const viewportInfo = getViewportInfo(direction, viewportSize);
     const resolvedOffset = resolveDirectionalValue(offset, direction);
@@ -1324,11 +1326,19 @@ var DrawerContent = forwardRef(function DrawerContent2({
   useEffect(() => {
     if (!present) {
       setKeyboardOpen(false);
+      contentRef.current?.style.removeProperty("--vds-drawer-keyboard-inset");
       return;
     }
+    const writeKeyboardInset = (px) => {
+      const el = contentRef.current;
+      if (!el) return;
+      if (px > 0) el.style.setProperty("--vds-drawer-keyboard-inset", `${Math.round(px)}px`);
+      else el.style.removeProperty("--vds-drawer-keyboard-inset");
+    };
     const syncKeyboardOpen = () => {
       if (typeof window === "undefined") {
         setKeyboardOpen(false);
+        writeKeyboardInset(0);
         return;
       }
       const activeElement = typeof document === "undefined" ? null : document.activeElement;
@@ -1337,20 +1347,34 @@ var DrawerContent = forwardRef(function DrawerContent2({
       );
       if (!hasFocusedEditable) {
         setKeyboardOpen(false);
+        writeKeyboardInset(0);
         return;
       }
       const vv = window.visualViewport;
       if (!vv) {
         setKeyboardOpen(false);
+        writeKeyboardInset(0);
         return;
       }
       const keyboardDelta = window.innerHeight - vv.height;
       const keyboardThreshold = Math.max(120, window.innerHeight * 0.18);
-      setKeyboardOpen(keyboardDelta > keyboardThreshold);
+      const isOpen = keyboardDelta > keyboardThreshold;
+      setKeyboardOpen(isOpen);
+      const kbOffset = isOpen ? Math.max(0, window.innerHeight - (vv.height + vv.offsetTop)) : 0;
+      writeKeyboardInset(kbOffset);
     };
     syncKeyboardOpen();
     const contentEl = contentRef.current;
-    const onFocusIn = () => syncKeyboardOpen();
+    const onFocusIn = (event) => {
+      syncKeyboardOpen();
+      const target = event.target;
+      if (!target || !isEditableElement(target)) return;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          target.scrollIntoView({ block: "center", behavior: "smooth" });
+        });
+      });
+    };
     const onFocusOut = () => requestAnimationFrame(syncKeyboardOpen);
     contentEl?.addEventListener("focusin", onFocusIn);
     contentEl?.addEventListener("focusout", onFocusOut);
@@ -1363,6 +1387,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
       window.visualViewport?.removeEventListener("resize", syncKeyboardOpen);
       window.visualViewport?.removeEventListener("scroll", syncKeyboardOpen);
       window.removeEventListener("resize", syncKeyboardOpen);
+      contentEl?.style.removeProperty("--vds-drawer-keyboard-inset");
     };
   }, [contentRef, present]);
   useLayoutEffect(() => {
@@ -1398,7 +1423,10 @@ var DrawerContent = forwardRef(function DrawerContent2({
       window.removeEventListener("resize", scheduleMeasure);
       window.visualViewport?.removeEventListener("resize", scheduleViewportMeasure);
     };
-  }, [bodyRef, contentRef, measure, present]);
+  }, [bodyRef, contentRef, measure, present, keyboardOpen]);
+  useEffect(() => {
+    keyboardOpenRef.current = keyboardOpen;
+  }, [keyboardOpen]);
   useLayoutEffect(() => {
     if (!present || layout.totalSize <= 0) return;
     cancelAnimationFrame(openAnimRef.current);

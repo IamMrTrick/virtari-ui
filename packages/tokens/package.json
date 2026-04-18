@@ -8,6 +8,9 @@
     "./spacing": "./src/spacing.css",
     "./typography": "./src/typography.css",
     "./radii": "./src/radii.css",
+    "./radii/primitives": "./src/radii/primitives.css",
+    "./radii/modes": "./src/radii/modes.css",
+    "./radii/components": "./src/radii/components.css",
     "./shadows": "./src/shadows.css",
     "./motion": "./src/motion.css"
   },

@@ -1,0 +1,45 @@
+@layer tokens {
+  :root {
+    /*
+     * ── Per-component radius tokens (caps) ──
+     * Only components that break under certain modes get a dedicated token.
+     * Pattern: min(<what the mode wants>, <this component's breaking point>).
+     * min() lets global modes shrink the value (sharp) but never exceed the cap,
+     * so pill mode can't turn a checkbox into a radio or bloat a dialog.
+     *
+     * Components NOT listed here keep using the generic t-shirt scale
+     * or the element/surface/badge aliases — intentional.
+     */
+
+    /* Checkbox — cap at md (8px) so it never reads as a radio */
+    --vds-radius-checkbox: min(var(--vds-radius-element), var(--vds-radius-md));
+
+    /* Textarea — cap at lg (12px) so big multi-line corners stay readable */
+    --vds-radius-textarea: min(var(--vds-radius-element), var(--vds-radius-lg));
+
+    /* Kbd (keyboard key cap) — cap at md (8px) so it keeps a key-like shape
+     * and works with the bottom-border-width trick used for depth */
+    --vds-radius-kbd: min(var(--vds-radius-element), var(--vds-radius-md));
+
+    /* Chip — follow Badge: pill in every mode except sharp (slight corner).
+     * Kept as a separate alias so future themes can diverge chip from badge. */
+    --vds-radius-chip: var(--vds-radius-badge);
+
+    /* Floating content panels with list-based content —
+     * cap at md (8px) so they never become fully pill.
+     * (Popover / DropdownMenu intentionally stay on --vds-radius-surface,
+     * which tops out at 2xl=24px in pill — acceptable for those panels.) */
+    --vds-radius-select-content: min(var(--vds-radius-element), var(--vds-radius-md));
+    --vds-radius-tooltip:        min(var(--vds-radius-element), var(--vds-radius-md));
+
+    /* Alert (banner-style container) — cap at xl (16px), matches card/toast */
+    --vds-radius-alert: min(var(--vds-radius-md), var(--vds-radius-xl));
+
+    /* Large containers — cap at xl (16px) so pill mode doesn't bloat them */
+    --vds-radius-card:         min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-dialog:       min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-alert-dialog: min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-drawer:       min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-toast:        min(var(--vds-radius-surface), var(--vds-radius-xl));
+  }
+}

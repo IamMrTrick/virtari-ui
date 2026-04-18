@@ -3,7 +3,7 @@
     --_textarea-px: var(--vds-space-3);
     --_textarea-py: var(--vds-space-2);
     --_textarea-font-size: var(--vds-text-sm);
-    --_textarea-radius: var(--vds-radius-element);
+    --_textarea-radius: var(--vds-radius-textarea);
 
     display: flex;
     inline-size: 100%;

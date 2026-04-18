@@ -359,11 +359,24 @@
     --vds-tracking-widest: 0.1em;
   }
 }
+/*
+ * Radii — three-tier architecture.
+ *
+ * primitives.css   Raw scale. Change to shift the whole system.
+ * modes.css        T-shirt semantic scale + data-radius mode overrides.
+ * components.css   Per-component tokens with caps where pill mode would break the component.
+ *
+ * Components should consume:
+ *   • a component token (--vds-radius-checkbox, --vds-radius-card, ...) when a cap is required, or
+ *   • the t-shirt scale (--vds-radius-sm, --vds-radius-md, ...) / legacy element/surface aliases otherwise.
+ */
 @layer tokens {
   :root {
     /*
      * ── Primitive Radius Scale ──
-     * Raw values. Components should use semantic tokens below.
+     * Raw values. Components should not consume these directly —
+     * use the t-shirt scale in modes.css or a component token
+     * from components.css instead.
      */
     --vds-radius-0: 0;
     --vds-radius-1: 0.125rem;  /* 2px */
@@ -374,34 +387,54 @@
     --vds-radius-6: 1rem;      /* 16px */
     --vds-radius-7: 1.5rem;    /* 24px */
     --vds-radius-full: 9999px;
+  }
+}
+@layer tokens {
+  /*
+   * ── T-shirt semantic scale ──
+   * Purpose-based, mode-reactive tokens. Prefer these in component CSS.
+   *
+   *   xs   tightest interactive (tiny chips, compact controls)
+   *   sm   default interactive  (button, input, select, toggle, tooltip)
+   *   md   larger interactive   (textarea cap, kbd, small badge)
+   *   lg   small surface        (card, dropdown-menu, popover)
+   *   xl   large surface        (dialog, drawer, toast)
+   *   2xl  extra-large surface
+   *   full fully rounded (pill/circle)
+   *
+   * ── Modes ──
+   * Set `data-radius` on <html> or any container to switch the personality.
+   *   sharp  — minimal rounding → enterprise, technical, dense
+   *   soft   — gentle rounding  → default, industry standard (= :root)
+   *   round  — noticeable rounding → friendly, modern, consumer
+   *   pill   — fully rounded    → playful, bold, marketing
+   *
+   * ── Back-compat aliases ──
+   * --vds-radius-element / --vds-radius-surface / --vds-radius-badge remain
+   * as thin aliases over sm / lg / full so existing components keep working.
+   */
+  :root {
+    --vds-radius-xs:   var(--vds-radius-2);  /* 4px  */
+    --vds-radius-sm:   var(--vds-radius-3);  /* 6px  */
+    --vds-radius-md:   var(--vds-radius-4);  /* 8px  */
+    --vds-radius-lg:   var(--vds-radius-5);  /* 12px */
+    --vds-radius-xl:   var(--vds-radius-6);  /* 16px */
+    --vds-radius-2xl:  var(--vds-radius-7);  /* 24px */
 
-    /*
-     * ── Radius Mode System ──
-     * Set `data-radius` on <html> or any container to change the personality.
-     *
-     * Modes:
-     *   sharp  — minimal rounding → enterprise, technical, dense
-     *   soft   — gentle rounding  → default, industry standard
-     *   round  — noticeable rounding → friendly, modern, consumer
-     *   pill   — fully rounded    → playful, bold, marketing
-     *
-     * Only 3 semantic levels needed:
-     *   element   — small interactive elements (button, input, select, toggle, checkbox)
-     *   surface   — containers (card, dialog, popover, dropdown, toast)
-     *   badge     — always full-round regardless of mode (except sharp)
-     *
-     * Rule: surface radius = element radius + padding (outer = inner + gap)
-     * Exception: checkbox never goes full-round (even in pill mode)
-     */
-    --vds-radius-element: var(--vds-radius-3);
-    --vds-radius-surface: var(--vds-radius-5);
-    --vds-radius-badge: var(--vds-radius-full);
+    /* Back-compat aliases */
+    --vds-radius-element: var(--vds-radius-sm);
+    --vds-radius-surface: var(--vds-radius-lg);
+    --vds-radius-badge:   var(--vds-radius-full);
   }
 
   /* ── Mode: Sharp ── */
   [data-radius="sharp"] {
-    --vds-radius-element: var(--vds-radius-1);
-    --vds-radius-surface: var(--vds-radius-2);
+    --vds-radius-xs:  var(--vds-radius-0);
+    --vds-radius-sm:  var(--vds-radius-1);
+    --vds-radius-md:  var(--vds-radius-1);
+    --vds-radius-lg:  var(--vds-radius-2);
+    --vds-radius-xl:  var(--vds-radius-2);
+    --vds-radius-2xl: var(--vds-radius-3);
     --vds-radius-badge: var(--vds-radius-2);
   }
 
@@ -409,16 +442,67 @@
 
   /* ── Mode: Round ── */
   [data-radius="round"] {
-    --vds-radius-element: var(--vds-radius-4);
-    --vds-radius-surface: var(--vds-radius-6);
-    --vds-radius-badge: var(--vds-radius-full);
+    --vds-radius-xs:  var(--vds-radius-3);
+    --vds-radius-sm:  var(--vds-radius-4);
+    --vds-radius-md:  var(--vds-radius-5);
+    --vds-radius-lg:  var(--vds-radius-6);
+    --vds-radius-xl:  var(--vds-radius-6);
+    --vds-radius-2xl: var(--vds-radius-7);
   }
 
   /* ── Mode: Pill ── */
   [data-radius="pill"] {
-    --vds-radius-element: var(--vds-radius-full);
-    --vds-radius-surface: var(--vds-radius-7);
-    --vds-radius-badge: var(--vds-radius-full);
+    --vds-radius-xs:  var(--vds-radius-full);
+    --vds-radius-sm:  var(--vds-radius-full);
+    --vds-radius-md:  var(--vds-radius-full);
+    --vds-radius-lg:  var(--vds-radius-7);
+    --vds-radius-xl:  var(--vds-radius-7);
+    --vds-radius-2xl: var(--vds-radius-7);
+  }
+}
+@layer tokens {
+  :root {
+    /*
+     * ── Per-component radius tokens (caps) ──
+     * Only components that break under certain modes get a dedicated token.
+     * Pattern: min(<what the mode wants>, <this component's breaking point>).
+     * min() lets global modes shrink the value (sharp) but never exceed the cap,
+     * so pill mode can't turn a checkbox into a radio or bloat a dialog.
+     *
+     * Components NOT listed here keep using the generic t-shirt scale
+     * or the element/surface/badge aliases — intentional.
+     */
+
+    /* Checkbox — cap at md (8px) so it never reads as a radio */
+    --vds-radius-checkbox: min(var(--vds-radius-element), var(--vds-radius-md));
+
+    /* Textarea — cap at lg (12px) so big multi-line corners stay readable */
+    --vds-radius-textarea: min(var(--vds-radius-element), var(--vds-radius-lg));
+
+    /* Kbd (keyboard key cap) — cap at md (8px) so it keeps a key-like shape
+     * and works with the bottom-border-width trick used for depth */
+    --vds-radius-kbd: min(var(--vds-radius-element), var(--vds-radius-md));
+
+    /* Chip — follow Badge: pill in every mode except sharp (slight corner).
+     * Kept as a separate alias so future themes can diverge chip from badge. */
+    --vds-radius-chip: var(--vds-radius-badge);
+
+    /* Floating content panels with list-based content —
+     * cap at md (8px) so they never become fully pill.
+     * (Popover / DropdownMenu intentionally stay on --vds-radius-surface,
+     * which tops out at 2xl=24px in pill — acceptable for those panels.) */
+    --vds-radius-select-content: min(var(--vds-radius-element), var(--vds-radius-md));
+    --vds-radius-tooltip:        min(var(--vds-radius-element), var(--vds-radius-md));
+
+    /* Alert (banner-style container) — cap at xl (16px), matches card/toast */
+    --vds-radius-alert: min(var(--vds-radius-md), var(--vds-radius-xl));
+
+    /* Large containers — cap at xl (16px) so pill mode doesn't bloat them */
+    --vds-radius-card:         min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-dialog:       min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-alert-dialog: min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-drawer:       min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-toast:        min(var(--vds-radius-surface), var(--vds-radius-xl));
   }
 }
 @layer tokens {

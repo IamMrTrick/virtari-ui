@@ -1,13 +1,11 @@
-import { cn } from "@virtari/utils";
-import type { ComponentRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, ComponentRef, Ref } from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
+import { cn } from "@virtari/utils";
 
-/* ── Re-export ── */
 export const ToastProvider = ToastPrimitive.Provider;
 
-/* ── ToastViewport ── */
 export interface ToastViewportProps
-  extends React.ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport> {
+  extends ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport> {
   ref?: Ref<ComponentRef<typeof ToastPrimitive.Viewport>>;
 }
 
@@ -19,19 +17,18 @@ export function ToastViewport({
   return (
     <ToastPrimitive.Viewport
       ref={ref}
-      className={cn("vds-toast-viewport", className)}
+      className={cn("vds-toaster", className)}
       {...props}
     />
   );
 }
 
-/* ── Toast ── */
-export interface ToastProps
-  extends React.ComponentPropsWithoutRef<typeof ToastPrimitive.Root> {
+export interface ToastRootProps
+  extends ComponentPropsWithoutRef<typeof ToastPrimitive.Root> {
   ref?: Ref<ComponentRef<typeof ToastPrimitive.Root>>;
 }
 
-export function Toast({ className, ref, ...props }: ToastProps) {
+export function ToastRoot({ className, ref, ...props }: ToastRootProps) {
   return (
     <ToastPrimitive.Root
       ref={ref}
@@ -41,9 +38,8 @@ export function Toast({ className, ref, ...props }: ToastProps) {
   );
 }
 
-/* ── ToastTitle ── */
 export interface ToastTitleProps
-  extends React.ComponentPropsWithoutRef<typeof ToastPrimitive.Title> {
+  extends ComponentPropsWithoutRef<typeof ToastPrimitive.Title> {
   ref?: Ref<ComponentRef<typeof ToastPrimitive.Title>>;
 }
 
@@ -51,15 +47,14 @@ export function ToastTitle({ className, ref, ...props }: ToastTitleProps) {
   return (
     <ToastPrimitive.Title
       ref={ref}
-      className={cn("vds-toast-title", className)}
+      className={cn("vds-toast__title", className)}
       {...props}
     />
   );
 }
 
-/* ── ToastDescription ── */
 export interface ToastDescriptionProps
-  extends React.ComponentPropsWithoutRef<typeof ToastPrimitive.Description> {
+  extends ComponentPropsWithoutRef<typeof ToastPrimitive.Description> {
   ref?: Ref<ComponentRef<typeof ToastPrimitive.Description>>;
 }
 
@@ -71,15 +66,14 @@ export function ToastDescription({
   return (
     <ToastPrimitive.Description
       ref={ref}
-      className={cn("vds-toast-description", className)}
+      className={cn("vds-toast__description", className)}
       {...props}
     />
   );
 }
 
-/* ── ToastAction ── */
 export interface ToastActionProps
-  extends React.ComponentPropsWithoutRef<typeof ToastPrimitive.Action> {
+  extends ComponentPropsWithoutRef<typeof ToastPrimitive.Action> {
   ref?: Ref<ComponentRef<typeof ToastPrimitive.Action>>;
 }
 
@@ -93,9 +87,8 @@ export function ToastAction({ className, ref, ...props }: ToastActionProps) {
   );
 }
 
-/* ── ToastClose ── */
 export interface ToastCloseProps
-  extends React.ComponentPropsWithoutRef<typeof ToastPrimitive.Close> {
+  extends ComponentPropsWithoutRef<typeof ToastPrimitive.Close> {
   ref?: Ref<ComponentRef<typeof ToastPrimitive.Close>>;
 }
 
@@ -103,7 +96,7 @@ export function ToastClose({ className, ref, ...props }: ToastCloseProps) {
   return (
     <ToastPrimitive.Close
       ref={ref}
-      className={cn("vds-toast-close", className)}
+      className={cn("vds-toast__close", className)}
       {...props}
     />
   );

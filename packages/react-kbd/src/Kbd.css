@@ -13,7 +13,7 @@
     background-color: var(--vds-color-bg-subtle);
     border: 1px solid var(--vds-color-border);
     border-bottom-width: 2px;
-    border-radius: var(--vds-radius-element);
+    border-radius: var(--vds-radius-kbd);
     white-space: nowrap;
     user-select: none;
   }

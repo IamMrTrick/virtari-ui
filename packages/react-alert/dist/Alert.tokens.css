@@ -1,0 +1,182 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Base component tokens
+   *    Semantic → component mapping with fallbacks
+   *    so the package works standalone if dropped
+   *    into a project without @virtari/tokens.
+   * ───────────────────────────────────────────── */
+  .vds-alert {
+    /* Layout */
+    --alert-gap: var(--vds-space-3, 0.75rem);
+    --alert-padding-inline: var(--vds-space-4, 1rem);
+    --alert-padding-block: var(--vds-space-3, 0.75rem);
+    --alert-radius: var(--vds-radius-md, 0.5rem);
+    --alert-border-width: 1px;
+
+    /* Typography */
+    --alert-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --alert-font-size: var(--vds-text-sm, 0.875rem);
+    --alert-line-height: var(--vds-leading-normal, 1.5);
+    --alert-title-font-size: var(--vds-text-sm, 0.875rem);
+    --alert-title-font-weight: var(--vds-font-weight-semibold, 600);
+    --alert-title-line-height: var(--vds-leading-snug, 1.375);
+    --alert-description-font-size: var(--vds-text-sm, 0.875rem);
+    --alert-description-line-height: var(--vds-leading-normal, 1.5);
+    --alert-title-description-gap: var(--vds-space-1, 0.25rem);
+
+    /* Icon */
+    --alert-icon-size: 1.25rem;
+    --alert-icon-inset-block-start: 0.125rem;
+
+    /* Close button */
+    --alert-close-size: 1.5rem;
+    --alert-close-radius: var(--vds-radius-sm, 0.375rem);
+    --alert-close-icon-size: 1rem;
+    --alert-close-bg: transparent;
+    --alert-close-bg-hover: color-mix(in oklch, currentColor 12%, transparent);
+    --alert-close-bg-active: color-mix(in oklch, currentColor 18%, transparent);
+
+    /* Motion */
+    --alert-transition-duration: var(--vds-duration-fast, 100ms);
+    --alert-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* Focus */
+    --alert-focus-ring-color: var(--vds-color-ring, #6366f1);
+    --alert-focus-ring-width: 2px;
+    --alert-focus-ring-offset: 2px;
+
+    /* Default colors — neutral surface (overridden by variants) */
+    --alert-background: var(--vds-color-surface, #ffffff);
+    --alert-border-color: var(--vds-color-border, #d1d5db);
+    --alert-text-color: var(--vds-color-text, #111827);
+    --alert-title-color: var(--vds-color-text, #111827);
+    --alert-description-color: var(--vds-color-text-muted, #6b7280);
+    --alert-icon-color: var(--vds-color-text, #111827);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 2. Variants — soft appearance (default)
+   *    Muted intent background + muted-text color
+   * ───────────────────────────────────────────── */
+  .vds-alert[data-variant="info"] {
+    --alert-background: var(--vds-color-info-muted, #cffafe);
+    --alert-border-color: color-mix(in oklch, var(--vds-color-info-emphasis, #06b6d4) 30%, transparent);
+    --alert-text-color: var(--vds-color-info-muted-text, #155e75);
+    --alert-title-color: var(--vds-color-info-muted-text, #155e75);
+    --alert-description-color: var(--vds-color-info-muted-text, #155e75);
+    --alert-icon-color: var(--vds-color-info-emphasis, #06b6d4);
+  }
+
+  .vds-alert[data-variant="success"] {
+    --alert-background: var(--vds-color-success-muted, #dcfce7);
+    --alert-border-color: color-mix(in oklch, var(--vds-color-success-emphasis, #22c55e) 30%, transparent);
+    --alert-text-color: var(--vds-color-success-muted-text, #166534);
+    --alert-title-color: var(--vds-color-success-muted-text, #166534);
+    --alert-description-color: var(--vds-color-success-muted-text, #166534);
+    --alert-icon-color: var(--vds-color-success-emphasis, #22c55e);
+  }
+
+  .vds-alert[data-variant="warning"] {
+    --alert-background: var(--vds-color-warning-muted, #fef3c7);
+    --alert-border-color: color-mix(in oklch, var(--vds-color-warning-emphasis, #f59e0b) 30%, transparent);
+    --alert-text-color: var(--vds-color-warning-muted-text, #78350f);
+    --alert-title-color: var(--vds-color-warning-muted-text, #78350f);
+    --alert-description-color: var(--vds-color-warning-muted-text, #78350f);
+    --alert-icon-color: var(--vds-color-warning-emphasis, #f59e0b);
+  }
+
+  .vds-alert[data-variant="danger"] {
+    --alert-background: var(--vds-color-danger-muted, #fee2e2);
+    --alert-border-color: color-mix(in oklch, var(--vds-color-danger-emphasis, #ef4444) 30%, transparent);
+    --alert-text-color: var(--vds-color-danger-muted-text, #991b1b);
+    --alert-title-color: var(--vds-color-danger-muted-text, #991b1b);
+    --alert-description-color: var(--vds-color-danger-muted-text, #991b1b);
+    --alert-icon-color: var(--vds-color-danger-emphasis, #ef4444);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 3. Solid appearance — emphasis bg + on-color text
+   * ───────────────────────────────────────────── */
+  .vds-alert[data-appearance="solid"][data-variant="info"] {
+    --alert-background: var(--vds-color-info-emphasis, #06b6d4);
+    --alert-border-color: transparent;
+    --alert-text-color: var(--vds-color-on-info, #ffffff);
+    --alert-title-color: var(--vds-color-on-info, #ffffff);
+    --alert-description-color: color-mix(in oklch, var(--vds-color-on-info, #ffffff) 88%, transparent);
+    --alert-icon-color: var(--vds-color-on-info, #ffffff);
+  }
+
+  .vds-alert[data-appearance="solid"][data-variant="success"] {
+    --alert-background: var(--vds-color-success-emphasis, #22c55e);
+    --alert-border-color: transparent;
+    --alert-text-color: var(--vds-color-on-success, #ffffff);
+    --alert-title-color: var(--vds-color-on-success, #ffffff);
+    --alert-description-color: color-mix(in oklch, var(--vds-color-on-success, #ffffff) 88%, transparent);
+    --alert-icon-color: var(--vds-color-on-success, #ffffff);
+  }
+
+  .vds-alert[data-appearance="solid"][data-variant="warning"] {
+    --alert-background: var(--vds-color-warning-emphasis, #f59e0b);
+    --alert-border-color: transparent;
+    --alert-text-color: var(--vds-color-on-warning, #111827);
+    --alert-title-color: var(--vds-color-on-warning, #111827);
+    --alert-description-color: color-mix(in oklch, var(--vds-color-on-warning, #111827) 88%, transparent);
+    --alert-icon-color: var(--vds-color-on-warning, #111827);
+  }
+
+  .vds-alert[data-appearance="solid"][data-variant="danger"] {
+    --alert-background: var(--vds-color-danger-emphasis, #ef4444);
+    --alert-border-color: transparent;
+    --alert-text-color: var(--vds-color-on-danger, #ffffff);
+    --alert-title-color: var(--vds-color-on-danger, #ffffff);
+    --alert-description-color: color-mix(in oklch, var(--vds-color-on-danger, #ffffff) 88%, transparent);
+    --alert-icon-color: var(--vds-color-on-danger, #ffffff);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 4. Outline appearance — transparent bg + intent border/text
+   * ───────────────────────────────────────────── */
+  .vds-alert[data-appearance="outline"] {
+    --alert-background: transparent;
+  }
+  .vds-alert[data-appearance="outline"][data-variant="info"] {
+    --alert-border-color: var(--vds-color-info-emphasis, #06b6d4);
+  }
+  .vds-alert[data-appearance="outline"][data-variant="success"] {
+    --alert-border-color: var(--vds-color-success-emphasis, #22c55e);
+  }
+  .vds-alert[data-appearance="outline"][data-variant="warning"] {
+    --alert-border-color: var(--vds-color-warning-emphasis, #f59e0b);
+  }
+  .vds-alert[data-appearance="outline"][data-variant="danger"] {
+    --alert-border-color: var(--vds-color-danger-emphasis, #ef4444);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 5. Sizes — redefine layout tokens only
+   * ───────────────────────────────────────────── */
+  .vds-alert[data-size="sm"] {
+    --alert-gap: var(--vds-space-2, 0.5rem);
+    --alert-padding-inline: var(--vds-space-3, 0.75rem);
+    --alert-padding-block: var(--vds-space-2, 0.5rem);
+    --alert-font-size: var(--vds-text-xs, 0.75rem);
+    --alert-title-font-size: var(--vds-text-xs, 0.75rem);
+    --alert-description-font-size: var(--vds-text-xs, 0.75rem);
+    --alert-icon-size: 1rem;
+    --alert-close-size: 1.25rem;
+    --alert-close-icon-size: 0.875rem;
+  }
+
+  .vds-alert[data-size="lg"] {
+    --alert-gap: var(--vds-space-4, 1rem);
+    --alert-padding-inline: var(--vds-space-5, 1.25rem);
+    --alert-padding-block: var(--vds-space-4, 1rem);
+    --alert-font-size: var(--vds-text-base, 1rem);
+    --alert-title-font-size: var(--vds-text-base, 1rem);
+    --alert-description-font-size: var(--vds-text-sm, 0.875rem);
+    --alert-title-description-gap: var(--vds-space-2, 0.5rem);
+    --alert-icon-size: 1.5rem;
+    --alert-close-size: 1.75rem;
+    --alert-close-icon-size: 1.125rem;
+  }
+}

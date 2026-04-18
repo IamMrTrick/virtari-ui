@@ -6,7 +6,7 @@
      * sm (14px) pairs with small text, md (18px) with body, lg (22px) with headings.
      */
     --_checkbox-size: 1.125rem;
-    --_checkbox-radius: var(--vds-radius-element);
+    --_checkbox-radius: var(--vds-radius-checkbox);
     --_checkbox-icon-size: 0.75rem;
 
     display: inline-flex;
@@ -44,7 +44,7 @@
 
     &[data-size="sm"] {
       --_checkbox-size: 0.875rem;
-      --_checkbox-radius: var(--vds-radius-element);
+      --_checkbox-radius: var(--vds-radius-checkbox);
       --_checkbox-icon-size: 0.625rem;
     }
 
@@ -52,7 +52,7 @@
 
     &[data-size="lg"] {
       --_checkbox-size: 1.375rem;
-      --_checkbox-radius: var(--vds-radius-element);
+      --_checkbox-radius: var(--vds-radius-checkbox);
       --_checkbox-icon-size: 0.875rem;
     }
   }

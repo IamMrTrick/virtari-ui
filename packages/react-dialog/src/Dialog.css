@@ -25,7 +25,7 @@
     max-block-size: 85dvh;
     padding: var(--vds-space-6);
     background-color: var(--vds-color-surface);
-    border-radius: var(--vds-radius-surface);
+    border-radius: var(--vds-radius-dialog);
     box-shadow: var(--vds-shadow-xl);
     overflow-y: auto;
     animation: vds-scale-in var(--vds-duration-normal) var(--vds-ease-spring);

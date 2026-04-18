@@ -1,0 +1,44 @@
+{
+  "name": "@virtari/react-alert",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles": "./dist/Alert.css",
+    "./tokens": "./dist/Alert.tokens.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && postcss src/Alert.tokens.css -o dist/Alert.tokens.css && postcss src/Alert.css -o dist/Alert.css",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
+    "@virtari/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "react": "^19.2.5",
+    "@types/react": "^19.2.14",
+    "typescript": "^5.5.0",
+    "tsup": "^8.0.0"
+  }
+}

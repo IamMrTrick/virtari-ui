@@ -1,17 +1,42 @@
+export { Toaster } from "./Toaster";
+export { toast } from "./toast";
+export { useToast } from "./useToast";
+export { toastStore, createToastId } from "./store";
+
 export {
   ToastProvider,
-  Toast,
+  ToastViewport,
+  ToastRoot,
   ToastTitle,
   ToastDescription,
   ToastAction,
   ToastClose,
-  ToastViewport,
-} from "./Toast";
+} from "./primitives";
+
 export type {
-  ToastProps,
   ToastViewportProps,
+  ToastRootProps,
   ToastTitleProps,
   ToastDescriptionProps,
   ToastActionProps,
   ToastCloseProps,
-} from "./Toast";
+} from "./primitives";
+
+export type {
+  ToastType,
+  ToastPosition,
+  ToastActionVariant,
+  ToastActionConfig,
+  ToastActions,
+  ToastOptions,
+  ToastData,
+  ToasterProps,
+} from "./types";
+
+export type {
+  ToastPromiseMessages,
+  ToastConfirmOptions,
+  ToastUndoOptions,
+} from "./toast";
+
+export type { UseToastReturn } from "./useToast";
