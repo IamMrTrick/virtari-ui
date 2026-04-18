@@ -191,11 +191,6 @@
     --dialog-overlay-blur: 0px;
   }
 
-  .vds-dialog-overlay[data-backdrop="transparent"] {
-    --dialog-overlay-bg: transparent;
-    --dialog-overlay-blur: 0px;
-  }
-
   .vds-dialog-overlay[data-backdrop="none"] {
     --dialog-overlay-bg: transparent;
     --dialog-overlay-blur: 0px;

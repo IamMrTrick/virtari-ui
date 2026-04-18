@@ -1092,12 +1092,23 @@
     font-size: var(--vds-text-xs, 0.75rem);
     font-weight: var(--vds-font-weight-medium, 500);
     color: var(--vds-color-text, #111827);
+    white-space: nowrap;
+  }
+  .vds-data-table-status-cell[data-variant="pill"] {
+    padding: 3px 10px 3px 8px;
+    border-radius: 999px;
+    background-color: color-mix(
+      in oklch,
+      currentColor,
+      transparent 88%
+    );
   }
   .vds-data-table-status-cell-dot {
     inline-size: 6px;
     block-size: 6px;
     border-radius: 999px;
     background-color: currentColor;
+    flex-shrink: 0;
   }
   .vds-data-table-status-cell[data-tone="success"] {
     color: var(--vds-color-success-emphasis, #16a34a);

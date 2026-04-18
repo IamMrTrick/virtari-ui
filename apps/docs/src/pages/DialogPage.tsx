@@ -310,7 +310,7 @@ function BackdropsSection() {
   return (
     <Section
       title="Backdrops"
-      description="Overlay variants range from solid tint to acrylic-style blur. `transparent` and `none` are for special cases (spotlight tours, non-blocking overlays)."
+      description="Overlay variants range from solid tint to acrylic-style blur. `none` is for special cases where the dialog should float without darkening the page (spotlight tours, non-blocking overlays)."
     >
       <Row>
         {BACKDROPS.map((backdrop) => (
@@ -891,7 +891,7 @@ function ApiReferenceSection() {
   intent?: "default" | "destructive" | "warning"
          | "success" | "info";                            // default "default"
   backdrop?: "default" | "blur" | "blur-strong"
-           | "light" | "transparent" | "none";            // default "default"
+           | "light" | "none";                              // default "default"
   responsive?: boolean;                                   // full-screen below 40rem
   showCloseButton?: boolean;                              // render built-in X
   closeButtonLabel?: string;                              // default "Close"

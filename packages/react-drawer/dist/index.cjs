@@ -1210,14 +1210,7 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
       return;
     }
     const { ms, ease } = readDrawerTiming(contentEl);
-    setTransition(
-      contentEl,
-      [
-        `transform ${ms}ms ${ease}`,
-        `block-size ${ms}ms ${ease}`,
-        `inline-size ${ms}ms ${ease}`
-      ].join(", ")
-    );
+    setTransition(contentEl, `transform ${ms}ms ${ease}`);
     setTransition(overlayEl, `opacity ${ms}ms ${ease}`);
     if (scaleBackground) {
       setTransition(
@@ -1296,6 +1289,7 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     const target = activeState.kind === "minimized" ? layout.minimized?.size ?? layout.totalSize : layout.snaps[activeState.index]?.size ?? layout.totalSize;
     const current = writeFrameRef.current ? pendingSizeRef.current : currentSizeRef.current;
     const resizeAnimation = pendingResizeSizeRef.current;
+    const shrinkResize = resizeAnimation && resizeAnimation.from > resizeAnimation.to ? resizeAnimation : null;
     debugDrawer("settle:request", {
       animated,
       activeState,
@@ -1322,8 +1316,16 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     }
     flushPendingSize();
     setAnimated(false);
-    writeVisualSize(current, { disableStretch: Boolean(resizeAnimation) });
     const contentEl = contentRef.current;
+    if (shrinkResize && contentEl) {
+      contentEl.style.setProperty(shrinkResize.property, `${shrinkResize.from}px`);
+      contentEl.style.setProperty(
+        "--vds-drawer-transform",
+        getVisualTransform(direction, current, shrinkResize.from, { disableStretch: true })
+      );
+    } else {
+      writeVisualSize(current, { disableStretch: Boolean(resizeAnimation) });
+    }
     if (contentEl) void contentEl.offsetHeight;
     setAnimated(true);
     if (contentEl) void contentEl.offsetHeight;
@@ -1337,16 +1339,26 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
           currentSize: currentSizeRef.current
         });
         const pendingResize = pendingResizeSizeRef.current;
-        if (pendingResize && contentEl) {
+        if (pendingResize && contentEl && pendingResize.from > pendingResize.to) {
           resizeSizeAnimatingRef.current = true;
-          contentEl.style.setProperty(pendingResize.property, `${pendingResize.to}px`);
+          contentEl.style.setProperty(
+            "--vds-drawer-transform",
+            getVisualTransform(direction, target, pendingResize.from, { disableStretch: true })
+          );
           window.clearTimeout(resizeCleanupTimerRef.current);
           const { ms } = readDrawerTiming(contentEl);
           resizeCleanupTimerRef.current = window.setTimeout(() => {
+            setTransition(contentRef.current, "none");
             contentRef.current?.style.removeProperty(pendingResize.property);
+            currentSizeRef.current = target;
+            pendingSizeRef.current = target;
+            writeVisualSize(target, { disableStretch: true });
+            if (contentRef.current) void contentRef.current.offsetHeight;
+            setAnimated(true);
             resizeSizeAnimatingRef.current = false;
           }, ms + 80);
           pendingResizeSizeRef.current = null;
+          return;
         }
         applySize(target, true);
       });
@@ -1355,6 +1367,7 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     activeState,
     applySize,
     contentRef,
+    direction,
     flushPendingSize,
     layout.minimized,
     layout.snaps,
@@ -1402,17 +1415,24 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     if (open && present && !dragging && sizeChanged && visualSize > 0) {
       window.clearTimeout(resizeCleanupTimerRef.current);
       resizeSizeAnimatingRef.current = false;
-      pendingResizeSizeRef.current = {
-        property: resizeSizeProperty,
-        from: previousLayout.totalSize,
-        to: totalSize
-      };
-      setTransition(contentEl, "none");
-      contentEl.style.setProperty(resizeSizeProperty, `${previousLayout.totalSize}px`);
-      contentEl.style.setProperty(
-        "--vds-drawer-transform",
-        getVisualTransform(direction, visualSize, totalSize, { disableStretch: true })
-      );
+      if (totalSize < previousLayout.totalSize) {
+        pendingResizeSizeRef.current = {
+          property: resizeSizeProperty,
+          from: previousLayout.totalSize,
+          to: totalSize
+        };
+        setTransition(contentEl, "none");
+        contentEl.style.setProperty(resizeSizeProperty, `${previousLayout.totalSize}px`);
+        contentEl.style.setProperty(
+          "--vds-drawer-transform",
+          getVisualTransform(direction, visualSize, previousLayout.totalSize, {
+            disableStretch: true
+          })
+        );
+      } else {
+        pendingResizeSizeRef.current = null;
+        contentEl.style.removeProperty(resizeSizeProperty);
+      }
     }
     setLayout((previous) => {
       const snapsSame = previous.snaps.length === snaps.length && previous.snaps.every((snap, index) => {
@@ -1644,6 +1664,10 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
       window.visualViewport?.removeEventListener("resize", scheduleViewportMeasure);
     };
   }, [bodyRef, contentRef, keyboardOpen, measure, present]);
+  react.useLayoutEffect(() => {
+    if (!present || resizeSizeAnimatingRef.current) return;
+    measure();
+  });
   react.useEffect(() => {
     keyboardOpenRef.current = keyboardOpen;
   }, [keyboardOpen]);

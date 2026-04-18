@@ -12,11 +12,11 @@
       var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --data-table-font-size:            var(--vds-text-sm, 0.875rem);
     --data-table-line-height:          var(--vds-leading-normal, 1.5);
-    --data-table-cell-padding-inline:  var(--vds-space-3, 0.75rem);
-    --data-table-cell-padding-block:   var(--vds-space-2, 0.5rem);
-    --data-table-row-height:           var(--vds-size-md, 2.5rem);
-    --data-table-header-row-height:    var(--vds-size-md, 2.25rem);
-    --data-table-footer-row-height:    var(--vds-size-md, 2.25rem);
+    --data-table-cell-padding-inline:  var(--vds-space-4, 1rem);
+    --data-table-cell-padding-block:   var(--vds-space-2-5, 0.625rem);
+    --data-table-row-height:           2.75rem;
+    --data-table-header-row-height:    2.75rem;
+    --data-table-footer-row-height:    2.75rem;
     --data-table-col-min-width:        4rem;
     --data-table-col-default-width:    10rem;
 
@@ -25,7 +25,12 @@
     --data-table-header-bg:            var(--vds-color-surface-raised, #f9fafb);
     --data-table-row-bg:               var(--vds-color-surface, #ffffff);
     --data-table-row-bg-alt:           var(--vds-color-surface-raised, #f9fafb);
-    --data-table-row-bg-hover:         var(--vds-color-surface-hover, #f3f4f6);
+    --data-table-row-bg-hover:
+      color-mix(
+        in oklch,
+        var(--vds-color-surface-hover, #f3f4f6),
+        transparent 30%
+      );
     --data-table-row-bg-selected:      var(--vds-color-primary-muted, #eef2ff);
     --data-table-row-bg-selected-hover:var(--vds-color-primary-muted, #eef2ff);
     --data-table-footer-bg:            var(--vds-color-surface-raised, #f9fafb);
@@ -37,9 +42,19 @@
 
     /* ── Borders ─────────────────────────────────────────────── */
     --data-table-border-width:         1px;
-    --data-table-border-color:         var(--vds-color-border-muted, #e5e7eb);
+    --data-table-border-color:
+      color-mix(
+        in oklch,
+        var(--vds-color-border-muted, #e5e7eb),
+        transparent 35%
+      );
     --data-table-border-color-strong:  var(--vds-color-border, #d1d5db);
-    --data-table-header-divider-color: var(--vds-color-border, #d1d5db);
+    --data-table-header-divider-color:
+      color-mix(
+        in oklch,
+        var(--vds-color-border-muted, #e5e7eb),
+        transparent 20%
+      );
 
     /* ── Typography ──────────────────────────────────────────── */
     --data-table-header-font-size:      var(--vds-text-xs, 0.75rem);
@@ -220,12 +235,12 @@
     --data-table-header-letter-spacing: 0;
   }
   .vds-data-table[data-size="md"] {
-    --data-table-row-height:        2.5rem;
-    --data-table-header-row-height: 2.25rem;
+    --data-table-row-height:        2.75rem;
+    --data-table-header-row-height: 2.75rem;
   }
   .vds-data-table[data-size="lg"] {
-    --data-table-row-height:          3rem;
-    --data-table-header-row-height:   2.75rem;
+    --data-table-row-height:          3.25rem;
+    --data-table-header-row-height:   3rem;
     --data-table-cell-padding-inline: var(--vds-space-4, 1rem);
     --data-table-cell-padding-block:  var(--vds-space-3, 0.75rem);
     --data-table-font-size:           var(--vds-text-base, 1rem);

@@ -28,19 +28,23 @@ export interface StatusBadgeCellProps {
   tone: StatusTone;
   label: ReactNode;
   withDot?: boolean;
+  /** "pill" = tinted background + dot (default), "text" = colored text only. */
+  variant?: "pill" | "text";
   className?: string;
 }
 
-/** Pre-styled status badge with a colored dot — maps tone → background. */
+/** Pre-styled status badge with a colored dot + pill background. */
 export function StatusBadgeCell({
   tone,
   label,
   withDot = true,
+  variant = "pill",
   className,
 }: StatusBadgeCellProps) {
   return (
     <span
       data-tone={tone}
+      data-variant={variant}
       className={cn("vds-data-table-status-cell", className)}
     >
       {withDot && (

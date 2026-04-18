@@ -6,7 +6,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 type DialogSize = "sm" | "md" | "lg" | "xl" | "full";
 type DialogAnimation = "scale" | "fade" | "slide-up" | "slide-down" | "zoom" | "bounce" | "none";
 type DialogIntent = "default" | "destructive" | "warning" | "success" | "info";
-type DialogBackdrop = "default" | "blur" | "blur-strong" | "light" | "transparent" | "none";
+type DialogBackdrop = "default" | "blur" | "blur-strong" | "light" | "none";
 type DialogHeaderVariant = "plain" | "bordered";
 declare const Dialog: react.FC<DialogPrimitive.DialogProps>;
 declare const DialogTrigger: react.ForwardRefExoticComponent<DialogPrimitive.DialogTriggerProps & react.RefAttributes<HTMLButtonElement>>;

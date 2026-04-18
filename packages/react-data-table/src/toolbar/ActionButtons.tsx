@@ -11,13 +11,24 @@ import { cn } from "@virtari/utils";
  * without taking a hard dependency on @virtari/react-button.
  */
 
+export type ToolbarActionButtonVariant = "ghost" | "outline" | "solid";
+export type ToolbarActionButtonSize = "sm" | "md";
+
 export interface ToolbarActionButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: ReactNode;
+  /** Trailing glyph (e.g. chevron-down for split-style buttons). */
+  trailingIcon?: ReactNode;
   label?: ReactNode;
   count?: number | string;
-  /** Visually emphasize (primary tint) — e.g. active filter. */
-  intent?: "neutral" | "primary";
+  /** Color intent. "primary" is the accent hue. "danger" is destructive. */
+  intent?: "neutral" | "primary" | "danger";
+  /** Visual variant. Default "ghost". */
+  variant?: ToolbarActionButtonVariant;
+  /** Size preset. Default "md". */
+  size?: ToolbarActionButtonSize;
+  /** Icon-only (skip the label slot even if provided). */
+  iconOnly?: boolean;
 }
 
 function Glyph({ children }: { children: ReactNode }) {
@@ -28,19 +39,35 @@ export const ToolbarActionButton = forwardRef<
   HTMLButtonElement,
   ToolbarActionButtonProps
 >(function ToolbarActionButton(
-  { icon, label, count, intent = "neutral", className, children, ...props },
+  {
+    icon,
+    trailingIcon,
+    label,
+    count,
+    intent = "neutral",
+    variant = "ghost",
+    size = "md",
+    iconOnly = false,
+    className,
+    children,
+    ...props
+  },
   ref,
 ) {
+  const showLabel = !iconOnly && (label !== undefined || children !== undefined);
   return (
     <button
       ref={ref}
       type="button"
       data-intent={intent}
+      data-variant={variant}
+      data-size={size}
+      data-icon-only={iconOnly ? "" : undefined}
       className={cn("vds-data-table-toolbar-button", className)}
       {...props}
     >
       {icon && <Glyph>{icon}</Glyph>}
-      {(label || children) && (
+      {showLabel && (
         <span className="vds-data-table-toolbar-button-label">
           {children ?? label}
         </span>
@@ -48,6 +75,7 @@ export const ToolbarActionButton = forwardRef<
       {count !== undefined && count !== 0 && (
         <span className="vds-data-table-toolbar-button-count">{count}</span>
       )}
+      {trailingIcon && <Glyph>{trailingIcon}</Glyph>}
     </button>
   );
 });
@@ -111,6 +139,24 @@ const XIcon = (
     <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
   </svg>
 );
+const MoreIcon = (
+  <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="currentColor">
+    <circle cx="3" cy="7" r="1.25" />
+    <circle cx="7" cy="7" r="1.25" />
+    <circle cx="11" cy="7" r="1.25" />
+  </svg>
+);
+const ChevronDownIcon = (
+  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" fill="none">
+    <path
+      d="m3 4.5 3 3 3-3"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 /* ─────────────── Named convenience buttons ─────────────── */
 
@@ -145,27 +191,51 @@ export const DataTableRefreshButton = forwardRef<HTMLButtonElement, BaseProps>(
   },
 );
 
+/** Export — default `variant="outline"` (matches the reference dashboard). */
 export const DataTableExportButton = forwardRef<HTMLButtonElement, BaseProps>(
-  function DataTableExportButton({ label = "Export", ...props }, ref) {
-    return (
-      <ToolbarActionButton ref={ref} icon={DownloadIcon} label={label} {...props} />
-    );
-  },
-);
-
-export const DataTableAddButton = forwardRef<HTMLButtonElement, BaseProps>(
-  function DataTableAddButton({ label = "Add", intent = "primary", ...props }, ref) {
+  function DataTableExportButton(
+    { label = "Export", variant = "outline", ...props },
+    ref,
+  ) {
     return (
       <ToolbarActionButton
         ref={ref}
-        icon={PlusIcon}
+        icon={DownloadIcon}
         label={label}
-        intent={intent}
+        variant={variant}
         {...props}
       />
     );
   },
 );
+
+/** Add — default `variant="solid"` with `intent="primary"` + trailing chevron. */
+export const DataTableAddButton = forwardRef<
+  HTMLButtonElement,
+  BaseProps & { withChevron?: boolean }
+>(function DataTableAddButton(
+  {
+    label = "Add",
+    intent = "primary",
+    variant = "solid",
+    withChevron = false,
+    trailingIcon,
+    ...props
+  },
+  ref,
+) {
+  return (
+    <ToolbarActionButton
+      ref={ref}
+      icon={PlusIcon}
+      label={label}
+      intent={intent}
+      variant={variant}
+      trailingIcon={trailingIcon ?? (withChevron ? ChevronDownIcon : undefined)}
+      {...props}
+    />
+  );
+});
 
 export const DataTableCustomizeButton = forwardRef<HTMLButtonElement, BaseProps>(
   function DataTableCustomizeButton({ label = "Customize", ...props }, ref) {
@@ -194,13 +264,13 @@ export const DataTableHideColumnsButton = forwardRef<
 });
 
 export const DataTableDeleteButton = forwardRef<HTMLButtonElement, BaseProps>(
-  function DataTableDeleteButton({ label = "Delete", ...props }, ref) {
+  function DataTableDeleteButton({ label = "Delete", intent = "danger", ...props }, ref) {
     return (
       <ToolbarActionButton
         ref={ref}
         icon={TrashIcon}
         label={label}
-        data-intent="danger"
+        intent={intent}
         {...props}
       />
     );
@@ -213,7 +283,23 @@ export const DataTableCloseButton = forwardRef<HTMLButtonElement, BaseProps>(
       <ToolbarActionButton
         ref={ref}
         icon={XIcon}
-        aria-label={props["aria-label"] ?? "Close"}
+        aria-label={(props as { "aria-label"?: string })["aria-label"] ?? "Close"}
+        label={label}
+        iconOnly={label === undefined}
+        {...props}
+      />
+    );
+  },
+);
+
+/** Icon-only search button (ghost). For a full search input, compose
+ *  `<DataTable.GlobalFilter>` alongside. */
+export const DataTableSearchButton = forwardRef<HTMLButtonElement, BaseProps>(
+  function DataTableSearchButton({ label = "Search", ...props }, ref) {
+    return (
+      <ToolbarActionButton
+        ref={ref}
+        icon={SearchIcon}
         label={label}
         {...props}
       />
@@ -221,4 +307,32 @@ export const DataTableCloseButton = forwardRef<HTMLButtonElement, BaseProps>(
   },
 );
 
+/** Icon-only overflow-menu button (⋯). Consumer wraps in a DropdownMenu. */
+export const DataTableMoreButton = forwardRef<HTMLButtonElement, BaseProps>(
+  function DataTableMoreButton({ ...props }, ref) {
+    return (
+      <ToolbarActionButton
+        ref={ref}
+        icon={MoreIcon}
+        iconOnly
+        aria-label={(props as { "aria-label"?: string })["aria-label"] ?? "More"}
+        {...props}
+      />
+    );
+  },
+);
+
+/** Inline row-action ghost button — for Edit / Delete inline pairs in
+ *  an Actions column. Smaller height, tighter padding than toolbar buttons. */
+export const DataTableRowAction = forwardRef<
+  HTMLButtonElement,
+  ToolbarActionButtonProps
+>(function DataTableRowAction({ size = "sm", variant = "ghost", ...props }, ref) {
+  return (
+    <ToolbarActionButton ref={ref} size={size} variant={variant} {...props} />
+  );
+});
+
 export const DataTableSearchIcon = SearchIcon;
+export const DataTableChevronDownIcon = ChevronDownIcon;
+export const DataTableMoreIcon = MoreIcon;
