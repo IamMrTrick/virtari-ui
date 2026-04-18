@@ -1,0 +1,80 @@
+@import "./Col.tokens.css";
+
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Base — mobile-first. `--col-span-base` is the
+   * always-present span (default: full row). It is
+   * overridden as the viewport widens through a
+   * cascading fallback chain that only activates
+   * when an inline CSS var has been set.
+   * ───────────────────────────────────────────── */
+  .vds-col {
+    grid-column: var(--col-span-base, auto);
+    grid-column-start: var(--col-start);
+    order: var(--col-order);
+  }
+
+  /* Flex-mode sibling props — ignored in grid mode. */
+  .vds-col[data-flex="true"] {
+    flex-grow: var(--col-grow, 0);
+    flex-shrink: var(--col-shrink, 1);
+    flex-basis: var(--col-basis, auto);
+  }
+
+  /* Responsive fallback chain. Each breakpoint cascades through
+     the previously active values so unspecified breakpoints
+     "inherit" from the last one that *was* specified.
+     Values mirror @virtari/tokens/breakpoints.css — keep in sync. */
+  @media (min-width: 640px) {
+    .vds-col {
+      grid-column: var(--col-span-sm, var(--col-span-base, auto));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .vds-col {
+      grid-column: var(
+        --col-span-md,
+        var(--col-span-sm, var(--col-span-base, auto))
+      );
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .vds-col {
+      grid-column: var(
+        --col-span-lg,
+        var(
+          --col-span-md,
+          var(--col-span-sm, var(--col-span-base, auto))
+        )
+      );
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .vds-col {
+      grid-column: var(
+        --col-span-xl,
+        var(
+          --col-span-lg,
+          var(
+            --col-span-md,
+            var(--col-span-sm, var(--col-span-base, auto))
+          )
+        )
+      );
+    }
+  }
+
+  /* ── Self alignment ── */
+  .vds-col[data-align="start"]   { align-self: start; }
+  .vds-col[data-align="center"]  { align-self: center; }
+  .vds-col[data-align="end"]     { align-self: end; }
+  .vds-col[data-align="stretch"] { align-self: stretch; }
+
+  .vds-col[data-justify="start"]   { justify-self: start; }
+  .vds-col[data-justify="center"]  { justify-self: center; }
+  .vds-col[data-justify="end"]     { justify-self: end; }
+  .vds-col[data-justify="stretch"] { justify-self: stretch; }
+}

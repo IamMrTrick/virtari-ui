@@ -1,0 +1,81 @@
+{
+  "name": "@virtari/react-data-table",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./dnd": {
+      "import": {
+        "types": "./dist/index.dnd.d.ts",
+        "default": "./dist/index.dnd.js"
+      },
+      "require": {
+        "types": "./dist/index.dnd.d.cts",
+        "default": "./dist/index.dnd.cjs"
+      }
+    },
+    "./styles": {
+      "style": "./dist/DataTable.css",
+      "default": "./dist/DataTable.css"
+    },
+    "./tokens": {
+      "style": "./dist/DataTable.tokens.css",
+      "default": "./dist/DataTable.tokens.css"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && postcss src/DataTable.tokens.css -o dist/DataTable.tokens.css && postcss src/DataTable.css -o dist/DataTable.css",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/react-table": "^8.21.0",
+    "@tanstack/react-virtual": "^3.10.0",
+    "@virtari/react-avatar": "workspace:*",
+    "@virtari/react-badge": "workspace:*",
+    "@virtari/react-checkbox": "workspace:*",
+    "@virtari/react-drawer": "workspace:*",
+    "@virtari/react-dropdown-menu": "workspace:*",
+    "@virtari/react-input": "workspace:*",
+    "@virtari/react-popover": "workspace:*",
+    "@virtari/react-switch": "workspace:*",
+    "@virtari/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "@dnd-kit/utilities": "^3.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@dnd-kit/core": { "optional": true },
+    "@dnd-kit/sortable": { "optional": true },
+    "@dnd-kit/utilities": { "optional": true }
+  },
+  "devDependencies": {
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "@dnd-kit/utilities": "^3.2.0",
+    "react": "^19.2.5",
+    "@types/react": "^19.2.14",
+    "typescript": "^5.5.0",
+    "tsup": "^8.0.0"
+  }
+}

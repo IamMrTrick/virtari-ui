@@ -1,18 +1,579 @@
 /*
- * Colors — three-tier architecture.
+ * Colors — four-tier architecture.
  *
- * primitives.css   Raw scales (theme-independent). Change to rebrand.
- * semantic.css     Purpose-based aliases using light-dark(). Change to retheme.
+ *   primitives.css   Raw scales (12-step neutral + intents, three alpha
+ *                    families, legacy 50-950). Mode-aware where it makes
+ *                    sense (12-step), mode-independent where it doesn't
+ *                    (legacy & always-black/always-white alpha).
  *
- * Components should consume semantic tokens only.
+ *   brands/          Brand override layer. Each [data-brand="..."] file
+ *                    overrides ONLY primitive hues. Defaults to virtari.
+ *
+ *   semantic/        Purpose-based aliases (bg, surface, text, icon,
+ *                    border, interactive states, status intents,
+ *                    data-viz). Components consume these.
+ *
+ * Component CSS files define their own --{name}-* tokens scoped to
+ * .vds-{name}, referencing semantic tokens with fallbacks.
+ *
+ * Order matters: primitives must load before brands (so brands can
+ * override them) before semantic (so semantic resolves the final values).
+ */
+/*
+ * Color primitives entry — re-exports the new split structure.
+ *
+ * The actual scales now live in primitives/ as separate files:
+ *   primitives/neutral.css   12-step neutral (mode-aware)
+ *   primitives/intents.css   12-step intent scales (mode-aware)
+ *   primitives/alphas.css    black-a, white-a, neutral-a, per-intent-a
+ *   primitives/_legacy.css   gray-50..950 + legacy single-set alphas
+ *
+ * Brand themes (brands/*.css) override these via [data-brand="..."].
+ */
+/*
+ * Primitives barrel — raw color scales.
+ *
+ * neutral.css   12-step neutral scale (mode-aware, hand-tuned)
+ * intents.css   12-step intent scales (primary/success/warning/danger/info/accent)
+ * alphas.css    Three alpha families + per-intent alpha
+ * _legacy.css   Backwards-compat tokens (gray-50..950, single-set alphas)
+ *
+ * Components should consume semantic tokens, not these directly.
+ * Brand themes (../brands/*.css) override these primitives.
  */
 @layer tokens {
+  /*
+   * ── Neutral 12-step scale ──
+   *
+   * Hand-tuned OKLCH scale for neutral surfaces, borders and text.
+   * Each step has a specific semantic role (Radix-style):
+   *
+   *   1   App canvas
+   *   2   Subtle bg (cards on app)
+   *   3   UI element rest
+   *   4   UI element hover
+   *   5   UI element active / pressed
+   *   6   Subtle border
+   *   7   UI border / focus border
+   *   8   Hovered border / strong divider
+   *   9   Solid neutral bg
+   *   10  Solid neutral hover
+   *   11  Low-contrast text
+   *   12  High-contrast text
+   *
+   * Curve is non-linear (perceptually tuned). Steps 1-4 are tight
+   * for surface elevation; 8→9 is the big jump from borders to solids;
+   * 11→12 widens for max text contrast.
+   *
+   * hue 270 = slight cool tint (avoids yellow cast on warm displays)
+   * Dark mode uses higher L for elevation (raised = lighter — modern).
+   */
+
+  :root {
+    /* ── Neutral solids (light, default) ── */
+    --vds-color-neutral-1:  oklch(0.985 0.002 270);
+    --vds-color-neutral-2:  oklch(0.975 0.003 270);
+    --vds-color-neutral-3:  oklch(0.945 0.004 270);
+    --vds-color-neutral-4:  oklch(0.920 0.005 270);
+    --vds-color-neutral-5:  oklch(0.890 0.006 270);
+    --vds-color-neutral-6:  oklch(0.855 0.007 270);
+    --vds-color-neutral-7:  oklch(0.810 0.008 270);
+    --vds-color-neutral-8:  oklch(0.745 0.010 270);
+    --vds-color-neutral-9:  oklch(0.580 0.014 270);
+    --vds-color-neutral-10: oklch(0.530 0.014 270);
+    --vds-color-neutral-11: oklch(0.430 0.013 270);
+    --vds-color-neutral-12: oklch(0.180 0.012 270);
+  }
+
+  /* ── Neutral solids (dark) ── */
+  [data-theme="dark"] {
+    --vds-color-neutral-1:  oklch(0.178 0.005 270);
+    --vds-color-neutral-2:  oklch(0.210 0.005 270);
+    --vds-color-neutral-3:  oklch(0.245 0.006 270);
+    --vds-color-neutral-4:  oklch(0.275 0.007 270);
+    --vds-color-neutral-5:  oklch(0.305 0.008 270);
+    --vds-color-neutral-6:  oklch(0.345 0.009 270);
+    --vds-color-neutral-7:  oklch(0.395 0.010 270);
+    --vds-color-neutral-8:  oklch(0.460 0.011 270);
+    --vds-color-neutral-9:  oklch(0.530 0.013 270);
+    --vds-color-neutral-10: oklch(0.580 0.013 270);
+    --vds-color-neutral-11: oklch(0.720 0.011 270);
+    --vds-color-neutral-12: oklch(0.930 0.008 270);
+  }
+
+  /*
+   * Optional OLED variant — overrides ONLY canvas to pure black.
+   * Keeps elevation ladder so hierarchy doesn't collapse.
+   * Activate with [data-theme="dark-oled"] on <html>.
+   */
+  [data-theme="dark-oled"] {
+    --vds-color-neutral-1:  oklch(0 0 0);
+    --vds-color-neutral-2:  oklch(0.150 0.005 270);
+    --vds-color-neutral-3:  oklch(0.200 0.006 270);
+    --vds-color-neutral-4:  oklch(0.245 0.007 270);
+    --vds-color-neutral-5:  oklch(0.285 0.008 270);
+    --vds-color-neutral-6:  oklch(0.330 0.009 270);
+    --vds-color-neutral-7:  oklch(0.385 0.010 270);
+    --vds-color-neutral-8:  oklch(0.455 0.011 270);
+    --vds-color-neutral-9:  oklch(0.525 0.013 270);
+    --vds-color-neutral-10: oklch(0.580 0.013 270);
+    --vds-color-neutral-11: oklch(0.720 0.011 270);
+    --vds-color-neutral-12: oklch(0.945 0.008 270);
+  }
+}
+@layer tokens {
+  /*
+   * ── Intent 12-step solid scales ──
+   *
+   * Same step semantics as neutral.css. Each intent has a dedicated hue
+   * tuned for its role (primary CTAs, status indicators, accents).
+   *
+   *   primary  indigo  h=265  brand action
+   *   success  green   h=155  positive feedback
+   *   warning  amber   h=85   caution (intentionally bright)
+   *   danger   red     h=25   destructive / error
+   *   info     cyan    h=210  informational
+   *   accent   orange  h=45   secondary CTA / highlight
+   *
+   * Brand themes override these in packages/tokens/src/brands/*.css.
+   */
+
+  :root {
+    /* ── Primary (indigo) — light ── */
+    --vds-color-primary-1:  oklch(0.985 0.005 265);
+    --vds-color-primary-2:  oklch(0.970 0.010 265);
+    --vds-color-primary-3:  oklch(0.940 0.020 265);
+    --vds-color-primary-4:  oklch(0.905 0.040 265);
+    --vds-color-primary-5:  oklch(0.870 0.070 265);
+    --vds-color-primary-6:  oklch(0.825 0.110 265);
+    --vds-color-primary-7:  oklch(0.770 0.150 265);
+    --vds-color-primary-8:  oklch(0.700 0.190 265);
+    --vds-color-primary-9:  oklch(0.550 0.200 265);
+    --vds-color-primary-10: oklch(0.500 0.205 265);
+    --vds-color-primary-11: oklch(0.450 0.190 265);
+    --vds-color-primary-12: oklch(0.260 0.140 265);
+
+    /* ── Success (green) — light ── */
+    --vds-color-success-1:  oklch(0.985 0.005 155);
+    --vds-color-success-2:  oklch(0.970 0.012 155);
+    --vds-color-success-3:  oklch(0.945 0.022 155);
+    --vds-color-success-4:  oklch(0.910 0.040 155);
+    --vds-color-success-5:  oklch(0.875 0.065 155);
+    --vds-color-success-6:  oklch(0.825 0.095 155);
+    --vds-color-success-7:  oklch(0.770 0.125 155);
+    --vds-color-success-8:  oklch(0.700 0.155 155);
+    --vds-color-success-9:  oklch(0.555 0.170 155);
+    --vds-color-success-10: oklch(0.500 0.165 155);
+    --vds-color-success-11: oklch(0.430 0.140 155);
+    --vds-color-success-12: oklch(0.235 0.090 155);
+
+    /* ── Warning (amber) — light ── */
+    --vds-color-warning-1:  oklch(0.985 0.005 85);
+    --vds-color-warning-2:  oklch(0.975 0.012 85);
+    --vds-color-warning-3:  oklch(0.950 0.025 85);
+    --vds-color-warning-4:  oklch(0.920 0.045 85);
+    --vds-color-warning-5:  oklch(0.885 0.075 85);
+    --vds-color-warning-6:  oklch(0.835 0.110 85);
+    --vds-color-warning-7:  oklch(0.785 0.140 85);
+    --vds-color-warning-8:  oklch(0.725 0.160 85);
+    --vds-color-warning-9:  oklch(0.700 0.165 85);
+    --vds-color-warning-10: oklch(0.650 0.155 85);
+    --vds-color-warning-11: oklch(0.500 0.130 85);
+    --vds-color-warning-12: oklch(0.300 0.080 85);
+
+    /* ── Danger (red) — light ── */
+    --vds-color-danger-1:  oklch(0.985 0.005 25);
+    --vds-color-danger-2:  oklch(0.970 0.012 25);
+    --vds-color-danger-3:  oklch(0.945 0.025 25);
+    --vds-color-danger-4:  oklch(0.910 0.045 25);
+    --vds-color-danger-5:  oklch(0.870 0.075 25);
+    --vds-color-danger-6:  oklch(0.820 0.110 25);
+    --vds-color-danger-7:  oklch(0.760 0.150 25);
+    --vds-color-danger-8:  oklch(0.690 0.180 25);
+    --vds-color-danger-9:  oklch(0.555 0.200 25);
+    --vds-color-danger-10: oklch(0.500 0.195 25);
+    --vds-color-danger-11: oklch(0.450 0.170 25);
+    --vds-color-danger-12: oklch(0.260 0.110 25);
+
+    /* ── Info (cyan) — light ── */
+    --vds-color-info-1:  oklch(0.985 0.005 210);
+    --vds-color-info-2:  oklch(0.970 0.012 210);
+    --vds-color-info-3:  oklch(0.945 0.025 210);
+    --vds-color-info-4:  oklch(0.910 0.040 210);
+    --vds-color-info-5:  oklch(0.870 0.060 210);
+    --vds-color-info-6:  oklch(0.820 0.085 210);
+    --vds-color-info-7:  oklch(0.755 0.105 210);
+    --vds-color-info-8:  oklch(0.685 0.125 210);
+    --vds-color-info-9:  oklch(0.555 0.140 210);
+    --vds-color-info-10: oklch(0.500 0.135 210);
+    --vds-color-info-11: oklch(0.430 0.115 210);
+    --vds-color-info-12: oklch(0.250 0.075 210);
+
+    /* ── Accent (orange) — light ── */
+    --vds-color-accent-1:  oklch(0.985 0.005 45);
+    --vds-color-accent-2:  oklch(0.970 0.015 45);
+    --vds-color-accent-3:  oklch(0.945 0.030 45);
+    --vds-color-accent-4:  oklch(0.915 0.055 45);
+    --vds-color-accent-5:  oklch(0.880 0.085 45);
+    --vds-color-accent-6:  oklch(0.830 0.115 45);
+    --vds-color-accent-7:  oklch(0.775 0.140 45);
+    --vds-color-accent-8:  oklch(0.720 0.160 45);
+    --vds-color-accent-9:  oklch(0.665 0.180 45);
+    --vds-color-accent-10: oklch(0.615 0.175 45);
+    --vds-color-accent-11: oklch(0.475 0.140 45);
+    --vds-color-accent-12: oklch(0.275 0.090 45);
+  }
+
+  /* ── Intent solids — dark mode ── */
+  [data-theme="dark"] {
+    /* Primary */
+    --vds-color-primary-1:  oklch(0.190 0.020 265);
+    --vds-color-primary-2:  oklch(0.215 0.035 265);
+    --vds-color-primary-3:  oklch(0.245 0.060 265);
+    --vds-color-primary-4:  oklch(0.275 0.085 265);
+    --vds-color-primary-5:  oklch(0.310 0.110 265);
+    --vds-color-primary-6:  oklch(0.355 0.135 265);
+    --vds-color-primary-7:  oklch(0.420 0.160 265);
+    --vds-color-primary-8:  oklch(0.500 0.180 265);
+    --vds-color-primary-9:  oklch(0.610 0.200 265);
+    --vds-color-primary-10: oklch(0.665 0.195 265);
+    --vds-color-primary-11: oklch(0.760 0.180 265);
+    --vds-color-primary-12: oklch(0.910 0.080 265);
+
+    /* Success */
+    --vds-color-success-1:  oklch(0.180 0.018 155);
+    --vds-color-success-2:  oklch(0.205 0.030 155);
+    --vds-color-success-3:  oklch(0.235 0.050 155);
+    --vds-color-success-4:  oklch(0.265 0.070 155);
+    --vds-color-success-5:  oklch(0.300 0.090 155);
+    --vds-color-success-6:  oklch(0.345 0.110 155);
+    --vds-color-success-7:  oklch(0.405 0.130 155);
+    --vds-color-success-8:  oklch(0.485 0.155 155);
+    --vds-color-success-9:  oklch(0.610 0.170 155);
+    --vds-color-success-10: oklch(0.660 0.165 155);
+    --vds-color-success-11: oklch(0.755 0.150 155);
+    --vds-color-success-12: oklch(0.905 0.080 155);
+
+    /* Warning */
+    --vds-color-warning-1:  oklch(0.180 0.020 85);
+    --vds-color-warning-2:  oklch(0.205 0.035 85);
+    --vds-color-warning-3:  oklch(0.240 0.055 85);
+    --vds-color-warning-4:  oklch(0.275 0.075 85);
+    --vds-color-warning-5:  oklch(0.315 0.095 85);
+    --vds-color-warning-6:  oklch(0.360 0.115 85);
+    --vds-color-warning-7:  oklch(0.420 0.135 85);
+    --vds-color-warning-8:  oklch(0.495 0.150 85);
+    --vds-color-warning-9:  oklch(0.700 0.155 85);
+    --vds-color-warning-10: oklch(0.745 0.150 85);
+    --vds-color-warning-11: oklch(0.815 0.140 85);
+    --vds-color-warning-12: oklch(0.925 0.085 85);
+
+    /* Danger */
+    --vds-color-danger-1:  oklch(0.190 0.020 25);
+    --vds-color-danger-2:  oklch(0.215 0.035 25);
+    --vds-color-danger-3:  oklch(0.245 0.055 25);
+    --vds-color-danger-4:  oklch(0.275 0.080 25);
+    --vds-color-danger-5:  oklch(0.310 0.105 25);
+    --vds-color-danger-6:  oklch(0.355 0.130 25);
+    --vds-color-danger-7:  oklch(0.420 0.155 25);
+    --vds-color-danger-8:  oklch(0.500 0.180 25);
+    --vds-color-danger-9:  oklch(0.620 0.200 25);
+    --vds-color-danger-10: oklch(0.670 0.195 25);
+    --vds-color-danger-11: oklch(0.770 0.175 25);
+    --vds-color-danger-12: oklch(0.910 0.085 25);
+
+    /* Info */
+    --vds-color-info-1:  oklch(0.185 0.015 210);
+    --vds-color-info-2:  oklch(0.210 0.025 210);
+    --vds-color-info-3:  oklch(0.240 0.045 210);
+    --vds-color-info-4:  oklch(0.270 0.060 210);
+    --vds-color-info-5:  oklch(0.305 0.080 210);
+    --vds-color-info-6:  oklch(0.350 0.095 210);
+    --vds-color-info-7:  oklch(0.410 0.115 210);
+    --vds-color-info-8:  oklch(0.490 0.135 210);
+    --vds-color-info-9:  oklch(0.620 0.140 210);
+    --vds-color-info-10: oklch(0.670 0.135 210);
+    --vds-color-info-11: oklch(0.760 0.120 210);
+    --vds-color-info-12: oklch(0.905 0.075 210);
+
+    /* Accent */
+    --vds-color-accent-1:  oklch(0.185 0.020 45);
+    --vds-color-accent-2:  oklch(0.215 0.035 45);
+    --vds-color-accent-3:  oklch(0.245 0.060 45);
+    --vds-color-accent-4:  oklch(0.275 0.085 45);
+    --vds-color-accent-5:  oklch(0.315 0.110 45);
+    --vds-color-accent-6:  oklch(0.360 0.130 45);
+    --vds-color-accent-7:  oklch(0.420 0.150 45);
+    --vds-color-accent-8:  oklch(0.500 0.165 45);
+    --vds-color-accent-9:  oklch(0.665 0.180 45);
+    --vds-color-accent-10: oklch(0.715 0.175 45);
+    --vds-color-accent-11: oklch(0.795 0.155 45);
+    --vds-color-accent-12: oklch(0.920 0.080 45);
+  }
+}
+@layer tokens {
+  /*
+   * ── Three alpha families ──
+   *
+   * 1. black-a*   ALWAYS black, regardless of theme.
+   *               Use for: shadows, modal scrims, dialog overlays.
+   *               Reason: a "shadow" tinted white reads as a highlight.
+   *
+   * 2. white-a*   ALWAYS white, regardless of theme.
+   *               Use for: glass/frost overlays on media, highlights on
+   *               dark hero sections, ripples on dark buttons.
+   *
+   * 3. gray-a*    ADAPTIVE — black tint in light mode, white tint in dark.
+   *               Use for: ghost button hover, dividers on colored panels,
+   *               interactive overlays where the parent bg color is unknown.
+   *               Composited result matches the solid neutral scale.
+   *
+   * Plus per-intent alpha (primary-a1..12, success-a1..12, etc.) for
+   * subtle intent backgrounds and hover overlays in component CSS.
+   *
+   * Percentages are Radix-canonical (industry-tested).
+   */
+
+  :root {
+    /* ─── Black alpha (always black) ─── */
+    --vds-color-black-a1:  oklch(0 0 0 / 0.05);
+    --vds-color-black-a2:  oklch(0 0 0 / 0.10);
+    --vds-color-black-a3:  oklch(0 0 0 / 0.15);
+    --vds-color-black-a4:  oklch(0 0 0 / 0.20);
+    --vds-color-black-a5:  oklch(0 0 0 / 0.30);
+    --vds-color-black-a6:  oklch(0 0 0 / 0.40);
+    --vds-color-black-a7:  oklch(0 0 0 / 0.50);
+    --vds-color-black-a8:  oklch(0 0 0 / 0.60);
+    --vds-color-black-a9:  oklch(0 0 0 / 0.70);
+    --vds-color-black-a10: oklch(0 0 0 / 0.80);
+    --vds-color-black-a11: oklch(0 0 0 / 0.90);
+    --vds-color-black-a12: oklch(0 0 0 / 0.95);
+
+    /* ─── White alpha (always white) ─── */
+    --vds-color-white-a1:  oklch(1 0 0 / 0.05);
+    --vds-color-white-a2:  oklch(1 0 0 / 0.10);
+    --vds-color-white-a3:  oklch(1 0 0 / 0.15);
+    --vds-color-white-a4:  oklch(1 0 0 / 0.20);
+    --vds-color-white-a5:  oklch(1 0 0 / 0.30);
+    --vds-color-white-a6:  oklch(1 0 0 / 0.40);
+    --vds-color-white-a7:  oklch(1 0 0 / 0.50);
+    --vds-color-white-a8:  oklch(1 0 0 / 0.60);
+    --vds-color-white-a9:  oklch(1 0 0 / 0.70);
+    --vds-color-white-a10: oklch(1 0 0 / 0.80);
+    --vds-color-white-a11: oklch(1 0 0 / 0.90);
+    --vds-color-white-a12: oklch(1 0 0 / 0.95);
+
+    /* ─── Neutral alpha — light (black tint, Radix-tuned) ─── */
+    --vds-color-neutral-a1:  oklch(0 0 0 / 0.012);
+    --vds-color-neutral-a2:  oklch(0 0 0 / 0.024);
+    --vds-color-neutral-a3:  oklch(0 0 0 / 0.059);
+    --vds-color-neutral-a4:  oklch(0 0 0 / 0.090);
+    --vds-color-neutral-a5:  oklch(0 0 0 / 0.122);
+    --vds-color-neutral-a6:  oklch(0 0 0 / 0.149);
+    --vds-color-neutral-a7:  oklch(0 0 0 / 0.192);
+    --vds-color-neutral-a8:  oklch(0 0 0 / 0.267);
+    --vds-color-neutral-a9:  oklch(0 0 0 / 0.447);
+    --vds-color-neutral-a10: oklch(0 0 0 / 0.486);
+    --vds-color-neutral-a11: oklch(0 0 0 / 0.608);
+    --vds-color-neutral-a12: oklch(0 0 0 / 0.875);
+
+    /* ─── Per-intent alpha — light (intent solid 9 with Radix percentages) ─── */
+    --vds-color-primary-a1:  oklch(0.55 0.20 265 / 0.020);
+    --vds-color-primary-a2:  oklch(0.55 0.20 265 / 0.040);
+    --vds-color-primary-a3:  oklch(0.55 0.20 265 / 0.080);
+    --vds-color-primary-a4:  oklch(0.55 0.20 265 / 0.120);
+    --vds-color-primary-a5:  oklch(0.55 0.20 265 / 0.160);
+    --vds-color-primary-a6:  oklch(0.55 0.20 265 / 0.200);
+    --vds-color-primary-a7:  oklch(0.55 0.20 265 / 0.260);
+    --vds-color-primary-a8:  oklch(0.55 0.20 265 / 0.350);
+    --vds-color-primary-a9:  oklch(0.55 0.20 265 / 0.550);
+    --vds-color-primary-a10: oklch(0.55 0.20 265 / 0.620);
+    --vds-color-primary-a11: oklch(0.55 0.20 265 / 0.730);
+    --vds-color-primary-a12: oklch(0.55 0.20 265 / 0.910);
+
+    --vds-color-success-a1:  oklch(0.555 0.17 155 / 0.020);
+    --vds-color-success-a2:  oklch(0.555 0.17 155 / 0.040);
+    --vds-color-success-a3:  oklch(0.555 0.17 155 / 0.080);
+    --vds-color-success-a4:  oklch(0.555 0.17 155 / 0.120);
+    --vds-color-success-a5:  oklch(0.555 0.17 155 / 0.160);
+    --vds-color-success-a6:  oklch(0.555 0.17 155 / 0.200);
+    --vds-color-success-a7:  oklch(0.555 0.17 155 / 0.260);
+    --vds-color-success-a8:  oklch(0.555 0.17 155 / 0.350);
+    --vds-color-success-a9:  oklch(0.555 0.17 155 / 0.550);
+    --vds-color-success-a10: oklch(0.555 0.17 155 / 0.620);
+    --vds-color-success-a11: oklch(0.555 0.17 155 / 0.730);
+    --vds-color-success-a12: oklch(0.555 0.17 155 / 0.910);
+
+    --vds-color-warning-a1:  oklch(0.70 0.165 85 / 0.030);
+    --vds-color-warning-a2:  oklch(0.70 0.165 85 / 0.060);
+    --vds-color-warning-a3:  oklch(0.70 0.165 85 / 0.110);
+    --vds-color-warning-a4:  oklch(0.70 0.165 85 / 0.160);
+    --vds-color-warning-a5:  oklch(0.70 0.165 85 / 0.220);
+    --vds-color-warning-a6:  oklch(0.70 0.165 85 / 0.280);
+    --vds-color-warning-a7:  oklch(0.70 0.165 85 / 0.360);
+    --vds-color-warning-a8:  oklch(0.70 0.165 85 / 0.470);
+    --vds-color-warning-a9:  oklch(0.70 0.165 85 / 0.700);
+    --vds-color-warning-a10: oklch(0.70 0.165 85 / 0.770);
+    --vds-color-warning-a11: oklch(0.70 0.165 85 / 0.860);
+    --vds-color-warning-a12: oklch(0.70 0.165 85 / 0.950);
+
+    --vds-color-danger-a1:  oklch(0.555 0.20 25 / 0.020);
+    --vds-color-danger-a2:  oklch(0.555 0.20 25 / 0.040);
+    --vds-color-danger-a3:  oklch(0.555 0.20 25 / 0.080);
+    --vds-color-danger-a4:  oklch(0.555 0.20 25 / 0.120);
+    --vds-color-danger-a5:  oklch(0.555 0.20 25 / 0.160);
+    --vds-color-danger-a6:  oklch(0.555 0.20 25 / 0.200);
+    --vds-color-danger-a7:  oklch(0.555 0.20 25 / 0.260);
+    --vds-color-danger-a8:  oklch(0.555 0.20 25 / 0.350);
+    --vds-color-danger-a9:  oklch(0.555 0.20 25 / 0.550);
+    --vds-color-danger-a10: oklch(0.555 0.20 25 / 0.620);
+    --vds-color-danger-a11: oklch(0.555 0.20 25 / 0.730);
+    --vds-color-danger-a12: oklch(0.555 0.20 25 / 0.910);
+
+    --vds-color-info-a1:  oklch(0.555 0.14 210 / 0.020);
+    --vds-color-info-a2:  oklch(0.555 0.14 210 / 0.040);
+    --vds-color-info-a3:  oklch(0.555 0.14 210 / 0.080);
+    --vds-color-info-a4:  oklch(0.555 0.14 210 / 0.120);
+    --vds-color-info-a5:  oklch(0.555 0.14 210 / 0.160);
+    --vds-color-info-a6:  oklch(0.555 0.14 210 / 0.200);
+    --vds-color-info-a7:  oklch(0.555 0.14 210 / 0.260);
+    --vds-color-info-a8:  oklch(0.555 0.14 210 / 0.350);
+    --vds-color-info-a9:  oklch(0.555 0.14 210 / 0.550);
+    --vds-color-info-a10: oklch(0.555 0.14 210 / 0.620);
+    --vds-color-info-a11: oklch(0.555 0.14 210 / 0.730);
+    --vds-color-info-a12: oklch(0.555 0.14 210 / 0.910);
+
+    --vds-color-accent-a1:  oklch(0.665 0.18 45 / 0.030);
+    --vds-color-accent-a2:  oklch(0.665 0.18 45 / 0.060);
+    --vds-color-accent-a3:  oklch(0.665 0.18 45 / 0.110);
+    --vds-color-accent-a4:  oklch(0.665 0.18 45 / 0.160);
+    --vds-color-accent-a5:  oklch(0.665 0.18 45 / 0.220);
+    --vds-color-accent-a6:  oklch(0.665 0.18 45 / 0.280);
+    --vds-color-accent-a7:  oklch(0.665 0.18 45 / 0.360);
+    --vds-color-accent-a8:  oklch(0.665 0.18 45 / 0.470);
+    --vds-color-accent-a9:  oklch(0.665 0.18 45 / 0.700);
+    --vds-color-accent-a10: oklch(0.665 0.18 45 / 0.770);
+    --vds-color-accent-a11: oklch(0.665 0.18 45 / 0.860);
+    --vds-color-accent-a12: oklch(0.665 0.18 45 / 0.950);
+  }
+
+  /* ─── Dark mode overrides ─── */
+  [data-theme="dark"] {
+    /* Neutral alpha — dark (white tint, Radix-tuned) */
+    --vds-color-neutral-a1:  oklch(1 0 0 / 0.000);
+    --vds-color-neutral-a2:  oklch(1 0 0 / 0.035);
+    --vds-color-neutral-a3:  oklch(1 0 0 / 0.070);
+    --vds-color-neutral-a4:  oklch(1 0 0 / 0.110);
+    --vds-color-neutral-a5:  oklch(1 0 0 / 0.130);
+    --vds-color-neutral-a6:  oklch(1 0 0 / 0.170);
+    --vds-color-neutral-a7:  oklch(1 0 0 / 0.230);
+    --vds-color-neutral-a8:  oklch(1 0 0 / 0.330);
+    --vds-color-neutral-a9:  oklch(1 0 0 / 0.390);
+    --vds-color-neutral-a10: oklch(1 0 0 / 0.450);
+    --vds-color-neutral-a11: oklch(1 0 0 / 0.690);
+    --vds-color-neutral-a12: oklch(1 0 0 / 0.930);
+
+    /* Per-intent alpha — dark (use brighter intent step 9 for vividness on dark bg) */
+    --vds-color-primary-a1:  oklch(0.61 0.20 265 / 0.030);
+    --vds-color-primary-a2:  oklch(0.61 0.20 265 / 0.060);
+    --vds-color-primary-a3:  oklch(0.61 0.20 265 / 0.110);
+    --vds-color-primary-a4:  oklch(0.61 0.20 265 / 0.160);
+    --vds-color-primary-a5:  oklch(0.61 0.20 265 / 0.220);
+    --vds-color-primary-a6:  oklch(0.61 0.20 265 / 0.280);
+    --vds-color-primary-a7:  oklch(0.61 0.20 265 / 0.360);
+    --vds-color-primary-a8:  oklch(0.61 0.20 265 / 0.470);
+    --vds-color-primary-a9:  oklch(0.61 0.20 265 / 0.700);
+    --vds-color-primary-a10: oklch(0.61 0.20 265 / 0.770);
+    --vds-color-primary-a11: oklch(0.61 0.20 265 / 0.860);
+    --vds-color-primary-a12: oklch(0.61 0.20 265 / 0.950);
+
+    --vds-color-success-a1:  oklch(0.61 0.17 155 / 0.030);
+    --vds-color-success-a2:  oklch(0.61 0.17 155 / 0.060);
+    --vds-color-success-a3:  oklch(0.61 0.17 155 / 0.110);
+    --vds-color-success-a4:  oklch(0.61 0.17 155 / 0.160);
+    --vds-color-success-a5:  oklch(0.61 0.17 155 / 0.220);
+    --vds-color-success-a6:  oklch(0.61 0.17 155 / 0.280);
+    --vds-color-success-a7:  oklch(0.61 0.17 155 / 0.360);
+    --vds-color-success-a8:  oklch(0.61 0.17 155 / 0.470);
+    --vds-color-success-a9:  oklch(0.61 0.17 155 / 0.700);
+    --vds-color-success-a10: oklch(0.61 0.17 155 / 0.770);
+    --vds-color-success-a11: oklch(0.61 0.17 155 / 0.860);
+    --vds-color-success-a12: oklch(0.61 0.17 155 / 0.950);
+
+    --vds-color-warning-a1:  oklch(0.70 0.155 85 / 0.040);
+    --vds-color-warning-a2:  oklch(0.70 0.155 85 / 0.080);
+    --vds-color-warning-a3:  oklch(0.70 0.155 85 / 0.140);
+    --vds-color-warning-a4:  oklch(0.70 0.155 85 / 0.200);
+    --vds-color-warning-a5:  oklch(0.70 0.155 85 / 0.280);
+    --vds-color-warning-a6:  oklch(0.70 0.155 85 / 0.360);
+    --vds-color-warning-a7:  oklch(0.70 0.155 85 / 0.450);
+    --vds-color-warning-a8:  oklch(0.70 0.155 85 / 0.560);
+    --vds-color-warning-a9:  oklch(0.70 0.155 85 / 0.800);
+    --vds-color-warning-a10: oklch(0.70 0.155 85 / 0.860);
+    --vds-color-warning-a11: oklch(0.70 0.155 85 / 0.920);
+    --vds-color-warning-a12: oklch(0.70 0.155 85 / 0.970);
+
+    --vds-color-danger-a1:  oklch(0.62 0.20 25 / 0.030);
+    --vds-color-danger-a2:  oklch(0.62 0.20 25 / 0.060);
+    --vds-color-danger-a3:  oklch(0.62 0.20 25 / 0.110);
+    --vds-color-danger-a4:  oklch(0.62 0.20 25 / 0.160);
+    --vds-color-danger-a5:  oklch(0.62 0.20 25 / 0.220);
+    --vds-color-danger-a6:  oklch(0.62 0.20 25 / 0.280);
+    --vds-color-danger-a7:  oklch(0.62 0.20 25 / 0.360);
+    --vds-color-danger-a8:  oklch(0.62 0.20 25 / 0.470);
+    --vds-color-danger-a9:  oklch(0.62 0.20 25 / 0.700);
+    --vds-color-danger-a10: oklch(0.62 0.20 25 / 0.770);
+    --vds-color-danger-a11: oklch(0.62 0.20 25 / 0.860);
+    --vds-color-danger-a12: oklch(0.62 0.20 25 / 0.950);
+
+    --vds-color-info-a1:  oklch(0.62 0.14 210 / 0.030);
+    --vds-color-info-a2:  oklch(0.62 0.14 210 / 0.060);
+    --vds-color-info-a3:  oklch(0.62 0.14 210 / 0.110);
+    --vds-color-info-a4:  oklch(0.62 0.14 210 / 0.160);
+    --vds-color-info-a5:  oklch(0.62 0.14 210 / 0.220);
+    --vds-color-info-a6:  oklch(0.62 0.14 210 / 0.280);
+    --vds-color-info-a7:  oklch(0.62 0.14 210 / 0.360);
+    --vds-color-info-a8:  oklch(0.62 0.14 210 / 0.470);
+    --vds-color-info-a9:  oklch(0.62 0.14 210 / 0.700);
+    --vds-color-info-a10: oklch(0.62 0.14 210 / 0.770);
+    --vds-color-info-a11: oklch(0.62 0.14 210 / 0.860);
+    --vds-color-info-a12: oklch(0.62 0.14 210 / 0.950);
+
+    --vds-color-accent-a1:  oklch(0.665 0.18 45 / 0.040);
+    --vds-color-accent-a2:  oklch(0.665 0.18 45 / 0.080);
+    --vds-color-accent-a3:  oklch(0.665 0.18 45 / 0.140);
+    --vds-color-accent-a4:  oklch(0.665 0.18 45 / 0.200);
+    --vds-color-accent-a5:  oklch(0.665 0.18 45 / 0.280);
+    --vds-color-accent-a6:  oklch(0.665 0.18 45 / 0.360);
+    --vds-color-accent-a7:  oklch(0.665 0.18 45 / 0.450);
+    --vds-color-accent-a8:  oklch(0.665 0.18 45 / 0.560);
+    --vds-color-accent-a9:  oklch(0.665 0.18 45 / 0.800);
+    --vds-color-accent-a10: oklch(0.665 0.18 45 / 0.860);
+    --vds-color-accent-a11: oklch(0.665 0.18 45 / 0.920);
+    --vds-color-accent-a12: oklch(0.665 0.18 45 / 0.970);
+  }
+}
+@layer tokens {
+  /*
+   * ── Legacy primitive scales ──
+   *
+   * Kept verbatim for backwards compatibility with any component still
+   * consuming the 50-950 scale or the original gray/primary alpha tokens.
+   * These values are MODE-INDEPENDENT (semantic layer wraps them in
+   * light-dark() to switch). Do not migrate to mode-aware values here —
+   * doing so would double-switch in the existing semantic layer.
+   *
+   * New work should use the mode-aware 12-step scales in:
+   *   neutral.css   --vds-color-neutral-1..12
+   *   intents.css   --vds-color-{primary,success,warning,danger,info,accent}-1..12
+   *   alphas.css    three alpha families + per-intent alpha
+   */
   :root {
     /* ─── Absolute ─── */
     --vds-color-white: oklch(1 0 0);
     --vds-color-black: oklch(0 0 0);
 
-    /* ─── Gray ─── */
+    /* ─── Gray (legacy 50-950) ─── */
     --vds-color-gray-50: oklch(0.98 0.005 264);
     --vds-color-gray-100: oklch(0.95 0.007 264);
     --vds-color-gray-200: oklch(0.90 0.010 264);
@@ -25,7 +586,7 @@
     --vds-color-gray-900: oklch(0.13 0.012 264);
     --vds-color-gray-950: oklch(0.08 0.010 264);
 
-    /* ─── Gray Alpha ─── */
+    /* ─── Gray Alpha (legacy single-set) ─── */
     --vds-color-gray-a3: oklch(0.50 0.018 264 / 0.05);
     --vds-color-gray-a4: oklch(0.50 0.018 264 / 0.07);
     --vds-color-gray-a5: oklch(0.50 0.018 264 / 0.09);
@@ -50,7 +611,7 @@
     --vds-color-primary-900: oklch(0.27 0.12 265);
     --vds-color-primary-950: oklch(0.20 0.09 265);
 
-    /* ─── Primary Alpha ─── */
+    /* ─── Primary Alpha (legacy single-set) ─── */
     --vds-color-primary-a3: oklch(0.55 0.20 265 / 0.05);
     --vds-color-primary-a4: oklch(0.55 0.20 265 / 0.07);
     --vds-color-primary-a5: oklch(0.55 0.20 265 / 0.09);
@@ -125,13 +686,107 @@
     --vds-color-chart-8: oklch(0.60 0.14 230);
   }
 }
+/*
+ * Brand registry.
+ *
+ * Each brand file overrides primitive hues under a [data-brand="..."]
+ * scope. The semantic layer is unchanged — components don't need to know
+ * which brand is active.
+ *
+ * To add a new brand:
+ *   1. Copy _template.css to {your-brand}.css
+ *   2. Fill in the OKLCH overrides
+ *   3. Add an @import for it below
+ *   4. Set <html data-brand="{your-brand}"> at runtime
+ *
+ * Order matters: later imports win in the cascade if scopes collide.
+ */
+@layer tokens.brand {
+  /*
+   * ── Virtari (default brand) ──
+   *
+   * Default brand identity. The scales here EXACTLY match the primitives
+   * defaults — this file exists so adding new brands is symmetric, and
+   * so the default can be re-asserted when nesting brand scopes.
+   *
+   * Activated by: <html data-brand="virtari">  (or no data-brand attr)
+   *
+   * To create a new brand, copy _template.css and override the hue/chroma
+   * for primary, accent, and optionally any intent scale. The semantic
+   * layer maps automatically — no component changes required.
+   */
+
+  :root,
+  [data-brand="virtari"] {
+    /* No overrides — defaults from primitives/intents.css apply.
+       Brand authors: list your overrides below following the
+       _template.css example. */
+  }
+}
+/*
+ * Color semantic entry — re-exports the new split structure.
+ *
+ * The actual tokens now live in semantic/ as separate files:
+ *   semantic/_legacy.css      original tokens (kept for back-compat)
+ *   semantic/background.css   bg/surface/scrim/shadow-tint additions
+ *   semantic/text.css         text-link, placeholder, inverse, selection
+ *   semantic/icon.css         entire icon domain (NEW)
+ *   semantic/border.css       border-strong, input, focus, divider
+ *   semantic/interactive.css  adaptive hover/active overlays
+ *   semantic/status.css       expanded per-intent (bg-hover, text-muted)
+ *   semantic/data-viz.css     chart-*-muted, chart-*-strong
+ */
+/*
+ * Semantic color barrel.
+ *
+ * Order matters:
+ *   1. _legacy.css      original semantic tokens (ALL old names with old values)
+ *   2. background.css   new bg/surface/scrim/shadow-tint/highlight-tint
+ *   3. text.css         new text-link/placeholder/inverse/selection
+ *   4. icon.css         new icon-* domain
+ *   5. border.css       new border-strong/input/focus/divider + per-intent
+ *   6. interactive.css  new adaptive hover/active overlays + selection-bg
+ *   7. status.css       new {intent}-bg-hover/active + {intent}-text-muted
+ *   8. data-viz.css     new chart-*-muted/strong
+ *
+ * Backwards compatibility: every token in the previous semantic.css is
+ * preserved verbatim in _legacy.css. Components keep working without
+ * any change. New work should prefer the expanded tokens.
+ */
 @layer tokens {
   /*
-   * Theme switching via `color-scheme`.
-   * `light-dark()` resolves each color based on the computed color-scheme
-   * of the element where the property is used, so variables are declared
-   * once on :root and inherited everywhere.
+   * ── Legacy semantic tokens ──
+   *
+   * Verbatim copy of the original semantic.css. Provides backwards
+   * compatibility for all components that consume:
+   *   • bg, bg-subtle, bg-muted, bg-disabled
+   *   • surface, surface-sunken, surface-raised, surface-overlay,
+   *     surface-hover, surface-active, surface-selected
+   *   • overlay, overlay-light
+   *   • text, text-muted, text-subtle, text-disabled, on-solid
+   *   • border, border-muted, border-disabled
+   *   • ring, ring-offset
+   *   • skeleton, skeleton-shimmer
+   *   • on-{intent}, {intent}-emphasis, {intent}-muted, {intent}-muted-text
+   *   • {intent}-hover, {intent}-active
+   *
+   * New work should prefer the expanded tokens in the sibling files
+   * (background.css, text.css, icon.css, border.css, interactive.css,
+   * status.css, data-viz.css), which add the missing pieces on top:
+   *   • neutral-1..12 (mode-aware 12-step)
+   *   • icon-*, icon-on-*, icon-{intent}
+   *   • text-link, text-placeholder, text-inverse, text-selection
+   *   • border-strong, border-input, border-focus, divider
+   *   • selection-bg, selection-text
+   *   • shadow-tint*, scrim, highlight-tint*
+   *   • {intent}-bg-hover, {intent}-bg-active, {intent}-text-muted,
+   *     {intent}-border, {intent}-border-strong
+   *   • chart-*-muted, chart-*-strong
+   *
+   * Definitions here use the legacy primitive scales (gray-50..950 etc.)
+   * so they keep working even after primitives.css was reorganized.
    */
+
   :root {
     color-scheme: light;
   }
@@ -254,6 +909,334 @@
   }
 }
 @layer tokens {
+  /*
+   * ── Background semantic layer (NEW, additive) ──
+   *
+   * Provides:
+   *   • Full neutral 12-step semantic exposure for advanced use cases
+   *     (data tables, code editors, financial dashboards) — same names
+   *     used in Radix, allowing direct port of patterns.
+   *   • Modern elevation aliases tuned for both modes.
+   *   • Strong/light overlay variants and dedicated shadow tints
+   *     (so components stop hardcoding `black` in shadows).
+   *   • Highlight tints for glass/frost effects on media.
+   *
+   * The legacy aliases (--vds-color-bg, --vds-color-surface, etc.)
+   * remain in _legacy.css unchanged — components keep working.
+   */
+
+  :root {
+    /* ─── Inverse background (NEW) ─── */
+    --vds-color-bg-inverse: var(--vds-color-neutral-12);
+    --vds-color-surface-inverse: var(--vds-color-neutral-12);
+
+    /* ─── Strong/light overlay variants (NEW — built on always-black alpha) ─── */
+    --vds-color-overlay-strong: var(--vds-color-black-a9);
+
+    /* ─── Scrim alias (NEW — for clarity in component CSS) ─── */
+    --vds-color-scrim: var(--vds-color-overlay);
+    --vds-color-scrim-light: var(--vds-color-overlay-light);
+    --vds-color-scrim-strong: var(--vds-color-overlay-strong);
+
+    /* ─── Shadow tint tokens (NEW — fixes Toast/Drawer hardcoded `black`) ───
+       Always uses black-a* — shadows must NOT invert in dark mode (a
+       white-tinted shadow reads as a highlight, not depth). */
+    --vds-color-shadow-tint-low:    var(--vds-color-black-a3);
+    --vds-color-shadow-tint:        var(--vds-color-black-a5);
+    --vds-color-shadow-tint-strong: var(--vds-color-black-a7);
+
+    /* ─── Highlight tints (NEW — for glass/frost overlays on media) ───
+       Always white-a*. Use for hero overlays, scrubber backgrounds, etc. */
+    --vds-color-highlight-tint:        var(--vds-color-white-a3);
+    --vds-color-highlight-tint-strong: var(--vds-color-white-a7);
+  }
+}
+@layer tokens {
+  /*
+   * ── Text semantic layer (NEW, additive) ──
+   *
+   * Adds the missing text roles every enterprise design system has:
+   *   • text-placeholder    distinct from text-disabled
+   *   • text-link / hover / visited
+   *   • text-inverse        text on inverse bg
+   *   • text-selection      text inside ::selection
+   *   • text-on-{intent}-muted  renamed-style aliases that mirror the
+   *                             status.css *-text tokens for consistency
+   *
+   * Legacy text/text-muted/text-subtle/text-disabled stay in _legacy.css.
+   */
+
+  :root {
+    /* ─── Placeholder (form inputs) ─── */
+    --vds-color-text-placeholder: light-dark(var(--vds-color-neutral-9), var(--vds-color-neutral-9));
+
+    /* ─── Hyperlinks ─── */
+    --vds-color-text-link:         var(--vds-color-primary-11);
+    --vds-color-text-link-hover:   var(--vds-color-primary-10);
+    --vds-color-text-link-visited: var(--vds-color-primary-12);
+
+    /* ─── Inverse (text on bg-inverse / surface-inverse) ─── */
+    --vds-color-text-inverse: light-dark(var(--vds-color-neutral-1), var(--vds-color-neutral-1));
+
+    /* ─── Selection (CSS ::selection text color) ─── */
+    --vds-color-text-selection: var(--vds-color-text);
+  }
+}
+@layer tokens {
+  /*
+   * ── Icon semantic layer (NEW domain) ──
+   *
+   * Icons need their own scale separate from text:
+   *   • Icons sometimes need higher visual weight than body text
+   *     (e.g. a status icon should pop, a body paragraph shouldn't)
+   *   • Icon-only theming is common (e.g. dim all icons, leave text)
+   *   • Status indicators are usually icon-only and need intent colors
+   *
+   * Defaults track text scale, so dropping these into existing
+   * components without overriding still works visually.
+   */
+
+  :root {
+    /* ─── Default neutrals ─── */
+    --vds-color-icon:           var(--vds-color-text);
+    --vds-color-icon-muted:     var(--vds-color-text-muted);
+    --vds-color-icon-subtle:    var(--vds-color-text-subtle);
+    --vds-color-icon-disabled:  var(--vds-color-text-disabled);
+    --vds-color-icon-inverse:   var(--vds-color-text-inverse);
+
+    /* ─── Icon on solid intent backgrounds ─── */
+    --vds-color-icon-on-primary: var(--vds-color-on-primary);
+    --vds-color-icon-on-success: var(--vds-color-on-success);
+    --vds-color-icon-on-warning: var(--vds-color-on-warning);
+    --vds-color-icon-on-danger:  var(--vds-color-on-danger);
+    --vds-color-icon-on-info:    var(--vds-color-on-info);
+    --vds-color-icon-on-accent:  var(--vds-color-on-primary); /* defaults to primary on-color */
+
+    /* ─── Intent-colored icons (status indicators, alerts) ─── */
+    --vds-color-icon-primary: var(--vds-color-primary-9);
+    --vds-color-icon-success: var(--vds-color-success-9);
+    --vds-color-icon-warning: var(--vds-color-warning-9);
+    --vds-color-icon-danger:  var(--vds-color-danger-9);
+    --vds-color-icon-info:    var(--vds-color-info-9);
+    --vds-color-icon-accent:  var(--vds-color-accent-9);
+  }
+}
+@layer tokens {
+  /*
+   * ── Border semantic layer (NEW, additive) ──
+   *
+   * Adds the missing border roles:
+   *   • border-subtle / border-strong
+   *   • border-input / border-input-hover  (form-specific, distinct from generic border)
+   *   • border-focus                       (border applied during focus)
+   *   • divider                            (horizontal/vertical separators)
+   *   • per-intent borders + strong variants
+   *
+   * Legacy border/border-muted/border-disabled stay in _legacy.css.
+   */
+
+  :root {
+    /* ─── Neutral borders (NEW additions) ─── */
+    --vds-color-border-subtle: var(--vds-color-neutral-6);
+    --vds-color-border-strong: var(--vds-color-neutral-8);
+
+    /* ─── Form input borders (distinct from generic border) ─── */
+    --vds-color-border-input:       var(--vds-color-neutral-7);
+    --vds-color-border-input-hover: var(--vds-color-neutral-8);
+    --vds-color-border-input-focus: var(--vds-color-primary-9);
+
+    /* ─── Focus border (applied to element when focused) ─── */
+    --vds-color-border-focus: var(--vds-color-primary-9);
+
+    /* ─── Divider (semantic line) ─── */
+    --vds-color-divider: var(--vds-color-neutral-a6);
+
+    /* ─── Per-intent borders ─── */
+    --vds-color-border-primary:        var(--vds-color-primary-7);
+    --vds-color-border-primary-strong: var(--vds-color-primary-9);
+    --vds-color-border-success:        var(--vds-color-success-7);
+    --vds-color-border-success-strong: var(--vds-color-success-9);
+    --vds-color-border-warning:        var(--vds-color-warning-7);
+    --vds-color-border-warning-strong: var(--vds-color-warning-9);
+    --vds-color-border-danger:         var(--vds-color-danger-7);
+    --vds-color-border-danger-strong:  var(--vds-color-danger-9);
+    --vds-color-border-info:           var(--vds-color-info-7);
+    --vds-color-border-info-strong:    var(--vds-color-info-9);
+    --vds-color-border-accent:         var(--vds-color-accent-7);
+    --vds-color-border-accent-strong:  var(--vds-color-accent-9);
+  }
+}
+@layer tokens {
+  /*
+   * ── Interactive semantic layer (NEW, additive) ──
+   *
+   * Adds:
+   *   • Adaptive hover/active/pressed overlays via neutral-a*
+   *     (the killer feature — works correctly on ANY parent bg color)
+   *   • Selection background/text (for ::selection)
+   *   • Error/success focus rings
+   *
+   * Legacy ring/ring-offset/skeleton stay in _legacy.css.
+   */
+
+  :root {
+    /* ─── Adaptive interactive overlays ───
+       Use these when you don't know what color the parent surface is.
+       Resolves to black-tinted alpha in light, white-tinted in dark,
+       so the composited result matches the solid neutral scale. */
+    --vds-color-hover:            var(--vds-color-neutral-a3);
+    --vds-color-active:           var(--vds-color-neutral-a4);
+    --vds-color-pressed:          var(--vds-color-neutral-a5);
+    --vds-color-disabled-overlay: var(--vds-color-neutral-a3);
+
+    /* ─── Text selection ─── */
+    --vds-color-selection-bg:   var(--vds-color-primary-a4);
+    --vds-color-selection-text: var(--vds-color-text-selection);
+
+    /* ─── Intent focus rings ─── */
+    --vds-color-ring-error:   var(--vds-color-danger-9);
+    --vds-color-ring-success: var(--vds-color-success-9);
+    --vds-color-ring-warning: var(--vds-color-warning-9);
+  }
+}
+@layer tokens {
+  /*
+   * ── Status (intent) semantic layer (NEW, additive) ──
+   *
+   * Expands each intent (primary/success/warning/danger/info/accent) to
+   * the full Radix-style 12-step semantic role coverage:
+   *
+   *   {intent}-bg-subtle    app-level intent tint (canvas accent)
+   *   {intent}-bg           component-level muted bg (badges, alerts)
+   *   {intent}-bg-hover     hover on muted bg                  (NEW)
+   *   {intent}-bg-active    active on muted bg                 (NEW)
+   *   {intent}-solid        emphasis bg (CTAs, indicators)
+   *   {intent}-solid-hover  solid hover
+   *   {intent}-solid-active solid active
+   *   {intent}-text         high-contrast text on muted bg
+   *   {intent}-text-muted   low-contrast text on muted bg      (NEW)
+   *
+   * Legacy aliases (*-emphasis, *-muted, *-muted-text, *-hover, *-active)
+   * stay in _legacy.css. New components should prefer these names.
+   */
+
+  :root {
+    /* ─── Primary ─── */
+    --vds-color-primary-bg-subtle:    var(--vds-color-primary-2);
+    --vds-color-primary-bg:           var(--vds-color-primary-3);
+    --vds-color-primary-bg-hover:     var(--vds-color-primary-4);
+    --vds-color-primary-bg-active:    var(--vds-color-primary-5);
+    --vds-color-primary-solid:        var(--vds-color-primary-9);
+    --vds-color-primary-solid-hover:  var(--vds-color-primary-10);
+    --vds-color-primary-solid-active: var(--vds-color-primary-11);
+    --vds-color-primary-text:         var(--vds-color-primary-11);
+    --vds-color-primary-text-muted:   var(--vds-color-primary-10);
+
+    /* ─── Success ─── */
+    --vds-color-success-bg-subtle:    var(--vds-color-success-2);
+    --vds-color-success-bg:           var(--vds-color-success-3);
+    --vds-color-success-bg-hover:     var(--vds-color-success-4);
+    --vds-color-success-bg-active:    var(--vds-color-success-5);
+    --vds-color-success-solid:        var(--vds-color-success-9);
+    --vds-color-success-solid-hover:  var(--vds-color-success-10);
+    --vds-color-success-solid-active: var(--vds-color-success-11);
+    --vds-color-success-text:         var(--vds-color-success-11);
+    --vds-color-success-text-muted:   var(--vds-color-success-10);
+
+    /* ─── Warning ─── */
+    --vds-color-warning-bg-subtle:    var(--vds-color-warning-2);
+    --vds-color-warning-bg:           var(--vds-color-warning-3);
+    --vds-color-warning-bg-hover:     var(--vds-color-warning-4);
+    --vds-color-warning-bg-active:    var(--vds-color-warning-5);
+    --vds-color-warning-solid:        var(--vds-color-warning-9);
+    --vds-color-warning-solid-hover:  var(--vds-color-warning-10);
+    --vds-color-warning-solid-active: var(--vds-color-warning-11);
+    --vds-color-warning-text:         var(--vds-color-warning-11);
+    --vds-color-warning-text-muted:   var(--vds-color-warning-10);
+
+    /* ─── Danger ─── */
+    --vds-color-danger-bg-subtle:    var(--vds-color-danger-2);
+    --vds-color-danger-bg:           var(--vds-color-danger-3);
+    --vds-color-danger-bg-hover:     var(--vds-color-danger-4);
+    --vds-color-danger-bg-active:    var(--vds-color-danger-5);
+    --vds-color-danger-solid:        var(--vds-color-danger-9);
+    --vds-color-danger-solid-hover:  var(--vds-color-danger-10);
+    --vds-color-danger-solid-active: var(--vds-color-danger-11);
+    --vds-color-danger-text:         var(--vds-color-danger-11);
+    --vds-color-danger-text-muted:   var(--vds-color-danger-10);
+
+    /* ─── Info ─── */
+    --vds-color-info-bg-subtle:    var(--vds-color-info-2);
+    --vds-color-info-bg:           var(--vds-color-info-3);
+    --vds-color-info-bg-hover:     var(--vds-color-info-4);
+    --vds-color-info-bg-active:    var(--vds-color-info-5);
+    --vds-color-info-solid:        var(--vds-color-info-9);
+    --vds-color-info-solid-hover:  var(--vds-color-info-10);
+    --vds-color-info-solid-active: var(--vds-color-info-11);
+    --vds-color-info-text:         var(--vds-color-info-11);
+    --vds-color-info-text-muted:   var(--vds-color-info-10);
+
+    /* ─── Accent ─── */
+    --vds-color-accent-bg-subtle:    var(--vds-color-accent-2);
+    --vds-color-accent-bg:           var(--vds-color-accent-3);
+    --vds-color-accent-bg-hover:     var(--vds-color-accent-4);
+    --vds-color-accent-bg-active:    var(--vds-color-accent-5);
+    --vds-color-accent-solid:        var(--vds-color-accent-9);
+    --vds-color-accent-solid-hover:  var(--vds-color-accent-10);
+    --vds-color-accent-solid-active: var(--vds-color-accent-11);
+    --vds-color-accent-text:         var(--vds-color-accent-11);
+    --vds-color-accent-text-muted:   var(--vds-color-accent-10);
+
+    /* ─── Accent on-color (text/icon on solid accent) ─── */
+    --vds-color-on-accent: var(--vds-color-white);
+  }
+}
+@layer tokens {
+  /*
+   * ── Data visualization semantic layer (NEW, additive) ──
+   *
+   * Adds:
+   *   • chart-{1..8}-muted    30%-alpha tint for area fills under lines
+   *   • chart-{1..8}-strong   high-contrast variant for emphasis points
+   *
+   * Legacy chart-1..8 stays in _legacy.css unchanged.
+   */
+
+  :root {
+    /* ─── Muted variants (30% alpha — for area fills, gradient backgrounds) ─── */
+    --vds-color-chart-1-muted: oklch(0.55 0.20 265 / 0.30);
+    --vds-color-chart-2-muted: oklch(0.60 0.18 155 / 0.30);
+    --vds-color-chart-3-muted: oklch(0.65 0.16 45 / 0.30);
+    --vds-color-chart-4-muted: oklch(0.55 0.18 310 / 0.30);
+    --vds-color-chart-5-muted: oklch(0.60 0.15 195 / 0.30);
+    --vds-color-chart-6-muted: oklch(0.65 0.17 75 / 0.30);
+    --vds-color-chart-7-muted: oklch(0.55 0.19 350 / 0.30);
+    --vds-color-chart-8-muted: oklch(0.60 0.14 230 / 0.30);
+
+    /* ─── Strong variants (deeper L for emphasis on key data points) ─── */
+    --vds-color-chart-1-strong: oklch(0.45 0.22 265);
+    --vds-color-chart-2-strong: oklch(0.50 0.20 155);
+    --vds-color-chart-3-strong: oklch(0.55 0.18 45);
+    --vds-color-chart-4-strong: oklch(0.45 0.20 310);
+    --vds-color-chart-5-strong: oklch(0.50 0.17 195);
+    --vds-color-chart-6-strong: oklch(0.55 0.19 75);
+    --vds-color-chart-7-strong: oklch(0.45 0.21 350);
+    --vds-color-chart-8-strong: oklch(0.50 0.16 230);
+  }
+
+  [data-theme="dark"] {
+    /* In dark mode, lift L slightly for vividness */
+    --vds-color-chart-1-strong: oklch(0.65 0.20 265);
+    --vds-color-chart-2-strong: oklch(0.70 0.18 155);
+    --vds-color-chart-3-strong: oklch(0.75 0.16 45);
+    --vds-color-chart-4-strong: oklch(0.65 0.18 310);
+    --vds-color-chart-5-strong: oklch(0.70 0.15 195);
+    --vds-color-chart-6-strong: oklch(0.75 0.17 75);
+    --vds-color-chart-7-strong: oklch(0.65 0.19 350);
+    --vds-color-chart-8-strong: oklch(0.70 0.14 230);
+  }
+}
+@layer tokens {
   :root {
     --vds-space-0: 0;
     --vds-space-px: 1px;
@@ -304,18 +1287,20 @@
      * 2xs   1.5rem  24px    ⚠ minimum        ✗                ✗          ✗
      * xs    1.75rem 28px    ✓                ✗                ✗          ✗
      * sm    2rem    32px    ✓                ✗                ✗          ✗
-     * md    2.5rem  40px    ✓                ✗                ✗          ✗
-     * lg    2.75rem 44px    ✓                ✓                ✓ (44pt)   ✗
-     * xl    3.25rem 52px    ✓                ✓                ✓          ✓ (48dp)
-     * 2xl   4rem    64px    ✓                ✓                ✓          ✓
+     * md    2.25rem 36px    ✓                ✗                ✗          ✗
+     * lg    2.5rem  40px    ✓                ✗                ✗          ✗
+     * xl    2.75rem 44px    ✓                ✓                ✓ (44pt)   ✗
+     * 2xl   3.25rem 52px    ✓                ✓                ✓          ✓ (48dp)
+     * 3xl   4rem    64px    ✓                ✓                ✓          ✓
      */
     --vds-size-2xs: 1.5rem;
     --vds-size-xs: 1.75rem;
     --vds-size-sm: 2rem;
-    --vds-size-md: 2.5rem;
-    --vds-size-lg: 2.75rem;
-    --vds-size-xl: 3.25rem;
-    --vds-size-2xl: 4rem;
+    --vds-size-md: 2.25rem;
+    --vds-size-lg: 2.5rem;
+    --vds-size-xl: 2.75rem;
+    --vds-size-2xl: 3.25rem;
+    --vds-size-3xl: 4rem;
   }
 }
 @layer tokens {
@@ -503,6 +1488,12 @@
     --vds-radius-alert-dialog: min(var(--vds-radius-surface), var(--vds-radius-xl));
     --vds-radius-drawer:       min(var(--vds-radius-surface), var(--vds-radius-xl));
     --vds-radius-toast:        min(var(--vds-radius-surface), var(--vds-radius-xl));
+
+    /* Data table — cap at md (8px). The inner <table> cells can't round,
+     * so the outer container radius is purely decorative. Anything above md
+     * creates visible wedges where the sticky-header divider and scrollbar
+     * meet the rounded corners. */
+    --vds-radius-data-table: min(var(--vds-radius-surface), var(--vds-radius-md));
   }
 }
 @layer tokens {
@@ -614,5 +1605,127 @@
     --vds-z-popover: 1500;
     --vds-z-toast: 1600;
     --vds-z-tooltip: 1700;
+  }
+}
+/*
+ * Layout — three-tier architecture.
+ *
+ * primitives.css   Raw scales. Change to shift the whole system.
+ * semantic.css     Purpose-named aliases (container-width, section-padding-block…).
+ * components.css   Per-component tokens — override a single primitive without touching semantics.
+ *
+ * Components in @virtari/react-layout should consume:
+ *   • a component token (--vds-section-padding-block-default, --vds-container-width-default …) as the default, or
+ *   • the semantic token (--vds-section-padding-block, --vds-row-gap …) when the per-component indirection isn't needed.
+ * Never consume the primitives directly.
+ */
+@layer tokens {
+  :root {
+    /*
+     * ── Primitive Layout Scales ──
+     * Raw values. Components should not consume these directly —
+     * use the semantic tokens in semantic.css or a component token
+     * from components.css instead.
+     */
+
+    /* Container (content max-width) ramp */
+    --vds-container-width-xs:    20rem;   /* 320px  — tight form */
+    --vds-container-width-sm:    40rem;   /* 640px  — short reading */
+    --vds-container-width-md:    48rem;   /* 768px  — narrow article */
+    --vds-container-width-lg:    64rem;   /* 1024px — default content */
+    --vds-container-width-xl:    80rem;   /* 1280px — wide content */
+    --vds-container-width-2xl:   96rem;   /* 1536px — max app canvas */
+    --vds-container-width-prose: 65ch;    /* Optimal reading measure */
+    --vds-container-width-full:  100%;
+
+    /* Section block-padding ramp (vertical rhythm) */
+    --vds-section-padding-none: 0;
+    --vds-section-padding-xs:   var(--vds-space-4);   /* 1rem   */
+    --vds-section-padding-sm:   var(--vds-space-8);   /* 2rem   */
+    --vds-section-padding-md:   var(--vds-space-12);  /* 3rem   */
+    --vds-section-padding-lg:   var(--vds-space-16);  /* 4rem   */
+    --vds-section-padding-xl:   var(--vds-space-24);  /* 6rem   */
+    --vds-section-padding-2xl:  var(--vds-space-32);  /* 8rem   */
+    --vds-section-padding-3xl:  var(--vds-space-40);  /* 10rem  */
+
+    /* Section inline-gutter ramp (horizontal breathing room inside container) */
+    --vds-section-gutter-none: 0;
+    --vds-section-gutter-xs:   var(--vds-space-3);    /* 0.75rem */
+    --vds-section-gutter-sm:   var(--vds-space-4);    /* 1rem    */
+    --vds-section-gutter-md:   var(--vds-space-6);    /* 1.5rem  */
+    --vds-section-gutter-lg:   var(--vds-space-8);    /* 2rem    */
+    --vds-section-gutter-xl:   var(--vds-space-12);   /* 3rem    */
+
+    /* Row gap ramp (gap between columns) */
+    --vds-row-gap-none: 0;
+    --vds-row-gap-xs:   var(--vds-space-2);   /* 0.5rem  */
+    --vds-row-gap-sm:   var(--vds-space-3);   /* 0.75rem */
+    --vds-row-gap-md:   var(--vds-space-4);   /* 1rem    */
+    --vds-row-gap-lg:   var(--vds-space-6);   /* 1.5rem  */
+    --vds-row-gap-xl:   var(--vds-space-8);   /* 2rem    */
+    --vds-row-gap-2xl:  var(--vds-space-12);  /* 3rem    */
+
+    /* Column-count constants — divisors that factor into 12 for clean spans */
+    --vds-row-cols-1:  1;
+    --vds-row-cols-2:  2;
+    --vds-row-cols-3:  3;
+    --vds-row-cols-4:  4;
+    --vds-row-cols-6:  6;
+    --vds-row-cols-8:  8;
+    --vds-row-cols-12: 12;
+  }
+}
+@layer tokens {
+  :root {
+    /*
+     * ── Semantic Layout Tokens ──
+     * Purpose-named aliases that map onto primitives.
+     * Components consume these (or the per-component tokens
+     * in components.css). Override at :root or a scoped
+     * wrapper to reshape a whole surface at once.
+     */
+
+    /* Container */
+    --vds-container-width:  var(--vds-container-width-xl);
+    --vds-container-gutter: var(--vds-section-gutter-md);
+
+    /* Section vertical + horizontal rhythm */
+    --vds-section-padding-block:  var(--vds-section-padding-lg);
+    --vds-section-padding-inline: var(--vds-section-gutter-md);
+    --vds-section-gap:            var(--vds-space-8);
+
+    /* Row */
+    --vds-row-gap:      var(--vds-row-gap-md);
+    --vds-row-col-gap:  var(--vds-row-gap-md);
+    --vds-row-row-gap:  var(--vds-row-gap-md);
+    --vds-row-cols:     var(--vds-row-cols-12);
+    --vds-row-min-col:  16rem;
+  }
+}
+@layer tokens {
+  :root {
+    /*
+     * ── Per-component Layout Tokens ──
+     * These let a consumer theme a single layout primitive
+     * without touching the global semantic tokens.
+     * Keep them aliased onto semantics by default —
+     * override per brand or per page as needed.
+     */
+
+    /* Container */
+    --vds-container-width-default: var(--vds-container-width);
+    --vds-container-gutter-default: var(--vds-container-gutter);
+
+    /* Section */
+    --vds-section-padding-block-default:  var(--vds-section-padding-block);
+    --vds-section-padding-inline-default: var(--vds-section-padding-inline);
+    --vds-section-gap-default:            var(--vds-section-gap);
+
+    /* Row */
+    --vds-row-gap-default:     var(--vds-row-gap);
+    --vds-row-col-gap-default: var(--vds-row-col-gap);
+    --vds-row-row-gap-default: var(--vds-row-row-gap);
+    --vds-row-cols-default:    var(--vds-row-cols);
+    --vds-row-min-col-default: var(--vds-row-min-col);
   }
 }

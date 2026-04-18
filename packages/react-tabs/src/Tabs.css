@@ -1,62 +1,309 @@
-@layer components {
+@import "./Tabs.tokens.css";
+
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * List
+   * ───────────────────────────────────────────── */
   .vds-tabs-list {
+    position: relative;
     display: inline-flex;
-    align-items: center;
-    gap: var(--vds-space-1);
-    border-block-end: 1px solid var(--vds-color-border);
-    padding-block-end: 0;
+    align-items: stretch;
+    gap: var(--tabs-list-gap);
+    padding-inline: var(--tabs-list-padding-inline);
+    padding-block: var(--tabs-list-padding-block);
+    background-color: var(--tabs-list-bg);
+    border-radius: var(--tabs-list-radius);
+    border: 0 solid var(--tabs-list-border-color);
+    border-block-end-width: var(--tabs-list-border-width);
   }
 
+  /* ─────────────────────────────────────────────
+   * Trigger
+   * ───────────────────────────────────────────── */
   .vds-tabs-trigger {
+    position: relative;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--vds-space-2);
-    padding-inline: var(--vds-space-4);
-    padding-block: var(--vds-space-2);
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-sm);
-    font-weight: var(--vds-font-weight-medium);
-    color: var(--vds-color-text-muted);
-    border: none;
-    border-block-end: 2px solid transparent;
-    margin-block-end: -1px;
+    gap: var(--tabs-trigger-gap);
+    block-size: var(--tabs-trigger-height);
+    padding-inline: var(--tabs-trigger-padding-inline);
+    padding-block: var(--tabs-trigger-padding-block);
+
+    font-family: var(--tabs-trigger-font-family);
+    font-size: var(--tabs-trigger-font-size);
+    font-weight: var(--tabs-trigger-font-weight);
+    line-height: var(--tabs-trigger-line-height);
+    color: var(--tabs-trigger-color);
+
+    background-color: var(--tabs-trigger-bg);
+    border: var(--tabs-trigger-border-width) solid
+      var(--tabs-trigger-border-color);
+    border-radius: var(--tabs-trigger-radius);
+
     cursor: pointer;
-    background: transparent;
-    transition:
-      color var(--vds-duration-fast) var(--vds-ease-out),
-      border-color var(--vds-duration-fast) var(--vds-ease-out);
+    appearance: none;
     white-space: nowrap;
     user-select: none;
-
-    &:hover:not(:disabled) {
-      color: var(--vds-color-text);
-    }
-
-    &[data-state="active"] {
-      color: var(--vds-color-text);
-      border-block-end-color: var(--vds-color-primary-500);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: -2px;
-      border-radius: var(--vds-radius-element);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    transition:
+      color var(--tabs-trigger-transition-duration)
+        var(--tabs-trigger-transition-ease),
+      background-color var(--tabs-trigger-transition-duration)
+        var(--tabs-trigger-transition-ease),
+      border-color var(--tabs-trigger-transition-duration)
+        var(--tabs-trigger-transition-ease),
+      box-shadow var(--tabs-trigger-transition-duration)
+        var(--tabs-trigger-transition-ease);
   }
 
-  .vds-tabs-content {
-    padding-block-start: var(--vds-space-4);
+  .vds-tabs-trigger:hover:not(:disabled):not([data-disabled]) {
+    color: var(--tabs-trigger-color-hover);
+    background-color: var(--tabs-trigger-bg-hover);
+    border-color: var(--tabs-trigger-border-color-hover);
+  }
 
-    &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
-      border-radius: var(--vds-radius-element);
+  .vds-tabs-trigger[data-state="active"] {
+    color: var(--tabs-trigger-color-active);
+    background-color: var(--tabs-trigger-bg-active);
+    border-color: var(--tabs-trigger-border-color-active);
+    box-shadow: var(--tabs-trigger-shadow-active);
+  }
+
+  .vds-tabs-trigger:focus-visible {
+    outline: var(--tabs-trigger-focus-ring-width) solid
+      var(--tabs-trigger-focus-ring-color);
+    outline-offset: var(--tabs-trigger-focus-ring-offset);
+  }
+
+  .vds-tabs-trigger:disabled,
+  .vds-tabs-trigger[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Content
+   * ───────────────────────────────────────────── */
+  .vds-tabs-content {
+    padding-block-start: var(--tabs-content-padding-block);
+  }
+
+  .vds-tabs-content:focus-visible {
+    outline: var(--tabs-content-focus-ring-width) solid
+      var(--tabs-content-focus-ring-color);
+    outline-offset: var(--tabs-content-focus-ring-offset);
+    border-radius: var(--tabs-content-focus-ring-radius);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Sliding indicator (::after)
+   * Driven by CSS vars set in useTabsIndicator.
+   * `--tabs-indicator-display` is block only on variants that
+   * support sliding (underline / line / pills / segmented).
+   * ───────────────────────────────────────────── */
+  .vds-tabs-list[data-animated="true"]::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+    display: var(--tabs-indicator-display);
+    background-color: var(--tabs-indicator-color);
+    border-radius: var(--tabs-indicator-radius);
+    opacity: var(--tabs-indicator-ready, 0);
+    transition:
+      transform var(--tabs-indicator-transition-duration)
+        var(--tabs-indicator-transition-ease),
+      inline-size var(--tabs-indicator-transition-duration)
+        var(--tabs-indicator-transition-ease),
+      block-size var(--tabs-indicator-transition-duration)
+        var(--tabs-indicator-transition-ease);
+  }
+
+  /* underline: bottom line (horizontal) / end line (vertical) */
+  .vds-tabs-list[data-variant="underline"][data-animated="true"]::after {
+    inset-inline-start: 0;
+    inset-block-end: calc(-1 * var(--tabs-list-border-width));
+    inline-size: var(--tabs-indicator-w, 0);
+    block-size: var(--tabs-indicator-thickness);
+    transform: translateX(var(--tabs-indicator-x, 0));
+  }
+  .vds-tabs-list[data-variant="underline"][data-orientation="vertical"][data-animated="true"]::after {
+    inset-block-start: 0;
+    inset-inline-end: calc(-1 * var(--tabs-list-border-width));
+    inset-inline-start: auto;
+    inset-block-end: auto;
+    inline-size: var(--tabs-indicator-thickness);
+    block-size: var(--tabs-indicator-h, 0);
+    transform: translateY(var(--tabs-indicator-y, 0));
+  }
+
+  /* line: top line (horizontal) / start line (vertical) */
+  .vds-tabs-list[data-variant="line"][data-animated="true"]::after {
+    inset-inline-start: 0;
+    inset-block-start: calc(-1 * var(--tabs-list-border-width));
+    inline-size: var(--tabs-indicator-w, 0);
+    block-size: var(--tabs-indicator-thickness);
+    transform: translateX(var(--tabs-indicator-x, 0));
+  }
+  .vds-tabs-list[data-variant="line"][data-orientation="vertical"][data-animated="true"]::after {
+    inset-block-start: 0;
+    inset-inline-start: calc(-1 * var(--tabs-list-border-width));
+    inset-block-end: auto;
+    inline-size: var(--tabs-indicator-thickness);
+    block-size: var(--tabs-indicator-h, 0);
+    transform: translateY(var(--tabs-indicator-y, 0));
+  }
+
+  /* pills / segmented: full-bleed indicator behind active trigger */
+  .vds-tabs-list[data-variant="pills"][data-animated="true"]::after,
+  .vds-tabs-list[data-variant="segmented"][data-animated="true"]::after {
+    inset-block-start: var(--tabs-list-padding-block);
+    inset-inline-start: var(--tabs-list-padding-inline);
+    inline-size: var(--tabs-indicator-w, 0);
+    block-size: var(--tabs-indicator-h, 0);
+    transform: translate(
+      calc(var(--tabs-indicator-x, 0) - var(--tabs-list-padding-inline)),
+      calc(var(--tabs-indicator-y, 0) - var(--tabs-list-padding-block))
+    );
+  }
+  .vds-tabs-list[data-variant="segmented"][data-animated="true"]::after {
+    box-shadow: var(--vds-shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
+  }
+
+  /* With a sliding fill (pills/segmented), the trigger mustn't
+     paint its own bg/shadow — that's the indicator's job. */
+  .vds-tabs-list[data-variant="pills"][data-animated="true"]
+    .vds-tabs-trigger[data-state="active"],
+  .vds-tabs-list[data-variant="segmented"][data-animated="true"]
+    .vds-tabs-trigger[data-state="active"] {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Static fallback for underline/line when the
+   * animated indicator is disabled.
+   * ───────────────────────────────────────────── */
+  .vds-tabs-list[data-variant="underline"]:not([data-animated="true"])
+    .vds-tabs-trigger {
+    box-shadow: inset 0 calc(-1 * var(--tabs-indicator-thickness)) 0 0
+      transparent;
+  }
+  .vds-tabs-list[data-variant="underline"]:not([data-animated="true"])
+    .vds-tabs-trigger[data-state="active"] {
+    box-shadow: inset 0 calc(-1 * var(--tabs-indicator-thickness)) 0 0
+      var(--tabs-indicator-color);
+  }
+  .vds-tabs-list[data-variant="line"]:not([data-animated="true"])
+    .vds-tabs-trigger {
+    box-shadow: inset 0 var(--tabs-indicator-thickness) 0 0 transparent;
+  }
+  .vds-tabs-list[data-variant="line"]:not([data-animated="true"])
+    .vds-tabs-trigger[data-state="active"] {
+    box-shadow: inset 0 var(--tabs-indicator-thickness) 0 0
+      var(--tabs-indicator-color);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Variant: boxed (browser tabs)
+   * ───────────────────────────────────────────── */
+  .vds-tabs-list[data-variant="boxed"] {
+    align-items: flex-end;
+  }
+  .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger {
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+    margin-block-end: calc(-1 * var(--tabs-list-border-width));
+  }
+  .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger[data-state="active"] {
+    border-block-end-color: var(--tabs-trigger-bg-active);
+  }
+
+  /* Boxed vertical: round start-side corners, attach to inline-end border */
+  .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"] {
+    align-items: stretch;
+  }
+  .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"]
+    .vds-tabs-trigger {
+    border-start-start-radius: var(--tabs-trigger-radius);
+    border-end-start-radius: var(--tabs-trigger-radius);
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+    margin-block-end: 0;
+    margin-inline-end: calc(-1 * var(--tabs-list-border-width));
+  }
+  .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"]
+    .vds-tabs-trigger[data-state="active"] {
+    border-block-end-color: var(--tabs-trigger-border-color-active);
+    border-inline-end-color: var(--tabs-trigger-bg-active);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Orientation: vertical
+   * ───────────────────────────────────────────── */
+  .vds-tabs-list[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: stretch;
+    border-block-end-width: 0;
+    border-inline-end-width: var(--tabs-list-border-width);
+  }
+  .vds-tabs-list[data-orientation="vertical"] .vds-tabs-trigger {
+    justify-content: flex-start;
+  }
+  /* line variant in vertical: swap to inline-start border */
+  .vds-tabs-list[data-variant="line"][data-orientation="vertical"] {
+    border-inline-end-width: 0;
+    border-inline-start-width: var(--tabs-list-border-width);
+  }
+
+  /* Static fallback for vertical underline/line (animated off) */
+  .vds-tabs-list[data-variant="underline"][data-orientation="vertical"]:not(
+      [data-animated="true"]
+    )
+    .vds-tabs-trigger {
+    box-shadow: inset calc(-1 * var(--tabs-indicator-thickness)) 0 0 0
+      transparent;
+  }
+  .vds-tabs-list[data-variant="underline"][data-orientation="vertical"]:not(
+      [data-animated="true"]
+    )
+    .vds-tabs-trigger[data-state="active"] {
+    box-shadow: inset calc(-1 * var(--tabs-indicator-thickness)) 0 0 0
+      var(--tabs-indicator-color);
+  }
+  .vds-tabs-list[data-variant="line"][data-orientation="vertical"]:not(
+      [data-animated="true"]
+    )
+    .vds-tabs-trigger {
+    box-shadow: inset var(--tabs-indicator-thickness) 0 0 0 transparent;
+  }
+  .vds-tabs-list[data-variant="line"][data-orientation="vertical"]:not(
+      [data-animated="true"]
+    )
+    .vds-tabs-trigger[data-state="active"] {
+    box-shadow: inset var(--tabs-indicator-thickness) 0 0 0
+      var(--tabs-indicator-color);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Full-width modifier
+   * ───────────────────────────────────────────── */
+  .vds-tabs-list[data-full-width="true"] {
+    display: flex;
+    inline-size: 100%;
+  }
+  .vds-tabs-list[data-full-width="true"] .vds-tabs-trigger {
+    flex: 1 1 0;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Reduced motion
+   * ───────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-tabs-list::after,
+    .vds-tabs-trigger {
+      transition: none;
     }
   }
 }

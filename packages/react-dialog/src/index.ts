@@ -5,14 +5,26 @@ export {
   DialogPortal,
   DialogOverlay,
   DialogContent,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
+  DialogCloseIcon,
 } from "./Dialog";
+
 export type {
   DialogOverlayProps,
   DialogContentProps,
+  DialogHeaderProps,
+  DialogBodyProps,
+  DialogFooterProps,
   DialogTitleProps,
   DialogDescriptionProps,
-  DialogFooterProps,
+  DialogCloseIconProps,
+  DialogSize,
+  DialogAnimation,
+  DialogIntent,
+  DialogBackdrop,
+  DialogHeaderVariant,
 } from "./Dialog";

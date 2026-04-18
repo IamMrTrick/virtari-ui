@@ -1,0 +1,92 @@
+@layer tokens {
+  /*
+   * ── Status (intent) semantic layer (NEW, additive) ──
+   *
+   * Expands each intent (primary/success/warning/danger/info/accent) to
+   * the full Radix-style 12-step semantic role coverage:
+   *
+   *   {intent}-bg-subtle    app-level intent tint (canvas accent)
+   *   {intent}-bg           component-level muted bg (badges, alerts)
+   *   {intent}-bg-hover     hover on muted bg                  (NEW)
+   *   {intent}-bg-active    active on muted bg                 (NEW)
+   *   {intent}-solid        emphasis bg (CTAs, indicators)
+   *   {intent}-solid-hover  solid hover
+   *   {intent}-solid-active solid active
+   *   {intent}-text         high-contrast text on muted bg
+   *   {intent}-text-muted   low-contrast text on muted bg      (NEW)
+   *
+   * Legacy aliases (*-emphasis, *-muted, *-muted-text, *-hover, *-active)
+   * stay in _legacy.css. New components should prefer these names.
+   */
+
+  :root {
+    /* ─── Primary ─── */
+    --vds-color-primary-bg-subtle:    var(--vds-color-primary-2);
+    --vds-color-primary-bg:           var(--vds-color-primary-3);
+    --vds-color-primary-bg-hover:     var(--vds-color-primary-4);
+    --vds-color-primary-bg-active:    var(--vds-color-primary-5);
+    --vds-color-primary-solid:        var(--vds-color-primary-9);
+    --vds-color-primary-solid-hover:  var(--vds-color-primary-10);
+    --vds-color-primary-solid-active: var(--vds-color-primary-11);
+    --vds-color-primary-text:         var(--vds-color-primary-11);
+    --vds-color-primary-text-muted:   var(--vds-color-primary-10);
+
+    /* ─── Success ─── */
+    --vds-color-success-bg-subtle:    var(--vds-color-success-2);
+    --vds-color-success-bg:           var(--vds-color-success-3);
+    --vds-color-success-bg-hover:     var(--vds-color-success-4);
+    --vds-color-success-bg-active:    var(--vds-color-success-5);
+    --vds-color-success-solid:        var(--vds-color-success-9);
+    --vds-color-success-solid-hover:  var(--vds-color-success-10);
+    --vds-color-success-solid-active: var(--vds-color-success-11);
+    --vds-color-success-text:         var(--vds-color-success-11);
+    --vds-color-success-text-muted:   var(--vds-color-success-10);
+
+    /* ─── Warning ─── */
+    --vds-color-warning-bg-subtle:    var(--vds-color-warning-2);
+    --vds-color-warning-bg:           var(--vds-color-warning-3);
+    --vds-color-warning-bg-hover:     var(--vds-color-warning-4);
+    --vds-color-warning-bg-active:    var(--vds-color-warning-5);
+    --vds-color-warning-solid:        var(--vds-color-warning-9);
+    --vds-color-warning-solid-hover:  var(--vds-color-warning-10);
+    --vds-color-warning-solid-active: var(--vds-color-warning-11);
+    --vds-color-warning-text:         var(--vds-color-warning-11);
+    --vds-color-warning-text-muted:   var(--vds-color-warning-10);
+
+    /* ─── Danger ─── */
+    --vds-color-danger-bg-subtle:    var(--vds-color-danger-2);
+    --vds-color-danger-bg:           var(--vds-color-danger-3);
+    --vds-color-danger-bg-hover:     var(--vds-color-danger-4);
+    --vds-color-danger-bg-active:    var(--vds-color-danger-5);
+    --vds-color-danger-solid:        var(--vds-color-danger-9);
+    --vds-color-danger-solid-hover:  var(--vds-color-danger-10);
+    --vds-color-danger-solid-active: var(--vds-color-danger-11);
+    --vds-color-danger-text:         var(--vds-color-danger-11);
+    --vds-color-danger-text-muted:   var(--vds-color-danger-10);
+
+    /* ─── Info ─── */
+    --vds-color-info-bg-subtle:    var(--vds-color-info-2);
+    --vds-color-info-bg:           var(--vds-color-info-3);
+    --vds-color-info-bg-hover:     var(--vds-color-info-4);
+    --vds-color-info-bg-active:    var(--vds-color-info-5);
+    --vds-color-info-solid:        var(--vds-color-info-9);
+    --vds-color-info-solid-hover:  var(--vds-color-info-10);
+    --vds-color-info-solid-active: var(--vds-color-info-11);
+    --vds-color-info-text:         var(--vds-color-info-11);
+    --vds-color-info-text-muted:   var(--vds-color-info-10);
+
+    /* ─── Accent ─── */
+    --vds-color-accent-bg-subtle:    var(--vds-color-accent-2);
+    --vds-color-accent-bg:           var(--vds-color-accent-3);
+    --vds-color-accent-bg-hover:     var(--vds-color-accent-4);
+    --vds-color-accent-bg-active:    var(--vds-color-accent-5);
+    --vds-color-accent-solid:        var(--vds-color-accent-9);
+    --vds-color-accent-solid-hover:  var(--vds-color-accent-10);
+    --vds-color-accent-solid-active: var(--vds-color-accent-11);
+    --vds-color-accent-text:         var(--vds-color-accent-11);
+    --vds-color-accent-text-muted:   var(--vds-color-accent-10);
+
+    /* ─── Accent on-color (text/icon on solid accent) ─── */
+    --vds-color-on-accent: var(--vds-color-white);
+  }
+}

@@ -1,0 +1,43 @@
+@layer tokens {
+  /*
+   * ── Background semantic layer (NEW, additive) ──
+   *
+   * Provides:
+   *   • Full neutral 12-step semantic exposure for advanced use cases
+   *     (data tables, code editors, financial dashboards) — same names
+   *     used in Radix, allowing direct port of patterns.
+   *   • Modern elevation aliases tuned for both modes.
+   *   • Strong/light overlay variants and dedicated shadow tints
+   *     (so components stop hardcoding `black` in shadows).
+   *   • Highlight tints for glass/frost effects on media.
+   *
+   * The legacy aliases (--vds-color-bg, --vds-color-surface, etc.)
+   * remain in _legacy.css unchanged — components keep working.
+   */
+
+  :root {
+    /* ─── Inverse background (NEW) ─── */
+    --vds-color-bg-inverse: var(--vds-color-neutral-12);
+    --vds-color-surface-inverse: var(--vds-color-neutral-12);
+
+    /* ─── Strong/light overlay variants (NEW — built on always-black alpha) ─── */
+    --vds-color-overlay-strong: var(--vds-color-black-a9);
+
+    /* ─── Scrim alias (NEW — for clarity in component CSS) ─── */
+    --vds-color-scrim: var(--vds-color-overlay);
+    --vds-color-scrim-light: var(--vds-color-overlay-light);
+    --vds-color-scrim-strong: var(--vds-color-overlay-strong);
+
+    /* ─── Shadow tint tokens (NEW — fixes Toast/Drawer hardcoded `black`) ───
+       Always uses black-a* — shadows must NOT invert in dark mode (a
+       white-tinted shadow reads as a highlight, not depth). */
+    --vds-color-shadow-tint-low:    var(--vds-color-black-a3);
+    --vds-color-shadow-tint:        var(--vds-color-black-a5);
+    --vds-color-shadow-tint-strong: var(--vds-color-black-a7);
+
+    /* ─── Highlight tints (NEW — for glass/frost overlays on media) ───
+       Always white-a*. Use for hero overlays, scrubber backgrounds, etc. */
+    --vds-color-highlight-tint:        var(--vds-color-white-a3);
+    --vds-color-highlight-tint-strong: var(--vds-color-white-a7);
+  }
+}

@@ -30,6 +30,8 @@ const NAV_ITEMS = [
       { label: "Colors", path: "colors" },
       { label: "Typography", path: "typography" },
       { label: "Composition", path: "composition" },
+      { label: "Page Layout", path: "layout" },
+      { label: "Utilities", path: "utilities" },
     ],
   },
   {
@@ -44,6 +46,7 @@ const NAV_ITEMS = [
       { label: "Switch", path: "switch" },
       { label: "Toggle", path: "toggle" },
       { label: "Slider", path: "slider" },
+      { label: "Date Picker", path: "date-picker" },
       { label: "Label", path: "label" },
     ],
   },
@@ -80,6 +83,10 @@ const NAV_ITEMS = [
       { label: "Collapsible", path: "collapsible" },
       { label: "Scroll Area", path: "scroll-area" },
     ],
+  },
+  {
+    group: "Data",
+    items: [{ label: "Data Table", path: "data-table" }],
   },
 ];
 

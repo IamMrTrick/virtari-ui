@@ -5,6 +5,20 @@
   "exports": {
     ".": "./dist/tokens.css",
     "./colors": "./src/colors.css",
+    "./colors/primitives": "./src/colors/primitives.css",
+    "./colors/primitives/neutral": "./src/colors/primitives/neutral.css",
+    "./colors/primitives/intents": "./src/colors/primitives/intents.css",
+    "./colors/primitives/alphas": "./src/colors/primitives/alphas.css",
+    "./colors/semantic": "./src/colors/semantic.css",
+    "./colors/semantic/background": "./src/colors/semantic/background.css",
+    "./colors/semantic/text": "./src/colors/semantic/text.css",
+    "./colors/semantic/icon": "./src/colors/semantic/icon.css",
+    "./colors/semantic/border": "./src/colors/semantic/border.css",
+    "./colors/semantic/interactive": "./src/colors/semantic/interactive.css",
+    "./colors/semantic/status": "./src/colors/semantic/status.css",
+    "./colors/semantic/data-viz": "./src/colors/semantic/data-viz.css",
+    "./brands": "./src/brands/index.css",
+    "./brands/virtari": "./src/brands/virtari.css",
     "./spacing": "./src/spacing.css",
     "./typography": "./src/typography.css",
     "./radii": "./src/radii.css",
@@ -12,7 +26,11 @@
     "./radii/modes": "./src/radii/modes.css",
     "./radii/components": "./src/radii/components.css",
     "./shadows": "./src/shadows.css",
-    "./motion": "./src/motion.css"
+    "./motion": "./src/motion.css",
+    "./layout": "./src/layout.css",
+    "./layout/primitives": "./src/layout/primitives.css",
+    "./layout/semantic": "./src/layout/semantic.css",
+    "./layout/components": "./src/layout/components.css"
   },
   "files": ["dist", "src"],
   "scripts": {

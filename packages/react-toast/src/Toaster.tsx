@@ -44,6 +44,8 @@ export function Toaster({
   closeLabel = "Close notification",
   maxToasts,
   label = "Notifications",
+  timerMode = "parallel",
+  pauseMode = "hover",
 }: ToasterProps) {
   useEffect(() => {
     toastStore.setDefaultDuration(duration);
@@ -186,6 +188,8 @@ export function Toaster({
             offset={offset}
             reportHeight={reportHeight}
             closeLabel={closeLabel}
+            timerMode={timerMode}
+            pauseMode={pauseMode}
           />
         ))}
       </ToastPrimitive.Viewport>

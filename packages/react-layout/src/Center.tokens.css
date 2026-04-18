@@ -1,0 +1,16 @@
+@layer design-system.components {
+  .vds-center {
+    --center-max-width: 60ch;
+    --center-gutter: var(--vds-space-4, 1rem);
+  }
+
+  .vds-center[data-max-width="sm"] { --center-max-width: 40ch; }
+  .vds-center[data-max-width="md"] { --center-max-width: 60ch; }
+  .vds-center[data-max-width="lg"] { --center-max-width: 80ch; }
+  .vds-center[data-max-width="xl"] { --center-max-width: 100ch; }
+
+  .vds-center[data-gutter="none"] { --center-gutter: 0; }
+  .vds-center[data-gutter="sm"]   { --center-gutter: var(--vds-space-2, 0.5rem); }
+  .vds-center[data-gutter="md"]   { --center-gutter: var(--vds-space-4, 1rem); }
+  .vds-center[data-gutter="lg"]   { --center-gutter: var(--vds-space-6, 1.5rem); }
+}

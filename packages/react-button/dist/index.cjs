@@ -6,6 +6,7 @@ var jsxRuntime = require('react/jsx-runtime');
 
 // src/Button.tsx
 function Button({
+  color = "primary",
   variant = "solid",
   size = "md",
   asChild = false,
@@ -24,13 +25,16 @@ function Button({
 }) {
   const Comp = asChild ? reactSlot.Slot : "button";
   const isDisabled = disabled || loading;
+  const resolvedColor = variant === "destructive" ? "danger" : color;
+  const resolvedVariant = variant === "destructive" ? "solid" : variant;
   return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
     /* @__PURE__ */ jsxRuntime.jsxs(
       Comp,
       {
         ref,
         className: utils.cn("vds-button", className),
-        "data-variant": variant,
+        "data-color": resolvedColor,
+        "data-variant": resolvedVariant,
         "data-size": size,
         "data-loading": loading || void 0,
         "data-full-width": fullWidth || void 0,

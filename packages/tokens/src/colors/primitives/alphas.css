@@ -1,0 +1,242 @@
+@layer tokens {
+  /*
+   * ── Three alpha families ──
+   *
+   * 1. black-a*   ALWAYS black, regardless of theme.
+   *               Use for: shadows, modal scrims, dialog overlays.
+   *               Reason: a "shadow" tinted white reads as a highlight.
+   *
+   * 2. white-a*   ALWAYS white, regardless of theme.
+   *               Use for: glass/frost overlays on media, highlights on
+   *               dark hero sections, ripples on dark buttons.
+   *
+   * 3. gray-a*    ADAPTIVE — black tint in light mode, white tint in dark.
+   *               Use for: ghost button hover, dividers on colored panels,
+   *               interactive overlays where the parent bg color is unknown.
+   *               Composited result matches the solid neutral scale.
+   *
+   * Plus per-intent alpha (primary-a1..12, success-a1..12, etc.) for
+   * subtle intent backgrounds and hover overlays in component CSS.
+   *
+   * Percentages are Radix-canonical (industry-tested).
+   */
+
+  :root {
+    /* ─── Black alpha (always black) ─── */
+    --vds-color-black-a1:  oklch(0 0 0 / 0.05);
+    --vds-color-black-a2:  oklch(0 0 0 / 0.10);
+    --vds-color-black-a3:  oklch(0 0 0 / 0.15);
+    --vds-color-black-a4:  oklch(0 0 0 / 0.20);
+    --vds-color-black-a5:  oklch(0 0 0 / 0.30);
+    --vds-color-black-a6:  oklch(0 0 0 / 0.40);
+    --vds-color-black-a7:  oklch(0 0 0 / 0.50);
+    --vds-color-black-a8:  oklch(0 0 0 / 0.60);
+    --vds-color-black-a9:  oklch(0 0 0 / 0.70);
+    --vds-color-black-a10: oklch(0 0 0 / 0.80);
+    --vds-color-black-a11: oklch(0 0 0 / 0.90);
+    --vds-color-black-a12: oklch(0 0 0 / 0.95);
+
+    /* ─── White alpha (always white) ─── */
+    --vds-color-white-a1:  oklch(1 0 0 / 0.05);
+    --vds-color-white-a2:  oklch(1 0 0 / 0.10);
+    --vds-color-white-a3:  oklch(1 0 0 / 0.15);
+    --vds-color-white-a4:  oklch(1 0 0 / 0.20);
+    --vds-color-white-a5:  oklch(1 0 0 / 0.30);
+    --vds-color-white-a6:  oklch(1 0 0 / 0.40);
+    --vds-color-white-a7:  oklch(1 0 0 / 0.50);
+    --vds-color-white-a8:  oklch(1 0 0 / 0.60);
+    --vds-color-white-a9:  oklch(1 0 0 / 0.70);
+    --vds-color-white-a10: oklch(1 0 0 / 0.80);
+    --vds-color-white-a11: oklch(1 0 0 / 0.90);
+    --vds-color-white-a12: oklch(1 0 0 / 0.95);
+
+    /* ─── Neutral alpha — light (black tint, Radix-tuned) ─── */
+    --vds-color-neutral-a1:  oklch(0 0 0 / 0.012);
+    --vds-color-neutral-a2:  oklch(0 0 0 / 0.024);
+    --vds-color-neutral-a3:  oklch(0 0 0 / 0.059);
+    --vds-color-neutral-a4:  oklch(0 0 0 / 0.090);
+    --vds-color-neutral-a5:  oklch(0 0 0 / 0.122);
+    --vds-color-neutral-a6:  oklch(0 0 0 / 0.149);
+    --vds-color-neutral-a7:  oklch(0 0 0 / 0.192);
+    --vds-color-neutral-a8:  oklch(0 0 0 / 0.267);
+    --vds-color-neutral-a9:  oklch(0 0 0 / 0.447);
+    --vds-color-neutral-a10: oklch(0 0 0 / 0.486);
+    --vds-color-neutral-a11: oklch(0 0 0 / 0.608);
+    --vds-color-neutral-a12: oklch(0 0 0 / 0.875);
+
+    /* ─── Per-intent alpha — light (intent solid 9 with Radix percentages) ─── */
+    --vds-color-primary-a1:  oklch(0.55 0.20 265 / 0.020);
+    --vds-color-primary-a2:  oklch(0.55 0.20 265 / 0.040);
+    --vds-color-primary-a3:  oklch(0.55 0.20 265 / 0.080);
+    --vds-color-primary-a4:  oklch(0.55 0.20 265 / 0.120);
+    --vds-color-primary-a5:  oklch(0.55 0.20 265 / 0.160);
+    --vds-color-primary-a6:  oklch(0.55 0.20 265 / 0.200);
+    --vds-color-primary-a7:  oklch(0.55 0.20 265 / 0.260);
+    --vds-color-primary-a8:  oklch(0.55 0.20 265 / 0.350);
+    --vds-color-primary-a9:  oklch(0.55 0.20 265 / 0.550);
+    --vds-color-primary-a10: oklch(0.55 0.20 265 / 0.620);
+    --vds-color-primary-a11: oklch(0.55 0.20 265 / 0.730);
+    --vds-color-primary-a12: oklch(0.55 0.20 265 / 0.910);
+
+    --vds-color-success-a1:  oklch(0.555 0.17 155 / 0.020);
+    --vds-color-success-a2:  oklch(0.555 0.17 155 / 0.040);
+    --vds-color-success-a3:  oklch(0.555 0.17 155 / 0.080);
+    --vds-color-success-a4:  oklch(0.555 0.17 155 / 0.120);
+    --vds-color-success-a5:  oklch(0.555 0.17 155 / 0.160);
+    --vds-color-success-a6:  oklch(0.555 0.17 155 / 0.200);
+    --vds-color-success-a7:  oklch(0.555 0.17 155 / 0.260);
+    --vds-color-success-a8:  oklch(0.555 0.17 155 / 0.350);
+    --vds-color-success-a9:  oklch(0.555 0.17 155 / 0.550);
+    --vds-color-success-a10: oklch(0.555 0.17 155 / 0.620);
+    --vds-color-success-a11: oklch(0.555 0.17 155 / 0.730);
+    --vds-color-success-a12: oklch(0.555 0.17 155 / 0.910);
+
+    --vds-color-warning-a1:  oklch(0.70 0.165 85 / 0.030);
+    --vds-color-warning-a2:  oklch(0.70 0.165 85 / 0.060);
+    --vds-color-warning-a3:  oklch(0.70 0.165 85 / 0.110);
+    --vds-color-warning-a4:  oklch(0.70 0.165 85 / 0.160);
+    --vds-color-warning-a5:  oklch(0.70 0.165 85 / 0.220);
+    --vds-color-warning-a6:  oklch(0.70 0.165 85 / 0.280);
+    --vds-color-warning-a7:  oklch(0.70 0.165 85 / 0.360);
+    --vds-color-warning-a8:  oklch(0.70 0.165 85 / 0.470);
+    --vds-color-warning-a9:  oklch(0.70 0.165 85 / 0.700);
+    --vds-color-warning-a10: oklch(0.70 0.165 85 / 0.770);
+    --vds-color-warning-a11: oklch(0.70 0.165 85 / 0.860);
+    --vds-color-warning-a12: oklch(0.70 0.165 85 / 0.950);
+
+    --vds-color-danger-a1:  oklch(0.555 0.20 25 / 0.020);
+    --vds-color-danger-a2:  oklch(0.555 0.20 25 / 0.040);
+    --vds-color-danger-a3:  oklch(0.555 0.20 25 / 0.080);
+    --vds-color-danger-a4:  oklch(0.555 0.20 25 / 0.120);
+    --vds-color-danger-a5:  oklch(0.555 0.20 25 / 0.160);
+    --vds-color-danger-a6:  oklch(0.555 0.20 25 / 0.200);
+    --vds-color-danger-a7:  oklch(0.555 0.20 25 / 0.260);
+    --vds-color-danger-a8:  oklch(0.555 0.20 25 / 0.350);
+    --vds-color-danger-a9:  oklch(0.555 0.20 25 / 0.550);
+    --vds-color-danger-a10: oklch(0.555 0.20 25 / 0.620);
+    --vds-color-danger-a11: oklch(0.555 0.20 25 / 0.730);
+    --vds-color-danger-a12: oklch(0.555 0.20 25 / 0.910);
+
+    --vds-color-info-a1:  oklch(0.555 0.14 210 / 0.020);
+    --vds-color-info-a2:  oklch(0.555 0.14 210 / 0.040);
+    --vds-color-info-a3:  oklch(0.555 0.14 210 / 0.080);
+    --vds-color-info-a4:  oklch(0.555 0.14 210 / 0.120);
+    --vds-color-info-a5:  oklch(0.555 0.14 210 / 0.160);
+    --vds-color-info-a6:  oklch(0.555 0.14 210 / 0.200);
+    --vds-color-info-a7:  oklch(0.555 0.14 210 / 0.260);
+    --vds-color-info-a8:  oklch(0.555 0.14 210 / 0.350);
+    --vds-color-info-a9:  oklch(0.555 0.14 210 / 0.550);
+    --vds-color-info-a10: oklch(0.555 0.14 210 / 0.620);
+    --vds-color-info-a11: oklch(0.555 0.14 210 / 0.730);
+    --vds-color-info-a12: oklch(0.555 0.14 210 / 0.910);
+
+    --vds-color-accent-a1:  oklch(0.665 0.18 45 / 0.030);
+    --vds-color-accent-a2:  oklch(0.665 0.18 45 / 0.060);
+    --vds-color-accent-a3:  oklch(0.665 0.18 45 / 0.110);
+    --vds-color-accent-a4:  oklch(0.665 0.18 45 / 0.160);
+    --vds-color-accent-a5:  oklch(0.665 0.18 45 / 0.220);
+    --vds-color-accent-a6:  oklch(0.665 0.18 45 / 0.280);
+    --vds-color-accent-a7:  oklch(0.665 0.18 45 / 0.360);
+    --vds-color-accent-a8:  oklch(0.665 0.18 45 / 0.470);
+    --vds-color-accent-a9:  oklch(0.665 0.18 45 / 0.700);
+    --vds-color-accent-a10: oklch(0.665 0.18 45 / 0.770);
+    --vds-color-accent-a11: oklch(0.665 0.18 45 / 0.860);
+    --vds-color-accent-a12: oklch(0.665 0.18 45 / 0.950);
+  }
+
+  /* ─── Dark mode overrides ─── */
+  [data-theme="dark"] {
+    /* Neutral alpha — dark (white tint, Radix-tuned) */
+    --vds-color-neutral-a1:  oklch(1 0 0 / 0.000);
+    --vds-color-neutral-a2:  oklch(1 0 0 / 0.035);
+    --vds-color-neutral-a3:  oklch(1 0 0 / 0.070);
+    --vds-color-neutral-a4:  oklch(1 0 0 / 0.110);
+    --vds-color-neutral-a5:  oklch(1 0 0 / 0.130);
+    --vds-color-neutral-a6:  oklch(1 0 0 / 0.170);
+    --vds-color-neutral-a7:  oklch(1 0 0 / 0.230);
+    --vds-color-neutral-a8:  oklch(1 0 0 / 0.330);
+    --vds-color-neutral-a9:  oklch(1 0 0 / 0.390);
+    --vds-color-neutral-a10: oklch(1 0 0 / 0.450);
+    --vds-color-neutral-a11: oklch(1 0 0 / 0.690);
+    --vds-color-neutral-a12: oklch(1 0 0 / 0.930);
+
+    /* Per-intent alpha — dark (use brighter intent step 9 for vividness on dark bg) */
+    --vds-color-primary-a1:  oklch(0.61 0.20 265 / 0.030);
+    --vds-color-primary-a2:  oklch(0.61 0.20 265 / 0.060);
+    --vds-color-primary-a3:  oklch(0.61 0.20 265 / 0.110);
+    --vds-color-primary-a4:  oklch(0.61 0.20 265 / 0.160);
+    --vds-color-primary-a5:  oklch(0.61 0.20 265 / 0.220);
+    --vds-color-primary-a6:  oklch(0.61 0.20 265 / 0.280);
+    --vds-color-primary-a7:  oklch(0.61 0.20 265 / 0.360);
+    --vds-color-primary-a8:  oklch(0.61 0.20 265 / 0.470);
+    --vds-color-primary-a9:  oklch(0.61 0.20 265 / 0.700);
+    --vds-color-primary-a10: oklch(0.61 0.20 265 / 0.770);
+    --vds-color-primary-a11: oklch(0.61 0.20 265 / 0.860);
+    --vds-color-primary-a12: oklch(0.61 0.20 265 / 0.950);
+
+    --vds-color-success-a1:  oklch(0.61 0.17 155 / 0.030);
+    --vds-color-success-a2:  oklch(0.61 0.17 155 / 0.060);
+    --vds-color-success-a3:  oklch(0.61 0.17 155 / 0.110);
+    --vds-color-success-a4:  oklch(0.61 0.17 155 / 0.160);
+    --vds-color-success-a5:  oklch(0.61 0.17 155 / 0.220);
+    --vds-color-success-a6:  oklch(0.61 0.17 155 / 0.280);
+    --vds-color-success-a7:  oklch(0.61 0.17 155 / 0.360);
+    --vds-color-success-a8:  oklch(0.61 0.17 155 / 0.470);
+    --vds-color-success-a9:  oklch(0.61 0.17 155 / 0.700);
+    --vds-color-success-a10: oklch(0.61 0.17 155 / 0.770);
+    --vds-color-success-a11: oklch(0.61 0.17 155 / 0.860);
+    --vds-color-success-a12: oklch(0.61 0.17 155 / 0.950);
+
+    --vds-color-warning-a1:  oklch(0.70 0.155 85 / 0.040);
+    --vds-color-warning-a2:  oklch(0.70 0.155 85 / 0.080);
+    --vds-color-warning-a3:  oklch(0.70 0.155 85 / 0.140);
+    --vds-color-warning-a4:  oklch(0.70 0.155 85 / 0.200);
+    --vds-color-warning-a5:  oklch(0.70 0.155 85 / 0.280);
+    --vds-color-warning-a6:  oklch(0.70 0.155 85 / 0.360);
+    --vds-color-warning-a7:  oklch(0.70 0.155 85 / 0.450);
+    --vds-color-warning-a8:  oklch(0.70 0.155 85 / 0.560);
+    --vds-color-warning-a9:  oklch(0.70 0.155 85 / 0.800);
+    --vds-color-warning-a10: oklch(0.70 0.155 85 / 0.860);
+    --vds-color-warning-a11: oklch(0.70 0.155 85 / 0.920);
+    --vds-color-warning-a12: oklch(0.70 0.155 85 / 0.970);
+
+    --vds-color-danger-a1:  oklch(0.62 0.20 25 / 0.030);
+    --vds-color-danger-a2:  oklch(0.62 0.20 25 / 0.060);
+    --vds-color-danger-a3:  oklch(0.62 0.20 25 / 0.110);
+    --vds-color-danger-a4:  oklch(0.62 0.20 25 / 0.160);
+    --vds-color-danger-a5:  oklch(0.62 0.20 25 / 0.220);
+    --vds-color-danger-a6:  oklch(0.62 0.20 25 / 0.280);
+    --vds-color-danger-a7:  oklch(0.62 0.20 25 / 0.360);
+    --vds-color-danger-a8:  oklch(0.62 0.20 25 / 0.470);
+    --vds-color-danger-a9:  oklch(0.62 0.20 25 / 0.700);
+    --vds-color-danger-a10: oklch(0.62 0.20 25 / 0.770);
+    --vds-color-danger-a11: oklch(0.62 0.20 25 / 0.860);
+    --vds-color-danger-a12: oklch(0.62 0.20 25 / 0.950);
+
+    --vds-color-info-a1:  oklch(0.62 0.14 210 / 0.030);
+    --vds-color-info-a2:  oklch(0.62 0.14 210 / 0.060);
+    --vds-color-info-a3:  oklch(0.62 0.14 210 / 0.110);
+    --vds-color-info-a4:  oklch(0.62 0.14 210 / 0.160);
+    --vds-color-info-a5:  oklch(0.62 0.14 210 / 0.220);
+    --vds-color-info-a6:  oklch(0.62 0.14 210 / 0.280);
+    --vds-color-info-a7:  oklch(0.62 0.14 210 / 0.360);
+    --vds-color-info-a8:  oklch(0.62 0.14 210 / 0.470);
+    --vds-color-info-a9:  oklch(0.62 0.14 210 / 0.700);
+    --vds-color-info-a10: oklch(0.62 0.14 210 / 0.770);
+    --vds-color-info-a11: oklch(0.62 0.14 210 / 0.860);
+    --vds-color-info-a12: oklch(0.62 0.14 210 / 0.950);
+
+    --vds-color-accent-a1:  oklch(0.665 0.18 45 / 0.040);
+    --vds-color-accent-a2:  oklch(0.665 0.18 45 / 0.080);
+    --vds-color-accent-a3:  oklch(0.665 0.18 45 / 0.140);
+    --vds-color-accent-a4:  oklch(0.665 0.18 45 / 0.200);
+    --vds-color-accent-a5:  oklch(0.665 0.18 45 / 0.280);
+    --vds-color-accent-a6:  oklch(0.665 0.18 45 / 0.360);
+    --vds-color-accent-a7:  oklch(0.665 0.18 45 / 0.450);
+    --vds-color-accent-a8:  oklch(0.665 0.18 45 / 0.560);
+    --vds-color-accent-a9:  oklch(0.665 0.18 45 / 0.800);
+    --vds-color-accent-a10: oklch(0.665 0.18 45 / 0.860);
+    --vds-color-accent-a11: oklch(0.665 0.18 45 / 0.920);
+    --vds-color-accent-a12: oklch(0.665 0.18 45 / 0.970);
+  }
+}

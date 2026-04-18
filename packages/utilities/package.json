@@ -1,0 +1,17 @@
+{
+  "name": "@virtari/utilities",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./dist/utilities.css"
+  },
+  "files": ["dist"],
+  "sideEffects": ["*.css"],
+  "scripts": {
+    "build": "node scripts/generate.mjs && postcss dist/_expanded.css -o dist/utilities.css && rm dist/_expanded.css",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@virtari/tokens": "workspace:*"
+  }
+}

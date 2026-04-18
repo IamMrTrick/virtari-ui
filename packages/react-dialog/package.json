@@ -16,13 +16,14 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./styles": "./dist/Dialog.css"
+    "./styles": "./dist/Dialog.css",
+    "./tokens": "./dist/Dialog.tokens.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup && postcss src/Dialog.css -o dist/Dialog.css",
+    "build": "tsup && postcss src/Dialog.tokens.css -o dist/Dialog.tokens.css && postcss src/Dialog.css -o dist/Dialog.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

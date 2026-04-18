@@ -1,19 +1,19 @@
-@layer components {
+@layer design-system.components {
 
   /* ━━━ Animation: Pulse ━━━
-   * Gentle breathing glow to draw attention. Great for primary CTAs.
+   * Gentle breathing glow to draw attention. Hue tracks --button-color-solid.
    * Usage: <Button animation="pulse">
    */
   .vds-button[data-animation="pulse"] {
-    animation: vds-button-pulse 2s var(--vds-ease-in-out) infinite;
+    animation: vds-button-pulse 2s var(--vds-ease-in-out, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
   }
 
   @keyframes vds-button-pulse {
     0%, 100% {
-      box-shadow: 0 0 0 0 color-mix(in oklch, var(--_button-bg), transparent 30%);
+      box-shadow: 0 0 0 0 color-mix(in oklch, var(--button-color-solid), transparent 30%);
     }
     50% {
-      box-shadow: 0 0 0 8px color-mix(in oklch, var(--_button-bg), transparent 100%);
+      box-shadow: 0 0 0 8px color-mix(in oklch, var(--button-color-solid), transparent 100%);
     }
   }
 
@@ -22,7 +22,7 @@
    * Usage: <Button animation="bounce">
    */
   .vds-button[data-animation="bounce"] {
-    animation: vds-button-bounce 1s var(--vds-ease-bounce) infinite;
+    animation: vds-button-bounce 1s var(--vds-ease-bounce, cubic-bezier(0.175, 0.885, 0.32, 1.275)) infinite;
   }
 
   @keyframes vds-button-bounce {
@@ -32,11 +32,11 @@
   }
 
   /* ━━━ Animation: Shake ━━━
-   * Horizontal shake for error/attention.
+   * Horizontal shake for error/attention. One-shot; re-key to replay.
    * Usage: <Button animation="shake">
    */
   .vds-button[data-animation="shake"] {
-    animation: vds-button-shake 0.5s var(--vds-ease-out);
+    animation: vds-button-shake 0.5s var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
   }
 
   @keyframes vds-button-shake {
@@ -46,11 +46,11 @@
   }
 
   /* ━━━ Animation: Jiggle ━━━
-   * Playful wiggle rotation.
+   * Playful wiggle rotation. One-shot; re-key to replay.
    * Usage: <Button animation="jiggle">
    */
   .vds-button[data-animation="jiggle"] {
-    animation: vds-button-jiggle 0.4s var(--vds-ease-out);
+    animation: vds-button-jiggle 0.4s var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
   }
 
   @keyframes vds-button-jiggle {
@@ -59,7 +59,7 @@
     75% { rotate: 2deg; }
   }
 
-  /* ━━━ Stop animations when reduced motion is preferred ━━━ */
+  /* ━━━ Reduced motion ━━━ */
   @media (prefers-reduced-motion: reduce) {
     .vds-button[data-animation] {
       animation: none;

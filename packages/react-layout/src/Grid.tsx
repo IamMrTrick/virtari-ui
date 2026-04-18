@@ -20,7 +20,7 @@ export function Grid({
   ...rest
 }: GridProps) {
   const mergedStyle: CSSProperties | undefined = minItemWidth
-    ? { ...style, ["--vds-grid-min-item-width" as string]: minItemWidth }
+    ? { ...style, ["--grid-min-item-width" as string]: minItemWidth }
     : style;
   return (
     <Tag

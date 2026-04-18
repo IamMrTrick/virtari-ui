@@ -25,7 +25,7 @@ export function Center({
   ...rest
 }: CenterProps) {
   const mergedStyle: CSSProperties | undefined = maxInlineSize
-    ? { ...style, ["--vds-center-max-width" as string]: maxInlineSize }
+    ? { ...style, ["--center-max-width" as string]: maxInlineSize }
     : style;
   return (
     <Tag

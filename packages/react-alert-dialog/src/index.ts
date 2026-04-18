@@ -1,18 +1,31 @@
 export {
   AlertDialog,
   AlertDialogTrigger,
+  AlertDialogPortal,
+  AlertDialogOverlay,
   AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
   AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogAction,
   AlertDialogCancel,
-  AlertDialogFooter,
 } from "./AlertDialog";
+
 export type {
+  AlertDialogOverlayProps,
   AlertDialogContentProps,
+  AlertDialogHeaderProps,
+  AlertDialogBodyProps,
+  AlertDialogFooterProps,
   AlertDialogTitleProps,
   AlertDialogDescriptionProps,
   AlertDialogActionProps,
   AlertDialogCancelProps,
-  AlertDialogFooterProps,
+  AlertDialogSize,
+  AlertDialogAnimation,
+  AlertDialogIntent,
+  AlertDialogBackdrop,
+  AlertDialogHeaderVariant,
 } from "./AlertDialog";

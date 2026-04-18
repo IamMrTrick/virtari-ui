@@ -1,0 +1,45 @@
+@layer tokens {
+  /*
+   * ── Border semantic layer (NEW, additive) ──
+   *
+   * Adds the missing border roles:
+   *   • border-subtle / border-strong
+   *   • border-input / border-input-hover  (form-specific, distinct from generic border)
+   *   • border-focus                       (border applied during focus)
+   *   • divider                            (horizontal/vertical separators)
+   *   • per-intent borders + strong variants
+   *
+   * Legacy border/border-muted/border-disabled stay in _legacy.css.
+   */
+
+  :root {
+    /* ─── Neutral borders (NEW additions) ─── */
+    --vds-color-border-subtle: var(--vds-color-neutral-6);
+    --vds-color-border-strong: var(--vds-color-neutral-8);
+
+    /* ─── Form input borders (distinct from generic border) ─── */
+    --vds-color-border-input:       var(--vds-color-neutral-7);
+    --vds-color-border-input-hover: var(--vds-color-neutral-8);
+    --vds-color-border-input-focus: var(--vds-color-primary-9);
+
+    /* ─── Focus border (applied to element when focused) ─── */
+    --vds-color-border-focus: var(--vds-color-primary-9);
+
+    /* ─── Divider (semantic line) ─── */
+    --vds-color-divider: var(--vds-color-neutral-a6);
+
+    /* ─── Per-intent borders ─── */
+    --vds-color-border-primary:        var(--vds-color-primary-7);
+    --vds-color-border-primary-strong: var(--vds-color-primary-9);
+    --vds-color-border-success:        var(--vds-color-success-7);
+    --vds-color-border-success-strong: var(--vds-color-success-9);
+    --vds-color-border-warning:        var(--vds-color-warning-7);
+    --vds-color-border-warning-strong: var(--vds-color-warning-9);
+    --vds-color-border-danger:         var(--vds-color-danger-7);
+    --vds-color-border-danger-strong:  var(--vds-color-danger-9);
+    --vds-color-border-info:           var(--vds-color-info-7);
+    --vds-color-border-info-strong:    var(--vds-color-info-9);
+    --vds-color-border-accent:         var(--vds-color-accent-7);
+    --vds-color-border-accent-strong:  var(--vds-color-accent-9);
+  }
+}

@@ -2,13 +2,51 @@ import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as react from 'react';
 import { Ref, ComponentRef } from 'react';
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
+import { DialogAnimation, DialogBackdrop, DialogSize, DialogIntent, DialogHeaderVariant } from '@virtari/react-dialog';
 
+type AlertDialogSize = DialogSize;
+type AlertDialogAnimation = DialogAnimation;
+type AlertDialogIntent = DialogIntent;
+type AlertDialogBackdrop = DialogBackdrop;
+type AlertDialogHeaderVariant = DialogHeaderVariant;
 declare const AlertDialog: react.FC<AlertDialogPrimitive.AlertDialogProps>;
 declare const AlertDialogTrigger: react.ForwardRefExoticComponent<AlertDialogPrimitive.AlertDialogTriggerProps & react.RefAttributes<HTMLButtonElement>>;
-interface AlertDialogContentProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> {
+declare const AlertDialogPortal: react.FC<AlertDialogPrimitive.AlertDialogPortalProps>;
+interface AlertDialogOverlayProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay> {
+    backdrop?: AlertDialogBackdrop;
+    ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Overlay>>;
+}
+declare function AlertDialogOverlay({ backdrop, className, ref, ...props }: AlertDialogOverlayProps): react_jsx_runtime.JSX.Element;
+type RadixContentProps = React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>;
+interface AlertDialogContentProps extends RadixContentProps {
+    /** Max-width variant. Defaults to `"md"`. */
+    size?: AlertDialogSize;
+    /** Enter/exit animation preset. Defaults to `"scale"`. */
+    animation?: AlertDialogAnimation;
+    /** Top accent strip color. Defaults to `"destructive"` — alerts are usually risky. */
+    intent?: AlertDialogIntent;
+    /** Overlay style. Forwarded to the internal overlay. */
+    backdrop?: AlertDialogBackdrop;
+    /** When true, fills the viewport on narrow screens (<= 40rem). */
+    responsive?: boolean;
+    /** Custom portal target. */
+    container?: HTMLElement | null;
     ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Content>>;
 }
-declare function AlertDialogContent({ className, ref, ...props }: AlertDialogContentProps): react_jsx_runtime.JSX.Element;
+declare function AlertDialogContent({ size, animation, intent, backdrop, responsive, container, className, children, ref, ...props }: AlertDialogContentProps): react_jsx_runtime.JSX.Element;
+interface AlertDialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+    variant?: AlertDialogHeaderVariant;
+    ref?: Ref<HTMLDivElement>;
+}
+declare function AlertDialogHeader({ variant, className, ref, ...props }: AlertDialogHeaderProps): react_jsx_runtime.JSX.Element;
+interface AlertDialogBodyProps extends React.HTMLAttributes<HTMLDivElement> {
+    ref?: Ref<HTMLDivElement>;
+}
+declare function AlertDialogBody({ className, ref, ...props }: AlertDialogBodyProps): react_jsx_runtime.JSX.Element;
+interface AlertDialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+    ref?: Ref<HTMLDivElement>;
+}
+declare function AlertDialogFooter({ className, ref, ...props }: AlertDialogFooterProps): react_jsx_runtime.JSX.Element;
 interface AlertDialogTitleProps extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title> {
     ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Title>>;
 }
@@ -25,9 +63,5 @@ interface AlertDialogCancelProps extends React.ComponentPropsWithoutRef<typeof A
     ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Cancel>>;
 }
 declare function AlertDialogCancel({ className, ref, ...props }: AlertDialogCancelProps): react_jsx_runtime.JSX.Element;
-interface AlertDialogFooterProps extends React.ComponentPropsWithoutRef<"div"> {
-    ref?: Ref<HTMLDivElement>;
-}
-declare function AlertDialogFooter({ className, ref, ...props }: AlertDialogFooterProps): react_jsx_runtime.JSX.Element;
 
-export { AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, type AlertDialogCancelProps, AlertDialogContent, type AlertDialogContentProps, AlertDialogDescription, type AlertDialogDescriptionProps, AlertDialogFooter, type AlertDialogFooterProps, AlertDialogTitle, type AlertDialogTitleProps, AlertDialogTrigger };
+export { AlertDialog, AlertDialogAction, type AlertDialogActionProps, type AlertDialogAnimation, type AlertDialogBackdrop, AlertDialogBody, type AlertDialogBodyProps, AlertDialogCancel, type AlertDialogCancelProps, AlertDialogContent, type AlertDialogContentProps, AlertDialogDescription, type AlertDialogDescriptionProps, AlertDialogFooter, type AlertDialogFooterProps, AlertDialogHeader, type AlertDialogHeaderProps, type AlertDialogHeaderVariant, type AlertDialogIntent, AlertDialogOverlay, type AlertDialogOverlayProps, AlertDialogPortal, type AlertDialogSize, AlertDialogTitle, type AlertDialogTitleProps, AlertDialogTrigger };

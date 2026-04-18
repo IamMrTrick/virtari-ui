@@ -1,0 +1,276 @@
+@layer design-system.components {
+  /*
+   * Virtari DataTable — local component tokens.
+   * Scoped to .vds-data-table. Every token declares a --vds-* fallback
+   * plus a literal light-mode default so the package works standalone.
+   *
+   * State/variant redefinitions only REWRITE values — never set properties.
+   */
+  .vds-data-table {
+    /* ── Font + layout ───────────────────────────────────────── */
+    --data-table-font-family:
+      var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --data-table-font-size:            var(--vds-text-sm, 0.875rem);
+    --data-table-line-height:          var(--vds-leading-normal, 1.5);
+    --data-table-cell-padding-inline:  var(--vds-space-3, 0.75rem);
+    --data-table-cell-padding-block:   var(--vds-space-2, 0.5rem);
+    --data-table-row-height:           var(--vds-size-md, 2.5rem);
+    --data-table-header-row-height:    var(--vds-size-md, 2.25rem);
+    --data-table-footer-row-height:    var(--vds-size-md, 2.25rem);
+    --data-table-col-min-width:        4rem;
+    --data-table-col-default-width:    10rem;
+
+    /* ── Surfaces ────────────────────────────────────────────── */
+    --data-table-bg:                   var(--vds-color-surface, #ffffff);
+    --data-table-header-bg:            var(--vds-color-surface-raised, #f9fafb);
+    --data-table-row-bg:               var(--vds-color-surface, #ffffff);
+    --data-table-row-bg-alt:           var(--vds-color-surface-raised, #f9fafb);
+    --data-table-row-bg-hover:         var(--vds-color-surface-hover, #f3f4f6);
+    --data-table-row-bg-selected:      var(--vds-color-primary-muted, #eef2ff);
+    --data-table-row-bg-selected-hover:var(--vds-color-primary-muted, #eef2ff);
+    --data-table-footer-bg:            var(--vds-color-surface-raised, #f9fafb);
+    --data-table-overlay-bg:           color-mix(
+      in oklch,
+      var(--vds-color-surface, #ffffff),
+      transparent 20%
+    );
+
+    /* ── Borders ─────────────────────────────────────────────── */
+    --data-table-border-width:         1px;
+    --data-table-border-color:         var(--vds-color-border-muted, #e5e7eb);
+    --data-table-border-color-strong:  var(--vds-color-border, #d1d5db);
+    --data-table-header-divider-color: var(--vds-color-border, #d1d5db);
+
+    /* ── Typography ──────────────────────────────────────────── */
+    --data-table-header-font-size:      var(--vds-text-xs, 0.75rem);
+    --data-table-header-font-weight:    var(--vds-font-weight-semibold, 600);
+    --data-table-header-color:          var(--vds-color-text-muted, #6b7280);
+    --data-table-header-letter-spacing: var(--vds-tracking-wide, 0.025em);
+    --data-table-header-text-transform: uppercase;
+    --data-table-cell-color:            var(--vds-color-text, #111827);
+    --data-table-footer-color:          var(--vds-color-text-muted, #6b7280);
+
+    /* ── Radii ───────────────────────────────────────────────── */
+    --data-table-radius: var(--vds-radius-data-table, 0.5rem);
+
+    /* ── Motion ──────────────────────────────────────────────── */
+    --data-table-transition-duration: var(--vds-duration-fast, 100ms);
+    --data-table-transition-easing:
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* ── Focus (grid mode + sort triggers) ───────────────────── */
+    --data-table-focus-ring-color:
+      var(--vds-color-primary-emphasis, #6366f1);
+    --data-table-focus-ring-width:  2px;
+    --data-table-focus-ring-offset: -2px;
+
+    /* ── Sort trigger ────────────────────────────────────────── */
+    --data-table-sort-icon-color:
+      var(--vds-color-text-subtle, #9ca3af);
+    --data-table-sort-icon-color-active:
+      var(--vds-color-primary-emphasis, #6366f1);
+    --data-table-sort-icon-opacity:        0.35;
+    --data-table-sort-icon-opacity-active: 1;
+    --data-table-sort-gap: var(--vds-space-1-5, 0.375rem);
+
+    /* ── Selection cell width ────────────────────────────────── */
+    --data-table-select-cell-size: 2.5rem;
+
+    /* ── Global filter ───────────────────────────────────────── */
+    --data-table-filter-bg:
+      var(--vds-color-surface, #ffffff);
+    --data-table-filter-border:
+      var(--vds-color-border, #d1d5db);
+    --data-table-filter-radius:
+      var(--vds-radius-element, 0.375rem);
+    --data-table-filter-height: var(--vds-size-md, 2.25rem);
+    --data-table-filter-padding-inline: var(--vds-space-3, 0.75rem);
+    --data-table-filter-font-size: var(--vds-text-sm, 0.875rem);
+    --data-table-filter-placeholder-color:
+      var(--vds-color-text-subtle, #9ca3af);
+
+    /* ── Pinning ─────────────────────────────────────────────── */
+    --data-table-pin-bg: var(--data-table-row-bg);
+    --data-table-pin-header-bg: var(--data-table-header-bg);
+    --data-table-pin-shadow-left: 4px 0 6px -4px color-mix(
+      in oklch,
+      var(--vds-color-border, #d1d5db),
+      transparent 20%
+    );
+    --data-table-pin-shadow-right: -4px 0 6px -4px color-mix(
+      in oklch,
+      var(--vds-color-border, #d1d5db),
+      transparent 20%
+    );
+
+    /* ── Resize ──────────────────────────────────────────────── */
+    --data-table-resize-hit-width: 8px;
+    --data-table-resize-line-width: 1px;
+    --data-table-resize-line-width-active: 2px;
+    --data-table-resize-line-color: transparent;
+    --data-table-resize-line-color-hover:
+      var(--vds-color-border, #d1d5db);
+    --data-table-resize-line-color-active:
+      var(--vds-color-primary-emphasis, #6366f1);
+    --data-table-guideline-color:
+      var(--vds-color-primary-emphasis, #6366f1);
+    --data-table-guideline-width: 1px;
+    --data-table-guideline-offset: 0px;
+
+    /* ── v2: View mode toggle ────────────────────────────────── */
+    --data-table-view-toggle-bg:
+      var(--vds-color-surface-raised, #f9fafb);
+    --data-table-view-toggle-border:
+      var(--vds-color-border-muted, #e5e7eb);
+    --data-table-view-toggle-radius:
+      var(--vds-radius-element, 0.375rem);
+    --data-table-view-toggle-button-color:
+      var(--vds-color-text-muted, #6b7280);
+    --data-table-view-toggle-button-color-active:
+      var(--vds-color-text, #111827);
+    --data-table-view-toggle-button-bg-active:
+      var(--vds-color-surface, #ffffff);
+
+    /* ── v2: Board view ──────────────────────────────────────── */
+    --data-table-board-gap: var(--vds-space-4, 1rem);
+    --data-table-board-card-min-width: 16rem;
+    --data-table-board-card-padding: var(--vds-space-4, 1rem);
+    --data-table-board-card-bg:
+      var(--vds-color-surface, #ffffff);
+    --data-table-board-card-border:
+      var(--vds-color-border-muted, #e5e7eb);
+    --data-table-board-card-radius:
+      var(--vds-radius-card, 0.75rem);
+    --data-table-board-card-shadow:
+      var(--vds-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.04));
+
+    /* ── v2: List view ───────────────────────────────────────── */
+    --data-table-list-item-padding-block: var(--vds-space-3, 0.75rem);
+    --data-table-list-item-padding-inline: var(--vds-space-4, 1rem);
+    --data-table-list-divider:
+      var(--vds-color-border-muted, #e5e7eb);
+
+    /* ── v2: BulkActions bar ─────────────────────────────────── */
+    --data-table-bulk-bg:
+      var(--vds-color-surface, #ffffff);
+    --data-table-bulk-border:
+      var(--vds-color-border-muted, #e5e7eb);
+    --data-table-bulk-padding-inline:
+      var(--vds-space-4, 1rem);
+    --data-table-bulk-padding-block:
+      var(--vds-space-3, 0.75rem);
+    --data-table-bulk-gap: var(--vds-space-3, 0.75rem);
+    --data-table-bulk-count-color:
+      var(--vds-color-primary-emphasis, #6366f1);
+
+    /* Select-all-across-pages banner */
+    --data-table-select-all-bg:
+      color-mix(
+        in oklch,
+        var(--vds-color-primary-emphasis, #6366f1),
+        transparent 92%
+      );
+    --data-table-select-all-color:
+      var(--vds-color-text, #111827);
+
+    /* ── v2: Toolbar buttons ─────────────────────────────────── */
+    --data-table-toolbar-button-bg: transparent;
+    --data-table-toolbar-button-bg-hover:
+      var(--vds-color-surface-hover, #f3f4f6);
+    --data-table-toolbar-button-color:
+      var(--vds-color-text, #111827);
+    --data-table-toolbar-button-color-primary:
+      var(--vds-color-primary-emphasis, #6366f1);
+    --data-table-toolbar-button-color-danger:
+      var(--vds-color-danger-emphasis, #dc2626);
+    --data-table-toolbar-button-radius:
+      var(--vds-radius-element, 0.375rem);
+    --data-table-toolbar-button-padding-inline: var(--vds-space-3, 0.75rem);
+    --data-table-toolbar-button-height: var(--vds-size-md, 2rem);
+    --data-table-toolbar-button-font-size: var(--vds-text-sm, 0.875rem);
+    --data-table-toolbar-button-gap: var(--vds-space-1-5, 0.375rem);
+
+    /* ── Pagination ──────────────────────────────────────────── */
+    --data-table-pagination-bg:
+      var(--vds-color-surface, #ffffff);
+    --data-table-pagination-padding-inline: var(--vds-space-4, 1rem);
+    --data-table-pagination-padding-block:  var(--vds-space-2, 0.5rem);
+    --data-table-pagination-gap: var(--vds-space-2, 0.5rem);
+    --data-table-pagination-button-size: var(--vds-size-md, 2rem);
+    --data-table-pagination-button-bg: transparent;
+    --data-table-pagination-button-bg-hover:
+      var(--vds-color-surface-hover, #f3f4f6);
+    --data-table-pagination-button-bg-active:
+      var(--vds-color-primary-muted, #eef2ff);
+    --data-table-pagination-button-color:
+      var(--vds-color-text, #111827);
+    --data-table-pagination-button-color-active:
+      var(--vds-color-primary-emphasis, #6366f1);
+    --data-table-pagination-button-radius:
+      var(--vds-radius-element, 0.375rem);
+  }
+
+  /* ── Density ─────────────────────────────────────────────── */
+  .vds-data-table[data-size="sm"] {
+    --data-table-row-height:           2rem;
+    --data-table-header-row-height:    1.75rem;
+    --data-table-cell-padding-inline:  var(--vds-space-2-5, 0.625rem);
+    --data-table-cell-padding-block:   var(--vds-space-1, 0.25rem);
+    --data-table-font-size:            var(--vds-text-xs, 0.75rem);
+    --data-table-header-letter-spacing: 0;
+  }
+  .vds-data-table[data-size="md"] {
+    --data-table-row-height:        2.5rem;
+    --data-table-header-row-height: 2.25rem;
+  }
+  .vds-data-table[data-size="lg"] {
+    --data-table-row-height:          3rem;
+    --data-table-header-row-height:   2.75rem;
+    --data-table-cell-padding-inline: var(--vds-space-4, 1rem);
+    --data-table-cell-padding-block:  var(--vds-space-3, 0.75rem);
+    --data-table-font-size:           var(--vds-text-base, 1rem);
+  }
+
+  /* ── Zebra opt-in ────────────────────────────────────────── */
+  .vds-data-table[data-striped] .vds-data-table-row:nth-child(even) {
+    --data-table-row-bg: var(--data-table-row-bg-alt);
+  }
+
+  /* ── Row states ──────────────────────────────────────────── */
+  .vds-data-table-row:hover {
+    --data-table-row-bg: var(--data-table-row-bg-hover);
+  }
+  .vds-data-table-row[data-selected] {
+    --data-table-row-bg: var(--data-table-row-bg-selected);
+  }
+  .vds-data-table-row[data-selected]:hover {
+    --data-table-row-bg: var(--data-table-row-bg-selected-hover);
+  }
+
+  /* ── Sort state: fade-in icon + accent ─────────────────────── */
+  .vds-data-table-header-cell:hover .vds-data-table-sort-icon,
+  .vds-data-table-header-cell[data-sorted] .vds-data-table-sort-icon {
+    --data-table-sort-icon-opacity: var(--data-table-sort-icon-opacity-active);
+  }
+  .vds-data-table-header-cell[data-sorted] .vds-data-table-sort-icon {
+    --data-table-sort-icon-color: var(--data-table-sort-icon-color-active);
+  }
+
+  /* ── Resize states ───────────────────────────────────────── */
+  .vds-data-table-resize-handle:hover,
+  .vds-data-table-resize-handle:focus-visible {
+    --data-table-resize-line-color:
+      var(--data-table-resize-line-color-hover);
+  }
+  .vds-data-table-resize-handle[data-resizing] {
+    --data-table-resize-line-color:
+      var(--data-table-resize-line-color-active);
+    --data-table-resize-line-width:
+      var(--data-table-resize-line-width-active);
+  }
+
+  /* Disable width transitions while dragging so it snaps frame-perfect. */
+  .vds-data-table[data-resizing] {
+    --data-table-transition-duration: 0ms;
+  }
+}

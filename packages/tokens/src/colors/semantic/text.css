@@ -1,0 +1,31 @@
+@layer tokens {
+  /*
+   * ── Text semantic layer (NEW, additive) ──
+   *
+   * Adds the missing text roles every enterprise design system has:
+   *   • text-placeholder    distinct from text-disabled
+   *   • text-link / hover / visited
+   *   • text-inverse        text on inverse bg
+   *   • text-selection      text inside ::selection
+   *   • text-on-{intent}-muted  renamed-style aliases that mirror the
+   *                             status.css *-text tokens for consistency
+   *
+   * Legacy text/text-muted/text-subtle/text-disabled stay in _legacy.css.
+   */
+
+  :root {
+    /* ─── Placeholder (form inputs) ─── */
+    --vds-color-text-placeholder: light-dark(var(--vds-color-neutral-9), var(--vds-color-neutral-9));
+
+    /* ─── Hyperlinks ─── */
+    --vds-color-text-link:         var(--vds-color-primary-11);
+    --vds-color-text-link-hover:   var(--vds-color-primary-10);
+    --vds-color-text-link-visited: var(--vds-color-primary-12);
+
+    /* ─── Inverse (text on bg-inverse / surface-inverse) ─── */
+    --vds-color-text-inverse: light-dark(var(--vds-color-neutral-1), var(--vds-color-neutral-1));
+
+    /* ─── Selection (CSS ::selection text color) ─── */
+    --vds-color-text-selection: var(--vds-color-text);
+  }
+}

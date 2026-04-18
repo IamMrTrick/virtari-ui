@@ -121,9 +121,9 @@ function getStretchScale(openPx, totalPx) {
   const stretchPx = Math.min(extraOpen, maxStretchPx);
   return (totalPx + stretchPx) / totalPx;
 }
-function getVisualTransform(direction, openPx, totalPx) {
+function getVisualTransform(direction, openPx, totalPx, options) {
   const translate = getTranslate(direction, openPx, totalPx);
-  const stretchScale = getStretchScale(openPx, totalPx);
+  const stretchScale = options?.disableStretch ? 1 : getStretchScale(openPx, totalPx);
   if (getAxis(direction) === "x") {
     return `${translate} scale3d(${stretchScale}, 1, 1)`;
   }
@@ -883,6 +883,27 @@ function isEditableElement(node) {
   const tagName = node.tagName;
   return tagName === "INPUT" || tagName === "TEXTAREA" || tagName === "SELECT";
 }
+function getComputedMainTranslate(el, direction) {
+  const transform = getComputedStyle(el).transform;
+  if (!transform || transform === "none") return 0;
+  const isHorizontal = direction === "left" || direction === "right";
+  const matrix3d = transform.match(/^matrix3d\((.+)\)$/);
+  if (matrix3d?.[1]) {
+    const values = matrix3d[1].split(",").map((part) => parseFloat(part.trim()));
+    const value = values[isHorizontal ? 12 : 13];
+    return Number.isFinite(value) ? value : 0;
+  }
+  const matrix2d = transform.match(/^matrix\((.+)\)$/);
+  if (matrix2d?.[1]) {
+    const values = matrix2d[1].split(",").map((part) => parseFloat(part.trim()));
+    const value = values[isHorizontal ? 4 : 5];
+    return Number.isFinite(value) ? value : 0;
+  }
+  return 0;
+}
+function getResizeSizeProperty(direction) {
+  return direction === "left" || direction === "right" ? "inline-size" : "block-size";
+}
 function dedupeSnaps(snapPoints) {
   if (!snapPoints?.length) return [1];
   return [...new Set(snapPoints)];
@@ -1157,6 +1178,7 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     minimized: null,
     overlayStartSize: 0
   });
+  const layoutRef = react.useRef(layout);
   const [keyboardOpen, setKeyboardOpen] = react.useState(false);
   const keyboardOpenRef = react.useRef(false);
   const currentSizeRef = react.useRef(0);
@@ -1165,6 +1187,9 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
   const writeFrameRef = react.useRef(0);
   const openAnimRef = react.useRef(0);
   const hasOpenedRef = react.useRef(false);
+  const pendingResizeSizeRef = react.useRef(null);
+  const resizeSizeAnimatingRef = react.useRef(false);
+  const resizeCleanupTimerRef = react.useRef(0);
   const minimizedStage = minimizedSize !== void 0 && activeSnapPoint === minimizedSize;
   const activeState = react.useMemo(() => {
     if (minimizedStage && layout.minimized) {
@@ -1185,7 +1210,14 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
       return;
     }
     const { ms, ease } = readDrawerTiming(contentEl);
-    setTransition(contentEl, `transform ${ms}ms ${ease}`);
+    setTransition(
+      contentEl,
+      [
+        `transform ${ms}ms ${ease}`,
+        `block-size ${ms}ms ${ease}`,
+        `inline-size ${ms}ms ${ease}`
+      ].join(", ")
+    );
     setTransition(overlayEl, `opacity ${ms}ms ${ease}`);
     if (scaleBackground) {
       setTransition(
@@ -1194,7 +1226,7 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
       );
     }
   }, [contentRef, overlayRef, scaleBackground]);
-  const writeVisualSize = react.useCallback((sizePx) => {
+  const writeVisualSize = react.useCallback((sizePx, options) => {
     const contentEl = contentRef.current;
     const overlayEl = overlayRef.current;
     const wrapperEl = getWrapperEl();
@@ -1202,13 +1234,18 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     if (layout.totalSize <= 0 || !contentEl) return;
     contentEl.style.setProperty(
       "--vds-drawer-transform",
-      getVisualTransform(direction, sizePx, layout.totalSize)
+      getVisualTransform(direction, sizePx, layout.totalSize, options)
     );
     const overlayProgress = getOverlayProgress(sizePx, layout.totalSize, layout.overlayStartSize);
     if (overlayEl) {
       overlayEl.style.setProperty("--vds-drawer-overlay-opacity", String(overlayProgress));
       overlayEl.style.pointerEvents = overlayProgress > 1e-3 ? "auto" : "none";
     }
+    const smallestRest = layout.minimized?.size ?? layout.snaps[0]?.size ?? layout.totalSize;
+    const closeTarget = smallestRest * closeThreshold;
+    const closeSpan = Math.max(smallestRest - closeTarget, 1);
+    const closeProgress = sizePx >= smallestRest ? 0 : clamp((smallestRest - sizePx) / closeSpan, 0, 1);
+    contentEl.style.setProperty("--vds-drawer-close-progress", closeProgress.toFixed(3));
     if (scaleBackground && wrapperEl) {
       if (overlayProgress <= 1e-3) {
         wrapperEl.style.transform = "";
@@ -1219,7 +1256,17 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
         wrapperEl.style.borderRadius = backgroundStyles.borderRadius;
       }
     }
-  }, [contentRef, direction, layout.overlayStartSize, layout.totalSize, overlayRef, scaleBackground]);
+  }, [
+    closeThreshold,
+    contentRef,
+    direction,
+    layout.minimized,
+    layout.overlayStartSize,
+    layout.snaps,
+    layout.totalSize,
+    overlayRef,
+    scaleBackground
+  ]);
   const flushVisualSize = react.useCallback(() => {
     writeFrameRef.current = 0;
     writeVisualSize(pendingSizeRef.current);
@@ -1248,26 +1295,34 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     if (layout.totalSize <= 0) return;
     const target = activeState.kind === "minimized" ? layout.minimized?.size ?? layout.totalSize : layout.snaps[activeState.index]?.size ?? layout.totalSize;
     const current = writeFrameRef.current ? pendingSizeRef.current : currentSizeRef.current;
+    const resizeAnimation = pendingResizeSizeRef.current;
     debugDrawer("settle:request", {
       animated,
       activeState,
       target,
       currentSize: current,
-      pendingSize: pendingSizeRef.current
+      pendingSize: pendingSizeRef.current,
+      resizeAnimation
     });
     if (!animated) {
       setAnimated(false);
+      if (resizeAnimation) {
+        contentRef.current?.style.removeProperty(resizeAnimation.property);
+        resizeSizeAnimatingRef.current = false;
+        window.clearTimeout(resizeCleanupTimerRef.current);
+      }
+      pendingResizeSizeRef.current = null;
       applySize(target, true);
       return;
     }
-    if (Math.abs(target - current) < 0.5) {
+    if (Math.abs(target - current) < 0.5 && !resizeAnimation) {
       setAnimated(false);
       applySize(target, true);
       return;
     }
     flushPendingSize();
     setAnimated(false);
-    writeVisualSize(current);
+    writeVisualSize(current, { disableStretch: Boolean(resizeAnimation) });
     const contentEl = contentRef.current;
     if (contentEl) void contentEl.offsetHeight;
     setAnimated(true);
@@ -1281,6 +1336,18 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
           target,
           currentSize: currentSizeRef.current
         });
+        const pendingResize = pendingResizeSizeRef.current;
+        if (pendingResize && contentEl) {
+          resizeSizeAnimatingRef.current = true;
+          contentEl.style.setProperty(pendingResize.property, `${pendingResize.to}px`);
+          window.clearTimeout(resizeCleanupTimerRef.current);
+          const { ms } = readDrawerTiming(contentEl);
+          resizeCleanupTimerRef.current = window.setTimeout(() => {
+            contentRef.current?.style.removeProperty(pendingResize.property);
+            resizeSizeAnimatingRef.current = false;
+          }, ms + 80);
+          pendingResizeSizeRef.current = null;
+        }
         applySize(target, true);
       });
     });
@@ -1315,7 +1382,11 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     } else {
       contentEl.style.removeProperty("--vds-drawer-fixed-size");
     }
+    const resizeSizeProperty = getResizeSizeProperty(direction);
+    const lockedResizeSize = contentEl.style.getPropertyValue(resizeSizeProperty);
+    if (lockedResizeSize) contentEl.style.removeProperty(resizeSizeProperty);
     const totalSize = getElementSize(contentEl, direction);
+    if (lockedResizeSize) contentEl.style.setProperty(resizeSizeProperty, lockedResizeSize);
     if (totalSize <= 0) return;
     if (currentSizeRef.current <= 0) {
       contentEl.style.setProperty("--vds-drawer-transform", getVisualTransform(direction, 0, totalSize));
@@ -1325,28 +1396,61 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     }
     const { snaps, minimized } = resolveSnaps(snapPoints, totalSize, minimizedSize);
     const overlayStartSize = minimized?.size ?? 0;
+    const previousLayout = layoutRef.current;
+    const sizeChanged = previousLayout.totalSize > 0 && Math.abs(previousLayout.totalSize - totalSize) >= 1;
+    const visualSize = writeFrameRef.current ? pendingSizeRef.current : currentSizeRef.current;
+    if (open && present && !dragging && sizeChanged && visualSize > 0) {
+      window.clearTimeout(resizeCleanupTimerRef.current);
+      resizeSizeAnimatingRef.current = false;
+      pendingResizeSizeRef.current = {
+        property: resizeSizeProperty,
+        from: previousLayout.totalSize,
+        to: totalSize
+      };
+      setTransition(contentEl, "none");
+      contentEl.style.setProperty(resizeSizeProperty, `${previousLayout.totalSize}px`);
+      contentEl.style.setProperty(
+        "--vds-drawer-transform",
+        getVisualTransform(direction, visualSize, totalSize, { disableStretch: true })
+      );
+    }
     setLayout((previous) => {
       const snapsSame = previous.snaps.length === snaps.length && previous.snaps.every((snap, index) => {
-        const next = snaps[index];
-        return snap.value === next?.value && snap.kind === next?.kind && Math.abs(snap.size - (next?.size ?? 0)) < 1;
+        const next2 = snaps[index];
+        return snap.value === next2?.value && snap.kind === next2?.kind && Math.abs(snap.size - (next2?.size ?? 0)) < 1;
       });
       const minimizedSame = previous.minimized === null && minimized === null || previous.minimized !== null && minimized !== null && previous.minimized.value === minimized.value && Math.abs(previous.minimized.size - minimized.size) < 1;
       const same = previous.totalSize === totalSize && previous.overlayStartSize === overlayStartSize && snapsSame && minimizedSame;
-      return same ? previous : {
+      const next = same ? previous : {
         totalSize,
         snaps,
         minimized,
         overlayStartSize
       };
+      layoutRef.current = next;
+      return next;
     });
-  }, [contentRef, direction, minimizedSize, offset, size, sizeMode, snapPoints]);
+  }, [
+    contentRef,
+    direction,
+    dragging,
+    minimizedSize,
+    offset,
+    open,
+    present,
+    size,
+    sizeMode,
+    snapPoints
+  ]);
   react.useEffect(() => () => {
     cancelAnimationFrame(measureFrameRef.current);
     cancelAnimationFrame(writeFrameRef.current);
     cancelAnimationFrame(openAnimRef.current);
+    window.clearTimeout(resizeCleanupTimerRef.current);
   }, []);
   react.useEffect(() => {
     if (!present) {
+      keyboardOpenRef.current = false;
       setKeyboardOpen(false);
       contentRef.current?.style.removeProperty("--vds-drawer-keyboard-inset");
       return;
@@ -1357,8 +1461,17 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
       if (px > 0) el.style.setProperty("--vds-drawer-keyboard-inset", `${Math.round(px)}px`);
       else el.style.removeProperty("--vds-drawer-keyboard-inset");
     };
+    const readCurrentInset = () => {
+      const raw = contentRef.current?.style.getPropertyValue(
+        "--vds-drawer-keyboard-inset"
+      );
+      if (!raw) return 0;
+      const n = parseFloat(raw);
+      return Number.isFinite(n) ? n : 0;
+    };
     const syncKeyboardOpen = () => {
       if (typeof window === "undefined") {
+        keyboardOpenRef.current = false;
         setKeyboardOpen(false);
         writeKeyboardInset(0);
         return;
@@ -1368,12 +1481,14 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
         contentRef.current?.contains(activeElement) && isEditableElement(activeElement)
       );
       if (!hasFocusedEditable) {
+        keyboardOpenRef.current = false;
         setKeyboardOpen(false);
         writeKeyboardInset(0);
         return;
       }
       const vv = window.visualViewport;
       if (!vv) {
+        keyboardOpenRef.current = false;
         setKeyboardOpen(false);
         writeKeyboardInset(0);
         return;
@@ -1381,9 +1496,62 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
       const keyboardDelta = window.innerHeight - vv.height;
       const keyboardThreshold = Math.max(120, window.innerHeight * 0.18);
       const isOpen = keyboardDelta > keyboardThreshold;
+      keyboardOpenRef.current = isOpen;
       setKeyboardOpen(isOpen);
-      const kbOffset = isOpen ? Math.max(0, window.innerHeight - (vv.height + vv.offsetTop)) : 0;
-      writeKeyboardInset(kbOffset);
+      if (!isOpen) {
+        writeKeyboardInset(0);
+        return;
+      }
+      const el = contentRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const currentInset = readCurrentInset();
+      const mainTranslate = getComputedMainTranslate(el, direction);
+      const naturalBottom = rect.bottom - mainTranslate + currentInset;
+      const visibleBottom = vv.offsetTop + vv.height;
+      const hiddenViewport = Math.max(0, window.innerHeight - visibleBottom);
+      const measuredOvershoot = Math.max(0, naturalBottom - visibleBottom);
+      const overshoot = Math.min(measuredOvershoot, hiddenViewport);
+      if (Math.abs(overshoot - currentInset) < 1) return;
+      writeKeyboardInset(overshoot);
+    };
+    let scrollSettleTimer = null;
+    const scrollFocusedIntoView = () => {
+      const active = typeof document === "undefined" ? null : document.activeElement;
+      if (!active || !isEditableElement(active)) return;
+      if (!contentRef.current?.contains(active)) return;
+      const scrollContainer = keyboardOpenRef.current ? contentRef.current : bodyRef.current;
+      if (!scrollContainer) return;
+      const targetRect = active.getBoundingClientRect();
+      const vv = window.visualViewport;
+      const vvTop = vv?.offsetTop ?? 0;
+      const vvHeight = vv?.height ?? window.innerHeight;
+      const vvBottom = vvTop + vvHeight;
+      const margin = Math.min(48, Math.max(16, vvHeight * 0.1));
+      let delta = 0;
+      if (targetRect.height > vvHeight - 2 * margin) {
+        delta = targetRect.top - (vvTop + margin);
+      } else if (targetRect.bottom > vvBottom - margin) {
+        delta = targetRect.bottom - (vvBottom - margin);
+      } else if (targetRect.top < vvTop + margin) {
+        delta = targetRect.top - (vvTop + margin);
+      }
+      if (Math.abs(delta) < 2) return;
+      const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+      const nextTop = Math.max(
+        0,
+        Math.min(scrollContainer.scrollTop + delta, maxScroll)
+      );
+      if (Math.abs(scrollContainer.scrollTop - nextTop) >= 1) {
+        scrollContainer.scrollTop = nextTop;
+      }
+    };
+    const scheduleScrollToFocused = () => {
+      if (scrollSettleTimer !== null) window.clearTimeout(scrollSettleTimer);
+      scrollSettleTimer = window.setTimeout(() => {
+        scrollSettleTimer = null;
+        scrollFocusedIntoView();
+      }, 150);
     };
     syncKeyboardOpen();
     const contentEl = contentRef.current;
@@ -1391,30 +1559,54 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
       syncKeyboardOpen();
       const target = event.target;
       if (!target || !isEditableElement(target)) return;
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          target.scrollIntoView({ block: "center", behavior: "smooth" });
-        });
-      });
+      scheduleScrollToFocused();
     };
     const onFocusOut = () => requestAnimationFrame(syncKeyboardOpen);
+    const onViewportChange = () => {
+      syncKeyboardOpen();
+      const active = typeof document === "undefined" ? null : document.activeElement;
+      if (active && isEditableElement(active) && contentEl?.contains(active)) {
+        scheduleScrollToFocused();
+      }
+    };
     contentEl?.addEventListener("focusin", onFocusIn);
     contentEl?.addEventListener("focusout", onFocusOut);
-    window.visualViewport?.addEventListener("resize", syncKeyboardOpen);
-    window.visualViewport?.addEventListener("scroll", syncKeyboardOpen);
-    window.addEventListener("resize", syncKeyboardOpen);
+    window.visualViewport?.addEventListener("resize", onViewportChange);
+    window.visualViewport?.addEventListener("scroll", onViewportChange);
+    window.addEventListener("resize", onViewportChange);
     return () => {
+      if (scrollSettleTimer !== null) window.clearTimeout(scrollSettleTimer);
       contentEl?.removeEventListener("focusin", onFocusIn);
       contentEl?.removeEventListener("focusout", onFocusOut);
-      window.visualViewport?.removeEventListener("resize", syncKeyboardOpen);
-      window.visualViewport?.removeEventListener("scroll", syncKeyboardOpen);
-      window.removeEventListener("resize", syncKeyboardOpen);
+      window.visualViewport?.removeEventListener("resize", onViewportChange);
+      window.visualViewport?.removeEventListener("scroll", onViewportChange);
+      window.removeEventListener("resize", onViewportChange);
       contentEl?.style.removeProperty("--vds-drawer-keyboard-inset");
     };
-  }, [contentRef, present]);
+  }, [bodyRef, contentRef, direction, present]);
+  const keyboardSnapHandledRef = react.useRef(false);
+  react.useEffect(() => {
+    if (!keyboardOpen) {
+      keyboardSnapHandledRef.current = false;
+      return;
+    }
+    if (keyboardSnapHandledRef.current) return;
+    if (layout.snaps.length === 0) return;
+    const largest = layout.snaps[layout.snaps.length - 1];
+    if (!largest) return;
+    keyboardSnapHandledRef.current = true;
+    if (largest.value !== activeSnapPoint) {
+      onSnapPointChange(largest.value);
+    }
+  }, [keyboardOpen, layout.snaps, activeSnapPoint, onSnapPointChange]);
   react.useLayoutEffect(() => {
     if (!present) {
       hasOpenedRef.current = false;
+      pendingResizeSizeRef.current = null;
+      resizeSizeAnimatingRef.current = false;
+      window.clearTimeout(resizeCleanupTimerRef.current);
+      contentRef.current?.style.removeProperty("block-size");
+      contentRef.current?.style.removeProperty("inline-size");
       return;
     }
     measure();
@@ -1422,15 +1614,21 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
       cancelAnimationFrame(measureFrameRef.current);
       measureFrameRef.current = requestAnimationFrame(measure);
     };
+    const contentEl = contentRef.current;
+    const measureObservedResize = () => {
+      if (resizeSizeAnimatingRef.current) return;
+      cancelAnimationFrame(measureFrameRef.current);
+      measureFrameRef.current = 0;
+      measure();
+    };
+    const resizeObserver = new ResizeObserver(measureObservedResize);
+    if (contentEl) resizeObserver.observe(contentEl);
+    if (bodyRef.current && bodyRef.current !== contentEl) resizeObserver.observe(bodyRef.current);
     const scheduleViewportMeasure = () => {
       const activeElement = typeof document === "undefined" ? null : document.activeElement;
       if (contentRef.current?.contains(activeElement) && isEditableElement(activeElement)) return;
       scheduleMeasure();
     };
-    const contentEl = contentRef.current;
-    const resizeObserver = new ResizeObserver(scheduleMeasure);
-    if (contentEl) resizeObserver.observe(contentEl);
-    if (bodyRef.current && bodyRef.current !== contentEl) resizeObserver.observe(bodyRef.current);
     scheduleMeasure();
     const settleMeasureFrame = requestAnimationFrame(() => {
       scheduleMeasure();
@@ -1445,7 +1643,7 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
       window.removeEventListener("resize", scheduleMeasure);
       window.visualViewport?.removeEventListener("resize", scheduleViewportMeasure);
     };
-  }, [bodyRef, contentRef, measure, present, keyboardOpen]);
+  }, [bodyRef, contentRef, keyboardOpen, measure, present]);
   react.useEffect(() => {
     keyboardOpenRef.current = keyboardOpen;
   }, [keyboardOpen]);
@@ -1534,7 +1732,11 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     getContentEl: () => contentRef.current,
     getHeaderEl: () => headerRef.current,
     getHandleEl: () => handleRef.current,
-    getScrollableEl: () => bodyRef.current ?? contentRef.current
+    // When the virtual keyboard is open on a bottom/top drawer, the CSS
+    // swaps the scroll container from body → content (unsticks header/footer
+    // so the whole drawer scrolls as one unit). Mirror that here so the
+    // drag hook queries the element that actually scrolls.
+    getScrollableEl: () => keyboardOpenRef.current ? contentRef.current : bodyRef.current ?? contentRef.current
   });
   return /* @__PURE__ */ jsxRuntime.jsxs(DialogPrimitive__namespace.Portal, { forceMount: present ? true : void 0, children: [
     /* @__PURE__ */ jsxRuntime.jsx(DrawerOverlay, { forceMount: present ? true : void 0 }),

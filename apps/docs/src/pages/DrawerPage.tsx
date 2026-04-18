@@ -1122,6 +1122,7 @@ const SIZE_MODE_OPTIONS: ReadonlyArray<SelectOption<DrawerSizeMode>> = [
 const INDICATOR_OPTIONS: ReadonlyArray<SelectOption<DrawerIndicatorPlacement>> = [
   { value: "inside", label: "Inside" },
   { value: "outside", label: "Outside" },
+  { value: "progress", label: "Progress" },
   { value: "hidden", label: "Hidden" },
 ];
 
@@ -1549,31 +1550,46 @@ export function DrawerPage() {
 
       <Section
         title="Indicator & header"
-        description="Place the handle inside the header, outside the drawer as a floating pill, or hide it entirely. Pair with a plain or bordered header depending on how much separation you want between title and body."
+        description="Place the handle inside the header, literally outside the drawer, as a progress fill, or hide it entirely. Pair with a plain or bordered header depending on how much separation you want between title and body."
       >
         <Row>
           <DemoDrawer
             indicator="inside"
             headerVariant="plain"
-            label="Inside · plain"
+            label="Inside"
             title="Inside indicator"
             description="Handle sits inside the header, no separator."
           />
           <DemoDrawer
             indicator="outside"
             headerVariant="plain"
-            label="Outside · plain"
+            label="Outside"
             title="Outside indicator"
-            description="Handle floats above the drawer as a pill."
+            description="Just the bar, floating above the drawer's edge with no background."
+          />
+          <DemoDrawer
+            indicator="progress"
+            headerVariant="plain"
+            label="Progress"
+            title="Progress indicator"
+            description="Drag me toward the close threshold — the bar fills as I approach dismissal."
           />
           <DemoDrawer
             indicator="hidden"
             headerVariant="bordered"
-            label="Hidden · bordered"
+            label="Hidden"
             title="No indicator"
             description="Bordered header separates the title from the body."
           />
         </Row>
+        <p className="docs-prose">
+          <strong>Progress indicator</strong> is a drag-aware variant: as the
+          user pulls the drawer past its smallest resting stage toward the{" "}
+          <code>closeThreshold</code>, the handle bar fills from the center
+          outward. When it's fully saturated, releasing dismisses the drawer.
+          Use it for confirmation-heavy drawers (checkout, destructive flows)
+          where the user benefits from seeing how committed a swipe is.
+        </p>
       </Section>
 
       <Section
@@ -1697,7 +1713,7 @@ import {
   velocityThreshold?: number
 
   // Appearance
-  indicator?:      "inside" | "outside" | "hidden"       // default "inside"
+  indicator?:      "inside" | "outside" | "progress" | "hidden"  // default "inside"
   headerVariant?:  "plain" | "bordered"                  // default "plain"
   scaleBackground?: boolean                              // needs data-vds-drawer-wrapper
 

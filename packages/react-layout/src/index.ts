@@ -1,3 +1,32 @@
+/* ── Semantic page primitives ── */
+export { Section } from "./Section";
+export type {
+  SectionProps,
+  SectionPadding,
+  SectionGutter,
+  SectionWidth,
+  SectionBackground,
+  SectionAlign,
+  SectionGap,
+} from "./Section";
+
+export { Row } from "./Row";
+export type {
+  RowProps,
+  RowMode,
+  RowCols,
+  RowGap,
+  RowAlign,
+  RowJustify,
+} from "./Row";
+
+export { Col } from "./Col";
+export type { ColProps, ColSpan, ColAlign, ColJustify } from "./Col";
+
+export { Container } from "./Container";
+export type { ContainerProps, ContainerWidth, ContainerGutter } from "./Container";
+
+/* ── Utility primitives ── */
 export { Stack } from "./Stack";
 export type { StackProps, StackGap } from "./Stack";
 

@@ -32,6 +32,10 @@ export { SpinnerPage } from "./SpinnerPage";
 export { CardPage } from "./CardPage";
 export { KbdPage } from "./KbdPage";
 export { CompositionPage } from "./CompositionPage";
+export { LayoutPage } from "./LayoutPage";
+export { DatePickerPage } from "./DatePickerPage";
+export { DataTablePage } from "./DataTablePage";
+export { UtilitiesPage } from "./UtilitiesPage";
 
 export const PAGE_META: Record<string, { title: string; description: string }> = {
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },
@@ -73,5 +77,25 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   composition: {
     title: "Composition",
     description: "Layout primitives — Stack, Cluster, Grid, Sidebar, Center.",
+  },
+  utilities: {
+    title: "Utilities",
+    description:
+      "Opt-in CSS utility classes for spacing, flex, grid, sizing, position, and z-index — all token-driven, logical-property-first, with sm/md/lg/xl/2xl responsive variants.",
+  },
+  layout: {
+    title: "Page Layout",
+    description:
+      "Section → Row → Col — semantic page-structure primitives tied to the Layout token system.",
+  },
+  "date-picker": {
+    title: "Date Picker",
+    description:
+      "Date, range, time, and calendar primitives — Persian, Islamic, Gregorian + full RTL.",
+  },
+  "data-table": {
+    title: "Data Table",
+    description:
+      "Excel-like resize, virtualization (10k+ rows), pinning, grouping, inline edit, server-side — built on TanStack.",
   },
 };

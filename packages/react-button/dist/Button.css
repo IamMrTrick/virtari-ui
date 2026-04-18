@@ -1,252 +1,412 @@
-@layer components {
+@layer design-system.components {
+  /* =========================================================================
+   * 1. Base component tokens
+   *    Layout, typography, motion, focus — orthogonal to color/variant.
+   *    Defaults resolve to: color=primary, variant=solid, size=md.
+   *    Fallbacks keep the package usable without @virtari/tokens.
+   * ========================================================================= */
   .vds-button {
-    /* Layout */
+    /* ── Layout ── */
+    --button-height: var(--vds-size-md, 2.25rem);
+    --button-padding-inline: var(--vds-space-4, 1rem);
+    --button-gap: var(--vds-space-2, 0.5rem);
+    --button-border-width: 1px;
+    --button-radius: var(--vds-radius-element, 0.375rem);
+    --button-min-width: var(--button-height);
+    --button-icon-size: 1.125rem;
+
+    /* ── Typography ── */
+    --button-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --button-font-size: var(--vds-text-sm, 0.875rem);
+    --button-font-weight: var(--vds-font-weight-medium, 500);
+    --button-line-height: var(--vds-leading-tight, 1.25);
+    --button-letter-spacing: var(--vds-tracking-normal, 0);
+
+    /* ── Motion ── */
+    --button-transition-duration: var(--vds-duration-fast, 120ms);
+    --button-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    --button-press-scale: 0.98;
+
+    /* ── Focus ── */
+    --button-focus-ring-color: var(--vds-color-ring, var(--button-color-solid));
+    --button-focus-ring-width: 2px;
+    --button-focus-ring-offset: 2px;
+
+    /* ── Effects (neutral, hue-free shadow depth) ── */
+    --button-shadow-depth: light-dark(
+      color-mix(in oklch, var(--vds-color-black, #000), transparent 18%),
+      var(--vds-color-black, #000)
+    );
+    --button-shadow-ambient: light-dark(
+      color-mix(in oklch, var(--vds-color-black, #000), transparent 70%),
+      color-mix(in oklch, var(--vds-color-black, #000), transparent 50%)
+    );
+
+    /* ── Disabled ── */
+    --button-disabled-opacity: 0.5;
+
+    /* =====================================================================
+     * Intent palette — default: primary
+     * Variants below read these meta-tokens to compute rendering tokens.
+     * ===================================================================== */
+    --button-color-solid:        var(--vds-color-primary-solid, var(--vds-color-primary-emphasis, #4f46e5));
+    --button-color-solid-hover:  var(--vds-color-primary-solid-hover, var(--vds-color-primary-hover, #4338ca));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-primary, #fff);
+
+    --button-color-bg:           var(--vds-color-primary-bg, var(--vds-color-primary-muted, #e0e7ff));
+    --button-color-bg-hover:     var(--vds-color-primary-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-primary-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+
+    --button-color-text:         var(--vds-color-primary-text, var(--vds-color-primary-muted-text, #3730a3));
+    --button-color-text-hover:   var(--button-color-solid-hover);
+    --button-color-border:       var(--button-color-solid);
+
+    /* =====================================================================
+     * Rendering tokens (the ones Button.css actually paints with).
+     * Defaults to solid variant — variants override these below.
+     * ===================================================================== */
+    --button-bg:           var(--button-color-solid);
+    --button-bg-hover:     var(--button-color-solid-hover);
+    --button-bg-active:    var(--button-color-solid-active);
+    --button-text:         var(--button-color-on-solid);
+    --button-text-hover:   var(--button-color-on-solid);
+    --button-text-active:  var(--button-color-on-solid);
+    --button-border:       transparent;
+    --button-border-hover: transparent;
+    --button-border-active: transparent;
+  }
+
+  /* =========================================================================
+   * 2. Color palettes — redefine --button-color-* meta-tokens.
+   *    Each [data-color] sets only what differs from primary.
+   * ========================================================================= */
+
+  .vds-button[data-color="success"] {
+    --button-color-solid:        var(--vds-color-success-solid, var(--vds-color-success-emphasis, #16a34a));
+    --button-color-solid-hover:  var(--vds-color-success-solid-hover, var(--vds-color-success-hover, #15803d));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-success, #fff);
+    --button-color-bg:           var(--vds-color-success-bg, var(--vds-color-success-muted, #dcfce7));
+    --button-color-bg-hover:     var(--vds-color-success-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-success-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-success-text, var(--vds-color-success-muted-text, #166534));
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  .vds-button[data-color="warning"] {
+    --button-color-solid:        var(--vds-color-warning-solid, var(--vds-color-warning-emphasis, #f59e0b));
+    --button-color-solid-hover:  var(--vds-color-warning-solid-hover, var(--vds-color-warning-hover, #d97706));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-warning, #111);
+    --button-color-bg:           var(--vds-color-warning-bg, var(--vds-color-warning-muted, #fef3c7));
+    --button-color-bg-hover:     var(--vds-color-warning-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-warning-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-warning-text, var(--vds-color-warning-muted-text, #78350f));
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  .vds-button[data-color="danger"] {
+    --button-color-solid:        var(--vds-color-danger-solid, var(--vds-color-danger-emphasis, #dc2626));
+    --button-color-solid-hover:  var(--vds-color-danger-solid-hover, var(--vds-color-danger-hover, #b91c1c));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-danger, #fff);
+    --button-color-bg:           var(--vds-color-danger-bg, var(--vds-color-danger-muted, #fee2e2));
+    --button-color-bg-hover:     var(--vds-color-danger-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-danger-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-danger-text, var(--vds-color-danger-muted-text, #991b1b));
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  .vds-button[data-color="info"] {
+    --button-color-solid:        var(--vds-color-info-solid, var(--vds-color-info-emphasis, #0891b2));
+    --button-color-solid-hover:  var(--vds-color-info-solid-hover, var(--vds-color-info-hover, #0e7490));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-info, #fff);
+    --button-color-bg:           var(--vds-color-info-bg, var(--vds-color-info-muted, #cffafe));
+    --button-color-bg-hover:     var(--vds-color-info-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-info-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-info-text, var(--vds-color-info-muted-text, #155e75));
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  .vds-button[data-color="accent"] {
+    --button-color-solid:        var(--vds-color-accent-solid, var(--vds-color-accent-emphasis, #f97316));
+    --button-color-solid-hover:  var(--vds-color-accent-solid-hover, #ea580c);
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-accent, #fff);
+    --button-color-bg:           var(--vds-color-accent-bg, #ffedd5);
+    --button-color-bg-hover:     var(--vds-color-accent-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-accent-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-accent-text, #7c2d12);
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  .vds-button[data-color="neutral"] {
+    --button-color-solid:        var(--vds-color-neutral-9, var(--vds-color-gray-700, #404040));
+    --button-color-solid-hover:  var(--vds-color-neutral-10, var(--vds-color-gray-600, #525252));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 14%);
+    --button-color-on-solid:     light-dark(var(--vds-color-white, #fff), var(--vds-color-gray-950, #0a0a0a));
+    --button-color-bg:           var(--vds-color-neutral-3, var(--vds-color-gray-100, #f5f5f5));
+    --button-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-gray-200, #e5e5e5));
+    --button-color-bg-active:    var(--vds-color-neutral-5, var(--vds-color-gray-300, #d4d4d4));
+    --button-color-text:         var(--vds-color-text, var(--vds-color-gray-900, #171717));
+    --button-color-border:       var(--vds-color-neutral-8, var(--vds-color-gray-400, #a3a3a3));
+  }
+
+  /* High-contrast: nearly pure black on light, nearly pure white on dark.
+   * Designed to pop against the page regardless of ambient theme. */
+  .vds-button[data-color="contrast"] {
+    --button-color-solid:        light-dark(var(--vds-color-gray-950, #0a0a0a), var(--vds-color-gray-50, #fafafa));
+    --button-color-solid-hover:  light-dark(var(--vds-color-gray-900, #171717), var(--vds-color-gray-100, #f5f5f5));
+    --button-color-solid-active: light-dark(var(--vds-color-black, #000), var(--vds-color-white, #fff));
+    --button-color-on-solid:     light-dark(var(--vds-color-white, #fff), var(--vds-color-gray-950, #0a0a0a));
+    --button-color-bg:           light-dark(var(--vds-color-gray-200, #e5e5e5), var(--vds-color-gray-800, #262626));
+    --button-color-bg-hover:     light-dark(var(--vds-color-gray-300, #d4d4d4), var(--vds-color-gray-700, #404040));
+    --button-color-bg-active:    light-dark(var(--vds-color-gray-400, #a3a3a3), var(--vds-color-gray-600, #525252));
+    --button-color-text:         light-dark(var(--vds-color-gray-950, #0a0a0a), var(--vds-color-gray-50, #fafafa));
+    --button-color-border:       light-dark(var(--vds-color-gray-950, #0a0a0a), var(--vds-color-gray-50, #fafafa));
+  }
+
+  /* =========================================================================
+   * 3. Variants — re-map the palette into rendering tokens.
+   *    Solid is baked into the base above; variants override the rendering
+   *    tokens only (not the palette), so changing [data-color] still works.
+   * ========================================================================= */
+
+  .vds-button[data-variant="outline"] {
+    --button-bg:            transparent;
+    --button-bg-hover:      var(--button-color-bg-hover);
+    --button-bg-active:     var(--button-color-bg-active);
+    --button-text:          var(--button-color-text);
+    --button-text-hover:    var(--button-color-text);
+    --button-text-active:   var(--button-color-text);
+    --button-border:        var(--button-color-border);
+    --button-border-hover:  var(--button-color-border);
+    --button-border-active: var(--button-color-border);
+  }
+
+  .vds-button[data-variant="ghost"] {
+    --button-bg:            transparent;
+    --button-bg-hover:      var(--button-color-bg-hover);
+    --button-bg-active:     var(--button-color-bg-active);
+    --button-text:          var(--button-color-text);
+    --button-text-hover:    var(--button-color-text);
+    --button-text-active:   var(--button-color-text);
+    --button-border:        transparent;
+    --button-border-hover:  transparent;
+    --button-border-active: transparent;
+  }
+
+  .vds-button[data-variant="soft"] {
+    --button-bg:            var(--button-color-bg);
+    --button-bg-hover:      var(--button-color-bg-hover);
+    --button-bg-active:     var(--button-color-bg-active);
+    --button-text:          var(--button-color-text);
+    --button-text-hover:    var(--button-color-text);
+    --button-text-active:   var(--button-color-text);
+    --button-border:        transparent;
+    --button-border-hover:  transparent;
+    --button-border-active: transparent;
+  }
+
+  .vds-button[data-variant="link"] {
+    --button-height:        auto;
+    --button-padding-inline: 0;
+    --button-min-width:     0;
+    --button-bg:            transparent;
+    --button-bg-hover:      transparent;
+    --button-bg-active:     transparent;
+    --button-text:          var(--button-color-solid);
+    --button-text-hover:    var(--button-color-solid-hover);
+    --button-text-active:   var(--button-color-solid-active);
+    --button-border:        transparent;
+    --button-border-hover:  transparent;
+    --button-border-active: transparent;
+  }
+
+  /* =========================================================================
+   * 4. Sizes — redefine layout-only tokens.
+   *    8-slot scale: 2xs(24) · xs(28) · sm(32) · md(36) · lg(40) · xl(44)
+   *                  · 2xl(52) · 3xl(64). md is the default.
+   * ========================================================================= */
+
+  .vds-button[data-size="2xs"] {
+    --button-height:         var(--vds-size-2xs, 1.5rem);
+    --button-padding-inline: var(--vds-space-2, 0.5rem);
+    --button-font-size:      var(--vds-text-xs, 0.75rem);
+    --button-gap:            var(--vds-space-1, 0.25rem);
+    --button-icon-size:      0.875rem;
+    --button-radius:         var(--vds-radius-element, 0.25rem);
+  }
+
+  .vds-button[data-size="xs"] {
+    --button-height:         var(--vds-size-xs, 1.75rem);
+    --button-padding-inline: var(--vds-space-2-5, 0.625rem);
+    --button-font-size:      var(--vds-text-xs, 0.75rem);
+    --button-gap:            var(--vds-space-1, 0.25rem);
+    --button-icon-size:      0.875rem;
+    --button-radius:         var(--vds-radius-element, 0.25rem);
+  }
+
+  .vds-button[data-size="sm"] {
+    --button-height:         var(--vds-size-sm, 2rem);
+    --button-padding-inline: var(--vds-space-3, 0.75rem);
+    --button-font-size:      var(--vds-text-sm, 0.875rem);
+    --button-gap:            var(--vds-space-1-5, 0.375rem);
+    --button-icon-size:      1rem;
+  }
+
+  /* md — default, inherits base tokens (height=var(--vds-size-md)=2.25rem/36px) */
+
+  .vds-button[data-size="lg"] {
+    --button-height:         var(--vds-size-lg, 2.5rem);
+    --button-padding-inline: var(--vds-space-5, 1.25rem);
+    --button-font-size:      var(--vds-text-base, 1rem);
+    --button-gap:            var(--vds-space-2, 0.5rem);
+    --button-icon-size:      1.25rem;
+  }
+
+  .vds-button[data-size="xl"] {
+    --button-height:         var(--vds-size-xl, 2.75rem);
+    --button-padding-inline: var(--vds-space-6, 1.5rem);
+    --button-font-size:      var(--vds-text-base, 1rem);
+    --button-gap:            var(--vds-space-2, 0.5rem);
+    --button-icon-size:      1.25rem;
+  }
+
+  .vds-button[data-size="2xl"] {
+    --button-height:         var(--vds-size-2xl, 3.25rem);
+    --button-padding-inline: var(--vds-space-7, 1.75rem);
+    --button-font-size:      var(--vds-text-lg, 1.125rem);
+    --button-gap:            var(--vds-space-2-5, 0.625rem);
+    --button-icon-size:      1.375rem;
+  }
+
+  .vds-button[data-size="3xl"] {
+    --button-height:         var(--vds-size-3xl, 4rem);
+    --button-padding-inline: var(--vds-space-8, 2rem);
+    --button-font-size:      var(--vds-text-xl, 1.25rem);
+    --button-gap:            var(--vds-space-3, 0.75rem);
+    --button-icon-size:      1.5rem;
+  }
+
+  /* =========================================================================
+   * 5. Disabled — single source of truth for the disabled palette.
+   *    Applied via :disabled in Button.css; these tokens give it one hook
+   *    to override per-color if needed.
+   * ========================================================================= */
+  .vds-button:disabled,
+  .vds-button[aria-disabled="true"] {
+    --button-bg-hover:     var(--button-bg);
+    --button-bg-active:    var(--button-bg);
+    --button-text-hover:   var(--button-text);
+    --button-text-active:  var(--button-text);
+    --button-border-hover: var(--button-border);
+    --button-border-active: var(--button-border);
+  }
+}
+
+@layer design-system.components {
+  /* ── Root ── */
+  .vds-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--_button-gap);
+    gap: var(--button-gap);
     position: relative;
     vertical-align: middle;
 
-    /* Typography */
-    font-family: var(--vds-font-sans);
-    font-weight: var(--vds-font-weight-medium);
-    line-height: var(--vds-leading-tight);
+    block-size: var(--button-height);
+    min-inline-size: var(--button-min-width);
+    padding-inline: var(--button-padding-inline);
+
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: var(--button-border-width) solid var(--button-border);
+    border-radius: var(--button-radius);
+
+    font-family: var(--button-font-family);
+    font-size: var(--button-font-size);
+    font-weight: var(--button-font-weight);
+    line-height: var(--button-line-height);
+    letter-spacing: var(--button-letter-spacing);
+
     text-decoration: none;
     white-space: nowrap;
-
-    /* Shape */
-    border-radius: var(--_button-radius);
-    border: 1px solid var(--_button-border);
-
-    /* Interaction */
     cursor: pointer;
     -webkit-user-select: none;
        -moz-user-select: none;
             user-select: none;
     -webkit-tap-highlight-color: transparent;
+
     transition:
-      background-color var(--vds-duration-fast) var(--vds-ease-out),
-      border-color var(--vds-duration-fast) var(--vds-ease-out),
-      color var(--vds-duration-fast) var(--vds-ease-out),
-      box-shadow var(--vds-duration-fast) var(--vds-ease-out),
-      opacity var(--vds-duration-fast) var(--vds-ease-out);
-
-    /* ── Component tokens (default: md solid) ── */
-    --_button-bg: var(--vds-color-primary-500);
-    --_button-text: var(--vds-color-on-solid);
-    --_button-border: transparent;
-    --_button-height: var(--vds-size-md);
-    --_button-px: var(--vds-space-4);
-    --_button-font-size: var(--vds-text-sm);
-    --_button-radius: var(--vds-radius-element);
-    --_button-gap: var(--vds-space-2);
-    --_button-icon-size: 1.125rem;
-    --_button-min-width: var(--_button-height);
-
-    background-color: var(--_button-bg);
-    color: var(--_button-text);
-    block-size: var(--_button-height);
-    min-inline-size: var(--_button-min-width);
-    padding-inline: var(--_button-px);
-    font-size: var(--_button-font-size);
-
-    /* ── States ── */
+      background-color var(--button-transition-duration) var(--button-transition-easing),
+      border-color     var(--button-transition-duration) var(--button-transition-easing),
+      color            var(--button-transition-duration) var(--button-transition-easing),
+      box-shadow       var(--button-transition-duration) var(--button-transition-easing),
+      opacity          var(--button-transition-duration) var(--button-transition-easing);
   }
-    .vds-button:hover:not(:disabled) {
-      --_button-bg: var(--vds-color-primary-hover);
-    }
 
-    .vds-button:active:not(:disabled) {
-      --_button-bg: var(--vds-color-primary-active);
-      scale: 0.98;
-    }
+  /* ── Interaction states ── */
+  .vds-button:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--button-bg-hover);
+    color: var(--button-text-hover);
+    border-color: var(--button-border-hover);
+  }
 
-    .vds-button:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
-    }
+  .vds-button:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--button-bg-active);
+    color: var(--button-text-active);
+    border-color: var(--button-border-active);
+    scale: var(--button-press-scale);
+  }
 
-    .vds-button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
+  .vds-button:focus-visible {
+    outline: var(--button-focus-ring-width) solid var(--button-focus-ring-color);
+    outline-offset: var(--button-focus-ring-offset);
+  }
 
-    /* ━━━ Variants ━━━ */
+  /* Link variant — underline on hover */
+  .vds-button[data-variant="link"] {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .vds-button[data-variant="link"]:hover:not(:disabled):not([aria-disabled="true"]) {
+    text-decoration-thickness: 2px;
+  }
 
-    .vds-button[data-variant="outline"] {
-      --_button-bg: transparent;
-      --_button-text: var(--vds-color-primary-500);
-      --_button-border: var(--vds-color-border);
-    }
+  /* ── Disabled ── */
+  .vds-button:disabled,
+  .vds-button[aria-disabled="true"] {
+    opacity: var(--button-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 
-      .vds-button[data-variant="outline"]:hover:not(:disabled) {
-        --_button-bg: var(--vds-color-bg-subtle);
-      }
+  /* ── Modifiers ── */
 
-      .vds-button[data-variant="outline"]:active:not(:disabled) {
-        --_button-bg: var(--vds-color-bg-muted);
-      }
+  /* Icon-only: auto-detected via :has(), or when spinner is the only extra child in loading state */
+  .vds-button:has(> svg:only-child),
+  .vds-button:has(> .vds-button-spinner:first-child + svg:last-child) {
+    padding-inline: 0;
+    aspect-ratio: 1;
+    --button-min-width: var(--button-height);
+  }
 
-    .vds-button[data-variant="ghost"] {
-      --_button-bg: transparent;
-      --_button-text: var(--vds-color-text);
-      --_button-border: transparent;
-    }
+  .vds-button[data-full-width] {
+    inline-size: 100%;
+  }
 
-      .vds-button[data-variant="ghost"]:hover:not(:disabled) {
-        --_button-bg: var(--vds-color-bg-muted);
-      }
+  .vds-button[data-loading] {
+    color: transparent;
+    pointer-events: none;
+  }
 
-      .vds-button[data-variant="ghost"]:active:not(:disabled) {
-        --_button-bg: var(--vds-color-border-muted);
-      }
-
-    .vds-button[data-variant="soft"] {
-      --_button-bg: var(--vds-color-primary-100);
-      --_button-text: var(--vds-color-primary-700);
-      --_button-border: transparent;
-    }
-
-      .vds-button[data-variant="soft"]:hover:not(:disabled) {
-        --_button-bg: var(--vds-color-primary-200);
-      }
-
-      .vds-button[data-variant="soft"]:active:not(:disabled) {
-        --_button-bg: var(--vds-color-primary-300);
-      }
-
-    .vds-button[data-variant="destructive"] {
-      --_button-bg: var(--vds-color-danger-500);
-    }
-
-      .vds-button[data-variant="destructive"]:hover:not(:disabled) {
-        --_button-bg: var(--vds-color-danger-hover);
-      }
-
-      .vds-button[data-variant="destructive"]:active:not(:disabled) {
-        --_button-bg: var(--vds-color-danger-active);
-      }
-
-    .vds-button[data-variant="link"] {
-      --_button-bg: transparent;
-      --_button-text: var(--vds-color-primary-500);
-      --_button-border: transparent;
-      --_button-height: auto;
-      --_button-px: 0;
-      --_button-min-width: 0;
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
-    }
-
-      .vds-button[data-variant="link"]:hover:not(:disabled) {
-        --_button-text: var(--vds-color-primary-hover);
-        text-decoration-thickness: 2px;
-      }
-
-    /* ━━━ Sizes ━━━
-     *
-     * Size  Height  WCAG 2.5.8 (AA 24px)  WCAG 2.5.5 (AAA 44px)  Apple HIG  Google MD
-     * ───── ─────── ───────────────────── ────────────────────── ────────── ─────────
-     * 2xs   24px    ⚠ Bare minimum         ✗                      ✗          ✗
-     * xs    28px    ✓                       ✗                      ✗          ✗
-     * sm    32px    ✓                       ✗                      ✗          ✗
-     * md    40px    ✓                       ✗                      ✗          ✗
-     * lg    44px    ✓                       ✓                      ✓ (44pt)   ✗
-     * xl    52px    ✓                       ✓                      ✓          ✓ (48dp)
-     * 2xl   64px    ✓                       ✓                      ✓          ✓
-     *
-     * ⚠ 2xs/xs/sm: Use only in dense UI (tables, toolbars) with adequate spacing.
-     *   For touch-primary interfaces, prefer lg+ to meet AAA / platform guidelines.
-     */
-
-    /* 2xs — 24px — WCAG AA minimum. Dense UI only, ensure 24px spacing from neighbors */
-    .vds-button[data-size="2xs"] {
-      --_button-height: var(--vds-size-2xs);
-      --_button-px: var(--vds-space-2);
-      --_button-font-size: var(--vds-text-xs);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-1);
-      --_button-icon-size: 0.875rem;
-    }
-
-    /* xs — 28px — WCAG AA. Tables, toolbars, inline actions */
-    .vds-button[data-size="xs"] {
-      --_button-height: var(--vds-size-xs);
-      --_button-px: var(--vds-space-2-5);
-      --_button-font-size: var(--vds-text-xs);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-1);
-      --_button-icon-size: 0.875rem;
-    }
-
-    /* sm — 32px — WCAG AA. Secondary actions, form controls */
-    .vds-button[data-size="sm"] {
-      --_button-height: var(--vds-size-sm);
-      --_button-px: var(--vds-space-3);
-      --_button-font-size: var(--vds-text-sm);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-1-5);
-      --_button-icon-size: 1rem;
-    }
-
-    /* md — 40px — WCAG AA. Default for desktop-first interfaces */
-    /* (uses the default component tokens above) */
-
-    /* lg — 44px — ✓ WCAG AAA + Apple HIG. Recommended for primary CTAs */
-    .vds-button[data-size="lg"] {
-      --_button-height: var(--vds-size-lg);
-      --_button-px: var(--vds-space-5);
-      --_button-font-size: var(--vds-text-base);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-2);
-      --_button-icon-size: 1.25rem;
-    }
-
-    /* xl — 52px — ✓ WCAG AAA + Apple HIG + Google MD. Hero sections */
-    .vds-button[data-size="xl"] {
-      --_button-height: var(--vds-size-xl);
-      --_button-px: var(--vds-space-6);
-      --_button-font-size: var(--vds-text-lg);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-2);
-      --_button-icon-size: 1.25rem;
-    }
-
-    /* 2xl — 64px — ✓ All standards. Landing pages, full-width mobile CTAs */
-    .vds-button[data-size="2xl"] {
-      --_button-height: var(--vds-size-2xl);
-      --_button-px: var(--vds-space-8);
-      --_button-font-size: var(--vds-text-xl);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-3);
-      --_button-icon-size: 1.5rem;
-    }
-
-    /* ━━━ Modifiers ━━━ */
-
-    /* Icon-only: auto-detected via :has() or explicit attribute */
-    .vds-button:has( > svg:only-child),.vds-button:has( > .vds-button-spinner:first-child + svg:last-child) {
-      padding-inline: 0;
-      aspect-ratio: 1;
-      --_button-min-width: var(--_button-height);
-    }
-
-    /* Full width */
-    .vds-button[data-full-width] {
-      inline-size: 100%;
-    }
-
-    /* Loading state */
-    .vds-button[data-loading] {
-      color: transparent;
-      pointer-events: none;
-    }
-
-    .vds-button[data-loading] > .vds-button-section,.vds-button[data-loading] > :not(.vds-button-spinner) {
-      visibility: hidden;
-    }
+  .vds-button[data-loading] > .vds-button-section,
+  .vds-button[data-loading] > :not(.vds-button-spinner) {
+    visibility: hidden;
+  }
 
   /* ── Spinner ── */
   .vds-button-spinner {
@@ -257,18 +417,18 @@
     inset: 0;
   }
 
-    .vds-button-spinner::after {
-      content: "";
-      display: block;
-      inline-size: var(--_button-icon-size);
-      block-size: var(--_button-icon-size);
-      border: 2px solid currentColor;
-      border-inline-end-color: transparent;
-      border-radius: var(--vds-radius-full);
-      animation: vds-button-spin 0.6s linear infinite;
-      opacity: 1;
-      color: var(--_button-text);
-    }
+  .vds-button-spinner::after {
+    content: "";
+    display: block;
+    inline-size: var(--button-icon-size);
+    block-size: var(--button-icon-size);
+    border: 2px solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: var(--vds-radius-full, 9999px);
+    animation: vds-button-spin 0.6s linear infinite;
+    color: var(--button-text);
+    opacity: 1;
+  }
 
   /* ── Sections (left/right icon slots) ── */
   .vds-button-section {
@@ -277,12 +437,12 @@
     flex-shrink: 0;
   }
 
-    .vds-button-section > svg {
-      inline-size: var(--_button-icon-size);
-      block-size: var(--_button-icon-size);
-    }
+  .vds-button-section > svg {
+    inline-size: var(--button-icon-size);
+    block-size: var(--button-icon-size);
+  }
 
-  /* ── Spin animation ── */
+  /* ── Keyframes ── */
   @keyframes vds-button-spin {
     to {
       rotate: 360deg;

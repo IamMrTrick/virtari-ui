@@ -6,7 +6,7 @@ export type DrawerSnapBehavior = "staged" | "closest";
 
 export type SnapPoint = number;
 
-export type DrawerIndicatorPlacement = "inside" | "outside" | "hidden";
+export type DrawerIndicatorPlacement = "inside" | "outside" | "hidden" | "progress";
 
 export type DrawerHeaderVariant = "plain" | "bordered";
 
@@ -159,9 +159,14 @@ export function getStretchScale(openPx: number, totalPx: number): number {
   return (totalPx + stretchPx) / totalPx;
 }
 
-export function getVisualTransform(direction: Direction, openPx: number, totalPx: number): string {
+export function getVisualTransform(
+  direction: Direction,
+  openPx: number,
+  totalPx: number,
+  options?: { disableStretch?: boolean },
+): string {
   const translate = getTranslate(direction, openPx, totalPx);
-  const stretchScale = getStretchScale(openPx, totalPx);
+  const stretchScale = options?.disableStretch ? 1 : getStretchScale(openPx, totalPx);
   if (getAxis(direction) === "x") {
     return `${translate} scale3d(${stretchScale}, 1, 1)`;
   }

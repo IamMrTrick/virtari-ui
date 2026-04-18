@@ -23,6 +23,25 @@ export type ToastActionVariant =
   | "danger"
   | "success";
 
+/**
+ * Controls when auto-dismiss timers start for stacked toasts.
+ *  - "parallel"   — each toast counts down from its own createdAt, independent
+ *                   of stack position (default).
+ *  - "sequential" — only the newest (top) toast counts down. Older stacked
+ *                   toasts wait with their timer paused; each resets and
+ *                   starts when it becomes the new top.
+ */
+export type ToastTimerMode = "parallel" | "sequential";
+
+/**
+ * Controls what interaction pauses the auto-dismiss timer.
+ *  - "hover" — timer pauses while the viewport is hovered or any toast is
+ *              focused (default; matches Radix built-in pause behavior).
+ *  - "press" — timer only pauses while the user is actively pressing
+ *              (pointer down) on the toast body. Hover is ignored.
+ */
+export type ToastPauseMode = "hover" | "press";
+
 export interface ToastActionConfig {
   label: ReactNode;
   onClick: () => void;
@@ -72,4 +91,6 @@ export interface ToasterProps {
   closeLabel?: string;
   maxToasts?: number;
   label?: string;
+  timerMode?: ToastTimerMode;
+  pauseMode?: ToastPauseMode;
 }

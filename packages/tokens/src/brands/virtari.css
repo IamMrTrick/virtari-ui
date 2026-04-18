@@ -1,0 +1,22 @@
+@layer tokens.brand {
+  /*
+   * ── Virtari (default brand) ──
+   *
+   * Default brand identity. The scales here EXACTLY match the primitives
+   * defaults — this file exists so adding new brands is symmetric, and
+   * so the default can be re-asserted when nesting brand scopes.
+   *
+   * Activated by: <html data-brand="virtari">  (or no data-brand attr)
+   *
+   * To create a new brand, copy _template.css and override the hue/chroma
+   * for primary, accent, and optionally any intent scale. The semantic
+   * layer maps automatically — no component changes required.
+   */
+
+  :root,
+  [data-brand="virtari"] {
+    /* No overrides — defaults from primitives/intents.css apply.
+       Brand authors: list your overrides below following the
+       _template.css example. */
+  }
+}

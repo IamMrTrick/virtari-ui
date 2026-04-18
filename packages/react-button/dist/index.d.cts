@@ -1,7 +1,12 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import { ReactNode, Ref } from 'react';
 
-type ButtonVariant = "solid" | "outline" | "ghost" | "soft" | "destructive" | "link";
+/** Intent palette — orthogonal to variant. Picks the hue family. */
+type ButtonColor = "primary" | "success" | "warning" | "danger" | "info" | "accent" | "neutral" | "contrast";
+/** Appearance — solid fill, bordered, text-only, tinted, or inline link. */
+type ButtonVariant = "solid" | "outline" | "ghost" | "soft" | "link"
+/** @deprecated Use `color="danger"` instead. Maps to solid + danger at runtime. */
+ | "destructive";
 /**
  * Button size presets.
  *
@@ -10,19 +15,22 @@ type ButtonVariant = "solid" | "outline" | "ghost" | "soft" | "destructive" | "l
  * | 2xs  | 24px   | ⚠ minimum      | ✗               | ✗         | ✗         |
  * | xs   | 28px   | ✓              | ✗               | ✗         | ✗         |
  * | sm   | 32px   | ✓              | ✗               | ✗         | ✗         |
- * | md   | 40px   | ✓              | ✗               | ✗         | ✗         |
- * | lg   | 44px   | ✓              | ✓               | ✓         | ✗         |
- * | xl   | 52px   | ✓              | ✓               | ✓         | ✓         |
- * | 2xl  | 64px   | ✓              | ✓               | ✓         | ✓         |
+ * | md   | 36px   | ✓              | ✗               | ✗         | ✗         |
+ * | lg   | 40px   | ✓              | ✗               | ✗         | ✗         |
+ * | xl   | 44px   | ✓              | ✓               | ✓ (44pt)  | ✗         |
+ * | 2xl  | 52px   | ✓              | ✓               | ✓         | ✓         |
+ * | 3xl  | 64px   | ✓              | ✓               | ✓         | ✓         |
  *
- * For touch-primary interfaces, prefer `lg`+ to meet AAA and platform guidelines.
+ * For touch-primary interfaces, prefer `xl`+ to meet AAA and platform guidelines.
  */
-type ButtonSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+type ButtonSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 /** Visual effects — requires importing `@virtari/react-button/styles/effects` */
 type ButtonEffect = "shine" | "raised" | "glow" | "glass" | "outline-glow";
 /** Attention animations — requires importing `@virtari/react-button/styles/animations` */
 type ButtonAnimation = "pulse" | "bounce" | "shake" | "jiggle";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Hue/intent. Orthogonal to variant. */
+    color?: ButtonColor;
     /** Visual style variant */
     variant?: ButtonVariant;
     /** Size preset */
@@ -45,6 +53,6 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     animation?: ButtonAnimation;
     ref?: Ref<HTMLButtonElement>;
 }
-declare function Button({ variant, size, asChild, loading, loadingText, leftSection, rightSection, fullWidth, effect, animation, disabled, className, children, ref, ...props }: ButtonProps): react_jsx_runtime.JSX.Element;
+declare function Button({ color, variant, size, asChild, loading, loadingText, leftSection, rightSection, fullWidth, effect, animation, disabled, className, children, ref, ...props }: ButtonProps): react_jsx_runtime.JSX.Element;
 
-export { Button, type ButtonAnimation, type ButtonEffect, type ButtonProps, type ButtonSize, type ButtonVariant };
+export { Button, type ButtonAnimation, type ButtonColor, type ButtonEffect, type ButtonProps, type ButtonSize, type ButtonVariant };

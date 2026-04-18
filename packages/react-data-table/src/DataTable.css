@@ -1,0 +1,1456 @@
+@import './DataTable.tokens.css';
+
+@layer design-system.components {
+  /* ───── Root wrapper ───────────────────────────────────────── */
+  .vds-data-table {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    color: var(--data-table-cell-color);
+    font-family: var(--data-table-font-family);
+    font-size: var(--data-table-font-size);
+    line-height: var(--data-table-line-height);
+    background-color: var(--data-table-bg);
+    border: var(--data-table-border-width) solid var(--data-table-border-color);
+    border-radius: var(--data-table-radius);
+    overflow: hidden;
+    position: relative;
+    contain: layout paint;
+  }
+
+  /* ───── Scroll area ────────────────────────────────────────── */
+  .vds-data-table-scroll-area {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    min-block-size: 0;
+    overflow: auto;
+    scrollbar-gutter: stable;
+  }
+
+  /* ───── Table element ──────────────────────────────────────── */
+  .vds-data-table-table {
+    table-layout: fixed;
+    inline-size: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  /* ───── Header group (sticky by default) ───────────────────── */
+  .vds-data-table-header {
+    background-color: var(--data-table-header-bg);
+  }
+  .vds-data-table[data-sticky-header] .vds-data-table-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+  }
+
+  /* ───── Header row ─────────────────────────────────────────── */
+  .vds-data-table-header-row {
+    block-size: var(--data-table-header-row-height);
+  }
+
+  /* ───── Header cell ────────────────────────────────────────── */
+  .vds-data-table-header-cell {
+    position: relative;
+    box-sizing: border-box;
+    text-align: start;
+    vertical-align: middle;
+    inline-size: var(--col-size, var(--data-table-col-default-width));
+    min-inline-size: var(--data-table-col-min-width);
+    padding-inline: var(--data-table-cell-padding-inline);
+    padding-block: 0;
+    font-size: var(--data-table-header-font-size);
+    font-weight: var(--data-table-header-font-weight);
+    letter-spacing: var(--data-table-header-letter-spacing);
+    text-transform: var(--data-table-header-text-transform);
+    color: var(--data-table-header-color);
+    background-color: var(--data-table-header-bg);
+    border-block-end: var(--data-table-border-width) solid
+      var(--data-table-header-divider-color);
+    user-select: none;
+  }
+
+  /* ───── Body / row / cell ──────────────────────────────────── */
+  .vds-data-table-body {
+    background-color: var(--data-table-bg);
+  }
+
+  .vds-data-table-row {
+    block-size: var(--data-table-row-height);
+    background-color: var(--data-table-row-bg);
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+
+  .vds-data-table-cell {
+    box-sizing: border-box;
+    vertical-align: middle;
+    inline-size: var(--col-size, var(--data-table-col-default-width));
+    min-inline-size: var(--data-table-col-min-width);
+    padding-inline: var(--data-table-cell-padding-inline);
+    padding-block: var(--data-table-cell-padding-block);
+    color: var(--data-table-cell-color);
+    background-color: inherit;
+    border-block-end: var(--data-table-border-width) solid
+      var(--data-table-border-color);
+    overflow: hidden;
+  }
+
+  /* Last row — drop the trailing divider (outer container owns that edge). */
+  .vds-data-table-row:last-child > .vds-data-table-cell {
+    border-block-end: 0;
+  }
+
+  /* Cell content — ellipsis truncation by default. */
+  .vds-data-table-cell-content {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Empty cell — stretches across all columns. */
+  .vds-data-table-empty-cell {
+    inline-size: auto;
+    min-inline-size: 0;
+    padding-block: var(--vds-space-8, 2rem);
+    text-align: center;
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+
+  /* ───── Footer ─────────────────────────────────────────────── */
+  .vds-data-table-footer {
+    background-color: var(--data-table-footer-bg);
+  }
+  .vds-data-table-footer-row {
+    block-size: var(--data-table-footer-row-height);
+  }
+  .vds-data-table-footer-cell {
+    box-sizing: border-box;
+    vertical-align: middle;
+    inline-size: var(--col-size, var(--data-table-col-default-width));
+    min-inline-size: var(--data-table-col-min-width);
+    padding-inline: var(--data-table-cell-padding-inline);
+    padding-block: var(--data-table-cell-padding-block);
+    color: var(--data-table-footer-color);
+    font-weight: var(--data-table-header-font-weight);
+    border-block-start: var(--data-table-border-width) solid
+      var(--data-table-header-divider-color);
+  }
+
+  /* ───── Bordered variants ──────────────────────────────────── */
+  .vds-data-table[data-bordered="none"] .vds-data-table-cell,
+  .vds-data-table[data-bordered="none"] .vds-data-table-header-cell {
+    border-block-end: 0;
+  }
+  .vds-data-table[data-bordered="grid"] .vds-data-table-cell,
+  .vds-data-table[data-bordered="grid"] .vds-data-table-header-cell,
+  .vds-data-table[data-bordered="grid"] .vds-data-table-footer-cell {
+    border-inline-end: var(--data-table-border-width) solid
+      var(--data-table-border-color);
+  }
+  .vds-data-table[data-bordered="grid"]
+    .vds-data-table-header-row
+    > .vds-data-table-header-cell:last-child,
+  .vds-data-table[data-bordered="grid"]
+    .vds-data-table-row
+    > .vds-data-table-cell:last-child,
+  .vds-data-table[data-bordered="grid"]
+    .vds-data-table-footer-row
+    > .vds-data-table-footer-cell:last-child {
+    border-inline-end: 0;
+  }
+
+  /* ───── Grid interaction-mode focus ring ───────────────────── */
+  .vds-data-table[data-interaction-mode="grid"]
+    .vds-data-table-cell:focus-visible,
+  .vds-data-table[data-interaction-mode="grid"]
+    .vds-data-table-header-cell:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: var(--data-table-focus-ring-offset);
+  }
+
+  /* ───── Empty + loading overlay ────────────────────────────── */
+  .vds-data-table-empty {
+    padding: var(--vds-space-8, 2rem);
+    text-align: center;
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+
+  .vds-data-table-loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background-color: var(--data-table-overlay-bg);
+    backdrop-filter: blur(2px);
+    z-index: 4;
+    pointer-events: all;
+  }
+  .vds-data-table-loading-label {
+    color: var(--vds-color-text, #111827);
+    font-weight: var(--vds-font-weight-medium, 500);
+  }
+
+  /* ───── Toolbar ────────────────────────────────────────────── */
+  .vds-data-table-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-3, 0.75rem);
+    padding-inline: var(--data-table-cell-padding-inline);
+    padding-block: var(--data-table-cell-padding-block);
+    border-block-end: var(--data-table-border-width) solid
+      var(--data-table-border-color);
+    background-color: var(--data-table-bg);
+  }
+
+  /* ───── Global filter (search input) ───────────────────────── */
+  .vds-data-table-global-filter {
+    block-size: var(--data-table-filter-height);
+    padding-inline: var(--data-table-filter-padding-inline);
+    min-inline-size: 14rem;
+    font-family: inherit;
+    font-size: var(--data-table-filter-font-size);
+    color: var(--data-table-cell-color);
+    background-color: var(--data-table-filter-bg);
+    border: 1px solid var(--data-table-filter-border);
+    border-radius: var(--data-table-filter-radius);
+    outline: none;
+    transition: border-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-global-filter::placeholder {
+    color: var(--data-table-filter-placeholder-color);
+  }
+  .vds-data-table-global-filter:focus-visible {
+    border-color: var(--data-table-focus-ring-color);
+    box-shadow: 0 0 0 3px color-mix(
+      in oklch,
+      var(--data-table-focus-ring-color),
+      transparent 80%
+    );
+  }
+
+  /* ───── Header cell inner content (flex wrapper) ───────────── */
+  .vds-data-table-header-cell-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--data-table-sort-gap);
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  /* ───── Sort trigger ───────────────────────────────────────── */
+  .vds-data-table-sort-trigger {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--data-table-sort-gap);
+    inline-size: 100%;
+    min-inline-size: 0;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+  }
+  .vds-data-table-sort-trigger:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+    border-radius: var(--vds-radius-element, 0.375rem);
+  }
+  .vds-data-table-sort-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  /* ───── Sort icon ──────────────────────────────────────────── */
+  .vds-data-table-sort-icon {
+    flex: 0 0 auto;
+    color: var(--data-table-sort-icon-color);
+    opacity: var(--data-table-sort-icon-opacity);
+    transition:
+      color var(--data-table-transition-duration)
+        var(--data-table-transition-easing),
+      opacity var(--data-table-transition-duration)
+        var(--data-table-transition-easing);
+  }
+
+  /* ───── Resize handle ──────────────────────────────────────── */
+  .vds-data-table-resize-handle {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: calc(var(--data-table-resize-hit-width) / -2);
+    inline-size: var(--data-table-resize-hit-width);
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+    z-index: 2;
+    /* No transition on width/background — must snap. */
+  }
+  .vds-data-table-resize-handle-line {
+    position: absolute;
+    inset-block: 25%;
+    inset-inline-end: calc(var(--data-table-resize-hit-width) / 2);
+    inline-size: var(--data-table-resize-line-width);
+    background-color: var(--data-table-resize-line-color);
+    transition:
+      background-color var(--data-table-transition-duration)
+        var(--data-table-transition-easing),
+      inline-size var(--data-table-transition-duration)
+        var(--data-table-transition-easing);
+  }
+  .vds-data-table-resize-handle:focus-visible {
+    outline: none; /* delegate focus ring to the line below */
+  }
+  .vds-data-table-resize-handle:focus-visible
+    .vds-data-table-resize-handle-line {
+    inline-size: var(--data-table-resize-line-width-active);
+    background-color: var(--data-table-resize-line-color-active);
+    box-shadow: 0 0 0 2px color-mix(
+      in oklch,
+      var(--data-table-resize-line-color-active),
+      transparent 70%
+    );
+  }
+
+  /* Resize guideline overlay — full-height 1px line during drag. */
+  .vds-data-table-resize-guideline {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: var(--data-table-guideline-width);
+    background-color: var(--data-table-guideline-color);
+    pointer-events: none;
+    z-index: 3;
+    transform: translateX(var(--data-table-guideline-offset, 0));
+    will-change: transform;
+  }
+
+  /* Global cursor while any table is being resized. */
+  body:has(.vds-data-table[data-resizing]) {
+    cursor: col-resize;
+    user-select: none;
+  }
+
+  /* ───── Column pinning (position: sticky approach) ─────────── */
+  /* Pinned cells must be opaque to overlay scrolling center cells.
+   * Background is re-applied explicitly because `background: inherit` fails
+   * once the row background is itself set on the <tr>. */
+  .vds-data-table-header-cell[data-pinned],
+  .vds-data-table-cell[data-pinned],
+  .vds-data-table-footer-cell[data-pinned] {
+    position: sticky;
+    z-index: 2;
+  }
+  .vds-data-table-header-cell[data-pinned] {
+    z-index: 3; /* above both body pinned cells and sticky header */
+    background-color: var(--data-table-pin-header-bg);
+  }
+  .vds-data-table-cell[data-pinned] {
+    background-color: var(--data-table-row-bg);
+  }
+  .vds-data-table-footer-cell[data-pinned] {
+    background-color: var(--data-table-footer-bg);
+  }
+
+  /* Scroll shadows on the LAST left-pinned and FIRST right-pinned columns.
+   * Only appear when horizontal scroll is not at the corresponding edge.
+   * - at "start" (scroll=0)  → no left shadow, right shadow OK
+   * - at "middle"            → both shadows
+   * - at "end" (maxed)       → left shadow OK, no right shadow
+   * - at "none"              → no overflow, no shadows */
+  .vds-data-table[data-scrolled-x="middle"]
+    .vds-data-table-cell[data-pinned-last],
+  .vds-data-table[data-scrolled-x="middle"]
+    .vds-data-table-header-cell[data-pinned-last],
+  .vds-data-table[data-scrolled-x="middle"]
+    .vds-data-table-footer-cell[data-pinned-last],
+  .vds-data-table[data-scrolled-x="end"]
+    .vds-data-table-cell[data-pinned-last],
+  .vds-data-table[data-scrolled-x="end"]
+    .vds-data-table-header-cell[data-pinned-last],
+  .vds-data-table[data-scrolled-x="end"]
+    .vds-data-table-footer-cell[data-pinned-last] {
+    box-shadow: var(--data-table-pin-shadow-left);
+  }
+  .vds-data-table[data-scrolled-x="middle"]
+    .vds-data-table-cell[data-pinned-first],
+  .vds-data-table[data-scrolled-x="middle"]
+    .vds-data-table-header-cell[data-pinned-first],
+  .vds-data-table[data-scrolled-x="middle"]
+    .vds-data-table-footer-cell[data-pinned-first],
+  .vds-data-table[data-scrolled-x="start"]
+    .vds-data-table-cell[data-pinned-first],
+  .vds-data-table[data-scrolled-x="start"]
+    .vds-data-table-header-cell[data-pinned-first],
+  .vds-data-table[data-scrolled-x="start"]
+    .vds-data-table-footer-cell[data-pinned-first] {
+    box-shadow: var(--data-table-pin-shadow-right);
+  }
+
+  /* RTL: flip the shadow directions — left/right physical values reversed. */
+  .vds-data-table[dir="rtl"]
+    .vds-data-table-cell[data-pinned-last],
+  .vds-data-table[dir="rtl"]
+    .vds-data-table-header-cell[data-pinned-last] {
+    box-shadow: var(--data-table-pin-shadow-right);
+  }
+  .vds-data-table[dir="rtl"]
+    .vds-data-table-cell[data-pinned-first],
+  .vds-data-table[dir="rtl"]
+    .vds-data-table-header-cell[data-pinned-first] {
+    box-shadow: var(--data-table-pin-shadow-left);
+  }
+
+  /* ───── Per-column filters ─────────────────────────────────── */
+  .vds-data-table-filter-trigger {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    color: var(--vds-color-text-subtle, #9ca3af);
+    border-radius: var(--vds-radius-element, 0.375rem);
+    cursor: pointer;
+    transition: color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-filter-trigger:hover {
+    color: var(--vds-color-text, #111827);
+    background-color: var(--data-table-pagination-button-bg-hover);
+  }
+  .vds-data-table-filter-trigger[data-active] {
+    color: var(--vds-color-primary-emphasis, #6366f1);
+  }
+  .vds-data-table-filter-trigger:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+
+  .vds-data-table-filter-popover {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-2, 0.5rem);
+    min-inline-size: 12rem;
+    padding: var(--vds-space-3, 0.75rem);
+  }
+
+  .vds-data-table-filter-number,
+  .vds-data-table-filter-date {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+  .vds-data-table-filter-sep {
+    color: var(--vds-color-text-muted, #6b7280);
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+
+  .vds-data-table-filter-select {
+    min-inline-size: 8rem;
+    block-size: var(--vds-size-sm, 2rem);
+    padding-inline: var(--vds-space-2, 0.5rem);
+    background-color: var(--data-table-filter-bg);
+    border: 1px solid var(--data-table-filter-border);
+    border-radius: var(--data-table-filter-radius);
+    color: var(--data-table-cell-color);
+    font: inherit;
+    font-size: var(--vds-text-sm, 0.875rem);
+    cursor: pointer;
+  }
+
+  .vds-data-table-filter-clear {
+    all: unset;
+    align-self: flex-start;
+    color: var(--vds-color-danger-emphasis, #dc2626);
+    font-size: var(--vds-text-xs, 0.75rem);
+    cursor: pointer;
+  }
+  .vds-data-table-filter-clear:hover {
+    text-decoration: underline;
+  }
+
+  /* ───── Pin column trigger (button) ────────────────────────── */
+  .vds-data-table-pin-trigger {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
+    font-size: var(--vds-text-xs, 0.75rem);
+    color: var(--vds-color-text-muted, #6b7280);
+    border-radius: var(--vds-radius-element, 0.375rem);
+    cursor: pointer;
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-pin-trigger:hover {
+    background-color: var(--data-table-pagination-button-bg-hover);
+  }
+  .vds-data-table-pin-trigger[data-pinned] {
+    color: var(--vds-color-primary-emphasis, #6366f1);
+  }
+  .vds-data-table-pin-trigger:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+
+  /* ───── Selection cells ────────────────────────────────────── */
+  .vds-data-table-header-cell[data-column-id="__select"],
+  .vds-data-table-cell[data-column-id="__select"],
+  .vds-data-table-footer-cell[data-column-id="__select"] {
+    inline-size: var(--data-table-select-cell-size);
+    min-inline-size: var(--data-table-select-cell-size);
+    text-align: center;
+    padding-inline: var(--vds-space-2, 0.5rem);
+  }
+  .vds-data-table-header-cell[data-column-id="__select"]
+    > .vds-data-table-header-cell-content,
+  .vds-data-table-cell[data-column-id="__select"]
+    > .vds-data-table-cell-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ───── Virtualization spacer rows ─────────────────────────── */
+  .vds-data-table-virtual-spacer {
+    /* Spacer <tr>s push real rows to their virtualized offsets.
+     * block-size comes from inline style (JS sets it per frame). */
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .vds-data-table-virtual-spacer > td {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent;
+  }
+
+  /* ───── Pagination ─────────────────────────────────────────── */
+  .vds-data-table-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--data-table-pagination-gap);
+    padding-inline: var(--data-table-pagination-padding-inline);
+    padding-block: var(--data-table-pagination-padding-block);
+    background-color: var(--data-table-pagination-bg);
+    border-block-start: var(--data-table-border-width) solid
+      var(--data-table-border-color);
+    font-size: var(--data-table-font-size);
+  }
+  .vds-data-table-pagination-info {
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+  .vds-data-table-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--data-table-pagination-gap);
+  }
+
+  /* Prev / Next buttons */
+  .vds-data-table-pagination-button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--data-table-pagination-button-size);
+    block-size: var(--data-table-pagination-button-size);
+    padding-inline: var(--vds-space-3, 0.75rem);
+    color: var(--data-table-pagination-button-color);
+    background-color: var(--data-table-pagination-button-bg);
+    border-radius: var(--data-table-pagination-button-radius);
+    cursor: pointer;
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-pagination-button:hover:not(:disabled) {
+    background-color: var(--data-table-pagination-button-bg-hover);
+  }
+  .vds-data-table-pagination-button:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+  .vds-data-table-pagination-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Page size select */
+  .vds-data-table-pagination-page-size {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+  .vds-data-table-pagination-page-size-select {
+    min-inline-size: 4rem;
+    block-size: var(--data-table-pagination-button-size);
+    padding-inline: var(--vds-space-2, 0.5rem);
+    background-color: var(--data-table-filter-bg);
+    border: 1px solid var(--data-table-filter-border);
+    border-radius: var(--data-table-filter-radius);
+    color: var(--data-table-cell-color);
+    font: inherit;
+    cursor: pointer;
+  }
+  .vds-data-table-pagination-page-size-select:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+
+  /* Numbered page buttons */
+  .vds-data-table-pagination-pages {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .vds-data-table-pagination-page-button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--data-table-pagination-button-size);
+    block-size: var(--data-table-pagination-button-size);
+    padding-inline: var(--vds-space-2, 0.5rem);
+    color: var(--data-table-pagination-button-color);
+    border-radius: var(--data-table-pagination-button-radius);
+    cursor: pointer;
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-pagination-page-button:hover {
+    background-color: var(--data-table-pagination-button-bg-hover);
+  }
+  .vds-data-table-pagination-page-button[data-active] {
+    background-color: var(--data-table-pagination-button-bg-active);
+    color: var(--data-table-pagination-button-color-active);
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
+  .vds-data-table-pagination-page-button:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+  .vds-data-table-pagination-ellipsis {
+    padding-inline: var(--vds-space-1-5, 0.375rem);
+    color: var(--vds-color-text-muted, #6b7280);
+    user-select: none;
+  }
+
+  /* ───── Row expand trigger ─────────────────────────────────── */
+  .vds-data-table-row-expand-trigger {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    color: var(--vds-color-text-muted, #6b7280);
+    border-radius: var(--vds-radius-element, 0.375rem);
+    cursor: pointer;
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-row-expand-trigger:hover {
+    background-color: var(--data-table-pagination-button-bg-hover);
+  }
+  .vds-data-table-row-expand-trigger:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+  .vds-data-table-row-expand-icon {
+    transition: transform var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-row-expand-trigger[data-expanded]
+    .vds-data-table-row-expand-icon {
+    transform: rotate(90deg);
+  }
+
+  /* ───── Group header row ───────────────────────────────────── */
+  .vds-data-table-group-header-row {
+    background-color: var(--data-table-header-bg);
+  }
+  .vds-data-table-group-header-cell {
+    padding-block: var(--data-table-cell-padding-block);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    color: var(--data-table-cell-color);
+    border-block-end: var(--data-table-border-width) solid
+      var(--data-table-border-color);
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+  .vds-data-table-group-label {
+    display: inline-flex;
+    gap: var(--vds-space-2, 0.5rem);
+    align-items: baseline;
+  }
+  .vds-data-table-group-count {
+    color: var(--vds-color-text-muted, #6b7280);
+    font-weight: var(--vds-font-weight-normal, 400);
+  }
+
+  /* ───── Column visibility list ─────────────────────────────── */
+  .vds-data-table-column-visibility {
+    list-style: none;
+    margin: 0;
+    padding: var(--vds-space-2, 0.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+    min-inline-size: 10rem;
+  }
+  .vds-data-table-column-visibility-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
+    cursor: pointer;
+    border-radius: var(--vds-radius-element, 0.375rem);
+  }
+  .vds-data-table-column-visibility-item:hover {
+    background-color: var(--data-table-pagination-button-bg-hover);
+  }
+
+  /* ───── Editable cell ──────────────────────────────────────── */
+  .vds-data-table-cell-editable {
+    cursor: text;
+  }
+  .vds-data-table-cell-editable[data-editing] {
+    padding-inline: 0;
+    padding-block: 0;
+  }
+  .vds-data-table-cell-editor {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* ───── Drag handle (column DnD) ───────────────────────────── */
+  .vds-data-table-header-cell-draggable {
+    cursor: grab;
+  }
+  .vds-data-table-header-cell-draggable[data-dragging] {
+    cursor: grabbing;
+  }
+  .vds-data-table-drag-handle {
+    display: inline-flex;
+    cursor: grab;
+    color: var(--vds-color-text-subtle, #9ca3af);
+  }
+
+  /* ───── Row pin trigger ────────────────────────────────────── */
+  .vds-data-table-row-pin-trigger {
+    all: unset;
+    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
+    color: var(--vds-color-text-muted, #6b7280);
+    font-size: var(--vds-text-xs, 0.75rem);
+    border-radius: var(--vds-radius-element, 0.375rem);
+    cursor: pointer;
+  }
+  .vds-data-table-row-pin-trigger:hover {
+    background-color: var(--data-table-pagination-button-bg-hover);
+  }
+  .vds-data-table-row-pin-trigger[data-pinned] {
+    color: var(--vds-color-primary-emphasis, #6366f1);
+  }
+
+  /* ───── SR-only utility ────────────────────────────────────── */
+  .vds-data-table-sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ═════════════════════════════════════════════════════════════
+   *  v2 ADDITIONS
+   * ═════════════════════════════════════════════════════════════ */
+
+  /* ───── View mode toggle (3-button pill segmented control) ───── */
+  .vds-data-table-view-toggle {
+    display: inline-flex;
+    padding: 2px;
+    background-color: var(--data-table-view-toggle-bg);
+    border: 1px solid var(--data-table-view-toggle-border);
+    border-radius: var(--data-table-view-toggle-radius);
+    gap: 2px;
+  }
+  .vds-data-table-view-toggle-button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1-5, 0.375rem);
+    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2-5, 0.625rem);
+    border-radius: calc(var(--data-table-view-toggle-radius) - 2px);
+    cursor: pointer;
+    color: var(--data-table-view-toggle-button-color);
+    font-size: var(--vds-text-sm, 0.875rem);
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-view-toggle-button:hover {
+    background-color: color-mix(
+      in oklch,
+      var(--data-table-view-toggle-button-bg-active),
+      transparent 50%
+    );
+  }
+  .vds-data-table-view-toggle-button[data-active] {
+    background-color: var(--data-table-view-toggle-button-bg-active);
+    color: var(--data-table-view-toggle-button-color-active);
+    box-shadow: var(--vds-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.04));
+  }
+  .vds-data-table-view-toggle-button:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+  .vds-data-table-view-toggle-icon {
+    display: inline-flex;
+  }
+
+  /* ───── Board view (card grid) ─────────────────────────────── */
+  .vds-data-table-board {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(var(--data-table-board-card-min-width), 1fr)
+    );
+    gap: var(--data-table-board-gap);
+    padding: var(--data-table-board-gap);
+  }
+  .vds-data-table-board-empty {
+    padding: var(--vds-space-8, 2rem);
+    text-align: center;
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+  .vds-data-table-board-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-3, 0.75rem);
+    padding: var(--data-table-board-card-padding);
+    background-color: var(--data-table-board-card-bg);
+    border: 1px solid var(--data-table-board-card-border);
+    border-radius: var(--data-table-board-card-radius);
+    box-shadow: var(--data-table-board-card-shadow);
+    transition:
+      border-color var(--data-table-transition-duration)
+        var(--data-table-transition-easing),
+      background-color var(--data-table-transition-duration)
+        var(--data-table-transition-easing);
+  }
+  .vds-data-table-board-card[data-selected] {
+    border-color: var(--vds-color-primary-emphasis, #6366f1);
+    background-color: var(--vds-color-primary-muted, #eef2ff);
+  }
+  .vds-data-table-board-field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .vds-data-table-board-label {
+    font-size: var(--vds-text-xs, 0.75rem);
+    color: var(--vds-color-text-muted, #6b7280);
+    text-transform: uppercase;
+    letter-spacing: var(--vds-tracking-wide, 0.025em);
+  }
+  .vds-data-table-board-value {
+    font-size: var(--vds-text-sm, 0.875rem);
+    color: var(--data-table-cell-color);
+    overflow-wrap: anywhere;
+  }
+
+  /* ───── List view (compact stacked) ────────────────────────── */
+  .vds-data-table-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .vds-data-table-list-empty {
+    padding: var(--vds-space-8, 2rem);
+    text-align: center;
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+  .vds-data-table-list-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-block: var(--data-table-list-item-padding-block);
+    padding-inline: var(--data-table-list-item-padding-inline);
+    border-block-end: 1px solid var(--data-table-list-divider);
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-list-item:hover {
+    background-color: var(--data-table-row-bg-hover);
+  }
+  .vds-data-table-list-item[data-selected] {
+    background-color: var(--data-table-row-bg-selected);
+  }
+  .vds-data-table-list-primary {
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--data-table-cell-color);
+  }
+  .vds-data-table-list-secondary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vds-space-3, 0.75rem);
+    color: var(--vds-color-text-muted, #6b7280);
+    font-size: var(--vds-text-xs, 0.75rem);
+  }
+  .vds-data-table-list-field {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ───── BulkActions bar ────────────────────────────────────── */
+  .vds-data-table-bulk-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--data-table-bulk-gap);
+    padding-inline: var(--data-table-bulk-padding-inline);
+    padding-block: var(--data-table-bulk-padding-block);
+    background-color: var(--data-table-bulk-bg);
+    border-block-start: 1px solid var(--data-table-bulk-border);
+  }
+  .vds-data-table-bulk-actions[data-sticky] {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 5;
+  }
+  .vds-data-table-bulk-count {
+    color: var(--data-table-bulk-count-color);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-data-table-bulk-clear {
+    all: unset;
+    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
+    color: var(--vds-color-text-muted, #6b7280);
+    font-size: var(--vds-text-sm, 0.875rem);
+    cursor: pointer;
+    border-radius: var(--vds-radius-element, 0.375rem);
+  }
+  .vds-data-table-bulk-clear:hover {
+    background-color: var(--data-table-pagination-button-bg-hover);
+  }
+
+  .vds-data-table-select-all-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem);
+    background-color: var(--data-table-select-all-bg);
+    color: var(--data-table-select-all-color);
+    border-radius: var(--vds-radius-element, 0.375rem);
+    font-size: var(--vds-text-sm, 0.875rem);
+    flex: 1 1 100%;
+  }
+  .vds-data-table-select-all-link {
+    all: unset;
+    color: var(--vds-color-primary-emphasis, #6366f1);
+    cursor: pointer;
+    font-weight: var(--vds-font-weight-medium, 500);
+  }
+  .vds-data-table-select-all-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ───── Toolbar buttons ────────────────────────────────────── */
+  .vds-data-table-toolbar-button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--data-table-toolbar-button-gap);
+    block-size: var(--data-table-toolbar-button-height);
+    padding-inline: var(--data-table-toolbar-button-padding-inline);
+    color: var(--data-table-toolbar-button-color);
+    background-color: var(--data-table-toolbar-button-bg);
+    font-size: var(--data-table-toolbar-button-font-size);
+    border-radius: var(--data-table-toolbar-button-radius);
+    cursor: pointer;
+    transition:
+      background-color var(--data-table-transition-duration)
+        var(--data-table-transition-easing),
+      color var(--data-table-transition-duration)
+        var(--data-table-transition-easing);
+  }
+  .vds-data-table-toolbar-button:hover:not(:disabled) {
+    background-color: var(--data-table-toolbar-button-bg-hover);
+  }
+  .vds-data-table-toolbar-button:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+  .vds-data-table-toolbar-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .vds-data-table-toolbar-button[data-intent="primary"] {
+    color: #fff;
+    background-color: var(--data-table-toolbar-button-color-primary);
+  }
+  .vds-data-table-toolbar-button[data-intent="primary"]:hover:not(:disabled) {
+    background-color: color-mix(
+      in oklch,
+      var(--data-table-toolbar-button-color-primary),
+      black 8%
+    );
+  }
+  .vds-data-table-toolbar-button[data-intent="danger"] {
+    color: var(--data-table-toolbar-button-color-danger);
+  }
+  .vds-data-table-toolbar-button[data-intent="danger"]:hover:not(:disabled) {
+    background-color: color-mix(
+      in oklch,
+      var(--data-table-toolbar-button-color-danger),
+      transparent 90%
+    );
+  }
+  .vds-data-table-toolbar-button-icon {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+  }
+  .vds-data-table-toolbar-button-label {
+    white-space: nowrap;
+  }
+  .vds-data-table-toolbar-button-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 1.25rem;
+    block-size: 1.25rem;
+    padding-inline: var(--vds-space-1, 0.25rem);
+    margin-inline-start: 2px;
+    background-color: var(--data-table-toolbar-button-color-primary);
+    color: #fff;
+    border-radius: 1rem;
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
+
+  /* ───── Cell primitives ────────────────────────────────────── */
+  .vds-data-table-avatar-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    min-inline-size: 0;
+  }
+  .vds-data-table-avatar-cell-text {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+  .vds-data-table-avatar-cell-primary {
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--data-table-cell-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vds-data-table-avatar-cell-secondary {
+    font-size: var(--vds-text-xs, 0.75rem);
+    color: var(--vds-color-text-muted, #6b7280);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .vds-data-table-status-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1-5, 0.375rem);
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--vds-color-text, #111827);
+  }
+  .vds-data-table-status-cell-dot {
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: 999px;
+    background-color: currentColor;
+  }
+  .vds-data-table-status-cell[data-tone="success"] {
+    color: var(--vds-color-success-emphasis, #16a34a);
+  }
+  .vds-data-table-status-cell[data-tone="warning"] {
+    color: var(--vds-color-warning-emphasis, #d97706);
+  }
+  .vds-data-table-status-cell[data-tone="danger"] {
+    color: var(--vds-color-danger-emphasis, #dc2626);
+  }
+  .vds-data-table-status-cell[data-tone="info"] {
+    color: var(--vds-color-info-emphasis, #2563eb);
+  }
+  .vds-data-table-status-cell[data-tone="neutral"] {
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+
+  .vds-data-table-text-cell[data-truncate] {
+    display: inline-block;
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+  }
+  .vds-data-table-text-cell[data-weight="medium"] {
+    font-weight: var(--vds-font-weight-medium, 500);
+  }
+  .vds-data-table-text-cell[data-weight="semibold"] {
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
+  .vds-data-table-text-cell[data-muted] {
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+
+  .vds-data-table-number-cell {
+    font-variant-numeric: tabular-nums;
+    display: inline-block;
+    inline-size: 100%;
+  }
+  .vds-data-table-number-cell[data-align="start"] { text-align: start; }
+  .vds-data-table-number-cell[data-align="center"] { text-align: center; }
+  .vds-data-table-number-cell[data-align="end"] { text-align: end; }
+
+  .vds-data-table-date-cell {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .vds-data-table-link-cell {
+    color: var(--vds-color-primary-emphasis, #6366f1);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vds-data-table-link-cell:hover {
+    text-decoration: underline;
+  }
+
+  .vds-data-table-copyable-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    min-inline-size: 0;
+  }
+  .vds-data-table-copyable-cell-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vds-data-table-copyable-cell-button {
+    all: unset;
+    display: inline-flex;
+    padding: 2px;
+    opacity: 0;
+    color: var(--vds-color-text-muted, #6b7280);
+    border-radius: var(--vds-radius-element, 0.375rem);
+    cursor: pointer;
+    transition: opacity var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-copyable-cell:hover .vds-data-table-copyable-cell-button,
+  .vds-data-table-copyable-cell-button:focus-visible {
+    opacity: 1;
+  }
+  .vds-data-table-copyable-cell[data-copied] .vds-data-table-copyable-cell-button {
+    opacity: 1;
+    color: var(--vds-color-success-emphasis, #16a34a);
+  }
+
+  .vds-data-table-actions-cell-trigger {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    color: var(--vds-color-text-muted, #6b7280);
+    border-radius: var(--vds-radius-element, 0.375rem);
+    cursor: pointer;
+  }
+  .vds-data-table-actions-cell-trigger:hover {
+    background-color: var(--data-table-pagination-button-bg-hover);
+    color: var(--vds-color-text, #111827);
+  }
+  .vds-data-table-actions-cell-trigger:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+  .vds-data-table-actions-cell-item-icon {
+    display: inline-flex;
+    margin-inline-end: var(--vds-space-2, 0.5rem);
+  }
+
+  /* ───── Filter drawer ──────────────────────────────────────── */
+  .vds-data-table-filter-drawer-header {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+  .vds-data-table-filter-drawer-back {
+    all: unset;
+    display: inline-flex;
+    padding: var(--vds-space-1, 0.25rem);
+    cursor: pointer;
+    color: var(--vds-color-text-muted, #6b7280);
+    border-radius: var(--vds-radius-element, 0.375rem);
+  }
+  .vds-data-table-filter-drawer-back:hover {
+    background-color: var(--data-table-pagination-button-bg-hover);
+  }
+  .vds-data-table-filter-drawer-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 1.25rem;
+    block-size: 1.25rem;
+    padding-inline: 4px;
+    background-color: var(--vds-color-primary-emphasis, #6366f1);
+    color: #fff;
+    border-radius: 999px;
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
+  .vds-data-table-filter-drawer-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-4, 1rem);
+  }
+  .vds-data-table-filter-drawer-active {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-2, 0.5rem);
+    padding: var(--vds-space-3, 0.75rem);
+    background-color: var(--vds-color-surface-raised, #f9fafb);
+    border-radius: var(--vds-radius-element, 0.375rem);
+  }
+  .vds-data-table-filter-drawer-active-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--vds-text-sm, 0.875rem);
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+  .vds-data-table-filter-drawer-clear {
+    all: unset;
+    cursor: pointer;
+    color: var(--vds-color-danger-emphasis, #dc2626);
+    font-size: var(--vds-text-xs, 0.75rem);
+  }
+  .vds-data-table-filter-drawer-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vds-space-1-5, 0.375rem);
+  }
+  .vds-data-table-filter-drawer-operator {
+    all: unset;
+    padding: 2px var(--vds-space-2, 0.5rem);
+    background-color: var(--vds-color-surface, #ffffff);
+    border: 1px dashed var(--vds-color-border, #d1d5db);
+    border-radius: var(--vds-radius-element, 0.375rem);
+    cursor: pointer;
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
+  .vds-data-table-filter-drawer-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px var(--vds-space-2, 0.5rem);
+    background-color: var(--vds-color-primary-muted, #eef2ff);
+    color: var(--vds-color-primary-emphasis, #6366f1);
+    border-radius: 999px;
+    font-size: var(--vds-text-xs, 0.75rem);
+  }
+  .vds-data-table-filter-drawer-chip-remove {
+    all: unset;
+    cursor: pointer;
+    display: inline-flex;
+    padding: 0 2px;
+    font-size: 14px;
+    line-height: 1;
+  }
+  .vds-data-table-filter-drawer-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+  .vds-data-table-filter-drawer-section-title {
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    color: var(--vds-color-text-muted, #6b7280);
+    text-transform: uppercase;
+    letter-spacing: var(--vds-tracking-wide, 0.025em);
+  }
+  .vds-data-table-filter-drawer-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .vds-data-table-filter-drawer-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem);
+    background-color: var(--vds-color-surface, #ffffff);
+    border: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    border-radius: var(--vds-radius-element, 0.375rem);
+    cursor: pointer;
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-filter-drawer-field:hover {
+    background-color: var(--vds-color-surface-hover, #f3f4f6);
+  }
+  .vds-data-table-filter-drawer-field[data-active] {
+    border-color: var(--vds-color-primary-emphasis, #6366f1);
+  }
+  .vds-data-table-filter-drawer-field-left {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+  .vds-data-table-filter-drawer-footer {
+    display: flex;
+    gap: var(--vds-space-2, 0.5rem);
+    justify-content: flex-end;
+  }
+  .vds-data-table-filter-config {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-3, 0.75rem);
+  }
+  .vds-data-table-filter-config-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+  }
+  .vds-data-table-filter-config-label {
+    font-size: var(--vds-text-xs, 0.75rem);
+    color: var(--vds-color-text-muted, #6b7280);
+    font-weight: var(--vds-font-weight-medium, 500);
+  }
+  .vds-data-table-filter-config-select {
+    block-size: var(--vds-size-md, 2rem);
+    padding-inline: var(--vds-space-2, 0.5rem);
+    background-color: var(--data-table-filter-bg);
+    border: 1px solid var(--data-table-filter-border);
+    border-radius: var(--data-table-filter-radius);
+    color: var(--data-table-cell-color);
+    font: inherit;
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-data-table-filter-config-actions {
+    display: flex;
+    gap: var(--vds-space-2, 0.5rem);
+    justify-content: flex-end;
+    padding-block-start: var(--vds-space-2, 0.5rem);
+  }
+
+  /* ───── Customize view drawer ──────────────────────────────── */
+  .vds-data-table-customize-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+  .vds-data-table-customize-drawer-count {
+    font-size: var(--vds-text-xs, 0.75rem);
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+  .vds-data-table-customize-drawer-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-3, 0.75rem);
+  }
+  .vds-data-table-customize-drawer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .vds-data-table-customize-drawer-reset {
+    all: unset;
+    align-self: flex-start;
+    cursor: pointer;
+    color: var(--vds-color-text-muted, #6b7280);
+    font-size: var(--vds-text-xs, 0.75rem);
+    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
+    border-radius: var(--vds-radius-element, 0.375rem);
+  }
+  .vds-data-table-customize-drawer-reset:hover {
+    background-color: var(--vds-color-surface-hover, #f3f4f6);
+  }
+  .vds-data-table-customize-item {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-3, 0.75rem);
+    padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem);
+    background-color: var(--vds-color-surface, #ffffff);
+    border: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    border-radius: var(--vds-radius-element, 0.375rem);
+  }
+  .vds-data-table-customize-item[data-dragging] {
+    box-shadow: var(--vds-shadow-md, 0 4px 8px rgba(0, 0, 0, 0.08));
+  }
+  .vds-data-table-customize-item-drag {
+    all: unset;
+    display: inline-flex;
+    cursor: grab;
+    color: var(--vds-color-text-subtle, #9ca3af);
+    padding: 2px;
+  }
+  .vds-data-table-customize-item-drag:active {
+    cursor: grabbing;
+  }
+  .vds-data-table-customize-item-icon {
+    display: inline-flex;
+    color: var(--vds-color-text-muted, #6b7280);
+  }
+  .vds-data-table-customize-item-label {
+    flex: 1;
+    font-size: var(--vds-text-sm, 0.875rem);
+    color: var(--data-table-cell-color);
+  }
+
+  /* ───── Reduced motion ─────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-data-table-row,
+    .vds-data-table-sort-icon,
+    .vds-data-table-pagination-button,
+    .vds-data-table-pagination-page-button {
+      transition: none;
+    }
+  }
+}

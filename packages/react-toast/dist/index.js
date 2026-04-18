@@ -201,6 +201,16 @@ var TOAST_ICON_MAP = {
   default: null
 };
 var PROGRESS_RING_CIRCUMFERENCE = 62.83;
+var DRAG_AXIS_LOCK_THRESHOLD = 6;
+var DRAG_DISMISS_DISTANCE = 96;
+var DRAG_DISMISS_VELOCITY = 0.5;
+var DRAG_VELOCITY_MIN_DISTANCE = 36;
+var EXIT_ANIMATION_NAMES = /* @__PURE__ */ new Set([
+  "vds-toast-exit-up",
+  "vds-toast-exit-down",
+  "vds-toast-swipe-out-left",
+  "vds-toast-swipe-out-right"
+]);
 function computeScale(index) {
   if (index <= 0) return 1;
   if (index === 1) return 0.96;
@@ -213,17 +223,29 @@ function computeOpacity(index) {
   if (index === 2) return 0.7;
   return Math.max(0.55, 1 - index * 0.15);
 }
-function ActionBtn({ action, toastId, dataSlot, defaultVariant }) {
+function ActionBtn({
+  action,
+  toastId: _toastId,
+  dataSlot,
+  defaultVariant,
+  onCloseSoft
+}) {
   const variant = action.variant ?? defaultVariant ?? "ghost";
   const handleClick = useCallback(
     (event) => {
       event.stopPropagation();
       action.onClick();
       if (action.closeOnClick !== false) {
-        toastStore.remove(toastId);
+        onCloseSoft();
       }
     },
-    [action, toastId]
+    [action, onCloseSoft]
+  );
+  const stopPointer = useCallback(
+    (event) => {
+      event.stopPropagation();
+    },
+    []
   );
   return /* @__PURE__ */ jsx(
     "button",
@@ -237,6 +259,7 @@ function ActionBtn({ action, toastId, dataSlot, defaultVariant }) {
       "data-variant": variant,
       "data-slot": dataSlot,
       onClick: handleClick,
+      onPointerDown: stopPointer,
       children: action.label
     }
   );
@@ -247,14 +270,25 @@ var ToastItem = memo(function ToastItem2({
   expanded,
   offset,
   reportHeight,
-  closeLabel
+  closeLabel,
+  swipeThreshold = DRAG_DISMISS_DISTANCE,
+  timerMode,
+  pauseMode
 }) {
   const rootRef = useRef(null);
+  const [open, setOpen] = useState(true);
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(100);
   const progressRef = useRef(100);
   const startRef = useRef(Date.now());
   const pauseAtRef = useRef(null);
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [swipeExit, setSwipeExit] = useState(null);
+  const dragStartXRef = useRef(0);
+  const dragStartYRef = useRef(0);
+  const dragStartTimeRef = useRef(0);
+  const dragAxisRef = useRef(null);
   const hasActions = Boolean(toast2.action) || Boolean(toast2.actions?.primary) || Boolean(toast2.actions?.secondary);
   const Icon = TOAST_ICON_MAP[toast2.type];
   const showIcon = toast2.icon !== false;
@@ -279,10 +313,23 @@ var ToastItem = memo(function ToastItem2({
     pauseAtRef.current = null;
     setProgress(100);
   }, [toast2.id, toast2.duration, toast2.createdAt]);
+  const prevIndexRef = useRef(index);
   useEffect(() => {
+    if (timerMode === "sequential" && prevIndexRef.current > 0 && index === 0 && toast2.duration > 0) {
+      progressRef.current = 100;
+      startRef.current = Date.now();
+      pauseAtRef.current = null;
+      setProgress(100);
+    }
+    prevIndexRef.current = index;
+  }, [index, timerMode, toast2.duration]);
+  const softCloseRef = useRef(null);
+  useEffect(() => {
+    if (!open) return;
     if (toast2.duration <= 0) return;
-    if (paused) {
-      pauseAtRef.current = Date.now();
+    if (timerMode === "sequential" && index > 0) return;
+    if (paused || isDragging) {
+      if (pauseAtRef.current === null) pauseAtRef.current = Date.now();
       return;
     }
     if (pauseAtRef.current !== null) {
@@ -301,7 +348,10 @@ var ToastItem = memo(function ToastItem2({
         progressRef.current = next;
         setProgress(next);
       }
-      if (remaining <= 0) return;
+      if (remaining <= 0) {
+        softCloseRef.current?.(null);
+        return;
+      }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -309,15 +359,131 @@ var ToastItem = memo(function ToastItem2({
       active = false;
       cancelAnimationFrame(raf);
     };
-  }, [toast2.duration, toast2.id, toast2.createdAt, paused]);
+  }, [
+    toast2.duration,
+    toast2.id,
+    toast2.createdAt,
+    paused,
+    isDragging,
+    open,
+    timerMode,
+    index
+  ]);
+  const softClose = useCallback((exit = null) => {
+    setSwipeExit(exit);
+    setOpen(false);
+  }, []);
+  useEffect(() => {
+    softCloseRef.current = softClose;
+  }, [softClose]);
   const handleOpenChange = useCallback(
-    (open) => {
-      if (!open) toastStore.remove(toast2.id);
+    (next) => {
+      if (next) return;
+      softClose(null);
+    },
+    [softClose]
+  );
+  const handleAnimationEnd = useCallback(
+    (event) => {
+      if (event.target !== rootRef.current) return;
+      if (!EXIT_ANIMATION_NAMES.has(event.animationName)) return;
+      toastStore.remove(toast2.id);
     },
     [toast2.id]
   );
-  const handlePause = useCallback(() => setPaused(true), []);
-  const handleResume = useCallback(() => setPaused(false), []);
+  const handlePause = useCallback(() => {
+    if (pauseMode === "hover") setPaused(true);
+  }, [pauseMode]);
+  const handleResume = useCallback(() => {
+    if (pauseMode === "hover") setPaused(false);
+  }, [pauseMode]);
+  useEffect(() => {
+    if (pauseMode !== "hover") setPaused(false);
+  }, [pauseMode]);
+  const onPointerDown = useCallback(
+    (event) => {
+      if (!toast2.dismissible || !open) return;
+      if (event.button !== 0 && event.pointerType === "mouse") return;
+      const target = event.target;
+      if (target.closest("button, a, [role='button'], input, textarea, select")) {
+        return;
+      }
+      try {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      } catch {
+      }
+      setIsDragging(true);
+      dragStartXRef.current = event.clientX;
+      dragStartYRef.current = event.clientY;
+      dragStartTimeRef.current = Date.now();
+      dragAxisRef.current = null;
+    },
+    [toast2.dismissible, open]
+  );
+  const onPointerMove = useCallback(
+    (event) => {
+      if (!isDragging) return;
+      const dx = event.clientX - dragStartXRef.current;
+      const dy = event.clientY - dragStartYRef.current;
+      if (dragAxisRef.current === null) {
+        const absX = Math.abs(dx);
+        const absY = Math.abs(dy);
+        if (absX < DRAG_AXIS_LOCK_THRESHOLD && absY < DRAG_AXIS_LOCK_THRESHOLD) {
+          return;
+        }
+        dragAxisRef.current = absX > absY ? "horizontal" : "vertical";
+        if (dragAxisRef.current === "vertical") {
+          try {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          } catch {
+          }
+          setIsDragging(false);
+          setDragX(0);
+          return;
+        }
+      }
+      if (dragAxisRef.current === "horizontal") {
+        setDragX(dx);
+      }
+    },
+    [isDragging]
+  );
+  const endDrag = useCallback(
+    (event, commit2) => {
+      try {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      } catch {
+      }
+      const delta = dragX;
+      const elapsed = Math.max(Date.now() - dragStartTimeRef.current, 1);
+      const velocity = Math.abs(delta) / elapsed;
+      const absDelta = Math.abs(delta);
+      const shouldDismiss = commit2 && (absDelta > swipeThreshold || absDelta > DRAG_VELOCITY_MIN_DISTANCE && velocity > DRAG_DISMISS_VELOCITY);
+      setIsDragging(false);
+      dragAxisRef.current = null;
+      if (shouldDismiss) {
+        const dir = delta > 0 ? "right" : "left";
+        softClose(dir);
+      } else {
+        setDragX(0);
+      }
+    },
+    [dragX, softClose, swipeThreshold]
+  );
+  const onPointerUp = useCallback(
+    (event) => {
+      if (!isDragging) return;
+      endDrag(event, true);
+    },
+    [isDragging, endDrag]
+  );
+  const onPointerCancel = useCallback(
+    (event) => {
+      if (!isDragging) return;
+      endDrag(event, false);
+    },
+    [isDragging, endDrag]
+  );
   const stackStyle = useMemo(() => {
     const scale = expanded ? 1 : computeScale(index);
     const opacity = expanded ? 1 : computeOpacity(index);
@@ -325,11 +491,12 @@ var ToastItem = memo(function ToastItem2({
       "--vds-toast-y": `${offset}px`,
       "--vds-toast-scale": scale,
       "--vds-toast-opacity": opacity,
+      "--vds-toast-drag-x": `${dragX}px`,
       zIndex: 1e3 - index
     };
     return vars;
-  }, [offset, index, expanded]);
-  const showProgressRing = toast2.duration > 0 && progress > 0 && progress < 100 && toast2.dismissible;
+  }, [offset, index, expanded, dragX]);
+  const showProgressRing = open && toast2.duration > 0 && progress > 0 && progress < 100 && toast2.dismissible && !isDragging;
   const rootClassName = cn(
     "vds-toast",
     `vds-toast--${toast2.type}`,
@@ -342,15 +509,26 @@ var ToastItem = memo(function ToastItem2({
       ref: rootRef,
       className: rootClassName,
       style: stackStyle,
-      duration: toast2.duration > 0 ? toast2.duration : Number.POSITIVE_INFINITY,
-      open: true,
+      duration: Number.POSITIVE_INFINITY,
+      open,
       onOpenChange: handleOpenChange,
       onPause: handlePause,
       onResume: handleResume,
+      onSwipeStart: (e) => e.preventDefault(),
+      onSwipeMove: (e) => e.preventDefault(),
+      onSwipeCancel: (e) => e.preventDefault(),
+      onSwipeEnd: (e) => e.preventDefault(),
+      onPointerDown,
+      onPointerMove,
+      onPointerUp,
+      onPointerCancel,
+      onAnimationEnd: handleAnimationEnd,
       "data-type": toast2.type,
       "data-index": index,
       "data-expanded": expanded || void 0,
       "data-has-actions": hasActions || void 0,
+      "data-dragging": isDragging || void 0,
+      "data-swipe-exit": swipeExit ?? void 0,
       children: /* @__PURE__ */ jsxs("div", { className: "vds-toast__content", children: [
         showIcon && (customIconProvided || Icon) && /* @__PURE__ */ jsx("div", { className: "vds-toast__icon", children: customIconProvided ? toast2.icon : Icon ? /* @__PURE__ */ jsx(Icon, {}) : null }),
         /* @__PURE__ */ jsxs("div", { className: "vds-toast__text", children: [
@@ -363,7 +541,8 @@ var ToastItem = memo(function ToastItem2({
                 action: toast2.action,
                 toastId: toast2.id,
                 dataSlot: "single",
-                defaultVariant: "ghost"
+                defaultVariant: "ghost",
+                onCloseSoft: () => softClose(null)
               }
             ),
             toast2.actions?.primary && /* @__PURE__ */ jsx(
@@ -372,7 +551,8 @@ var ToastItem = memo(function ToastItem2({
                 action: toast2.actions.primary,
                 toastId: toast2.id,
                 dataSlot: "primary",
-                defaultVariant: "primary"
+                defaultVariant: "primary",
+                onCloseSoft: () => softClose(null)
               }
             ),
             toast2.actions?.secondary && /* @__PURE__ */ jsx(
@@ -381,7 +561,8 @@ var ToastItem = memo(function ToastItem2({
                 action: toast2.actions.secondary,
                 toastId: toast2.id,
                 dataSlot: "secondary",
-                defaultVariant: "ghost"
+                defaultVariant: "ghost",
+                onCloseSoft: () => softClose(null)
               }
             )
           ] })
@@ -431,6 +612,7 @@ var ToastItem = memo(function ToastItem2({
             {
               className: "vds-toast__close",
               "aria-label": closeLabel,
+              onPointerDown: (e) => e.stopPropagation(),
               children: /* @__PURE__ */ jsx(CloseIcon, {})
             }
           )
@@ -463,7 +645,9 @@ function Toaster({
   className,
   closeLabel = "Close notification",
   maxToasts: maxToasts2,
-  label = "Notifications"
+  label = "Notifications",
+  timerMode = "parallel",
+  pauseMode = "hover"
 }) {
   useEffect(() => {
     toastStore.setDefaultDuration(duration);
@@ -591,7 +775,9 @@ function Toaster({
               expanded: isExpanded,
               offset,
               reportHeight,
-              closeLabel
+              closeLabel,
+              timerMode,
+              pauseMode
             },
             toast2.id
           ))

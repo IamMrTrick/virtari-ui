@@ -26,11 +26,11 @@ export function Sidebar({
 }: SidebarProps) {
   const mergedStyle: CSSProperties = { ...style };
   if (sideWidth) {
-    (mergedStyle as Record<string, string>)["--vds-sidebar-side-width"] =
+    (mergedStyle as Record<string, string>)["--sidebar-side-width"] =
       sideWidth;
   }
   if (contentMin) {
-    (mergedStyle as Record<string, string>)["--vds-sidebar-content-min"] =
+    (mergedStyle as Record<string, string>)["--sidebar-content-min"] =
       contentMin;
   }
 

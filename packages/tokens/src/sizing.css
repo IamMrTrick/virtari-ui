@@ -10,17 +10,19 @@
      * 2xs   1.5rem  24px    ⚠ minimum        ✗                ✗          ✗
      * xs    1.75rem 28px    ✓                ✗                ✗          ✗
      * sm    2rem    32px    ✓                ✗                ✗          ✗
-     * md    2.5rem  40px    ✓                ✗                ✗          ✗
-     * lg    2.75rem 44px    ✓                ✓                ✓ (44pt)   ✗
-     * xl    3.25rem 52px    ✓                ✓                ✓          ✓ (48dp)
-     * 2xl   4rem    64px    ✓                ✓                ✓          ✓
+     * md    2.25rem 36px    ✓                ✗                ✗          ✗
+     * lg    2.5rem  40px    ✓                ✗                ✗          ✗
+     * xl    2.75rem 44px    ✓                ✓                ✓ (44pt)   ✗
+     * 2xl   3.25rem 52px    ✓                ✓                ✓          ✓ (48dp)
+     * 3xl   4rem    64px    ✓                ✓                ✓          ✓
      */
     --vds-size-2xs: 1.5rem;
     --vds-size-xs: 1.75rem;
     --vds-size-sm: 2rem;
-    --vds-size-md: 2.5rem;
-    --vds-size-lg: 2.75rem;
-    --vds-size-xl: 3.25rem;
-    --vds-size-2xl: 4rem;
+    --vds-size-md: 2.25rem;
+    --vds-size-lg: 2.5rem;
+    --vds-size-xl: 2.75rem;
+    --vds-size-2xl: 3.25rem;
+    --vds-size-3xl: 4rem;
   }
 }

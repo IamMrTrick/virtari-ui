@@ -36,6 +36,10 @@ import {
   CardPage,
   KbdPage,
   CompositionPage,
+  DatePickerPage,
+  DataTablePage,
+  LayoutPage,
+  UtilitiesPage,
 } from "./pages";
 
 const PAGES: Record<string, () => React.JSX.Element> = {
@@ -73,6 +77,10 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   spinner: SpinnerPage,
   kbd: KbdPage,
   composition: CompositionPage,
+  layout: LayoutPage,
+  "date-picker": DatePickerPage,
+  "data-table": DataTablePage,
+  utilities: UtilitiesPage,
 };
 
 function getHashPage(): string {

@@ -1,0 +1,33 @@
+@layer tokens {
+  /*
+   * ── Interactive semantic layer (NEW, additive) ──
+   *
+   * Adds:
+   *   • Adaptive hover/active/pressed overlays via neutral-a*
+   *     (the killer feature — works correctly on ANY parent bg color)
+   *   • Selection background/text (for ::selection)
+   *   • Error/success focus rings
+   *
+   * Legacy ring/ring-offset/skeleton stay in _legacy.css.
+   */
+
+  :root {
+    /* ─── Adaptive interactive overlays ───
+       Use these when you don't know what color the parent surface is.
+       Resolves to black-tinted alpha in light, white-tinted in dark,
+       so the composited result matches the solid neutral scale. */
+    --vds-color-hover:            var(--vds-color-neutral-a3);
+    --vds-color-active:           var(--vds-color-neutral-a4);
+    --vds-color-pressed:          var(--vds-color-neutral-a5);
+    --vds-color-disabled-overlay: var(--vds-color-neutral-a3);
+
+    /* ─── Text selection ─── */
+    --vds-color-selection-bg:   var(--vds-color-primary-a4);
+    --vds-color-selection-text: var(--vds-color-text-selection);
+
+    /* ─── Intent focus rings ─── */
+    --vds-color-ring-error:   var(--vds-color-danger-9);
+    --vds-color-ring-success: var(--vds-color-success-9);
+    --vds-color-ring-warning: var(--vds-color-warning-9);
+  }
+}

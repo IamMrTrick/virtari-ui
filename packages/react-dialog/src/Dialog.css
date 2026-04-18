@@ -1,72 +1,340 @@
-@layer components {
+@import "./Dialog.tokens.css";
+
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Overlay — full-viewport backdrop
+   * ───────────────────────────────────────────── */
   .vds-dialog-overlay {
     position: fixed;
     inset: 0;
-    z-index: var(--vds-z-overlay);
-    background-color: var(--vds-color-overlay);
-    animation: vds-fade-in var(--vds-duration-normal) var(--vds-ease-out);
+    z-index: var(--vds-z-overlay, 1300);
+    background-color: var(--dialog-overlay-bg);
+    backdrop-filter: blur(var(--dialog-overlay-blur));
+    -webkit-backdrop-filter: blur(var(--dialog-overlay-blur));
+    animation: vds-dialog-fade-in var(--dialog-overlay-enter-duration) var(--dialog-overlay-enter-ease);
 
     &[data-state="closed"] {
-      animation: vds-fade-out var(--vds-duration-fast) var(--vds-ease-in);
+      animation: vds-dialog-fade-out var(--dialog-overlay-exit-duration) var(--dialog-overlay-exit-ease);
     }
   }
 
+  .vds-dialog-overlay[data-backdrop="none"] {
+    pointer-events: none;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Content — centered modal surface
+   * ───────────────────────────────────────────── */
   .vds-dialog-content {
     position: fixed;
-    z-index: var(--vds-z-modal);
+    z-index: var(--vds-z-modal, 1400);
     inset-block-start: 50%;
     inset-inline-start: 50%;
     translate: -50% -50%;
+
     display: flex;
     flex-direction: column;
-    gap: var(--vds-space-4);
-    min-inline-size: min(90vw, var(--vds-space-72));
-    max-inline-size: min(90vw, 32rem);
-    max-block-size: 85dvh;
-    padding: var(--vds-space-6);
-    background-color: var(--vds-color-surface);
-    border-radius: var(--vds-radius-dialog);
-    box-shadow: var(--vds-shadow-xl);
-    overflow-y: auto;
-    animation: vds-scale-in var(--vds-duration-normal) var(--vds-ease-spring);
+    box-sizing: border-box;
+
+    min-inline-size: var(--dialog-min-width);
+    max-inline-size: var(--dialog-max-width);
+    max-block-size: var(--dialog-max-height);
+
+    background-color: var(--dialog-surface);
+    border: var(--dialog-border-width) solid var(--dialog-border-color);
+    border-radius: var(--dialog-radius);
+    box-shadow: var(--dialog-shadow);
+
+    overflow: hidden;
+    container-type: inline-size;
+
+    animation: var(--dialog-enter-animation) var(--dialog-enter-duration) var(--dialog-enter-ease);
 
     &[data-state="closed"] {
-      animation: vds-scale-out var(--vds-duration-fast) var(--vds-ease-in);
+      animation: var(--dialog-exit-animation) var(--dialog-exit-duration) var(--dialog-exit-ease);
     }
 
     &:focus-visible {
       outline: none;
     }
-
-    container-type: inline-size;
   }
 
-  .vds-dialog-title {
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-lg);
-    font-weight: var(--vds-font-weight-semibold);
-    line-height: var(--vds-leading-tight);
-    color: var(--vds-color-text);
+  /* Full-screen anchoring */
+  .vds-dialog-content[data-size="full"] {
+    inset: 0;
+    translate: 0 0;
   }
 
-  .vds-dialog-description {
-    font-size: var(--vds-text-sm);
-    line-height: var(--vds-leading-normal);
-    color: var(--vds-color-text-muted);
+  @media (max-width: 40rem) {
+    .vds-dialog-content[data-responsive] {
+      inset: 0;
+      translate: 0 0;
+    }
   }
 
+  /* Intent accent — colored strip along the top edge */
+  .vds-dialog-content::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: var(--dialog-intent-accent-height);
+    background-color: var(--dialog-intent-accent-color);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Simple layout — when neither Header nor Body
+   * is used, apply padding + gap directly to the
+   * flex children so the quick-start markup
+   * (just Title/Description/Footer) still has
+   * comfortable spacing.
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content:not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body)) {
+    gap: var(--dialog-gap);
+    padding: var(--dialog-padding-block) var(--dialog-padding-inline);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Header — sticky top section
+   * ───────────────────────────────────────────── */
+  .vds-dialog-header {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--dialog-header-gap);
+    padding-inline: var(--dialog-padding-inline);
+    padding-block-start: var(--dialog-header-padding-block-start);
+    padding-block-end: var(--dialog-header-padding-block-end);
+  }
+
+  .vds-dialog-header[data-variant="bordered"] {
+    border-block-end: var(--dialog-section-border);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Body — scrollable main region
+   * ───────────────────────────────────────────── */
+  .vds-dialog-body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-inline: var(--dialog-padding-inline);
+    padding-block: var(--dialog-body-padding-block);
+    color: var(--vds-color-text, #111827);
+    font-size: var(--dialog-description-font-size);
+    line-height: var(--dialog-description-line-height);
+  }
+
+  .vds-dialog-header + .vds-dialog-body {
+    padding-block-start: 0;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Footer — sticky actions area
+   * ───────────────────────────────────────────── */
   .vds-dialog-footer {
     display: flex;
     justify-content: flex-end;
-    gap: var(--vds-space-3);
-    padding-block-start: var(--vds-space-2);
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--dialog-footer-gap);
+    padding-inline: var(--dialog-padding-inline);
+    padding-block: var(--dialog-footer-padding-block);
+  }
 
-    @container (inline-size < 20rem) {
+  .vds-dialog-body + .vds-dialog-footer,
+  .vds-dialog-header + .vds-dialog-footer {
+    border-block-start: var(--dialog-section-border);
+  }
+
+  @container (inline-size < 20rem) {
+    .vds-dialog-footer {
       flex-direction: column-reverse;
 
       & > * {
         inline-size: 100%;
       }
     }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Title & Description typography
+   * ───────────────────────────────────────────── */
+  .vds-dialog-title {
+    margin: 0;
+    font-family: var(--dialog-title-font-family);
+    font-size: var(--dialog-title-font-size);
+    font-weight: var(--dialog-title-font-weight);
+    line-height: var(--dialog-title-line-height);
+    color: var(--dialog-title-color);
+  }
+
+  .vds-dialog-description {
+    margin: 0;
+    font-size: var(--dialog-description-font-size);
+    line-height: var(--dialog-description-line-height);
+    color: var(--dialog-description-color);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Close icon — absolute-positioned X button
+   * ───────────────────────────────────────────── */
+  .vds-dialog-close-icon {
+    position: absolute;
+    inset-block-start: var(--dialog-close-inset);
+    inset-inline-end: var(--dialog-close-inset);
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    inline-size: var(--dialog-close-size);
+    block-size: var(--dialog-close-size);
+    padding: 0;
+
+    background: transparent;
+    color: var(--dialog-close-color);
+    border: 0;
+    border-radius: var(--dialog-close-radius);
+    cursor: pointer;
+
+    transition:
+      background-color var(--vds-duration-fast, 100ms) var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      color var(--vds-duration-fast, 100ms) var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-dialog-close-icon:hover {
+    background-color: var(--dialog-close-bg-hover);
+    color: var(--dialog-close-color-hover);
+  }
+
+  .vds-dialog-close-icon:active {
+    background-color: var(--dialog-close-bg-active);
+  }
+
+  .vds-dialog-close-icon:focus-visible {
+    outline: 2px solid var(--vds-color-ring, #6366f1);
+    outline-offset: 2px;
+  }
+
+  .vds-dialog-close-icon > svg {
+    inline-size: var(--dialog-close-icon-size);
+    block-size: var(--dialog-close-icon-size);
+  }
+
+  /* When a close icon is rendered, pad the header (or simple content)
+     so the title never collides with it. */
+  .vds-dialog-content:has(> .vds-dialog-close-icon) .vds-dialog-header,
+  .vds-dialog-content:has(> .vds-dialog-close-icon):not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body)) {
+    padding-inline-end: calc(var(--dialog-close-inset) + var(--dialog-close-size) + var(--vds-space-2, 0.5rem));
+  }
+
+  /* ─────────────────────────────────────────────
+   * Keyframes — local to Dialog. motion.css
+   * keyframes use `translate: x y` that would
+   * conflict with our -50% -50% centering, so we
+   * define dialog-specific variants that animate
+   * around the centered transform.
+   * ───────────────────────────────────────────── */
+
+  /* Scale */
+  @keyframes vds-dialog-scale-in {
+    from { opacity: 0; scale: 0.95; }
+    to   { opacity: 1; scale: 1; }
+  }
+  @keyframes vds-dialog-scale-out {
+    from { opacity: 1; scale: 1; }
+    to   { opacity: 0; scale: 0.95; }
+  }
+
+  /* Fade */
+  @keyframes vds-dialog-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes vds-dialog-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  /* Slide — up = enters from bottom edge */
+  @keyframes vds-dialog-slide-in-up {
+    from { opacity: 0; translate: -50% calc(-50% + 1.5rem); }
+    to   { opacity: 1; translate: -50% -50%; }
+  }
+  @keyframes vds-dialog-slide-out-down {
+    from { opacity: 1; translate: -50% -50%; }
+    to   { opacity: 0; translate: -50% calc(-50% + 1.5rem); }
+  }
+
+  /* Slide — down = enters from top edge */
+  @keyframes vds-dialog-slide-in-down {
+    from { opacity: 0; translate: -50% calc(-50% - 1.5rem); }
+    to   { opacity: 1; translate: -50% -50%; }
+  }
+  @keyframes vds-dialog-slide-out-up {
+    from { opacity: 1; translate: -50% -50%; }
+    to   { opacity: 0; translate: -50% calc(-50% - 1.5rem); }
+  }
+
+  /* Zoom — larger motion than scale */
+  @keyframes vds-dialog-zoom-in {
+    from { opacity: 0; scale: 0.8; }
+    to   { opacity: 1; scale: 1; }
+  }
+  @keyframes vds-dialog-zoom-out {
+    from { opacity: 1; scale: 1; }
+    to   { opacity: 0; scale: 0.8; }
+  }
+
+  /* Bounce — enter overshoots past 1, exit overshoots past 1 briefly
+     then collapses. Pure reverse of the entry motion. */
+  @keyframes vds-dialog-bounce-in {
+    0%   { opacity: 0; scale: 0.3; }
+    60%  { opacity: 1; scale: 1.05; }
+    100% { opacity: 1; scale: 1; }
+  }
+  @keyframes vds-dialog-bounce-out {
+    0%   { opacity: 1; scale: 1; }
+    40%  { opacity: 1; scale: 1.05; }
+    100% { opacity: 0; scale: 0.3; }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Full-screen / responsive anchoring uses
+   * translate: 0 0, so slide keyframes (which
+   * assume -50% center) would drift. Force fade
+   * for those variants.
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content[data-size="full"] {
+    animation-name: vds-dialog-fade-in;
+  }
+  .vds-dialog-content[data-size="full"][data-state="closed"] {
+    animation-name: vds-dialog-fade-out;
+  }
+
+  @media (max-width: 40rem) {
+    .vds-dialog-content[data-responsive] {
+      animation-name: vds-dialog-slide-in-up-full;
+    }
+    .vds-dialog-content[data-responsive][data-state="closed"] {
+      animation-name: vds-dialog-slide-out-down-full;
+    }
+  }
+
+  /* Full-anchored slide variants for responsive mode: drawer-like
+     entry from the bottom of the viewport. */
+  @keyframes vds-dialog-slide-in-up-full {
+    from { opacity: 0; translate: 0 1rem; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+  @keyframes vds-dialog-slide-out-down-full {
+    from { opacity: 1; translate: 0 0; }
+    to   { opacity: 0; translate: 0 1rem; }
   }
 }

@@ -11,7 +11,7 @@
     --chip-gap: var(--vds-space-1-5, 0.375rem);
     --chip-padding-inline: var(--vds-space-3, 0.75rem);
     --chip-padding-block: 0;
-    --chip-radius: var(--vds-radius-full, 9999px);
+    --chip-radius: var(--vds-radius-chip, 9999px);
     --chip-border-width: 1px;
 
     /* Typography */

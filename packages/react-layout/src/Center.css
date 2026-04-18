@@ -1,11 +1,11 @@
-@layer components {
+@import "./Center.tokens.css";
+
+@layer design-system.components {
   .vds-center {
-    --vds-center-max-width: 60ch;
-    --vds-center-gutter: var(--vds-space-4);
     box-sizing: content-box;
     margin-inline: auto;
-    max-inline-size: var(--vds-center-max-width);
-    padding-inline: var(--vds-center-gutter);
+    max-inline-size: var(--center-max-width);
+    padding-inline: var(--center-gutter);
   }
 
   .vds-center[data-intrinsic] {
@@ -13,14 +13,4 @@
     flex-direction: column;
     align-items: center;
   }
-
-  .vds-center[data-max-width="sm"] { --vds-center-max-width: 40ch; }
-  .vds-center[data-max-width="md"] { --vds-center-max-width: 60ch; }
-  .vds-center[data-max-width="lg"] { --vds-center-max-width: 80ch; }
-  .vds-center[data-max-width="xl"] { --vds-center-max-width: 100ch; }
-
-  .vds-center[data-gutter="none"] { --vds-center-gutter: 0; }
-  .vds-center[data-gutter="sm"]   { --vds-center-gutter: var(--vds-space-2); }
-  .vds-center[data-gutter="md"]   { --vds-center-gutter: var(--vds-space-4); }
-  .vds-center[data-gutter="lg"]   { --vds-center-gutter: var(--vds-space-6); }
 }

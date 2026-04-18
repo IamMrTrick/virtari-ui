@@ -2,54 +2,195 @@ import { cn } from "@virtari/utils";
 import type { ComponentRef, Ref } from "react";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 
-/* ── Re-exports ── */
+/* ─────────────────────────────────────────────────────────────
+ * AlertDialog is a thin variant of Dialog. It renders with the
+ * same `vds-dialog-*` CSS classes so its size / animation /
+ * backdrop / intent variants look identical to Dialog. The only
+ * differences are semantic:
+ *
+ *   • role="alertdialog" via @radix-ui/react-alert-dialog
+ *   • Escape and outside-click do NOT dismiss by default
+ *   • Resolution is via <AlertDialogAction> or <AlertDialogCancel>
+ *   • No `showCloseButton` / `preventCloseOn*` props — by design
+ *
+ * The visual token set lives in @virtari/react-dialog/styles.
+ * Import it at your app root alongside this package's CSS.
+ * ───────────────────────────────────────────────────────────── */
+
+/* ── Shared variant types (kept in sync with react-dialog) ── */
+
+export type AlertDialogSize = "sm" | "md" | "lg" | "xl" | "full";
+export type AlertDialogAnimation =
+  | "scale"
+  | "fade"
+  | "slide-up"
+  | "slide-down"
+  | "zoom"
+  | "bounce"
+  | "none";
+export type AlertDialogIntent = "default" | "destructive" | "warning" | "success" | "info";
+export type AlertDialogBackdrop =
+  | "default"
+  | "blur"
+  | "blur-strong"
+  | "light"
+  | "none";
+export type AlertDialogHeaderVariant = "plain" | "bordered";
+
+/* ── Root primitives ── */
+
 export const AlertDialog = AlertDialogPrimitive.Root;
 export const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
+export const AlertDialogPortal = AlertDialogPrimitive.Portal;
 
-/* ── AlertDialogContent ── */
-export interface AlertDialogContentProps
-  extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> {
-  ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Content>>;
+/* ── Overlay ── */
+
+export interface AlertDialogOverlayProps
+  extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay> {
+  backdrop?: AlertDialogBackdrop;
+  ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Overlay>>;
 }
 
-export function AlertDialogContent({
+export function AlertDialogOverlay({
+  backdrop = "default",
   className,
   ref,
   ...props
-}: AlertDialogContentProps) {
+}: AlertDialogOverlayProps) {
   return (
-    <AlertDialogPrimitive.Portal>
-      <AlertDialogPrimitive.Overlay className="vds-alert-dialog-overlay" />
-      <AlertDialogPrimitive.Content
-        ref={ref}
-        className={cn("vds-alert-dialog-content", className)}
-        {...props}
-      />
-    </AlertDialogPrimitive.Portal>
-  );
-}
-
-/* ── AlertDialogTitle ── */
-export interface AlertDialogTitleProps
-  extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title> {
-  ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Title>>;
-}
-
-export function AlertDialogTitle({
-  className,
-  ref,
-  ...props
-}: AlertDialogTitleProps) {
-  return (
-    <AlertDialogPrimitive.Title
+    <AlertDialogPrimitive.Overlay
       ref={ref}
-      className={cn("vds-alert-dialog-title", className)}
+      data-backdrop={backdrop}
+      className={cn("vds-dialog-overlay", className)}
       {...props}
     />
   );
 }
 
-/* ── AlertDialogDescription ── */
+/* ── Content ── */
+
+type RadixContentProps = React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>;
+
+export interface AlertDialogContentProps extends RadixContentProps {
+  /** Max-width variant. Defaults to `"md"`. */
+  size?: AlertDialogSize;
+  /** Enter/exit animation preset. Defaults to `"scale"`. */
+  animation?: AlertDialogAnimation;
+  /** Top accent strip color. Defaults to `"destructive"` — alerts are usually risky. */
+  intent?: AlertDialogIntent;
+  /** Overlay style. Forwarded to the internal overlay. */
+  backdrop?: AlertDialogBackdrop;
+  /** When true, fills the viewport on narrow screens (<= 40rem). */
+  responsive?: boolean;
+  /** Custom portal target. */
+  container?: HTMLElement | null;
+  ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Content>>;
+}
+
+export function AlertDialogContent({
+  size = "md",
+  animation = "scale",
+  intent = "destructive",
+  backdrop = "default",
+  responsive,
+  container,
+  className,
+  children,
+  ref,
+  ...props
+}: AlertDialogContentProps) {
+  return (
+    <AlertDialogPortal container={container ?? undefined}>
+      <AlertDialogOverlay backdrop={backdrop} />
+      <AlertDialogPrimitive.Content
+        ref={ref}
+        data-size={size}
+        data-animation={animation}
+        data-intent={intent}
+        data-responsive={responsive ? "" : undefined}
+        className={cn("vds-dialog-content", className)}
+        {...props}
+      >
+        {children}
+      </AlertDialogPrimitive.Content>
+    </AlertDialogPortal>
+  );
+}
+
+/* ── Header ── */
+
+export interface AlertDialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: AlertDialogHeaderVariant;
+  ref?: Ref<HTMLDivElement>;
+}
+
+export function AlertDialogHeader({
+  variant = "plain",
+  className,
+  ref,
+  ...props
+}: AlertDialogHeaderProps) {
+  return (
+    <div
+      ref={ref}
+      data-variant={variant}
+      className={cn("vds-dialog-header", className)}
+      {...props}
+    />
+  );
+}
+
+/* ── Body ── */
+
+export interface AlertDialogBodyProps extends React.HTMLAttributes<HTMLDivElement> {
+  ref?: Ref<HTMLDivElement>;
+}
+
+export function AlertDialogBody({ className, ref, ...props }: AlertDialogBodyProps) {
+  return (
+    <div
+      ref={ref}
+      className={cn("vds-dialog-body", className)}
+      {...props}
+    />
+  );
+}
+
+/* ── Footer ── */
+
+export interface AlertDialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+  ref?: Ref<HTMLDivElement>;
+}
+
+export function AlertDialogFooter({ className, ref, ...props }: AlertDialogFooterProps) {
+  return (
+    <div
+      ref={ref}
+      className={cn("vds-dialog-footer", className)}
+      {...props}
+    />
+  );
+}
+
+/* ── Title ── */
+
+export interface AlertDialogTitleProps
+  extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title> {
+  ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Title>>;
+}
+
+export function AlertDialogTitle({ className, ref, ...props }: AlertDialogTitleProps) {
+  return (
+    <AlertDialogPrimitive.Title
+      ref={ref}
+      className={cn("vds-dialog-title", className)}
+      {...props}
+    />
+  );
+}
+
+/* ── Description ── */
+
 export interface AlertDialogDescriptionProps
   extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description> {
   ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Description>>;
@@ -63,67 +204,39 @@ export function AlertDialogDescription({
   return (
     <AlertDialogPrimitive.Description
       ref={ref}
-      className={cn("vds-alert-dialog-description", className)}
+      className={cn("vds-dialog-description", className)}
       {...props}
     />
   );
 }
 
-/* ── AlertDialogAction ── */
+/* ── Action / Cancel (alertdialog commit pattern) ── */
+
 export interface AlertDialogActionProps
   extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action> {
   ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Action>>;
 }
 
-export function AlertDialogAction({
-  className,
-  ref,
-  ...props
-}: AlertDialogActionProps) {
+export function AlertDialogAction({ className, ref, ...props }: AlertDialogActionProps) {
   return (
     <AlertDialogPrimitive.Action
       ref={ref}
-      className={cn("vds-alert-dialog-action", className)}
+      className={cn(className)}
       {...props}
     />
   );
 }
 
-/* ── AlertDialogCancel ── */
 export interface AlertDialogCancelProps
   extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel> {
   ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Cancel>>;
 }
 
-export function AlertDialogCancel({
-  className,
-  ref,
-  ...props
-}: AlertDialogCancelProps) {
+export function AlertDialogCancel({ className, ref, ...props }: AlertDialogCancelProps) {
   return (
     <AlertDialogPrimitive.Cancel
       ref={ref}
-      className={cn("vds-alert-dialog-cancel", className)}
-      {...props}
-    />
-  );
-}
-
-/* ── AlertDialogFooter (custom layout div) ── */
-export interface AlertDialogFooterProps
-  extends React.ComponentPropsWithoutRef<"div"> {
-  ref?: Ref<HTMLDivElement>;
-}
-
-export function AlertDialogFooter({
-  className,
-  ref,
-  ...props
-}: AlertDialogFooterProps) {
-  return (
-    <div
-      ref={ref}
-      className={cn("vds-alert-dialog-footer", className)}
+      className={cn(className)}
       {...props}
     />
   );

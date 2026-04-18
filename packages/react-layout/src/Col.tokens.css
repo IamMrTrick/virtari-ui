@@ -1,0 +1,15 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Col has no preset tokens — span / start / order
+   * are driven entirely by inline CSS custom properties
+   * injected by Col.tsx. This keeps the attribute API
+   * light while supporting arbitrary numeric spans
+   * without class explosion.
+   *
+   * The responsive fallback chain is expressed in Col.css
+   * using @custom-media from @virtari/tokens/breakpoints.
+   * ───────────────────────────────────────────── */
+  .vds-col {
+    /* Default span: `auto` = one grid track. Users opt into `span="full"` for 1/-1. */
+  }
+}

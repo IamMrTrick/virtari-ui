@@ -1,6 +1,7 @@
 /* Foundation — imported once at app root */
 @import "@virtari/core";
 @import "@virtari/tokens";
+@import "@virtari/utilities";
 
 /* Component styles */
 @import "@virtari/react-button/styles";
@@ -14,6 +15,8 @@
 @import "@virtari/react-avatar/styles";
 @import "@virtari/react-tabs/styles";
 @import "@virtari/react-select/styles";
+@import "@virtari/react-select/combobox/styles";
+@import "@virtari/react-chip/styles";
 @import "@virtari/react-dialog/styles";
 @import "../../../../packages/react-drawer/dist/Drawer.css";
 @import "@virtari/react-tooltip/styles";
@@ -34,6 +37,8 @@
 @import "@virtari/react-spinner/styles";
 @import "@virtari/react-card/styles";
 @import "@virtari/react-kbd/styles";
+@import "@virtari/react-date-picker/styles";
+@import "@virtari/react-date-picker/range-picker/styles";
 @import "../../../../packages/react-layout/dist/index.css";
 
 /* Docs app styles */

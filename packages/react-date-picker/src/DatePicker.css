@@ -1,0 +1,157 @@
+@import "./DatePicker.tokens.css";
+@import "./DateField.css";
+@import "./Calendar.css";
+
+@layer design-system.components {
+  /* ── Root ── */
+  .vds-date-picker {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+    font-family: var(--date-field-font-family);
+  }
+
+  .vds-date-picker[data-dir="rtl"] {
+    direction: rtl;
+  }
+
+  .vds-date-picker-label {
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--date-field-label-color);
+  }
+
+  /* ── Group — reuses DateField's group selector for consistent shell ── */
+  .vds-date-picker-group {
+    cursor: text;
+  }
+
+  /* ── Field (segments row) ── */
+  .vds-date-picker-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Trigger (calendar icon button) ── */
+  .vds-date-picker-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: calc(var(--date-field-trigger-size) + 0.5rem);
+    block-size: calc(var(--date-field-trigger-size) + 0.5rem);
+    padding: 0;
+    margin-inline-start: auto;
+    background: transparent;
+    border: 0;
+    border-radius: var(--vds-radius-sm, 0.25rem);
+    color: var(--date-field-trigger-color);
+    cursor: pointer;
+    appearance: none;
+    flex: none;
+    transition: background-color var(--date-field-transition-duration) var(--date-field-transition-easing);
+  }
+
+  .vds-date-picker-trigger:hover:not(:disabled) {
+    background: color-mix(in oklab, currentColor 10%, transparent);
+  }
+
+  .vds-date-picker-trigger:focus-visible {
+    outline: var(--date-field-focus-ring-width) solid var(--date-field-focus-ring-color);
+    outline-offset: 1px;
+  }
+
+  .vds-date-picker-trigger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .vds-date-picker-trigger svg {
+    inline-size: var(--date-field-trigger-size);
+    block-size: var(--date-field-trigger-size);
+  }
+
+  /* ── Content (popover panel) ── */
+  .vds-date-picker-content {
+    z-index: var(--date-picker-content-z-index);
+    background: var(--date-picker-content-bg);
+    border: var(--date-picker-content-border-width) solid var(--date-picker-content-border-color);
+    border-radius: var(--date-picker-content-radius);
+    box-shadow: var(--date-picker-content-shadow);
+    padding: var(--date-picker-content-padding);
+    overflow: hidden;
+    animation: vds-fade-in var(--date-picker-content-transition-duration) var(--date-picker-content-transition-easing);
+  }
+
+  .vds-date-picker-content[data-state="closed"] {
+    animation: vds-fade-out calc(var(--date-picker-content-transition-duration) * 0.5) var(--date-picker-content-transition-easing);
+  }
+
+  .vds-date-picker-content:focus-visible {
+    outline: none;
+  }
+
+  /* ── Layout inside content ── */
+  .vds-date-picker-content-inner {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .vds-date-picker-presets {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+    padding: var(--vds-space-3, 0.75rem);
+    min-inline-size: 9rem;
+    border-inline-end: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    background: var(--vds-color-bg-subtle, #fafafa);
+  }
+
+  .vds-date-picker[data-dir="rtl"] .vds-date-picker-presets {
+    border-inline-end: 0;
+    border-inline-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+  }
+
+  .vds-date-picker-main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .vds-date-picker-time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--vds-space-2, 0.5rem);
+    padding-inline: var(--calendar-padding);
+    border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+  }
+
+  .vds-date-picker-footer {
+    padding: var(--vds-space-3, 0.75rem);
+    border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+  }
+
+  .vds-date-picker-description {
+    font-size: var(--vds-text-xs, 0.75rem);
+    color: var(--date-field-description-color);
+  }
+
+  .vds-date-picker-error {
+    font-size: var(--vds-text-xs, 0.75rem);
+    color: var(--date-field-error-color);
+  }
+
+  /* ── Popover enter / exit animations (namespaced to not collide) ── */
+  @keyframes vds-fade-in {
+    from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes vds-fade-out {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  }
+}

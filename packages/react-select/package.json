@@ -16,18 +16,36 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./styles": "./dist/Select.css"
+    "./styles": {
+      "style": "./dist/Select.css",
+      "default": "./dist/Select.css"
+    },
+    "./tokens": {
+      "style": "./dist/Select.tokens.css",
+      "default": "./dist/Select.tokens.css"
+    },
+    "./combobox/styles": {
+      "style": "./dist/Combobox.css",
+      "default": "./dist/Combobox.css"
+    },
+    "./combobox/tokens": {
+      "style": "./dist/Combobox.tokens.css",
+      "default": "./dist/Combobox.tokens.css"
+    }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup && postcss src/Select.css -o dist/Select.css",
+    "build": "tsup && postcss src/Select.tokens.css -o dist/Select.tokens.css && postcss src/Select.css -o dist/Select.css && postcss src/Combobox.tokens.css -o dist/Combobox.tokens.css && postcss src/Combobox.css -o dist/Combobox.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-select": "^2.2.6",
+    "@tanstack/react-virtual": "^3.10.0",
+    "@virtari/react-chip": "workspace:*",
     "@virtari/utils": "workspace:*"
   },
   "peerDependencies": {

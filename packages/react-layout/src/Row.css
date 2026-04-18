@@ -1,0 +1,50 @@
+@import "./Row.tokens.css";
+
+@layer design-system.components {
+  /* ── Root — grid-first ── */
+  .vds-row {
+    display: grid;
+    grid-template-columns: repeat(var(--row-cols), minmax(0, 1fr));
+    column-gap: var(--row-col-gap);
+    row-gap: var(--row-row-gap);
+    inline-size: 100%;
+  }
+
+  /* ── auto-fit mode — card gallery ── */
+  .vds-row[data-auto-fit="true"] {
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(var(--row-min-col), 100%), 1fr)
+    );
+  }
+
+  /* ── Flex mode ── */
+  .vds-row[data-mode="flex"] {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    column-gap: var(--row-col-gap);
+    row-gap: var(--row-row-gap);
+    grid-template-columns: none;
+  }
+
+  .vds-row[data-mode="flex"][data-wrap="true"] { flex-wrap: wrap; }
+  .vds-row[data-mode="flex"][data-reverse="true"] { flex-direction: row-reverse; }
+
+  /* ── Alignment (both modes) ── */
+  .vds-row[data-align="start"]    { align-items: start; }
+  .vds-row[data-align="center"]   { align-items: center; }
+  .vds-row[data-align="end"]      { align-items: end; }
+  .vds-row[data-align="stretch"]  { align-items: stretch; }
+  .vds-row[data-align="baseline"] { align-items: baseline; }
+
+  /* justify-content works natively for flex; for grid it governs the
+     column track box. That's usually what people expect from `justify`
+     even in a fixed-column grid. */
+  .vds-row[data-justify="start"]   { justify-content: start; }
+  .vds-row[data-justify="center"]  { justify-content: center; }
+  .vds-row[data-justify="end"]     { justify-content: end; }
+  .vds-row[data-justify="between"] { justify-content: space-between; }
+  .vds-row[data-justify="around"]  { justify-content: space-around; }
+  .vds-row[data-justify="evenly"]  { justify-content: space-evenly; }
+}

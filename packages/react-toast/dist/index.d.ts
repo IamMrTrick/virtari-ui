@@ -6,6 +6,23 @@ import * as ToastPrimitive from '@radix-ui/react-toast';
 type ToastType = "success" | "error" | "warning" | "info" | "loading" | "default";
 type ToastPosition = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
 type ToastActionVariant = "primary" | "secondary" | "ghost" | "danger" | "success";
+/**
+ * Controls when auto-dismiss timers start for stacked toasts.
+ *  - "parallel"   — each toast counts down from its own createdAt, independent
+ *                   of stack position (default).
+ *  - "sequential" — only the newest (top) toast counts down. Older stacked
+ *                   toasts wait with their timer paused; each resets and
+ *                   starts when it becomes the new top.
+ */
+type ToastTimerMode = "parallel" | "sequential";
+/**
+ * Controls what interaction pauses the auto-dismiss timer.
+ *  - "hover" — timer pauses while the viewport is hovered or any toast is
+ *              focused (default; matches Radix built-in pause behavior).
+ *  - "press" — timer only pauses while the user is actively pressing
+ *              (pointer down) on the toast body. Hover is ignored.
+ */
+type ToastPauseMode = "hover" | "press";
 interface ToastActionConfig {
     label: ReactNode;
     onClick: () => void;
@@ -51,9 +68,11 @@ interface ToasterProps {
     closeLabel?: string;
     maxToasts?: number;
     label?: string;
+    timerMode?: ToastTimerMode;
+    pauseMode?: ToastPauseMode;
 }
 
-declare function Toaster({ position, duration, visibleToasts, expand, hotkey, swipeThreshold, dir, className, closeLabel, maxToasts, label, }: ToasterProps): react_jsx_runtime.JSX.Element;
+declare function Toaster({ position, duration, visibleToasts, expand, hotkey, swipeThreshold, dir, className, closeLabel, maxToasts, label, timerMode, pauseMode, }: ToasterProps): react_jsx_runtime.JSX.Element;
 
 type BaseOpts = Omit<ToastOptions, "type" | "title" | "description">;
 interface ToastPromiseMessages<T> {
@@ -135,4 +154,4 @@ interface ToastCloseProps extends ComponentPropsWithoutRef<typeof ToastPrimitive
 }
 declare function ToastClose({ className, ref, ...props }: ToastCloseProps): react_jsx_runtime.JSX.Element;
 
-export { ToastAction, type ToastActionConfig, type ToastActionProps, type ToastActionVariant, type ToastActions, ToastClose, type ToastCloseProps, type ToastConfirmOptions, type ToastData, ToastDescription, type ToastDescriptionProps, type ToastOptions, type ToastPosition, type ToastPromiseMessages, ToastProvider, ToastRoot, type ToastRootProps, ToastTitle, type ToastTitleProps, type ToastType, type ToastUndoOptions, ToastViewport, type ToastViewportProps, Toaster, type ToasterProps, type UseToastReturn, createToastId, toast, toastStore, useToast };
+export { ToastAction, type ToastActionConfig, type ToastActionProps, type ToastActionVariant, type ToastActions, ToastClose, type ToastCloseProps, type ToastConfirmOptions, type ToastData, ToastDescription, type ToastDescriptionProps, type ToastOptions, type ToastPauseMode, type ToastPosition, type ToastPromiseMessages, ToastProvider, ToastRoot, type ToastRootProps, type ToastTimerMode, ToastTitle, type ToastTitleProps, type ToastType, type ToastUndoOptions, ToastViewport, type ToastViewportProps, Toaster, type ToasterProps, type UseToastReturn, createToastId, toast, toastStore, useToast };

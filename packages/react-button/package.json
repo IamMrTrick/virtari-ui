@@ -18,13 +18,14 @@
     },
     "./styles": "./dist/Button.css",
     "./styles/effects": "./dist/effects.css",
-    "./styles/animations": "./dist/animations.css"
+    "./styles/animations": "./dist/animations.css",
+    "./tokens": "./dist/Button.tokens.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup && postcss src/Button.css -o dist/Button.css && postcss src/effects.css -o dist/effects.css && postcss src/animations.css -o dist/animations.css",
+    "build": "tsup && postcss src/Button.tokens.css -o dist/Button.tokens.css && postcss src/Button.css -o dist/Button.css && postcss src/effects.css -o dist/effects.css && postcss src/animations.css -o dist/animations.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

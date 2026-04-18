@@ -6,6 +6,7 @@
     "build": "pnpm -r --filter \"./packages/**\" run build",
     "build:tokens": "pnpm --filter @virtari/tokens run build",
     "build:core": "pnpm --filter @virtari/core run build",
+    "build:utilities": "pnpm --filter @virtari/utilities run build",
     "dev": "pnpm --filter @virtari/docs run dev",
     "clean": "pnpm -r run clean",
     "typecheck": "pnpm -r run typecheck"

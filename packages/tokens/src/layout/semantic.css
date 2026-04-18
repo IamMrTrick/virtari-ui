@@ -1,0 +1,27 @@
+@layer tokens {
+  :root {
+    /*
+     * ── Semantic Layout Tokens ──
+     * Purpose-named aliases that map onto primitives.
+     * Components consume these (or the per-component tokens
+     * in components.css). Override at :root or a scoped
+     * wrapper to reshape a whole surface at once.
+     */
+
+    /* Container */
+    --vds-container-width:  var(--vds-container-width-xl);
+    --vds-container-gutter: var(--vds-section-gutter-md);
+
+    /* Section vertical + horizontal rhythm */
+    --vds-section-padding-block:  var(--vds-section-padding-lg);
+    --vds-section-padding-inline: var(--vds-section-gutter-md);
+    --vds-section-gap:            var(--vds-space-8);
+
+    /* Row */
+    --vds-row-gap:      var(--vds-row-gap-md);
+    --vds-row-col-gap:  var(--vds-row-gap-md);
+    --vds-row-row-gap:  var(--vds-row-gap-md);
+    --vds-row-cols:     var(--vds-row-cols-12);
+    --vds-row-min-col:  16rem;
+  }
+}

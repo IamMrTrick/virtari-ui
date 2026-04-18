@@ -1,0 +1,13 @@
+@layer design-system.components {
+  .vds-sidebar {
+    --sidebar-side-width: 16rem;
+    --sidebar-content-min: 60%;
+    --sidebar-gap: var(--vds-space-4, 1rem);
+  }
+
+  .vds-sidebar[data-gap="xs"] { --sidebar-gap: var(--vds-space-1, 0.25rem); }
+  .vds-sidebar[data-gap="sm"] { --sidebar-gap: var(--vds-space-2, 0.5rem); }
+  .vds-sidebar[data-gap="md"] { --sidebar-gap: var(--vds-space-4, 1rem); }
+  .vds-sidebar[data-gap="lg"] { --sidebar-gap: var(--vds-space-6, 1.5rem); }
+  .vds-sidebar[data-gap="xl"] { --sidebar-gap: var(--vds-space-8, 2rem); }
+}

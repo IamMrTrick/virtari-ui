@@ -1,251 +1,102 @@
-@layer components {
+@import "./Button.tokens.css";
+
+@layer design-system.components {
+  /* ── Root ── */
   .vds-button {
-    /* Layout */
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--_button-gap);
+    gap: var(--button-gap);
     position: relative;
     vertical-align: middle;
 
-    /* Typography */
-    font-family: var(--vds-font-sans);
-    font-weight: var(--vds-font-weight-medium);
-    line-height: var(--vds-leading-tight);
+    block-size: var(--button-height);
+    min-inline-size: var(--button-min-width);
+    padding-inline: var(--button-padding-inline);
+
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: var(--button-border-width) solid var(--button-border);
+    border-radius: var(--button-radius);
+
+    font-family: var(--button-font-family);
+    font-size: var(--button-font-size);
+    font-weight: var(--button-font-weight);
+    line-height: var(--button-line-height);
+    letter-spacing: var(--button-letter-spacing);
+
     text-decoration: none;
     white-space: nowrap;
-
-    /* Shape */
-    border-radius: var(--_button-radius);
-    border: 1px solid var(--_button-border);
-
-    /* Interaction */
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+
     transition:
-      background-color var(--vds-duration-fast) var(--vds-ease-out),
-      border-color var(--vds-duration-fast) var(--vds-ease-out),
-      color var(--vds-duration-fast) var(--vds-ease-out),
-      box-shadow var(--vds-duration-fast) var(--vds-ease-out),
-      opacity var(--vds-duration-fast) var(--vds-ease-out);
+      background-color var(--button-transition-duration) var(--button-transition-easing),
+      border-color     var(--button-transition-duration) var(--button-transition-easing),
+      color            var(--button-transition-duration) var(--button-transition-easing),
+      box-shadow       var(--button-transition-duration) var(--button-transition-easing),
+      opacity          var(--button-transition-duration) var(--button-transition-easing);
+  }
 
-    /* ── Component tokens (default: md solid) ── */
-    --_button-bg: var(--vds-color-primary-500);
-    --_button-text: var(--vds-color-on-solid);
-    --_button-border: transparent;
-    --_button-height: var(--vds-size-md);
-    --_button-px: var(--vds-space-4);
-    --_button-font-size: var(--vds-text-sm);
-    --_button-radius: var(--vds-radius-element);
-    --_button-gap: var(--vds-space-2);
-    --_button-icon-size: 1.125rem;
-    --_button-min-width: var(--_button-height);
+  /* ── Interaction states ── */
+  .vds-button:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--button-bg-hover);
+    color: var(--button-text-hover);
+    border-color: var(--button-border-hover);
+  }
 
-    background-color: var(--_button-bg);
-    color: var(--_button-text);
-    block-size: var(--_button-height);
-    min-inline-size: var(--_button-min-width);
-    padding-inline: var(--_button-px);
-    font-size: var(--_button-font-size);
+  .vds-button:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--button-bg-active);
+    color: var(--button-text-active);
+    border-color: var(--button-border-active);
+    scale: var(--button-press-scale);
+  }
 
-    /* ── States ── */
-    &:hover:not(:disabled) {
-      --_button-bg: var(--vds-color-primary-hover);
-    }
+  .vds-button:focus-visible {
+    outline: var(--button-focus-ring-width) solid var(--button-focus-ring-color);
+    outline-offset: var(--button-focus-ring-offset);
+  }
 
-    &:active:not(:disabled) {
-      --_button-bg: var(--vds-color-primary-active);
-      scale: 0.98;
-    }
+  /* Link variant — underline on hover */
+  .vds-button[data-variant="link"] {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .vds-button[data-variant="link"]:hover:not(:disabled):not([aria-disabled="true"]) {
+    text-decoration-thickness: 2px;
+  }
 
-    &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
-    }
+  /* ── Disabled ── */
+  .vds-button:disabled,
+  .vds-button[aria-disabled="true"] {
+    opacity: var(--button-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
+  /* ── Modifiers ── */
 
-    /* ━━━ Variants ━━━ */
+  /* Icon-only: auto-detected via :has(), or when spinner is the only extra child in loading state */
+  .vds-button:has(> svg:only-child),
+  .vds-button:has(> .vds-button-spinner:first-child + svg:last-child) {
+    padding-inline: 0;
+    aspect-ratio: 1;
+    --button-min-width: var(--button-height);
+  }
 
-    &[data-variant="outline"] {
-      --_button-bg: transparent;
-      --_button-text: var(--vds-color-primary-500);
-      --_button-border: var(--vds-color-border);
+  .vds-button[data-full-width] {
+    inline-size: 100%;
+  }
 
-      &:hover:not(:disabled) {
-        --_button-bg: var(--vds-color-bg-subtle);
-      }
+  .vds-button[data-loading] {
+    color: transparent;
+    pointer-events: none;
+  }
 
-      &:active:not(:disabled) {
-        --_button-bg: var(--vds-color-bg-muted);
-      }
-    }
-
-    &[data-variant="ghost"] {
-      --_button-bg: transparent;
-      --_button-text: var(--vds-color-text);
-      --_button-border: transparent;
-
-      &:hover:not(:disabled) {
-        --_button-bg: var(--vds-color-bg-muted);
-      }
-
-      &:active:not(:disabled) {
-        --_button-bg: var(--vds-color-border-muted);
-      }
-    }
-
-    &[data-variant="soft"] {
-      --_button-bg: var(--vds-color-primary-100);
-      --_button-text: var(--vds-color-primary-700);
-      --_button-border: transparent;
-
-      &:hover:not(:disabled) {
-        --_button-bg: var(--vds-color-primary-200);
-      }
-
-      &:active:not(:disabled) {
-        --_button-bg: var(--vds-color-primary-300);
-      }
-    }
-
-    &[data-variant="destructive"] {
-      --_button-bg: var(--vds-color-danger-500);
-
-      &:hover:not(:disabled) {
-        --_button-bg: var(--vds-color-danger-hover);
-      }
-
-      &:active:not(:disabled) {
-        --_button-bg: var(--vds-color-danger-active);
-      }
-    }
-
-    &[data-variant="link"] {
-      --_button-bg: transparent;
-      --_button-text: var(--vds-color-primary-500);
-      --_button-border: transparent;
-      --_button-height: auto;
-      --_button-px: 0;
-      --_button-min-width: 0;
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
-
-      &:hover:not(:disabled) {
-        --_button-text: var(--vds-color-primary-hover);
-        text-decoration-thickness: 2px;
-      }
-    }
-
-    /* ━━━ Sizes ━━━
-     *
-     * Size  Height  WCAG 2.5.8 (AA 24px)  WCAG 2.5.5 (AAA 44px)  Apple HIG  Google MD
-     * ───── ─────── ───────────────────── ────────────────────── ────────── ─────────
-     * 2xs   24px    ⚠ Bare minimum         ✗                      ✗          ✗
-     * xs    28px    ✓                       ✗                      ✗          ✗
-     * sm    32px    ✓                       ✗                      ✗          ✗
-     * md    40px    ✓                       ✗                      ✗          ✗
-     * lg    44px    ✓                       ✓                      ✓ (44pt)   ✗
-     * xl    52px    ✓                       ✓                      ✓          ✓ (48dp)
-     * 2xl   64px    ✓                       ✓                      ✓          ✓
-     *
-     * ⚠ 2xs/xs/sm: Use only in dense UI (tables, toolbars) with adequate spacing.
-     *   For touch-primary interfaces, prefer lg+ to meet AAA / platform guidelines.
-     */
-
-    /* 2xs — 24px — WCAG AA minimum. Dense UI only, ensure 24px spacing from neighbors */
-    &[data-size="2xs"] {
-      --_button-height: var(--vds-size-2xs);
-      --_button-px: var(--vds-space-2);
-      --_button-font-size: var(--vds-text-xs);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-1);
-      --_button-icon-size: 0.875rem;
-    }
-
-    /* xs — 28px — WCAG AA. Tables, toolbars, inline actions */
-    &[data-size="xs"] {
-      --_button-height: var(--vds-size-xs);
-      --_button-px: var(--vds-space-2-5);
-      --_button-font-size: var(--vds-text-xs);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-1);
-      --_button-icon-size: 0.875rem;
-    }
-
-    /* sm — 32px — WCAG AA. Secondary actions, form controls */
-    &[data-size="sm"] {
-      --_button-height: var(--vds-size-sm);
-      --_button-px: var(--vds-space-3);
-      --_button-font-size: var(--vds-text-sm);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-1-5);
-      --_button-icon-size: 1rem;
-    }
-
-    /* md — 40px — WCAG AA. Default for desktop-first interfaces */
-    /* (uses the default component tokens above) */
-
-    /* lg — 44px — ✓ WCAG AAA + Apple HIG. Recommended for primary CTAs */
-    &[data-size="lg"] {
-      --_button-height: var(--vds-size-lg);
-      --_button-px: var(--vds-space-5);
-      --_button-font-size: var(--vds-text-base);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-2);
-      --_button-icon-size: 1.25rem;
-    }
-
-    /* xl — 52px — ✓ WCAG AAA + Apple HIG + Google MD. Hero sections */
-    &[data-size="xl"] {
-      --_button-height: var(--vds-size-xl);
-      --_button-px: var(--vds-space-6);
-      --_button-font-size: var(--vds-text-lg);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-2);
-      --_button-icon-size: 1.25rem;
-    }
-
-    /* 2xl — 64px — ✓ All standards. Landing pages, full-width mobile CTAs */
-    &[data-size="2xl"] {
-      --_button-height: var(--vds-size-2xl);
-      --_button-px: var(--vds-space-8);
-      --_button-font-size: var(--vds-text-xl);
-      --_button-radius: var(--vds-radius-element);
-      --_button-gap: var(--vds-space-3);
-      --_button-icon-size: 1.5rem;
-    }
-
-    /* ━━━ Modifiers ━━━ */
-
-    /* Icon-only: auto-detected via :has() or explicit attribute */
-    &:has(> svg:only-child),
-    &:has(> .vds-button-spinner:first-child + svg:last-child) {
-      padding-inline: 0;
-      aspect-ratio: 1;
-      --_button-min-width: var(--_button-height);
-    }
-
-    /* Full width */
-    &[data-full-width] {
-      inline-size: 100%;
-    }
-
-    /* Loading state */
-    &[data-loading] {
-      color: transparent;
-      pointer-events: none;
-    }
-
-    &[data-loading] > .vds-button-section,
-    &[data-loading] > :not(.vds-button-spinner) {
-      visibility: hidden;
-    }
+  .vds-button[data-loading] > .vds-button-section,
+  .vds-button[data-loading] > :not(.vds-button-spinner) {
+    visibility: hidden;
   }
 
   /* ── Spinner ── */
@@ -255,19 +106,19 @@
     align-items: center;
     justify-content: center;
     inset: 0;
+  }
 
-    &::after {
-      content: "";
-      display: block;
-      inline-size: var(--_button-icon-size);
-      block-size: var(--_button-icon-size);
-      border: 2px solid currentColor;
-      border-inline-end-color: transparent;
-      border-radius: var(--vds-radius-full);
-      animation: vds-button-spin 0.6s linear infinite;
-      opacity: 1;
-      color: var(--_button-text);
-    }
+  .vds-button-spinner::after {
+    content: "";
+    display: block;
+    inline-size: var(--button-icon-size);
+    block-size: var(--button-icon-size);
+    border: 2px solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: var(--vds-radius-full, 9999px);
+    animation: vds-button-spin 0.6s linear infinite;
+    color: var(--button-text);
+    opacity: 1;
   }
 
   /* ── Sections (left/right icon slots) ── */
@@ -275,14 +126,14 @@
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
-
-    & > svg {
-      inline-size: var(--_button-icon-size);
-      block-size: var(--_button-icon-size);
-    }
   }
 
-  /* ── Spin animation ── */
+  .vds-button-section > svg {
+    inline-size: var(--button-icon-size);
+    block-size: var(--button-icon-size);
+  }
+
+  /* ── Keyframes ── */
   @keyframes vds-button-spin {
     to {
       rotate: 360deg;

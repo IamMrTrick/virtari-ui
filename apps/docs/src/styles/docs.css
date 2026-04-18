@@ -514,3 +514,33 @@
     display: none;
   }
 }
+
+/* ── Tabs showcase helpers ── */
+.docs-stack-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vds-space-2);
+}
+
+.docs-subtitle {
+  font-size: var(--vds-text-xs);
+  font-weight: var(--vds-font-weight-semibold);
+  color: var(--vds-color-text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.docs-inline-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vds-space-2);
+  font-size: var(--vds-text-sm);
+  color: var(--vds-color-text);
+}
+
+.docs-tabs-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vds-space-6);
+  max-inline-size: 48rem;
+}

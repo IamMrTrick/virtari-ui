@@ -41,5 +41,11 @@
     --vds-radius-alert-dialog: min(var(--vds-radius-surface), var(--vds-radius-xl));
     --vds-radius-drawer:       min(var(--vds-radius-surface), var(--vds-radius-xl));
     --vds-radius-toast:        min(var(--vds-radius-surface), var(--vds-radius-xl));
+
+    /* Data table — cap at md (8px). The inner <table> cells can't round,
+     * so the outer container radius is purely decorative. Anything above md
+     * creates visible wedges where the sticky-header divider and scrollbar
+     * meet the rounded corners. */
+    --vds-radius-data-table: min(var(--vds-radius-surface), var(--vds-radius-md));
   }
 }

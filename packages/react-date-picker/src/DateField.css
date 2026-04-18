@@ -1,0 +1,117 @@
+@import "./DateField.tokens.css";
+
+@layer design-system.components {
+  /* ── DateField / TimeField shell ── */
+  .vds-date-field,
+  .vds-time-field {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+    font-family: var(--date-field-font-family);
+  }
+
+  .vds-date-field[data-dir="rtl"],
+  .vds-time-field[data-dir="rtl"] {
+    direction: rtl;
+  }
+
+  /* ── Label ── */
+  .vds-date-field-label,
+  .vds-time-field-label {
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--date-field-label-color);
+  }
+
+  /* ── Field group (the box with segments) ── */
+  .vds-date-field-group,
+  .vds-time-field-group,
+  .vds-date-picker-group,
+  .vds-date-range-picker-group {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--date-field-gap);
+    inline-size: 100%;
+    block-size: var(--date-field-height);
+    padding-inline: var(--date-field-padding-inline);
+    background: var(--date-field-bg);
+    border: var(--date-field-border-width) solid var(--date-field-border-color);
+    border-radius: var(--date-field-radius);
+    color: var(--date-field-text-color);
+    font-size: var(--date-field-font-size);
+    line-height: var(--date-field-line-height);
+    transition:
+      background-color var(--date-field-transition-duration) var(--date-field-transition-easing),
+      border-color var(--date-field-transition-duration) var(--date-field-transition-easing),
+      box-shadow var(--date-field-transition-duration) var(--date-field-transition-easing);
+  }
+
+  .vds-date-field-group:hover,
+  .vds-time-field-group:hover,
+  .vds-date-picker-group:hover,
+  .vds-date-range-picker-group:hover {
+    background: var(--date-field-bg-hover);
+    border-color: var(--date-field-border-color-hover);
+  }
+
+  .vds-date-field-group:focus-within,
+  .vds-time-field-group:focus-within,
+  .vds-date-picker-group:focus-within,
+  .vds-date-range-picker-group:focus-within {
+    border-color: var(--date-field-focus-border-color);
+    box-shadow: 0 0 0 var(--date-field-focus-ring-width) var(--date-field-focus-ring-color);
+  }
+
+  .vds-date-field[data-disabled="true"] .vds-date-field-group,
+  .vds-time-field[data-disabled="true"] .vds-time-field-group,
+  .vds-date-picker[data-disabled="true"] .vds-date-picker-group,
+  .vds-date-range-picker[data-disabled="true"] .vds-date-range-picker-group {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* ── Segment ── */
+  .vds-date-field-segment,
+  .vds-time-field-segment {
+    display: inline-block;
+    padding-inline: var(--date-field-segment-padding-inline);
+    border-radius: var(--date-field-segment-radius);
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+    caret-color: transparent;
+    outline: none;
+    transition: background-color var(--date-field-transition-duration) var(--date-field-transition-easing);
+  }
+
+  .vds-date-field-segment[data-placeholder="true"],
+  .vds-time-field-segment[data-placeholder="true"] {
+    color: var(--date-field-placeholder-color);
+  }
+
+  .vds-date-field-segment:focus,
+  .vds-time-field-segment:focus {
+    background: var(--date-field-segment-focus-bg);
+    color: var(--date-field-segment-focus-text);
+  }
+
+  /* Literal separators (/ : space) should not receive a focus outline. */
+  .vds-date-field-segment[data-type="literal"],
+  .vds-time-field-segment[data-type="literal"] {
+    padding-inline: 0;
+    color: var(--date-field-placeholder-color);
+  }
+
+  /* ── Description + error ── */
+  .vds-date-field-description,
+  .vds-time-field-description {
+    font-size: var(--vds-text-xs, 0.75rem);
+    color: var(--date-field-description-color);
+  }
+
+  .vds-date-field-error,
+  .vds-time-field-error {
+    font-size: var(--vds-text-xs, 0.75rem);
+    color: var(--date-field-error-color);
+  }
+}

@@ -1,31 +1,24 @@
-@layer components {
+@import "./Sidebar.tokens.css";
+
+@layer design-system.components {
   .vds-sidebar {
-    --vds-sidebar-side-width: 16rem;
-    --vds-sidebar-content-min: 60%;
-    --vds-sidebar-gap: var(--vds-space-4);
     display: flex;
     flex-wrap: wrap;
-    gap: var(--vds-sidebar-gap);
+    gap: var(--sidebar-gap);
   }
 
   .vds-sidebar > :first-child {
-    flex-basis: var(--vds-sidebar-side-width);
+    flex-basis: var(--sidebar-side-width);
     flex-grow: 1;
   }
 
   .vds-sidebar > :last-child {
     flex-basis: 0;
     flex-grow: 999;
-    min-inline-size: var(--vds-sidebar-content-min);
+    min-inline-size: var(--sidebar-content-min);
   }
 
   .vds-sidebar[data-side="end"] {
     flex-direction: row-reverse;
   }
-
-  .vds-sidebar[data-gap="xs"] { --vds-sidebar-gap: var(--vds-space-1); }
-  .vds-sidebar[data-gap="sm"] { --vds-sidebar-gap: var(--vds-space-2); }
-  .vds-sidebar[data-gap="md"] { --vds-sidebar-gap: var(--vds-space-4); }
-  .vds-sidebar[data-gap="lg"] { --vds-sidebar-gap: var(--vds-space-6); }
-  .vds-sidebar[data-gap="xl"] { --vds-sidebar-gap: var(--vds-space-8); }
 }

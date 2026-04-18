@@ -4,6 +4,7 @@ import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
 
 // src/Button.tsx
 function Button({
+  color = "primary",
   variant = "solid",
   size = "md",
   asChild = false,
@@ -22,13 +23,16 @@ function Button({
 }) {
   const Comp = asChild ? Slot : "button";
   const isDisabled = disabled || loading;
+  const resolvedColor = variant === "destructive" ? "danger" : color;
+  const resolvedVariant = variant === "destructive" ? "solid" : variant;
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs(
       Comp,
       {
         ref,
         className: cn("vds-button", className),
-        "data-variant": variant,
+        "data-color": resolvedColor,
+        "data-variant": resolvedVariant,
         "data-size": size,
         "data-loading": loading || void 0,
         "data-full-width": fullWidth || void 0,

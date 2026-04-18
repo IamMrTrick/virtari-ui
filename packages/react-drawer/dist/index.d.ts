@@ -7,7 +7,7 @@ type Direction = "top" | "bottom" | "left" | "right";
 type DrawerSizeMode = "adaptive" | "full" | "fixed";
 type DrawerSnapBehavior = "staged" | "closest";
 type SnapPoint = number;
-type DrawerIndicatorPlacement = "inside" | "outside" | "hidden";
+type DrawerIndicatorPlacement = "inside" | "outside" | "hidden" | "progress";
 type DrawerHeaderVariant = "plain" | "bordered";
 type DrawerDeclaredSize = number | string | ((info: DrawerViewportInfo) => number | string);
 type DrawerDirectionalValue<T> = T | Partial<Record<Direction, T>>;

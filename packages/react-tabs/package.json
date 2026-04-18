@@ -16,13 +16,20 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./styles": "./dist/Tabs.css"
+    "./styles": {
+      "style": "./dist/Tabs.css",
+      "default": "./dist/Tabs.css"
+    },
+    "./tokens": {
+      "style": "./dist/Tabs.tokens.css",
+      "default": "./dist/Tabs.tokens.css"
+    }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup && postcss src/Tabs.css -o dist/Tabs.css",
+    "build": "tsup && postcss src/Tabs.tokens.css -o dist/Tabs.tokens.css && postcss src/Tabs.css -o dist/Tabs.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

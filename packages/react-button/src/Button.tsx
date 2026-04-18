@@ -2,13 +2,26 @@ import { cn } from "@virtari/utils";
 import type { Ref, ReactNode } from "react";
 import { Slot, Slottable } from "@radix-ui/react-slot";
 
+/** Intent palette — orthogonal to variant. Picks the hue family. */
+export type ButtonColor =
+  | "primary"
+  | "success"
+  | "warning"
+  | "danger"
+  | "info"
+  | "accent"
+  | "neutral"
+  | "contrast";
+
+/** Appearance — solid fill, bordered, text-only, tinted, or inline link. */
 export type ButtonVariant =
   | "solid"
   | "outline"
   | "ghost"
   | "soft"
-  | "destructive"
-  | "link";
+  | "link"
+  /** @deprecated Use `color="danger"` instead. Maps to solid + danger at runtime. */
+  | "destructive";
 
 /**
  * Button size presets.
@@ -18,14 +31,15 @@ export type ButtonVariant =
  * | 2xs  | 24px   | ⚠ minimum      | ✗               | ✗         | ✗         |
  * | xs   | 28px   | ✓              | ✗               | ✗         | ✗         |
  * | sm   | 32px   | ✓              | ✗               | ✗         | ✗         |
- * | md   | 40px   | ✓              | ✗               | ✗         | ✗         |
- * | lg   | 44px   | ✓              | ✓               | ✓         | ✗         |
- * | xl   | 52px   | ✓              | ✓               | ✓         | ✓         |
- * | 2xl  | 64px   | ✓              | ✓               | ✓         | ✓         |
+ * | md   | 36px   | ✓              | ✗               | ✗         | ✗         |
+ * | lg   | 40px   | ✓              | ✗               | ✗         | ✗         |
+ * | xl   | 44px   | ✓              | ✓               | ✓ (44pt)  | ✗         |
+ * | 2xl  | 52px   | ✓              | ✓               | ✓         | ✓         |
+ * | 3xl  | 64px   | ✓              | ✓               | ✓         | ✓         |
  *
- * For touch-primary interfaces, prefer `lg`+ to meet AAA and platform guidelines.
+ * For touch-primary interfaces, prefer `xl`+ to meet AAA and platform guidelines.
  */
-export type ButtonSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+export type ButtonSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 
 /** Visual effects — requires importing `@virtari/react-button/styles/effects` */
 export type ButtonEffect = "shine" | "raised" | "glow" | "glass" | "outline-glow";
@@ -35,6 +49,8 @@ export type ButtonAnimation = "pulse" | "bounce" | "shake" | "jiggle";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Hue/intent. Orthogonal to variant. */
+  color?: ButtonColor;
   /** Visual style variant */
   variant?: ButtonVariant;
   /** Size preset */
@@ -59,6 +75,7 @@ export interface ButtonProps
 }
 
 export function Button({
+  color = "primary",
   variant = "solid",
   size = "md",
   asChild = false,
@@ -78,12 +95,17 @@ export function Button({
   const Comp = asChild ? Slot : "button";
   const isDisabled = disabled || loading;
 
+  // Backward compat: variant="destructive" → color="danger" + variant="solid".
+  const resolvedColor = variant === "destructive" ? "danger" : color;
+  const resolvedVariant = variant === "destructive" ? "solid" : variant;
+
   return (
     <>
       <Comp
         ref={ref}
         className={cn("vds-button", className)}
-        data-variant={variant}
+        data-color={resolvedColor}
+        data-variant={resolvedVariant}
         data-size={size}
         data-loading={loading || undefined}
         data-full-width={fullWidth || undefined}

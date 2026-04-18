@@ -21,6 +21,7 @@
     "@virtari/react-tabs": "workspace:*",
     "@virtari/react-toggle": "workspace:*",
     "@virtari/tokens": "workspace:*",
+    "@virtari/utilities": "workspace:*",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "@virtari/react-drawer": "workspace:*",
@@ -41,8 +42,14 @@
     "@virtari/react-skeleton": "workspace:*",
     "@virtari/react-spinner": "workspace:*",
     "@virtari/react-card": "workspace:*",
+    "@virtari/react-chip": "workspace:*",
     "@virtari/react-kbd": "workspace:*",
-    "@virtari/react-layout": "workspace:*"
+    "@virtari/react-layout": "workspace:*",
+    "@virtari/react-date-picker": "workspace:*",
+    "@virtari/react-data-table": "workspace:*",
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "@dnd-kit/utilities": "^3.2.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",

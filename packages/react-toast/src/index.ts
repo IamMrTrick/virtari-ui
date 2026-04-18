@@ -31,6 +31,8 @@ export type {
   ToastOptions,
   ToastData,
   ToasterProps,
+  ToastTimerMode,
+  ToastPauseMode,
 } from "./types";
 
 export type {

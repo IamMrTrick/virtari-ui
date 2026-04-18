@@ -1,0 +1,17 @@
+import { defineConfig } from "tsup";
+
+export default defineConfig({
+  entry: ["src/index.ts", "src/index.dnd.ts"],
+  format: ["esm", "cjs"],
+  dts: true,
+  clean: true,
+  external: [
+    "react",
+    "react-dom",
+    "react/jsx-runtime",
+    "@dnd-kit/core",
+    "@dnd-kit/sortable",
+    "@dnd-kit/utilities",
+  ],
+  treeshake: true,
+});
