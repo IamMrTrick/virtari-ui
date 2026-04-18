@@ -1014,26 +1014,82 @@
     opacity: 0.4;
     cursor: not-allowed;
   }
-  .vds-data-table-toolbar-button[data-intent="primary"] {
-    color: #fff;
-    background-color: var(--data-table-toolbar-button-color-primary);
+  /* Variant: outline — thin border, transparent fill. */
+  .vds-data-table-toolbar-button[data-variant="outline"] {
+    border: 1px solid var(--vds-color-border, #d1d5db);
+    background-color: transparent;
   }
-  .vds-data-table-toolbar-button[data-intent="primary"]:hover:not(:disabled) {
+  .vds-data-table-toolbar-button[data-variant="outline"]:hover:not(:disabled) {
+    background-color: var(--data-table-toolbar-button-bg-hover);
+  }
+  /* Variant: solid — filled with current intent color. */
+  .vds-data-table-toolbar-button[data-variant="solid"] {
+    background-color: var(--data-table-toolbar-button-color);
+    color: var(--vds-color-surface, #ffffff);
+  }
+  .vds-data-table-toolbar-button[data-variant="solid"][data-intent="primary"] {
+    background-color: var(--data-table-toolbar-button-color-primary);
+    color: #fff;
+  }
+  .vds-data-table-toolbar-button[data-variant="solid"][data-intent="primary"]:hover:not(:disabled) {
     background-color: color-mix(
       in oklch,
       var(--data-table-toolbar-button-color-primary),
-      black 8%
+      black 10%
     );
   }
-  .vds-data-table-toolbar-button[data-intent="danger"] {
+  .vds-data-table-toolbar-button[data-variant="solid"][data-intent="danger"] {
+    background-color: var(--data-table-toolbar-button-color-danger);
+    color: #fff;
+  }
+
+  /* Intent: primary on ghost/outline — colored text, no bg. */
+  .vds-data-table-toolbar-button[data-intent="primary"]:not([data-variant="solid"]) {
+    color: var(--data-table-toolbar-button-color-primary);
+  }
+  .vds-data-table-toolbar-button[data-intent="primary"][data-variant="ghost"] {
+    background-color: transparent;
+  }
+  .vds-data-table-toolbar-button[data-intent="primary"][data-variant="ghost"]:hover:not(:disabled) {
+    background-color: color-mix(
+      in oklch,
+      var(--data-table-toolbar-button-color-primary),
+      transparent 90%
+    );
+  }
+  .vds-data-table-toolbar-button[data-intent="primary"][data-variant="outline"] {
+    border-color: color-mix(
+      in oklch,
+      var(--data-table-toolbar-button-color-primary),
+      transparent 60%
+    );
+  }
+  .vds-data-table-toolbar-button[data-intent="danger"]:not([data-variant="solid"]) {
     color: var(--data-table-toolbar-button-color-danger);
   }
-  .vds-data-table-toolbar-button[data-intent="danger"]:hover:not(:disabled) {
+  .vds-data-table-toolbar-button[data-intent="danger"][data-variant="ghost"]:hover:not(:disabled) {
     background-color: color-mix(
       in oklch,
       var(--data-table-toolbar-button-color-danger),
       transparent 90%
     );
+  }
+
+  /* Size sm: tighter padding + smaller height. Used for inline row actions. */
+  .vds-data-table-toolbar-button[data-size="sm"] {
+    block-size: var(--vds-size-sm, 1.75rem);
+    padding-inline: var(--vds-space-2, 0.5rem);
+    font-size: var(--vds-text-xs, 0.75rem);
+  }
+
+  /* Icon-only: square — collapse label padding, aspect-square look. */
+  .vds-data-table-toolbar-button[data-icon-only] {
+    padding-inline: 0;
+    inline-size: var(--data-table-toolbar-button-height);
+    justify-content: center;
+  }
+  .vds-data-table-toolbar-button[data-icon-only][data-size="sm"] {
+    inline-size: var(--vds-size-sm, 1.75rem);
   }
   .vds-data-table-toolbar-button-icon {
     display: inline-flex;
