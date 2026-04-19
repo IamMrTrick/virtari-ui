@@ -14,17 +14,17 @@ import {
   type TableDensity,
   type TableColor,
   type TableSortDirection,
-} from "@virtari/react-table";
+} from "@virtari-packages/react-table";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@virtari/react-select";
-import { Switch } from "@virtari/react-switch";
-import { Badge } from "@virtari/react-badge";
-import { Row as LayoutRow } from "@virtari/react-layout";
+} from "@virtari-packages/react-select";
+import { Switch } from "@virtari-packages/react-switch";
+import { Badge } from "@virtari-packages/react-badge";
+import { Row as LayoutRow } from "@virtari-packages/react-layout";
 import { Section } from "../components";
 
 /* ─────────────────────────── Demo data ─────────────────────────── */
@@ -863,7 +863,7 @@ function UsageSection() {
       <pre className="docs-code">{`import {
   Table, TableHeader, TableBody, TableFooter,
   TableRow, TableHead, TableCell, TableCaption,
-} from "@virtari/react-table";
+} from "@virtari-packages/react-table";
 
 <Table variant="surface" rows="divided" size="md" hoverable>
   <TableCaption>Q1 2026 outstanding invoices</TableCaption>

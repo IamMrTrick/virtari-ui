@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
 import { Checkbox, type CheckboxProps } from "./Checkbox";
 import { useCheckboxGroupContext } from "./context";

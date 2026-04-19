@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import * as SwitchPrimitive from '@radix-ui/react-switch';
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { flushSync } from 'react-dom';
 import { jsx } from 'react/jsx-runtime';
 

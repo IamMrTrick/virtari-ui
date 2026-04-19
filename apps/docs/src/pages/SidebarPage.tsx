@@ -10,7 +10,7 @@ import {
   type SidebarSize,
   type SidebarSide,
   type SidebarBackground,
-} from "@virtari/react-sidebar";
+} from "@virtari-packages/react-sidebar";
 import {
   Nav,
   NavList,
@@ -23,17 +23,17 @@ import {
   NavBadge,
   NavChevron,
   NavSubmenu,
-} from "@virtari/react-nav";
+} from "@virtari-packages/react-nav";
 import {
   Header,
   HeaderMain,
   HeaderStart,
   HeaderCenter,
   HeaderEnd,
-} from "@virtari/react-header";
-import { Avatar } from "@virtari/react-avatar";
-import { Button } from "@virtari/react-button";
-import { Input } from "@virtari/react-input";
+} from "@virtari-packages/react-header";
+import { Avatar } from "@virtari-packages/react-avatar";
+import { Button } from "@virtari-packages/react-button";
+import { Input } from "@virtari-packages/react-input";
 import {
   IconLayoutDashboard,
   IconFolder,
@@ -45,7 +45,7 @@ import {
   IconLifebuoy,
   IconMenu2,
   IconSearch,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 import { Section } from "../components";
 
 /* ─────────────────────────────── Shared demo bits ─────────────────────────────── */
@@ -455,16 +455,16 @@ export function SidebarPage() {
     <>
       <Section
         title="Structure"
-        description="Sidebar is the app-chrome navigation rail — <aside> landmark that pairs with Header in two layout modes. Compose SidebarHeader / SidebarBody / SidebarFooter with @virtari/react-nav inside. The sidebar's collapsed state is forwarded to Nav, which owns the rail-mode rendering (icons only, submenus become popovers)."
+        description="Sidebar is the app-chrome navigation rail — <aside> landmark that pairs with Header in two layout modes. Compose SidebarHeader / SidebarBody / SidebarFooter with @virtari-packages/react-nav inside. The sidebar's collapsed state is forwarded to Nav, which owns the rail-mode rendering (icons only, submenus become popovers)."
       >
         <pre className="docs-code">{`import {
   Sidebar, SidebarHeader, SidebarBody,
   SidebarFooter, SidebarSeparator, SidebarTrigger,
   useSidebar,
-} from "@virtari/react-sidebar";
+} from "@virtari-packages/react-sidebar";
 import { Nav, NavList, NavItem, NavLink, NavTrigger,
          NavSubmenu, NavIcon, NavLabel, NavBadge, NavChevron,
-         NavGroup } from "@virtari/react-nav";
+         NavGroup } from "@virtari-packages/react-nav";
 
 function NavTree() {
   const { collapsed } = useSidebar();
@@ -569,7 +569,7 @@ function SubmenuDemo() {
   return (
     <Section
       title="Submenu + dropdown behaviour"
-      description="Projects has children — in the expanded sidebar the submenu opens inline (accordion). When the sidebar collapses to a rail, Nav forces the same submenu to popover mode so it floats out of the rail. Per-item behaviour is handled entirely by @virtari/react-nav — the sidebar only tells Nav whether it's in rail mode."
+      description="Projects has children — in the expanded sidebar the submenu opens inline (accordion). When the sidebar collapses to a rail, Nav forces the same submenu to popover mode so it floats out of the rail. Per-item behaviour is handled entirely by @virtari-packages/react-nav — the sidebar only tells Nav whether it's in rail mode."
     >
       <DemoShell label="Submenu demo" height="28rem">
         <Sidebar blockSize="100%" aria-label="Primary navigation">
@@ -818,7 +818,7 @@ function BackgroundsDemo() {
   return (
     <Section
       title="Backgrounds"
-      description="Four surface presets mapped to @virtari/tokens color scales. `none` strips the background — pair with a colored page or glass effect."
+      description="Four surface presets mapped to @virtari-packages/tokens color scales. `none` strips the background — pair with a colored page or glass effect."
     >
       <div
         style={{
@@ -1064,7 +1064,7 @@ function AccessibilitySection() {
   return (
     <Section
       title="Accessibility"
-      description="Landmarks are layered correctly — <aside> for the sidebar, <nav> for the nav itself (from @virtari/react-nav). Rail mode keeps labels in the accessibility tree."
+      description="Landmarks are layered correctly — <aside> for the sidebar, <nav> for the nav itself (from @virtari-packages/react-nav). Rail mode keeps labels in the accessibility tree."
     >
       <ul className="docs-prose" style={{ paddingInlineStart: "1.25em" }}>
         <li>
@@ -1072,7 +1072,7 @@ function AccessibilitySection() {
           Pass <code>aria-label</code> so multiple asides can be told apart.
         </li>
         <li>
-          Put <code>@virtari/react-nav</code> inside{" "}
+          Put <code>@virtari-packages/react-nav</code> inside{" "}
           <code>&lt;SidebarBody&gt;</code> — Nav renders its own{" "}
           <code>&lt;nav&gt;</code> landmark, and NavLink auto-applies{" "}
           <code>aria-current=&quot;page&quot;</code>.
@@ -1095,7 +1095,7 @@ function AccessibilitySection() {
         </li>
         <li>
           Mobile: wrap Sidebar inside{" "}
-          <code>@virtari/react-drawer</code> and toggle via{" "}
+          <code>@virtari-packages/react-drawer</code> and toggle via{" "}
           <code>useSidebar()</code> — the Sidebar itself is desktop-first.
         </li>
         <li>

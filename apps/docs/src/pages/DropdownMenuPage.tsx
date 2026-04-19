@@ -5,8 +5,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@virtari/react-dropdown-menu";
-import { Button } from "@virtari/react-button";
+} from "@virtari-packages/react-dropdown-menu";
+import { Button } from "@virtari-packages/react-button";
 import { Section, Row } from "../components";
 
 export function DropdownMenuPage() {
@@ -52,7 +52,7 @@ export function DropdownMenuPage() {
         <pre className="docs-code">{`import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
-} from "@virtari/react-dropdown-menu";
+} from "@virtari-packages/react-dropdown-menu";
 
 <DropdownMenu>
   <DropdownMenuTrigger asChild>

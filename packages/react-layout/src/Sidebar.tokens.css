@@ -3,7 +3,7 @@
    * NOTE: class is `.vds-split`, not `.vds-sidebar`.
    * The component is still exported as `Sidebar` for backwards compat,
    * but the CSS class was renamed to avoid colliding with the app-chrome
-   * sidebar in `@virtari/react-sidebar`. That package owns the `.vds-sidebar`
+   * sidebar in `@virtari-packages/react-sidebar`. That package owns the `.vds-sidebar`
    * namespace — this utility lives under `.vds-split`.
    */
   .vds-split {

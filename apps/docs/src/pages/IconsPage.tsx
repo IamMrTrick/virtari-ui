@@ -13,14 +13,14 @@ import * as TablerIcons from "@tabler/icons-react";
 // @ts-ignore -- ambient JSON module declared in icons-manifest.d.ts
 import iconsManifestRaw from "../../node_modules/@tabler/icons/icons.json";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { Input } from "@virtari/react-input";
+import { Input } from "@virtari-packages/react-input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@virtari/react-select";
+} from "@virtari-packages/react-select";
 import { Section, Row } from "../components";
 
 /* ────────────────────────── Tabler metadata ────────────────────────── */
@@ -99,7 +99,7 @@ export function IconsPage() {
 
   const handleCopy = async (entry: IconEntry) => {
     const componentName = toComponentName(entry.key, style === "filled" && entry.hasFilled);
-    const snippet = `import { ${componentName} } from "@virtari/react-icons";\n\n<${componentName} size={${size}} stroke={${stroke}} />`;
+    const snippet = `import { ${componentName} } from "@virtari-packages/react-icons";\n\n<${componentName} size={${size}} stroke={${stroke}} />`;
     try {
       await navigator.clipboard.writeText(snippet);
       setCopied(componentName);
@@ -118,7 +118,7 @@ export function IconsPage() {
     <>
       <Section
         title="Browse"
-        description={`${ALL_ICONS.length.toLocaleString()} Tabler icons (MIT) — re-exported from @virtari/react-icons. Click any icon to copy import + JSX.`}
+        description={`${ALL_ICONS.length.toLocaleString()} Tabler icons (MIT) — re-exported from @virtari-packages/react-icons. Click any icon to copy import + JSX.`}
       >
         <Row>
           <div className="docs-icons-search">
@@ -214,17 +214,17 @@ export function IconsPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { IconCheck } from "@virtari/react-icons";
+        <pre className="docs-code">{`import { IconCheck } from "@virtari-packages/react-icons";
 
 // Direct (tree-shakable, simplest)
 <IconCheck size={20} stroke={1.5} />
 
 // Wrapper with system tokens
-import { Icon, IconCheck } from "@virtari/react-icons";
+import { Icon, IconCheck } from "@virtari-packages/react-icons";
 <Icon icon={IconCheck} size="md" color="success" label="Saved" />
 
 // App-wide defaults
-import { IconProvider } from "@virtari/react-icons";
+import { IconProvider } from "@virtari-packages/react-icons";
 <IconProvider size="md" stroke={1.5}>
   {/* every <Icon> below inherits these defaults */}
 </IconProvider>`}</pre>

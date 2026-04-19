@@ -3,7 +3,7 @@
    * 1. Base component tokens
    *    Layout, typography, motion, focus — orthogonal to variant/size/density.
    *    Defaults: variant=surface, rows=divided, size=md, density=normal.
-   *    Fallbacks keep the package usable without @virtari/tokens.
+   *    Fallbacks keep the package usable without @virtari-packages/tokens.
    * ========================================================================= */
   .vds-table {
     /* ── Frame (outer scroll container) ── */

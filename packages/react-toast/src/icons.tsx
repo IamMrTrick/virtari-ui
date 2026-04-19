@@ -6,7 +6,7 @@ import {
   IconInfoCircle,
   IconLoader2,
   IconX,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 import type { ToastType } from "./types";
 
 const ICON_PROPS = {

@@ -12,18 +12,18 @@ import {
   type SortingState,
   type VisibilityState,
   type DataTableViewMode,
-} from "@virtari/react-data-table";
+} from "@virtari-packages/react-data-table";
 import {
   DataTableCustomizeDrawer,
   DataTableDndProvider,
   DataTableDraggableHeaderCell,
   type ColumnConfig,
-} from "@virtari/react-data-table/dnd";
-import "@virtari/react-data-table/styles";
-import { Avatar } from "@virtari/react-avatar";
-import { Badge } from "@virtari/react-badge";
-import { Button } from "@virtari/react-button";
-import { Checkbox } from "@virtari/react-checkbox";
+} from "@virtari-packages/react-data-table/dnd";
+import "@virtari-packages/react-data-table/styles";
+import { Avatar } from "@virtari-packages/react-avatar";
+import { Badge } from "@virtari-packages/react-badge";
+import { Button } from "@virtari-packages/react-button";
+import { Checkbox } from "@virtari-packages/react-checkbox";
 import {
   Drawer,
   DrawerBody,
@@ -31,7 +31,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@virtari/react-drawer";
+} from "@virtari-packages/react-drawer";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,17 +39,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@virtari/react-dropdown-menu";
-import { Input } from "@virtari/react-input";
+} from "@virtari-packages/react-dropdown-menu";
+import { Input } from "@virtari-packages/react-input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@virtari/react-select";
-import { Switch } from "@virtari/react-switch";
-import { toast } from "@virtari/react-toast";
+} from "@virtari-packages/react-select";
+import { Switch } from "@virtari-packages/react-switch";
+import { toast } from "@virtari-packages/react-toast";
 import {
   IconCalendar,
   IconChevronLeft,
@@ -79,7 +79,7 @@ import {
   IconUserCheck,
   IconUserOff,
   IconX,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 
 /* ════════════════════════════════════════════════════════════════ *
  * Types & mock data — 380 deterministic users

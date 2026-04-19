@@ -1,5 +1,5 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { useRef, useState, Children, isValidElement, cloneElement, useLayoutEffect, useCallback, useEffect } from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { jsx } from 'react/jsx-runtime';

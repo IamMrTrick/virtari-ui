@@ -1,4 +1,4 @@
-# @virtari/react-popover
+# @virtari-packages/react-popover
 
 Virtari popover — accessible React component built on CSS variables and logical properties.
 
@@ -11,7 +11,7 @@ Virtari popover — accessible React component built on CSS variables and logica
 Create or edit `.npmrc` at the root of the consuming project:
 
 ```ini
-@virtari:registry=https://npm.pkg.github.com
+@virtari-packages:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -24,11 +24,11 @@ export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx
 Then install as you would any scoped package:
 
 ```bash
-npm install @virtari/react-popover
+npm install @virtari-packages/react-popover
 # or
-pnpm add @virtari/react-popover
+pnpm add @virtari-packages/react-popover
 # or
-yarn add @virtari/react-popover
+yarn add @virtari-packages/react-popover
 ```
 
 ## Peer dependencies
@@ -38,23 +38,23 @@ yarn add @virtari/react-popover
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari/react-popover";
+import { /* … */ } from "@virtari-packages/react-popover";
 ```
 
 ### Import styles
 
 ```ts
-import "@virtari/react-popover/styles";
+import "@virtari-packages/react-popover/styles";
 ```
 
 Styles sit in the `design-system.components` cascade layer so your app can override them without `!important`.
 
 ## Design tokens
 
-This package reads `@virtari/tokens` CSS variables. Import the token layer once at the root of your app:
+This package reads `@virtari-packages/tokens` CSS variables. Import the token layer once at the root of your app:
 
 ```ts
-import "@virtari/tokens";
+import "@virtari-packages/tokens";
 ```
 
 Override any `--vds-*` custom property at `:root` (or a subtree) to retheme.

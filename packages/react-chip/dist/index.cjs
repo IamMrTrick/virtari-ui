@@ -1,6 +1,6 @@
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var reactSlot = require('@radix-ui/react-slot');
 var jsxRuntime = require('react/jsx-runtime');
 

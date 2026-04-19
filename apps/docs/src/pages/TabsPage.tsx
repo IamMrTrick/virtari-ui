@@ -7,7 +7,7 @@ import {
   TabsPanels,
   type TabsVariant,
   type TabsSize,
-} from "@virtari/react-tabs";
+} from "@virtari-packages/react-tabs";
 import { Section } from "../components";
 
 const VARIANTS: TabsVariant[] = [
@@ -274,7 +274,7 @@ export function TabsPage() {
       <Section title="Usage">
         <pre className="docs-code">{`import {
   Tabs, TabsList, TabsTrigger, TabsContent,
-} from "@virtari/react-tabs";
+} from "@virtari-packages/react-tabs";
 
 <Tabs defaultValue="overview">
   <TabsList variant="pills" size="md">

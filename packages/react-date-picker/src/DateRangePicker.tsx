@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import { useEffect, useRef, useState, type ReactNode, type Ref } from "react";
 import { useDateRangePicker, useDateField } from "@react-aria/datepicker";
 import {

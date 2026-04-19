@@ -4,7 +4,7 @@ import {
   LanguageLabel,
   localeToFlag,
   type LocaleTag,
-} from "@virtari/react-language-picker";
+} from "@virtari-packages/react-language-picker";
 import { Section, Row, Stack } from "../components";
 
 const CURATED: LocaleTag[] = [
@@ -107,7 +107,7 @@ export function LanguagePickerPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { LanguagePicker, LanguageLabel } from "@virtari/react-language-picker";
+        <pre className="docs-code">{`import { LanguagePicker, LanguageLabel } from "@virtari-packages/react-language-picker";
 
 <LanguagePicker
   value={locale}

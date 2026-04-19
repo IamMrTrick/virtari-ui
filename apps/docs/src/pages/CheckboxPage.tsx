@@ -4,12 +4,12 @@ import {
   CheckboxField,
   CheckboxGroup,
   CheckboxCard,
-} from "@virtari/react-checkbox";
+} from "@virtari-packages/react-checkbox";
 import {
   IconBrandSlack,
   IconMail,
   IconCalendar,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 import { Section, Row } from "../components";
 
 /* -------------------------------------------------------------
@@ -605,7 +605,7 @@ export function CheckboxPage() {
   CheckboxField,
   CheckboxGroup,
   CheckboxCard,
-} from "@virtari/react-checkbox";
+} from "@virtari-packages/react-checkbox";
 
 // Primitive — all states: error, disabled, indeterminate.
 <Checkbox checked={value} onCheckedChange={setValue} error={hasError} />

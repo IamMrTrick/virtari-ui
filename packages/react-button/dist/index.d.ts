@@ -24,9 +24,9 @@ type ButtonVariant = "solid" | "outline" | "ghost" | "soft" | "link"
  * For touch-primary interfaces, prefer `xl`+ to meet AAA and platform guidelines.
  */
 type ButtonSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
-/** Visual effects — requires importing `@virtari/react-button/styles/effects` */
+/** Visual effects — requires importing `@virtari-packages/react-button/styles/effects` */
 type ButtonEffect = "shine" | "raised" | "glow" | "glass" | "outline-glow" | "candy";
-/** Attention animations — requires importing `@virtari/react-button/styles/animations` */
+/** Attention animations — requires importing `@virtari-packages/react-button/styles/animations` */
 type ButtonAnimation = "pulse" | "bounce" | "shake" | "jiggle";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     /** Hue/intent. Orthogonal to variant. */

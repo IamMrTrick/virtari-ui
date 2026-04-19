@@ -1,4 +1,4 @@
-import { Switch } from "@virtari/react-switch";
+import { Switch } from "@virtari-packages/react-switch";
 import { Section, Row } from "../components";
 
 export function SwitchPage() {
@@ -22,7 +22,7 @@ export function SwitchPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Switch } from "@virtari/react-switch";
+        <pre className="docs-code">{`import { Switch } from "@virtari-packages/react-switch";
 
 <Switch
   checked={enabled}

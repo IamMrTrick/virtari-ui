@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Input } from "@virtari/react-input";
-import { cn } from "@virtari/utils";
+import { Input } from "@virtari-packages/react-input";
+import { cn } from "@virtari-packages/utils";
 
 import type {
   ComparisonOperator,

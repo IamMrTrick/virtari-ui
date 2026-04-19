@@ -24,7 +24,7 @@
   /* Responsive fallback chain. Each breakpoint cascades through
      the previously active values so unspecified breakpoints
      "inherit" from the last one that *was* specified.
-     Values mirror @virtari/tokens/breakpoints.css — keep in sync. */
+     Values mirror @virtari-packages/tokens/breakpoints.css — keep in sync. */
   @media (min-width: 640px) {
     .vds-col {
       grid-column: var(--col-span-sm, var(--col-span-base, auto));

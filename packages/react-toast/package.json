@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-toast",
+  "name": "@virtari-packages/react-toast",
   "version": "0.1.0",
   "description": "Virtari toast — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -54,8 +54,8 @@
   },
   "dependencies": {
     "@radix-ui/react-toast": "^1.2.15",
-    "@virtari/react-icons": "workspace:*",
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/react-icons": "workspace:*",
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "@tabler/icons-react": "^3.0.0",

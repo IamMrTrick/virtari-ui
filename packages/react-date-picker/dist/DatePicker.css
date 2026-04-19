@@ -171,7 +171,7 @@
    * Calendar — tokens
    * Semantic → component mapping with fallbacks
    * so the package works standalone if dropped
-   * into a project without @virtari/tokens.
+   * into a project without @virtari-packages/tokens.
    * ───────────────────────────────────────────── */
 
   .vds-calendar {
@@ -311,7 +311,7 @@
    * 1. Base component tokens
    *    Layout, typography, motion, focus — orthogonal to color/variant.
    *    Defaults resolve to: color=primary, variant=solid, size=md.
-   *    Fallbacks keep the package usable without @virtari/tokens.
+   *    Fallbacks keep the package usable without @virtari-packages/tokens.
    * ========================================================================= */
   .vds-button {
     /* ── Layout ── */
@@ -779,7 +779,7 @@
    * 1. Base component tokens
    *    Semantic → component mapping with fallbacks
    *    so the package works standalone if dropped
-   *    into a project without @virtari/tokens.
+   *    into a project without @virtari-packages/tokens.
    * ───────────────────────────────────────────── */
   .vds-dialog-content {
     /* Layout */
@@ -1890,7 +1890,7 @@
    * 1. Base component tokens (atomic radio)
    *    Radio is circular, proportional to text — NOT on the height ramp.
    *    sm (14px) pairs with small text, md (18px) with body, lg (22px) with headings.
-   *    Fallbacks keep the package usable without @virtari/tokens.
+   *    Fallbacks keep the package usable without @virtari-packages/tokens.
    * ========================================================================= */
   .vds-radio-item {
     /* ── Geometry ── */

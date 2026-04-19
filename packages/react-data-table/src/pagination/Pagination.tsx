@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 import { useDataTableContext } from "../DataTableContext";
 

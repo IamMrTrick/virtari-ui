@@ -3,7 +3,7 @@
 
 var react = require('react');
 var SwitchPrimitive = require('@radix-ui/react-switch');
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var reactDom = require('react-dom');
 var jsxRuntime = require('react/jsx-runtime');
 

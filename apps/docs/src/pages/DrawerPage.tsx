@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Avatar } from "@virtari/react-avatar";
-import { Badge } from "@virtari/react-badge";
-import { Button } from "@virtari/react-button";
-import { Checkbox } from "@virtari/react-checkbox";
+import { Avatar } from "@virtari-packages/react-avatar";
+import { Badge } from "@virtari-packages/react-badge";
+import { Button } from "@virtari-packages/react-button";
+import { Checkbox } from "@virtari-packages/react-checkbox";
 import {
   Drawer,
   DrawerTrigger,
@@ -18,27 +18,27 @@ import {
   type DrawerHeaderVariant,
   type DrawerIndicatorPlacement,
   type DrawerSizeMode,
-} from "@virtari/react-drawer";
-import { Input } from "@virtari/react-input";
-import { RadioGroup, RadioGroupItem } from "@virtari/react-radio-group";
+} from "@virtari-packages/react-drawer";
+import { Input } from "@virtari-packages/react-input";
+import { RadioGroup, RadioGroupItem } from "@virtari-packages/react-radio-group";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@virtari/react-select";
-import { Separator } from "@virtari/react-separator";
-import { Slider } from "@virtari/react-slider";
-import { Switch } from "@virtari/react-switch";
+} from "@virtari-packages/react-select";
+import { Separator } from "@virtari-packages/react-separator";
+import { Slider } from "@virtari-packages/react-slider";
+import { Switch } from "@virtari-packages/react-switch";
 import {
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
   TabsPanels,
-} from "@virtari/react-tabs";
-import { Textarea } from "@virtari/react-textarea";
+} from "@virtari-packages/react-tabs";
+import { Textarea } from "@virtari-packages/react-textarea";
 import { Section, Row } from "../components";
 
 /* ─────────────────────────────── Helpers ─────────────────────────────── */
@@ -1703,17 +1703,17 @@ export function DrawerPage() {
       </Section>
 
       <Section title="Installation & imports">
-        <pre className="docs-code">{`pnpm add @virtari/react-drawer
+        <pre className="docs-code">{`pnpm add @virtari-packages/react-drawer
 
 // your app entry (once):
-import "@virtari/react-drawer/styles";
+import "@virtari-packages/react-drawer/styles";
 
 // per component:
 import {
   Drawer, DrawerTrigger, DrawerContent,
   DrawerHeader, DrawerHandle, DrawerTitle, DrawerDescription,
   DrawerBody, DrawerFooter, DrawerClose,
-} from "@virtari/react-drawer";`}</pre>
+} from "@virtari-packages/react-drawer";`}</pre>
       </Section>
 
       <Section

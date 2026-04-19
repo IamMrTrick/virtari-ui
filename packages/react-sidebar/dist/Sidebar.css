@@ -245,7 +245,7 @@
     justify-content: center;
   }
 
-  /* Rail-mode behaviour of @virtari/react-nav is owned by the Nav
+  /* Rail-mode behaviour of @virtari-packages/react-nav is owned by the Nav
    * component itself — pass `collapsed={sidebarCollapsed}` to <Nav> and
    * it handles labels, badges, chevrons, and submenu mode natively. */
 

@@ -1,4 +1,4 @@
-import type { CountryCode } from "@virtari/react-flag";
+import type { CountryCode } from "@virtari-packages/react-flag";
 import { loadLibPhone } from "./lazy-libphonenumber";
 import { normalizeDigits } from "./digits";
 

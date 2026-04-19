@@ -11,7 +11,7 @@ import {
   type BreadcrumbSize,
   type BreadcrumbSeparatorPreset,
   type BreadcrumbItemData,
-} from "@virtari/react-breadcrumb";
+} from "@virtari-packages/react-breadcrumb";
 import { Section } from "../components";
 
 const VARIANTS: BreadcrumbVariant[] = [
@@ -253,7 +253,7 @@ export function BreadcrumbPage() {
   BreadcrumbPage,
   BreadcrumbSeparator,
   BreadcrumbHome,
-} from "@virtari/react-breadcrumb";
+} from "@virtari-packages/react-breadcrumb";
 
 <Breadcrumb separator="slash" size="sm">
   <BreadcrumbList>

@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-radio-group",
+  "name": "@virtari-packages/react-radio-group",
   "version": "0.2.0",
   "description": "Virtari radio group — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -56,8 +56,8 @@
   },
   "dependencies": {
     "@radix-ui/react-radio-group": "^1.3.8",
-    "@virtari/react-icons": "workspace:*",
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/react-icons": "workspace:*",
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "@tabler/icons-react": "^3.0.0",

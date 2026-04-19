@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { Ref } from "react";
 
 export interface KbdProps extends React.HTMLAttributes<HTMLElement> {

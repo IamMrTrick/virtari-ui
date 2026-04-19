@@ -1,8 +1,8 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { createContext, useContext, createElement, useId } from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { IconPlus, IconMinus, IconArrowDown, IconCaretDownFilled, IconChevronDown } from '@virtari/react-icons';
+import { IconPlus, IconMinus, IconArrowDown, IconCaretDownFilled, IconChevronDown } from '@virtari-packages/react-icons';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 
 // src/Accordion.tsx

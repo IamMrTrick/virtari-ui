@@ -19,7 +19,7 @@ import {
   ComboboxEmpty,
   ComboboxLoading,
   type ComboboxItemData,
-} from "@virtari/react-select";
+} from "@virtari-packages/react-select";
 import { Section, Row } from "../components";
 
 /* ─────────────────────────────────────────────
@@ -608,7 +608,7 @@ export function SelectPage() {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@virtari/react-select";
+} from "@virtari-packages/react-select";
 
 <Select value={plan} onValueChange={setPlan}>
   <SelectTrigger
@@ -639,7 +639,7 @@ export function SelectPage() {
   ComboboxItem,
   ComboboxEmpty,
   ComboboxLoading,
-} from "@virtari/react-select";
+} from "@virtari-packages/react-select";
 
 <Combobox
   items={users}                  // ComboboxItemData[]: { value, label, ... }

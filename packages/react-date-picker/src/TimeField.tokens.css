@@ -1,7 +1,7 @@
 @layer design-system.components {
   /* TimeField shares its token surface with DateField — see DateField.tokens.css.
    * This file exists so consumers can import only time-field tokens
-   * (`@virtari/react-date-picker/time-field/tokens`) without pulling
+   * (`@virtari-packages/react-date-picker/time-field/tokens`) without pulling
    * everything else.
    * The selector ramp is identical because .vds-time-field is covered
    * by the combined selector set in DateField.tokens.css.

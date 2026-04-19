@@ -1,4 +1,4 @@
-import { Kbd } from "@virtari/react-kbd";
+import { Kbd } from "@virtari-packages/react-kbd";
 import { Section, Row } from "../components";
 
 export function KbdPage() {
@@ -58,7 +58,7 @@ export function KbdPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Kbd } from "@virtari/react-kbd";
+        <pre className="docs-code">{`import { Kbd } from "@virtari-packages/react-kbd";
 
 // Single key
 <Kbd>Ctrl</Kbd>

@@ -1,5 +1,5 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { jsx, jsxs } from 'react/jsx-runtime';
 

@@ -1,4 +1,4 @@
-import { Heading, type HeadingLevel, type HeadingSize } from "@virtari/react-text";
+import { Heading, type HeadingLevel, type HeadingSize } from "@virtari-packages/react-text";
 import { Section, Stack } from "../components";
 
 const LEVELS: HeadingLevel[] = [1, 2, 3, 4, 5, 6];
@@ -68,7 +68,7 @@ export function HeadingPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Heading } from "@virtari/react-text";
+        <pre className="docs-code">{`import { Heading } from "@virtari-packages/react-text";
 
 // Level controls semantics; size controls visuals.
 <Heading level={1} size="9">Hero</Heading>

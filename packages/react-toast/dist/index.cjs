@@ -3,8 +3,8 @@
 
 var react = require('react');
 var ToastPrimitive3 = require('@radix-ui/react-toast');
-var utils = require('@virtari/utils');
-var reactIcons = require('@virtari/react-icons');
+var utils = require('@virtari-packages/utils');
+var reactIcons = require('@virtari-packages/react-icons');
 var jsxRuntime = require('react/jsx-runtime');
 
 function _interopNamespace(e) {

@@ -4,9 +4,9 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@virtari/react-popover";
-import { cn } from "@virtari/utils";
-import { IconFilter, IconFilterFilled } from "@virtari/react-icons";
+} from "@virtari-packages/react-popover";
+import { cn } from "@virtari-packages/utils";
+import { IconFilter, IconFilterFilled } from "@virtari-packages/react-icons";
 
 import { useColumnFilter } from "../use-column-filter";
 

@@ -11,7 +11,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import { CloseIcon, TOAST_ICON_MAP } from "./icons";
 import { toastStore } from "./store";
 import type {

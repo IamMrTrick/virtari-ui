@@ -1,7 +1,7 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { ReactNode, Ref } from "react";
 import type { DateRange } from "@react-stately/datepicker";
-import { RadioGroup, RadioField } from "@virtari/react-radio-group";
+import { RadioGroup, RadioField } from "@virtari-packages/react-radio-group";
 import type { DateValue } from "./date-utils";
 
 export interface DatePickerPreset {

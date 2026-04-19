@@ -1,6 +1,6 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import { ReactNode, Ref } from 'react';
-import { TablerIcon } from '@virtari/react-icons';
+import { TablerIcon } from '@virtari-packages/react-icons';
 
 type BreadcrumbVariant = "default" | "underline" | "ghost" | "soft" | "solid";
 type BreadcrumbSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl";

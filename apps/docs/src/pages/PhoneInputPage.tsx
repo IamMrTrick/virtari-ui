@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PhoneInput, type PhoneInputValue } from "@virtari/react-phone-input";
+import { PhoneInput, type PhoneInputValue } from "@virtari-packages/react-phone-input";
 import { Section, Row, Stack } from "../components";
 
 const SIZES = ["2xs", "xs", "sm", "md", "lg", "xl", "2xl"] as const;
@@ -86,7 +86,7 @@ export function PhoneInputPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { PhoneInput } from "@virtari/react-phone-input";
+        <pre className="docs-code">{`import { PhoneInput } from "@virtari-packages/react-phone-input";
 
 <PhoneInput
   defaultCountry="ir"

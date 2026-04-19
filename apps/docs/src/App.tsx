@@ -1,5 +1,5 @@
 import { useState, useEffect, useSyncExternalStore } from "react";
-import { Toaster } from "@virtari/react-toast";
+import { Toaster } from "@virtari-packages/react-toast";
 import { Sidebar, MobileSidebar, Layout } from "./components";
 import {
   PAGE_META,

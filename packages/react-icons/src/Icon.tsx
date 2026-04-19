@@ -5,7 +5,7 @@ import {
   type RefAttributes,
 } from "react";
 import type { IconProps as TablerIconProps } from "@tabler/icons-react";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import { IconContext } from "./IconProvider";
 
 export type IconSize = "xs" | "sm" | "md" | "lg" | "xl" | number;

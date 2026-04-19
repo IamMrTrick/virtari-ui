@@ -1,9 +1,9 @@
 "use client";
 import { createContext, useMemo, Fragment as Fragment$1, useContext } from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { cn } from '@virtari/utils';
-import { IconArrowRight, IconPointFilled, IconChevronRight, IconDots, IconHome } from '@virtari/react-icons';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@virtari/react-dropdown-menu';
+import { cn } from '@virtari-packages/utils';
+import { IconArrowRight, IconPointFilled, IconChevronRight, IconDots, IconHome } from '@virtari-packages/react-icons';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@virtari-packages/react-dropdown-menu';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 
 // src/Breadcrumb.tsx

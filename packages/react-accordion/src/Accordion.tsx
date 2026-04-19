@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import {
   createContext,
   createElement,
@@ -14,7 +14,7 @@ import {
   IconMinus,
   IconArrowDown,
   IconCaretDownFilled,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 
 /** Shape/frame variant — orthogonal to color and size. */
 export type AccordionVariant =

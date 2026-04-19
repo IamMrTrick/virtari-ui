@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import type { ReactNode } from "react";
-import { cn } from "@virtari/utils";
-import { IconCheck, IconCopy } from "@virtari/react-icons";
+import { cn } from "@virtari-packages/utils";
+import { IconCheck, IconCopy } from "@virtari-packages/react-icons";
 
 export interface CopyableCellProps {
   children: ReactNode;

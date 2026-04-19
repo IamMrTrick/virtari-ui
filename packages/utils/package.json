@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/utils",
+  "name": "@virtari-packages/utils",
   "version": "0.1.0",
   "description": "Small internal helpers shared across Virtari React packages.",
   "license": "UNLICENSED",

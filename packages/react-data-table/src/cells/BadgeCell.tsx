@@ -1,7 +1,7 @@
-import { Badge } from "@virtari/react-badge";
-import type { BadgeVariant } from "@virtari/react-badge";
+import { Badge } from "@virtari-packages/react-badge";
+import type { BadgeVariant } from "@virtari-packages/react-badge";
 import type { ReactNode } from "react";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 export interface BadgeCellProps {
   variant?: BadgeVariant;

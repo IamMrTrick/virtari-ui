@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { ScrollArea } from "@virtari/react-scroll-area";
+import { ScrollArea } from "@virtari-packages/react-scroll-area";
 import { Section } from "../components";
 
 const frameStyle: React.CSSProperties = {
@@ -185,7 +185,7 @@ export function ScrollAreaPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { ScrollArea } from "@virtari/react-scroll-area";
+        <pre className="docs-code">{`import { ScrollArea } from "@virtari-packages/react-scroll-area";
 
 <ScrollArea
   orientation="horizontal"

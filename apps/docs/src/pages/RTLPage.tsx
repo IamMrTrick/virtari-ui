@@ -1,9 +1,9 @@
 import { Section, Row, Stack } from "../components";
-import { Button } from "@virtari/react-button";
-import { Input } from "@virtari/react-input";
-import { Badge } from "@virtari/react-badge";
-import { Spinner } from "@virtari/react-spinner";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@virtari/react-tabs";
+import { Button } from "@virtari-packages/react-button";
+import { Input } from "@virtari-packages/react-input";
+import { Badge } from "@virtari-packages/react-badge";
+import { Spinner } from "@virtari-packages/react-spinner";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@virtari-packages/react-tabs";
 
 const WEIGHTS = [
   { value: 400, label: "Normal 400" },

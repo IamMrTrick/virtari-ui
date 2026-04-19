@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/core",
+  "name": "@virtari-packages/core",
   "version": "0.1.0",
   "description": "Base reset, layers, and global primitives for the Virtari design system.",
   "license": "UNLICENSED",
@@ -39,6 +39,6 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@virtari/tokens": "workspace:*"
+    "@virtari-packages/tokens": "workspace:*"
   }
 }

@@ -1,5 +1,5 @@
-import { Popover, PopoverTrigger, PopoverContent } from "@virtari/react-popover";
-import { Button } from "@virtari/react-button";
+import { Popover, PopoverTrigger, PopoverContent } from "@virtari-packages/react-popover";
+import { Button } from "@virtari-packages/react-button";
 import { Section, Row } from "../components";
 
 export function PopoverPage() {
@@ -55,7 +55,7 @@ export function PopoverPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Popover, PopoverTrigger, PopoverContent } from "@virtari/react-popover";
+        <pre className="docs-code">{`import { Popover, PopoverTrigger, PopoverContent } from "@virtari-packages/react-popover";
 
 <Popover>
   <PopoverTrigger asChild>

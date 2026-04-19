@@ -1,5 +1,5 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { jsxs, jsx } from 'react/jsx-runtime';
 

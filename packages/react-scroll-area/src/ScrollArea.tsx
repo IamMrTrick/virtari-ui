@@ -11,7 +11,7 @@ import {
   type Ref,
 } from "react";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import { ScrollAreaArrow } from "./ScrollAreaArrow";
 import { useDragScroll } from "./hooks/use-drag-scroll";
 import { useEdgeState, type EdgeState } from "./hooks/use-edge-state";

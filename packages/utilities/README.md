@@ -1,4 +1,4 @@
-# @virtari/utilities
+# @virtari-packages/utilities
 
 Utility CSS classes (spacing, sizing, layout, z-index) driven by Virtari tokens.
 
@@ -11,7 +11,7 @@ Utility CSS classes (spacing, sizing, layout, z-index) driven by Virtari tokens.
 Create or edit `.npmrc` at the root of the consuming project:
 
 ```ini
-@virtari:registry=https://npm.pkg.github.com
+@virtari-packages:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -24,11 +24,11 @@ export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx
 Then install as you would any scoped package:
 
 ```bash
-npm install @virtari/utilities
+npm install @virtari-packages/utilities
 # or
-pnpm add @virtari/utilities
+pnpm add @virtari-packages/utilities
 # or
-yarn add @virtari/utilities
+yarn add @virtari-packages/utilities
 ```
 
 ## Peer dependencies
@@ -38,23 +38,23 @@ yarn add @virtari/utilities
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari/utilities";
+import { /* … */ } from "@virtari-packages/utilities";
 ```
 
 ### Import styles
 
 ```ts
-import "@virtari/utilities/styles";
+import "@virtari-packages/utilities/styles";
 ```
 
 Styles sit in the `design-system.components` cascade layer so your app can override them without `!important`.
 
 ## Design tokens
 
-This package reads `@virtari/tokens` CSS variables. Import the token layer once at the root of your app:
+This package reads `@virtari-packages/tokens` CSS variables. Import the token layer once at the root of your app:
 
 ```ts
-import "@virtari/tokens";
+import "@virtari-packages/tokens";
 ```
 
 Override any `--vds-*` custom property at `:root` (or a subtree) to retheme.

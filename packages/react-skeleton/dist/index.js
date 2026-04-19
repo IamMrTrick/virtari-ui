@@ -1,4 +1,4 @@
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { jsx } from 'react/jsx-runtime';
 
 // src/Skeleton.tsx

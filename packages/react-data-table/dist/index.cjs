@@ -3,18 +3,18 @@
 
 var react = require('react');
 var reactTable = require('@tanstack/react-table');
-var reactCheckbox = require('@virtari/react-checkbox');
-var utils = require('@virtari/utils');
-var reactIcons = require('@virtari/react-icons');
+var reactCheckbox = require('@virtari-packages/react-checkbox');
+var utils = require('@virtari-packages/utils');
+var reactIcons = require('@virtari-packages/react-icons');
 var jsxRuntime = require('react/jsx-runtime');
 var reactVirtual = require('@tanstack/react-virtual');
-var reactDropdownMenu = require('@virtari/react-dropdown-menu');
-var reactAvatar = require('@virtari/react-avatar');
-var reactBadge = require('@virtari/react-badge');
-var reactInput = require('@virtari/react-input');
-var reactDrawer = require('@virtari/react-drawer');
-var reactSwitch = require('@virtari/react-switch');
-var reactPopover = require('@virtari/react-popover');
+var reactDropdownMenu = require('@virtari-packages/react-dropdown-menu');
+var reactAvatar = require('@virtari-packages/react-avatar');
+var reactBadge = require('@virtari-packages/react-badge');
+var reactInput = require('@virtari-packages/react-input');
+var reactDrawer = require('@virtari-packages/react-drawer');
+var reactSwitch = require('@virtari-packages/react-switch');
+var reactPopover = require('@virtari-packages/react-popover');
 
 // src/DataTable.tsx
 var DataTableCtx = react.createContext(null);

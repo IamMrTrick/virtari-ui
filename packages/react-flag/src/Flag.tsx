@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import {
   Suspense,
   lazy,
@@ -49,7 +49,7 @@ function getComponent(code: CountryCode): ComponentType<FlagCoreProps> {
  * manifest, so only flags actually rendered end up in the bundle.
  *
  * For maximum tree-shaking in routes where the flag is known at build time,
- * prefer the named import (e.g. `import { FlagIr } from "@virtari/react-flag"`).
+ * prefer the named import (e.g. `import { FlagIr } from "@virtari-packages/react-flag"`).
  */
 export function Flag({ code, fallback, style, ...rest }: FlagProps) {
   const Component = useMemo(() => getComponent(code), [code]);

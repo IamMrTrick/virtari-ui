@@ -14,15 +14,15 @@ import {
   type AlertDialogBackdrop,
   type AlertDialogIntent,
   type AlertDialogSize,
-} from "@virtari/react-alert-dialog";
-import { Button } from "@virtari/react-button";
+} from "@virtari-packages/react-alert-dialog";
+import { Button } from "@virtari-packages/react-button";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@virtari/react-select";
+} from "@virtari-packages/react-select";
 import { Section, Row } from "../components";
 
 const SIZES: AlertDialogSize[] = ["sm", "md", "lg", "xl", "full"];
@@ -419,14 +419,14 @@ function UsageSection() {
       description="Import styles for both Dialog and AlertDialog — they share the same stylesheet."
     >
       <pre className="docs-code">{`// app root
-import "@virtari/react-dialog/styles";
-import "@virtari/react-alert-dialog/styles";
+import "@virtari-packages/react-dialog/styles";
+import "@virtari-packages/react-alert-dialog/styles";
 
 import {
   AlertDialog, AlertDialogTrigger, AlertDialogContent,
   AlertDialogHeader, AlertDialogTitle, AlertDialogDescription,
   AlertDialogFooter, AlertDialogAction, AlertDialogCancel,
-} from "@virtari/react-alert-dialog";
+} from "@virtari-packages/react-alert-dialog";
 
 <AlertDialog>
   <AlertDialogTrigger asChild>

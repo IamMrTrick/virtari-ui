@@ -3,7 +3,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Header } from "@tanstack/react-table";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 import {
   DataTableHeaderCell,

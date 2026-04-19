@@ -1,11 +1,11 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import {
   Chip,
   ChipLabel,
   ChipRemove,
   type ChipSize,
-} from "@virtari/react-chip";
+} from "@virtari-packages/react-chip";
 import {
   createContext,
   useCallback,

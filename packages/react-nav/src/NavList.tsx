@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { ElementType, HTMLAttributes, Ref } from "react";
 import { NavLevelContext, useNavContext, useNavLevel } from "./context";
 

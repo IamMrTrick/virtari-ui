@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Chip, ChipIcon, ChipLabel, ChipRemove } from "@virtari/react-chip";
-import { Avatar } from "@virtari/react-avatar";
-import { Input } from "@virtari/react-input";
+import { Chip, ChipIcon, ChipLabel, ChipRemove } from "@virtari-packages/react-chip";
+import { Avatar } from "@virtari-packages/react-avatar";
+import { Input } from "@virtari-packages/react-input";
 import {
   IconCheck,
   IconStar,
@@ -20,7 +20,7 @@ import {
   IconPlus,
   IconSearch,
   IconClock,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 import { Section, Row, Stack } from "../components";
 
 /* ─── Chip (filter) — controlled on/off state ─── */
@@ -648,7 +648,7 @@ export function ChipPage() {
   ChipIcon,
   ChipLabel,
   ChipRemove,
-} from "@virtari/react-chip";
+} from "@virtari-packages/react-chip";
 
 // Simple chip
 <Chip variant="success">Verified</Chip>

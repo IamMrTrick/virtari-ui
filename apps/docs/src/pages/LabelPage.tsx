@@ -1,6 +1,6 @@
-import { Label } from "@virtari/react-label";
-import { Input } from "@virtari/react-input";
-import { Checkbox } from "@virtari/react-checkbox";
+import { Label } from "@virtari-packages/react-label";
+import { Input } from "@virtari-packages/react-input";
+import { Checkbox } from "@virtari-packages/react-checkbox";
 import { Section, Row } from "../components";
 
 export function LabelPage() {
@@ -30,8 +30,8 @@ export function LabelPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Label } from "@virtari/react-label";
-import { Input } from "@virtari/react-input";
+        <pre className="docs-code">{`import { Label } from "@virtari-packages/react-label";
+import { Input } from "@virtari-packages/react-input";
 
 <Label htmlFor="email">Email</Label>
 <Input id="email" type="email" />`}</pre>

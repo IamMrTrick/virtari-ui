@@ -1,7 +1,7 @@
 "use client";
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var react = require('react');
 var jsxRuntime = require('react/jsx-runtime');
 var reactSlot = require('@radix-ui/react-slot');

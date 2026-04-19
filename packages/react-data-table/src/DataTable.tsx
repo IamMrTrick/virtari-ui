@@ -27,13 +27,13 @@ import type {
   Table,
 } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
-import { Checkbox } from "@virtari/react-checkbox";
-import { cn } from "@virtari/utils";
+import { Checkbox } from "@virtari-packages/react-checkbox";
+import { cn } from "@virtari-packages/utils";
 import {
   IconArrowsSort,
   IconChevronRight,
   IconChevronUp,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 
 import {
   DataTableProvider,
@@ -1565,7 +1565,7 @@ export const DataTableRowPinTrigger = forwardRef<
  * ColumnVisibility — checkbox list of visible columns inside a popover.
  * Consumer passes the Popover wrapper; this component renders only
  * the inner list of toggle items. For a complete popover UI, compose
- * with @virtari/react-popover (or use DataTable.ColumnMenu).
+ * with @virtari-packages/react-popover (or use DataTable.ColumnMenu).
  * ──────────────────────────────────────────────────────────── */
 
 export interface DataTableColumnVisibilityProps {

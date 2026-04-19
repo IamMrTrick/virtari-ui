@@ -1,4 +1,4 @@
-import { Badge } from "@virtari/react-badge";
+import { Badge } from "@virtari-packages/react-badge";
 import { Section } from "../components";
 
 export function IntroductionPage() {
@@ -30,22 +30,22 @@ export function IntroductionPage() {
 
       <Section title="Quick Start">
         <pre className="docs-code">{`# Install foundation + a component
-pnpm add @virtari/core @virtari/tokens @virtari/react-button
+pnpm add @virtari-packages/core @virtari-packages/tokens @virtari-packages/react-button
 
 # Import CSS once in your app root
-@import "@virtari/core";
-@import "@virtari/tokens";
-@import "@virtari/react-button/styles";
+@import "@virtari-packages/core";
+@import "@virtari-packages/tokens";
+@import "@virtari-packages/react-button/styles";
 
 # Use it
-import { Button } from "@virtari/react-button";
+import { Button } from "@virtari-packages/react-button";
 <Button variant="outline">Click me</Button>`}</pre>
       </Section>
 
       <Section title="Architecture">
-        <pre className="docs-code">{`@virtari/tokens       → Design tokens (CSS custom properties)
-@virtari/core         → @layer order, reset, base styles
-@virtari/react-*      → One package per component`}</pre>
+        <pre className="docs-code">{`@virtari-packages/tokens       → Design tokens (CSS custom properties)
+@virtari-packages/core         → @layer order, reset, base styles
+@virtari-packages/react-*      → One package per component`}</pre>
       </Section>
     </>
   );

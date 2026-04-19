@@ -1,15 +1,15 @@
 "use client";
-import { DataTableHeaderCell, useDataTableContext } from './chunk-ZLYJOQMF.js';
+import { DataTableHeaderCell, useDataTableContext } from './chunk-LRLNRHO3.js';
 import { useSensors, useSensor, PointerSensor, KeyboardSensor, DndContext, closestCenter } from '@dnd-kit/core';
 import { useSortable, sortableKeyboardCoordinates, horizontalListSortingStrategy, SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { forwardRef, useMemo, useCallback, useState, useEffect } from 'react';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { CSS } from '@dnd-kit/utilities';
-import { cn } from '@virtari/utils';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerBody } from '@virtari/react-drawer';
-import { Input } from '@virtari/react-input';
-import { Switch } from '@virtari/react-switch';
-import { IconGripVertical } from '@virtari/react-icons';
+import { cn } from '@virtari-packages/utils';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerBody } from '@virtari-packages/react-drawer';
+import { Input } from '@virtari-packages/react-input';
+import { Switch } from '@virtari-packages/react-switch';
+import { IconGripVertical } from '@virtari-packages/react-icons';
 
 function useColumnDnd(options = {}) {
   const { table } = useDataTableContext();

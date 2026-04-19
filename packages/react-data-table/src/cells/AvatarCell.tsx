@@ -1,7 +1,7 @@
-import { Avatar } from "@virtari/react-avatar";
-import type { AvatarSize } from "@virtari/react-avatar";
+import { Avatar } from "@virtari-packages/react-avatar";
+import type { AvatarSize } from "@virtari-packages/react-avatar";
 import type { ReactNode } from "react";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 export interface AvatarCellProps {
   src?: string;

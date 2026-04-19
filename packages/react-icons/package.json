@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-icons",
+  "name": "@virtari-packages/react-icons",
   "version": "0.1.0",
   "description": "Virtari icons — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -54,7 +54,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "@tabler/icons-react": "^3.0.0",

@@ -3,7 +3,7 @@
    * 1. Base component tokens
    *    Semantic → component mapping with fallbacks
    *    so the package works standalone if dropped
-   *    into a project without @virtari/tokens.
+   *    into a project without @virtari-packages/tokens.
    * ───────────────────────────────────────────── */
   .vds-tooltip-content {
     /* Layout */

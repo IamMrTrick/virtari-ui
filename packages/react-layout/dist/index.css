@@ -242,7 +242,7 @@
    * without class explosion.
    *
    * The responsive fallback chain is expressed in Col.css
-   * using @custom-media from @virtari/tokens/breakpoints.
+   * using @custom-media from @virtari-packages/tokens/breakpoints.
    * ───────────────────────────────────────────── */
   .vds-col {
     /* Default span: `auto` = one grid track. Users opt into `span="full"` for 1/-1. */
@@ -273,7 +273,7 @@
   /* Responsive fallback chain. Each breakpoint cascades through
      the previously active values so unspecified breakpoints
      "inherit" from the last one that *was* specified.
-     Values mirror @virtari/tokens/breakpoints.css — keep in sync. */
+     Values mirror @virtari-packages/tokens/breakpoints.css — keep in sync. */
   @media (min-width: 640px) {
     .vds-col {
       grid-column: var(--col-span-sm, var(--col-span-base, auto));
@@ -466,7 +466,7 @@
    * NOTE: class is `.vds-split`, not `.vds-sidebar`.
    * The component is still exported as `Sidebar` for backwards compat,
    * but the CSS class was renamed to avoid colliding with the app-chrome
-   * sidebar in `@virtari/react-sidebar`. That package owns the `.vds-sidebar`
+   * sidebar in `@virtari-packages/react-sidebar`. That package owns the `.vds-sidebar`
    * namespace — this utility lives under `.vds-split`.
    */
   .vds-split {
@@ -485,7 +485,7 @@
 @layer design-system.components {
   /*
    * See Sidebar.tokens.css — selectors target `.vds-split` specifically
-   * so the app-chrome sidebar in @virtari/react-sidebar (`.vds-sidebar`)
+   * so the app-chrome sidebar in @virtari-packages/react-sidebar (`.vds-sidebar`)
    * isn't affected by these flex-basis rules.
    */
   .vds-split {

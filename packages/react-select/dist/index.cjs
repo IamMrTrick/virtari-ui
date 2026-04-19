@@ -1,12 +1,12 @@
 "use client";
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var SelectPrimitive = require('@radix-ui/react-select');
-var reactIcons = require('@virtari/react-icons');
+var reactIcons = require('@virtari-packages/react-icons');
 var jsxRuntime = require('react/jsx-runtime');
 var PopoverPrimitive = require('@radix-ui/react-popover');
-var reactChip = require('@virtari/react-chip');
+var reactChip = require('@virtari-packages/react-chip');
 var react = require('react');
 var reactVirtual = require('@tanstack/react-virtual');
 

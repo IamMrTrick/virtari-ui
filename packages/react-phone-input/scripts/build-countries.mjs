@@ -76,7 +76,7 @@ async function main() {
   await mkdir(outDir, { recursive: true });
 
   const typesTs = `// AUTO-GENERATED. DO NOT EDIT.
-import type { CountryCode } from "@virtari/react-flag";
+import type { CountryCode } from "@virtari-packages/react-flag";
 
 export interface CountryEntry {
   code: CountryCode;

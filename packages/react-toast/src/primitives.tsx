@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, ComponentRef, Ref } from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 export const ToastProvider = ToastPrimitive.Provider;
 

@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import type { Column } from "@tanstack/react-table";
-import { Input } from "@virtari/react-input";
-import { cn } from "@virtari/utils";
+import { Input } from "@virtari-packages/react-input";
+import { cn } from "@virtari-packages/utils";
 
 import { useColumnFilter } from "../use-column-filter";
 

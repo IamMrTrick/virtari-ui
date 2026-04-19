@@ -1,4 +1,4 @@
-import { Avatar } from "@virtari/react-avatar";
+import { Avatar } from "@virtari-packages/react-avatar";
 import { Section, Row } from "../components";
 
 export function AvatarPage() {
@@ -38,7 +38,7 @@ export function AvatarPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Avatar } from "@virtari/react-avatar";
+        <pre className="docs-code">{`import { Avatar } from "@virtari-packages/react-avatar";
 
 <Avatar
   src="/avatar.jpg"

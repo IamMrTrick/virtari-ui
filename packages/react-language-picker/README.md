@@ -1,4 +1,4 @@
-# @virtari/react-language-picker
+# @virtari-packages/react-language-picker
 
 Virtari language picker — accessible React component built on CSS variables and logical properties.
 
@@ -11,7 +11,7 @@ Virtari language picker — accessible React component built on CSS variables an
 Create or edit `.npmrc` at the root of the consuming project:
 
 ```ini
-@virtari:registry=https://npm.pkg.github.com
+@virtari-packages:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -24,11 +24,11 @@ export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx
 Then install as you would any scoped package:
 
 ```bash
-npm install @virtari/react-language-picker
+npm install @virtari-packages/react-language-picker
 # or
-pnpm add @virtari/react-language-picker
+pnpm add @virtari-packages/react-language-picker
 # or
-yarn add @virtari/react-language-picker
+yarn add @virtari-packages/react-language-picker
 ```
 
 ## Peer dependencies
@@ -38,23 +38,23 @@ yarn add @virtari/react-language-picker
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari/react-language-picker";
+import { /* … */ } from "@virtari-packages/react-language-picker";
 ```
 
 ### Import styles
 
 ```ts
-import "@virtari/react-language-picker/styles";
+import "@virtari-packages/react-language-picker/styles";
 ```
 
 Styles sit in the `design-system.components` cascade layer so your app can override them without `!important`.
 
 ## Design tokens
 
-This package reads `@virtari/tokens` CSS variables. Import the token layer once at the root of your app:
+This package reads `@virtari-packages/tokens` CSS variables. Import the token layer once at the root of your app:
 
 ```ts
-import "@virtari/tokens";
+import "@virtari-packages/tokens";
 ```
 
 Override any `--vds-*` custom property at `:root` (or a subtree) to retheme.

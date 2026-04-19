@@ -43,7 +43,7 @@ pnpm run dev
 
 ```bash
 pnpm run build               # build every publishable package
-pnpm --filter @virtari/react-button run build   # one package
+pnpm --filter @virtari-packages/react-button run build   # one package
 pnpm run typecheck           # strict TS across the workspace
 pnpm run clean               # wipe every dist/
 ```
@@ -88,7 +88,7 @@ node -e "
 "
 ```
 
-Also update the internal `@virtari:registry=…` lines in consumer `.npmrc` files and any hard-coded scope references (e.g. in workflow's `Setup Node` step: `scope: "@virtari"`).
+Also update the internal `@virtari-packages:registry=…` lines in consumer `.npmrc` files and any hard-coded scope references (e.g. in the Release workflow's `Setup Node` step: `scope: "@virtari"`).
 
 ### Consumer setup
 
@@ -97,7 +97,7 @@ Every project that installs Virtari packages needs:
 **1. `.npmrc` in the project root:**
 
 ```ini
-@virtari:registry=https://npm.pkg.github.com
+@virtari-packages:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -106,7 +106,7 @@ Every project that installs Virtari packages needs:
 Install as usual:
 
 ```bash
-pnpm add @virtari/react-button
+pnpm add @virtari-packages/react-button
 ```
 
 ### Publisher setup
@@ -117,7 +117,7 @@ For local/manual publishes:
 
 ```bash
 export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx   # needs write:packages
-echo "@virtari:registry=https://npm.pkg.github.com" > ~/.npmrc
+echo "@virtari-packages:registry=https://npm.pkg.github.com" > ~/.npmrc
 echo "//npm.pkg.github.com/:_authToken=\${GITHUB_TOKEN}" >> ~/.npmrc
 pnpm run release
 ```

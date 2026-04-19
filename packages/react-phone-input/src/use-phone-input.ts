@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { CountryCode } from "@virtari/react-flag";
+import type { CountryCode } from "@virtari-packages/react-flag";
 import { countries, countriesByCode, type CountryEntry } from "./generated/countries";
 import { normalizeDigits } from "./digits";
 import { getLibPhone, loadLibPhone } from "./lazy-libphonenumber";

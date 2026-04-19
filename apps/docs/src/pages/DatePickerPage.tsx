@@ -16,7 +16,7 @@ import {
   isWeekend,
   type DateValue,
   type DateRange,
-} from "@virtari/react-date-picker";
+} from "@virtari-packages/react-date-picker";
 import { Section, Row } from "../components";
 
 const tz = getLocalTimeZone();
@@ -453,7 +453,7 @@ export function DatePickerPage() {
   I18nProvider,
   today,
   getLocalTimeZone,
-} from "@virtari/react-date-picker";
+} from "@virtari-packages/react-date-picker";
 
 // Wrap your app once so locale and direction propagate.
 <I18nProvider locale="fa-IR">

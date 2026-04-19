@@ -1,7 +1,7 @@
 "use client";
 import { createContext, forwardRef, useState, useRef, useMemo, useCallback, useEffect, useLayoutEffect, useContext } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
 // src/Drawer.tsx

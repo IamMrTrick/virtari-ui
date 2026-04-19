@@ -59,142 +59,142 @@ importers:
       '@tanstack/react-virtual':
         specifier: ^3.10.0
         version: 3.13.24(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/core':
+      '@virtari-packages/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@virtari/react-accordion':
+      '@virtari-packages/react-accordion':
         specifier: workspace:*
         version: link:../../packages/react-accordion
-      '@virtari/react-alert-dialog':
+      '@virtari-packages/react-alert-dialog':
         specifier: workspace:*
         version: link:../../packages/react-alert-dialog
-      '@virtari/react-avatar':
+      '@virtari-packages/react-avatar':
         specifier: workspace:*
         version: link:../../packages/react-avatar
-      '@virtari/react-badge':
+      '@virtari-packages/react-badge':
         specifier: workspace:*
         version: link:../../packages/react-badge
-      '@virtari/react-breadcrumb':
+      '@virtari-packages/react-breadcrumb':
         specifier: workspace:*
         version: link:../../packages/react-breadcrumb
-      '@virtari/react-button':
+      '@virtari-packages/react-button':
         specifier: workspace:*
         version: link:../../packages/react-button
-      '@virtari/react-card':
+      '@virtari-packages/react-card':
         specifier: workspace:*
         version: link:../../packages/react-card
-      '@virtari/react-checkbox':
+      '@virtari-packages/react-checkbox':
         specifier: workspace:*
         version: link:../../packages/react-checkbox
-      '@virtari/react-chip':
+      '@virtari-packages/react-chip':
         specifier: workspace:*
         version: link:../../packages/react-chip
-      '@virtari/react-collapsible':
+      '@virtari-packages/react-collapsible':
         specifier: workspace:*
         version: link:../../packages/react-collapsible
-      '@virtari/react-data-table':
+      '@virtari-packages/react-data-table':
         specifier: workspace:*
         version: link:../../packages/react-data-table
-      '@virtari/react-date-picker':
+      '@virtari-packages/react-date-picker':
         specifier: workspace:*
         version: link:../../packages/react-date-picker
-      '@virtari/react-dialog':
+      '@virtari-packages/react-dialog':
         specifier: workspace:*
         version: link:../../packages/react-dialog
-      '@virtari/react-drawer':
+      '@virtari-packages/react-drawer':
         specifier: workspace:*
         version: link:../../packages/react-drawer
-      '@virtari/react-dropdown-menu':
+      '@virtari-packages/react-dropdown-menu':
         specifier: workspace:*
         version: link:../../packages/react-dropdown-menu
-      '@virtari/react-flag':
+      '@virtari-packages/react-flag':
         specifier: workspace:*
         version: link:../../packages/react-flag
-      '@virtari/react-header':
+      '@virtari-packages/react-header':
         specifier: workspace:*
         version: link:../../packages/react-header
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../../packages/react-icons
-      '@virtari/react-input':
+      '@virtari-packages/react-input':
         specifier: workspace:*
         version: link:../../packages/react-input
-      '@virtari/react-kbd':
+      '@virtari-packages/react-kbd':
         specifier: workspace:*
         version: link:../../packages/react-kbd
-      '@virtari/react-label':
+      '@virtari-packages/react-label':
         specifier: workspace:*
         version: link:../../packages/react-label
-      '@virtari/react-language-picker':
+      '@virtari-packages/react-language-picker':
         specifier: workspace:*
         version: link:../../packages/react-language-picker
-      '@virtari/react-layout':
+      '@virtari-packages/react-layout':
         specifier: workspace:*
         version: link:../../packages/react-layout
-      '@virtari/react-nav':
+      '@virtari-packages/react-nav':
         specifier: workspace:*
         version: link:../../packages/react-nav
-      '@virtari/react-phone-input':
+      '@virtari-packages/react-phone-input':
         specifier: workspace:*
         version: link:../../packages/react-phone-input
-      '@virtari/react-popover':
+      '@virtari-packages/react-popover':
         specifier: workspace:*
         version: link:../../packages/react-popover
-      '@virtari/react-progress':
+      '@virtari-packages/react-progress':
         specifier: workspace:*
         version: link:../../packages/react-progress
-      '@virtari/react-radio-group':
+      '@virtari-packages/react-radio-group':
         specifier: workspace:*
         version: link:../../packages/react-radio-group
-      '@virtari/react-scroll-area':
+      '@virtari-packages/react-scroll-area':
         specifier: workspace:*
         version: link:../../packages/react-scroll-area
-      '@virtari/react-select':
+      '@virtari-packages/react-select':
         specifier: workspace:*
         version: link:../../packages/react-select
-      '@virtari/react-separator':
+      '@virtari-packages/react-separator':
         specifier: workspace:*
         version: link:../../packages/react-separator
-      '@virtari/react-sidebar':
+      '@virtari-packages/react-sidebar':
         specifier: workspace:*
         version: link:../../packages/react-sidebar
-      '@virtari/react-skeleton':
+      '@virtari-packages/react-skeleton':
         specifier: workspace:*
         version: link:../../packages/react-skeleton
-      '@virtari/react-slider':
+      '@virtari-packages/react-slider':
         specifier: workspace:*
         version: link:../../packages/react-slider
-      '@virtari/react-spinner':
+      '@virtari-packages/react-spinner':
         specifier: workspace:*
         version: link:../../packages/react-spinner
-      '@virtari/react-switch':
+      '@virtari-packages/react-switch':
         specifier: workspace:*
         version: link:../../packages/react-switch
-      '@virtari/react-table':
+      '@virtari-packages/react-table':
         specifier: workspace:*
         version: link:../../packages/react-table
-      '@virtari/react-tabs':
+      '@virtari-packages/react-tabs':
         specifier: workspace:*
         version: link:../../packages/react-tabs
-      '@virtari/react-text':
+      '@virtari-packages/react-text':
         specifier: workspace:*
         version: link:../../packages/react-text
-      '@virtari/react-textarea':
+      '@virtari-packages/react-textarea':
         specifier: workspace:*
         version: link:../../packages/react-textarea
-      '@virtari/react-toast':
+      '@virtari-packages/react-toast':
         specifier: workspace:*
         version: link:../../packages/react-toast
-      '@virtari/react-toggle':
+      '@virtari-packages/react-toggle':
         specifier: workspace:*
         version: link:../../packages/react-toggle
-      '@virtari/react-tooltip':
+      '@virtari-packages/react-tooltip':
         specifier: workspace:*
         version: link:../../packages/react-tooltip
-      '@virtari/tokens':
+      '@virtari-packages/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
-      '@virtari/utilities':
+      '@virtari-packages/utilities':
         specifier: workspace:*
         version: link:../../packages/utilities
       react:
@@ -222,7 +222,7 @@ importers:
 
   packages/core:
     dependencies:
-      '@virtari/tokens':
+      '@virtari-packages/tokens':
         specifier: workspace:*
         version: link:../tokens
 
@@ -231,10 +231,10 @@ importers:
       '@radix-ui/react-accordion':
         specifier: ^1.2.12
         version: 1.2.12(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -262,7 +262,7 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -287,7 +287,7 @@ importers:
       '@radix-ui/react-alert-dialog':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -312,7 +312,7 @@ importers:
       '@radix-ui/react-avatar':
         specifier: ^1.1.11
         version: 1.1.11(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -337,7 +337,7 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -362,13 +362,13 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
-      '@virtari/react-dropdown-menu':
+      '@virtari-packages/react-dropdown-menu':
         specifier: workspace:*
         version: link:../react-dropdown-menu
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -393,7 +393,7 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -415,7 +415,7 @@ importers:
 
   packages/react-card:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -440,10 +440,10 @@ importers:
       '@radix-ui/react-checkbox':
         specifier: ^1.3.3
         version: 1.3.3(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -471,7 +471,7 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -496,7 +496,7 @@ importers:
       '@radix-ui/react-collapsible':
         specifier: ^1.1.12
         version: 1.1.12(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -524,34 +524,34 @@ importers:
       '@tanstack/react-virtual':
         specifier: ^3.10.0
         version: 3.13.24(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/react-avatar':
+      '@virtari-packages/react-avatar':
         specifier: workspace:*
         version: link:../react-avatar
-      '@virtari/react-badge':
+      '@virtari-packages/react-badge':
         specifier: workspace:*
         version: link:../react-badge
-      '@virtari/react-checkbox':
+      '@virtari-packages/react-checkbox':
         specifier: workspace:*
         version: link:../react-checkbox
-      '@virtari/react-drawer':
+      '@virtari-packages/react-drawer':
         specifier: workspace:*
         version: link:../react-drawer
-      '@virtari/react-dropdown-menu':
+      '@virtari-packages/react-dropdown-menu':
         specifier: workspace:*
         version: link:../react-dropdown-menu
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
-      '@virtari/react-input':
+      '@virtari-packages/react-input':
         specifier: workspace:*
         version: link:../react-input
-      '@virtari/react-popover':
+      '@virtari-packages/react-popover':
         specifier: workspace:*
         version: link:../react-popover
-      '@virtari/react-switch':
+      '@virtari-packages/react-switch':
         specifier: workspace:*
         version: link:../react-switch
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -606,22 +606,22 @@ importers:
       '@react-stately/datepicker':
         specifier: ^3.10.3
         version: 3.17.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/react-button':
+      '@virtari-packages/react-button':
         specifier: workspace:*
         version: link:../react-button
-      '@virtari/react-dialog':
+      '@virtari-packages/react-dialog':
         specifier: workspace:*
         version: link:../react-dialog
-      '@virtari/react-drawer':
+      '@virtari-packages/react-drawer':
         specifier: workspace:*
         version: link:../react-drawer
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
-      '@virtari/react-radio-group':
+      '@virtari-packages/react-radio-group':
         specifier: workspace:*
         version: link:../react-radio-group
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -649,10 +649,10 @@ importers:
       '@radix-ui/react-dialog':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -680,7 +680,7 @@ importers:
       '@radix-ui/react-dialog':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -705,7 +705,7 @@ importers:
       '@radix-ui/react-dropdown-menu':
         specifier: ^2.1.16
         version: 2.1.16(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -727,7 +727,7 @@ importers:
 
   packages/react-flag:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -752,7 +752,7 @@ importers:
 
   packages/react-header:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -774,7 +774,7 @@ importers:
 
   packages/react-icons:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -799,7 +799,7 @@ importers:
 
   packages/react-input:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -821,7 +821,7 @@ importers:
 
   packages/react-kbd:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -846,7 +846,7 @@ importers:
       '@radix-ui/react-label':
         specifier: ^2.1.8
         version: 2.1.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -868,13 +868,13 @@ importers:
 
   packages/react-language-picker:
     dependencies:
-      '@virtari/react-flag':
+      '@virtari-packages/react-flag':
         specifier: workspace:*
         version: link:../react-flag
-      '@virtari/react-select':
+      '@virtari-packages/react-select':
         specifier: workspace:*
         version: link:../react-select
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -902,7 +902,7 @@ importers:
 
   packages/react-layout:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -930,7 +930,7 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -955,16 +955,16 @@ importers:
       '@radix-ui/react-popover':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/react-flag':
+      '@virtari-packages/react-flag':
         specifier: workspace:*
         version: link:../react-flag
-      '@virtari/react-input':
+      '@virtari-packages/react-input':
         specifier: workspace:*
         version: link:../react-input
-      '@virtari/react-select':
+      '@virtari-packages/react-select':
         specifier: workspace:*
         version: link:../react-select
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       libphonenumber-js:
@@ -998,7 +998,7 @@ importers:
       '@radix-ui/react-popover':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1023,7 +1023,7 @@ importers:
       '@radix-ui/react-progress':
         specifier: ^1.1.8
         version: 1.1.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1048,10 +1048,10 @@ importers:
       '@radix-ui/react-radio-group':
         specifier: ^1.3.8
         version: 1.3.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1079,7 +1079,7 @@ importers:
       '@radix-ui/react-scroll-area':
         specifier: ^1.2.10
         version: 1.2.10(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1110,13 +1110,13 @@ importers:
       '@tanstack/react-virtual':
         specifier: ^3.10.0
         version: 3.13.24(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/react-chip':
+      '@virtari-packages/react-chip':
         specifier: workspace:*
         version: link:../react-chip
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1144,7 +1144,7 @@ importers:
       '@radix-ui/react-separator':
         specifier: ^1.1.8
         version: 1.1.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1166,7 +1166,7 @@ importers:
 
   packages/react-sidebar:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1188,7 +1188,7 @@ importers:
 
   packages/react-skeleton:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1213,7 +1213,7 @@ importers:
       '@radix-ui/react-slider':
         specifier: ^1.3.6
         version: 1.3.6(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1235,7 +1235,7 @@ importers:
 
   packages/react-spinner:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1260,7 +1260,7 @@ importers:
       '@radix-ui/react-switch':
         specifier: ^1.2.6
         version: 1.2.6(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1288,7 +1288,7 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1313,7 +1313,7 @@ importers:
       '@radix-ui/react-tabs':
         specifier: ^1.1.13
         version: 1.1.13(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1338,7 +1338,7 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1360,7 +1360,7 @@ importers:
 
   packages/react-textarea:
     dependencies:
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1385,10 +1385,10 @@ importers:
       '@radix-ui/react-toast':
         specifier: ^1.2.15
         version: 1.2.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/react-icons':
+      '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1416,7 +1416,7 @@ importers:
       '@radix-ui/react-toggle':
         specifier: ^1.1.10
         version: 1.1.10(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1441,7 +1441,7 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@virtari/utils':
+      '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
       react-dom:
@@ -1465,7 +1465,7 @@ importers:
 
   packages/utilities:
     dependencies:
-      '@virtari/tokens':
+      '@virtari-packages/tokens':
         specifier: workspace:*
         version: link:../tokens
 

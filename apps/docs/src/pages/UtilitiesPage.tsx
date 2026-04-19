@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "@virtari/react-button";
-import { Card } from "@virtari/react-card";
+import { Button } from "@virtari-packages/react-button";
+import { Card } from "@virtari-packages/react-card";
 import { Section } from "../components";
 
 const GROUPS: {
@@ -156,10 +156,10 @@ export function UtilitiesPage() {
         description="Drop-in CSS classes for one-off layout. Use these for quick positioning, spacing, and flex/grid — but reach for Stack/Cluster/Grid layout components when a pattern repeats."
       >
         <pre className="docs-code">{`// apps/docs/src/styles/global.css
-@import "@virtari/core";
-@import "@virtari/tokens";
-@import "@virtari/utilities";   // ← opt-in
-@import "@virtari/react-button/styles";
+@import "@virtari-packages/core";
+@import "@virtari-packages/tokens";
+@import "@virtari-packages/utilities";   // ← opt-in
+@import "@virtari-packages/react-button/styles";
 // ...`}</pre>
         <p style={{ color: "var(--vds-color-text-muted)", fontSize: "var(--vds-text-sm)", marginBlockStart: "var(--vds-space-3)" }}>
           Class prefix: <code>vds-u-</code>. Responsive prefixes:{" "}

@@ -1,4 +1,4 @@
-# @virtari/react-date-picker
+# @virtari-packages/react-date-picker
 
 Headless, accessible, tokens-first date / time / range / calendar primitives for the Virtari design system.
 
@@ -7,18 +7,18 @@ Built on [`react-aria`](https://react-spectrum.adobe.com/react-aria) hooks and [
 ## Install
 
 ```bash
-pnpm add @virtari/react-date-picker
+pnpm add @virtari-packages/react-date-picker
 ```
 
 Import the CSS you use:
 
 ```ts
 // one per primitive you render
-import "@virtari/react-date-picker/styles";
-import "@virtari/react-date-picker/calendar/styles";
-import "@virtari/react-date-picker/date-field/styles";
-import "@virtari/react-date-picker/time-field/styles";
-import "@virtari/react-date-picker/range-picker/styles";
+import "@virtari-packages/react-date-picker/styles";
+import "@virtari-packages/react-date-picker/calendar/styles";
+import "@virtari-packages/react-date-picker/date-field/styles";
+import "@virtari-packages/react-date-picker/time-field/styles";
+import "@virtari-packages/react-date-picker/range-picker/styles";
 ```
 
 Wrap your app in `I18nProvider` once (from `@react-aria/i18n`) so locale and direction propagate.

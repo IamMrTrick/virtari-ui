@@ -1,7 +1,7 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { IconCheck, IconMinus } from "@virtari/react-icons";
+import { IconCheck, IconMinus } from "@virtari-packages/react-icons";
 import { useCheckboxGroupContext } from "./context";
 
 export type CheckboxSize = "sm" | "md" | "lg";

@@ -123,7 +123,7 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   icons: {
     title: "Icons",
     description:
-      "Tabler Icons (MIT) — outline + filled, re-exported from @virtari/react-icons. Searchable, copyable, with live size and stroke controls.",
+      "Tabler Icons (MIT) — outline + filled, re-exported from @virtari-packages/react-icons. Searchable, copyable, with live size and stroke controls.",
   },
   rtl: {
     title: "RTL",

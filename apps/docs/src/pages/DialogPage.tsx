@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { Button } from "@virtari/react-button";
-import { Checkbox } from "@virtari/react-checkbox";
+import { Button } from "@virtari-packages/react-button";
+import { Checkbox } from "@virtari-packages/react-checkbox";
 import {
   Dialog,
   DialogTrigger,
@@ -16,16 +16,16 @@ import {
   type DialogBackdrop,
   type DialogIntent,
   type DialogSize,
-} from "@virtari/react-dialog";
-import { Input } from "@virtari/react-input";
-import { Textarea } from "@virtari/react-textarea";
+} from "@virtari-packages/react-dialog";
+import { Input } from "@virtari-packages/react-input";
+import { Textarea } from "@virtari-packages/react-textarea";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@virtari/react-select";
+} from "@virtari-packages/react-select";
 import { Section, Row } from "../components";
 
 /* ─────────────────────────────── Helpers ─────────────────────────────── */
@@ -866,12 +866,12 @@ function InstallationSection() {
       title="Installation"
       description="The package ships ESM + CJS with a separate CSS file. Import styles once at your app root."
     >
-      <pre className="docs-code">{`pnpm add @virtari/react-dialog
+      <pre className="docs-code">{`pnpm add @virtari-packages/react-dialog
 
 // app root
-import "@virtari/react-dialog/styles";
+import "@virtari-packages/react-dialog/styles";
 // (tokens auto-imported via Dialog.css — or bring them yourself)
-import "@virtari/react-dialog/tokens";`}</pre>
+import "@virtari-packages/react-dialog/tokens";`}</pre>
     </Section>
   );
 }

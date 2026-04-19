@@ -7,7 +7,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import { toastStore } from "./store";
 import { ToastItem } from "./ToastItem";
 import type { ToastData, ToasterProps, ToastPosition } from "./types";

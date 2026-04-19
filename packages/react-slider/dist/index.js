@@ -1,5 +1,5 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import { jsxs, jsx } from 'react/jsx-runtime';
 

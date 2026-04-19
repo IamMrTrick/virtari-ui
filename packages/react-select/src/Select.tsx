@@ -1,7 +1,7 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, MouseEvent, ReactNode, Ref } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { IconCheck, IconChevronDown, IconLoader2, IconX } from "@virtari/react-icons";
+import { IconCheck, IconChevronDown, IconLoader2, IconX } from "@virtari-packages/react-icons";
 
 /* ── Root ── */
 export const Select = SelectPrimitive.Root;

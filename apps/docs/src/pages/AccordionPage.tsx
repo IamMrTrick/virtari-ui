@@ -10,7 +10,7 @@ import {
   type AccordionIconType,
   type AccordionIconPosition,
   type FAQItem,
-} from "@virtari/react-accordion";
+} from "@virtari-packages/react-accordion";
 import { Section, Row } from "../components";
 
 /* ─────────────────────────── Demo content ─────────────────────────── */
@@ -19,7 +19,7 @@ const ITEMS = [
   {
     id: "install",
     q: "How do I install Virtari?",
-    a: "Install individual packages via npm, e.g. `npm install @virtari/react-accordion`. Each component ships with its own stylesheet so you only pull what you use.",
+    a: "Install individual packages via npm, e.g. `npm install @virtari-packages/react-accordion`. Each component ships with its own stylesheet so you only pull what you use.",
   },
   {
     id: "a11y",
@@ -223,7 +223,7 @@ export function AccordionPage() {
             defaultOpen={["install"]}
           />
         </div>
-        <pre className="docs-code">{`import { FAQAccordion, type FAQItem } from "@virtari/react-accordion";
+        <pre className="docs-code">{`import { FAQAccordion, type FAQItem } from "@virtari-packages/react-accordion";
 
 const items: FAQItem[] = [
   {
@@ -246,7 +246,7 @@ const items: FAQItem[] = [
       <Section title="Usage">
         <pre className="docs-code">{`import {
   Accordion, AccordionItem, AccordionTrigger, AccordionContent,
-} from "@virtari/react-accordion";
+} from "@virtari-packages/react-accordion";
 
 <Accordion
   type="single"

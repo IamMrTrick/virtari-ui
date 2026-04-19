@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import { forwardRef, type ReactNode } from "react";
 import { Slot, Slottable } from "@radix-ui/react-slot";
 
@@ -41,10 +41,10 @@ export type ButtonVariant =
  */
 export type ButtonSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 
-/** Visual effects — requires importing `@virtari/react-button/styles/effects` */
+/** Visual effects — requires importing `@virtari-packages/react-button/styles/effects` */
 export type ButtonEffect = "shine" | "raised" | "glow" | "glass" | "outline-glow" | "candy";
 
-/** Attention animations — requires importing `@virtari/react-button/styles/animations` */
+/** Attention animations — requires importing `@virtari-packages/react-button/styles/animations` */
 export type ButtonAnimation = "pulse" | "bounce" | "shake" | "jiggle";
 
 export interface ButtonProps

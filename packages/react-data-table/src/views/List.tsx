@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import type { Row } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 import { useDataTableContext } from "../DataTableContext";
 import { boolAttr } from "../utils/data-attrs";

@@ -1,6 +1,6 @@
 import { forwardRef, useMemo } from "react";
 import type { Column } from "@tanstack/react-table";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 import { useColumnFilter } from "../use-column-filter";
 

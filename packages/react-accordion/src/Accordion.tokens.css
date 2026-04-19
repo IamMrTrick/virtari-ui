@@ -3,7 +3,7 @@
    * 1. Base component tokens
    *    Layout, typography, motion — orthogonal to variant/size/color.
    *    Defaults: variant=plain, size=md, color=neutral, iconType=chevron.
-   *    Fallbacks keep the package usable without @virtari/tokens.
+   *    Fallbacks keep the package usable without @virtari-packages/tokens.
    * ========================================================================= */
   .vds-accordion {
     /* ── Layout ── */

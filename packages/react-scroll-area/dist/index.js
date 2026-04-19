@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState, useCallback, useMemo, Children, useEffect } from 'react';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 
 // src/ScrollArea.tsx

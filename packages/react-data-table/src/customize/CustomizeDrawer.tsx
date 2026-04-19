@@ -22,11 +22,11 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-} from "@virtari/react-drawer";
-import { Input } from "@virtari/react-input";
-import { Switch } from "@virtari/react-switch";
-import { cn } from "@virtari/utils";
-import { IconGripVertical } from "@virtari/react-icons";
+} from "@virtari-packages/react-drawer";
+import { Input } from "@virtari-packages/react-input";
+import { Switch } from "@virtari-packages/react-switch";
+import { cn } from "@virtari-packages/utils";
+import { IconGripVertical } from "@virtari-packages/react-icons";
 
 export interface ColumnConfig {
   id: string;

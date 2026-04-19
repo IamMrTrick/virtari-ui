@@ -5,8 +5,8 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@virtari/react-card";
-import { Button } from "@virtari/react-button";
+} from "@virtari-packages/react-card";
+import { Button } from "@virtari-packages/react-button";
 import { Section, Row } from "../components";
 
 export function CardPage() {
@@ -84,7 +84,7 @@ export function CardPage() {
         <pre className="docs-code">{`import {
   Card, CardHeader, CardTitle, CardDescription,
   CardContent, CardFooter,
-} from "@virtari/react-card";
+} from "@virtari-packages/react-card";
 
 <Card>
   <CardHeader>

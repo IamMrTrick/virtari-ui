@@ -1641,7 +1641,7 @@
  * semantic.css     Purpose-named aliases (container-width, section-padding-block…).
  * components.css   Per-component tokens — override a single primitive without touching semantics.
  *
- * Components in @virtari/react-layout should consume:
+ * Components in @virtari-packages/react-layout should consume:
  *   • a component token (--vds-section-padding-block-default, --vds-container-width-default …) as the default, or
  *   • the semantic token (--vds-section-padding-block, --vds-row-gap …) when the per-component indirection isn't needed.
  * Never consume the primitives directly.

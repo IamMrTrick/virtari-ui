@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
 import { useSidebarOptional } from "./Sidebar";
 

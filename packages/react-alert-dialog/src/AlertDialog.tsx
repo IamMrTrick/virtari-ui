@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 
@@ -13,7 +13,7 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
  *   • Resolution is via <AlertDialogAction> or <AlertDialogCancel>
  *   • No `showCloseButton` / `preventCloseOn*` props — by design
  *
- * The visual token set lives in @virtari/react-dialog/styles.
+ * The visual token set lives in @virtari-packages/react-dialog/styles.
  * Import it at your app root alongside this package's CSS.
  * ───────────────────────────────────────────────────────────── */
 

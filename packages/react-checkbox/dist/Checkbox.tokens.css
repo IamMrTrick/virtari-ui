@@ -3,7 +3,7 @@
    * 1. Base component tokens
    *    Checkbox is square, proportional to text — NOT on the height ramp.
    *    sm (14px) pairs with small text, md (18px) with body, lg (22px) with headings.
-   *    Fallbacks keep the package usable without @virtari/tokens.
+   *    Fallbacks keep the package usable without @virtari-packages/tokens.
    * ========================================================================= */
   .vds-checkbox {
     /* ── Geometry ── */

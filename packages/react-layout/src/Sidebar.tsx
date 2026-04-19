@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { CSSProperties, ElementType, HTMLAttributes, Ref } from "react";
 
 export type SidebarSide = "start" | "end";

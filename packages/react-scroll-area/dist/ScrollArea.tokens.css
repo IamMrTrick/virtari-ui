@@ -3,7 +3,7 @@
    * ScrollArea — tokens
    * Semantic CSS variables with fallbacks so the
    * package works standalone if dropped into a
-   * project without @virtari/tokens.
+   * project without @virtari-packages/tokens.
    * ───────────────────────────────────────────── */
   .vds-scroll-area-root {
     /* ── Scrollbar track / thumb ── */

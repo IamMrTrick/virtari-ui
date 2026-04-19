@@ -3,8 +3,8 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-} from "@virtari/react-tooltip";
-import { Button } from "@virtari/react-button";
+} from "@virtari-packages/react-tooltip";
+import { Button } from "@virtari-packages/react-button";
 import { Section, Row } from "../components";
 
 export function TooltipPage() {
@@ -136,7 +136,7 @@ export function TooltipPage() {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-} from "@virtari/react-tooltip";
+} from "@virtari-packages/react-tooltip";
 
 <TooltipProvider>           {/* once at app root, delay defaults to 300 ms */}
   <Tooltip>

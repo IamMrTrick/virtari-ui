@@ -4,8 +4,8 @@ import {
   HeaderMain,
   HeaderStart,
   HeaderEnd,
-} from "@virtari/react-header";
-import { IconMenu2, IconSettings } from "@virtari/react-icons";
+} from "@virtari-packages/react-header";
+import { IconMenu2, IconSettings } from "@virtari-packages/react-icons";
 import { SettingsDrawer } from "./SettingsDrawer";
 import type { RadiusMode, Direction } from "../App";
 

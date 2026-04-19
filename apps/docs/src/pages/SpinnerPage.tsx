@@ -1,4 +1,4 @@
-import { Spinner } from "@virtari/react-spinner";
+import { Spinner } from "@virtari-packages/react-spinner";
 import { Section, Row } from "../components";
 
 export function SpinnerPage() {
@@ -31,7 +31,7 @@ export function SpinnerPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Spinner } from "@virtari/react-spinner";
+        <pre className="docs-code">{`import { Spinner } from "@virtari-packages/react-spinner";
 
 // Sizes
 <Spinner size="sm" />

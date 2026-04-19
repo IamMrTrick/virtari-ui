@@ -91,7 +91,7 @@ async function main() {
   await mkdir(resolve(root, "src/generated"), { recursive: true });
 
   const out = `// AUTO-GENERATED. DO NOT EDIT.
-import type { CountryCode } from "@virtari/react-flag";
+import type { CountryCode } from "@virtari-packages/react-flag";
 
 export interface LanguageEntry {
   locale: string;

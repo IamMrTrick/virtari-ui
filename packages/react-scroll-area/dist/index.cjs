@@ -3,7 +3,7 @@
 
 var react = require('react');
 var ScrollAreaPrimitive = require('@radix-ui/react-scroll-area');
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var jsxRuntime = require('react/jsx-runtime');
 
 function _interopNamespace(e) {

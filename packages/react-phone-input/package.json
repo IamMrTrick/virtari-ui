@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-phone-input",
+  "name": "@virtari-packages/react-phone-input",
   "version": "0.1.0",
   "description": "Virtari phone input — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -58,10 +58,10 @@
   },
   "dependencies": {
     "@radix-ui/react-popover": "^1.1.15",
-    "@virtari/react-flag": "workspace:*",
-    "@virtari/react-input": "workspace:*",
-    "@virtari/react-select": "workspace:*",
-    "@virtari/utils": "workspace:*",
+    "@virtari-packages/react-flag": "workspace:*",
+    "@virtari-packages/react-input": "workspace:*",
+    "@virtari-packages/react-select": "workspace:*",
+    "@virtari-packages/utils": "workspace:*",
     "libphonenumber-js": "^1.11.0"
   },
   "peerDependencies": {

@@ -1,5 +1,5 @@
-import { cn } from "@virtari/utils";
-import { Flag, type CountryCode } from "@virtari/react-flag";
+import { cn } from "@virtari-packages/utils";
+import { Flag, type CountryCode } from "@virtari-packages/react-flag";
 import type { HTMLAttributes, Ref } from "react";
 import { languagesByLocale } from "./generated/languages";
 
@@ -14,7 +14,7 @@ export interface LanguageLabelProps extends HTMLAttributes<HTMLSpanElement> {
   showNative?: boolean;
   /** Hide the flag entirely. Default `false`. */
   hideFlag?: boolean;
-  /** Flag-size token (see `@virtari/react-flag`). Default `"sm"`. */
+  /** Flag-size token (see `@virtari-packages/react-flag`). Default `"sm"`. */
   flagSize?: "2xs" | "xs" | "sm" | "md" | "lg";
   ref?: Ref<HTMLSpanElement>;
 }

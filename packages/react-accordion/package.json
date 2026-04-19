@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-accordion",
+  "name": "@virtari-packages/react-accordion",
   "version": "0.1.0",
   "description": "Virtari accordion — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -55,8 +55,8 @@
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
-    "@virtari/react-icons": "workspace:*",
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/react-icons": "workspace:*",
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "@tabler/icons-react": "^3.0.0",

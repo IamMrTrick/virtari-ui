@@ -1,4 +1,4 @@
-import { Separator } from "@virtari/react-separator";
+import { Separator } from "@virtari-packages/react-separator";
 import { Section, Row } from "../components";
 
 export function SeparatorPage() {
@@ -33,7 +33,7 @@ export function SeparatorPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Separator } from "@virtari/react-separator";
+        <pre className="docs-code">{`import { Separator } from "@virtari-packages/react-separator";
 
 // Horizontal (default)
 <Separator />

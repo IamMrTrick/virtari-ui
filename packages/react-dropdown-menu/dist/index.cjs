@@ -1,7 +1,7 @@
 "use client";
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var DropdownMenuPrimitive = require('@radix-ui/react-dropdown-menu');
 var jsxRuntime = require('react/jsx-runtime');
 

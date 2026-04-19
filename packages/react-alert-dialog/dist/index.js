@@ -1,5 +1,5 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 import { jsx, jsxs } from 'react/jsx-runtime';
 

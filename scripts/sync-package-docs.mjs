@@ -60,7 +60,7 @@ ${desc}
 Create or edit \`.npmrc\` at the root of the consuming project:
 
 \`\`\`ini
-@virtari:registry=${REGISTRY}
+@virtari-packages:registry=${REGISTRY}
 //npm.pkg.github.com/:_authToken=\${GITHUB_TOKEN}
 \`\`\`
 
@@ -92,10 +92,10 @@ import { /* … */ } from "${name}";
 ${cssNote}
 ## Design tokens
 
-This package reads \`@virtari/tokens\` CSS variables. Import the token layer once at the root of your app:
+This package reads \`@virtari-packages/tokens\` CSS variables. Import the token layer once at the root of your app:
 
 \`\`\`ts
-import "@virtari/tokens";
+import "@virtari-packages/tokens";
 \`\`\`
 
 Override any \`--vds-*\` custom property at \`:root\` (or a subtree) to retheme.

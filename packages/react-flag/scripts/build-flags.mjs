@@ -102,7 +102,7 @@ async function main() {
 
     const out = `// AUTO-GENERATED. DO NOT EDIT. Source: flag-icons/flags/4x3/${code}.svg
 import type { FC } from "react";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { FlagCoreProps } from "../../Flag";
 
 const ${componentName}: FC<FlagCoreProps> = ({

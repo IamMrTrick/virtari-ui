@@ -12,7 +12,7 @@ export default defineConfig({
     "react/jsx-runtime",
     "@floating-ui/react",
     "@radix-ui/react-slot",
-    "@virtari/utils",
+    "@virtari-packages/utils",
   ],
   treeshake: true,
   onSuccess: prependUseClient,

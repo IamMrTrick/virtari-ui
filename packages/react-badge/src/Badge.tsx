@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { Ref, ReactNode, MouseEvent } from "react";
 import { Slot, Slottable } from "@radix-ui/react-slot";
 

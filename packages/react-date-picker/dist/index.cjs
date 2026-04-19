@@ -1,21 +1,21 @@
 "use client";
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var react = require('react');
 var calendar$1 = require('@react-aria/calendar');
 var calendar = require('@react-stately/calendar');
 var i18n = require('@react-aria/i18n');
 var date = require('@internationalized/date');
-var reactIcons = require('@virtari/react-icons');
+var reactIcons = require('@virtari-packages/react-icons');
 var jsxRuntime = require('react/jsx-runtime');
 var datepicker$1 = require('@react-aria/datepicker');
 var datepicker = require('@react-stately/datepicker');
 var PopoverPrimitive = require('@radix-ui/react-popover');
-var reactButton = require('@virtari/react-button');
-var reactDialog = require('@virtari/react-dialog');
-var reactDrawer = require('@virtari/react-drawer');
-var reactRadioGroup = require('@virtari/react-radio-group');
+var reactButton = require('@virtari-packages/react-button');
+var reactDialog = require('@virtari-packages/react-dialog');
+var reactDrawer = require('@virtari-packages/react-drawer');
+var reactRadioGroup = require('@virtari-packages/react-radio-group');
 
 function _interopNamespace(e) {
   if (e && e.__esModule) return e;

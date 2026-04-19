@@ -1,5 +1,5 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { useRef, useState, useCallback, useEffect, useLayoutEffect, useMemo } from 'react';
 import { useCalendar, useRangeCalendar, useCalendarGrid, useCalendarCell } from '@react-aria/calendar';
 import { useCalendarState, useRangeCalendarState } from '@react-stately/calendar';
@@ -7,15 +7,15 @@ import { useLocale } from '@react-aria/i18n';
 export { I18nProvider, useLocale } from '@react-aria/i18n';
 import { GregorianCalendar, TaiwanCalendar, EthiopicAmeteAlemCalendar, EthiopicCalendar, IndianCalendar, HebrewCalendar, JapaneseCalendar, BuddhistCalendar, IslamicTabularCalendar, IslamicCivilCalendar, IslamicUmalquraCalendar, PersianCalendar, today, toCalendar, Time } from '@internationalized/date';
 export { BuddhistCalendar, CalendarDate, CalendarDateTime, EthiopicCalendar, GregorianCalendar, HebrewCalendar, IndianCalendar, IslamicCivilCalendar, IslamicUmalquraCalendar, JapaneseCalendar, PersianCalendar, TaiwanCalendar, Time, ZonedDateTime, endOfMonth, endOfWeek, endOfYear, getLocalTimeZone, isSameDay, isSameMonth, isSameYear, isToday, isWeekend, now, parseAbsolute, parseDate, parseDateTime, parseTime, parseZonedDateTime, startOfMonth, startOfWeek, startOfYear, toCalendar, toCalendarDate, toCalendarDateTime, toZoned, today } from '@internationalized/date';
-import { IconChevronRight, IconChevronLeft } from '@virtari/react-icons';
+import { IconChevronRight, IconChevronLeft } from '@virtari-packages/react-icons';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { useDateField, useDateSegment, useTimeField, useDatePicker, useDateRangePicker } from '@react-aria/datepicker';
 import { useDateFieldState, useTimeFieldState, useDatePickerState, useDateRangePickerState } from '@react-stately/datepicker';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
-import { Button } from '@virtari/react-button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter } from '@virtari/react-dialog';
-import { Drawer, DrawerContent, DrawerHandle, DrawerHeader, DrawerTitle, DrawerDescription, DrawerBody, DrawerFooter } from '@virtari/react-drawer';
-import { RadioGroup, RadioField } from '@virtari/react-radio-group';
+import { Button } from '@virtari-packages/react-button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter } from '@virtari-packages/react-dialog';
+import { Drawer, DrawerContent, DrawerHandle, DrawerHeader, DrawerTitle, DrawerDescription, DrawerBody, DrawerFooter } from '@virtari-packages/react-drawer';
+import { RadioGroup, RadioField } from '@virtari-packages/react-radio-group';
 
 // src/Calendar.tsx
 function createCalendar(identifier) {

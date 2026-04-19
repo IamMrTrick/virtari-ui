@@ -1,4 +1,4 @@
-import { Toggle } from "@virtari/react-toggle";
+import { Toggle } from "@virtari-packages/react-toggle";
 import { Section, Row } from "../components";
 
 export function TogglePage() {
@@ -32,7 +32,7 @@ export function TogglePage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Toggle } from "@virtari/react-toggle";
+        <pre className="docs-code">{`import { Toggle } from "@virtari-packages/react-toggle";
 
 <Toggle
   pressed={bold}

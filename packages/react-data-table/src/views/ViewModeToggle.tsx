@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
-import { cn } from "@virtari/utils";
-import { IconLayoutKanban, IconList, IconTable } from "@virtari/react-icons";
+import { cn } from "@virtari-packages/utils";
+import { IconLayoutKanban, IconList, IconTable } from "@virtari-packages/react-icons";
 
 import { useDataTableContext } from "../DataTableContext";
 import type { DataTableViewMode } from "../types";

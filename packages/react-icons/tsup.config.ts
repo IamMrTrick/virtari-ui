@@ -11,7 +11,7 @@ export default defineConfig({
     "react-dom",
     "react/jsx-runtime",
     "@tabler/icons-react",
-    "@virtari/utils",
+    "@virtari-packages/utils",
   ],
   treeshake: true,
   onSuccess: prependUseClient,

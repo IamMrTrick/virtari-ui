@@ -1,5 +1,5 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
 import { jsx } from 'react/jsx-runtime';
 

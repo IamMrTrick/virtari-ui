@@ -1,6 +1,6 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import { useEffect, useState, type ReactNode } from "react";
-import { Button, type ButtonSize } from "@virtari/react-button";
+import { Button, type ButtonSize } from "@virtari-packages/react-button";
 import {
   Dialog,
   DialogBody,
@@ -9,7 +9,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@virtari/react-dialog";
+} from "@virtari-packages/react-dialog";
 import {
   Drawer,
   DrawerBody,
@@ -19,7 +19,7 @@ import {
   DrawerHandle,
   DrawerHeader,
   DrawerTitle,
-} from "@virtari/react-drawer";
+} from "@virtari-packages/react-drawer";
 
 export type MobilePickerPresentation = "drawer" | "dialog";
 export type MobilePickerSizeMode = "content" | "full";

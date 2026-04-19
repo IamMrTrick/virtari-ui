@@ -1,4 +1,4 @@
-import { Text, type TextSize } from "@virtari/react-text";
+import { Text, type TextSize } from "@virtari-packages/react-text";
 import { Section, Stack } from "../components";
 
 const SIZES: TextSize[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -77,7 +77,7 @@ export function TextPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Text } from "@virtari/react-text";
+        <pre className="docs-code">{`import { Text } from "@virtari-packages/react-text";
 
 <Text>Default paragraph</Text>
 <Text size="2" tone="muted">Caption / helper</Text>

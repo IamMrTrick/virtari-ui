@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 

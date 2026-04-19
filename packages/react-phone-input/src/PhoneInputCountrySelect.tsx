@@ -1,5 +1,5 @@
-import { cn } from "@virtari/utils";
-import { Flag, type CountryCode } from "@virtari/react-flag";
+import { cn } from "@virtari-packages/utils";
+import { Flag, type CountryCode } from "@virtari-packages/react-flag";
 import {
   Combobox,
   ComboboxContent,
@@ -9,7 +9,7 @@ import {
   ComboboxList,
   ComboboxOptions,
   useComboboxContext,
-} from "@virtari/react-select";
+} from "@virtari-packages/react-select";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import {
   useCallback,

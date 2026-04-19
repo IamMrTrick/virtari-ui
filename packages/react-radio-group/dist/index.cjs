@@ -1,10 +1,10 @@
 "use client";
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var react = require('react');
 var RadioGroupPrimitive = require('@radix-ui/react-radio-group');
-var reactIcons = require('@virtari/react-icons');
+var reactIcons = require('@virtari-packages/react-icons');
 var jsxRuntime = require('react/jsx-runtime');
 
 function _interopNamespace(e) {

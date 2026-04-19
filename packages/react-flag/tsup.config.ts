@@ -6,7 +6,7 @@ export default defineConfig({
   format: ["esm", "cjs"],
   dts: true,
   clean: true,
-  external: ["react", "react-dom", "react/jsx-runtime", "@virtari/utils"],
+  external: ["react", "react-dom", "react/jsx-runtime", "@virtari-packages/utils"],
   treeshake: true,
   onSuccess: prependUseClient,
 });

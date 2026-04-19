@@ -1,4 +1,4 @@
-# @virtari/core
+# @virtari-packages/core
 
 Base reset, layers, and global primitives for the Virtari design system.
 
@@ -11,7 +11,7 @@ Base reset, layers, and global primitives for the Virtari design system.
 Create or edit `.npmrc` at the root of the consuming project:
 
 ```ini
-@virtari:registry=https://npm.pkg.github.com
+@virtari-packages:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -24,11 +24,11 @@ export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx
 Then install as you would any scoped package:
 
 ```bash
-npm install @virtari/core
+npm install @virtari-packages/core
 # or
-pnpm add @virtari/core
+pnpm add @virtari-packages/core
 # or
-yarn add @virtari/core
+yarn add @virtari-packages/core
 ```
 
 ## Peer dependencies
@@ -38,23 +38,23 @@ yarn add @virtari/core
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari/core";
+import { /* … */ } from "@virtari-packages/core";
 ```
 
 ### Import styles
 
 ```ts
-import "@virtari/core/styles";
+import "@virtari-packages/core/styles";
 ```
 
 Styles sit in the `design-system.components` cascade layer so your app can override them without `!important`.
 
 ## Design tokens
 
-This package reads `@virtari/tokens` CSS variables. Import the token layer once at the root of your app:
+This package reads `@virtari-packages/tokens` CSS variables. Import the token layer once at the root of your app:
 
 ```ts
-import "@virtari/tokens";
+import "@virtari-packages/tokens";
 ```
 
 Override any `--vds-*` custom property at `:root` (or a subtree) to retheme.

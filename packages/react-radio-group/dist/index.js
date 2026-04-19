@@ -1,8 +1,8 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { createContext, useId, useMemo, useContext } from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
-import { IconAlertCircle } from '@virtari/react-icons';
+import { IconAlertCircle } from '@virtari-packages/react-icons';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
 // src/RadioGroup.tsx

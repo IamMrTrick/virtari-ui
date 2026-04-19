@@ -1,8 +1,8 @@
 "use client";
 import { memo, useRef, useState, useEffect, useCallback, useMemo, useSyncExternalStore } from 'react';
 import * as ToastPrimitive3 from '@radix-ui/react-toast';
-import { cn } from '@virtari/utils';
-import { IconCircleCheck, IconCircleX, IconAlertTriangle, IconInfoCircle, IconLoader2, IconX } from '@virtari/react-icons';
+import { cn } from '@virtari-packages/utils';
+import { IconCircleCheck, IconCircleX, IconAlertTriangle, IconInfoCircle, IconLoader2, IconX } from '@virtari-packages/react-icons';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
 // src/Toaster.tsx

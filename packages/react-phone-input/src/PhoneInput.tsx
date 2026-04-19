@@ -1,6 +1,6 @@
-import { cn } from "@virtari/utils";
-import { Input, type InputProps } from "@virtari/react-input";
-import type { CountryCode } from "@virtari/react-flag";
+import { cn } from "@virtari-packages/utils";
+import { Input, type InputProps } from "@virtari-packages/react-input";
+import type { CountryCode } from "@virtari-packages/react-flag";
 import {
   useCallback,
   useEffect,

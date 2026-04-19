@@ -6,14 +6,14 @@ var sortable = require('@dnd-kit/sortable');
 var react = require('react');
 var jsxRuntime = require('react/jsx-runtime');
 var utilities = require('@dnd-kit/utilities');
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var reactTable = require('@tanstack/react-table');
-require('@virtari/react-checkbox');
-var reactIcons = require('@virtari/react-icons');
+require('@virtari-packages/react-checkbox');
+var reactIcons = require('@virtari-packages/react-icons');
 var reactVirtual = require('@tanstack/react-virtual');
-var reactDrawer = require('@virtari/react-drawer');
-var reactInput = require('@virtari/react-input');
-var reactSwitch = require('@virtari/react-switch');
+var reactDrawer = require('@virtari-packages/react-drawer');
+var reactInput = require('@virtari-packages/react-input');
+var reactSwitch = require('@virtari-packages/react-switch');
 
 // src/dnd/DndProvider.tsx
 var DataTableCtx = react.createContext(null);

@@ -1,4 +1,4 @@
-import { Input } from "@virtari/react-input";
+import { Input } from "@virtari-packages/react-input";
 import { Section, Row, Stack } from "../components";
 
 export function InputPage() {
@@ -46,7 +46,7 @@ export function InputPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Input } from "@virtari/react-input";
+        <pre className="docs-code">{`import { Input } from "@virtari-packages/react-input";
 
 <Input inputSize="lg" placeholder="Enter email..." />
 

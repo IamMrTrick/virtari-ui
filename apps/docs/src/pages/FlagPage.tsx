@@ -18,8 +18,8 @@ import {
   countryCodes,
   hasFlag,
   type CountryCode,
-} from "@virtari/react-flag";
-import { Input } from "@virtari/react-input";
+} from "@virtari-packages/react-flag";
+import { Input } from "@virtari-packages/react-input";
 import { Section, Row, Stack } from "../components";
 
 const SIZES = ["2xs", "xs", "sm", "md", "lg", "xl", "2xl"] as const;
@@ -110,11 +110,11 @@ export function FlagPage() {
 
       <Section title="Usage">
         <pre className="docs-code">{`// Named import (best tree-shaking; use when code is known at build time)
-import { FlagIr, FlagUs } from "@virtari/react-flag";
+import { FlagIr, FlagUs } from "@virtari-packages/react-flag";
 <FlagIr size="lg" />
 
 // Dynamic (lazy-loaded per manifest)
-import { Flag } from "@virtari/react-flag";
+import { Flag } from "@virtari-packages/react-flag";
 <Flag code="gb-eng" size="md" rounded="full" title="England" />
 
 // Sizes: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | number`}</pre>

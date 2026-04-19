@@ -1,4 +1,4 @@
-import { Textarea } from "@virtari/react-textarea";
+import { Textarea } from "@virtari-packages/react-textarea";
 import { Section, Row } from "../components";
 
 export function TextareaPage() {
@@ -25,7 +25,7 @@ export function TextareaPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Textarea } from "@virtari/react-textarea";
+        <pre className="docs-code">{`import { Textarea } from "@virtari-packages/react-textarea";
 
 // Basic
 <Textarea placeholder="Enter text..." />

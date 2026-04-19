@@ -1,4 +1,4 @@
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { createContext, useId, useContext } from 'react';
 import { jsx, jsxs } from 'react/jsx-runtime';
 

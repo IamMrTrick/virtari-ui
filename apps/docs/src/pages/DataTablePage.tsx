@@ -21,15 +21,15 @@ import {
   useDataTableContext,
   type ColumnDef,
   type DataTableServerRequestState,
-} from "@virtari/react-data-table";
+} from "@virtari-packages/react-data-table";
 import {
   DataTableCustomizeDrawer,
   DataTableDndProvider,
   DataTableDraggableHeaderCell,
   type ColumnConfig,
-} from "@virtari/react-data-table/dnd";
-import "@virtari/react-data-table/styles";
-import { Button } from "@virtari/react-button";
+} from "@virtari-packages/react-data-table/dnd";
+import "@virtari-packages/react-data-table/styles";
+import { Button } from "@virtari-packages/react-button";
 import { Section, Row } from "../components";
 
 /* ─────────────────────────────── Dataset ─────────────────────────────── */
@@ -1004,7 +1004,7 @@ export function DataTablePage() {
       </Section>
       <Section
         title="Column reorder (drag-and-drop)"
-        description="Optional @virtari/react-data-table/dnd subpath. @dnd-kit only loads when imported."
+        description="Optional @virtari-packages/react-data-table/dnd subpath. @dnd-kit only loads when imported."
       >
         <DndExample />
       </Section>

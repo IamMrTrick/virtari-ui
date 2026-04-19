@@ -7,7 +7,7 @@ import {
   DrawerClose,
   DrawerTitle,
   DrawerDescription,
-} from "@virtari/react-drawer";
+} from "@virtari-packages/react-drawer";
 import {
   Sidebar as VdsSidebar,
   SidebarHeader,
@@ -15,10 +15,10 @@ import {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
-} from "@virtari/react-sidebar";
-import { Nav, NavGroup, NavList, NavItem } from "@virtari/react-nav";
-import { Input } from "@virtari/react-input";
-import { toast } from "@virtari/react-toast";
+} from "@virtari-packages/react-sidebar";
+import { Nav, NavGroup, NavList, NavItem } from "@virtari-packages/react-nav";
+import { Input } from "@virtari-packages/react-input";
+import { toast } from "@virtari-packages/react-toast";
 import {
   IconAdjustmentsHorizontal,
   IconAlertCircle,
@@ -68,7 +68,7 @@ import {
   IconTypography,
   IconUserCircle,
   IconX,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 
 const srOnly: CSSProperties = {
   position: "absolute",

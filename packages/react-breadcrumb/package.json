@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-breadcrumb",
+  "name": "@virtari-packages/react-breadcrumb",
   "version": "0.1.0",
   "description": "Virtari breadcrumb — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -55,9 +55,9 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
-    "@virtari/react-dropdown-menu": "workspace:*",
-    "@virtari/react-icons": "workspace:*",
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/react-dropdown-menu": "workspace:*",
+    "@virtari-packages/react-icons": "workspace:*",
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

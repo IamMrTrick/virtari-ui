@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { Ref } from "react";
 import { Slot } from "@radix-ui/react-slot";
 

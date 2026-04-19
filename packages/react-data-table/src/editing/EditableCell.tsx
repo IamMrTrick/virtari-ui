@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import type { TdHTMLAttributes } from "react";
 import type { Cell } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 import { useDataTableContext } from "../DataTableContext";
 import { pinnedAttr } from "../utils/data-attrs";

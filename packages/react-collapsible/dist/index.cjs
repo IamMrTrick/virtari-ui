@@ -1,7 +1,7 @@
 "use client";
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var CollapsiblePrimitive = require('@radix-ui/react-collapsible');
 var jsxRuntime = require('react/jsx-runtime');
 

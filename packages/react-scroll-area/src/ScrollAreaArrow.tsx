@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes } from "react";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 export interface ScrollAreaArrowProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> {

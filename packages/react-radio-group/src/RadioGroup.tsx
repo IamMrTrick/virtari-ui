@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import {
   useId,
   useMemo,
@@ -7,7 +7,7 @@ import {
   type Ref,
 } from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { IconAlertCircle } from "@virtari/react-icons";
+import { IconAlertCircle } from "@virtari-packages/react-icons";
 import {
   RadioGroupContext,
   useRadioGroupContext,

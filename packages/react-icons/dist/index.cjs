@@ -3,7 +3,7 @@
 
 var iconsReact = require('@tabler/icons-react');
 var react = require('react');
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var jsxRuntime = require('react/jsx-runtime');
 
 // src/index.ts

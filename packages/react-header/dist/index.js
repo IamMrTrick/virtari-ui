@@ -1,5 +1,5 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { createContext, useState, useCallback, useMemo, useRef, useEffect, useContext } from 'react';
 import { jsx } from 'react/jsx-runtime';
 

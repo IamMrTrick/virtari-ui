@@ -1,7 +1,7 @@
 "use client";
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var TogglePrimitive = require('@radix-ui/react-toggle');
 var jsxRuntime = require('react/jsx-runtime');
 

@@ -1,7 +1,7 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { IconCheck, IconMinus, IconAlertCircle } from '@virtari/react-icons';
+import { IconCheck, IconMinus, IconAlertCircle } from '@virtari-packages/react-icons';
 import { createContext, useId, useMemo, useContext } from 'react';
 import { jsx, jsxs } from 'react/jsx-runtime';
 

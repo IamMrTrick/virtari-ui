@@ -5,19 +5,19 @@ import {
   type BadgeVariant,
   type BadgeSize,
   type BadgeShape,
-} from "@virtari/react-badge";
+} from "@virtari-packages/react-badge";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@virtari/react-select";
-import { Switch } from "@virtari/react-switch";
+} from "@virtari-packages/react-select";
+import { Switch } from "@virtari-packages/react-switch";
 import {
   Row as LayoutRow,
   Stack as LayoutStack,
-} from "@virtari/react-layout";
+} from "@virtari-packages/react-layout";
 import { Section, Row } from "../components";
 import {
   IconCheck,
@@ -26,8 +26,8 @@ import {
   IconAlertTriangle,
   IconGitBranch,
   IconBolt,
-} from "@virtari/react-icons";
-import { toast } from "@virtari/react-toast";
+} from "@virtari-packages/react-icons";
+import { toast } from "@virtari-packages/react-toast";
 
 /* ─────────────────────────────── Icons ─────────────────────────────── */
 
@@ -710,7 +710,7 @@ function ApiSection() {
       title="API reference"
       description="Color and variant are orthogonal. All props extend native span attributes."
     >
-      <pre className="docs-code">{`import { Badge } from "@virtari/react-badge";
+      <pre className="docs-code">{`import { Badge } from "@virtari-packages/react-badge";
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   color?:   "primary" | "success" | "warning" | "danger"

@@ -1,7 +1,7 @@
 "use client";
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var AvatarPrimitive = require('@radix-ui/react-avatar');
 var jsxRuntime = require('react/jsx-runtime');
 

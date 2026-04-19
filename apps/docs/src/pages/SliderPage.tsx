@@ -1,4 +1,4 @@
-import { Slider } from "@virtari/react-slider";
+import { Slider } from "@virtari-packages/react-slider";
 import { Section, Row } from "../components";
 
 export function SliderPage() {
@@ -23,7 +23,7 @@ export function SliderPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Slider } from "@virtari/react-slider";
+        <pre className="docs-code">{`import { Slider } from "@virtari-packages/react-slider";
 
 // Basic
 <Slider defaultValue={[50]} max={100} step={1} />

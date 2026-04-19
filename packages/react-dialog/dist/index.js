@@ -1,7 +1,7 @@
 "use client";
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { IconX } from '@virtari/react-icons';
+import { IconX } from '@virtari-packages/react-icons';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
 // src/Dialog.tsx

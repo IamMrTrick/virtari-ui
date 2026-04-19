@@ -1,5 +1,5 @@
-import { cn } from "@virtari/utils";
-import { Flag, type CountryCode } from "@virtari/react-flag";
+import { cn } from "@virtari-packages/utils";
+import { Flag, type CountryCode } from "@virtari-packages/react-flag";
 import {
   Combobox,
   ComboboxContent,
@@ -12,7 +12,7 @@ import {
   type ComboboxAppearance,
   type ComboboxItemData,
   type ComboboxSize,
-} from "@virtari/react-select";
+} from "@virtari-packages/react-select";
 import { useCallback, useMemo, type Ref } from "react";
 import { languages as allLanguages, languagesByLocale, type LanguageEntry } from "./generated/languages";
 

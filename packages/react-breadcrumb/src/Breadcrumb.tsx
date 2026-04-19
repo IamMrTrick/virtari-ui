@@ -7,7 +7,7 @@ import {
   type Ref,
 } from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import {
   IconChevronRight,
   IconPointFilled,
@@ -15,13 +15,13 @@ import {
   IconHome,
   IconDots,
   type TablerIcon,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@virtari/react-dropdown-menu";
+} from "@virtari-packages/react-dropdown-menu";
 
 /* ── Types ── */
 

@@ -1,4 +1,4 @@
-# @virtari/tokens
+# @virtari-packages/tokens
 
 Design tokens (colors, spacing, typography, radii, shadows, motion) as CSS variables.
 
@@ -11,7 +11,7 @@ Design tokens (colors, spacing, typography, radii, shadows, motion) as CSS varia
 Create or edit `.npmrc` at the root of the consuming project:
 
 ```ini
-@virtari:registry=https://npm.pkg.github.com
+@virtari-packages:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -24,11 +24,11 @@ export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx
 Then install as you would any scoped package:
 
 ```bash
-npm install @virtari/tokens
+npm install @virtari-packages/tokens
 # or
-pnpm add @virtari/tokens
+pnpm add @virtari-packages/tokens
 # or
-yarn add @virtari/tokens
+yarn add @virtari-packages/tokens
 ```
 
 ## Peer dependencies
@@ -38,23 +38,23 @@ yarn add @virtari/tokens
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari/tokens";
+import { /* … */ } from "@virtari-packages/tokens";
 ```
 
 ### Import styles
 
 ```ts
-import "@virtari/tokens/styles";
+import "@virtari-packages/tokens/styles";
 ```
 
 Styles sit in the `design-system.components` cascade layer so your app can override them without `!important`.
 
 ## Design tokens
 
-This package reads `@virtari/tokens` CSS variables. Import the token layer once at the root of your app:
+This package reads `@virtari-packages/tokens` CSS variables. Import the token layer once at the root of your app:
 
 ```ts
-import "@virtari/tokens";
+import "@virtari-packages/tokens";
 ```
 
 Override any `--vds-*` custom property at `:root` (or a subtree) to retheme.

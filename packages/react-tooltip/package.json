@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-tooltip",
+  "name": "@virtari-packages/react-tooltip",
   "version": "0.1.0",
   "description": "Virtari tooltip — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

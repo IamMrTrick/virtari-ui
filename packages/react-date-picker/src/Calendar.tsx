@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import {
   useCallback,
   useEffect,
@@ -32,7 +32,7 @@ import {
 } from "@internationalized/date";
 import { createCalendar, resolveLocale, type CalendarSystem, type DateValue } from "./date-utils";
 import type { DatePickerAppearance, DatePickerSize } from "./context";
-import { IconChevronLeft, IconChevronRight } from "@virtari/react-icons";
+import { IconChevronLeft, IconChevronRight } from "@virtari-packages/react-icons";
 import { toButtonProps } from "./aria-button";
 import { ScrollWheel } from "./Wheel";
 

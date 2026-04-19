@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 
 export interface TextCellProps {
   value?: ReactNode;

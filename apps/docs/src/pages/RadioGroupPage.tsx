@@ -7,13 +7,13 @@ import {
   SegmentedRadioItem,
   PillRadio,
   PillRadioItem,
-} from "@virtari/react-radio-group";
-import { Label } from "@virtari/react-label";
+} from "@virtari-packages/react-radio-group";
+import { Label } from "@virtari-packages/react-label";
 import {
   IconUser,
   IconUsers,
   IconBuilding,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 import { Section, Row } from "../components";
 
 /* -------------------------------------------------------------
@@ -712,7 +712,7 @@ export function RadioGroupPage() {
   SegmentedRadioItem,
   PillRadio,
   PillRadioItem,
-} from "@virtari/react-radio-group";
+} from "@virtari-packages/react-radio-group";
 
 // Basic group with label + error
 <RadioGroup

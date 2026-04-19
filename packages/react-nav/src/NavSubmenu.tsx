@@ -3,7 +3,7 @@ import {
   FloatingPortal,
   type FloatingContext,
 } from "@floating-ui/react";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from "react";
 import { useNavSubmenuContext } from "./context";
 

@@ -4,7 +4,7 @@ import {
   Grid,
   Sidebar as LayoutSidebar,
   Center,
-} from "@virtari/react-layout";
+} from "@virtari-packages/react-layout";
 import { Section } from "../components";
 
 const demoBoxStyle: React.CSSProperties = {
@@ -33,7 +33,7 @@ export function CompositionPage() {
           <Box>Second</Box>
           <Box>Third</Box>
         </Stack>
-        <pre className="docs-code">{`import { Stack } from "@virtari/react-layout";
+        <pre className="docs-code">{`import { Stack } from "@virtari-packages/react-layout";
 
 <Stack gap="md">
   <Card />
@@ -117,10 +117,10 @@ export function CompositionPage() {
   Grid,
   Sidebar,
   Center,
-} from "@virtari/react-layout";
+} from "@virtari-packages/react-layout";
 
 // Add styles once at app root:
-// @import "@virtari/react-layout/styles";`}</pre>
+// @import "@virtari-packages/react-layout/styles";`}</pre>
       </Section>
     </>
   );

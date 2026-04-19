@@ -17,7 +17,7 @@ import {
   NavMegaSection,
   type NavVariant,
   type NavSize,
-} from "@virtari/react-nav";
+} from "@virtari-packages/react-nav";
 import {
   IconHome,
   IconUsers,
@@ -38,9 +38,9 @@ import {
   IconShoppingCart,
   IconRocket,
   IconArrowRight,
-} from "@virtari/react-icons";
-import { Button } from "@virtari/react-button";
-import { Badge } from "@virtari/react-badge";
+} from "@virtari-packages/react-icons";
+import { Button } from "@virtari-packages/react-button";
+import { Badge } from "@virtari-packages/react-badge";
 import { Section } from "../components";
 
 /* ──────────────────────────────────────────────
@@ -167,7 +167,7 @@ function IntroSection() {
       title="One nav, many shapes"
       description="Nav is the W3C-pattern navigation primitive — a nav landmark containing a list of links with disclosure buttons for expandable sections. The same component composes a sidebar, a menubar, a mega menu, or a multi-level tree. Orientation and submenu presentation are the only things that change."
     >
-      <pre className="docs-code">{`import { Nav, NavList, NavItem, NavSubmenu } from "@virtari/react-nav";
+      <pre className="docs-code">{`import { Nav, NavList, NavItem, NavSubmenu } from "@virtari-packages/react-nav";
 
 // Sidebar — vertical, inline submenus
 <Nav orientation="vertical" currentPath={pathname}>

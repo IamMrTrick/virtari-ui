@@ -1,8 +1,8 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as react from 'react';
 import { ReactNode, AnchorHTMLAttributes, HTMLAttributes, ButtonHTMLAttributes, TdHTMLAttributes, MutableRefObject, Dispatch, SetStateAction, KeyboardEvent, CSSProperties } from 'react';
-import { AvatarSize } from '@virtari/react-avatar';
-import { BadgeVariant } from '@virtari/react-badge';
+import { AvatarSize } from '@virtari-packages/react-avatar';
+import { BadgeVariant } from '@virtari-packages/react-badge';
 import { Row, Column, Cell, Table, Header } from '@tanstack/react-table';
 export { Cell, ColumnDef, ColumnFiltersState, ColumnOrderState, ColumnPinningState, ColumnSizingState, ExpandedState, GroupingState, Header, HeaderGroup, PaginationState, Row, RowPinningState, RowSelectionState, SortingState, Table, VisibilityState, createColumnHelper, flexRender } from '@tanstack/react-table';
 import { a as DataTableViewMode, b as DataTableRootProps, c as DataTableToolbarProps, d as DataTableScrollAreaProps, e as DataTableTableProps, f as DataTableHeaderProps, g as DataTableHeaderGroupProps, D as DataTableHeaderCellProps, h as DataTableSortTriggerProps, i as DataTableResizeHandleProps, j as DataTableColumnGuide, k as DataTablePinColumnTriggerProps, l as DataTableBodyProps, m as DataTableRowProps, n as DataTableCellProps, o as DataTableGroupHeaderRowProps, p as DataTableRowExpandTriggerProps, q as DataTableRowPinTriggerProps, r as DataTableFooterProps, s as DataTableFooterRowProps, t as DataTableFooterCellProps, u as DataTableSelectAllCheckbox, v as DataTableRowSelectCheckbox, w as DataTableEmptyProps, x as DataTableLoadingOverlayProps, y as DataTableGlobalFilterProps, z as DataTableColumnVisibility, A as DataTableOptions, B as DataTableSize, C as DataTableInteractionMode, E as DataTableBorderMode, F as DataTableMode, G as DataTableVirtualizationOptions, H as DataTableServerRequestState } from './DataTable-BO53g--v.js';
@@ -25,7 +25,7 @@ interface ActionsCellProps {
     trigger?: ReactNode;
     className?: string;
 }
-/** Three-dot menu with row actions — wraps @virtari/react-dropdown-menu. */
+/** Three-dot menu with row actions — wraps @virtari-packages/react-dropdown-menu. */
 declare function ActionsCell({ items, trigger, className }: ActionsCellProps): react_jsx_runtime.JSX.Element;
 
 interface AvatarCellProps {

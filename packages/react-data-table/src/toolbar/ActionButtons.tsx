@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import {
   IconChevronDown,
   IconDotsVertical,
@@ -14,7 +14,7 @@ import {
   IconSettings,
   IconTrash,
   IconX,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 
 /*
  * Toolbar action-button primitives.
@@ -22,7 +22,7 @@ import {
  * Thin <button>s with consistent styling hooks via `.vds-data-table-toolbar-button`.
  * Defaults to an inline SVG glyph + label. Consumers can pass an `icon` and
  * override everything. Wired to look and behave like ghost Button tokens
- * without taking a hard dependency on @virtari/react-button.
+ * without taking a hard dependency on @virtari-packages/react-button.
  */
 
 export type ToolbarActionButtonVariant = "ghost" | "outline" | "solid";

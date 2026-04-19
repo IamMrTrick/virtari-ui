@@ -3,8 +3,8 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
-} from "@virtari/react-collapsible";
-import { Button } from "@virtari/react-button";
+} from "@virtari-packages/react-collapsible";
+import { Button } from "@virtari-packages/react-button";
 import { Section, Row } from "../components";
 
 export function CollapsiblePage() {
@@ -24,15 +24,15 @@ export function CollapsiblePage() {
               </CollapsibleTrigger>
             </div>
             <div style={{ marginTop: "var(--vds-space-2)", padding: "var(--vds-space-2)", borderRadius: "var(--vds-radius-md)", border: "1px solid var(--vds-color-border)" }}>
-              @virtari/react-button
+              @virtari-packages/react-button
             </div>
             <CollapsibleContent>
               <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-2)", marginTop: "var(--vds-space-2)" }}>
                 <div style={{ padding: "var(--vds-space-2)", borderRadius: "var(--vds-radius-md)", border: "1px solid var(--vds-color-border)" }}>
-                  @virtari/react-select
+                  @virtari-packages/react-select
                 </div>
                 <div style={{ padding: "var(--vds-space-2)", borderRadius: "var(--vds-radius-md)", border: "1px solid var(--vds-color-border)" }}>
-                  @virtari/react-accordion
+                  @virtari-packages/react-accordion
                 </div>
               </div>
             </CollapsibleContent>
@@ -56,7 +56,7 @@ export function CollapsiblePage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari/react-collapsible";
+        <pre className="docs-code">{`import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari-packages/react-collapsible";
 
 <Collapsible>
   <CollapsibleTrigger asChild>

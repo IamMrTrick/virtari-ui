@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import type { ComponentRef, Ref } from "react";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import { useSwitchDrag } from "./useSwitchDrag";
 
 export type SwitchSize = "sm" | "md" | "lg";

@@ -15,7 +15,7 @@ Token-driven, accessibility-first, RTL-safe, and shipped as independent packages
 
 ## Why Virtari
 
-- **Token-first.** Every visual surface reads from CSS custom properties in `@virtari/tokens`. Brand or dark-mode overrides cascade through automatically.
+- **Token-first.** Every visual surface reads from CSS custom properties in `@virtari-packages/tokens`. Brand or dark-mode overrides cascade through automatically.
 - **Logical & RTL-safe.** Layouts use `margin-inline` / `padding-block` / `inset-*` and `:dir(rtl)` adjustments, so the same markup flips correctly in Arabic, Hebrew, or Persian.
 - **Composable CSS layers.** Styles sit in the `design-system.components` cascade layer, so consumer apps can always override without `!important`.
 - **Accessible by default.** Built on Radix, React Aria, and strict semantic HTML — focus management, ARIA wiring, and keyboard support are non-optional.
@@ -26,11 +26,11 @@ Token-driven, accessibility-first, RTL-safe, and shipped as independent packages
 
 | Scope | Count | Purpose |
 |---|---|---|
-| `@virtari/tokens` | 1 | Source-of-truth CSS custom properties. |
-| `@virtari/core` | 1 | Reset + global primitives. |
-| `@virtari/utilities` | 1 | Utility classes (spacing, sizing, z-index) built from tokens. |
-| `@virtari/utils` | 1 | Shared internal helpers for component packages. |
-| `@virtari/react-*` | 44 | Individual React components (button, select, data-table, date-picker, …). |
+| `@virtari-packages/tokens` | 1 | Source-of-truth CSS custom properties. |
+| `@virtari-packages/core` | 1 | Reset + global primitives. |
+| `@virtari-packages/utilities` | 1 | Utility classes (spacing, sizing, z-index) built from tokens. |
+| `@virtari-packages/utils` | 1 | Shared internal helpers for component packages. |
+| `@virtari-packages/react-*` | 44 | Individual React components (button, select, data-table, date-picker, …). |
 
 Full list: [`packages/`](./packages). Each package has its own README with install and usage.
 
@@ -43,7 +43,7 @@ Virtari is private — packages live on **GitHub Packages**, not the public npm 
 ### 1. A `.npmrc` at the project root
 
 ```ini
-@virtari:registry=https://npm.pkg.github.com
+@virtari-packages:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -58,8 +58,8 @@ export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx
 Then install only what you need:
 
 ```bash
-pnpm add @virtari/tokens @virtari/core
-pnpm add @virtari/react-button @virtari/react-input @virtari/react-dialog
+pnpm add @virtari-packages/tokens @virtari-packages/core
+pnpm add @virtari-packages/react-button @virtari-packages/react-input @virtari-packages/react-dialog
 ```
 
 > **Prerequisite for publishing under `@virtari`:** GitHub Packages requires the npm scope to match a GitHub owner. You need either (a) a GitHub **organization named `virtari`** that owns this repository, or (b) to rename the scope to match your user/org name. See [CONTRIBUTING.md](./CONTRIBUTING.md#scope--ownership) for details.
@@ -68,17 +68,17 @@ pnpm add @virtari/react-button @virtari/react-input @virtari/react-dialog
 
 ```ts
 // app entry
-import "@virtari/tokens";                     // CSS variables
-import "@virtari/core";                       // reset + layers
-import "@virtari/react-button/styles";        // one per component
-import "@virtari/react-input/styles";
+import "@virtari-packages/tokens";                     // CSS variables
+import "@virtari-packages/core";                       // reset + layers
+import "@virtari-packages/react-button/styles";        // one per component
+import "@virtari-packages/react-input/styles";
 ```
 
 Then use the components as normal React:
 
 ```tsx
-import { Button } from "@virtari/react-button";
-import { Input } from "@virtari/react-input";
+import { Button } from "@virtari-packages/react-button";
+import { Input } from "@virtari-packages/react-input";
 
 export function SignIn() {
   return (
@@ -140,7 +140,7 @@ pnpm run typecheck     # strict type check across the workspace
 ```
 
 - Node 22+, pnpm 10+.
-- The docs app imports packages through their published `exports`, so an edit to a package source requires a rebuild of that package (`pnpm --filter @virtari/react-<name> build`) to reflect in the browser. HMR works on the docs source itself.
+- The docs app imports packages through their published `exports`, so an edit to a package source requires a rebuild of that package (`pnpm --filter @virtari-packages/react-<name> build`) to reflect in the browser. HMR works on the docs source itself.
 
 ## Releasing
 

@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { CSSProperties, Ref } from "react";
 
 export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {

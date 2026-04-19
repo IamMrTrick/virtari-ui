@@ -1,16 +1,16 @@
-import { Button } from "@virtari/react-button";
-import { Input } from "@virtari/react-input";
-import { Toggle } from "@virtari/react-toggle";
+import { Button } from "@virtari-packages/react-button";
+import { Input } from "@virtari-packages/react-input";
+import { Toggle } from "@virtari-packages/react-toggle";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@virtari/react-select";
-import { Checkbox } from "@virtari/react-checkbox";
-import { Switch } from "@virtari/react-switch";
-import { Avatar } from "@virtari/react-avatar";
+} from "@virtari-packages/react-select";
+import { Checkbox } from "@virtari-packages/react-checkbox";
+import { Switch } from "@virtari-packages/react-switch";
+import { Avatar } from "@virtari-packages/react-avatar";
 import { Section, Row } from "../components";
 
 const HEIGHT_RAMP = [

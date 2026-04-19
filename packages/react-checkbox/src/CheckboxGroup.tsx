@@ -1,6 +1,6 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import { useId, useMemo, type ComponentPropsWithoutRef, type ReactNode, type Ref } from "react";
-import { IconAlertCircle } from "@virtari/react-icons";
+import { IconAlertCircle } from "@virtari-packages/react-icons";
 import { CheckboxGroupContext } from "./context";
 
 export interface CheckboxGroupProps

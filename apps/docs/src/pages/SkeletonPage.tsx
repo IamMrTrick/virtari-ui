@@ -1,4 +1,4 @@
-import { Skeleton } from "@virtari/react-skeleton";
+import { Skeleton } from "@virtari-packages/react-skeleton";
 import { Section, Row } from "../components";
 
 export function SkeletonPage() {
@@ -25,7 +25,7 @@ export function SkeletonPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Skeleton } from "@virtari/react-skeleton";
+        <pre className="docs-code">{`import { Skeleton } from "@virtari-packages/react-skeleton";
 
 // Text line
 <Skeleton style={{ height: "1rem", width: "75%" }} />

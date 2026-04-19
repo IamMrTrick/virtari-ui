@@ -1,5 +1,5 @@
 import { Slot } from "@radix-ui/react-slot";
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import {
   useCallback,
   type ElementType,

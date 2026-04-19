@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-language-picker",
+  "name": "@virtari-packages/react-language-picker",
   "version": "0.1.0",
   "description": "Virtari language picker — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -56,9 +56,9 @@
     "typecheck": "pnpm codegen && tsc --noEmit"
   },
   "dependencies": {
-    "@virtari/react-flag": "workspace:*",
-    "@virtari/react-select": "workspace:*",
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/react-flag": "workspace:*",
+    "@virtari-packages/react-select": "workspace:*",
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-data-table",
+  "name": "@virtari-packages/react-data-table",
   "version": "0.1.0",
   "description": "Virtari data table — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -74,16 +74,16 @@
   "dependencies": {
     "@tanstack/react-table": "^8.21.0",
     "@tanstack/react-virtual": "^3.10.0",
-    "@virtari/react-avatar": "workspace:*",
-    "@virtari/react-badge": "workspace:*",
-    "@virtari/react-checkbox": "workspace:*",
-    "@virtari/react-drawer": "workspace:*",
-    "@virtari/react-dropdown-menu": "workspace:*",
-    "@virtari/react-icons": "workspace:*",
-    "@virtari/react-input": "workspace:*",
-    "@virtari/react-popover": "workspace:*",
-    "@virtari/react-switch": "workspace:*",
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/react-avatar": "workspace:*",
+    "@virtari-packages/react-badge": "workspace:*",
+    "@virtari-packages/react-checkbox": "workspace:*",
+    "@virtari-packages/react-drawer": "workspace:*",
+    "@virtari-packages/react-dropdown-menu": "workspace:*",
+    "@virtari-packages/react-icons": "workspace:*",
+    "@virtari-packages/react-input": "workspace:*",
+    "@virtari-packages/react-popover": "workspace:*",
+    "@virtari-packages/react-switch": "workspace:*",
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "@tabler/icons-react": "^3.0.0",

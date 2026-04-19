@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-date-picker",
+  "name": "@virtari-packages/react-date-picker",
   "version": "0.1.0",
   "description": "Virtari date picker — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -101,12 +101,12 @@
     "@react-stately/calendar": "^3.5.5",
     "@react-stately/datepicker": "^3.10.3",
     "@radix-ui/react-popover": "^1.1.15",
-    "@virtari/react-button": "workspace:*",
-    "@virtari/react-dialog": "workspace:*",
-    "@virtari/react-drawer": "workspace:*",
-    "@virtari/react-icons": "workspace:*",
-    "@virtari/react-radio-group": "workspace:*",
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/react-button": "workspace:*",
+    "@virtari-packages/react-dialog": "workspace:*",
+    "@virtari-packages/react-drawer": "workspace:*",
+    "@virtari-packages/react-icons": "workspace:*",
+    "@virtari-packages/react-radio-group": "workspace:*",
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "@tabler/icons-react": "^3.0.0",

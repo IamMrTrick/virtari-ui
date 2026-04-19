@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-spinner",
+  "name": "@virtari-packages/react-spinner",
   "version": "0.1.0",
   "description": "Virtari spinner — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -53,7 +53,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

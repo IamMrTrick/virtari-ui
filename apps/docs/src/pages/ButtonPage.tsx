@@ -6,20 +6,20 @@ import {
   type ButtonSize,
   type ButtonEffect,
   type ButtonAnimation,
-} from "@virtari/react-button";
+} from "@virtari-packages/react-button";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@virtari/react-select";
-import { Switch } from "@virtari/react-switch";
+} from "@virtari-packages/react-select";
+import { Switch } from "@virtari-packages/react-switch";
 import {
   Row as LayoutRow,
   Col,
   Stack as LayoutStack,
-} from "@virtari/react-layout";
+} from "@virtari-packages/react-layout";
 import { Section, Row } from "../components";
 import {
   IconArrowRight,
@@ -28,7 +28,7 @@ import {
   IconSearch as TablerIconSearch,
   IconSparkles,
   IconTrash as TablerIconTrash,
-} from "@virtari/react-icons";
+} from "@virtari-packages/react-icons";
 
 /* ─────────────────────────────── Icons ─────────────────────────────── */
 
@@ -285,7 +285,7 @@ function PlaygroundSection() {
           </Select>
         </Field>
 
-        <Field label="Effect" hint="Requires @virtari/react-button/styles/effects.">
+        <Field label="Effect" hint="Requires @virtari-packages/react-button/styles/effects.">
           <Select value={effect} onValueChange={(v) => setEffect(v as ButtonEffect | "none")}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -294,7 +294,7 @@ function PlaygroundSection() {
           </Select>
         </Field>
 
-        <Field label="Animation" hint="Requires @virtari/react-button/styles/animations.">
+        <Field label="Animation" hint="Requires @virtari-packages/react-button/styles/animations.">
           <Select value={animation} onValueChange={(v) => setAnimation(v as ButtonAnimation | "none")}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -709,7 +709,7 @@ function EffectsSection() {
   return (
     <Section
       title="Visual effects"
-      description="Decorative layers for hero moments. Opt-in per build — import @virtari/react-button/styles/effects to unlock. The raised 3D shadow is now hue-neutral (no color bleed in dark mode)."
+      description="Decorative layers for hero moments. Opt-in per build — import @virtari-packages/react-button/styles/effects to unlock. The raised 3D shadow is now hue-neutral (no color bleed in dark mode)."
     >
       <Row>
         <Button effect="shine">Shine</Button>
@@ -775,7 +775,7 @@ function EffectsSection() {
       </Caption>
 
       <pre className="docs-code">{`// vite.config.ts / layout.tsx
-import "@virtari/react-button/styles/effects";
+import "@virtari-packages/react-button/styles/effects";
 
 <Button effect="shine">Shine</Button>
 <Button effect="raised" size="lg">Raised</Button>
@@ -794,7 +794,7 @@ function AnimationsSection() {
   return (
     <Section
       title="Attention animations"
-      description="Motion cues for emphasis or validation. Opt-in by importing @virtari/react-button/styles/animations. All animations respect prefers-reduced-motion."
+      description="Motion cues for emphasis or validation. Opt-in by importing @virtari-packages/react-button/styles/animations. All animations respect prefers-reduced-motion."
     >
       <Row>
         <Button animation="pulse">Pulse</Button>
@@ -814,7 +814,7 @@ function AnimationsSection() {
         <li><strong>jiggle</strong> — one-shot playful wiggle. Affirm a delete / confirm interaction.</li>
       </ul>
 
-      <pre className="docs-code">{`import "@virtari/react-button/styles/animations";
+      <pre className="docs-code">{`import "@virtari-packages/react-button/styles/animations";
 
 <Button animation="pulse">Try me</Button>
 <Button animation="bounce">Tour</Button>
@@ -869,10 +869,10 @@ function ApiSection() {
       title="API reference"
       description="Color and variant are orthogonal. All props extend native button attributes."
     >
-      <pre className="docs-code">{`import { Button } from "@virtari/react-button";
+      <pre className="docs-code">{`import { Button } from "@virtari-packages/react-button";
 // opt-in layers:
-import "@virtari/react-button/styles/effects";
-import "@virtari/react-button/styles/animations";
+import "@virtari-packages/react-button/styles/effects";
+import "@virtari-packages/react-button/styles/animations";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?:       "primary" | "success" | "warning" | "danger"

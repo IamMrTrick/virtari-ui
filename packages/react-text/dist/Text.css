@@ -13,7 +13,7 @@
    *
    * All semantic vars fall back to literal values so the
    * package works standalone if dropped into a project
-   * without @virtari/tokens.
+   * without @virtari-packages/tokens.
    * ───────────────────────────────────────────── */
   .vds-text {
     --text-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);

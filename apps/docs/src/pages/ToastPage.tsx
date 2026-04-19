@@ -13,18 +13,18 @@ import {
   type ToastPosition,
   type ToastTimerMode,
   type ToastPauseMode,
-} from "@virtari/react-toast";
-import { Button } from "@virtari/react-button";
-import { Badge } from "@virtari/react-badge";
+} from "@virtari-packages/react-toast";
+import { Button } from "@virtari-packages/react-button";
+import { Badge } from "@virtari-packages/react-badge";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@virtari/react-select";
-import { Switch } from "@virtari/react-switch";
-import { Slider } from "@virtari/react-slider";
+} from "@virtari-packages/react-select";
+import { Switch } from "@virtari-packages/react-switch";
+import { Slider } from "@virtari-packages/react-slider";
 import { Section, Row } from "../components";
 
 /* ─────────────────────────────── Helpers ─────────────────────────────── */
@@ -964,7 +964,7 @@ function HookSection() {
         </Button>
       </Row>
 
-      <pre className="docs-code">{`import { useToast } from "@virtari/react-toast";
+      <pre className="docs-code">{`import { useToast } from "@virtari-packages/react-toast";
 
 function Header() {
   const { toasts, toast, dismiss, dismissAll } = useToast();
@@ -985,7 +985,7 @@ function ImperativeApiSection() {
       title="Imperative API — full reference"
       description="Call these from anywhere — services, event handlers, zustand actions, etc. No React context required."
     >
-      <pre className="docs-code">{`import { toast } from "@virtari/react-toast";
+      <pre className="docs-code">{`import { toast } from "@virtari-packages/react-toast";
 
 // Type shortcuts
 toast(options);                 // generic
@@ -1075,7 +1075,7 @@ function LowLevelSection() {
   ToastProvider, ToastViewport,
   ToastRoot, ToastTitle, ToastDescription,
   ToastAction, ToastClose,
-} from "@virtari/react-toast";
+} from "@virtari-packages/react-toast";
 
 <ToastProvider swipeDirection="right">
   <ToastRoot open={open} onOpenChange={setOpen} duration={Infinity}>

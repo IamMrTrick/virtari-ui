@@ -3,9 +3,9 @@
 
 var react = require('react');
 var reactSlot = require('@radix-ui/react-slot');
-var utils = require('@virtari/utils');
-var reactIcons = require('@virtari/react-icons');
-var reactDropdownMenu = require('@virtari/react-dropdown-menu');
+var utils = require('@virtari-packages/utils');
+var reactIcons = require('@virtari-packages/react-icons');
+var reactDropdownMenu = require('@virtari-packages/react-dropdown-menu');
 var jsxRuntime = require('react/jsx-runtime');
 
 // src/Breadcrumb.tsx

@@ -3,9 +3,9 @@ import { createContext, forwardRef, useMemo, memo, useCallback, useState, useEff
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { flexRender, useReactTable, getFacetedUniqueValues, getFacetedRowModel, getGroupedRowModel, getExpandedRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel, getCoreRowModel } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { Checkbox } from '@virtari/react-checkbox';
-import { cn } from '@virtari/utils';
-import { IconArrowsSort, IconChevronUp, IconChevronRight } from '@virtari/react-icons';
+import { Checkbox } from '@virtari-packages/react-checkbox';
+import { cn } from '@virtari-packages/utils';
+import { IconArrowsSort, IconChevronUp, IconChevronRight } from '@virtari-packages/react-icons';
 
 // src/DataTableContext.tsx
 var DataTableCtx = createContext(null);

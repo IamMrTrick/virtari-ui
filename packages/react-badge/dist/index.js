@@ -1,4 +1,4 @@
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { Slot, Slottable } from '@radix-ui/react-slot';
 import { jsxs, jsx } from 'react/jsx-runtime';
 

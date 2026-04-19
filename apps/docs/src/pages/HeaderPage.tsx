@@ -8,9 +8,9 @@ import {
   HeaderCenter,
   HeaderEnd,
   type HeaderStickyMode,
-} from "@virtari/react-header";
-import { Nav, NavList, NavItem } from "@virtari/react-nav";
-import { Button } from "@virtari/react-button";
+} from "@virtari-packages/react-header";
+import { Nav, NavList, NavItem } from "@virtari-packages/react-nav";
+import { Button } from "@virtari-packages/react-button";
 import { Section } from "../components";
 
 /* ─────────────────────────────── Helpers ─────────────────────────────── */
@@ -151,7 +151,7 @@ export function HeaderPage() {
         <pre className="docs-code">{`import {
   Header, HeaderTop, HeaderMain, HeaderBottom,
   HeaderStart, HeaderCenter, HeaderEnd,
-} from "@virtari/react-header";
+} from "@virtari-packages/react-header";
 
 <Header aria-label="Site header" stickyOffset="0px">
   <HeaderTop sticky="collapse" background="emphasis">

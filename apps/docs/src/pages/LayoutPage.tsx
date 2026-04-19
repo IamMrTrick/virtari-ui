@@ -3,7 +3,7 @@ import {
   Row,
   Col,
   Container,
-} from "@virtari/react-layout";
+} from "@virtari-packages/react-layout";
 import { Section } from "../components";
 
 const demoBoxStyle: React.CSSProperties = {
@@ -37,7 +37,7 @@ export function LayoutPage() {
         title="Why these primitives?"
         description="Main → Section → Row → Col is the semantic hierarchy for a production page. Main is the page's single landmark. Section owns vertical rhythm and content width. Row owns the horizontal slot. Col owns the cell. Together they replace ad-hoc div + inline flex/grid markup."
       >
-        <pre className="docs-code">{`import { Main, Section, Row, Col, Container } from "@virtari/react-layout";
+        <pre className="docs-code">{`import { Main, Section, Row, Col, Container } from "@virtari-packages/react-layout";
 
 <Main>
   <Section padding="lg" width="xl" gap="lg">
@@ -235,7 +235,7 @@ export function LayoutPage() {
 
       <Section
         title="Token architecture"
-        description="All defaults flow from @virtari/tokens/layout — a three-tier system mirroring the radii & color tiers."
+        description="All defaults flow from @virtari-packages/tokens/layout — a three-tier system mirroring the radii & color tiers."
       >
         <pre className="docs-code">{`/* packages/tokens/src/layout/primitives.css */
 --vds-container-width-xs ... -2xl, -prose, -full

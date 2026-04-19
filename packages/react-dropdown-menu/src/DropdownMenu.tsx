@@ -1,4 +1,4 @@
-import { cn } from "@virtari/utils";
+import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 

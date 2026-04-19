@@ -1,4 +1,4 @@
-import { Progress } from "@virtari/react-progress";
+import { Progress } from "@virtari-packages/react-progress";
 import { Section, Row } from "../components";
 
 export function ProgressPage() {
@@ -32,7 +32,7 @@ export function ProgressPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Progress } from "@virtari/react-progress";
+        <pre className="docs-code">{`import { Progress } from "@virtari-packages/react-progress";
 
 // Determinate
 <Progress value={60} />

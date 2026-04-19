@@ -1,9 +1,9 @@
 "use client";
 'use strict';
 
-var utils = require('@virtari/utils');
+var utils = require('@virtari-packages/utils');
 var CheckboxPrimitive = require('@radix-ui/react-checkbox');
-var reactIcons = require('@virtari/react-icons');
+var reactIcons = require('@virtari-packages/react-icons');
 var react = require('react');
 var jsxRuntime = require('react/jsx-runtime');
 

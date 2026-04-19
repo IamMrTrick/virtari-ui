@@ -6,9 +6,9 @@ import {
   DrawerBody,
   DrawerTitle,
   DrawerDescription,
-} from "@virtari/react-drawer";
-import { Switch } from "@virtari/react-switch";
-import { IconSun, IconMoon } from "@virtari/react-icons";
+} from "@virtari-packages/react-drawer";
+import { Switch } from "@virtari-packages/react-switch";
+import { IconSun, IconMoon } from "@virtari-packages/react-icons";
 import type { RadiusMode, Direction } from "../App";
 
 const RADIUS_MODES: { value: RadiusMode; label: string }[] = [

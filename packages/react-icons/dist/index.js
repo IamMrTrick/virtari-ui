@@ -1,7 +1,7 @@
 "use client";
 export * from '@tabler/icons-react';
 import { createContext, useContext } from 'react';
-import { cn } from '@virtari/utils';
+import { cn } from '@virtari-packages/utils';
 import { jsx } from 'react/jsx-runtime';
 
 // src/index.ts

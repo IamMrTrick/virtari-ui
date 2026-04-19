@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/react-toggle",
+  "name": "@virtari-packages/react-toggle",
   "version": "0.1.0",
   "description": "Virtari toggle — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@radix-ui/react-toggle": "^1.1.10",
-    "@virtari/utils": "workspace:*"
+    "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

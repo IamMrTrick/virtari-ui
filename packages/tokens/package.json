@@ -1,5 +1,5 @@
 {
-  "name": "@virtari/tokens",
+  "name": "@virtari-packages/tokens",
   "version": "0.1.0",
   "description": "Design tokens (colors, spacing, typography, radii, shadows, motion) as CSS variables.",
   "license": "UNLICENSED",

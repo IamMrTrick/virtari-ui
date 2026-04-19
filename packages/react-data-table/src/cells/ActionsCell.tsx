@@ -5,9 +5,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@virtari/react-dropdown-menu";
-import { cn } from "@virtari/utils";
-import { IconDots } from "@virtari/react-icons";
+} from "@virtari-packages/react-dropdown-menu";
+import { cn } from "@virtari-packages/utils";
+import { IconDots } from "@virtari-packages/react-icons";
 
 export interface ActionItem {
   id: string;
@@ -27,7 +27,7 @@ export interface ActionsCellProps {
   className?: string;
 }
 
-/** Three-dot menu with row actions — wraps @virtari/react-dropdown-menu. */
+/** Three-dot menu with row actions — wraps @virtari-packages/react-dropdown-menu. */
 export function ActionsCell({ items, trigger, className }: ActionsCellProps) {
   return (
     <DropdownMenu>
