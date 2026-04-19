@@ -191,16 +191,20 @@
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
+    /* Plain (default): a single flat step of contrast vs the drawer body —
+       slightly darker in light theme, slightly lighter in dark theme, no
+       border. No gradient. */
+    background: light-dark(
+      color-mix(in oklch, var(--vds-color-surface), black 5%),
+      color-mix(in oklch, var(--vds-color-surface), white 5%)
+    );
   }
 
   .vds-drawer-header[data-variant="bordered"] {
+    /* Bordered: uniform with the drawer body, differentiated only by a
+       bottom rule. */
+    background: transparent;
     border-block-end: 1px solid var(--vds-color-border-muted);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in oklch, var(--vds-color-surface), white 4%),
-        color-mix(in oklch, var(--vds-color-surface), transparent 4%)
-      );
   }
 
   .vds-drawer-content[data-direction="top"] .vds-drawer-header,

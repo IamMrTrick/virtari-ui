@@ -1029,7 +1029,7 @@ function LowLevelSection() {
   return (
     <Section
       title="Low-level primitives (power users)"
-      description="If you need full control over each toast's open state, render your own Radix-wrapped tree using the exported primitives. The <Toaster /> sits at a higher level and drives the store — drop down here only when the imperative API can't express what you need."
+      description="If you need full control over each toast's open state, render your own primitive tree using the exported primitives. The <Toaster /> sits at a higher level and drives the store — drop down here only when the imperative API can't express what you need."
     >
       <ToastProvider swipeDirection="right">
         <Row>
@@ -1080,7 +1080,7 @@ function LowLevelSection() {
 <ToastProvider swipeDirection="right">
   <ToastRoot open={open} onOpenChange={setOpen} duration={Infinity}>
     <ToastTitle>Manual mode</ToastTitle>
-    <ToastDescription>Full Radix control</ToastDescription>
+    <ToastDescription>Full primitive control</ToastDescription>
     <ToastAction altText="Got it">Got it</ToastAction>
     <ToastClose />
   </ToastRoot>
@@ -1094,13 +1094,13 @@ function AccessibilitySection() {
   return (
     <Section
       title="Accessibility"
-      description="Backed by @radix-ui/react-toast — a11y is handled for you."
+      description="Built-in a11y — handled for you."
     >
       <ul className="docs-prose" style={{ paddingInlineStart: "1.25em" }}>
         <li>
           <strong>Screen readers</strong> — each toast is announced via a polite
           <code> aria-live </code> region (assertive for warnings/errors via
-          Radix's <code>type</code>). The announcer dedupes rapid-fire updates.
+          the <code>type</code> prop). The announcer dedupes rapid-fire updates.
         </li>
         <li>
           <strong>Keyboard</strong> — press <kbd>F8</kbd> to move focus into the

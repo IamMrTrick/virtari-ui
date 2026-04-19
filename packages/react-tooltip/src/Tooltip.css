@@ -1,20 +1,133 @@
-@layer components {
+@import "./Tooltip.tokens.css";
+
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Content — floating label surface
+   * ───────────────────────────────────────────── */
   .vds-tooltip-content {
-    z-index: var(--vds-z-tooltip);
-    background-color: var(--vds-color-gray-900);
-    color: var(--vds-color-white);
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-xs);
-    line-height: var(--vds-leading-normal);
-    padding-inline: var(--vds-space-3);
-    padding-block: var(--vds-space-1-5);
-    border-radius: var(--vds-radius-tooltip);
-    box-shadow: var(--vds-shadow-md);
-    animation: vds-fade-in var(--vds-duration-fast) var(--vds-ease-out);
+    z-index: var(--vds-z-tooltip, 1700);
+
+    max-inline-size: var(--tooltip-max-width);
+    padding-inline: var(--tooltip-padding-inline);
+    padding-block: var(--tooltip-padding-block);
+
+    background-color: var(--tooltip-surface);
+    color: var(--tooltip-color);
+    border: 1px solid var(--tooltip-border-color);
+    border-radius: var(--tooltip-radius);
+    box-shadow: var(--tooltip-shadow);
+
+    font-family: var(--tooltip-font-family);
+    font-size: var(--tooltip-font-size);
+    font-weight: var(--tooltip-font-weight);
+    line-height: var(--tooltip-line-height);
+    text-wrap: pretty;
+
     user-select: none;
+    pointer-events: none;
+    will-change: transform, opacity;
+
+    animation: vds-tooltip-in var(--tooltip-enter-duration) var(--tooltip-enter-ease) forwards;
 
     &[data-state="closed"] {
-      animation: vds-fade-out var(--vds-duration-fastest) var(--vds-ease-in);
+      animation: vds-tooltip-out var(--tooltip-exit-duration) var(--tooltip-exit-ease) forwards;
     }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Per-side directional slide on enter
+   * (the keyframes share opacity 0→1 + a small
+   *  translate from the trigger toward the side)
+   * ───────────────────────────────────────────── */
+  .vds-tooltip-content[data-side="top"] {
+    animation-name: vds-tooltip-in-from-bottom;
+    &[data-state="closed"] { animation-name: vds-tooltip-out-to-bottom; }
+  }
+  .vds-tooltip-content[data-side="bottom"] {
+    animation-name: vds-tooltip-in-from-top;
+    &[data-state="closed"] { animation-name: vds-tooltip-out-to-top; }
+  }
+  .vds-tooltip-content[data-side="left"] {
+    animation-name: vds-tooltip-in-from-right;
+    &[data-state="closed"] { animation-name: vds-tooltip-out-to-right; }
+  }
+  .vds-tooltip-content[data-side="right"] {
+    animation-name: vds-tooltip-in-from-left;
+    &[data-state="closed"] { animation-name: vds-tooltip-out-to-left; }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Arrow — Radix renders an <svg> we color via fill
+   * ───────────────────────────────────────────── */
+  .vds-tooltip-arrow {
+    fill: var(--tooltip-arrow-fill);
+    inline-size: var(--tooltip-arrow-size);
+    block-size: calc(var(--tooltip-arrow-size) / 2);
+  }
+
+  /* Reduced motion — keep just a fade */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-tooltip-content,
+    .vds-tooltip-content[data-side] {
+      animation-name: vds-tooltip-in;
+      animation-duration: 0ms;
+    }
+    .vds-tooltip-content[data-state="closed"],
+    .vds-tooltip-content[data-side][data-state="closed"] {
+      animation-name: vds-tooltip-out;
+      animation-duration: 0ms;
+    }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Keyframes (scoped to the component)
+   * ───────────────────────────────────────────── */
+  @keyframes vds-tooltip-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes vds-tooltip-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  @keyframes vds-tooltip-in-from-top {
+    from { opacity: 0; transform: translateY(calc(var(--tooltip-enter-translate) * -1)); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes vds-tooltip-out-to-top {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(calc(var(--tooltip-enter-translate) * -1)); }
+  }
+
+  @keyframes vds-tooltip-in-from-bottom {
+    from { opacity: 0; transform: translateY(var(--tooltip-enter-translate)); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes vds-tooltip-out-to-bottom {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(var(--tooltip-enter-translate)); }
+  }
+
+  @keyframes vds-tooltip-in-from-left {
+    from { opacity: 0; transform: translateX(calc(var(--tooltip-enter-translate) * -1)); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes vds-tooltip-out-to-left {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(calc(var(--tooltip-enter-translate) * -1)); }
+  }
+
+  @keyframes vds-tooltip-in-from-right {
+    from { opacity: 0; transform: translateX(var(--tooltip-enter-translate)); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes vds-tooltip-out-to-right {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(var(--tooltip-enter-translate)); }
   }
 }

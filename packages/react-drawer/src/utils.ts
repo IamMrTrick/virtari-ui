@@ -333,9 +333,16 @@ export function applyRubberband(openPx: number, drawerSize: number): number {
 
 export function getBackgroundStyles(progress: number): { transform: string; borderRadius: string } {
   const p = clamp(progress, 0, 1);
+  // Peak-and-relax curve: the background scale (and its rounded corners)
+  // grow while the drawer transitions, peak near the top, then ease back to
+  // unity when the drawer is fully open. At the "full-full" state the
+  // background is mostly hidden, so a shrunken-with-rounded-corners backdrop
+  // just looks fragmented — we relax it to its natural state instead.
+  const PEAK = 0.9;
+  const strength = p <= PEAK ? p / PEAK : Math.max(0, 1 - (p - PEAK) / (1 - PEAK));
   return {
-    transform: `scale(${1 - p * 0.06})`,
-    borderRadius: `${p * 24}px`,
+    transform: `scale(${1 - strength * 0.06})`,
+    borderRadius: `${strength * 24}px`,
   };
 }
 

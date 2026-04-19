@@ -522,6 +522,7 @@ export const DrawerContent = forwardRef<
   const layoutRef = useRef<DrawerLayout>(layout);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const keyboardOpenRef = useRef(false);
+  const draggingRef = useRef(false);
   const currentSizeRef = useRef(0);
   const pendingSizeRef = useRef(0);
   const measureFrameRef = useRef(0);
@@ -758,6 +759,11 @@ export const DrawerContent = forwardRef<
   const measure = useCallback(() => {
     const contentEl = contentRef.current;
     if (!contentEl) return;
+    // Don't re-measure during drag — the rubber-band stretch writes a scale
+    // transform that inflates getBoundingClientRect(). Re-reading it and
+    // updating layout.totalSize would feed back into writeVisualSize's
+    // divisor, shrinking the scale on the next frame — visible as jitter.
+    if (draggingRef.current) return;
     // Keep snap/layout sizing on the pre-keyboard viewport. Android fires a
     // visualViewport resize for the keyboard; remeasuring there would shrink
     // available-size and then CSS would subtract keyboard-inset a second time.
@@ -1098,6 +1104,7 @@ export const DrawerContent = forwardRef<
     const contentEl = contentRef.current;
     const measureObservedResize = () => {
       if (resizeSizeAnimatingRef.current) return;
+      if (draggingRef.current) return;
       cancelAnimationFrame(measureFrameRef.current);
       measureFrameRef.current = 0;
       measure();
@@ -1133,12 +1140,17 @@ export const DrawerContent = forwardRef<
 
   useLayoutEffect(() => {
     if (!present || resizeSizeAnimatingRef.current) return;
+    if (draggingRef.current) return;
     measure();
   });
 
   useEffect(() => {
     keyboardOpenRef.current = keyboardOpen;
   }, [keyboardOpen]);
+
+  useEffect(() => {
+    draggingRef.current = dragging;
+  }, [dragging]);
 
   useLayoutEffect(() => {
     if (!present || layout.totalSize <= 0) return;

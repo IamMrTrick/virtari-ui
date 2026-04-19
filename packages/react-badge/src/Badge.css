@@ -1,49 +1,116 @@
-@layer components {
+@import "./Badge.tokens.css";
+
+@layer design-system.components {
+  /* ── Root ── */
   .vds-badge {
     display: inline-flex;
     align-items: center;
-    gap: var(--vds-space-1);
-    border-radius: var(--vds-radius-badge);
-    border: 1px solid transparent;
-    padding-inline: var(--vds-space-2-5);
-    padding-block: var(--vds-space-0-5);
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-xs);
-    font-weight: var(--vds-font-weight-medium);
-    line-height: var(--vds-leading-tight);
+    justify-content: center;
+    gap: var(--badge-gap);
+    vertical-align: middle;
+
+    block-size: var(--badge-height);
+    padding-inline: var(--badge-padding-inline);
+
+    background-color: var(--badge-bg);
+    color: var(--badge-text);
+    border: var(--badge-border-width) solid var(--badge-border);
+    border-radius: var(--badge-radius);
+
+    font-family: var(--badge-font-family);
+    font-size: var(--badge-font-size);
+    font-weight: var(--badge-font-weight);
+    line-height: var(--badge-line-height);
+    letter-spacing: var(--badge-letter-spacing);
+
     white-space: nowrap;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
     transition:
-      background-color var(--vds-duration-fast) var(--vds-ease-out),
-      color var(--vds-duration-fast) var(--vds-ease-out);
+      background-color var(--badge-transition-duration) var(--badge-transition-easing),
+      border-color     var(--badge-transition-duration) var(--badge-transition-easing),
+      color            var(--badge-transition-duration) var(--badge-transition-easing);
+  }
 
-    --_badge-bg: var(--vds-color-primary-muted);
-    --_badge-text: var(--vds-color-primary-muted-text);
-    --_badge-border: transparent;
+  /* ── Interactive state (button/anchor render) ── */
+  .vds-badge[data-interactive="true"] {
+    cursor: pointer;
+  }
 
-    background-color: var(--_badge-bg);
-    color: var(--_badge-text);
-    border-color: var(--_badge-border);
+  .vds-badge[data-interactive="true"]:hover {
+    background-color: var(--badge-bg-hover);
+  }
 
-    &[data-variant="secondary"] {
-      --_badge-bg: var(--vds-color-bg-subtle);
-      --_badge-text: var(--vds-color-text);
-    }
+  .vds-badge[data-interactive="true"]:focus-visible,
+  .vds-badge:is(a, button):focus-visible {
+    outline: var(--badge-focus-ring-width) solid var(--badge-focus-ring-color);
+    outline-offset: var(--badge-focus-ring-offset);
+  }
 
-    &[data-variant="outline"] {
-      --_badge-bg: transparent;
-      --_badge-text: var(--vds-color-text);
-      --_badge-border: var(--vds-color-border);
-    }
+  /* ── Sections (leading/trailing icon slots) ── */
+  .vds-badge-section {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
 
-    &[data-variant="destructive"] {
-      --_badge-bg: var(--vds-color-danger-muted);
-      --_badge-text: var(--vds-color-danger-muted-text);
-    }
+  .vds-badge-section > svg {
+    inline-size: var(--badge-icon-size);
+    block-size: var(--badge-icon-size);
+  }
 
-    &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
-    }
+  /* ── Dot indicator ── */
+  .vds-badge-dot {
+    flex-shrink: 0;
+    inline-size: var(--badge-dot-size);
+    block-size: var(--badge-dot-size);
+    border-radius: var(--vds-radius-full, 9999px);
+    background-color: var(--badge-dot);
+  }
+
+  /* ── Close (removable chip) ── */
+  .vds-badge-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--badge-icon-size);
+    block-size: var(--badge-icon-size);
+    margin-inline-start: calc(var(--badge-gap) / 2);
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: var(--vds-radius-full, 9999px);
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity var(--badge-transition-duration) var(--badge-transition-easing),
+                background-color var(--badge-transition-duration) var(--badge-transition-easing);
+  }
+
+  .vds-badge-close:hover,
+  .vds-badge-close:focus-visible {
+    opacity: 1;
+    background-color: color-mix(in oklch, currentColor 14%, transparent);
+  }
+
+  .vds-badge-close:focus-visible {
+    outline: var(--badge-focus-ring-width) solid var(--badge-focus-ring-color);
+    outline-offset: 1px;
+  }
+
+  .vds-badge-close > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* ── Dot-only mode ── */
+  .vds-badge[data-dot-only="true"] {
+    inline-size: var(--badge-dot-size);
+    background-color: var(--badge-color-solid);
+    border: 0;
+  }
+  .vds-badge[data-dot-only="true"] > .vds-badge-dot {
+    display: none;
   }
 }

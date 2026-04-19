@@ -65,7 +65,7 @@ export function DateField({
   });
   const localRef = useRef<HTMLDivElement>(null);
   const { labelProps, fieldProps, descriptionProps, errorMessageProps } =
-    useDateField({ ...props, isInvalid: invalid ?? props.isInvalid }, state, localRef);
+    useDateField({ ...props, label, isInvalid: invalid ?? props.isInvalid }, state, localRef);
 
   const isInvalid = invalid ?? state.isInvalid;
 
@@ -129,6 +129,28 @@ export function FieldSegment({ segment, state }: FieldSegmentProps) {
       data-placeholder={segment.isPlaceholder ? "true" : undefined}
     >
       {segment.text}
+    </div>
+  );
+}
+
+interface StaticFieldSegmentsProps {
+  segments: DateSegment[];
+  className?: string;
+}
+
+export function StaticFieldSegments({ segments, className }: StaticFieldSegmentsProps) {
+  return (
+    <div className={cn("vds-static-field-segments", className)} aria-hidden="true">
+      {segments.map((segment, index) => (
+        <span
+          key={`${segment.type}-${index}`}
+          className="vds-static-field-segment"
+          data-type={segment.type}
+          data-placeholder={segment.isPlaceholder ? "true" : undefined}
+        >
+          {segment.text}
+        </span>
+      ))}
     </div>
   );
 }

@@ -12,11 +12,11 @@ export type { TimeFieldProps } from "./TimeField";
 
 /* ── DatePicker (single date, field + popover calendar) ── */
 export { DatePicker } from "./DatePicker";
-export type { DatePickerProps } from "./DatePicker";
+export type { DatePickerProps, DatePickerPresetRenderProps } from "./DatePicker";
 
 /* ── DateRangePicker (start/end, field + popover range calendar) ── */
 export { DateRangePicker } from "./DateRangePicker";
-export type { DateRangePickerProps } from "./DateRangePicker";
+export type { DateRangePickerProps, DateRangePickerPresetRenderProps } from "./DateRangePicker";
 
 /* ── Presets sidebar ── */
 export { DatePickerPresets, DateRangePickerPresets } from "./Presets";
@@ -29,6 +29,11 @@ export type {
 
 /* ── Shared visual types ── */
 export type { DatePickerSize, DatePickerAppearance } from "./context";
+export type {
+  MobilePickerPresentation,
+  MobilePickerSizeMode,
+  PickerOverlayMode,
+} from "./picker-overlay";
 
 /* ── Date engine utilities ── */
 export { createCalendar, resolveLocale } from "./date-utils";

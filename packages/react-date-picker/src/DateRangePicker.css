@@ -2,7 +2,6 @@
 @import "./DatePicker.css";
 
 @layer design-system.components {
-  /* ── Root ── */
   .vds-date-range-picker {
     display: inline-flex;
     flex-direction: column;
@@ -20,7 +19,6 @@
     color: var(--date-field-label-color);
   }
 
-  /* ── Field (one per start / end) ── */
   .vds-date-range-picker-field {
     display: inline-flex;
     align-items: center;
@@ -29,7 +27,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* ── Separator ── */
   .vds-date-range-picker-separator {
     flex: none;
     padding-inline: var(--vds-space-1, 0.25rem);
@@ -37,7 +34,6 @@
     user-select: none;
   }
 
-  /* ── Trigger ── */
   .vds-date-range-picker-trigger {
     display: inline-flex;
     align-items: center;
@@ -75,13 +71,12 @@
     block-size: var(--date-field-trigger-size);
   }
 
-  /* ── Content ── */
   .vds-date-range-picker-content {
     z-index: var(--date-picker-content-z-index);
     box-sizing: border-box;
-    inline-size: max-content;
-    max-inline-size: calc(100vw - 1rem);
-    max-block-size: calc(100dvh - 1rem);
+    inline-size: min(42rem, calc(100vw - 1rem));
+    max-inline-size: min(44rem, calc(100vw - 1rem));
+    max-block-size: min(36rem, calc(100dvh - 1rem));
     background: var(--date-picker-content-bg);
     border: var(--date-picker-content-border-width) solid var(--date-picker-content-border-color);
     border-radius: var(--date-picker-content-radius);
@@ -99,10 +94,31 @@
     outline: none;
   }
 
+  .vds-date-range-picker-overlay,
+  .vds-date-range-picker-mobile-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-inline-size: 0;
+  }
+
+  .vds-date-range-picker-mobile-panel {
+    gap: var(--vds-space-3, 0.75rem);
+  }
+
+  .vds-date-range-picker-mobile-time-panel {
+    overflow-x: hidden;
+  }
+
+  .vds-date-range-picker-mobile-calendar .vds-calendar-months {
+    grid-template-columns: 1fr;
+  }
+
   .vds-date-range-picker-content-inner {
     display: flex;
     align-items: stretch;
     max-inline-size: 100%;
+    min-inline-size: 0;
   }
 
   .vds-date-range-picker-presets {
@@ -110,7 +126,7 @@
     flex-direction: column;
     gap: var(--vds-space-1, 0.25rem);
     padding: var(--vds-space-3, 0.75rem);
-    min-inline-size: 10rem;
+    min-inline-size: 12rem;
     border-inline-end: 1px solid var(--vds-color-border-muted, #e5e7eb);
     background: var(--vds-color-bg-subtle, #fafafa);
   }
@@ -123,23 +139,51 @@
   .vds-date-range-picker-main {
     display: flex;
     flex-direction: column;
-    min-inline-size: min(42rem, calc(100vw - 2rem));
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  .vds-date-range-picker-main[data-layout="split"] {
+    display: grid;
+    grid-template-columns: minmax(28rem, 1fr) minmax(12rem, 14rem);
+    align-items: stretch;
   }
 
   .vds-date-range-picker-time {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-inline-size: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--vds-space-3, 0.75rem);
-    padding-block: var(--vds-space-2, 0.5rem);
-    padding-inline: var(--calendar-padding);
+    align-items: start;
+    min-inline-size: 0;
+    padding: var(--vds-space-3, 0.75rem);
     border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    background: color-mix(in oklab, var(--date-picker-content-bg) 97%, var(--vds-color-bg-subtle, #fafafa));
+  }
+
+  .vds-date-range-picker-time[data-mobile-time-links="true"] {
+    grid-template-columns: 1fr;
+  }
+
+  .vds-date-range-picker-main[data-layout="split"] .vds-date-range-picker-time {
+    grid-template-columns: 1fr;
+    align-content: start;
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
   }
 
   .vds-date-range-picker-footer {
     padding: var(--vds-space-3, 0.75rem);
     border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+  }
+
+  .vds-date-range-picker-main[data-layout="split"] > .vds-date-range-picker-footer {
+    grid-column: 1 / -1;
+  }
+
+  .vds-date-range-picker-actions {
+    padding: var(--vds-space-3, 0.75rem);
+    border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    background: color-mix(in oklab, var(--date-picker-content-bg) 98%, var(--vds-color-bg-subtle, #fafafa));
   }
 
   .vds-date-range-picker-description {
@@ -153,11 +197,6 @@
   }
 
   @media (max-width: 42rem) {
-    .vds-date-range-picker-content {
-      inline-size: calc(100vw - 1rem);
-      overflow: hidden;
-    }
-
     .vds-date-range-picker-content-inner {
       flex-direction: column;
     }
@@ -177,9 +216,19 @@
       inline-size: 100%;
     }
 
-    .vds-date-range-picker-time {
-      flex-direction: column;
+    .vds-date-range-picker-time,
+    .vds-date-range-picker-main[data-layout="split"] .vds-date-range-picker-time {
+      grid-template-columns: 1fr;
       align-items: stretch;
+      border-inline-start: 0;
+      border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    }
+
+    .vds-date-range-picker-actions {
+      padding-inline: 0;
+      padding-block-end: 0;
+      border-block-start: 0;
+      background: transparent;
     }
   }
 }

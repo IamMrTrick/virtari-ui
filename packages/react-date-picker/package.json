@@ -63,6 +63,9 @@
     "@react-stately/calendar": "^3.5.5",
     "@react-stately/datepicker": "^3.10.3",
     "@radix-ui/react-popover": "^1.1.15",
+    "@virtari/react-button": "workspace:*",
+    "@virtari/react-dialog": "workspace:*",
+    "@virtari/react-drawer": "workspace:*",
     "@virtari/react-icons": "workspace:*",
     "@virtari/utils": "workspace:*"
   },

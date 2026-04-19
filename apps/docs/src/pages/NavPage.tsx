@@ -144,6 +144,7 @@ export function NavPage() {
       <GroupsSection />
       <CollapsedSection />
       <NestedSection />
+      <TreeSection />
       <MenubarSection />
       <MegaSection />
       <VariantsSection />
@@ -542,9 +543,9 @@ function NestedSection() {
   return (
     <Section
       title="Nested — arbitrary depth"
-      description="Inline submenus nest without ceremony. Each level bumps the indent token for a readable hierarchy. Arbitrary depth is supported — three shown here, but you can go deeper."
+      description="Inline submenus nest without ceremony. Each level bumps the `--item-indent` token for a readable hierarchy. Indent is styled up to 10 levels out of the box — the step tapers past level 3 so deep trees stay inside a standard 16rem sidebar. Below: three quick levels, then a ten-level smoke test."
     >
-      <SidebarFrame label="Nested sidebar">
+      <SidebarFrame label="Nested sidebar — three levels">
         <Nav orientation="vertical">
           <NavList>
             <NavItem
@@ -585,7 +586,46 @@ function NestedSection() {
           </NavList>
         </Nav>
       </SidebarFrame>
+
+      <div style={{ marginBlockStart: "var(--vds-space-4)" }}>
+        <SidebarFrame label="Ten-level nested sidebar" height="34rem">
+          <TenLevelTree />
+        </SidebarFrame>
+      </div>
     </Section>
+  );
+}
+
+/**
+ * TenLevelTree — renders a single spine of ten nested inline submenus so every
+ * `--item-indent` rule from level 1 through level 10 in Nav.tokens.css is
+ * exercised visually. The "Level N" label matches the item's `data-level`.
+ */
+function TenLevelTree() {
+  // Build the spine from the innermost leaf (level 10) outwards.
+  // At level 10 the item has no submenu — it's a terminal link.
+  let node: ReactNode = (
+    <NavItem href="/depth/10" label="Level 10 · leaf" />
+  );
+  for (let depth = 9; depth >= 1; depth--) {
+    const submenu = (
+      <NavSubmenu>
+        <NavList>{node}</NavList>
+      </NavSubmenu>
+    );
+    node = (
+      <NavItem
+        label={`Level ${depth}`}
+        icon={depth === 1 ? <IconBook2 size={18} /> : undefined}
+        submenu={submenu}
+      />
+    );
+  }
+
+  return (
+    <Nav orientation="vertical">
+      <NavList>{node}</NavList>
+    </Nav>
   );
 }
 
@@ -734,14 +774,38 @@ function MegaSection() {
  * Variants
  * ────────────────────────────── */
 
-const VARIANTS: NavVariant[] = ["ghost", "filled", "pill", "underline"];
+const VARIANTS: NavVariant[] = [
+  "ghost",
+  "filled",
+  "pill",
+  "underline",
+  "reveal",
+  "outline",
+  "lift",
+  "none",
+  "dot",
+  "tab",
+];
+
+const VARIANT_HINTS: Record<NavVariant, string> = {
+  ghost: "Minimal bg tint on hover — default, safe anywhere.",
+  filled: "Solid bg block on hover. Good for dense sidebars.",
+  pill: "Fully-rounded bg. Reads as an action chip.",
+  underline: "Thin bottom border on current, tints on hover. Tab-style horizontal navs.",
+  reveal: "Animated underline grows from the centre on hover. Marketing menubars.",
+  outline: "Hollow border ring fades in on hover. Soft, structured look.",
+  lift: "Soft shadow + 1px translate on hover. Card-like bounce.",
+  none: "Zero chrome — only the text recolors to primary on hover / current.",
+  dot: "Small primary circle pops in below the label. Minimalist indicator.",
+  tab: "Thick primary bar with rounded top corners. Reads as a tab-strip.",
+};
 
 function VariantsSection() {
   const [variant, setVariant] = useState<NavVariant>("ghost");
   return (
     <Section
-      title="Variants — ghost, filled, pill, underline"
-      description="Four visual treatments. All honor the active / current-page state, all pull from the same token palette, and all work in horizontal and vertical orientations."
+      title="Variants — ten hover decorations"
+      description="Ten visual treatments. ghost / filled / pill / underline are the staples; reveal / outline / lift add richer hover decorations; none / dot / tab strip everything back to a single primary indicator — all especially suited to horizontal menubars. Each honors the current-page state and pulls from the same token palette."
     >
       <div
         style={{
@@ -763,6 +827,16 @@ function VariantsSection() {
         ))}
       </div>
 
+      <div
+        style={{
+          fontSize: "var(--vds-text-sm)",
+          color: "var(--vds-color-text-muted)",
+          marginBlockEnd: "var(--vds-space-3)",
+        }}
+      >
+        {VARIANT_HINTS[variant]}
+      </div>
+
       <DemoFrame label={`Variant: ${variant}`}>
         <Nav orientation="horizontal" variant={variant} currentPath="/docs">
           <NavList>
@@ -773,6 +847,128 @@ function VariantsSection() {
           </NavList>
         </Nav>
       </DemoFrame>
+
+      <div style={{ marginBlockStart: "var(--vds-space-6)" }}>
+        <h3
+          style={{
+            fontSize: "var(--vds-text-sm)",
+            fontWeight: "var(--vds-font-weight-semibold)",
+            marginBlock: "0 var(--vds-space-3)",
+            color: "var(--vds-color-text-muted)",
+            textTransform: "uppercase",
+            letterSpacing: "var(--vds-tracking-wide)",
+          }}
+        >
+          All seven side-by-side
+        </h3>
+        <div
+          style={{
+            display: "grid",
+            gap: "var(--vds-space-3)",
+          }}
+        >
+          {VARIANTS.map((v) => (
+            <DemoFrame key={v} label={`Variant preview: ${v}`}>
+              <div
+                style={{
+                  fontSize: "var(--vds-text-xs)",
+                  color: "var(--vds-color-text-muted)",
+                  fontFamily: "var(--vds-font-mono)",
+                  marginBlockEnd: "var(--vds-space-2)",
+                }}
+              >
+                variant="{v}"
+              </div>
+              <Nav orientation="horizontal" variant={v} currentPath="/docs">
+                <NavList>
+                  <NavItem href="/" label="Home" />
+                  <NavItem href="/docs" label="Docs" />
+                  <NavItem href="/blog" label="Blog" />
+                  <NavItem href="/pricing" label="Pricing" />
+                </NavList>
+              </Nav>
+            </DemoFrame>
+          ))}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ──────────────────────────────
+ * Tree lines
+ * ────────────────────────────── */
+
+function TreeSection() {
+  return (
+    <Section
+      title="Tree lines — file-tree style nesting"
+      description="Opt in via the `tree` prop on Nav. Each inline submenu draws a 1px vertical guide from the parent item's icon centre down through its children — the classic file-tree look (VS Code sidebar, Finder). No-op for popover submenus and horizontal navs."
+    >
+      <SidebarFrame label="Tree nav" height="32rem">
+        <Nav orientation="vertical" tree>
+          <NavList>
+            <NavItem
+              label="src"
+              icon={<IconBook2 size={18} />}
+              submenu={
+                <NavSubmenu>
+                  <NavList>
+                    <NavItem href="/src/app" label="app.tsx" />
+                    <NavItem
+                      label="components"
+                      submenu={
+                        <NavSubmenu>
+                          <NavList>
+                            <NavItem href="/src/components/button" label="Button.tsx" />
+                            <NavItem href="/src/components/input" label="Input.tsx" />
+                            <NavItem
+                              label="layout"
+                              submenu={
+                                <NavSubmenu>
+                                  <NavList>
+                                    <NavItem href="/src/layout/section" label="Section.tsx" />
+                                    <NavItem href="/src/layout/row" label="Row.tsx" />
+                                    <NavItem href="/src/layout/col" label="Col.tsx" />
+                                  </NavList>
+                                </NavSubmenu>
+                              }
+                            />
+                          </NavList>
+                        </NavSubmenu>
+                      }
+                    />
+                    <NavItem href="/src/styles" label="styles.css" />
+                  </NavList>
+                </NavSubmenu>
+              }
+            />
+            <NavItem
+              label="public"
+              icon={<IconBook2 size={18} />}
+              submenu={
+                <NavSubmenu>
+                  <NavList>
+                    <NavItem href="/public/logo" label="logo.svg" />
+                    <NavItem href="/public/favicon" label="favicon.ico" />
+                  </NavList>
+                </NavSubmenu>
+              }
+            />
+            <NavItem href="/readme" label="README.md" icon={<IconFileText size={18} />} />
+          </NavList>
+        </Nav>
+      </SidebarFrame>
+
+      <pre className="docs-code">{`<Nav orientation="vertical" tree>
+  <NavList>
+    <NavItem label="src" icon={<IconFolder/>} submenu={
+      <NavSubmenu>
+        <NavList>{/* ... */}</NavList>
+      </NavSubmenu>
+    }/>
+  </NavList>
+</Nav>`}</pre>
     </Section>
   );
 }
@@ -939,11 +1135,15 @@ function ApiSection() {
   as?: ElementType;                             // default "nav"
   orientation?: "vertical" | "horizontal";      // default "vertical"
   submenu?: "inline" | "popover";               // default: inline (vert) / popover (horiz)
-  variant?: "ghost" | "filled" | "pill" | "underline";
+  variant?:
+    | "ghost" | "filled" | "pill" | "underline"
+    | "reveal" | "outline" | "lift"
+    | "none" | "dot" | "tab";
   size?: "sm" | "md" | "lg";
   currentPath?: string;                         // drives auto aria-current
   matchStrategy?: "exact" | "startsWith";       // default "exact"
   collapsed?: boolean;                          // rail mode
+  tree?: boolean;                               // vertical guide lines for nested inline submenus
 }
 
 interface NavItemProps extends HTMLAttributes<HTMLLIElement> {

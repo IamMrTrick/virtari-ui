@@ -105,11 +105,26 @@
 
   /* ─────────────────────────────────────────────
    * 5. Nesting indent (vertical / inline submenus)
-   *    Each level adds indent so the hierarchy is readable.
+   *
+   *    Uniform 1rem step per level, so every new depth reads as a clear
+   *    visual offset from its parent. Supported up to 10 levels — deeper
+   *    trees fall back to the default `--item-indent: 0`.
+   *
+   *    At level 10 the total leading offset is ~10.75rem (indent + base
+   *    padding), which fits a standard 16rem sidebar with ellipsis on long
+   *    labels. Trees deeper than that should widen the sidebar or use the
+   *    popover submenu mode.
    * ───────────────────────────────────────────── */
-  .vds-nav__item[data-level="1"] { --item-indent: var(--vds-space-4, 1rem); }
-  .vds-nav__item[data-level="2"] { --item-indent: var(--vds-space-8, 2rem); }
-  .vds-nav__item[data-level="3"] { --item-indent: var(--vds-space-12, 3rem); }
+  .vds-nav__item[data-level="1"]  { --item-indent: var(--vds-space-4,  1rem);   }
+  .vds-nav__item[data-level="2"]  { --item-indent: var(--vds-space-8,  2rem);   }
+  .vds-nav__item[data-level="3"]  { --item-indent: var(--vds-space-12, 3rem);   }
+  .vds-nav__item[data-level="4"]  { --item-indent: var(--vds-space-16, 4rem);   }
+  .vds-nav__item[data-level="5"]  { --item-indent: var(--vds-space-20, 5rem);   }
+  .vds-nav__item[data-level="6"]  { --item-indent: var(--vds-space-24, 6rem);   }
+  .vds-nav__item[data-level="7"]  { --item-indent: 7rem;                        }
+  .vds-nav__item[data-level="8"]  { --item-indent: 8rem;                        }
+  .vds-nav__item[data-level="9"]  { --item-indent: 9rem;                        }
+  .vds-nav__item[data-level="10"] { --item-indent: 10rem;                       }
 
   /* ─────────────────────────────────────────────
    * 6. Submenu tokens

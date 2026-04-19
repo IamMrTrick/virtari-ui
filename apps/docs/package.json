@@ -51,6 +51,7 @@
     "@virtari/react-sidebar": "workspace:*",
     "@virtari/react-date-picker": "workspace:*",
     "@virtari/react-data-table": "workspace:*",
+    "@virtari/react-table": "workspace:*",
     "@virtari/react-icons": "workspace:*",
     "@virtari/react-text": "workspace:*",
     "@tabler/icons": "^3.0.0",

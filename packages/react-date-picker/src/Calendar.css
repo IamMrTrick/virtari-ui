@@ -1,7 +1,6 @@
 @import "./Calendar.tokens.css";
 
 @layer design-system.components {
-  /* ── Root ── */
   .vds-calendar {
     display: inline-flex;
     flex-direction: column;
@@ -16,7 +15,6 @@
     direction: rtl;
   }
 
-  /* ── Header ── */
   .vds-calendar-header {
     display: flex;
     align-items: center;
@@ -26,7 +24,12 @@
   }
 
   .vds-calendar-heading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-1, 0.25rem);
     flex: 1 1 auto;
+    min-inline-size: 0;
     margin: 0;
     text-align: center;
     font-size: var(--calendar-heading-font-size);
@@ -59,7 +62,6 @@
     outline-offset: 2px;
   }
 
-  /* ── Nav buttons ── */
   .vds-calendar-nav {
     display: inline-flex;
     align-items: center;
@@ -98,7 +100,6 @@
     block-size: 0.875rem;
   }
 
-  /* ── Grid table ── */
   .vds-calendar-grid {
     border-collapse: separate;
     border-spacing: var(--calendar-cell-gap);
@@ -179,7 +180,6 @@
     letter-spacing: 0.02em;
   }
 
-  /* ── Cell td (table cell) ── */
   .vds-calendar-cell-td {
     padding: 0;
     text-align: center;
@@ -187,7 +187,6 @@
     position: relative;
   }
 
-  /* ── Cell (focusable inner) ── */
   .vds-calendar-cell {
     display: inline-flex;
     align-items: center;
@@ -220,9 +219,7 @@
     z-index: 1;
   }
 
-  /* Today — hollow ring */
-  .vds-calendar-cell:not([data-selected])[data-today],
-  .vds-calendar-cell:not([data-selected]):has(~ *)[data-today] {
+  .vds-calendar-cell:not([data-selected])[data-today="true"] {
     box-shadow: inset 0 0 0 var(--calendar-cell-today-ring-width) var(--calendar-cell-today-ring-color);
   }
 
@@ -245,7 +242,6 @@
     text-decoration-thickness: 1px;
   }
 
-  /* ── Single-date selected ── */
   .vds-calendar:not(.vds-calendar-range) .vds-calendar-cell[data-selected="true"] {
     background: var(--calendar-cell-selected-bg);
     color: var(--calendar-cell-selected-text);
@@ -255,7 +251,6 @@
     background: var(--calendar-cell-selected-bg-hover);
   }
 
-  /* ── Range states ── */
   .vds-calendar-range .vds-calendar-cell[data-range-middle="true"] {
     background: var(--calendar-range-bg);
     color: var(--calendar-range-text);
@@ -276,19 +271,16 @@
     border-end-start-radius: 0;
   }
 
-  /* Both endpoints on the same day (single-day range) */
   .vds-calendar-range .vds-calendar-cell[data-range-start="true"][data-range-end="true"] {
     border-radius: var(--calendar-cell-radius);
   }
 
-  /* Extend the range tint to fill the table-spacing gap */
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-middle="true"]),
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-start="true"]),
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-end="true"]) {
     background: var(--calendar-range-bg);
   }
 
-  /* Round the outer corners of the range strip */
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-start="true"]) {
     border-start-start-radius: var(--calendar-cell-radius);
     border-end-start-radius: var(--calendar-cell-radius);
@@ -299,7 +291,6 @@
     border-end-end-radius: var(--calendar-cell-radius);
   }
 
-  /* ── Footer ── */
   .vds-calendar-footer {
     display: flex;
     align-items: center;

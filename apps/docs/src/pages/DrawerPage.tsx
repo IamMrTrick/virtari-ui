@@ -31,7 +31,13 @@ import {
 import { Separator } from "@virtari/react-separator";
 import { Slider } from "@virtari/react-slider";
 import { Switch } from "@virtari/react-switch";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@virtari/react-tabs";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  TabsPanels,
+} from "@virtari/react-tabs";
 import { Textarea } from "@virtari/react-textarea";
 import { Section, Row } from "../components";
 
@@ -944,7 +950,9 @@ function NotificationItem({ n }: { n: Notification }) {
         alignItems: "start",
         padding: "var(--vds-space-3)",
         borderRadius: "var(--vds-radius-lg)",
-        background: n.unread ? "var(--vds-color-primary-50)" : "transparent",
+        background: n.unread
+          ? "var(--vds-color-primary-muted)"
+          : "transparent",
       }}
     >
       <div
@@ -952,7 +960,9 @@ function NotificationItem({ n }: { n: Notification }) {
           inlineSize: "0.5rem",
           blockSize: "0.5rem",
           borderRadius: "var(--vds-radius-full)",
-          background: n.unread ? "var(--vds-color-primary-500)" : "transparent",
+          background: n.unread
+            ? "var(--vds-color-primary-emphasis)"
+            : "transparent",
           marginBlockStart: "0.45rem",
         }}
         aria-hidden
@@ -994,10 +1004,27 @@ function NotificationsDrawer() {
   const [tab, setTab] = useState("all");
 
   const unreadCount = items.filter((n) => n.unread).length;
-  const list = tab === "unread" ? items.filter((n) => n.unread) : items;
+  const unreadItems = items.filter((n) => n.unread);
 
   const markAllRead = () =>
     setItems((prev) => prev.map((n) => ({ ...n, unread: false })));
+
+  const renderList = (list: Notification[]) => (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--vds-space-1)",
+        marginBlockStart: "var(--vds-space-3)",
+      }}
+    >
+      {list.length === 0 ? (
+        <p className="docs-prose">Nothing to see here.</p>
+      ) : (
+        list.map((n) => <NotificationItem key={n.id} n={n} />)
+      )}
+    </div>
+  );
 
   return (
     <Drawer
@@ -1033,26 +1060,24 @@ function NotificationsDrawer() {
         </DrawerHeader>
         <DrawerBody>
           <Tabs value={tab} onValueChange={setTab}>
-            <TabsList>
+            {/* Break the tab list out of DrawerBody's inline padding so the
+                underline reaches the drawer edges; push the triggers back in
+                with equal internal padding so they keep their visual inset. */}
+            <TabsList
+              style={{
+                marginInline: "calc(-1 * var(--vds-space-6))",
+                paddingInline: "var(--vds-space-6)",
+                inlineSize: "calc(100% + 2 * var(--vds-space-6))",
+                maxInlineSize: "none",
+              }}
+            >
               <TabsTrigger value="all">All · {items.length}</TabsTrigger>
               <TabsTrigger value="unread">Unread · {unreadCount}</TabsTrigger>
             </TabsList>
-            <TabsContent value={tab}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "var(--vds-space-1)",
-                  marginBlockStart: "var(--vds-space-3)",
-                }}
-              >
-                {list.length === 0 ? (
-                  <p className="docs-prose">Nothing to see here.</p>
-                ) : (
-                  list.map((n) => <NotificationItem key={n.id} n={n} />)
-                )}
-              </div>
-            </TabsContent>
+            <TabsPanels>
+              <TabsContent value="all">{renderList(items)}</TabsContent>
+              <TabsContent value="unread">{renderList(unreadItems)}</TabsContent>
+            </TabsPanels>
           </Tabs>
         </DrawerBody>
         <DrawerFooter>
@@ -1272,7 +1297,7 @@ export function DrawerPage() {
         description="A drawer is a sliding surface that enters from any edge. Use it for secondary tasks that benefit from staying in the flow — editing, filtering, reviewing — where a full-page navigation would feel heavy and a popover would feel cramped."
       >
         <p className="docs-prose">
-          Built on Radix Dialog for accessibility (focus trap, ESC, scroll lock),
+          Built on Dialog primitives for accessibility (focus trap, ESC, scroll lock),
           tuned for touch (native-feel drag with rubber-band physics, snap points,
           velocity flicks), and aware of the mobile virtual keyboard so focused
           inputs stay visible above the IME on both iOS and Android.
@@ -1651,7 +1676,7 @@ export function DrawerPage() {
 
       <Section
         title="Accessibility"
-        description="Built on Radix Dialog primitives. What you get for free — and what you own."
+        description="Built on Dialog primitives. What you get for free — and what you own."
       >
         <p className="docs-prose">
           <strong>Built in:</strong> focus trap while open, <code>Escape</code> to

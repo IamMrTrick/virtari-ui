@@ -831,7 +831,7 @@ function AsChildSection() {
   return (
     <Section
       title="Polymorphic via asChild"
-      description="Pass asChild to forward all Button styling to the first child — ideal for anchors, Next.js Link, Remix Link, or React Router. Powered by Radix Slot; leftSection / rightSection still render."
+      description="Pass asChild to forward all Button styling to the first child — ideal for anchors, Next.js Link, Remix Link, or React Router. Powered by Slot; leftSection / rightSection still render."
     >
       <Row>
         <Button asChild>
@@ -879,7 +879,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
               | "info" | "accent" | "neutral" | "contrast";
   variant?:     "solid" | "outline" | "ghost" | "soft" | "link";
   size?:        "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
-  asChild?:     boolean;                    // render as child (Radix Slot)
+  asChild?:     boolean;                    // render as child (Slot)
   loading?:     boolean;                    // spinner + disables interaction
   loadingText?: string;                     // sr-only status (default "Loading")
   leftSection?: ReactNode;

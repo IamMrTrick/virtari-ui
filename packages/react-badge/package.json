@@ -16,13 +16,14 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./styles": "./dist/Badge.css"
+    "./styles": "./dist/Badge.css",
+    "./tokens": "./dist/Badge.tokens.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup && postcss src/Badge.css -o dist/Badge.css",
+    "build": "tsup && postcss src/Badge.tokens.css -o dist/Badge.tokens.css && postcss src/Badge.css -o dist/Badge.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

@@ -40,6 +40,7 @@ export { NavPage } from "./NavPage";
 export { SidebarPage } from "./SidebarPage";
 export { DatePickerPage } from "./DatePickerPage";
 export { DataTablePage } from "./DataTablePage";
+export { TablePage } from "./TablePage";
 export { UtilitiesPage } from "./UtilitiesPage";
 export { RTLPage } from "./RTLPage";
 export { IconsPage } from "./IconsPage";
@@ -52,7 +53,11 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   colors: { title: "Colors", description: "OKLCH color palette and semantic token reference." },
   typography: { title: "Typography", description: "Font scale, weights, and font family tokens." },
   button: { title: "Button", description: "6 variants, 7 sizes, loading, icons, animations." },
-  badge: { title: "Badge", description: "Small status indicators and labels." },
+  badge: {
+    title: "Badge",
+    description:
+      "7 colors × 5 variants × 4 sizes — pill or square, optional dot, icons, removable chip, and asChild routing.",
+  },
   input: { title: "Input", description: "Text input — 7 sizes aligned with Button." },
   textarea: { title: "Textarea", description: "Multi-line text input with auto-resize." },
   select: { title: "Select", description: "Dropdown selector with groups and search." },
@@ -151,5 +156,10 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     title: "Data Table",
     description:
       "Excel-like resize, virtualization (10k+ rows), pinning, grouping, inline edit, server-side — built on TanStack.",
+  },
+  table: {
+    title: "Table",
+    description:
+      "Semantic HTML table — 4 variants, 3 row styles, 3 sizes, density, sortable headers, sticky header/columns, selection, and full RTL.",
   },
 };

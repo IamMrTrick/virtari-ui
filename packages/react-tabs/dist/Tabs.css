@@ -168,7 +168,7 @@
     --tabs-list-gap: 0;
     --tabs-list-border-width: 1px;
     /* Curve radius — also used for top corners of each tab. */
-    --tabs-boxed-curve: 0.75rem;
+    --tabs-boxed-curve: 0.5rem;
     --tabs-boxed-bg: var(--vds-color-surface, #ffffff);
     --tabs-boxed-border: var(--vds-color-border, #d1d5db);
   }
@@ -652,49 +652,84 @@
     border-color: var(--tabs-boxed-border);
   }
 
-  /* Inverted curves — visible only on active, with matching border line */
+  /* ─────────────────────────────────────────────
+   * Inverted curves — rendered via radial-gradient for hair-thin precise
+   * joins. The technique: each curve pseudo is a square filled with a 3-zone
+   * radial gradient whose circle is centered at the pseudo's corner adjacent
+   * to the tab body. Zones (inside → out):
+   *
+   *   1. transparent        → inside the circle (the list bg + list border
+   *                            show through untouched)
+   *   2. border-color ring  → exactly `list-border-width` wide, sitting on
+   *                            the circle boundary (the curve's outline,
+   *                            meeting the tab's side border tangentially
+   *                            at the top and the list's horizontal border
+   *                            tangentially at the bottom)
+   *   3. tab-bg             → outside the circle (the flare of the active
+   *                            tab extending down to the list border line)
+   *
+   * Why this beats the border+radius+box-shadow approach: the gradient is
+   * evaluated with continuous math and sub-pixel antialiasing, so the arc
+   * and the two horizontal/vertical tangent lines merge into one unbroken
+   * line without the rasterization seams and double-pixel artifacts that
+   * the multi-layer technique produces where the radius meets the border.
+   * ───────────────────────────────────────────── */
   .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::before,
   .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::after {
     content: "";
     position: absolute;
     inline-size: var(--tabs-boxed-curve);
     block-size: var(--tabs-boxed-curve);
-    inset-block-end: calc(-1 * var(--tabs-list-border-width));
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--tabs-trigger-transition-duration)
       var(--tabs-trigger-transition-ease);
   }
-  .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::before {
+
+  /* Horizontal orientation — curves sit at the bottom of each trigger and
+   * tuck under the list's horizontal border line. */
+  .vds-tabs-list[data-variant="boxed"]:not([data-orientation="vertical"])
+    .vds-tabs-trigger::before,
+  .vds-tabs-list[data-variant="boxed"]:not([data-orientation="vertical"])
+    .vds-tabs-trigger::after {
+    inset-block-end: 0;
+    /* Inner radius = outer radius − border width → produces a ring exactly
+     * one border-width wide on the circle boundary. */
+    background: radial-gradient(
+      circle at var(--tabs-boxed-curve-origin-x, 0) 0,
+      transparent 0 calc(var(--tabs-boxed-curve) - var(--tabs-list-border-width)),
+      var(--tabs-boxed-border) calc(var(--tabs-boxed-curve) - var(--tabs-list-border-width)) var(--tabs-boxed-curve),
+      var(--tabs-boxed-bg) var(--tabs-boxed-curve)
+    );
+  }
+  .vds-tabs-list[data-variant="boxed"]:not([data-orientation="vertical"])
+    .vds-tabs-trigger::before {
     inset-inline-start: calc(-1 * var(--tabs-boxed-curve));
-    border-inline-end: 1px solid var(--tabs-boxed-border);
-    border-block-end: 1px solid var(--tabs-boxed-border);
-    border-end-end-radius: var(--tabs-boxed-curve);
-    box-shadow: calc(var(--tabs-boxed-curve) / 2)
-      calc(var(--tabs-boxed-curve) / 2) 0 0 var(--tabs-boxed-bg);
+    --tabs-boxed-curve-origin-x: 0%;
   }
-  .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::after {
+  .vds-tabs-list[data-variant="boxed"]:not([data-orientation="vertical"])
+    .vds-tabs-trigger::after {
     inset-inline-end: calc(-1 * var(--tabs-boxed-curve));
-    border-inline-start: 1px solid var(--tabs-boxed-border);
-    border-block-end: 1px solid var(--tabs-boxed-border);
-    border-end-start-radius: var(--tabs-boxed-curve);
-    box-shadow: calc(-1 * var(--tabs-boxed-curve) / 2)
-      calc(var(--tabs-boxed-curve) / 2) 0 0 var(--tabs-boxed-bg);
+    --tabs-boxed-curve-origin-x: 100%;
   }
+
+  /* RTL: logical inset flips the pseudos to the opposite physical side, so
+   * the gradient's circle center must flip too (background position is
+   * physical, not logical). */
+  :dir(rtl) .vds-tabs-list[data-variant="boxed"]:not([data-orientation="vertical"])
+    .vds-tabs-trigger::before {
+    --tabs-boxed-curve-origin-x: 100%;
+  }
+  :dir(rtl) .vds-tabs-list[data-variant="boxed"]:not([data-orientation="vertical"])
+    .vds-tabs-trigger::after {
+    --tabs-boxed-curve-origin-x: 0%;
+  }
+
   .vds-tabs-list[data-variant="boxed"]
     .vds-tabs-trigger[data-state="active"]::before,
   .vds-tabs-list[data-variant="boxed"]
     .vds-tabs-trigger[data-state="active"]::after {
     opacity: 1;
-  }
-  /* RTL: flip curve border sides so they trace the tab's outer corners. */
-  :dir(rtl) .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::before {
-    border-inline-end: 0;
-    border-inline-start: 1px solid var(--tabs-boxed-border);
-  }
-  :dir(rtl) .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::after {
-    border-inline-start: 0;
-    border-inline-end: 1px solid var(--tabs-boxed-border);
   }
 
   /* Boxed vertical — curves attach to inline-end side */
@@ -718,6 +753,8 @@
     inset-inline-end: 0;
     inset-block-end: auto;
     inset-block-start: calc(-1 * var(--tabs-boxed-curve));
+    border-inline-end: 1px solid var(--tabs-boxed-border);
+    border-block-end: 1px solid var(--tabs-boxed-border);
     border-end-end-radius: 0;
     border-start-end-radius: var(--tabs-boxed-curve);
     box-shadow: calc(var(--tabs-boxed-curve) / 2)
@@ -728,10 +765,21 @@
     inset-inline-start: auto;
     inset-inline-end: 0;
     inset-block-end: calc(-1 * var(--tabs-boxed-curve));
+    border-inline-end: 1px solid var(--tabs-boxed-border);
+    border-block-end: 1px solid var(--tabs-boxed-border);
     border-end-start-radius: 0;
     border-start-end-radius: var(--tabs-boxed-curve);
     box-shadow: calc(var(--tabs-boxed-curve) / 2)
       calc(var(--tabs-boxed-curve) / 2) 0 0 var(--tabs-boxed-bg);
+  }
+  /* RTL: flip vertical curve border sides so they trace the tab's outer
+   * edge (horizontal uses radial-gradient and needs no border flip). */
+  :dir(rtl) .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"]
+    .vds-tabs-trigger::before,
+  :dir(rtl) .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"]
+    .vds-tabs-trigger::after {
+    border-inline-end: 0;
+    border-inline-start: 1px solid var(--tabs-boxed-border);
   }
 
   /* ─────────────────────────────────────────────

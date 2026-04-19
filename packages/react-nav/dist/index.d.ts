@@ -3,7 +3,23 @@ import { HTMLAttributes, ElementType, Ref, ReactNode, AnchorHTMLAttributes, Butt
 
 type NavOrientation = "vertical" | "horizontal";
 type NavSubmenuMode = "inline" | "popover";
-type NavVariant = "ghost" | "filled" | "pill" | "underline";
+/**
+ * Visual treatment of NavLink / NavTrigger.
+ *
+ * - `ghost`     — minimal bg tint on hover (default).
+ * - `filled`    — solid bg block on hover.
+ * - `pill`      — fully-rounded bg on hover / current.
+ * - `underline` — thin bottom border on current, tints on hover.
+ * - `reveal`    — animated underline that grows from the centre on hover.
+ * - `outline`   — hollow border ring that fades in on hover.
+ * - `lift`      — soft shadow + 1px translate on hover (card-like).
+ * - `none`      — no bg, no border, no decoration — just the text colors to
+ *                 primary on hover / current. The quietest possible look.
+ * - `dot`       — small circular primary indicator below the label.
+ * - `tab`       — thick primary bar below the item, top corners rounded.
+ *                 Reads as a tab-strip indicator.
+ */
+type NavVariant = "ghost" | "filled" | "pill" | "underline" | "reveal" | "outline" | "lift" | "none" | "dot" | "tab";
 type NavSize = "sm" | "md" | "lg";
 interface NavContextValue {
     orientation: NavOrientation;
@@ -91,6 +107,13 @@ interface NavProps extends HTMLAttributes<HTMLElement> {
      * presentation (inline accordion would be nonsensical on a narrow rail).
      */
     collapsed?: boolean;
+    /**
+     * Vertical tree-guide lines. When `true`, each inline submenu draws a 1px
+     * vertical guide from the parent item's icon-centre down through its
+     * children — the file-tree look (VS Code, finder). Only affects vertical
+     * orientation with inline submenus; no-op for popover / horizontal navs.
+     */
+    tree?: boolean;
     ref?: Ref<HTMLElement>;
 }
 /**
@@ -103,7 +126,7 @@ interface NavProps extends HTMLAttributes<HTMLElement> {
  * application-menu pattern (`role="menubar"`). Assistive tech announces it
  * as a navigation landmark, not an app menu.
  */
-declare function Nav({ as: Tag, orientation, submenu, variant, size, currentPath, matchStrategy, collapsed, className, children, ref, "aria-label": ariaLabel, ...rest }: NavProps): react_jsx_runtime.JSX.Element;
+declare function Nav({ as: Tag, orientation, submenu, variant, size, currentPath, matchStrategy, collapsed, tree, className, children, ref, "aria-label": ariaLabel, ...rest }: NavProps): react_jsx_runtime.JSX.Element;
 
 interface NavListProps extends HTMLAttributes<HTMLElement> {
     as?: ElementType;

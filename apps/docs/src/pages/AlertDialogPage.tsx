@@ -81,7 +81,7 @@ function OverviewSection() {
           <code>backdrop</code> / <code>intent</code> / <code>responsive</code>{" "}
           API — there is no separate visual style to learn. AlertDialog just
           defaults <code>intent</code> to <code>&ldquo;destructive&rdquo;</code>{" "}
-          and uses Radix&apos;s <code>role=&ldquo;alertdialog&rdquo;</code> under
+          and uses <code>role=&ldquo;alertdialog&rdquo;</code> under
           the hood.
         </p>
       </div>
@@ -95,7 +95,7 @@ function BasicSection() {
   return (
     <Section
       title="Basic"
-      description="A classic destructive confirmation. Must be resolved via Cancel or Action — Escape and outside-click are blocked by Radix."
+      description="A classic destructive confirmation. Must be resolved via Cancel or Action — Escape and outside-click are blocked by design."
     >
       <Row>
         <AlertDialog>

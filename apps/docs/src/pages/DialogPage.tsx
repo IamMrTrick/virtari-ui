@@ -130,7 +130,7 @@ function OverviewSection() {
   return (
     <Section
       title="Overview"
-      description="A modal surface that blocks the page until resolved. Built on @radix-ui/react-dialog for focus trap, scroll lock, and aria-modal semantics."
+      description="A modal surface that blocks the page until resolved. Provides focus trap, scroll lock, and aria-modal semantics out of the box."
     >
       <div className="docs-prose">
         <p>
@@ -138,7 +138,7 @@ function OverviewSection() {
           content — profile editors, confirmations, checkout flows, settings panes.
           All accessibility concerns (focus trap, return focus, aria-modal,
           Escape dismissal, click-outside dismissal, body scroll lock) are handled
-          by Radix. Virtari layers on theming, animation variants, backdrop
+          for you. Virtari layers on theming, animation variants, backdrop
           variants, size variants, intent accents, and enterprise controls like
           portal container override and close-prevention.
         </p>
@@ -819,14 +819,14 @@ function AccessibilitySection() {
   return (
     <Section
       title="Accessibility"
-      description="Provided by @radix-ui/react-dialog. You still need to label the dialog and pick sensible dismiss semantics."
+      description="Built in. You still need to label the dialog and pick sensible dismiss semantics."
     >
       <div className="docs-prose">
         <ul>
           <li>
             <strong>Labeling.</strong> Always render a <code>DialogTitle</code> or
             pass <code>aria-label</code>/<code>aria-labelledby</code> on <code>DialogContent</code>.
-            Radix logs a warning in development if neither is present.
+            A development-mode warning fires if neither is present.
           </li>
           <li>
             <strong>Description.</strong> <code>DialogDescription</code> wires up
@@ -884,7 +884,7 @@ function ApiReferenceSection() {
       title="API reference"
       description="Full prop surface for each compound component."
     >
-      <pre className="docs-code">{`interface DialogContentProps extends Radix.DialogContentProps {
+      <pre className="docs-code">{`interface DialogContentProps extends DialogPrimitive.ContentProps {
   size?: "sm" | "md" | "lg" | "xl" | "full";             // default "md"
   animation?: "scale" | "fade" | "slide-up" | "slide-down"
             | "zoom" | "bounce" | "none";                 // default "scale"
@@ -900,7 +900,7 @@ function ApiReferenceSection() {
   preventCloseOnEscape?: boolean;
 }
 
-interface DialogOverlayProps extends Radix.DialogOverlayProps {
+interface DialogOverlayProps extends DialogPrimitive.OverlayProps {
   backdrop?: DialogBackdrop;                              // default "default"
 }
 
@@ -910,8 +910,8 @@ interface DialogHeaderProps extends HTMLAttributes<HTMLDivElement> {
 
 interface DialogBodyProps     extends HTMLAttributes<HTMLDivElement> {}
 interface DialogFooterProps   extends HTMLAttributes<HTMLDivElement> {}
-interface DialogTitleProps       extends Radix.DialogTitleProps {}
-interface DialogDescriptionProps extends Radix.DialogDescriptionProps {}
+interface DialogTitleProps       extends DialogPrimitive.TitleProps {}
+interface DialogDescriptionProps extends DialogPrimitive.DescriptionProps {}
 interface DialogCloseIconProps extends ButtonHTMLAttributes<HTMLButtonElement> {}`}</pre>
     </Section>
   );

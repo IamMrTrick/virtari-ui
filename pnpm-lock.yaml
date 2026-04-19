@@ -158,6 +158,9 @@ importers:
       '@virtari/react-switch':
         specifier: workspace:*
         version: link:../../packages/react-switch
+      '@virtari/react-table':
+        specifier: workspace:*
+        version: link:../../packages/react-table
       '@virtari/react-tabs':
         specifier: workspace:*
         version: link:../../packages/react-tabs
@@ -591,6 +594,15 @@ importers:
       '@react-stately/datepicker':
         specifier: ^3.10.3
         version: 3.17.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@virtari/react-button':
+        specifier: workspace:*
+        version: link:../react-button
+      '@virtari/react-dialog':
+        specifier: workspace:*
+        version: link:../react-dialog
+      '@virtari/react-drawer':
+        specifier: workspace:*
+        version: link:../react-drawer
       '@virtari/react-icons':
         specifier: workspace:*
         version: link:../react-icons
@@ -1138,6 +1150,31 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.14)
+      react:
+        specifier: ^19.2.5
+        version: 19.2.5
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(postcss@8.5.10)(typescript@5.9.3)(yaml@2.8.3)
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+
+  packages/react-table:
+    dependencies:
+      '@radix-ui/react-slot':
+        specifier: ^1.2.4
+        version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
+      '@virtari/utils':
+        specifier: workspace:*
+        version: link:../utils
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.5(react@19.2.5)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
       react:
         specifier: ^19.2.5
         version: 19.2.5

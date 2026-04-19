@@ -1,7 +1,9 @@
+@import "../../react-button/src/Button.css";
+@import "../../react-dialog/src/Dialog.css";
+@import "../../react-drawer/src/Drawer.css";
 @import "./DateField.tokens.css";
 
 @layer design-system.components {
-  /* ── DateField / TimeField shell ── */
   .vds-date-field,
   .vds-time-field {
     display: inline-flex;
@@ -15,7 +17,6 @@
     direction: rtl;
   }
 
-  /* ── Label ── */
   .vds-date-field-label,
   .vds-time-field-label {
     font-size: var(--vds-text-xs, 0.75rem);
@@ -23,7 +24,6 @@
     color: var(--date-field-label-color);
   }
 
-  /* ── Field group (the box with segments) ── */
   .vds-date-field-group,
   .vds-time-field-group,
   .vds-date-picker-group,
@@ -32,6 +32,7 @@
     align-items: center;
     gap: var(--date-field-gap);
     inline-size: 100%;
+    min-inline-size: 0;
     block-size: var(--date-field-height);
     padding-inline: var(--date-field-padding-inline);
     background: var(--date-field-bg);
@@ -75,6 +76,12 @@
     cursor: pointer;
   }
 
+  .vds-date-picker-group[data-surface-trigger="true"],
+  .vds-date-range-picker-group[data-surface-trigger="true"],
+  .vds-time-field-group[data-surface-trigger="true"] {
+    cursor: pointer;
+  }
+
   .vds-time-field-segments {
     display: inline-flex;
     align-items: center;
@@ -83,9 +90,17 @@
     min-inline-size: 0;
   }
 
-  /* ── Segment ── */
+  .vds-static-field-segments {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
   .vds-date-field-segment,
-  .vds-time-field-segment {
+  .vds-time-field-segment,
+  .vds-static-field-segment {
     display: inline-block;
     padding-inline: var(--date-field-segment-padding-inline);
     border-radius: var(--date-field-segment-radius);
@@ -97,7 +112,8 @@
   }
 
   .vds-date-field-segment[data-placeholder="true"],
-  .vds-time-field-segment[data-placeholder="true"] {
+  .vds-time-field-segment[data-placeholder="true"],
+  .vds-static-field-segment[data-placeholder="true"] {
     color: var(--date-field-placeholder-color);
   }
 
@@ -107,14 +123,13 @@
     color: var(--date-field-segment-focus-text);
   }
 
-  /* Literal separators (/ : space) should not receive a focus outline. */
   .vds-date-field-segment[data-type="literal"],
-  .vds-time-field-segment[data-type="literal"] {
+  .vds-time-field-segment[data-type="literal"],
+  .vds-static-field-segment[data-type="literal"] {
     padding-inline: 0;
     color: var(--date-field-placeholder-color);
   }
 
-  /* ── Description + error ── */
   .vds-time-field-picker-trigger {
     display: inline-flex;
     align-items: center;
@@ -154,6 +169,115 @@
     block-size: var(--date-field-trigger-size);
   }
 
+  .vds-picker-mobile-surface {
+    overflow: hidden;
+  }
+
+  .vds-picker-mobile-body {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    padding-inline: 0;
+    padding-block: 0;
+    overflow-x: hidden;
+  }
+
+  .vds-picker-mobile-body > * {
+    min-block-size: 0;
+  }
+
+  .vds-time-picker-mobile-body {
+    align-items: stretch;
+    justify-content: center;
+    padding-block: var(--vds-space-2, 0.5rem);
+  }
+
+  .vds-time-picker-mobile-body .vds-time-picker-panel {
+    flex: 1 1 auto;
+    min-block-size: 0;
+  }
+
+  .vds-picker-mobile-footer {
+    padding: var(--vds-space-3, 0.75rem);
+    border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    background: color-mix(in oklab, var(--date-picker-content-bg, var(--vds-color-surface, #fff)) 97%, var(--vds-color-bg-subtle, #fafafa));
+  }
+
+  .vds-picker-mobile-header-main {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--vds-space-2, 0.5rem);
+    align-items: center;
+  }
+
+  .vds-picker-mobile-header-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+    min-inline-size: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  .vds-picker-mobile-header-title {
+    min-inline-size: 0;
+    font-size: var(--vds-text-lg, 1.125rem);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    line-height: 1.2;
+    color: var(--date-field-text-color);
+  }
+
+  .vds-picker-mobile-header-description {
+    color: var(--date-field-description-color);
+    font-size: var(--vds-text-sm, 0.875rem);
+    line-height: 1.4;
+  }
+
+  .vds-picker-mobile-header-slot {
+    display: inline-flex;
+    align-items: center;
+    min-inline-size: 3rem;
+  }
+
+  .vds-picker-mobile-header-slot[data-slot="trailing"] {
+    justify-content: flex-end;
+  }
+
+  .vds-picker-mobile-header-slot[data-empty="true"] {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .vds-picker-mobile-mode-link {
+    justify-content: space-between;
+    min-inline-size: 0;
+    text-align: start;
+  }
+
+  .vds-picker-mobile-mode-label {
+    font-size: var(--vds-text-sm, 0.875rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--date-field-label-color);
+  }
+
+  .vds-picker-mobile-mode-value {
+    min-inline-size: 0;
+    color: var(--date-field-text-color);
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .vds-picker-action-bar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--vds-space-3, 0.75rem);
+    align-items: stretch;
+  }
+
+  .vds-picker-action-bar > * {
+    min-inline-size: 0;
+  }
+
   .vds-time-field-picker-content {
     z-index: var(--vds-z-popover, 70);
     box-sizing: border-box;
@@ -169,42 +293,28 @@
   }
 
   .vds-time-picker-panel {
-    --time-picker-column-count: 4;
     display: flex;
     flex-direction: column;
     gap: var(--vds-space-4, 1rem);
+    min-inline-size: 0;
     padding: var(--vds-space-4, 1rem);
     font-family: var(--date-field-font-family);
     color: var(--date-field-text-color);
-  }
-
-  .vds-time-picker-panel[data-columns="1"] { --time-picker-column-count: 1; }
-  .vds-time-picker-panel[data-columns="2"] { --time-picker-column-count: 2; }
-  .vds-time-picker-panel[data-columns="3"] { --time-picker-column-count: 3; }
-  .vds-time-picker-panel[data-columns="4"] { --time-picker-column-count: 4; }
-  .vds-time-picker-panel[data-columns="5"] { --time-picker-column-count: 5; }
-
-  .vds-time-picker-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    min-block-size: 1.25rem;
-    padding-inline: var(--vds-space-1, 0.25rem);
-  }
-
-  .vds-time-picker-title {
-    font-size: var(--vds-text-base, 1rem);
-    font-weight: var(--vds-font-weight-semibold, 600);
+    background: var(--time-picker-surface-bg);
   }
 
   .vds-time-picker-wheels {
     position: relative;
-    display: grid;
-    grid-template-columns: repeat(var(--time-picker-column-count), minmax(0, 1fr));
-    gap: var(--vds-space-1, 0.25rem);
+    display: flex;
     align-items: stretch;
+    justify-content: center;
+    gap: var(--vds-space-0-5, 0.125rem);
+    inline-size: 100%;
+    min-inline-size: 0;
     min-block-size: var(--time-picker-wheel-height);
-    padding-inline: var(--vds-space-3, 0.75rem);
+    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
+    border-radius: var(--time-picker-surface-inner-radius);
+    background: var(--time-picker-wheel-surface-bg);
     overflow: hidden;
   }
 
@@ -212,29 +322,71 @@
     content: "";
     position: absolute;
     z-index: 1;
-    inset-inline: var(--vds-space-3, 0.75rem);
-    inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2));
+    inset-inline: var(--vds-space-2, 0.5rem);
+    inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2) + var(--time-picker-wheel-header-offset));
     block-size: var(--time-picker-wheel-item-height);
-    border-block: 1px solid var(--time-picker-wheel-divider-color);
+    border-radius: var(--vds-radius-sm, 0.25rem);
+    background: var(--time-picker-wheel-selection-bg);
+    box-shadow:
+      inset 0 0 0 1px var(--time-picker-wheel-selection-border),
+      0 0.25rem 0.875rem -0.5rem var(--time-picker-wheel-selection-shadow);
     pointer-events: none;
+  }
+
+  .vds-time-picker-wheels::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset-inline: var(--vds-space-2, 0.5rem);
+    inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2) + var(--time-picker-wheel-header-offset));
+    block-size: var(--time-picker-wheel-item-height);
+    border-block: 1px solid var(--time-picker-wheel-selection-border);
+    pointer-events: none;
+  }
+
+  .vds-time-picker-colon {
+    flex: 0 0 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 0.75rem;
+    padding-block-start: var(--time-picker-wheel-header-height);
+    font-size: var(--time-picker-wheel-font-size);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    color: var(--time-picker-wheel-colon-color);
+    line-height: 1;
+    user-select: none;
+    animation: vds-time-picker-colon-pulse 1.8s ease-in-out infinite;
+  }
+
+  .vds-time-picker-colon[data-variant="dot"] {
+    animation: none;
   }
 
   .vds-time-wheel {
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
     min-inline-size: 0;
+    flex: 1 1 0;
   }
 
-  .vds-time-wheel-label {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
+  .vds-time-wheel[data-variant="period"] {
+    flex: 0 1 3.25rem;
+  }
+
+  .vds-time-wheel-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--time-picker-wheel-header-height);
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--time-picker-wheel-header-color);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    user-select: none;
   }
 
   .vds-time-wheel-track {
@@ -246,16 +398,20 @@
     overflow-y: auto;
     overscroll-behavior: contain;
     scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
     scroll-padding-block: calc((var(--time-picker-wheel-height) - var(--time-picker-wheel-item-height)) / 2);
     border-radius: var(--vds-radius-sm, 0.25rem);
     scrollbar-width: none;
-    touch-action: none;
+    touch-action: pan-y;
     cursor: grab;
-    -webkit-mask-image: linear-gradient(180deg, transparent, #000 24%, #000 76%, transparent);
-    mask-image: linear-gradient(180deg, transparent, #000 24%, #000 76%, transparent);
+    outline: none;
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+    mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
   }
 
-  .vds-time-wheel-track:active {
+  .vds-time-wheel-track[data-dragging="true"] {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
     cursor: grabbing;
   }
 
@@ -280,90 +436,53 @@
     block-size: var(--time-picker-wheel-item-height);
     padding: 0;
     border: 0;
-    border-radius: var(--vds-radius-sm, 0.25rem);
     background: transparent;
     color: var(--time-picker-wheel-muted-text);
     font: inherit;
-    font-size: var(--vds-text-base, 1rem);
+    font-size: var(--time-picker-wheel-font-size);
     font-weight: var(--vds-font-weight-semibold, 600);
     font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
     scroll-snap-align: center;
     cursor: pointer;
     transition:
       color var(--date-field-transition-duration) var(--date-field-transition-easing),
-      opacity var(--date-field-transition-duration) var(--date-field-transition-easing),
-      transform var(--date-field-transition-duration) var(--date-field-transition-easing);
+      transform var(--date-field-transition-duration) var(--date-field-transition-easing),
+      background-color var(--date-field-transition-duration) var(--date-field-transition-easing),
+      box-shadow var(--date-field-transition-duration) var(--date-field-transition-easing);
+  }
+
+  .vds-time-wheel[data-variant="period"] .vds-time-wheel-item {
+    font-size: var(--vds-text-sm, 0.875rem);
+    letter-spacing: 0.04em;
   }
 
   .vds-time-wheel-item:hover {
-    color: var(--time-picker-wheel-selected-text);
-  }
-
-  .vds-time-wheel-item:active {
-    transform: scale(0.96);
+    color: var(--time-picker-wheel-hover-text);
   }
 
   .vds-time-wheel-item:focus-visible {
-    outline: var(--date-field-focus-ring-width) solid var(--date-field-focus-ring-color);
-    outline-offset: -2px;
+    outline: none;
   }
 
   .vds-time-wheel-item[data-selected="true"] {
     color: var(--time-picker-wheel-selected-text);
-    opacity: 1;
+    background: color-mix(in oklab, var(--time-picker-wheel-selection-bg) 92%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--time-picker-wheel-selection-border) 92%, transparent);
     transform: scale(1.04);
+    font-weight: var(--vds-font-weight-bold, 700);
   }
 
   .vds-time-picker-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--vds-space-3, 0.75rem);
-    padding-block-start: var(--vds-space-1, 0.25rem);
+    padding-block-start: 0;
   }
 
-  .vds-time-picker-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  .vds-time-picker-panel--embedded {
+    inline-size: 100%;
     min-inline-size: 0;
-    min-block-size: 2.875rem;
-    padding-inline: var(--vds-space-3, 0.75rem);
-    border: 1px solid var(--time-picker-action-secondary-border);
-    border-radius: var(--vds-radius-element, 0.5rem);
-    background: var(--time-picker-action-secondary-bg);
-    color: var(--time-picker-action-secondary-text);
-    font: inherit;
-    font-size: var(--vds-text-sm, 0.875rem);
-    font-weight: var(--vds-font-weight-semibold, 600);
-    cursor: pointer;
-    transition:
-      background-color var(--date-field-transition-duration) var(--date-field-transition-easing),
-      border-color var(--date-field-transition-duration) var(--date-field-transition-easing),
-      color var(--date-field-transition-duration) var(--date-field-transition-easing),
-      transform var(--date-field-transition-duration) var(--date-field-transition-easing);
-  }
-
-  .vds-time-picker-action:hover {
-    background: color-mix(in oklab, var(--date-field-text-color) 7%, var(--time-picker-action-secondary-bg));
-  }
-
-  .vds-time-picker-action:active {
-    transform: translateY(1px);
-  }
-
-  .vds-time-picker-action:focus-visible {
-    outline: var(--date-field-focus-ring-width) solid var(--date-field-focus-ring-color);
-    outline-offset: 2px;
-  }
-
-  .vds-time-picker-action[data-variant="primary"] {
-    border-color: transparent;
-    background: var(--time-picker-action-primary-bg);
-    color: var(--time-picker-action-primary-text);
-  }
-
-  .vds-time-picker-action[data-variant="primary"]:hover {
-    background: color-mix(in oklab, var(--time-picker-action-primary-bg) 92%, #000);
+    padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem) 0;
+    background: transparent;
+    overflow-x: hidden;
   }
 
   @keyframes vds-time-picker-in {
@@ -371,62 +490,18 @@
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  @media (max-width: 42rem) {
-    .vds-time-field-picker-content {
-      box-sizing: border-box;
-      inline-size: calc(100vw - 1rem);
-      max-inline-size: calc(100vw - 1rem);
-      max-block-size: min(72dvh, 32rem);
-      border-radius: 1rem;
-      overflow: hidden;
-      animation: vds-time-picker-sheet-in 180ms var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
-    }
-
-    .vds-time-picker-panel {
-      gap: var(--vds-space-4, 1rem);
-      padding: var(--vds-space-4, 1rem);
-    }
-
-    .vds-time-picker-wheels {
-      --time-picker-wheel-height: 9rem;
-      gap: 0;
-      padding-inline: var(--vds-space-1, 0.25rem);
-    }
-
-    .vds-time-picker-wheels::before {
-      inset-inline: var(--vds-space-1, 0.25rem);
-    }
-
-    .vds-time-wheel-item {
-      font-size: var(--vds-text-sm, 0.875rem);
-    }
-
-    .vds-time-picker-action {
-      min-block-size: 3rem;
-    }
+  @keyframes vds-time-picker-colon-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
   }
 
-  @media (max-width: 22rem) {
-    .vds-time-picker-panel {
-      padding-inline: var(--vds-space-3, 0.75rem);
+  @media (prefers-reduced-motion: reduce) {
+    .vds-time-picker-colon {
+      animation: none;
     }
-
-    .vds-time-picker-wheels {
-      padding-inline: 0;
+    .vds-time-wheel-track {
+      scroll-behavior: auto;
     }
-
-    .vds-time-picker-wheels::before {
-      inset-inline: 0;
-    }
-
-    .vds-time-wheel-item {
-      font-size: var(--vds-text-xs, 0.75rem);
-    }
-  }
-
-  @keyframes vds-time-picker-sheet-in {
-    from { opacity: 0; transform: translateY(1rem); }
-    to { opacity: 1; transform: translateY(0); }
   }
 
   .vds-date-field-description,
@@ -439,5 +514,43 @@
   .vds-time-field-error {
     font-size: var(--vds-text-xs, 0.75rem);
     color: var(--date-field-error-color);
+  }
+
+  @media (max-width: 42rem) {
+    .vds-picker-action-bar {
+      gap: var(--vds-space-2, 0.5rem);
+    }
+
+    .vds-time-picker-panel {
+      gap: var(--vds-space-3, 0.75rem);
+      padding: var(--vds-space-3, 0.75rem);
+    }
+
+    .vds-time-picker-wheels {
+      --time-picker-wheel-height: 11.5rem;
+      --time-picker-wheel-item-height: 2.75rem;
+      --time-picker-wheel-font-size: var(--vds-text-xl, 1.25rem);
+    }
+
+    .vds-time-picker-colon {
+      flex-basis: 0.5rem;
+      min-inline-size: 0.5rem;
+    }
+  }
+
+  @media (max-width: 22rem) {
+    .vds-picker-action-bar {
+      grid-template-columns: 1fr;
+    }
+
+    .vds-time-picker-wheels {
+      --time-picker-wheel-height: 10rem;
+      --time-picker-wheel-font-size: var(--vds-text-lg, 1.125rem);
+      padding-inline: var(--vds-space-1, 0.25rem);
+    }
+
+    .vds-time-wheel[data-variant="period"] {
+      flex-basis: 2.5rem;
+    }
   }
 }

@@ -229,7 +229,7 @@ export function TabsPage() {
 
       <Section
         title="Disabled"
-        description="Individual triggers can be disabled; Radix skips them in keyboard navigation."
+        description="Individual triggers can be disabled; they are skipped in keyboard navigation."
       >
         <div className="docs-tabs-stack">
           <div className="docs-stack-item">

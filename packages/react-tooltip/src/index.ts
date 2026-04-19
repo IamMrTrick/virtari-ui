@@ -3,5 +3,12 @@ export {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
+  TooltipArrow,
 } from "./Tooltip";
-export type { TooltipContentProps } from "./Tooltip";
+export type {
+  TooltipProviderProps,
+  TooltipContentProps,
+  TooltipArrowProps,
+  TooltipSize,
+  TooltipVariant,
+} from "./Tooltip";

@@ -50,16 +50,21 @@
     --time-picker-surface-border-color: var(--vds-color-border-muted, #e5e7eb);
     --time-picker-surface-shadow: var(--vds-shadow-lg, 0 18px 45px rgb(15 23 42 / 0.18));
     --time-picker-surface-radius: var(--vds-radius-surface, 0.75rem);
-    --time-picker-wheel-height: 8.25rem;
+    --time-picker-surface-inner-radius: var(--vds-radius-element, 0.5rem);
+    --time-picker-wheel-surface-bg: color-mix(in oklab, var(--vds-color-bg-subtle, #f8fafc) 90%, var(--vds-color-surface, #ffffff));
+    --time-picker-wheel-height: 11rem;
     --time-picker-wheel-item-height: 2.75rem;
-    --time-picker-wheel-divider-color: color-mix(in oklab, var(--vds-color-border, #d1d5db) 86%, transparent);
-    --time-picker-wheel-muted-text: color-mix(in oklab, var(--date-field-text-color) 38%, transparent);
-    --time-picker-wheel-selected-text: var(--date-field-text-color);
-    --time-picker-action-primary-bg: var(--vds-color-success-600, var(--vds-color-primary-600, #2563eb));
-    --time-picker-action-primary-text: var(--vds-color-success-contrast, var(--vds-color-primary-contrast, #ffffff));
-    --time-picker-action-secondary-bg: transparent;
-    --time-picker-action-secondary-text: var(--date-field-text-color);
-    --time-picker-action-secondary-border: var(--vds-color-border, #d1d5db);
+    --time-picker-wheel-header-height: 1.5rem;
+    --time-picker-wheel-header-offset: calc(var(--time-picker-wheel-header-height) / 2);
+    --time-picker-wheel-font-size: var(--vds-text-xl, 1.25rem);
+    --time-picker-wheel-muted-text: color-mix(in oklab, var(--date-field-text-color) 36%, transparent);
+    --time-picker-wheel-hover-text: color-mix(in oklab, var(--date-field-text-color) 72%, transparent);
+    --time-picker-wheel-selected-text: var(--vds-color-white, #ffffff);
+    --time-picker-wheel-header-color: var(--vds-color-text-muted, #6b7280);
+    --time-picker-wheel-colon-color: color-mix(in oklab, var(--date-field-text-color) 55%, transparent);
+    --time-picker-wheel-selection-bg: var(--vds-color-neutral-a7, rgb(0 0 0 / 0.44));
+    --time-picker-wheel-selection-border: var(--vds-color-neutral-a8, rgb(0 0 0 / 0.56));
+    --time-picker-wheel-selection-shadow: color-mix(in oklab, var(--vds-color-black-a4, rgb(0 0 0 / 0.2)) 100%, transparent);
   }
 
   /* ── Appearance variants ── */

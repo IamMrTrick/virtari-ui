@@ -168,7 +168,7 @@
     --tabs-list-gap: 0;
     --tabs-list-border-width: 1px;
     /* Curve radius — also used for top corners of each tab. */
-    --tabs-boxed-curve: 0.75rem;
+    --tabs-boxed-curve: 0.5rem;
     --tabs-boxed-bg: var(--vds-color-surface, #ffffff);
     --tabs-boxed-border: var(--vds-color-border, #d1d5db);
   }

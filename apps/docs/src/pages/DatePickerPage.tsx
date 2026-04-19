@@ -72,10 +72,12 @@ export function DatePickerPage() {
   const [rangeWithPresets, setRangeWithPresets] = useState<DateRange | null>(null);
   const [deadline, setDeadline] = useState<DateValue | null>(null);
   const [meetingTime, setMeetingTime] = useState<Time | null>(new Time(9, 30));
+  const [preciseTime, setPreciseTime] = useState<Time | null>(new Time(14, 8, 32, 240));
   const [dob, setDob] = useState<DateValue | null>(null);
   const [faDate, setFaDate] = useState<DateValue | null>(null);
   const [calDate, setCalDate] = useState<DateValue | null>(todayDate);
   const [calRange, setCalRange] = useState<DateRange | null>(null);
+  const [scheduledWindow, setScheduledWindow] = useState<DateRange | null>(null);
 
   return (
     <>
@@ -212,13 +214,52 @@ export function DatePickerPage() {
             value={rangeWithPresets}
             onChange={setRangeWithPresets}
             aria-label="Report range"
-            presets={
+            presets={({ value, setValue }) => (
               <DateRangePickerPresets
                 presets={rangePresets}
-                value={rangeWithPresets}
-                onSelect={setRangeWithPresets}
+                value={value}
+                onSelect={setValue}
               />
-            }
+            )}
+          />
+        </div>
+      </Section>
+
+      <Section
+        title="Desktop Dialog Preview"
+        description="On desktop, date pickers use popover or dialog surfaces. Drawer stays mobile-only."
+      >
+        <Row>
+          <div style={{ maxInlineSize: "16rem" }}>
+            <DatePicker
+              overlayMode="dialog"
+              aria-label="Dialog preview"
+            />
+          </div>
+          <div style={{ maxInlineSize: "14rem" }}>
+            <TimeField
+              label="Time dialog"
+              overlayMode="dialog"
+              defaultValue={new Time(10, 15)}
+            />
+          </div>
+        </Row>
+      </Section>
+
+      <Section
+        title="DateRangePicker + time"
+        description="Range selection with explicit Apply/Cancel and start/end time editing. On mobile this can open as a full-height drawer or dialog."
+      >
+        <div style={{ maxInlineSize: "28rem" }}>
+          <DateRangePicker
+            value={scheduledWindow}
+            onChange={setScheduledWindow}
+            granularity="second"
+            hourCycle={12}
+            aria-label="Scheduled window"
+            showMilliseconds
+            millisecondStep={50}
+            overlayMode="dialog"
           />
         </div>
       </Section>
@@ -233,13 +274,13 @@ export function DatePickerPage() {
             value={withPreset}
             onChange={setWithPreset}
             aria-label="Schedule"
-            presets={
+            presets={({ value, setValue }) => (
               <DatePickerPresets
                 presets={singlePresets}
-                value={withPreset}
-                onSelect={setWithPreset}
+                value={value}
+                onSelect={setValue}
               />
-            }
+            )}
           />
         </div>
       </Section>
@@ -331,6 +372,16 @@ export function DatePickerPage() {
               label="With seconds"
               granularity="second"
               defaultValue={new Time(14, 0, 30)}
+            />
+          </div>
+          <div style={{ inlineSize: "14rem" }}>
+            <TimeField
+              label="With ms"
+              granularity="second"
+              showMilliseconds
+              millisecondStep={20}
+              value={preciseTime}
+              onChange={(v) => setPreciseTime(v as Time | null)}
             />
           </div>
         </Row>

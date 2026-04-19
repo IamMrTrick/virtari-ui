@@ -1,5 +1,5 @@
 import { cn } from "@virtari/utils";
-import type { Ref, ReactNode } from "react";
+import { forwardRef, type ReactNode } from "react";
 import { Slot, Slottable } from "@radix-ui/react-slot";
 
 /** Intent palette — orthogonal to variant. Picks the hue family. */
@@ -71,10 +71,9 @@ export interface ButtonProps
   effect?: ButtonEffect;
   /** Attention animation (requires animations CSS import) */
   animation?: ButtonAnimation;
-  ref?: Ref<HTMLButtonElement>;
 }
 
-export function Button({
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button({
   color = "primary",
   variant = "solid",
   size = "md",
@@ -89,9 +88,8 @@ export function Button({
   disabled,
   className,
   children,
-  ref,
   ...props
-}: ButtonProps) {
+}, forwardedRef) {
   const Comp = asChild ? Slot : "button";
   const isDisabled = disabled || loading;
 
@@ -102,7 +100,7 @@ export function Button({
   return (
     <>
       <Comp
-        ref={ref}
+        ref={forwardedRef}
         className={cn("vds-button", className)}
         data-color={resolvedColor}
         data-variant={resolvedVariant}
@@ -136,4 +134,6 @@ export function Button({
       )}
     </>
   );
-}
+});
+
+Button.displayName = "Button";

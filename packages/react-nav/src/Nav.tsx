@@ -48,6 +48,13 @@ export interface NavProps extends HTMLAttributes<HTMLElement> {
    * presentation (inline accordion would be nonsensical on a narrow rail).
    */
   collapsed?: boolean;
+  /**
+   * Vertical tree-guide lines. When `true`, each inline submenu draws a 1px
+   * vertical guide from the parent item's icon-centre down through its
+   * children — the file-tree look (VS Code, finder). Only affects vertical
+   * orientation with inline submenus; no-op for popover / horizontal navs.
+   */
+  tree?: boolean;
   ref?: Ref<HTMLElement>;
 }
 
@@ -70,6 +77,7 @@ export function Nav({
   currentPath,
   matchStrategy = "exact",
   collapsed = false,
+  tree = false,
   className,
   children,
   ref,
@@ -112,6 +120,7 @@ export function Nav({
         data-size={size === "md" ? undefined : size}
         data-submenu={resolvedSubmenu}
         data-collapsed={collapsed ? "true" : undefined}
+        data-tree={tree ? "true" : undefined}
         aria-label={ariaLabel ?? "Navigation"}
         {...rest}
       >

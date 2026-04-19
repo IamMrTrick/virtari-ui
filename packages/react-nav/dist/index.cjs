@@ -46,6 +46,7 @@ function Nav({
   currentPath,
   matchStrategy = "exact",
   collapsed = false,
+  tree = false,
   className,
   children,
   ref,
@@ -83,6 +84,7 @@ function Nav({
       "data-size": size === "md" ? void 0 : size,
       "data-submenu": resolvedSubmenu,
       "data-collapsed": collapsed ? "true" : void 0,
+      "data-tree": tree ? "true" : void 0,
       "aria-label": ariaLabel ?? "Navigation",
       ...rest,
       children

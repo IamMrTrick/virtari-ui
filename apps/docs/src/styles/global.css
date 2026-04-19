@@ -37,11 +37,12 @@
 @import "@virtari/react-skeleton/styles";
 @import "@virtari/react-spinner/styles";
 @import "@virtari/react-card/styles";
+@import "@virtari/react-table/styles";
 @import "@virtari/react-kbd/styles";
 @import "@virtari/react-text/styles";
 @import "@virtari/react-text/heading/styles";
 @import "@virtari/react-date-picker/styles";
-@import "@virtari/react-date-picker/range-picker/styles";
+@import "../../../../packages/react-date-picker/dist/DateRangePicker.css";
 @import "../../../../packages/react-layout/dist/index.css";
 @import "../../../../packages/react-header/dist/Header.css";
 @import "../../../../packages/react-nav/dist/Nav.css";

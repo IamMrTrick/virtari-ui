@@ -8,11 +8,12 @@
       "import": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
       "require": { "types": "./dist/index.d.cts", "default": "./dist/index.cjs" }
     },
-    "./styles": "./dist/Tooltip.css"
+    "./styles": "./dist/Tooltip.css",
+    "./tokens": "./dist/Tooltip.tokens.css"
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup && postcss src/Tooltip.css -o dist/Tooltip.css",
+    "build": "tsup && postcss src/Tooltip.tokens.css -o dist/Tooltip.tokens.css && postcss src/Tooltip.css -o dist/Tooltip.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

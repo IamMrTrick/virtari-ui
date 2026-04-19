@@ -1,6 +1,6 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import { ReactNode, Ref } from 'react';
-import { Calendar as Calendar$1, DateValue } from '@internationalized/date';
+import { Calendar as Calendar$1, DateDuration, DateValue } from '@internationalized/date';
 export { BuddhistCalendar, CalendarDate, CalendarDateTime, DateValue, EthiopicCalendar, GregorianCalendar, HebrewCalendar, IndianCalendar, IslamicCivilCalendar, IslamicUmalquraCalendar, JapaneseCalendar, PersianCalendar, TaiwanCalendar, Time, ZonedDateTime, endOfMonth, endOfWeek, endOfYear, getLocalTimeZone, isSameDay, isSameMonth, isSameYear, isToday, isWeekend, now, parseAbsolute, parseDate, parseDateTime, parseTime, parseZonedDateTime, startOfMonth, startOfWeek, startOfYear, toCalendar, toCalendarDate, toCalendarDateTime, toZoned, today } from '@internationalized/date';
 import { DateSegment, DateFieldState, TimeValue, DateRange } from '@react-stately/datepicker';
 export { DateRange } from '@react-stately/datepicker';
@@ -19,13 +19,12 @@ interface CalendarVisualProps {
     size?: DatePickerSize;
     appearance?: DatePickerAppearance;
     invalid?: boolean;
-    /** Calendar system override (e.g. "persian", "islamic-umalqura"). */
     calendar?: CalendarSystem;
-    /** Locale override, e.g. "fa-IR". Falls back to I18nProvider locale. */
     locale?: string;
-    /** Custom footer rendered under the month grid. */
     footer?: ReactNode;
     className?: string;
+    visibleDuration?: DateDuration;
+    pageBehavior?: "single" | "visible";
 }
 interface CalendarProps extends CalendarVisualProps {
     value?: DateValue | null;
@@ -102,6 +101,10 @@ interface FieldSegmentProps {
 }
 declare function FieldSegment({ segment, state }: FieldSegmentProps): react_jsx_runtime.JSX.Element;
 
+type MobilePickerPresentation = "drawer" | "dialog";
+type MobilePickerSizeMode = "content" | "full";
+type PickerOverlayMode = "auto" | "popover" | "drawer" | "dialog";
+
 interface TimeFieldProps {
     value?: TimeValue | null;
     defaultValue?: TimeValue | null;
@@ -127,15 +130,15 @@ interface TimeFieldProps {
     invalid?: boolean;
     locale?: string;
     className?: string;
-    /** Shows the native-like wheel picker when the field is clicked. */
     showPicker?: boolean;
-    /** Adds a millisecond wheel. */
     showMilliseconds?: boolean;
-    /** Millisecond wheel increment. Defaults to 10. */
     millisecondStep?: number;
+    overlayMode?: PickerOverlayMode;
+    mobilePresentation?: MobilePickerPresentation;
+    mobileSizeMode?: MobilePickerSizeMode;
     ref?: Ref<HTMLDivElement>;
 }
-declare function TimeField({ size, appearance, invalid, locale, label, description, errorMessage, className, showPicker, showMilliseconds, millisecondStep, ref, ...props }: TimeFieldProps): react_jsx_runtime.JSX.Element;
+declare function TimeField({ size, appearance, invalid, locale, label, description, errorMessage, className, showPicker, showMilliseconds, millisecondStep, overlayMode, mobilePresentation, mobileSizeMode, ref, ...props }: TimeFieldProps): react_jsx_runtime.JSX.Element;
 
 interface DatePickerProps {
     value?: DateValue | null;
@@ -168,13 +171,18 @@ interface DatePickerProps {
     calendar?: CalendarSystem;
     locale?: string;
     className?: string;
-    /** Rendered to the left of the calendar — e.g., `<DatePickerPresets>` */
-    presets?: ReactNode;
-    /** Rendered below the calendar (after the optional time field) */
+    presets?: ReactNode | ((props: DatePickerPresetRenderProps) => ReactNode);
     footer?: ReactNode;
+    overlayMode?: PickerOverlayMode;
+    mobilePresentation?: MobilePickerPresentation;
+    mobileSizeMode?: MobilePickerSizeMode;
     ref?: Ref<HTMLDivElement>;
 }
-declare function DatePicker({ size, appearance, invalid, calendar, locale, label, description, errorMessage, presets, footer, className, ref, ...props }: DatePickerProps): react_jsx_runtime.JSX.Element;
+interface DatePickerPresetRenderProps {
+    value: DateValue | null;
+    setValue: (value: DateValue | null) => void;
+}
+declare function DatePicker({ size, appearance, invalid, calendar, locale, label, description, errorMessage, presets, footer, className, overlayMode, mobilePresentation, mobileSizeMode, ref, ...props }: DatePickerProps): react_jsx_runtime.JSX.Element;
 
 interface DateRangePickerProps {
     value?: DateRange | null;
@@ -209,11 +217,18 @@ interface DateRangePickerProps {
     calendar?: CalendarSystem;
     locale?: string;
     className?: string;
-    presets?: ReactNode;
+    presets?: ReactNode | ((props: DateRangePickerPresetRenderProps) => ReactNode);
     footer?: ReactNode;
+    overlayMode?: PickerOverlayMode;
+    mobilePresentation?: MobilePickerPresentation;
+    mobileSizeMode?: MobilePickerSizeMode;
     ref?: Ref<HTMLDivElement>;
 }
-declare function DateRangePicker({ size, appearance, invalid, calendar, locale, label, description, errorMessage, presets, footer, className, ref, ...props }: DateRangePickerProps): react_jsx_runtime.JSX.Element;
+interface DateRangePickerPresetRenderProps {
+    value: DateRange | null;
+    setValue: (value: DateRange | null) => void;
+}
+declare function DateRangePicker({ size, appearance, invalid, calendar, locale, label, description, errorMessage, presets, footer, className, overlayMode, mobilePresentation, mobileSizeMode, ref, ...props }: DateRangePickerProps): react_jsx_runtime.JSX.Element;
 
 interface DatePickerPreset {
     id: string;
@@ -242,4 +257,4 @@ interface DateRangePickerPresetsProps {
 }
 declare function DateRangePickerPresets({ presets, value, onSelect, className, ref, }: DateRangePickerPresetsProps): react_jsx_runtime.JSX.Element;
 
-export { Calendar, type CalendarProps, type CalendarSystem, DateField, type DateFieldProps, DatePicker, type DatePickerAppearance, type DatePickerPreset, DatePickerPresets, type DatePickerPresetsProps, type DatePickerProps, type DatePickerSize, DateRangePicker, type DateRangePickerPreset, DateRangePickerPresets, type DateRangePickerPresetsProps, type DateRangePickerProps, FieldSegment, RangeCalendar, type RangeCalendarProps, TimeField, type TimeFieldProps, createCalendar, resolveLocale };
+export { Calendar, type CalendarProps, type CalendarSystem, DateField, type DateFieldProps, DatePicker, type DatePickerAppearance, type DatePickerPreset, type DatePickerPresetRenderProps, DatePickerPresets, type DatePickerPresetsProps, type DatePickerProps, type DatePickerSize, DateRangePicker, type DateRangePickerPreset, type DateRangePickerPresetRenderProps, DateRangePickerPresets, type DateRangePickerPresetsProps, type DateRangePickerProps, FieldSegment, type MobilePickerPresentation, type MobilePickerSizeMode, type PickerOverlayMode, RangeCalendar, type RangeCalendarProps, TimeField, type TimeFieldProps, createCalendar, resolveLocale };

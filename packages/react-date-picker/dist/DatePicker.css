@@ -50,16 +50,21 @@
     --time-picker-surface-border-color: var(--vds-color-border-muted, #e5e7eb);
     --time-picker-surface-shadow: var(--vds-shadow-lg, 0 18px 45px rgb(15 23 42 / 0.18));
     --time-picker-surface-radius: var(--vds-radius-surface, 0.75rem);
-    --time-picker-wheel-height: 8.25rem;
+    --time-picker-surface-inner-radius: var(--vds-radius-element, 0.5rem);
+    --time-picker-wheel-surface-bg: color-mix(in oklab, var(--vds-color-bg-subtle, #f8fafc) 90%, var(--vds-color-surface, #ffffff));
+    --time-picker-wheel-height: 11rem;
     --time-picker-wheel-item-height: 2.75rem;
-    --time-picker-wheel-divider-color: color-mix(in oklab, var(--vds-color-border, #d1d5db) 86%, transparent);
-    --time-picker-wheel-muted-text: color-mix(in oklab, var(--date-field-text-color) 38%, transparent);
-    --time-picker-wheel-selected-text: var(--date-field-text-color);
-    --time-picker-action-primary-bg: var(--vds-color-success-600, var(--vds-color-primary-600, #2563eb));
-    --time-picker-action-primary-text: var(--vds-color-success-contrast, var(--vds-color-primary-contrast, #ffffff));
-    --time-picker-action-secondary-bg: transparent;
-    --time-picker-action-secondary-text: var(--date-field-text-color);
-    --time-picker-action-secondary-border: var(--vds-color-border, #d1d5db);
+    --time-picker-wheel-header-height: 1.5rem;
+    --time-picker-wheel-header-offset: calc(var(--time-picker-wheel-header-height) / 2);
+    --time-picker-wheel-font-size: var(--vds-text-xl, 1.25rem);
+    --time-picker-wheel-muted-text: color-mix(in oklab, var(--date-field-text-color) 36%, transparent);
+    --time-picker-wheel-hover-text: color-mix(in oklab, var(--date-field-text-color) 72%, transparent);
+    --time-picker-wheel-selected-text: var(--vds-color-white, #ffffff);
+    --time-picker-wheel-header-color: var(--vds-color-text-muted, #6b7280);
+    --time-picker-wheel-colon-color: color-mix(in oklab, var(--date-field-text-color) 55%, transparent);
+    --time-picker-wheel-selection-bg: var(--vds-color-neutral-a7, rgb(0 0 0 / 0.44));
+    --time-picker-wheel-selection-border: var(--vds-color-neutral-a8, rgb(0 0 0 / 0.56));
+    --time-picker-wheel-selection-shadow: color-mix(in oklab, var(--vds-color-black-a4, rgb(0 0 0 / 0.2)) 100%, transparent);
   }
 
   /* ── Appearance variants ── */
@@ -300,7 +305,1585 @@
   }
 }
 @layer design-system.components {
-  /* ── DateField / TimeField shell ── */
+  /* =========================================================================
+   * 1. Base component tokens
+   *    Layout, typography, motion, focus — orthogonal to color/variant.
+   *    Defaults resolve to: color=primary, variant=solid, size=md.
+   *    Fallbacks keep the package usable without @virtari/tokens.
+   * ========================================================================= */
+  .vds-button {
+    /* ── Layout ── */
+    --button-height: var(--vds-size-md, 2.25rem);
+    --button-padding-inline: var(--vds-space-4, 1rem);
+    --button-gap: var(--vds-space-2, 0.5rem);
+    --button-border-width: 1px;
+    --button-radius: var(--vds-radius-element, 0.375rem);
+    --button-min-width: var(--button-height);
+    --button-icon-size: 1.125rem;
+
+    /* ── Typography ──
+     * line-height:1 keeps the glyph visually centered inside the flex box.
+     * With 1.25 leading, flex centers the text-box but the cap-height sits
+     * above the box center due to ascender bias → label looks "raised".
+     */
+    --button-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --button-font-size: var(--vds-text-sm, 0.875rem);
+    --button-font-weight: var(--vds-font-weight-medium, 500);
+    --button-line-height: 1;
+    --button-letter-spacing: var(--vds-tracking-normal, 0);
+
+    /* ── Motion ── */
+    --button-transition-duration: var(--vds-duration-fast, 120ms);
+    --button-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    --button-press-scale: 0.98;
+
+    /* ── Focus ── */
+    --button-focus-ring-color: var(--vds-color-ring, var(--button-color-solid));
+    --button-focus-ring-width: 2px;
+    --button-focus-ring-offset: 2px;
+
+    /* ── Effects: shadow of the same material ──
+     * Relative color syntax: ONLY lightness drops, chroma and hue stay
+     * exactly as the button's solid color. Prevents the perceived hue shift
+     * you get with color-mix(..., black) — where chroma is dropped too and
+     * a blue button's shadow reads as purple. Here: blue stays blue.
+     */
+    --button-shadow-depth: oklch(
+      from var(--button-color-solid) calc(l * 0.75) c h
+    );
+    --button-shadow-ambient: oklch(
+      from var(--button-color-solid) l c h / 0.35
+    );
+
+    /* ── Disabled ── */
+    --button-disabled-opacity: 0.5;
+
+    /* =====================================================================
+     * Intent palette — default: primary
+     * Variants below read these meta-tokens to compute rendering tokens.
+     * ===================================================================== */
+    --button-color-solid:        var(--vds-color-primary-solid, var(--vds-color-primary-emphasis, #4f46e5));
+    --button-color-solid-hover:  var(--vds-color-primary-solid-hover, var(--vds-color-primary-hover, #4338ca));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-primary, #fff);
+
+    --button-color-bg:           var(--vds-color-primary-bg, var(--vds-color-primary-muted, #e0e7ff));
+    --button-color-bg-hover:     var(--vds-color-primary-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-primary-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+
+    --button-color-text:         var(--vds-color-primary-text, var(--vds-color-primary-muted-text, #3730a3));
+    --button-color-text-hover:   var(--button-color-solid-hover);
+    --button-color-border:       var(--button-color-solid);
+
+    /* =====================================================================
+     * Rendering tokens (the ones Button.css actually paints with).
+     * Defaults to solid variant — variants override these below.
+     * ===================================================================== */
+    --button-bg:           var(--button-color-solid);
+    --button-bg-hover:     var(--button-color-solid-hover);
+    --button-bg-active:    var(--button-color-solid-active);
+    --button-text:         var(--button-color-on-solid);
+    --button-text-hover:   var(--button-color-on-solid);
+    --button-text-active:  var(--button-color-on-solid);
+    --button-border:       transparent;
+    --button-border-hover: transparent;
+    --button-border-active: transparent;
+  }
+
+  /* =========================================================================
+   * 2. Color palettes — redefine --button-color-* meta-tokens.
+   *    Each [data-color] sets only what differs from primary.
+   * ========================================================================= */
+
+  .vds-button[data-color="success"] {
+    --button-color-solid:        var(--vds-color-success-solid, var(--vds-color-success-emphasis, #16a34a));
+    --button-color-solid-hover:  var(--vds-color-success-solid-hover, var(--vds-color-success-hover, #15803d));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-success, #fff);
+    --button-color-bg:           var(--vds-color-success-bg, var(--vds-color-success-muted, #dcfce7));
+    --button-color-bg-hover:     var(--vds-color-success-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-success-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-success-text, var(--vds-color-success-muted-text, #166534));
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  .vds-button[data-color="warning"] {
+    --button-color-solid:        var(--vds-color-warning-solid, var(--vds-color-warning-emphasis, #f59e0b));
+    --button-color-solid-hover:  var(--vds-color-warning-solid-hover, var(--vds-color-warning-hover, #d97706));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-warning, #111);
+    --button-color-bg:           var(--vds-color-warning-bg, var(--vds-color-warning-muted, #fef3c7));
+    --button-color-bg-hover:     var(--vds-color-warning-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-warning-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-warning-text, var(--vds-color-warning-muted-text, #78350f));
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  .vds-button[data-color="danger"] {
+    --button-color-solid:        var(--vds-color-danger-solid, var(--vds-color-danger-emphasis, #dc2626));
+    --button-color-solid-hover:  var(--vds-color-danger-solid-hover, var(--vds-color-danger-hover, #b91c1c));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-danger, #fff);
+    --button-color-bg:           var(--vds-color-danger-bg, var(--vds-color-danger-muted, #fee2e2));
+    --button-color-bg-hover:     var(--vds-color-danger-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-danger-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-danger-text, var(--vds-color-danger-muted-text, #991b1b));
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  .vds-button[data-color="info"] {
+    --button-color-solid:        var(--vds-color-info-solid, var(--vds-color-info-emphasis, #0891b2));
+    --button-color-solid-hover:  var(--vds-color-info-solid-hover, var(--vds-color-info-hover, #0e7490));
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-info, #fff);
+    --button-color-bg:           var(--vds-color-info-bg, var(--vds-color-info-muted, #cffafe));
+    --button-color-bg-hover:     var(--vds-color-info-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-info-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-info-text, var(--vds-color-info-muted-text, #155e75));
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  .vds-button[data-color="accent"] {
+    --button-color-solid:        var(--vds-color-accent-solid, var(--vds-color-accent-emphasis, #f97316));
+    --button-color-solid-hover:  var(--vds-color-accent-solid-hover, #ea580c);
+    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-on-solid:     var(--vds-color-on-accent, #fff);
+    --button-color-bg:           var(--vds-color-accent-bg, #ffedd5);
+    --button-color-bg-hover:     var(--vds-color-accent-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
+    --button-color-bg-active:    var(--vds-color-accent-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
+    --button-color-text:         var(--vds-color-accent-text, #7c2d12);
+    --button-color-border:       var(--button-color-solid);
+  }
+
+  /* Neutral — desaturated gray button distinct from `contrast`. Uses the
+   * high-contrast step (neutral-12) as bg so both modes get ≥ 9:1 contrast
+   * with the inverted on-solid text. Softer than `contrast` though: contrast
+   * uses pure black/white, neutral stays in the warm gray-270 family. */
+  .vds-button[data-color="neutral"] {
+    --button-color-solid:        var(--vds-color-neutral-12, var(--vds-color-gray-900, #171717));
+    --button-color-solid-hover:  var(--vds-color-neutral-11, var(--vds-color-gray-800, #262626));
+    --button-color-solid-active: oklch(from var(--button-color-solid) calc(l * 0.85) c h);
+    --button-color-on-solid:     var(--vds-color-neutral-1, light-dark(var(--vds-color-white, #fff), var(--vds-color-gray-950, #0a0a0a)));
+    --button-color-bg:           var(--vds-color-neutral-3, var(--vds-color-gray-100, #f5f5f5));
+    --button-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-gray-200, #e5e5e5));
+    --button-color-bg-active:    var(--vds-color-neutral-5, var(--vds-color-gray-300, #d4d4d4));
+    --button-color-text:         var(--vds-color-neutral-12, var(--vds-color-text, #171717));
+    --button-color-border:       var(--vds-color-neutral-8, var(--vds-color-gray-400, #a3a3a3));
+  }
+
+  /* High-contrast: nearly pure black on light, nearly pure white on dark.
+   * Designed to pop against the page regardless of ambient theme. */
+  .vds-button[data-color="contrast"] {
+    --button-color-solid:        light-dark(var(--vds-color-gray-950, #0a0a0a), var(--vds-color-gray-50, #fafafa));
+    --button-color-solid-hover:  light-dark(var(--vds-color-gray-900, #171717), var(--vds-color-gray-100, #f5f5f5));
+    --button-color-solid-active: light-dark(var(--vds-color-black, #000), var(--vds-color-white, #fff));
+    --button-color-on-solid:     light-dark(var(--vds-color-white, #fff), var(--vds-color-gray-950, #0a0a0a));
+    --button-color-bg:           light-dark(var(--vds-color-gray-200, #e5e5e5), var(--vds-color-gray-800, #262626));
+    --button-color-bg-hover:     light-dark(var(--vds-color-gray-300, #d4d4d4), var(--vds-color-gray-700, #404040));
+    --button-color-bg-active:    light-dark(var(--vds-color-gray-400, #a3a3a3), var(--vds-color-gray-600, #525252));
+    --button-color-text:         light-dark(var(--vds-color-gray-950, #0a0a0a), var(--vds-color-gray-50, #fafafa));
+    --button-color-border:       light-dark(var(--vds-color-gray-950, #0a0a0a), var(--vds-color-gray-50, #fafafa));
+  }
+
+  /* =========================================================================
+   * 3. Variants — re-map the palette into rendering tokens.
+   *    Solid is baked into the base above; variants override the rendering
+   *    tokens only (not the palette), so changing [data-color] still works.
+   * ========================================================================= */
+
+  .vds-button[data-variant="outline"] {
+    --button-bg:            transparent;
+    --button-bg-hover:      var(--button-color-bg-hover);
+    --button-bg-active:     var(--button-color-bg-active);
+    --button-text:          var(--button-color-text);
+    --button-text-hover:    var(--button-color-text);
+    --button-text-active:   var(--button-color-text);
+    --button-border:        var(--button-color-border);
+    --button-border-hover:  var(--button-color-border);
+    --button-border-active: var(--button-color-border);
+  }
+
+  .vds-button[data-variant="ghost"] {
+    --button-bg:            transparent;
+    --button-bg-hover:      var(--button-color-bg-hover);
+    --button-bg-active:     var(--button-color-bg-active);
+    --button-text:          var(--button-color-text);
+    --button-text-hover:    var(--button-color-text);
+    --button-text-active:   var(--button-color-text);
+    --button-border:        transparent;
+    --button-border-hover:  transparent;
+    --button-border-active: transparent;
+  }
+
+  .vds-button[data-variant="soft"] {
+    --button-bg:            var(--button-color-bg);
+    --button-bg-hover:      var(--button-color-bg-hover);
+    --button-bg-active:     var(--button-color-bg-active);
+    --button-text:          var(--button-color-text);
+    --button-text-hover:    var(--button-color-text);
+    --button-text-active:   var(--button-color-text);
+    --button-border:        transparent;
+    --button-border-hover:  transparent;
+    --button-border-active: transparent;
+  }
+
+  .vds-button[data-variant="link"] {
+    --button-height:        auto;
+    --button-padding-inline: 0;
+    --button-min-width:     0;
+    --button-bg:            transparent;
+    --button-bg-hover:      transparent;
+    --button-bg-active:     transparent;
+    --button-text:          var(--button-color-solid);
+    --button-text-hover:    var(--button-color-solid-hover);
+    --button-text-active:   var(--button-color-solid-active);
+    --button-border:        transparent;
+    --button-border-hover:  transparent;
+    --button-border-active: transparent;
+  }
+
+  /* =========================================================================
+   * 4. Sizes — redefine layout-only tokens.
+   *    8-slot scale: 2xs(24) · xs(28) · sm(32) · md(36) · lg(40) · xl(44)
+   *                  · 2xl(52) · 3xl(64). md is the default.
+   * ========================================================================= */
+
+  .vds-button[data-size="2xs"] {
+    --button-height:         var(--vds-size-2xs, 1.5rem);
+    --button-padding-inline: var(--vds-space-2, 0.5rem);
+    --button-font-size:      var(--vds-text-xs, 0.75rem);
+    --button-gap:            var(--vds-space-1, 0.25rem);
+    --button-icon-size:      0.875rem;
+    --button-radius:         var(--vds-radius-element, 0.25rem);
+  }
+
+  .vds-button[data-size="xs"] {
+    --button-height:         var(--vds-size-xs, 1.75rem);
+    --button-padding-inline: var(--vds-space-2-5, 0.625rem);
+    --button-font-size:      var(--vds-text-xs, 0.75rem);
+    --button-gap:            var(--vds-space-1, 0.25rem);
+    --button-icon-size:      0.875rem;
+    --button-radius:         var(--vds-radius-element, 0.25rem);
+  }
+
+  .vds-button[data-size="sm"] {
+    --button-height:         var(--vds-size-sm, 2rem);
+    --button-padding-inline: var(--vds-space-3, 0.75rem);
+    --button-font-size:      var(--vds-text-sm, 0.875rem);
+    --button-gap:            var(--vds-space-1-5, 0.375rem);
+    --button-icon-size:      1rem;
+  }
+
+  /* md — default, inherits base tokens (height=var(--vds-size-md)=2.25rem/36px) */
+
+  .vds-button[data-size="lg"] {
+    --button-height:         var(--vds-size-lg, 2.5rem);
+    --button-padding-inline: var(--vds-space-5, 1.25rem);
+    --button-font-size:      var(--vds-text-base, 1rem);
+    --button-gap:            var(--vds-space-2, 0.5rem);
+    --button-icon-size:      1.25rem;
+  }
+
+  .vds-button[data-size="xl"] {
+    --button-height:         var(--vds-size-xl, 2.75rem);
+    --button-padding-inline: var(--vds-space-6, 1.5rem);
+    --button-font-size:      var(--vds-text-base, 1rem);
+    --button-gap:            var(--vds-space-2, 0.5rem);
+    --button-icon-size:      1.25rem;
+  }
+
+  .vds-button[data-size="2xl"] {
+    --button-height:         var(--vds-size-2xl, 3.25rem);
+    --button-padding-inline: var(--vds-space-7, 1.75rem);
+    --button-font-size:      var(--vds-text-lg, 1.125rem);
+    --button-gap:            var(--vds-space-2-5, 0.625rem);
+    --button-icon-size:      1.375rem;
+  }
+
+  .vds-button[data-size="3xl"] {
+    --button-height:         var(--vds-size-3xl, 4rem);
+    --button-padding-inline: var(--vds-space-8, 2rem);
+    --button-font-size:      var(--vds-text-xl, 1.25rem);
+    --button-gap:            var(--vds-space-3, 0.75rem);
+    --button-icon-size:      1.5rem;
+  }
+
+  /* =========================================================================
+   * 5. Disabled — single source of truth for the disabled palette.
+   *    Applied via :disabled in Button.css; these tokens give it one hook
+   *    to override per-color if needed.
+   * ========================================================================= */
+  .vds-button:disabled,
+  .vds-button[aria-disabled="true"] {
+    --button-bg-hover:     var(--button-bg);
+    --button-bg-active:    var(--button-bg);
+    --button-text-hover:   var(--button-text);
+    --button-text-active:  var(--button-text);
+    --button-border-hover: var(--button-border);
+    --button-border-active: var(--button-border);
+  }
+}
+@layer design-system.components {
+  /* ── Root ── */
+  .vds-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--button-gap);
+    position: relative;
+    vertical-align: middle;
+
+    block-size: var(--button-height);
+    min-inline-size: var(--button-min-width);
+    padding-inline: var(--button-padding-inline);
+
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: var(--button-border-width) solid var(--button-border);
+    border-radius: var(--button-radius);
+
+    font-family: var(--button-font-family);
+    font-size: var(--button-font-size);
+    font-weight: var(--button-font-weight);
+    line-height: var(--button-line-height);
+    letter-spacing: var(--button-letter-spacing);
+
+    /* Trim ascender space above cap-height and descender below baseline so
+     * flex centering lines up the visible glyph, not the full em-box. Newer
+     * syntax (Chrome 133+, Safari 18.2+); fallback is the raw line-height:1. */
+    text-box: trim-both cap alphabetic;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+      background-color var(--button-transition-duration) var(--button-transition-easing),
+      border-color     var(--button-transition-duration) var(--button-transition-easing),
+      color            var(--button-transition-duration) var(--button-transition-easing),
+      box-shadow       var(--button-transition-duration) var(--button-transition-easing),
+      opacity          var(--button-transition-duration) var(--button-transition-easing);
+  }
+
+  /* ── Interaction states ── */
+  .vds-button:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--button-bg-hover);
+    color: var(--button-text-hover);
+    border-color: var(--button-border-hover);
+  }
+
+  .vds-button:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--button-bg-active);
+    color: var(--button-text-active);
+    border-color: var(--button-border-active);
+    scale: var(--button-press-scale);
+  }
+
+  .vds-button:focus-visible {
+    outline: var(--button-focus-ring-width) solid var(--button-focus-ring-color);
+    outline-offset: var(--button-focus-ring-offset);
+  }
+
+  /* Link variant — underline on hover */
+  .vds-button[data-variant="link"] {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .vds-button[data-variant="link"]:hover:not(:disabled):not([aria-disabled="true"]) {
+    text-decoration-thickness: 2px;
+  }
+
+  /* ── Disabled ── */
+  .vds-button:disabled,
+  .vds-button[aria-disabled="true"] {
+    opacity: var(--button-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* ── Modifiers ── */
+
+  /* Icon-only: auto-detected via :has(), or when spinner is the only extra child in loading state */
+  .vds-button:has(> svg:only-child),
+  .vds-button:has(> .vds-button-spinner:first-child + svg:last-child) {
+    padding-inline: 0;
+    aspect-ratio: 1;
+    --button-min-width: var(--button-height);
+  }
+
+  .vds-button[data-full-width] {
+    inline-size: 100%;
+  }
+
+  .vds-button[data-loading] {
+    color: transparent;
+    pointer-events: none;
+  }
+
+  .vds-button[data-loading] > .vds-button-section,
+  .vds-button[data-loading] > :not(.vds-button-spinner) {
+    visibility: hidden;
+  }
+
+  /* ── Spinner ── */
+  .vds-button-spinner {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inset: 0;
+  }
+
+  .vds-button-spinner::after {
+    content: "";
+    display: block;
+    inline-size: var(--button-icon-size);
+    block-size: var(--button-icon-size);
+    border: 2px solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: var(--vds-radius-full, 9999px);
+    animation: vds-button-spin 0.6s linear infinite;
+    color: var(--button-text);
+    opacity: 1;
+  }
+
+  /* ── Sections (left/right icon slots) ── */
+  .vds-button-section {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .vds-button-section > svg {
+    inline-size: var(--button-icon-size);
+    block-size: var(--button-icon-size);
+  }
+
+  /* ── Keyframes ── */
+  @keyframes vds-button-spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+}
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Base component tokens
+   *    Semantic → component mapping with fallbacks
+   *    so the package works standalone if dropped
+   *    into a project without @virtari/tokens.
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content {
+    /* Layout */
+    --dialog-radius: var(--vds-radius-dialog, 0.75rem);
+    --dialog-surface: var(--vds-color-surface, #ffffff);
+    --dialog-shadow: var(--vds-shadow-xl, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1));
+    --dialog-border-width: 1px;
+    --dialog-border-color: var(--vds-color-border, #e5e7eb);
+    --dialog-padding-inline: var(--vds-space-6, 1.5rem);
+    --dialog-padding-block: var(--vds-space-6, 1.5rem);
+    --dialog-gap: var(--vds-space-4, 1rem);
+    --dialog-min-width: min(90vw, 20rem);
+    --dialog-max-width: min(90vw, 32rem);
+    --dialog-max-height: 85dvh;
+
+    /* Typography */
+    --dialog-title-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --dialog-title-font-size: var(--vds-text-lg, 1.125rem);
+    --dialog-title-font-weight: var(--vds-font-weight-semibold, 600);
+    --dialog-title-line-height: var(--vds-leading-tight, 1.25);
+    --dialog-title-color: var(--vds-color-text, #111827);
+    --dialog-description-font-size: var(--vds-text-sm, 0.875rem);
+    --dialog-description-line-height: var(--vds-leading-normal, 1.5);
+    --dialog-description-color: var(--vds-color-text-muted, #6b7280);
+
+    /* Motion */
+    --dialog-enter-duration: var(--vds-duration-normal, 200ms);
+    --dialog-exit-duration: var(--vds-duration-fast, 100ms);
+    --dialog-enter-ease: var(--vds-ease-spring, cubic-bezier(0.22, 1.2, 0.36, 1));
+    --dialog-exit-ease: var(--vds-ease-in, cubic-bezier(0.4, 0, 1, 1));
+    --dialog-enter-animation: vds-dialog-scale-in;
+    --dialog-exit-animation: vds-dialog-scale-out;
+
+    /* Intent accent strip (top border) */
+    --dialog-intent-accent-color: transparent;
+    --dialog-intent-accent-height: 0px;
+
+    /* Close button */
+    --dialog-close-size: 2rem;
+    --dialog-close-icon-size: 1rem;
+    --dialog-close-inset: var(--vds-space-3, 0.75rem);
+    --dialog-close-radius: var(--vds-radius-sm, 0.375rem);
+    --dialog-close-color: var(--vds-color-text-muted, #6b7280);
+    --dialog-close-color-hover: var(--vds-color-text, #111827);
+    --dialog-close-bg-hover: color-mix(in oklch, currentColor 10%, transparent);
+    --dialog-close-bg-active: color-mix(in oklch, currentColor 16%, transparent);
+
+    /* Header / body / footer layout */
+    --dialog-header-gap: var(--vds-space-1-5, 0.375rem);
+    --dialog-header-padding-block-start: var(--vds-space-6, 1.5rem);
+    --dialog-header-padding-block-end: var(--vds-space-4, 1rem);
+    --dialog-body-padding-block: var(--vds-space-4, 1rem);
+    --dialog-footer-gap: var(--vds-space-3, 0.75rem);
+    --dialog-footer-padding-block: var(--vds-space-4, 1rem);
+    --dialog-section-border: 1px solid var(--vds-color-border-muted, #e5e7eb);
+  }
+
+  .vds-dialog-overlay {
+    --dialog-overlay-bg: var(--vds-color-overlay, rgb(0 0 0 / 0.6));
+    --dialog-overlay-blur: 0px;
+    --dialog-overlay-enter-duration: var(--vds-duration-normal, 200ms);
+    --dialog-overlay-exit-duration: var(--vds-duration-fast, 100ms);
+    --dialog-overlay-enter-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    --dialog-overlay-exit-ease: var(--vds-ease-in, cubic-bezier(0.4, 0, 1, 1));
+  }
+
+  /* ─────────────────────────────────────────────
+   * 2. Sizes — only geometry tokens change
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content[data-size="sm"] {
+    --dialog-max-width: min(90vw, 24rem);
+    --dialog-padding-inline: var(--vds-space-5, 1.25rem);
+    --dialog-padding-block: var(--vds-space-5, 1.25rem);
+    --dialog-gap: var(--vds-space-3, 0.75rem);
+    --dialog-title-font-size: var(--vds-text-base, 1rem);
+  }
+
+  .vds-dialog-content[data-size="md"] {
+    --dialog-max-width: min(90vw, 32rem);
+  }
+
+  .vds-dialog-content[data-size="lg"] {
+    --dialog-max-width: min(90vw, 48rem);
+    --dialog-title-font-size: var(--vds-text-xl, 1.25rem);
+  }
+
+  .vds-dialog-content[data-size="xl"] {
+    --dialog-max-width: min(95vw, 64rem);
+    --dialog-title-font-size: var(--vds-text-xl, 1.25rem);
+  }
+
+  .vds-dialog-content[data-size="full"] {
+    --dialog-max-width: 100vw;
+    --dialog-min-width: 100vw;
+    --dialog-max-height: 100dvh;
+    --dialog-radius: 0;
+    --dialog-border-width: 0;
+    --dialog-title-font-size: var(--vds-text-xl, 1.25rem);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 3. Animations — swap keyframes + ease + duration
+   * ───────────────────────────────────────────── */
+  /* Each preset wires enter & exit to be mirror images:
+     - same keyframe family, reversed direction
+     - same easing, matched duration (exit slightly faster to feel snappy) */
+
+  .vds-dialog-content[data-animation="scale"] {
+    --dialog-enter-animation: vds-dialog-scale-in;
+    --dialog-exit-animation: vds-dialog-scale-out;
+    --dialog-enter-ease: var(--vds-ease-spring, cubic-bezier(0.22, 1.2, 0.36, 1));
+    --dialog-exit-ease: var(--vds-ease-spring, cubic-bezier(0.22, 1.2, 0.36, 1));
+  }
+
+  .vds-dialog-content[data-animation="fade"] {
+    --dialog-enter-animation: vds-dialog-fade-in;
+    --dialog-exit-animation: vds-dialog-fade-out;
+    --dialog-enter-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    --dialog-exit-ease: var(--vds-ease-in, cubic-bezier(0.4, 0, 1, 1));
+  }
+
+  .vds-dialog-content[data-animation="slide-up"] {
+    --dialog-enter-animation: vds-dialog-slide-in-up;
+    --dialog-exit-animation: vds-dialog-slide-out-down;
+    --dialog-enter-duration: var(--vds-duration-slow, 300ms);
+    --dialog-exit-duration: var(--vds-duration-normal, 200ms);
+    --dialog-enter-ease: var(--vds-ease-ios, cubic-bezier(0.32, 0.72, 0, 1));
+    --dialog-exit-ease: var(--vds-ease-ios, cubic-bezier(0.32, 0.72, 0, 1));
+  }
+
+  .vds-dialog-content[data-animation="slide-down"] {
+    --dialog-enter-animation: vds-dialog-slide-in-down;
+    --dialog-exit-animation: vds-dialog-slide-out-up;
+    --dialog-enter-duration: var(--vds-duration-slow, 300ms);
+    --dialog-exit-duration: var(--vds-duration-normal, 200ms);
+    --dialog-enter-ease: var(--vds-ease-ios, cubic-bezier(0.32, 0.72, 0, 1));
+    --dialog-exit-ease: var(--vds-ease-ios, cubic-bezier(0.32, 0.72, 0, 1));
+  }
+
+  .vds-dialog-content[data-animation="zoom"] {
+    --dialog-enter-animation: vds-dialog-zoom-in;
+    --dialog-exit-animation: vds-dialog-zoom-out;
+    --dialog-enter-duration: var(--vds-duration-slow, 300ms);
+    --dialog-exit-duration: var(--vds-duration-normal, 200ms);
+    --dialog-enter-ease: var(--vds-ease-spring, cubic-bezier(0.22, 1.2, 0.36, 1));
+    --dialog-exit-ease: var(--vds-ease-spring, cubic-bezier(0.22, 1.2, 0.36, 1));
+  }
+
+  .vds-dialog-content[data-animation="bounce"] {
+    --dialog-enter-animation: vds-dialog-bounce-in;
+    --dialog-exit-animation: vds-dialog-bounce-out;
+    --dialog-enter-duration: var(--vds-duration-slower, 400ms);
+    --dialog-exit-duration: var(--vds-duration-slow, 300ms);
+    --dialog-enter-ease: var(--vds-ease-bounce, cubic-bezier(0.34, 1.56, 0.64, 1));
+    --dialog-exit-ease: var(--vds-ease-bounce, cubic-bezier(0.34, 1.56, 0.64, 1));
+  }
+
+  .vds-dialog-content[data-animation="none"] {
+    --dialog-enter-animation: vds-dialog-fade-in;
+    --dialog-exit-animation: vds-dialog-fade-out;
+    --dialog-enter-duration: 0ms;
+    --dialog-exit-duration: 0ms;
+  }
+
+  /* ─────────────────────────────────────────────
+   * 4. Backdrop variants — overlay appearance
+   * ───────────────────────────────────────────── */
+  .vds-dialog-overlay[data-backdrop="default"] {
+    --dialog-overlay-bg: var(--vds-color-overlay, rgb(0 0 0 / 0.6));
+    --dialog-overlay-blur: 0px;
+  }
+
+  .vds-dialog-overlay[data-backdrop="blur"] {
+    --dialog-overlay-bg: var(--vds-color-overlay-light, rgb(0 0 0 / 0.3));
+    --dialog-overlay-blur: 8px;
+  }
+
+  .vds-dialog-overlay[data-backdrop="blur-strong"] {
+    --dialog-overlay-bg: var(--vds-color-overlay-light, rgb(0 0 0 / 0.3));
+    --dialog-overlay-blur: 20px;
+  }
+
+  .vds-dialog-overlay[data-backdrop="light"] {
+    --dialog-overlay-bg: var(--vds-color-overlay-light, rgb(0 0 0 / 0.3));
+    --dialog-overlay-blur: 0px;
+  }
+
+  .vds-dialog-overlay[data-backdrop="none"] {
+    --dialog-overlay-bg: transparent;
+    --dialog-overlay-blur: 0px;
+  }
+
+  /* ─────────────────────────────────────────────
+   * 5. Intents — top accent strip
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content[data-intent="destructive"] {
+    --dialog-intent-accent-color: var(--vds-color-danger-emphasis, #ef4444);
+    --dialog-intent-accent-height: 3px;
+  }
+
+  .vds-dialog-content[data-intent="warning"] {
+    --dialog-intent-accent-color: var(--vds-color-warning-emphasis, #f59e0b);
+    --dialog-intent-accent-height: 3px;
+  }
+
+  .vds-dialog-content[data-intent="success"] {
+    --dialog-intent-accent-color: var(--vds-color-success-emphasis, #22c55e);
+    --dialog-intent-accent-height: 3px;
+  }
+
+  .vds-dialog-content[data-intent="info"] {
+    --dialog-intent-accent-color: var(--vds-color-info-emphasis, #06b6d4);
+    --dialog-intent-accent-height: 3px;
+  }
+
+  /* ─────────────────────────────────────────────
+   * 6. Responsive — full-screen on narrow viewports
+   * ───────────────────────────────────────────── */
+  @media (max-width: 40rem) {
+    .vds-dialog-content[data-responsive] {
+      --dialog-max-width: 100vw;
+      --dialog-min-width: 100vw;
+      --dialog-max-height: 100dvh;
+      --dialog-radius: 0;
+      --dialog-border-width: 0;
+    }
+  }
+}
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Overlay — full-viewport backdrop
+   * ───────────────────────────────────────────── */
+  .vds-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--vds-z-overlay, 1300);
+    background-color: var(--dialog-overlay-bg);
+    backdrop-filter: blur(var(--dialog-overlay-blur));
+    -webkit-backdrop-filter: blur(var(--dialog-overlay-blur));
+    animation: vds-dialog-fade-in var(--dialog-overlay-enter-duration) var(--dialog-overlay-enter-ease);
+  }
+
+    .vds-dialog-overlay[data-state="closed"] {
+      animation: vds-dialog-fade-out var(--dialog-overlay-exit-duration) var(--dialog-overlay-exit-ease);
+    }
+
+  .vds-dialog-overlay[data-backdrop="none"] {
+    pointer-events: none;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Content — centered modal surface
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content {
+    position: fixed;
+    z-index: var(--vds-z-modal, 1400);
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    translate: -50% -50%;
+
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    min-inline-size: var(--dialog-min-width);
+    max-inline-size: var(--dialog-max-width);
+    max-block-size: var(--dialog-max-height);
+
+    background-color: var(--dialog-surface);
+    border: var(--dialog-border-width) solid var(--dialog-border-color);
+    border-radius: var(--dialog-radius);
+    box-shadow: var(--dialog-shadow);
+
+    overflow: hidden;
+    container-type: inline-size;
+
+    animation: var(--dialog-enter-animation) var(--dialog-enter-duration) var(--dialog-enter-ease);
+  }
+
+    .vds-dialog-content[data-state="closed"] {
+      animation: var(--dialog-exit-animation) var(--dialog-exit-duration) var(--dialog-exit-ease);
+    }
+
+    .vds-dialog-content:focus-visible {
+      outline: none;
+    }
+
+  /* Full-screen anchoring */
+  .vds-dialog-content[data-size="full"] {
+    inset: 0;
+    translate: 0 0;
+  }
+
+  @media (max-width: 40rem) {
+    .vds-dialog-content[data-responsive] {
+      inset: 0;
+      translate: 0 0;
+    }
+  }
+
+  /* Intent accent — colored strip along the top edge */
+  .vds-dialog-content::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: var(--dialog-intent-accent-height);
+    background-color: var(--dialog-intent-accent-color);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Simple layout — when neither Header nor Body
+   * is used, apply padding + gap directly to the
+   * flex children so the quick-start markup
+   * (just Title/Description/Footer) still has
+   * comfortable spacing.
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content:not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body)) {
+    gap: var(--dialog-gap);
+    padding: var(--dialog-padding-block) var(--dialog-padding-inline);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Header — sticky top section
+   * ───────────────────────────────────────────── */
+  .vds-dialog-header {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--dialog-header-gap);
+    padding-inline: var(--dialog-padding-inline);
+    padding-block-start: var(--dialog-header-padding-block-start);
+    padding-block-end: var(--dialog-header-padding-block-end);
+  }
+
+  .vds-dialog-header[data-variant="bordered"] {
+    border-block-end: var(--dialog-section-border);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Body — scrollable main region
+   * ───────────────────────────────────────────── */
+  .vds-dialog-body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-inline: var(--dialog-padding-inline);
+    padding-block: var(--dialog-body-padding-block);
+    color: var(--vds-color-text, #111827);
+    font-size: var(--dialog-description-font-size);
+    line-height: var(--dialog-description-line-height);
+  }
+
+  .vds-dialog-header + .vds-dialog-body {
+    padding-block-start: 0;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Footer — sticky actions area
+   * ───────────────────────────────────────────── */
+  .vds-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--dialog-footer-gap);
+    padding-inline: var(--dialog-padding-inline);
+    padding-block: var(--dialog-footer-padding-block);
+  }
+
+  .vds-dialog-body + .vds-dialog-footer,
+  .vds-dialog-header + .vds-dialog-footer {
+    border-block-start: var(--dialog-section-border);
+  }
+
+  @container (inline-size < 20rem) {
+    .vds-dialog-footer {
+      flex-direction: column-reverse;
+    }
+
+      .vds-dialog-footer > * {
+        inline-size: 100%;
+      }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Title & Description typography
+   * ───────────────────────────────────────────── */
+  .vds-dialog-title {
+    margin: 0;
+    font-family: var(--dialog-title-font-family);
+    font-size: var(--dialog-title-font-size);
+    font-weight: var(--dialog-title-font-weight);
+    line-height: var(--dialog-title-line-height);
+    color: var(--dialog-title-color);
+  }
+
+  .vds-dialog-description {
+    margin: 0;
+    font-size: var(--dialog-description-font-size);
+    line-height: var(--dialog-description-line-height);
+    color: var(--dialog-description-color);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Close icon — absolute-positioned X button
+   * ───────────────────────────────────────────── */
+  .vds-dialog-close-icon {
+    position: absolute;
+    inset-block-start: var(--dialog-close-inset);
+    inset-inline-end: var(--dialog-close-inset);
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    inline-size: var(--dialog-close-size);
+    block-size: var(--dialog-close-size);
+    padding: 0;
+
+    background: transparent;
+    color: var(--dialog-close-color);
+    border: 0;
+    border-radius: var(--dialog-close-radius);
+    cursor: pointer;
+
+    transition:
+      background-color var(--vds-duration-fast, 100ms) var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      color var(--vds-duration-fast, 100ms) var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-dialog-close-icon:hover {
+    background-color: var(--dialog-close-bg-hover);
+    color: var(--dialog-close-color-hover);
+  }
+
+  .vds-dialog-close-icon:active {
+    background-color: var(--dialog-close-bg-active);
+  }
+
+  .vds-dialog-close-icon:focus-visible {
+    outline: 2px solid var(--vds-color-ring, #6366f1);
+    outline-offset: 2px;
+  }
+
+  .vds-dialog-close-icon > svg {
+    inline-size: var(--dialog-close-icon-size);
+    block-size: var(--dialog-close-icon-size);
+  }
+
+  /* When a close icon is rendered, pad the header (or simple content)
+     so the title never collides with it. */
+  .vds-dialog-content:has(> .vds-dialog-close-icon) .vds-dialog-header,
+  .vds-dialog-content:has(> .vds-dialog-close-icon):not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body)) {
+    padding-inline-end: calc(var(--dialog-close-inset) + var(--dialog-close-size) + var(--vds-space-2, 0.5rem));
+  }
+
+  /* ─────────────────────────────────────────────
+   * Keyframes — local to Dialog. motion.css
+   * keyframes use `translate: x y` that would
+   * conflict with our -50% -50% centering, so we
+   * define dialog-specific variants that animate
+   * around the centered transform.
+   * ───────────────────────────────────────────── */
+
+  /* Scale */
+  @keyframes vds-dialog-scale-in {
+    from { opacity: 0; scale: 0.95; }
+    to   { opacity: 1; scale: 1; }
+  }
+  @keyframes vds-dialog-scale-out {
+    from { opacity: 1; scale: 1; }
+    to   { opacity: 0; scale: 0.95; }
+  }
+
+  /* Fade */
+  @keyframes vds-dialog-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes vds-dialog-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  /* Slide — up = enters from bottom edge */
+  @keyframes vds-dialog-slide-in-up {
+    from { opacity: 0; translate: -50% calc(-50% + 1.5rem); }
+    to   { opacity: 1; translate: -50% -50%; }
+  }
+  @keyframes vds-dialog-slide-out-down {
+    from { opacity: 1; translate: -50% -50%; }
+    to   { opacity: 0; translate: -50% calc(-50% + 1.5rem); }
+  }
+
+  /* Slide — down = enters from top edge */
+  @keyframes vds-dialog-slide-in-down {
+    from { opacity: 0; translate: -50% calc(-50% - 1.5rem); }
+    to   { opacity: 1; translate: -50% -50%; }
+  }
+  @keyframes vds-dialog-slide-out-up {
+    from { opacity: 1; translate: -50% -50%; }
+    to   { opacity: 0; translate: -50% calc(-50% - 1.5rem); }
+  }
+
+  /* Zoom — larger motion than scale */
+  @keyframes vds-dialog-zoom-in {
+    from { opacity: 0; scale: 0.8; }
+    to   { opacity: 1; scale: 1; }
+  }
+  @keyframes vds-dialog-zoom-out {
+    from { opacity: 1; scale: 1; }
+    to   { opacity: 0; scale: 0.8; }
+  }
+
+  /* Bounce — enter overshoots past 1, exit overshoots past 1 briefly
+     then collapses. Pure reverse of the entry motion. */
+  @keyframes vds-dialog-bounce-in {
+    0%   { opacity: 0; scale: 0.3; }
+    60%  { opacity: 1; scale: 1.05; }
+    100% { opacity: 1; scale: 1; }
+  }
+  @keyframes vds-dialog-bounce-out {
+    0%   { opacity: 1; scale: 1; }
+    40%  { opacity: 1; scale: 1.05; }
+    100% { opacity: 0; scale: 0.3; }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Full-screen / responsive anchoring uses
+   * translate: 0 0, so slide keyframes (which
+   * assume -50% center) would drift. Force fade
+   * for those variants.
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content[data-size="full"] {
+    animation-name: vds-dialog-fade-in;
+  }
+  .vds-dialog-content[data-size="full"][data-state="closed"] {
+    animation-name: vds-dialog-fade-out;
+  }
+
+  @media (max-width: 40rem) {
+    .vds-dialog-content[data-responsive] {
+      animation-name: vds-dialog-slide-in-up-full;
+    }
+    .vds-dialog-content[data-responsive][data-state="closed"] {
+      animation-name: vds-dialog-slide-out-down-full;
+    }
+  }
+
+  /* Full-anchored slide variants for responsive mode: drawer-like
+     entry from the bottom of the viewport. */
+  @keyframes vds-dialog-slide-in-up-full {
+    from { opacity: 0; translate: 0 1rem; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+  @keyframes vds-dialog-slide-out-down-full {
+    from { opacity: 1; translate: 0 0; }
+    to   { opacity: 0; translate: 0 1rem; }
+  }
+}
+@layer components {
+  .vds-drawer-overlay {
+    --vds-drawer-duration: var(--vds-duration-slower);
+    --vds-drawer-ease: var(--vds-ease-ios);
+    position: fixed;
+    inset: 0;
+    z-index: var(--vds-z-overlay);
+    background-color: var(--vds-color-overlay);
+    opacity: var(--vds-drawer-overlay-opacity, 0);
+    pointer-events: none;
+    will-change: opacity;
+    transition: opacity var(--vds-drawer-duration) var(--vds-drawer-ease);
+  }
+
+  .vds-drawer-overlay[data-open] {
+    pointer-events: auto;
+  }
+
+  .vds-drawer-content {
+    --vds-drawer-radius: var(--vds-radius-drawer);
+    --vds-drawer-duration: var(--vds-duration-slower);
+    --vds-drawer-ease: var(--vds-ease-ios);
+    --vds-drawer-shadow: var(--vds-shadow-xl);
+    --vds-drawer-shadow-minimized:
+      0 0 0 1px color-mix(in oklch, var(--vds-color-border-muted), transparent 40%),
+      var(--vds-shadow-lg);
+    --vds-drawer-handle-width: 2.875rem;
+    --vds-drawer-handle-thickness: 0.3125rem;
+    --vds-drawer-handle-color: var(--vds-color-border);
+    --vds-drawer-handle-color-active: var(--vds-color-border-strong, var(--vds-color-gray-400));
+    --vds-drawer-available-size: 100dvh;
+    --vds-drawer-fixed-size: var(--vds-drawer-available-size);
+    --vds-drawer-adaptive-size: clamp(18rem, 32vw, 28rem);
+    --vds-drawer-edge-offset: 0px;
+    --vds-drawer-keyboard-inset: 0px;
+    position: fixed;
+    z-index: var(--vds-z-modal);
+    display: flex;
+    min-block-size: 0;
+    min-inline-size: 0;
+    flex-direction: column;
+    box-sizing: border-box;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklch, var(--vds-color-surface), white 4%),
+        var(--vds-color-surface)
+      );
+    outline: none;
+    overflow: hidden;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable both-edges;
+    backface-visibility: hidden;
+    will-change: transform;
+    transform-style: preserve-3d;
+    transition: transform var(--vds-drawer-duration) var(--vds-drawer-ease);
+    transform: var(--vds-drawer-transform, var(--vds-drawer-rest-transform));
+    -moz-user-select: none;
+         user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    container-type: inline-size;
+    contain: layout paint style;
+  }
+
+    .vds-drawer-content[data-indicator="outside"] {
+      overflow: visible;
+      contain: layout style;
+    }
+
+    .vds-drawer-content:not([data-open]) {
+      pointer-events: none;
+    }
+
+    .vds-drawer-content[data-dragging] {
+      transition: none;
+    }
+
+    .vds-drawer-content[data-stage="minimized"] {
+      box-shadow: var(--vds-drawer-shadow-minimized);
+    }
+
+    .vds-drawer-content[data-direction="bottom"],.vds-drawer-content[data-direction="top"] {
+      inset-inline: 0;
+      max-block-size: calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px));
+      max-inline-size: 100vw;
+      touch-action: pan-y;
+    }
+
+    .vds-drawer-content[data-direction="bottom"][data-size-mode="adaptive"],.vds-drawer-content[data-direction="top"][data-size-mode="adaptive"] {
+      block-size: auto;
+    }
+
+    .vds-drawer-content[data-direction="bottom"][data-size-mode="full"],.vds-drawer-content[data-direction="top"][data-size-mode="full"] {
+      block-size: calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px));
+    }
+
+    .vds-drawer-content[data-direction="bottom"][data-size-mode="fixed"],.vds-drawer-content[data-direction="top"][data-size-mode="fixed"] {
+      block-size: min(
+        var(--vds-drawer-fixed-size),
+        calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px))
+      );
+    }
+
+    .vds-drawer-content[data-direction="bottom"] {
+      inset-block-end: calc(var(--vds-drawer-edge-offset) + var(--vds-drawer-keyboard-inset, 0px));
+      border-start-start-radius: var(--vds-drawer-radius);
+      border-start-end-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: center bottom;
+      --vds-drawer-rest-transform: translate3d(0, 100%, 0);
+    }
+
+    .vds-drawer-content[data-direction="top"] {
+      inset-block-start: var(--vds-drawer-edge-offset);
+      border-end-start-radius: var(--vds-drawer-radius);
+      border-end-end-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: center top;
+      --vds-drawer-rest-transform: translate3d(0, -100%, 0);
+    }
+
+    .vds-drawer-content[data-direction="left"],.vds-drawer-content[data-direction="right"] {
+      inset-block: 0;
+      max-inline-size: var(--vds-drawer-available-size);
+      max-block-size: calc(100dvh - var(--vds-drawer-keyboard-inset, 0px));
+      touch-action: pan-x;
+    }
+
+    .vds-drawer-content[data-direction="left"][data-size-mode="adaptive"],.vds-drawer-content[data-direction="right"][data-size-mode="adaptive"] {
+      inline-size: min(var(--vds-drawer-adaptive-size), var(--vds-drawer-available-size));
+    }
+
+    .vds-drawer-content[data-direction="left"][data-size-mode="full"],.vds-drawer-content[data-direction="right"][data-size-mode="full"] {
+      inline-size: var(--vds-drawer-available-size);
+    }
+
+    .vds-drawer-content[data-direction="left"][data-size-mode="fixed"],.vds-drawer-content[data-direction="right"][data-size-mode="fixed"] {
+      inline-size: min(var(--vds-drawer-fixed-size), var(--vds-drawer-available-size));
+    }
+
+    .vds-drawer-content[data-direction="left"] {
+      inset-inline-start: var(--vds-drawer-edge-offset);
+      border-start-end-radius: var(--vds-drawer-radius);
+      border-end-end-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: left center;
+      --vds-drawer-rest-transform: translate3d(-100%, 0, 0);
+    }
+
+    .vds-drawer-content[data-direction="right"] {
+      /* Compensate for the scroll-lock margin-right that react-remove-scroll
+         applies to body when a modal is open. The variable is set to the
+         real scrollbar width while locked and is absent otherwise. */
+      inset-inline-end: calc(
+        var(--vds-drawer-edge-offset) - var(--removed-body-scroll-bar-size, 0px)
+      );
+      border-start-start-radius: var(--vds-drawer-radius);
+      border-end-start-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: right center;
+      --vds-drawer-rest-transform: translate3d(100%, 0, 0);
+    }
+
+    /* RTL: inset-inline-* already flips which physical edge the drawer docks
+       to; mirror transform-origin and the rest translation so the slide axis
+       matches the new dock edge. */
+    :dir(rtl) .vds-drawer-content[data-direction="left"] {
+      transform-origin: right center;
+      --vds-drawer-rest-transform: translate3d(100%, 0, 0);
+    }
+
+    :dir(rtl) .vds-drawer-content[data-direction="right"] {
+      transform-origin: left center;
+      --vds-drawer-rest-transform: translate3d(-100%, 0, 0);
+    }
+
+  .vds-drawer-header {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: var(--vds-space-2);
+    padding: var(--vds-space-4) var(--vds-space-6);
+    touch-action: none;
+    -moz-user-select: none;
+         user-select: none;
+    -webkit-user-select: none;
+    /* Plain (default): a single flat step of contrast vs the drawer body —
+       slightly darker in light theme, slightly lighter in dark theme, no
+       border. No gradient. */
+    background: light-dark(
+      color-mix(in oklch, var(--vds-color-surface), black 5%),
+      color-mix(in oklch, var(--vds-color-surface), white 5%)
+    );
+  }
+
+  .vds-drawer-header[data-variant="bordered"] {
+    /* Bordered: uniform with the drawer body, differentiated only by a
+       bottom rule. */
+    background: transparent;
+    border-block-end: 1px solid var(--vds-color-border-muted);
+  }
+
+  .vds-drawer-content[data-direction="top"] .vds-drawer-header,
+  .vds-drawer-content[data-direction="left"] .vds-drawer-header,
+  .vds-drawer-content[data-direction="right"] .vds-drawer-header {
+    padding-block-start: max(var(--vds-space-4), env(safe-area-inset-top));
+  }
+
+  .vds-drawer-header > .vds-drawer-title,
+  .vds-drawer-header > .vds-drawer-description {
+    padding-inline: 0;
+  }
+
+  .vds-drawer-header > .vds-drawer-description {
+    margin-block-start: 0;
+  }
+
+  .vds-drawer-content[data-direction="bottom"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="inside"],
+  .vds-drawer-content[data-direction="bottom"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="progress"] {
+    margin-block: calc(var(--vds-space-2) * -1) var(--vds-space-3);
+  }
+
+  .vds-drawer-content[data-direction="top"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="inside"],
+  .vds-drawer-content[data-direction="top"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="progress"] {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    justify-content: center;
+    padding-block: var(--vds-space-3);
+    margin: 0;
+  }
+
+  .vds-drawer-content[data-direction="top"][data-indicator="inside"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="top"][data-indicator="progress"]
+    .vds-drawer-body {
+    padding-block-end: calc(
+      var(--vds-drawer-handle-thickness) + var(--vds-space-5)
+    );
+  }
+
+  .vds-drawer-content[data-direction="left"][data-indicator="inside"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="left"][data-indicator="inside"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="left"][data-indicator="inside"]
+    .vds-drawer-footer,
+  .vds-drawer-content[data-direction="left"][data-indicator="progress"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="left"][data-indicator="progress"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="left"][data-indicator="progress"]
+    .vds-drawer-footer {
+    padding-inline-end: calc(
+      var(--vds-drawer-handle-thickness) + var(--vds-space-5)
+    );
+  }
+
+  .vds-drawer-content[data-direction="right"][data-indicator="inside"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="right"][data-indicator="inside"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="right"][data-indicator="inside"]
+    .vds-drawer-footer,
+  .vds-drawer-content[data-direction="right"][data-indicator="progress"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="right"][data-indicator="progress"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="right"][data-indicator="progress"]
+    .vds-drawer-footer {
+    padding-inline-start: calc(
+      var(--vds-drawer-handle-thickness) + var(--vds-space-5)
+    );
+  }
+
+  .vds-drawer-body {
+    flex: 1;
+    min-block-size: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    -moz-user-select: auto;
+         user-select: auto;
+    -webkit-user-select: auto;
+    padding-inline: var(--vds-space-6);
+    padding-block: var(--vds-space-4);
+    touch-action: auto;
+  }
+
+  .vds-drawer-header + .vds-drawer-body {
+    padding-block-start: 0;
+  }
+
+  .vds-drawer-handle {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--vds-space-3);
+    -moz-user-select: none;
+         user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    cursor: grab;
+  }
+
+    .vds-drawer-handle:active {
+      cursor: grabbing;
+    }
+      :is(.vds-drawer-handle[data-direction="bottom"],.vds-drawer-handle[data-direction="top"]) .vds-drawer-handle-bar {
+        inline-size: var(--vds-drawer-handle-width);
+        block-size: var(--vds-drawer-handle-thickness);
+      }
+
+    .vds-drawer-handle[data-direction="left"],.vds-drawer-handle[data-direction="right"] {
+      position: absolute;
+      inset-block: 0;
+      padding-inline: var(--vds-space-3);
+      padding-block: 0;
+      block-size: 100%;
+    }
+
+      :is(.vds-drawer-handle[data-direction="left"],.vds-drawer-handle[data-direction="right"]) .vds-drawer-handle-bar {
+        inline-size: var(--vds-drawer-handle-thickness);
+        block-size: var(--vds-drawer-handle-width);
+      }
+
+    .vds-drawer-handle[data-direction="left"] {
+      inset-inline-end: 0;
+    }
+
+    .vds-drawer-handle[data-direction="right"] {
+      inset-inline-start: 0;
+    }
+
+    .vds-drawer-handle[data-stage="minimized"] .vds-drawer-handle-bar {
+      background-color: var(--vds-drawer-handle-color-active);
+    }
+
+  /* Outside: the handle floats beyond the drawer's opening edge as a bare bar,
+     with no chip/pill background. Sits exactly at the boundary plus a small
+     visual gap. */
+  .vds-drawer-handle[data-placement="outside"] {
+    position: absolute;
+    z-index: 2;
+    margin: 0;
+    padding: var(--vds-space-2);
+    background: none;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="bottom"],
+  .vds-drawer-handle[data-placement="outside"][data-direction="top"] {
+    inset-inline-start: 50%;
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="bottom"] {
+    inset-block-start: 0;
+    transform: translate(-50%, calc(-100% - var(--vds-space-2)));
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="top"] {
+    inset-block-end: 0;
+    transform: translate(-50%, calc(100% + var(--vds-space-2)));
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="left"],
+  .vds-drawer-handle[data-placement="outside"][data-direction="right"] {
+    inset-block: auto;
+    inset-block-start: 50%;
+    block-size: auto;
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="left"] {
+    inset-inline-end: 0;
+    transform: translate(calc(100% + var(--vds-space-2)), -50%);
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="right"] {
+    inset-inline-start: 0;
+    transform: translate(calc(-100% - var(--vds-space-2)), -50%);
+  }
+
+  .vds-drawer-handle-bar {
+    position: relative;
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-drawer-handle-color);
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+    .vds-drawer-handle:hover .vds-drawer-handle-bar {
+      background-color: var(--vds-drawer-handle-color-active);
+    }
+
+  /* Progress indicator: the bar fills from its center outward as the user drags
+     the drawer toward the close threshold. Reaches full fill right as the
+     drawer is about to dismiss on release. */
+  .vds-drawer-handle[data-placement="progress"] .vds-drawer-handle-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--vds-color-primary-500, var(--vds-color-text));
+    transform-origin: center;
+    transform: scaleX(var(--vds-drawer-close-progress, 0));
+    transition: transform var(--vds-duration-fast) var(--vds-ease-out);
+    pointer-events: none;
+  }
+
+  /* Left/right drawers have a vertical bar — scale on Y instead. */
+  .vds-drawer-content[data-direction="left"]
+    .vds-drawer-handle[data-placement="progress"]
+    .vds-drawer-handle-bar::after,
+  .vds-drawer-content[data-direction="right"]
+    .vds-drawer-handle[data-placement="progress"]
+    .vds-drawer-handle-bar::after {
+    transform: scaleY(var(--vds-drawer-close-progress, 0));
+  }
+
+  /* While actively dragging, snap the fill updates to the drag frame (no
+     lagging transition). */
+  .vds-drawer-content[data-dragging]
+    .vds-drawer-handle[data-placement="progress"]
+    .vds-drawer-handle-bar::after {
+    transition: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .vds-drawer-header {
+      cursor: grab;
+    }
+
+    .vds-drawer-header:active {
+      cursor: grabbing;
+    }
+
+    .vds-drawer-handle[data-direction="bottom"],
+    .vds-drawer-handle[data-direction="top"] {
+      cursor: ns-resize;
+    }
+
+    .vds-drawer-handle[data-direction="left"],
+    .vds-drawer-handle[data-direction="right"] {
+      cursor: ew-resize;
+    }
+  }
+
+  .vds-drawer-title {
+    padding-inline: var(--vds-space-6);
+    font-family: var(--vds-font-sans);
+    font-size: var(--vds-text-lg);
+    font-weight: var(--vds-font-weight-semibold);
+    line-height: var(--vds-leading-tight);
+    color: var(--vds-color-text);
+  }
+
+  .vds-drawer-description {
+    margin-block-start: var(--vds-space-1);
+    padding-inline: var(--vds-space-6);
+    font-size: var(--vds-text-sm);
+    line-height: var(--vds-leading-normal);
+    color: var(--vds-color-text-muted);
+  }
+
+  .vds-drawer-footer {
+    display: flex;
+    gap: var(--vds-space-3);
+    flex-shrink: 0;
+    padding: var(--vds-space-4) var(--vds-space-6);
+    padding-block-end: max(var(--vds-space-4), env(safe-area-inset-bottom));
+    margin-block-start: auto;
+    border-block-start: 1px solid var(--vds-color-border-muted);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklch, var(--vds-color-surface), transparent 8%),
+        color-mix(in oklch, var(--vds-color-surface), black 2%)
+      );
+  }
+
+  @container (inline-size < 26rem) {
+    .vds-drawer-footer {
+      flex-direction: column-reverse;
+    }
+
+      .vds-drawer-footer > * {
+        inline-size: 100%;
+      }
+  }
+
+  /* Keyboard-focus mode — while a virtual keyboard is visible inside a
+     bottom/top drawer, we unstick the header and footer so they scroll
+     together with the body. This maximizes the vertical real estate
+     available for the form inside the clamped visible area. The drag hook
+     is informed via keyboardOpenRef so it treats the drawer content as
+     the active scroll container. */
+  .vds-drawer-content[data-keyboard-open][data-direction="bottom"],
+  .vds-drawer-content[data-keyboard-open][data-direction="top"] {
+    overflow-y: auto;
+    /* Force full-viewport height while a form is being filled — overrides
+       adaptive/fixed size-modes so the user gets maximum space regardless of
+       how short the resting content is. */
+    block-size: calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px));
+  }
+
+  .vds-drawer-content[data-keyboard-open][data-direction="bottom"] .vds-drawer-body,
+  .vds-drawer-content[data-keyboard-open][data-direction="top"] .vds-drawer-body {
+    flex: 0 0 auto;
+    min-block-size: auto;
+    overflow: visible;
+  }
+
+  .vds-drawer-content[data-keyboard-open] .vds-drawer-footer {
+    margin-block-start: 0;
+  }
+
+  [data-vds-drawer-wrapper] {
+    --vds-drawer-duration: var(--vds-duration-slower);
+    --vds-drawer-ease: var(--vds-ease-ios);
+    transition:
+      transform var(--vds-drawer-duration) var(--vds-drawer-ease),
+      border-radius var(--vds-drawer-duration) var(--vds-drawer-ease);
+    transform-origin: center top;
+    overflow: hidden;
+  }
+}
+@layer design-system.components {
   .vds-date-field,
   .vds-time-field {
     display: inline-flex;
@@ -314,7 +1897,6 @@
     direction: rtl;
   }
 
-  /* ── Label ── */
   .vds-date-field-label,
   .vds-time-field-label {
     font-size: var(--vds-text-xs, 0.75rem);
@@ -322,7 +1904,6 @@
     color: var(--date-field-label-color);
   }
 
-  /* ── Field group (the box with segments) ── */
   .vds-date-field-group,
   .vds-time-field-group,
   .vds-date-picker-group,
@@ -331,6 +1912,7 @@
     align-items: center;
     gap: var(--date-field-gap);
     inline-size: 100%;
+    min-inline-size: 0;
     block-size: var(--date-field-height);
     padding-inline: var(--date-field-padding-inline);
     background: var(--date-field-bg);
@@ -374,6 +1956,12 @@
     cursor: pointer;
   }
 
+  .vds-date-picker-group[data-surface-trigger="true"],
+  .vds-date-range-picker-group[data-surface-trigger="true"],
+  .vds-time-field-group[data-surface-trigger="true"] {
+    cursor: pointer;
+  }
+
   .vds-time-field-segments {
     display: inline-flex;
     align-items: center;
@@ -382,9 +1970,17 @@
     min-inline-size: 0;
   }
 
-  /* ── Segment ── */
+  .vds-static-field-segments {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
   .vds-date-field-segment,
-  .vds-time-field-segment {
+  .vds-time-field-segment,
+  .vds-static-field-segment {
     display: inline-block;
     padding-inline: var(--date-field-segment-padding-inline);
     border-radius: var(--date-field-segment-radius);
@@ -398,7 +1994,8 @@
   }
 
   .vds-date-field-segment[data-placeholder="true"],
-  .vds-time-field-segment[data-placeholder="true"] {
+  .vds-time-field-segment[data-placeholder="true"],
+  .vds-static-field-segment[data-placeholder="true"] {
     color: var(--date-field-placeholder-color);
   }
 
@@ -408,14 +2005,13 @@
     color: var(--date-field-segment-focus-text);
   }
 
-  /* Literal separators (/ : space) should not receive a focus outline. */
   .vds-date-field-segment[data-type="literal"],
-  .vds-time-field-segment[data-type="literal"] {
+  .vds-time-field-segment[data-type="literal"],
+  .vds-static-field-segment[data-type="literal"] {
     padding-inline: 0;
     color: var(--date-field-placeholder-color);
   }
 
-  /* ── Description + error ── */
   .vds-time-field-picker-trigger {
     display: inline-flex;
     align-items: center;
@@ -455,6 +2051,115 @@
     block-size: var(--date-field-trigger-size);
   }
 
+  .vds-picker-mobile-surface {
+    overflow: hidden;
+  }
+
+  .vds-picker-mobile-body {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    padding-inline: 0;
+    padding-block: 0;
+    overflow-x: hidden;
+  }
+
+  .vds-picker-mobile-body > * {
+    min-block-size: 0;
+  }
+
+  .vds-time-picker-mobile-body {
+    align-items: stretch;
+    justify-content: center;
+    padding-block: var(--vds-space-2, 0.5rem);
+  }
+
+  .vds-time-picker-mobile-body .vds-time-picker-panel {
+    flex: 1 1 auto;
+    min-block-size: 0;
+  }
+
+  .vds-picker-mobile-footer {
+    padding: var(--vds-space-3, 0.75rem);
+    border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    background: color-mix(in oklab, var(--date-picker-content-bg, var(--vds-color-surface, #fff)) 97%, var(--vds-color-bg-subtle, #fafafa));
+  }
+
+  .vds-picker-mobile-header-main {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--vds-space-2, 0.5rem);
+    align-items: center;
+  }
+
+  .vds-picker-mobile-header-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+    min-inline-size: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  .vds-picker-mobile-header-title {
+    min-inline-size: 0;
+    font-size: var(--vds-text-lg, 1.125rem);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    line-height: 1.2;
+    color: var(--date-field-text-color);
+  }
+
+  .vds-picker-mobile-header-description {
+    color: var(--date-field-description-color);
+    font-size: var(--vds-text-sm, 0.875rem);
+    line-height: 1.4;
+  }
+
+  .vds-picker-mobile-header-slot {
+    display: inline-flex;
+    align-items: center;
+    min-inline-size: 3rem;
+  }
+
+  .vds-picker-mobile-header-slot[data-slot="trailing"] {
+    justify-content: flex-end;
+  }
+
+  .vds-picker-mobile-header-slot[data-empty="true"] {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .vds-picker-mobile-mode-link {
+    justify-content: space-between;
+    min-inline-size: 0;
+    text-align: start;
+  }
+
+  .vds-picker-mobile-mode-label {
+    font-size: var(--vds-text-sm, 0.875rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--date-field-label-color);
+  }
+
+  .vds-picker-mobile-mode-value {
+    min-inline-size: 0;
+    color: var(--date-field-text-color);
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .vds-picker-action-bar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--vds-space-3, 0.75rem);
+    align-items: stretch;
+  }
+
+  .vds-picker-action-bar > * {
+    min-inline-size: 0;
+  }
+
   .vds-time-field-picker-content {
     z-index: var(--vds-z-popover, 70);
     box-sizing: border-box;
@@ -470,42 +2175,28 @@
   }
 
   .vds-time-picker-panel {
-    --time-picker-column-count: 4;
     display: flex;
     flex-direction: column;
     gap: var(--vds-space-4, 1rem);
+    min-inline-size: 0;
     padding: var(--vds-space-4, 1rem);
     font-family: var(--date-field-font-family);
     color: var(--date-field-text-color);
-  }
-
-  .vds-time-picker-panel[data-columns="1"] { --time-picker-column-count: 1; }
-  .vds-time-picker-panel[data-columns="2"] { --time-picker-column-count: 2; }
-  .vds-time-picker-panel[data-columns="3"] { --time-picker-column-count: 3; }
-  .vds-time-picker-panel[data-columns="4"] { --time-picker-column-count: 4; }
-  .vds-time-picker-panel[data-columns="5"] { --time-picker-column-count: 5; }
-
-  .vds-time-picker-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    min-block-size: 1.25rem;
-    padding-inline: var(--vds-space-1, 0.25rem);
-  }
-
-  .vds-time-picker-title {
-    font-size: var(--vds-text-base, 1rem);
-    font-weight: var(--vds-font-weight-semibold, 600);
+    background: var(--time-picker-surface-bg);
   }
 
   .vds-time-picker-wheels {
     position: relative;
-    display: grid;
-    grid-template-columns: repeat(var(--time-picker-column-count), minmax(0, 1fr));
-    gap: var(--vds-space-1, 0.25rem);
+    display: flex;
     align-items: stretch;
+    justify-content: center;
+    gap: var(--vds-space-0-5, 0.125rem);
+    inline-size: 100%;
+    min-inline-size: 0;
     min-block-size: var(--time-picker-wheel-height);
-    padding-inline: var(--vds-space-3, 0.75rem);
+    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
+    border-radius: var(--time-picker-surface-inner-radius);
+    background: var(--time-picker-wheel-surface-bg);
     overflow: hidden;
   }
 
@@ -513,29 +2204,75 @@
     content: "";
     position: absolute;
     z-index: 1;
-    inset-inline: var(--vds-space-3, 0.75rem);
-    inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2));
+    inset-inline: var(--vds-space-2, 0.5rem);
+    inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2) + var(--time-picker-wheel-header-offset));
     block-size: var(--time-picker-wheel-item-height);
-    border-block: 1px solid var(--time-picker-wheel-divider-color);
+    border-radius: var(--vds-radius-sm, 0.25rem);
+    background: var(--time-picker-wheel-selection-bg);
+    box-shadow:
+      inset 0 0 0 1px var(--time-picker-wheel-selection-border),
+      0 0.25rem 0.875rem -0.5rem var(--time-picker-wheel-selection-shadow);
     pointer-events: none;
+  }
+
+  .vds-time-picker-wheels::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset-inline: var(--vds-space-2, 0.5rem);
+    inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2) + var(--time-picker-wheel-header-offset));
+    block-size: var(--time-picker-wheel-item-height);
+    border-block: 1px solid var(--time-picker-wheel-selection-border);
+    pointer-events: none;
+  }
+
+  .vds-time-picker-colon {
+    flex: 0 0 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 0.75rem;
+    padding-block-start: var(--time-picker-wheel-header-height);
+    font-size: var(--time-picker-wheel-font-size);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    color: var(--time-picker-wheel-colon-color);
+    line-height: 1;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    animation: vds-time-picker-colon-pulse 1.8s ease-in-out infinite;
+  }
+
+  .vds-time-picker-colon[data-variant="dot"] {
+    animation: none;
   }
 
   .vds-time-wheel {
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
     min-inline-size: 0;
+    flex: 1 1 0;
   }
 
-  .vds-time-wheel-label {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
+  .vds-time-wheel[data-variant="period"] {
+    flex: 0 1 3.25rem;
+  }
+
+  .vds-time-wheel-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--time-picker-wheel-header-height);
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--time-picker-wheel-header-color);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
   }
 
   .vds-time-wheel-track {
@@ -547,16 +2284,20 @@
     overflow-y: auto;
     overscroll-behavior: contain;
     scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
     scroll-padding-block: calc((var(--time-picker-wheel-height) - var(--time-picker-wheel-item-height)) / 2);
     border-radius: var(--vds-radius-sm, 0.25rem);
     scrollbar-width: none;
-    touch-action: none;
+    touch-action: pan-y;
     cursor: grab;
-    -webkit-mask-image: linear-gradient(180deg, transparent, #000 24%, #000 76%, transparent);
-    mask-image: linear-gradient(180deg, transparent, #000 24%, #000 76%, transparent);
+    outline: none;
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+    mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
   }
 
-  .vds-time-wheel-track:active {
+  .vds-time-wheel-track[data-dragging="true"] {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
     cursor: grabbing;
   }
 
@@ -581,90 +2322,53 @@
     block-size: var(--time-picker-wheel-item-height);
     padding: 0;
     border: 0;
-    border-radius: var(--vds-radius-sm, 0.25rem);
     background: transparent;
     color: var(--time-picker-wheel-muted-text);
     font: inherit;
-    font-size: var(--vds-text-base, 1rem);
+    font-size: var(--time-picker-wheel-font-size);
     font-weight: var(--vds-font-weight-semibold, 600);
     font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
     scroll-snap-align: center;
     cursor: pointer;
     transition:
       color var(--date-field-transition-duration) var(--date-field-transition-easing),
-      opacity var(--date-field-transition-duration) var(--date-field-transition-easing),
-      transform var(--date-field-transition-duration) var(--date-field-transition-easing);
+      transform var(--date-field-transition-duration) var(--date-field-transition-easing),
+      background-color var(--date-field-transition-duration) var(--date-field-transition-easing),
+      box-shadow var(--date-field-transition-duration) var(--date-field-transition-easing);
+  }
+
+  .vds-time-wheel[data-variant="period"] .vds-time-wheel-item {
+    font-size: var(--vds-text-sm, 0.875rem);
+    letter-spacing: 0.04em;
   }
 
   .vds-time-wheel-item:hover {
-    color: var(--time-picker-wheel-selected-text);
-  }
-
-  .vds-time-wheel-item:active {
-    transform: scale(0.96);
+    color: var(--time-picker-wheel-hover-text);
   }
 
   .vds-time-wheel-item:focus-visible {
-    outline: var(--date-field-focus-ring-width) solid var(--date-field-focus-ring-color);
-    outline-offset: -2px;
+    outline: none;
   }
 
   .vds-time-wheel-item[data-selected="true"] {
     color: var(--time-picker-wheel-selected-text);
-    opacity: 1;
+    background: color-mix(in oklab, var(--time-picker-wheel-selection-bg) 92%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--time-picker-wheel-selection-border) 92%, transparent);
     transform: scale(1.04);
+    font-weight: var(--vds-font-weight-bold, 700);
   }
 
   .vds-time-picker-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--vds-space-3, 0.75rem);
-    padding-block-start: var(--vds-space-1, 0.25rem);
+    padding-block-start: 0;
   }
 
-  .vds-time-picker-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  .vds-time-picker-panel--embedded {
+    inline-size: 100%;
     min-inline-size: 0;
-    min-block-size: 2.875rem;
-    padding-inline: var(--vds-space-3, 0.75rem);
-    border: 1px solid var(--time-picker-action-secondary-border);
-    border-radius: var(--vds-radius-element, 0.5rem);
-    background: var(--time-picker-action-secondary-bg);
-    color: var(--time-picker-action-secondary-text);
-    font: inherit;
-    font-size: var(--vds-text-sm, 0.875rem);
-    font-weight: var(--vds-font-weight-semibold, 600);
-    cursor: pointer;
-    transition:
-      background-color var(--date-field-transition-duration) var(--date-field-transition-easing),
-      border-color var(--date-field-transition-duration) var(--date-field-transition-easing),
-      color var(--date-field-transition-duration) var(--date-field-transition-easing),
-      transform var(--date-field-transition-duration) var(--date-field-transition-easing);
-  }
-
-  .vds-time-picker-action:hover {
-    background: color-mix(in oklab, var(--date-field-text-color) 7%, var(--time-picker-action-secondary-bg));
-  }
-
-  .vds-time-picker-action:active {
-    transform: translateY(1px);
-  }
-
-  .vds-time-picker-action:focus-visible {
-    outline: var(--date-field-focus-ring-width) solid var(--date-field-focus-ring-color);
-    outline-offset: 2px;
-  }
-
-  .vds-time-picker-action[data-variant="primary"] {
-    border-color: transparent;
-    background: var(--time-picker-action-primary-bg);
-    color: var(--time-picker-action-primary-text);
-  }
-
-  .vds-time-picker-action[data-variant="primary"]:hover {
-    background: color-mix(in oklab, var(--time-picker-action-primary-bg) 92%, #000);
+    padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem) 0;
+    background: transparent;
+    overflow-x: hidden;
   }
 
   @keyframes vds-time-picker-in {
@@ -672,62 +2376,18 @@
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  @media (max-width: 42rem) {
-    .vds-time-field-picker-content {
-      box-sizing: border-box;
-      inline-size: calc(100vw - 1rem);
-      max-inline-size: calc(100vw - 1rem);
-      max-block-size: min(72dvh, 32rem);
-      border-radius: 1rem;
-      overflow: hidden;
-      animation: vds-time-picker-sheet-in 180ms var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
-    }
-
-    .vds-time-picker-panel {
-      gap: var(--vds-space-4, 1rem);
-      padding: var(--vds-space-4, 1rem);
-    }
-
-    .vds-time-picker-wheels {
-      --time-picker-wheel-height: 9rem;
-      gap: 0;
-      padding-inline: var(--vds-space-1, 0.25rem);
-    }
-
-    .vds-time-picker-wheels::before {
-      inset-inline: var(--vds-space-1, 0.25rem);
-    }
-
-    .vds-time-wheel-item {
-      font-size: var(--vds-text-sm, 0.875rem);
-    }
-
-    .vds-time-picker-action {
-      min-block-size: 3rem;
-    }
+  @keyframes vds-time-picker-colon-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
   }
 
-  @media (max-width: 22rem) {
-    .vds-time-picker-panel {
-      padding-inline: var(--vds-space-3, 0.75rem);
+  @media (prefers-reduced-motion: reduce) {
+    .vds-time-picker-colon {
+      animation: none;
     }
-
-    .vds-time-picker-wheels {
-      padding-inline: 0;
+    .vds-time-wheel-track {
+      scroll-behavior: auto;
     }
-
-    .vds-time-picker-wheels::before {
-      inset-inline: 0;
-    }
-
-    .vds-time-wheel-item {
-      font-size: var(--vds-text-xs, 0.75rem);
-    }
-  }
-
-  @keyframes vds-time-picker-sheet-in {
-    from { opacity: 0; transform: translateY(1rem); }
-    to { opacity: 1; transform: translateY(0); }
   }
 
   .vds-date-field-description,
@@ -741,9 +2401,46 @@
     font-size: var(--vds-text-xs, 0.75rem);
     color: var(--date-field-error-color);
   }
+
+  @media (max-width: 42rem) {
+    .vds-picker-action-bar {
+      gap: var(--vds-space-2, 0.5rem);
+    }
+
+    .vds-time-picker-panel {
+      gap: var(--vds-space-3, 0.75rem);
+      padding: var(--vds-space-3, 0.75rem);
+    }
+
+    .vds-time-picker-wheels {
+      --time-picker-wheel-height: 11.5rem;
+      --time-picker-wheel-item-height: 2.75rem;
+      --time-picker-wheel-font-size: var(--vds-text-xl, 1.25rem);
+    }
+
+    .vds-time-picker-colon {
+      flex-basis: 0.5rem;
+      min-inline-size: 0.5rem;
+    }
+  }
+
+  @media (max-width: 22rem) {
+    .vds-picker-action-bar {
+      grid-template-columns: 1fr;
+    }
+
+    .vds-time-picker-wheels {
+      --time-picker-wheel-height: 10rem;
+      --time-picker-wheel-font-size: var(--vds-text-lg, 1.125rem);
+      padding-inline: var(--vds-space-1, 0.25rem);
+    }
+
+    .vds-time-wheel[data-variant="period"] {
+      flex-basis: 2.5rem;
+    }
+  }
 }
 @layer design-system.components {
-  /* ── Root ── */
   .vds-calendar {
     display: inline-flex;
     flex-direction: column;
@@ -760,7 +2457,6 @@
     direction: rtl;
   }
 
-  /* ── Header ── */
   .vds-calendar-header {
     display: flex;
     align-items: center;
@@ -770,7 +2466,12 @@
   }
 
   .vds-calendar-heading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-1, 0.25rem);
     flex: 1 1 auto;
+    min-inline-size: 0;
     margin: 0;
     text-align: center;
     font-size: var(--calendar-heading-font-size);
@@ -803,7 +2504,6 @@
     outline-offset: 2px;
   }
 
-  /* ── Nav buttons ── */
   .vds-calendar-nav {
     display: inline-flex;
     align-items: center;
@@ -844,7 +2544,6 @@
     block-size: 0.875rem;
   }
 
-  /* ── Grid table ── */
   .vds-calendar-grid {
     border-collapse: separate;
     border-spacing: var(--calendar-cell-gap);
@@ -925,7 +2624,6 @@
     letter-spacing: 0.02em;
   }
 
-  /* ── Cell td (table cell) ── */
   .vds-calendar-cell-td {
     padding: 0;
     text-align: center;
@@ -933,7 +2631,6 @@
     position: relative;
   }
 
-  /* ── Cell (focusable inner) ── */
   .vds-calendar-cell {
     display: inline-flex;
     align-items: center;
@@ -966,9 +2663,7 @@
     z-index: 1;
   }
 
-  /* Today — hollow ring */
-  .vds-calendar-cell:not([data-selected])[data-today],
-  .vds-calendar-cell:not([data-selected]):has(~ *)[data-today] {
+  .vds-calendar-cell:not([data-selected])[data-today="true"] {
     box-shadow: inset 0 0 0 var(--calendar-cell-today-ring-width) var(--calendar-cell-today-ring-color);
   }
 
@@ -991,7 +2686,6 @@
     text-decoration-thickness: 1px;
   }
 
-  /* ── Single-date selected ── */
   .vds-calendar:not(.vds-calendar-range) .vds-calendar-cell[data-selected="true"] {
     background: var(--calendar-cell-selected-bg);
     color: var(--calendar-cell-selected-text);
@@ -1001,7 +2695,6 @@
     background: var(--calendar-cell-selected-bg-hover);
   }
 
-  /* ── Range states ── */
   .vds-calendar-range .vds-calendar-cell[data-range-middle="true"] {
     background: var(--calendar-range-bg);
     color: var(--calendar-range-text);
@@ -1022,19 +2715,16 @@
     border-end-start-radius: 0;
   }
 
-  /* Both endpoints on the same day (single-day range) */
   .vds-calendar-range .vds-calendar-cell[data-range-start="true"][data-range-end="true"] {
     border-radius: var(--calendar-cell-radius);
   }
 
-  /* Extend the range tint to fill the table-spacing gap */
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-middle="true"]),
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-start="true"]),
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-end="true"]) {
     background: var(--calendar-range-bg);
   }
 
-  /* Round the outer corners of the range strip */
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-start="true"]) {
     border-start-start-radius: var(--calendar-cell-radius);
     border-end-start-radius: var(--calendar-cell-radius);
@@ -1045,7 +2735,6 @@
     border-end-end-radius: var(--calendar-cell-radius);
   }
 
-  /* ── Footer ── */
   .vds-calendar-footer {
     display: flex;
     align-items: center;
@@ -1071,7 +2760,6 @@
   }
 }
 @layer design-system.components {
-  /* ── Root ── */
   .vds-date-picker {
     display: inline-flex;
     flex-direction: column;
@@ -1089,12 +2777,10 @@
     color: var(--date-field-label-color);
   }
 
-  /* ── Group — reuses DateField's group selector for consistent shell ── */
   .vds-date-picker-group {
     cursor: text;
   }
 
-  /* ── Field (segments row) ── */
   .vds-date-picker-field {
     display: inline-flex;
     align-items: center;
@@ -1104,7 +2790,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* ── Trigger (calendar icon button) ── */
   .vds-date-picker-trigger {
     display: inline-flex;
     align-items: center;
@@ -1144,14 +2829,12 @@
     block-size: var(--date-field-trigger-size);
   }
 
-  /* ── Content (popover panel) ── */
   .vds-date-picker-content {
     z-index: var(--date-picker-content-z-index);
     box-sizing: border-box;
-    inline-size: -moz-max-content;
-    inline-size: max-content;
-    max-inline-size: calc(100vw - 1rem);
-    max-block-size: calc(100dvh - 1rem);
+    inline-size: min(22rem, calc(100vw - 1rem));
+    max-inline-size: min(26rem, calc(100vw - 1rem));
+    max-block-size: min(32rem, calc(100dvh - 1rem));
     background: var(--date-picker-content-bg);
     border: var(--date-picker-content-border-width) solid var(--date-picker-content-border-color);
     border-radius: var(--date-picker-content-radius);
@@ -1159,6 +2842,21 @@
     padding: var(--date-picker-content-padding);
     overflow: hidden;
     animation: vds-fade-in var(--date-picker-content-transition-duration) var(--date-picker-content-transition-easing);
+  }
+
+  .vds-date-picker-content:has(.vds-date-picker-main[data-layout="split"]) {
+    inline-size: min(34rem, calc(100vw - 1rem));
+    max-inline-size: min(34rem, calc(100vw - 1rem));
+  }
+
+  .vds-date-picker-content:has(.vds-date-picker-presets) {
+    inline-size: min(32rem, calc(100vw - 1rem));
+    max-inline-size: min(34rem, calc(100vw - 1rem));
+  }
+
+  .vds-date-picker-content:has(.vds-date-picker-main[data-layout="split"]):has(.vds-date-picker-presets) {
+    inline-size: min(42rem, calc(100vw - 1rem));
+    max-inline-size: min(44rem, calc(100vw - 1rem));
   }
 
   .vds-date-picker-content[data-state="closed"] {
@@ -1169,11 +2867,27 @@
     outline: none;
   }
 
-  /* ── Layout inside content ── */
+  .vds-date-picker-overlay,
+  .vds-date-picker-mobile-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-inline-size: 0;
+  }
+
+  .vds-date-picker-mobile-panel {
+    gap: var(--vds-space-3, 0.75rem);
+  }
+
+  .vds-date-picker-mobile-time-panel {
+    overflow-x: hidden;
+  }
+
   .vds-date-picker-content-inner {
     display: flex;
     align-items: stretch;
     max-inline-size: 100%;
+    min-inline-size: 0;
   }
 
   .vds-date-picker-presets {
@@ -1181,7 +2895,7 @@
     flex-direction: column;
     gap: var(--vds-space-1, 0.25rem);
     padding: var(--vds-space-3, 0.75rem);
-    min-inline-size: 9rem;
+    min-inline-size: 10rem;
     border-inline-end: 1px solid var(--vds-color-border-muted, #e5e7eb);
     background: var(--vds-color-bg-subtle, #fafafa);
   }
@@ -1194,22 +2908,66 @@
   .vds-date-picker-main {
     display: flex;
     flex-direction: column;
-    min-inline-size: min(21rem, calc(100vw - 2rem));
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  .vds-date-picker-main[data-layout="split"] {
+    display: grid;
+    grid-template-columns: minmax(18rem, 1fr) minmax(11rem, 13rem);
+    align-items: stretch;
   }
 
   .vds-date-picker-time {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     min-inline-size: 0;
-    padding-block: var(--vds-space-2, 0.5rem);
-    padding-inline: var(--calendar-padding);
+    padding: var(--vds-space-3, 0.75rem);
     border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    background: color-mix(in oklab, var(--date-picker-content-bg) 96%, var(--vds-color-bg-subtle, #fafafa));
+  }
+
+  .vds-date-picker-main[data-layout="split"] .vds-date-picker-time {
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+  }
+
+  .vds-date-picker-time .vds-time-field {
+    inline-size: 100%;
   }
 
   .vds-date-picker-footer {
     padding: var(--vds-space-3, 0.75rem);
     border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+  }
+
+  .vds-date-picker-main[data-layout="split"] > .vds-date-picker-footer {
+    grid-column: 1 / -1;
+  }
+
+  .vds-date-picker-actions {
+    padding: var(--vds-space-3, 0.75rem);
+    border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    background: color-mix(in oklab, var(--date-picker-content-bg) 98%, var(--vds-color-bg-subtle, #fafafa));
+  }
+
+  .vds-picker-mobile-footer .vds-date-picker-actions,
+  .vds-picker-mobile-footer .vds-date-range-picker-actions,
+  .vds-picker-mobile-footer .vds-time-picker-actions {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .vds-picker-mobile-mode-link.vds-button {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .vds-picker-mobile-mode-link.vds-button .vds-button-section {
+    display: none;
   }
 
   .vds-date-picker-description {
@@ -1222,23 +2980,17 @@
     color: var(--date-field-error-color);
   }
 
-  /* ── Popover enter / exit animations (namespaced to not collide) ── */
   @keyframes vds-fade-in {
     from { opacity: 0; transform: translateY(-4px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   @keyframes vds-fade-out {
     from { opacity: 1; transform: translateY(0) scale(1); }
-    to   { opacity: 0; transform: translateY(-4px) scale(0.98); }
+    to { opacity: 0; transform: translateY(-4px) scale(0.98); }
   }
 
   @media (max-width: 42rem) {
-    .vds-date-picker-content {
-      inline-size: calc(100vw - 1rem);
-      overflow: hidden;
-    }
-
     .vds-date-picker-content-inner {
       flex-direction: column;
     }
@@ -1253,9 +3005,28 @@
       border-inline-start: 0;
     }
 
-    .vds-date-picker-main {
+    .vds-date-picker-main,
+    .vds-date-picker-main[data-layout="split"] {
       min-inline-size: 0;
       inline-size: 100%;
+      grid-template-columns: 1fr;
+    }
+
+    .vds-date-picker-time,
+    .vds-date-picker-main[data-layout="split"] .vds-date-picker-time {
+      border-inline-start: 0;
+      border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    }
+
+    .vds-date-picker-actions {
+      padding-inline: 0;
+      padding-block-end: 0;
+      border-block-start: 0;
+      background: transparent;
+    }
+
+    .vds-date-picker-mobile-body .vds-picker-mobile-mode-link {
+      margin-inline: var(--vds-space-3, 0.75rem);
     }
   }
 }

@@ -203,7 +203,7 @@ export function SelectPage() {
 
       <Section
         title="Select — basic"
-        description="Radix-powered native-select clone. Use for 2–20 static options. Keeps standard form semantics and first-char typeahead."
+        description="Accessible native-select clone. Use for 2–20 static options. Keeps standard form semantics and first-char typeahead."
       >
         <div style={{ maxInlineSize: "18rem" }}>
           <Select value={plan} onValueChange={setPlan}>
@@ -271,7 +271,7 @@ export function SelectPage() {
 
       <Section
         title="States"
-        description="Clearable, loading, invalid. Works alongside existing Radix props."
+        description="Clearable, loading, invalid. Works alongside existing primitive props."
       >
         <Row>
           <div style={{ inlineSize: "16rem" }}>
@@ -372,7 +372,7 @@ export function SelectPage() {
 
       <Section
         title="Combobox — searchable"
-        description="For anything beyond ~20 options, async data, or when users need to filter by typing. Built on Popover + custom listbox — the Radix Select focus model can't host an input."
+        description="For anything beyond ~20 options, async data, or when users need to filter by typing. Built on Popover + custom listbox — the underlying Select focus model can't host an input."
       >
         <div style={{ maxInlineSize: "22rem" }}>
           <Combobox

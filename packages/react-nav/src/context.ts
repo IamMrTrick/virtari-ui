@@ -6,7 +6,33 @@ import { createContext, useContext } from "react";
 
 export type NavOrientation = "vertical" | "horizontal";
 export type NavSubmenuMode = "inline" | "popover";
-export type NavVariant = "ghost" | "filled" | "pill" | "underline";
+/**
+ * Visual treatment of NavLink / NavTrigger.
+ *
+ * - `ghost`     — minimal bg tint on hover (default).
+ * - `filled`    — solid bg block on hover.
+ * - `pill`      — fully-rounded bg on hover / current.
+ * - `underline` — thin bottom border on current, tints on hover.
+ * - `reveal`    — animated underline that grows from the centre on hover.
+ * - `outline`   — hollow border ring that fades in on hover.
+ * - `lift`      — soft shadow + 1px translate on hover (card-like).
+ * - `none`      — no bg, no border, no decoration — just the text colors to
+ *                 primary on hover / current. The quietest possible look.
+ * - `dot`       — small circular primary indicator below the label.
+ * - `tab`       — thick primary bar below the item, top corners rounded.
+ *                 Reads as a tab-strip indicator.
+ */
+export type NavVariant =
+  | "ghost"
+  | "filled"
+  | "pill"
+  | "underline"
+  | "reveal"
+  | "outline"
+  | "lift"
+  | "none"
+  | "dot"
+  | "tab";
 export type NavSize = "sm" | "md" | "lg";
 
 export interface NavContextValue {

@@ -60,6 +60,7 @@ import {
   IconSquareCheck,
   IconSquareRounded,
   IconTable,
+  IconTableRow,
   IconTag,
   IconToggleLeft,
   IconToggleRight,
@@ -140,6 +141,7 @@ const ICONS: Record<string, ReactNode> = {
   collapsible: <IconChevronDown {...navIconProps} />,
   "scroll-area": <IconArrowsVertical {...navIconProps} />,
   "data-table": <IconTable {...navIconProps} />,
+  table: <IconTableRow {...navIconProps} />,
 };
 
 const FALLBACK_ICON = <IconCircle {...navIconProps} />;
@@ -160,9 +162,6 @@ const NAV_ITEMS: NavGroupData[] = [
       { label: "Icons", path: "icons" },
       { label: "Composition", path: "composition" },
       { label: "Page Layout", path: "layout" },
-      { label: "Header", path: "header" },
-      { label: "Navigation", path: "nav" },
-      { label: "Sidebar", path: "sidebar" },
       { label: "Utilities", path: "utilities" },
       { label: "RTL", path: "rtl" },
     ],
@@ -213,7 +212,12 @@ const NAV_ITEMS: NavGroupData[] = [
   },
   {
     group: "Navigation",
-    items: [{ label: "Breadcrumb", path: "breadcrumb" }],
+    items: [
+      { label: "Header", path: "header" },
+      { label: "Navigation", path: "nav" },
+      { label: "Sidebar", path: "sidebar" },
+      { label: "Breadcrumb", path: "breadcrumb" },
+    ],
   },
   {
     group: "Layout",
@@ -226,7 +230,10 @@ const NAV_ITEMS: NavGroupData[] = [
   },
   {
     group: "Data",
-    items: [{ label: "Data Table", path: "data-table" }],
+    items: [
+      { label: "Table", path: "table" },
+      { label: "Data Table", path: "data-table" },
+    ],
   },
 ];
 

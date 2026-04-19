@@ -26,27 +26,63 @@ function _interopNamespace(e) {
 var TooltipPrimitive__namespace = /*#__PURE__*/_interopNamespace(TooltipPrimitive);
 
 // src/Tooltip.tsx
-var TooltipProvider = TooltipPrimitive__namespace.Provider;
+function TooltipProvider({
+  delayDuration = 300,
+  skipDelayDuration = 200,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    TooltipPrimitive__namespace.Provider,
+    {
+      delayDuration,
+      skipDelayDuration,
+      ...props
+    }
+  );
+}
 var Tooltip = TooltipPrimitive__namespace.Root;
 var TooltipTrigger = TooltipPrimitive__namespace.Trigger;
 function TooltipContent({
   className,
-  sideOffset = 4,
+  sideOffset = 6,
+  collisionPadding = 8,
+  size = "md",
+  variant = "default",
+  arrow = false,
+  children,
   ref,
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntime.jsx(TooltipPrimitive__namespace.Portal, { children: /* @__PURE__ */ jsxRuntime.jsx(
+  return /* @__PURE__ */ jsxRuntime.jsx(TooltipPrimitive__namespace.Portal, { children: /* @__PURE__ */ jsxRuntime.jsxs(
     TooltipPrimitive__namespace.Content,
     {
       ref,
       sideOffset,
+      collisionPadding,
+      "data-size": size,
+      "data-variant": variant,
       className: utils.cn("vds-tooltip-content", className),
-      ...props
+      ...props,
+      children: [
+        children,
+        arrow ? /* @__PURE__ */ jsxRuntime.jsx(TooltipPrimitive__namespace.Arrow, { className: "vds-tooltip-arrow" }) : null
+      ]
     }
   ) });
 }
+function TooltipArrow({ className, ref, ...props }) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    TooltipPrimitive__namespace.Arrow,
+    {
+      ref,
+      className: utils.cn("vds-tooltip-arrow", className),
+      ...props
+    }
+  );
+}
 
 exports.Tooltip = Tooltip;
+exports.TooltipArrow = TooltipArrow;
 exports.TooltipContent = TooltipContent;
 exports.TooltipProvider = TooltipProvider;
 exports.TooltipTrigger = TooltipTrigger;

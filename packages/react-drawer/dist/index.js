@@ -219,9 +219,11 @@ function applyRubberband(openPx, drawerSize) {
 }
 function getBackgroundStyles(progress) {
   const p = clamp(progress, 0, 1);
+  const PEAK = 0.9;
+  const strength = p <= PEAK ? p / PEAK : Math.max(0, 1 - (p - PEAK) / (1 - PEAK));
   return {
-    transform: `scale(${1 - p * 0.06})`,
-    borderRadius: `${p * 24}px`
+    transform: `scale(${1 - strength * 0.06})`,
+    borderRadius: `${strength * 24}px`
   };
 }
 function isAtScrollEdge(el, direction, closingDelta) {
@@ -1160,6 +1162,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
   const layoutRef = useRef(layout);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const keyboardOpenRef = useRef(false);
+  const draggingRef = useRef(false);
   const currentSizeRef = useRef(0);
   const pendingSizeRef = useRef(0);
   const measureFrameRef = useRef(0);
@@ -1357,6 +1360,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
   const measure = useCallback(() => {
     const contentEl = contentRef.current;
     if (!contentEl) return;
+    if (draggingRef.current) return;
     if (keyboardOpenRef.current) return;
     const viewportSize = getViewportSize(direction);
     const viewportInfo = getViewportInfo(direction, viewportSize);
@@ -1616,6 +1620,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
     const contentEl = contentRef.current;
     const measureObservedResize = () => {
       if (resizeSizeAnimatingRef.current) return;
+      if (draggingRef.current) return;
       cancelAnimationFrame(measureFrameRef.current);
       measureFrameRef.current = 0;
       measure();
@@ -1645,11 +1650,15 @@ var DrawerContent = forwardRef(function DrawerContent2({
   }, [bodyRef, contentRef, keyboardOpen, measure, present]);
   useLayoutEffect(() => {
     if (!present || resizeSizeAnimatingRef.current) return;
+    if (draggingRef.current) return;
     measure();
   });
   useEffect(() => {
     keyboardOpenRef.current = keyboardOpen;
   }, [keyboardOpen]);
+  useEffect(() => {
+    draggingRef.current = dragging;
+  }, [dragging]);
   useLayoutEffect(() => {
     if (!present || layout.totalSize <= 0) return;
     cancelAnimationFrame(openAnimRef.current);
