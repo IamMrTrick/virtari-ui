@@ -1,0 +1,80 @@
+@layer components {
+  .vds-segmented-radio {
+    display: inline-flex;
+    align-items: stretch;
+    padding: var(--segmented-padding);
+    background-color: var(--segmented-track-bg);
+    border: var(--segmented-track-border-width) solid
+      var(--segmented-track-border-color);
+    border-radius: var(--segmented-radius);
+    min-inline-size: 0;
+  }
+
+  .vds-segmented-radio[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vds-segmented-radio-item {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-2, 0.5rem);
+    min-inline-size: 0;
+    block-size: var(--segmented-item-height);
+    padding-inline: var(--segmented-item-padding-inline);
+    font-family: inherit;
+    font-size: var(--segmented-item-font-size);
+    font-weight: var(--segmented-item-font-weight);
+    color: var(--segmented-item-color);
+    background-color: transparent;
+    border: 0;
+    border-radius: calc(var(--segmented-radius) - var(--segmented-padding));
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color var(--segmented-transition-duration)
+        var(--segmented-transition-easing),
+      color var(--segmented-transition-duration)
+        var(--segmented-transition-easing),
+      box-shadow var(--segmented-transition-duration)
+        var(--segmented-transition-easing);
+    flex: 1;
+  }
+
+  /* ── Hover ── */
+  .vds-segmented-radio-item:hover:not(:disabled):not([data-state="checked"]) {
+    color: var(--segmented-item-color-hover);
+  }
+
+  /* ── Checked (selected) — elevated white tile over muted track ── */
+  .vds-segmented-radio-item[data-state="checked"] {
+    background-color: var(--segmented-item-checked-bg);
+    color: var(--segmented-item-checked-color);
+    box-shadow: var(--segmented-item-checked-shadow);
+  }
+
+  /* ── Focus ring ── */
+  .vds-segmented-radio-item:focus-visible {
+    outline: var(--segmented-focus-ring-width) solid
+      var(--segmented-focus-ring-color);
+    outline-offset: var(--segmented-focus-ring-offset);
+    z-index: 1;
+  }
+
+  /* ── Disabled ── */
+  .vds-segmented-radio-item:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* ── Error — entire segmented group shows danger state ── */
+  .vds-segmented-radio[data-error] {
+    border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  .vds-segmented-radio[data-error] .vds-segmented-radio-item:focus-visible {
+    outline-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+}

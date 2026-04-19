@@ -1,46 +1,561 @@
-@layer components {
-  .vds-scroll-area {
-    overflow: hidden;
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * ScrollArea — tokens
+   * Semantic CSS variables with fallbacks so the
+   * package works standalone if dropped into a
+   * project without @virtari/tokens.
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area-root {
+    /* ── Scrollbar track / thumb ── */
+    --scroll-area-scrollbar-size: var(--vds-space-2-5, 0.625rem); /* md default (10px) */
+    --scroll-area-scrollbar-padding: 2px;
+    --scroll-area-track-bg: transparent;
+    --scroll-area-track-bg-hover: var(--vds-color-bg-subtle, rgba(0, 0, 0, 0.04));
+    --scroll-area-thumb-bg: var(--vds-color-gray-300, #d4d4d8);
+    --scroll-area-thumb-bg-hover: var(--vds-color-gray-400, #a1a1aa);
+    --scroll-area-thumb-bg-active: var(--vds-color-gray-500, #71717a);
+    --scroll-area-thumb-radius: var(--vds-radius-scrollbar-thumb, 6px);
+    --scroll-area-transition-duration: var(--vds-duration-fast, 150ms);
+    --scroll-area-transition-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* ── Edge mask (gradient fade) ── */
+    --scroll-area-mask-size: 40px;
+    --scroll-area-mask-inline-start: transparent;
+    --scroll-area-mask-inline-end: transparent;
+    --scroll-area-mask-block-start: transparent;
+    --scroll-area-mask-block-end: transparent;
+
+    /* ── Marquee (infinite autoplay) ── */
+    --scroll-area-marquee-duration: 30s;
+    --scroll-area-marquee-direction: normal;
+    --scroll-area-marquee-gap: var(--vds-space-3, 0.75rem);
+
+    /* ── Arrow buttons ── */
+    --scroll-area-arrow-size: var(--vds-size-sm, 2rem);
+    --scroll-area-arrow-icon-size: 1rem;
+    --scroll-area-arrow-bg: var(--vds-color-surface, #ffffff);
+    --scroll-area-arrow-bg-hover: var(--vds-color-surface-hover, #f9fafb);
+    --scroll-area-arrow-bg-active: var(--vds-color-bg-muted, #f3f4f6);
+    --scroll-area-arrow-color: var(--vds-color-text, #111827);
+    --scroll-area-arrow-color-disabled: var(--vds-color-text-muted, #9ca3af);
+    --scroll-area-arrow-border-color: var(--vds-color-border, #d1d5db);
+    --scroll-area-arrow-radius: var(--vds-radius-element, 0.5rem);
+    --scroll-area-arrow-shadow: var(--vds-shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
+    --scroll-area-arrow-gap: var(--vds-space-1, 0.25rem);
+
+    /* ── Drag cursor ── */
+    --scroll-area-drag-cursor: grab;
+    --scroll-area-drag-cursor-active: grabbing;
   }
 
+  /* ─────────────────────────────────────────────
+   * Size ramp (scrollbar thickness only)
+   * Matches Button/Input/Select size vocabulary.
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area-root[data-size="sm"] {
+    --scroll-area-scrollbar-size: var(--vds-space-2, 0.5rem); /* 8px */
+  }
+  .vds-scroll-area-root[data-size="md"] {
+    --scroll-area-scrollbar-size: var(--vds-space-2-5, 0.625rem); /* 10px */
+  }
+  .vds-scroll-area-root[data-size="lg"] {
+    --scroll-area-scrollbar-size: var(--vds-space-3, 0.75rem); /* 12px */
+  }
+}
+
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Root wrapper
+   * Holds the scroll area primitive + optional arrows.
+   * Layout flips between flex-row / flex-column so
+   * outer arrows sit on either side of the scroll area.
+   * When arrows are "inner" the root goes back to block
+   * layout and the arrows are absolutely positioned over
+   * the content.
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area-root {
+    position: relative;
+    display: flex;
+    min-inline-size: 0;
+    min-block-size: 0;
+    gap: var(--scroll-area-arrow-gap);
+  }
+  .vds-scroll-area-root[data-orientation="vertical"] {
+    flex-direction: column;
+  }
+  .vds-scroll-area-root[data-orientation="horizontal"],
+  .vds-scroll-area-root[data-orientation="both"] {
+    flex-direction: row;
+  }
+
+  /* Arrows disabled → no gap wasted */
+  .vds-scroll-area-root:not([data-arrows="true"]) {
+    gap: 0;
+  }
+
+  /* Inner arrows: root stops laying arrows out, arrows float on top. */
+  .vds-scroll-area-root[data-arrow-placement="inner"] {
+    display: block;
+    gap: 0;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Primitive Root — the actual scroll container
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area {
+    position: relative;
+    overflow: hidden;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    min-block-size: 0;
+    border-radius: inherit;
+  }
+  .vds-scroll-area-root[data-arrow-placement="inner"] .vds-scroll-area {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Viewport — the scrollable element.
+   * ───────────────────────────────────────────── */
   .vds-scroll-area-viewport {
     inline-size: 100%;
     block-size: 100%;
     border-radius: inherit;
   }
 
+  /* Drag-to-scroll cursor affordance */
+  .vds-scroll-area-root[data-drag="true"] .vds-scroll-area-viewport {
+    cursor: var(--scroll-area-drag-cursor);
+  }
+  .vds-scroll-area-root[data-drag="true"][data-dragging="true"]
+    .vds-scroll-area-viewport {
+    cursor: var(--scroll-area-drag-cursor-active);
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+  .vds-scroll-area-root[data-dragging="true"] .vds-scroll-area-viewport * {
+    pointer-events: none;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Edge mask (gradient fade)
+   * Multi-stop gradient using color-mix produces a
+   * smooth ease rather than the hard linear cut a
+   * two-stop gradient would give. The curve is
+   * sampled at 35 %, 65 % and 90 % of the mask zone
+   * for a visually soft shoulder at the edge.
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area-root[data-mask="true"][data-orientation="horizontal"]
+    .vds-scroll-area {
+    mask-image: linear-gradient(
+      to right,
+      var(--scroll-area-mask-inline-start) 0,
+      color-mix(in srgb, var(--scroll-area-mask-inline-start), black 55%)
+        calc(var(--scroll-area-mask-size) * 0.35),
+      color-mix(in srgb, var(--scroll-area-mask-inline-start), black 85%)
+        calc(var(--scroll-area-mask-size) * 0.7),
+      black var(--scroll-area-mask-size),
+      black calc(100% - var(--scroll-area-mask-size)),
+      color-mix(in srgb, var(--scroll-area-mask-inline-end), black 85%)
+        calc(100% - var(--scroll-area-mask-size) * 0.7),
+      color-mix(in srgb, var(--scroll-area-mask-inline-end), black 55%)
+        calc(100% - var(--scroll-area-mask-size) * 0.35),
+      var(--scroll-area-mask-inline-end) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      var(--scroll-area-mask-inline-start) 0,
+      color-mix(in srgb, var(--scroll-area-mask-inline-start), black 55%)
+        calc(var(--scroll-area-mask-size) * 0.35),
+      color-mix(in srgb, var(--scroll-area-mask-inline-start), black 85%)
+        calc(var(--scroll-area-mask-size) * 0.7),
+      black var(--scroll-area-mask-size),
+      black calc(100% - var(--scroll-area-mask-size)),
+      color-mix(in srgb, var(--scroll-area-mask-inline-end), black 85%)
+        calc(100% - var(--scroll-area-mask-size) * 0.7),
+      color-mix(in srgb, var(--scroll-area-mask-inline-end), black 55%)
+        calc(100% - var(--scroll-area-mask-size) * 0.35),
+      var(--scroll-area-mask-inline-end) 100%
+    );
+  }
+  /* RTL flips physical direction so "inline-start" stays on the right edge. */
+  :dir(rtl).vds-scroll-area-root[data-mask="true"][data-orientation="horizontal"]
+    .vds-scroll-area,
+  :dir(rtl) .vds-scroll-area-root[data-mask="true"][data-orientation="horizontal"]
+    .vds-scroll-area {
+    mask-image: linear-gradient(
+      to left,
+      var(--scroll-area-mask-inline-start) 0,
+      color-mix(in srgb, var(--scroll-area-mask-inline-start), black 55%)
+        calc(var(--scroll-area-mask-size) * 0.35),
+      color-mix(in srgb, var(--scroll-area-mask-inline-start), black 85%)
+        calc(var(--scroll-area-mask-size) * 0.7),
+      black var(--scroll-area-mask-size),
+      black calc(100% - var(--scroll-area-mask-size)),
+      color-mix(in srgb, var(--scroll-area-mask-inline-end), black 85%)
+        calc(100% - var(--scroll-area-mask-size) * 0.7),
+      color-mix(in srgb, var(--scroll-area-mask-inline-end), black 55%)
+        calc(100% - var(--scroll-area-mask-size) * 0.35),
+      var(--scroll-area-mask-inline-end) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to left,
+      var(--scroll-area-mask-inline-start) 0,
+      color-mix(in srgb, var(--scroll-area-mask-inline-start), black 55%)
+        calc(var(--scroll-area-mask-size) * 0.35),
+      color-mix(in srgb, var(--scroll-area-mask-inline-start), black 85%)
+        calc(var(--scroll-area-mask-size) * 0.7),
+      black var(--scroll-area-mask-size),
+      black calc(100% - var(--scroll-area-mask-size)),
+      color-mix(in srgb, var(--scroll-area-mask-inline-end), black 85%)
+        calc(100% - var(--scroll-area-mask-size) * 0.7),
+      color-mix(in srgb, var(--scroll-area-mask-inline-end), black 55%)
+        calc(100% - var(--scroll-area-mask-size) * 0.35),
+      var(--scroll-area-mask-inline-end) 100%
+    );
+  }
+
+  .vds-scroll-area-root[data-mask="true"][data-orientation="vertical"]
+    .vds-scroll-area {
+    mask-image: linear-gradient(
+      to bottom,
+      var(--scroll-area-mask-block-start) 0,
+      color-mix(in srgb, var(--scroll-area-mask-block-start), black 55%)
+        calc(var(--scroll-area-mask-size) * 0.35),
+      color-mix(in srgb, var(--scroll-area-mask-block-start), black 85%)
+        calc(var(--scroll-area-mask-size) * 0.7),
+      black var(--scroll-area-mask-size),
+      black calc(100% - var(--scroll-area-mask-size)),
+      color-mix(in srgb, var(--scroll-area-mask-block-end), black 85%)
+        calc(100% - var(--scroll-area-mask-size) * 0.7),
+      color-mix(in srgb, var(--scroll-area-mask-block-end), black 55%)
+        calc(100% - var(--scroll-area-mask-size) * 0.35),
+      var(--scroll-area-mask-block-end) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      var(--scroll-area-mask-block-start) 0,
+      color-mix(in srgb, var(--scroll-area-mask-block-start), black 55%)
+        calc(var(--scroll-area-mask-size) * 0.35),
+      color-mix(in srgb, var(--scroll-area-mask-block-start), black 85%)
+        calc(var(--scroll-area-mask-size) * 0.7),
+      black var(--scroll-area-mask-size),
+      black calc(100% - var(--scroll-area-mask-size)),
+      color-mix(in srgb, var(--scroll-area-mask-block-end), black 85%)
+        calc(100% - var(--scroll-area-mask-size) * 0.7),
+      color-mix(in srgb, var(--scroll-area-mask-block-end), black 55%)
+        calc(100% - var(--scroll-area-mask-size) * 0.35),
+      var(--scroll-area-mask-block-end) 100%
+    );
+  }
+
+  .vds-scroll-area-root[data-mask="true"][data-orientation="both"]
+    .vds-scroll-area {
+    mask-image:
+      linear-gradient(
+        to right,
+        var(--scroll-area-mask-inline-start) 0,
+        black var(--scroll-area-mask-size),
+        black calc(100% - var(--scroll-area-mask-size)),
+        var(--scroll-area-mask-inline-end) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        var(--scroll-area-mask-block-start) 0,
+        black var(--scroll-area-mask-size),
+        black calc(100% - var(--scroll-area-mask-size)),
+        var(--scroll-area-mask-block-end) 100%
+      );
+    -webkit-mask-composite: source-in, xor;
+            mask-composite: intersect;
+    -webkit-mask-image:
+      linear-gradient(
+        to right,
+        var(--scroll-area-mask-inline-start) 0,
+        black var(--scroll-area-mask-size),
+        black calc(100% - var(--scroll-area-mask-size)),
+        var(--scroll-area-mask-inline-end) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        var(--scroll-area-mask-block-start) 0,
+        black var(--scroll-area-mask-size),
+        black calc(100% - var(--scroll-area-mask-size)),
+        var(--scroll-area-mask-block-end) 100%
+      );
+    -webkit-mask-composite: source-in;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Scrollbars
+   * Auto-hide when the UX is otherwise covered by
+   * drag / arrow-navigation / marquee. Users still
+   * get the content scroll behaviour, just without
+   * a redundant visible track.
+   * ───────────────────────────────────────────── */
   .vds-scrollbar {
     display: flex;
     touch-action: none;
     -webkit-user-select: none;
        -moz-user-select: none;
             user-select: none;
-    padding: 2px;
-    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+    padding: var(--scroll-area-scrollbar-padding);
+    background-color: var(--scroll-area-track-bg);
+    transition: background-color var(--scroll-area-transition-duration)
+      var(--scroll-area-transition-ease);
+  }
+  .vds-scrollbar:hover {
+    background-color: var(--scroll-area-track-bg-hover);
+  }
+  .vds-scrollbar[data-orientation="vertical"] {
+    inline-size: var(--scroll-area-scrollbar-size);
+  }
+  .vds-scrollbar[data-orientation="horizontal"] {
+    flex-direction: column;
+    block-size: var(--scroll-area-scrollbar-size);
   }
 
-    .vds-scrollbar:hover {
-      background-color: var(--vds-color-bg-subtle);
-    }
-
-    .vds-scrollbar[data-orientation="vertical"] {
-      inline-size: var(--vds-space-2-5);
-    }
-
-    .vds-scrollbar[data-orientation="horizontal"] {
-      flex-direction: column;
-      block-size: var(--vds-space-2-5);
-    }
+  .vds-scroll-area-root[data-drag="true"] .vds-scrollbar,
+  .vds-scroll-area-root[data-arrows="true"] .vds-scrollbar,
+  .vds-scroll-area-root[data-marquee="true"] .vds-scrollbar,
+  .vds-scroll-area-root[data-hide-scrollbar="true"] .vds-scrollbar {
+    display: none;
+  }
 
   .vds-scrollbar-thumb {
     position: relative;
     flex: 1;
-    border-radius: var(--vds-radius-full);
-    background-color: var(--vds-color-gray-300);
-    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+    border-radius: var(--scroll-area-thumb-radius);
+    background-color: var(--scroll-area-thumb-bg);
+    transition: background-color var(--scroll-area-transition-duration)
+      var(--scroll-area-transition-ease);
+  }
+  .vds-scrollbar-thumb:hover {
+    background-color: var(--scroll-area-thumb-bg-hover);
+  }
+  .vds-scrollbar-thumb[data-state="visible"]:active {
+    background-color: var(--scroll-area-thumb-bg-active);
+  }
+  .vds-scrollbar-thumb::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    min-inline-size: 44px;
+    min-block-size: 44px;
   }
 
-    .vds-scrollbar-thumb:hover {
-      background-color: var(--vds-color-gray-400);
+  .vds-scroll-area [data-radix-scroll-area-corner] {
+    background-color: var(--scroll-area-track-bg);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Arrow buttons
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area-arrow {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--scroll-area-arrow-size);
+    block-size: var(--scroll-area-arrow-size);
+    padding: 0;
+    color: var(--scroll-area-arrow-color);
+    background-color: var(--scroll-area-arrow-bg);
+    border: 1px solid var(--scroll-area-arrow-border-color);
+    border-radius: var(--scroll-area-arrow-radius);
+    box-shadow: var(--scroll-area-arrow-shadow);
+    cursor: pointer;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    align-self: center;
+    transition:
+      background-color var(--scroll-area-transition-duration)
+        var(--scroll-area-transition-ease),
+      color var(--scroll-area-transition-duration)
+        var(--scroll-area-transition-ease),
+      opacity var(--scroll-area-transition-duration)
+        var(--scroll-area-transition-ease),
+      transform var(--scroll-area-transition-duration)
+        var(--scroll-area-transition-ease);
+  }
+  .vds-scroll-area-arrow:hover:not(:disabled) {
+    background-color: var(--scroll-area-arrow-bg-hover);
+  }
+  .vds-scroll-area-arrow:active:not(:disabled) {
+    background-color: var(--scroll-area-arrow-bg-active);
+  }
+  .vds-scroll-area-arrow:disabled {
+    color: var(--scroll-area-arrow-color-disabled);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .vds-scroll-area-arrow:focus-visible {
+    outline: 2px solid var(--vds-color-ring, #6366f1);
+    outline-offset: 2px;
+  }
+  .vds-scroll-area-arrow svg {
+    inline-size: var(--scroll-area-arrow-icon-size);
+    block-size: var(--scroll-area-arrow-icon-size);
+    display: block;
+  }
+
+  /* Inner placement: overlay the arrows on top of the scroll area.
+     For horizontal orientation they anchor to inline-start / inline-end
+     and centre vertically; for vertical they anchor block-start / block-end
+     and centre horizontally. */
+  .vds-scroll-area-root[data-arrow-placement="inner"] .vds-scroll-area-arrow {
+    position: absolute;
+    z-index: 2;
+  }
+  .vds-scroll-area-root[data-arrow-placement="inner"][data-orientation="horizontal"]
+    .vds-scroll-area-arrow {
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+  }
+  .vds-scroll-area-root[data-arrow-placement="inner"][data-orientation="horizontal"]
+    .vds-scroll-area-arrow[data-side="start"] {
+    inset-inline-start: var(--scroll-area-arrow-inset, 0.5rem);
+  }
+  .vds-scroll-area-root[data-arrow-placement="inner"][data-orientation="horizontal"]
+    .vds-scroll-area-arrow[data-side="end"] {
+    inset-inline-end: var(--scroll-area-arrow-inset, 0.5rem);
+  }
+  .vds-scroll-area-root[data-arrow-placement="inner"][data-orientation="vertical"]
+    .vds-scroll-area-arrow {
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+  }
+  .vds-scroll-area-root[data-arrow-placement="inner"][data-orientation="vertical"]
+    .vds-scroll-area-arrow[data-side="start"] {
+    inset-block-start: var(--scroll-area-arrow-inset, 0.5rem);
+  }
+  .vds-scroll-area-root[data-arrow-placement="inner"][data-orientation="vertical"]
+    .vds-scroll-area-arrow[data-side="end"] {
+    inset-block-end: var(--scroll-area-arrow-inset, 0.5rem);
+  }
+
+  /* Hover-appearance: fade arrows in/out on root hover / focus-within.
+     When an arrow is at-edge (disabled) we fade it further so it doesn't
+     draw attention once it's no longer useful. */
+  .vds-scroll-area-root[data-arrow-appearance="hover"] .vds-scroll-area-arrow {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .vds-scroll-area-root[data-arrow-appearance="hover"]:hover
+    .vds-scroll-area-arrow,
+  .vds-scroll-area-root[data-arrow-appearance="hover"]:focus-within
+    .vds-scroll-area-arrow {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* RTL chevron flip for horizontal arrows. */
+  :dir(rtl) .vds-scroll-area-arrow[data-side="start"] svg,
+  :dir(rtl) .vds-scroll-area-arrow[data-side="end"] svg {
+    transform: scaleX(-1);
+  }
+  .vds-scroll-area-root[data-orientation="vertical"]
+    .vds-scroll-area-arrow svg {
+    transform: none !important;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Marquee (infinite autoplay scroll animation)
+   *
+   * Children are flattened (via React.Children) and
+   * each one wrapped in `.vds-scroll-area-marquee-item`
+   * so the marquee itself owns the layout — the user's
+   * own padding/margin doesn't create a "double-gap" at
+   * the junction between the two copies.
+   *
+   * Seamless-loop math: with N items per copy, flex-gap
+   * G and padding-inline-end G, the track width is
+   *   2N × item + 2N × G
+   * so translateX(-50%) = -(N × item + N × G) which is
+   * exactly "one copy + one gap" — the second copy lands
+   * precisely where the first started. Without the
+   * trailing padding, we'd be off by ½G and the gap at
+   * the seam would look different from the internal gaps.
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area-marquee {
+    display: flex;
+    inline-size: -moz-max-content;
+    inline-size: max-content;
+    gap: var(--scroll-area-marquee-gap);
+    padding-inline-end: var(--scroll-area-marquee-gap);
+    animation: vds-scroll-area-marquee-x
+      var(--scroll-area-marquee-duration, 30s) linear infinite;
+    animation-direction: var(--scroll-area-marquee-direction, normal);
+    will-change: transform;
+  }
+  .vds-scroll-area-marquee-item {
+    flex: 0 0 auto;
+  }
+  .vds-scroll-area-root[data-orientation="vertical"] .vds-scroll-area-marquee {
+    flex-direction: column;
+    inline-size: 100%;
+    block-size: -moz-max-content;
+    block-size: max-content;
+    padding-inline-end: 0;
+    padding-block-end: var(--scroll-area-marquee-gap);
+    animation-name: vds-scroll-area-marquee-y;
+  }
+  /* In RTL the animation runs the other way so the visual motion matches the
+     inline-start→inline-end reading direction. */
+  :dir(rtl) .vds-scroll-area-root[data-orientation="horizontal"]
+    .vds-scroll-area-marquee {
+    animation-direction: reverse;
+  }
+
+  .vds-scroll-area-root[data-marquee="true"][data-marquee-pause-on-hover="true"]:hover
+    .vds-scroll-area-marquee,
+  .vds-scroll-area-root[data-marquee="true"][data-marquee-pause-on-hover="true"]:focus-within
+    .vds-scroll-area-marquee {
+    animation-play-state: paused;
+  }
+
+  @keyframes vds-scroll-area-marquee-x {
+    from {
+      transform: translate3d(0, 0, 0);
     }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes vds-scroll-area-marquee-y {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(0, -50%, 0);
+    }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Infinite-scroll sentinel
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area-sentinel {
+    flex: 0 0 auto;
+    inline-size: 1px;
+    block-size: 1px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Reduced motion
+   * ───────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-scroll-area-arrow,
+    .vds-scrollbar,
+    .vds-scrollbar-thumb {
+      transition: none;
+    }
+    .vds-scroll-area-marquee {
+      animation: none;
+    }
+  }
 }

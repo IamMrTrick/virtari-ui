@@ -55,7 +55,7 @@ export interface ButtonProps
   variant?: ButtonVariant;
   /** Size preset */
   size?: ButtonSize;
-  /** Render as child element (polymorphic via Radix Slot) */
+  /** Render as child element (polymorphic via Slot) */
   asChild?: boolean;
   /** Show loading spinner and disable interaction */
   loading?: boolean;

@@ -1,0 +1,115 @@
+@import "./PhoneInput.tokens.css";
+
+@layer design-system.components {
+  /* The wrapper already has position:relative + flex from .vds-input-wrapper.
+   * We just widen the leading-icon slot and style the country button. */
+  .vds-phone-input {
+    position: relative;
+  }
+
+  /* Force the nested tel input to stay LTR — phone numbers read left-to-right
+   * in every locale. The container can still be RTL for label/error alignment. */
+  .vds-phone-input > input[type="tel"] {
+    direction: ltr;
+    text-align: start;
+    padding-inline-start: var(--phone-input-country-width);
+  }
+
+  .vds-phone-input-country {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: var(--phone-input-country-width);
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--phone-input-country-gap);
+    padding-inline: var(--phone-input-country-padding-inline);
+
+    background: transparent;
+    border: 0;
+    border-inline-end: 1px solid var(--phone-input-country-separator-color);
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
+
+    color: var(--vds-color-text, #111827);
+    font: inherit;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color var(--vds-duration-fast, 100ms) var(--vds-ease-out, ease-out);
+  }
+
+  .vds-phone-input-country:hover:not(:disabled) {
+    background-color: var(--phone-input-country-bg-hover);
+  }
+
+  .vds-phone-input-country:focus-visible {
+    outline: 2px solid var(--vds-color-ring, #6366f1);
+    outline-offset: -2px;
+  }
+
+  .vds-phone-input-country:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .vds-phone-input-country[aria-expanded="true"] .vds-phone-input-caret {
+    transform: rotate(180deg);
+  }
+
+  .vds-phone-input-flag {
+    --flag-size: var(--phone-input-flag-size);
+    flex: none;
+  }
+
+  .vds-phone-input-dial {
+    font-weight: var(--phone-input-dial-font-weight);
+    color: var(--vds-color-text-muted, #6b7280);
+    white-space: nowrap;
+  }
+
+  .vds-phone-input-caret {
+    inline-size: 0.625rem;
+    block-size: 0.625rem;
+    color: var(--vds-color-text-muted, #6b7280);
+    flex: none;
+    margin-inline-start: auto;
+    transition: transform var(--vds-duration-fast, 100ms) var(--vds-ease-out, ease-out);
+  }
+
+  /* Country picker popover — option row (flag · name · dial) */
+  .vds-phone-input-option {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    inline-size: 100%;
+  }
+
+  .vds-phone-input-option-name {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .vds-phone-input-option-dial {
+    flex: none;
+    color: var(--vds-color-text-muted, #6b7280);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Announce-only region for country changes (visually hidden, SR-accessible) */
+  .vds-phone-input-announce {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

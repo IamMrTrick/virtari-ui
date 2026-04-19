@@ -14,6 +14,10 @@
     /* Checkbox — cap at md (8px) so it never reads as a radio */
     --vds-radius-checkbox: min(var(--vds-radius-element), var(--vds-radius-md));
 
+    /* Checkbox card — follow card radius family (xl cap) so card-style
+     * selections match sibling surfaces like Card / Alert / Toast. */
+    --vds-radius-checkbox-card: var(--vds-radius-card);
+
     /* Textarea — cap at lg (12px) so big multi-line corners stay readable */
     --vds-radius-textarea: min(var(--vds-radius-element), var(--vds-radius-lg));
 
@@ -26,10 +30,11 @@
     --vds-radius-chip: var(--vds-radius-badge);
 
     /* Floating content panels with list-based content —
-     * cap at md (8px) so they never become fully pill.
+     * cap at xl (16px / 24px in pill) so they stay readable: pill mode makes
+     * the popover noticeably rounder, but never a full circle.
      * (Popover / DropdownMenu intentionally stay on --vds-radius-surface,
      * which tops out at 2xl=24px in pill — acceptable for those panels.) */
-    --vds-radius-select-content: min(var(--vds-radius-element), var(--vds-radius-md));
+    --vds-radius-select-content: min(var(--vds-radius-element), var(--vds-radius-xl));
     --vds-radius-tooltip:        min(var(--vds-radius-element), var(--vds-radius-md));
 
     /* Alert (banner-style container) — cap at xl (16px), matches card/toast */
@@ -47,5 +52,23 @@
      * creates visible wedges where the sticky-header divider and scrollbar
      * meet the rounded corners. */
     --vds-radius-data-table: min(var(--vds-radius-surface), var(--vds-radius-md));
+
+    /* Radio card — follow card radius family (xl cap) so card-style
+     * selections match sibling surfaces and the checkbox card. */
+    --vds-radius-radio-card: var(--vds-radius-card);
+
+    /* Segmented radio — cap at md (8px). Outer group keeps a clean corner
+     * but inner segment dividers would blur if pill-mode rounded them too much. */
+    --vds-radius-segmented: min(var(--vds-radius-element), var(--vds-radius-md));
+
+    /* Pill radio — always pill-shaped, mirroring badge/chip. */
+    --vds-radius-pill-radio: var(--vds-radius-badge);
+
+    /* Scrollbar thumb — cap via primitive so pill mode can't bloat the
+     * thumb into a full circle. Thumbs are 8–10px thick; 9999px radius
+     * makes them capsules/circles which reads as a UI glitch. The
+     * primitive --vds-radius-3 (6px) is mode-invariant, while
+     * --vds-radius-sm still lets sharp mode tighten to 2px. */
+    --vds-radius-scrollbar-thumb: min(var(--vds-radius-sm), var(--vds-radius-3));
   }
 }

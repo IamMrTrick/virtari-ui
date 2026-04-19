@@ -52,15 +52,38 @@
     cursor: progress;
   }
 
-  /* ── Value area (grows, wraps chips) ── */
+  /* ── Value area (grows, keeps chips on one line) ── */
   .vds-combobox-trigger-value {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
     gap: var(--combobox-trigger-chip-gap);
     flex: 1 1 auto;
     min-inline-size: 0;
     overflow: hidden;
+  }
+
+  /* Inline chip row — container measured for overflow collapse */
+  .vds-combobox-trigger-chips {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: var(--combobox-trigger-chip-gap);
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+  }
+
+  /* Off-screen clone used purely to measure each chip's natural width */
+  .vds-combobox-trigger-chips-measure {
+    position: absolute;
+    inset-inline-start: -9999px;
+    inset-block-start: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--combobox-trigger-chip-gap);
+    visibility: hidden;
+    pointer-events: none;
+    white-space: nowrap;
   }
 
   .vds-combobox-trigger-label {

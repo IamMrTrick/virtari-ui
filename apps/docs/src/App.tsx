@@ -40,6 +40,7 @@ import {
   CompositionPage,
   DatePickerPage,
   DataTablePage,
+  DataTableUsersPage,
   TablePage,
   LayoutPage,
   HeaderPage,
@@ -51,6 +52,9 @@ import {
   HeadingPage,
   TextPage,
   BreadcrumbPage,
+  FlagPage,
+  PhoneInputPage,
+  LanguagePickerPage,
 } from "./pages";
 
 const PAGES: Record<string, () => React.JSX.Element> = {
@@ -96,12 +100,16 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   breadcrumb: BreadcrumbPage,
   "date-picker": DatePickerPage,
   "data-table": DataTablePage,
+  "data-table-users": DataTableUsersPage,
   table: TablePage,
   utilities: UtilitiesPage,
   rtl: RTLPage,
   icons: IconsPage,
   heading: HeadingPage,
   text: TextPage,
+  flag: FlagPage,
+  "phone-input": PhoneInputPage,
+  "language-picker": LanguagePickerPage,
 };
 
 function getHashPage(): string {
@@ -128,10 +136,45 @@ function navigate(page: string) {
 export type RadiusMode = "sharp" | "soft" | "round" | "pill";
 export type Direction = "ltr" | "rtl";
 
+const SETTINGS_KEY = "virtari.docs.settings";
+const RADIUS_MODES: RadiusMode[] = ["sharp", "soft", "round", "pill"];
+
+type Settings = {
+  dark: boolean;
+  radius: RadiusMode;
+  direction: Direction;
+};
+
+const DEFAULT_SETTINGS: Settings = {
+  dark: true,
+  radius: "soft",
+  direction: "ltr",
+};
+
+function readSettings(): Settings {
+  try {
+    const raw = window.localStorage.getItem(SETTINGS_KEY);
+    if (!raw) return DEFAULT_SETTINGS;
+    const parsed = JSON.parse(raw) as Partial<Settings>;
+    return {
+      dark: typeof parsed.dark === "boolean" ? parsed.dark : DEFAULT_SETTINGS.dark,
+      radius: RADIUS_MODES.includes(parsed.radius as RadiusMode)
+        ? (parsed.radius as RadiusMode)
+        : DEFAULT_SETTINGS.radius,
+      direction:
+        parsed.direction === "ltr" || parsed.direction === "rtl"
+          ? parsed.direction
+          : DEFAULT_SETTINGS.direction,
+    };
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+}
+
 export default function App() {
-  const [dark, setDark] = useState(true);
-  const [radius, setRadius] = useState<RadiusMode>("soft");
-  const [direction, setDirection] = useState<Direction>("ltr");
+  const [dark, setDark] = useState(() => readSettings().dark);
+  const [radius, setRadius] = useState<RadiusMode>(() => readSettings().radius);
+  const [direction, setDirection] = useState<Direction>(() => readSettings().direction);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const activePage = useHashRoute();
 
@@ -151,6 +194,14 @@ export default function App() {
     else root.removeAttribute("data-radius");
     root.setAttribute("dir", direction);
     root.setAttribute("lang", direction === "rtl" ? "fa" : "en");
+    try {
+      window.localStorage.setItem(
+        SETTINGS_KEY,
+        JSON.stringify({ dark, radius, direction }),
+      );
+    } catch {
+      /* storage disabled — ignore */
+    }
   }, [dark, radius, direction]);
 
   function handleNavigate(page: string) {

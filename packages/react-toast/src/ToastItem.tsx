@@ -127,8 +127,8 @@ export const ToastItem = memo(function ToastItem({
 }: ToastItemProps) {
   const rootRef = useRef<HTMLLIElement>(null);
 
-  /* Open state is local so Radix can play the exit animation before the
-     item is removed from the store (via onAnimationEnd). */
+  /* Open state is local so the primitive can play the exit animation before
+     the item is removed from the store (via onAnimationEnd). */
   const [open, setOpen] = useState(true);
 
   /* Progress ring timer */
@@ -265,7 +265,7 @@ export const ToastItem = memo(function ToastItem({
   const handleOpenChange = useCallback(
     (next: boolean) => {
       if (next) return;
-      // Radix's internal close (duration expiry, ESC, Close button)
+      // Internal close (duration expiry, ESC, Close button)
       softClose(null);
     },
     [softClose],
@@ -280,10 +280,10 @@ export const ToastItem = memo(function ToastItem({
     [toast.id],
   );
 
-  /* Only react to Radix's hover/focus pause when pauseMode === "hover".
-     In press mode, Radix still fires these (we can't disable viewport-level
-     pause) but we deliberately ignore them — the RAF only pauses on actual
-     pointer-down (isDragging). */
+  /* Only react to the primitive's hover/focus pause when pauseMode === "hover".
+     In press mode, the primitive still fires these (we can't disable
+     viewport-level pause) but we deliberately ignore them — the RAF only
+     pauses on actual pointer-down (isDragging). */
   const handlePause = useCallback(() => {
     if (pauseMode === "hover") setPaused(true);
   }, [pauseMode]);
@@ -431,8 +431,8 @@ export const ToastItem = memo(function ToastItem({
       className={rootClassName}
       style={stackStyle}
       /* Always Infinity — our RAF owns the countdown and dismiss. Leaving
-         Radix to also run a timer would double-fire close and desync with
-         the progress ring under press/hover pause modes. */
+         the primitive to also run a timer would double-fire close and desync
+         with the progress ring under press/hover pause modes. */
       duration={Number.POSITIVE_INFINITY}
       open={open}
       onOpenChange={handleOpenChange}

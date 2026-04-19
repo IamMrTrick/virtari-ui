@@ -14,10 +14,10 @@ type AccordionIconType = "chevron" | "plus-minus" | "arrow" | "caret" | "none";
 type AccordionIconPosition = "start" | "end";
 /** Semantic heading level for each trigger. Default: `h3` for FAQ/SEO. */
 type AccordionHeadingLevel = "h2" | "h3" | "h4" | "h5" | "h6";
-type RadixAccordionRootProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>;
-/** Root props. Intersection because Radix's Root is a discriminated union
+type PrimitiveAccordionRootProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>;
+/** Root props. Intersection because the primitive Root is a discriminated union
  * on `type="single" | "multiple"` — `interface extends` can't widen it. */
-type AccordionProps = RadixAccordionRootProps & {
+type AccordionProps = PrimitiveAccordionRootProps & {
     /** Shape/frame. Default: `plain`. */
     variant?: AccordionVariant;
     /** Size preset. Default: `md`. */
@@ -61,7 +61,7 @@ declare function AccordionContent({ className, children, ref, ...props }: Accord
 
 /** A single question/answer pair. `answer` may be plain text or rich ReactNode. */
 interface FAQItem {
-    /** Stable id for Radix controlled state + anchor links. Required. */
+    /** Stable id for controlled state + anchor links. Required. */
     id: string;
     question: string;
     /** Rich node rendered inside the body. */
@@ -79,7 +79,7 @@ interface FAQAccordionProps {
     defaultOpen?: string[];
     /**
      * Allow multiple open at once. Default: true — UX-friendly for FAQ since
-     * users often want to compare answers. Radix handles either mode.
+     * users often want to compare answers. Either mode is supported.
      */
     allowMultiple?: boolean;
     /** Shape variant forwarded to the underlying Accordion. Default: `contained`. */

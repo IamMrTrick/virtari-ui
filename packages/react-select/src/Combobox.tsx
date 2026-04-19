@@ -11,8 +11,10 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
+  useState,
   type ChangeEvent,
   type KeyboardEvent,
   type MouseEvent,
@@ -70,6 +72,118 @@ export function Combobox<T extends ComboboxItemData = ComboboxItemData>({
         </PopoverPrimitive.Root>
       </ComboboxVisualContext.Provider>
     </ComboboxProvider>
+  );
+}
+
+/* ─────────────────────────────────────────────
+ * <ComboboxChipList>
+ * Renders selected chips on a single line, collapsing overflow into a
+ * "+N" counter chip. Uses an off-screen measurement container so it can
+ * know every chip's natural width without laying them out in-flow.
+ * ───────────────────────────────────────────── */
+
+interface ComboboxChipListProps {
+  items: ReadonlyArray<ComboboxItemData>;
+  chipSize: ChipSize;
+  onRemove: (value: string) => void;
+}
+
+function ComboboxChipList({ items, chipSize, onRemove }: ComboboxChipListProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const measureRef = useRef<HTMLDivElement | null>(null);
+  const [visibleCount, setVisibleCount] = useState(items.length);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    const measure = measureRef.current;
+    if (!container || !measure) return;
+
+    const recompute = () => {
+      const cs = getComputedStyle(container);
+      const gap = parseFloat(cs.columnGap || cs.gap) || 0;
+      const width = container.clientWidth;
+
+      const children = measure.children;
+      const chipEls: HTMLElement[] = [];
+      for (let i = 0; i < items.length; i += 1) {
+        const el = children.item(i);
+        if (el instanceof HTMLElement) chipEls.push(el);
+      }
+      const counterEl = children.item(items.length);
+      const counterWidth = counterEl instanceof HTMLElement ? counterEl.offsetWidth : 0;
+
+      let used = 0;
+      let fits = 0;
+      for (let i = 0; i < chipEls.length; i += 1) {
+        const w = chipEls[i]!.offsetWidth;
+        const next = used + (i > 0 ? gap : 0) + w;
+        if (next <= width) {
+          used = next;
+          fits = i + 1;
+        } else {
+          break;
+        }
+      }
+
+      if (fits < items.length) {
+        while (fits > 0) {
+          let total = 0;
+          for (let i = 0; i < fits; i += 1) {
+            total += (i > 0 ? gap : 0) + chipEls[i]!.offsetWidth;
+          }
+          total += gap + counterWidth;
+          if (total <= width) break;
+          fits -= 1;
+        }
+      }
+
+      setVisibleCount(fits);
+    };
+
+    recompute();
+    const obs = new ResizeObserver(recompute);
+    obs.observe(container);
+    return () => obs.disconnect();
+  }, [items]);
+
+  const hidden = items.length - visibleCount;
+  const visibleItems = hidden > 0 ? items.slice(0, visibleCount) : items;
+
+  return (
+    <>
+      <div ref={containerRef} className="vds-combobox-trigger-chips">
+        {visibleItems.map((item) => (
+          <Chip key={item.value} size={chipSize} appearance="soft">
+            <ChipLabel>{item.label}</ChipLabel>
+            <ChipRemove
+              tabIndex={-1}
+              aria-label={`Remove ${item.label}`}
+              onPointerDown={(e) => e.preventDefault()}
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove(item.value);
+              }}
+            />
+          </Chip>
+        ))}
+        {hidden > 0 ? (
+          <Chip size={chipSize} appearance="soft" aria-label={`${hidden} more selected`}>
+            <ChipLabel>+{hidden}</ChipLabel>
+          </Chip>
+        ) : null}
+      </div>
+      <div ref={measureRef} className="vds-combobox-trigger-chips-measure" aria-hidden="true">
+        {items.map((item) => (
+          <Chip key={item.value} size={chipSize} appearance="soft">
+            <ChipLabel>{item.label}</ChipLabel>
+            <ChipRemove tabIndex={-1} />
+          </Chip>
+        ))}
+        <Chip size={chipSize} appearance="soft">
+          <ChipLabel>+{items.length}</ChipLabel>
+        </Chip>
+      </div>
+    </>
   );
 }
 
@@ -184,20 +298,11 @@ export function ComboboxTrigger({
             selectedItems.length === 0 ? (
               <span className="vds-combobox-trigger-placeholder">{placeholder}</span>
             ) : (
-              selectedItems.map((item) => (
-                <Chip key={item.value} size={chipSize} appearance="soft">
-                  <ChipLabel>{item.label}</ChipLabel>
-                  <ChipRemove
-                    tabIndex={-1}
-                    aria-label={`Remove ${item.label}`}
-                    onPointerDown={(e) => e.preventDefault()}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeValue(item.value);
-                    }}
-                  />
-                </Chip>
-              ))
+              <ComboboxChipList
+                items={selectedItems}
+                chipSize={chipSize}
+                onRemove={removeValue}
+              />
             )
           ) : selectedItems[0] ? (
             <span className="vds-combobox-trigger-label">

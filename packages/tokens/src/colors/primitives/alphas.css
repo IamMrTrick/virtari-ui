@@ -18,7 +18,7 @@
    * Plus per-intent alpha (primary-a1..12, success-a1..12, etc.) for
    * subtle intent backgrounds and hover overlays in component CSS.
    *
-   * Percentages are Radix-canonical (industry-tested).
+   * Percentages are industry-tested.
    */
 
   :root {
@@ -50,7 +50,7 @@
     --vds-color-white-a11: oklch(1 0 0 / 0.90);
     --vds-color-white-a12: oklch(1 0 0 / 0.95);
 
-    /* ─── Neutral alpha — light (black tint, Radix-tuned) ─── */
+    /* ─── Neutral alpha — light (black tint, industry-tuned) ─── */
     --vds-color-neutral-a1:  oklch(0 0 0 / 0.012);
     --vds-color-neutral-a2:  oklch(0 0 0 / 0.024);
     --vds-color-neutral-a3:  oklch(0 0 0 / 0.059);
@@ -64,7 +64,7 @@
     --vds-color-neutral-a11: oklch(0 0 0 / 0.608);
     --vds-color-neutral-a12: oklch(0 0 0 / 0.875);
 
-    /* ─── Per-intent alpha — light (intent solid 9 with Radix percentages) ─── */
+    /* ─── Per-intent alpha — light (intent solid 9 with industry percentages) ─── */
     --vds-color-primary-a1:  oklch(0.55 0.20 265 / 0.020);
     --vds-color-primary-a2:  oklch(0.55 0.20 265 / 0.040);
     --vds-color-primary-a3:  oklch(0.55 0.20 265 / 0.080);
@@ -146,7 +146,7 @@
 
   /* ─── Dark mode overrides ─── */
   [data-theme="dark"] {
-    /* Neutral alpha — dark (white tint, Radix-tuned) */
+    /* Neutral alpha — dark (white tint, industry-tuned) */
     --vds-color-neutral-a1:  oklch(1 0 0 / 0.000);
     --vds-color-neutral-a2:  oklch(1 0 0 / 0.035);
     --vds-color-neutral-a3:  oklch(1 0 0 / 0.070);

@@ -12,7 +12,7 @@ export type TooltipVariant =
   | "danger";
 
 /* ── Provider ──
- * Snappier default delay (300ms vs Radix default of 700ms) so tooltips
+ * Snappier default delay (300ms vs the 700ms primitive default) so tooltips
  * feel responsive in design-system contexts. Override per-instance
  * with `delayDuration={n}`. */
 export interface TooltipProviderProps

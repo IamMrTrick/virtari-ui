@@ -52,7 +52,7 @@ export type AccordionIconPosition = "start" | "end";
 export type AccordionHeadingLevel = "h2" | "h3" | "h4" | "h5" | "h6";
 
 /* ──────────────────────────── Root context ────────────────────────────
- * Radix's Root takes its own props, so we wrap it and forward styling
+ * The primitive Root takes its own props, so we wrap it and forward styling
  * config to children via context instead of drilling props. */
 
 interface AccordionContextValue {
@@ -71,13 +71,13 @@ const AccordionContext = createContext<AccordionContextValue>({
 
 /* ──────────────────────────── Accordion (root) ──────────────────────── */
 
-type RadixAccordionRootProps = React.ComponentPropsWithoutRef<
+type PrimitiveAccordionRootProps = React.ComponentPropsWithoutRef<
   typeof AccordionPrimitive.Root
 >;
 
-/** Root props. Intersection because Radix's Root is a discriminated union
+/** Root props. Intersection because the primitive Root is a discriminated union
  * on `type="single" | "multiple"` — `interface extends` can't widen it. */
-export type AccordionProps = RadixAccordionRootProps & {
+export type AccordionProps = PrimitiveAccordionRootProps & {
   /** Shape/frame. Default: `plain`. */
   variant?: AccordionVariant;
   /** Size preset. Default: `md`. */
@@ -119,7 +119,7 @@ export function Accordion({
         data-variant={variant}
         data-size={size}
         data-color={color}
-        {...(props as RadixAccordionRootProps)}
+        {...(props as PrimitiveAccordionRootProps)}
       />
     </AccordionContext.Provider>
   );
@@ -216,7 +216,7 @@ export function AccordionTrigger({
   return (
     <AccordionPrimitive.Header asChild>
       {/* Render as a real heading for SEO + proper document outline.
-       * Radix keeps the ARIA semantics intact; the Trigger inside provides
+       * The primitive keeps the ARIA semantics intact; the Trigger inside provides
        * aria-expanded / aria-controls. */}
       <HeadingTag className="vds-accordion-header" tag={headingLevel}>
         <AccordionPrimitive.Trigger

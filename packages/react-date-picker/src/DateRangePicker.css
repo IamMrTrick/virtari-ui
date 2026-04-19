@@ -164,6 +164,23 @@
     grid-template-columns: 1fr;
   }
 
+  .vds-date-range-picker-time[data-embedded="true"] .vds-time-field {
+    inline-size: 100%;
+  }
+
+  .vds-date-range-picker-time[data-embedded="true"] .vds-time-field-group {
+    display: flex;
+    inline-size: 100%;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    justify-content: space-between;
+  }
+
+  .vds-date-range-picker-time[data-embedded="true"] .vds-time-field-segments {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
   .vds-date-range-picker-main[data-layout="split"] .vds-date-range-picker-time {
     grid-template-columns: 1fr;
     align-content: start;

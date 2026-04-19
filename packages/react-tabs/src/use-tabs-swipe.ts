@@ -79,8 +79,8 @@ export function useTabsSwipe(
       if (axisLocked === "x" && absDx > threshold) {
         const toNext = isRTL() ? dx > 0 : dx < 0;
         const activated = activateNeighbor(root, toNext ? "next" : "prev");
-        // Radix will swap which panel has data-state="active" — clean the
-        // old panel so it doesn't hold a stale inline transform.
+        // The primitive will swap which panel has data-state="active" — clean
+        // the old panel so it doesn't hold a stale inline transform.
         clearPanel();
         if (!activated) return;
         return;

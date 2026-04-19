@@ -26,6 +26,18 @@ interface CalendarVisualProps {
     visibleDuration?: DateDuration;
     pageBehavior?: "single" | "visible";
 }
+type CalendarView = "days" | "months" | "years";
+/** Imperative handle exposed via `apiRef` so a parent (e.g. DatePicker)
+ * can drive the year/month draft commit from an external action bar. */
+interface CalendarHandle {
+    getView: () => CalendarView;
+    setView: (view: CalendarView) => void;
+    hasMonthDraft: () => boolean;
+    hasYearDraft: () => boolean;
+    applyMonthDraft: () => void;
+    applyYearDraft: () => void;
+    cancelDraft: () => void;
+}
 interface CalendarProps extends CalendarVisualProps {
     value?: DateValue | null;
     defaultValue?: DateValue | null;
@@ -37,9 +49,19 @@ interface CalendarProps extends CalendarVisualProps {
     isReadOnly?: boolean;
     autoFocus?: boolean;
     "aria-label"?: string;
+    /** Fires when the internal view changes (days/months/years). */
+    onViewChange?: (view: CalendarView) => void;
+    /** Parent-supplied ref populated with year/month draft-commit methods. */
+    apiRef?: {
+        current: CalendarHandle | null;
+    };
+    /** If true, Calendar hides its own Cancel/Change-Year/Month footer.
+     *  Parent is expected to render an external action bar and drive
+     *  commits through `apiRef`. */
+    hideInternalActions?: boolean;
     ref?: Ref<HTMLDivElement>;
 }
-declare function Calendar({ size, appearance, invalid, calendar, locale, footer, className, ref, ...props }: CalendarProps): react_jsx_runtime.JSX.Element;
+declare function Calendar({ size, appearance, invalid, calendar, locale, footer, className, onViewChange, apiRef, hideInternalActions, ref, ...props }: CalendarProps): react_jsx_runtime.JSX.Element;
 interface RangeCalendarProps extends CalendarVisualProps {
     value?: {
         start: DateValue;
@@ -61,9 +83,14 @@ interface RangeCalendarProps extends CalendarVisualProps {
     allowsNonContiguousRanges?: boolean;
     autoFocus?: boolean;
     "aria-label"?: string;
+    onViewChange?: (view: CalendarView) => void;
+    apiRef?: {
+        current: CalendarHandle | null;
+    };
+    hideInternalActions?: boolean;
     ref?: Ref<HTMLDivElement>;
 }
-declare function RangeCalendar({ size, appearance, invalid, calendar, locale, footer, className, ref, ...props }: RangeCalendarProps): react_jsx_runtime.JSX.Element;
+declare function RangeCalendar({ size, appearance, invalid, calendar, locale, footer, className, onViewChange, apiRef, hideInternalActions, ref, ...props }: RangeCalendarProps): react_jsx_runtime.JSX.Element;
 
 interface DateFieldProps {
     value?: DateValue | null;
@@ -133,12 +160,24 @@ interface TimeFieldProps {
     showPicker?: boolean;
     showMilliseconds?: boolean;
     millisecondStep?: number;
+    /**
+     * Seeded time when the picker opens with no current value.
+     * Defaults to the user's current local time (see `nowAsTime()`).
+     */
+    defaultTimeValue?: TimeValue;
+    /**
+     * When provided, intercepts field/trigger clicks and replaces the
+     * default "open internal picker" behavior. The internal popover + mobile
+     * surface are suppressed — parent owns picker presentation.
+     * Used by DatePicker mobile step 1 to route to its time step.
+     */
+    onTriggerClick?: () => void;
     overlayMode?: PickerOverlayMode;
     mobilePresentation?: MobilePickerPresentation;
     mobileSizeMode?: MobilePickerSizeMode;
     ref?: Ref<HTMLDivElement>;
 }
-declare function TimeField({ size, appearance, invalid, locale, label, description, errorMessage, className, showPicker, showMilliseconds, millisecondStep, overlayMode, mobilePresentation, mobileSizeMode, ref, ...props }: TimeFieldProps): react_jsx_runtime.JSX.Element;
+declare function TimeField({ size, appearance, invalid, locale, label, description, errorMessage, className, showPicker, showMilliseconds, millisecondStep, defaultTimeValue, onTriggerClick, overlayMode, mobilePresentation, mobileSizeMode, ref, ...props }: TimeFieldProps): react_jsx_runtime.JSX.Element;
 
 interface DatePickerProps {
     value?: DateValue | null;
@@ -159,6 +198,11 @@ interface DatePickerProps {
     showTimePicker?: boolean;
     showMilliseconds?: boolean;
     millisecondStep?: number;
+    /**
+     * Seeded time when the picker opens without a value. Defaults to the user's
+     * current local time (now). Pass any `TimeValue` to override.
+     */
+    defaultTimeValue?: TimeValue;
     autoFocus?: boolean;
     name?: string;
     label?: ReactNode;
@@ -182,7 +226,7 @@ interface DatePickerPresetRenderProps {
     value: DateValue | null;
     setValue: (value: DateValue | null) => void;
 }
-declare function DatePicker({ size, appearance, invalid, calendar, locale, label, description, errorMessage, presets, footer, className, overlayMode, mobilePresentation, mobileSizeMode, ref, ...props }: DatePickerProps): react_jsx_runtime.JSX.Element;
+declare function DatePicker({ size, appearance, invalid, calendar, locale, label, description, errorMessage, presets, footer, className, overlayMode, mobilePresentation, mobileSizeMode, defaultTimeValue, ref, ...props }: DatePickerProps): react_jsx_runtime.JSX.Element;
 
 interface DateRangePickerProps {
     value?: DateRange | null;
@@ -203,6 +247,11 @@ interface DateRangePickerProps {
     showTimePicker?: boolean;
     showMilliseconds?: boolean;
     millisecondStep?: number;
+    /**
+     * Seeded time (applied to both start and end) when the picker opens
+     * without a value. Defaults to the user's current local time (now).
+     */
+    defaultTimeValue?: TimeValue;
     allowsNonContiguousRanges?: boolean;
     autoFocus?: boolean;
     startName?: string;
@@ -228,33 +277,38 @@ interface DateRangePickerPresetRenderProps {
     value: DateRange | null;
     setValue: (value: DateRange | null) => void;
 }
-declare function DateRangePicker({ size, appearance, invalid, calendar, locale, label, description, errorMessage, presets, footer, className, overlayMode, mobilePresentation, mobileSizeMode, ref, ...props }: DateRangePickerProps): react_jsx_runtime.JSX.Element;
+declare function DateRangePicker({ size, appearance, invalid, calendar, locale, label, description, errorMessage, presets, footer, className, overlayMode, mobilePresentation, mobileSizeMode, defaultTimeValue, ref, ...props }: DateRangePickerProps): react_jsx_runtime.JSX.Element;
 
 interface DatePickerPreset {
     id: string;
     label: ReactNode;
     value: DateValue;
+    description?: ReactNode;
 }
 interface DateRangePickerPreset {
     id: string;
     label: ReactNode;
     value: DateRange;
+    description?: ReactNode;
 }
 interface DatePickerPresetsProps {
     presets: DatePickerPreset[];
     value?: DateValue | null;
     onSelect: (value: DateValue) => void;
+    /** Group label — announced by assistive tech. */
+    label?: ReactNode;
     className?: string;
     ref?: Ref<HTMLDivElement>;
 }
-declare function DatePickerPresets({ presets, value, onSelect, className, ref, }: DatePickerPresetsProps): react_jsx_runtime.JSX.Element;
+declare function DatePickerPresets({ presets, value, onSelect, label, className, ref, }: DatePickerPresetsProps): react_jsx_runtime.JSX.Element;
 interface DateRangePickerPresetsProps {
     presets: DateRangePickerPreset[];
     value?: DateRange | null;
     onSelect: (value: DateRange) => void;
+    label?: ReactNode;
     className?: string;
     ref?: Ref<HTMLDivElement>;
 }
-declare function DateRangePickerPresets({ presets, value, onSelect, className, ref, }: DateRangePickerPresetsProps): react_jsx_runtime.JSX.Element;
+declare function DateRangePickerPresets({ presets, value, onSelect, label, className, ref, }: DateRangePickerPresetsProps): react_jsx_runtime.JSX.Element;
 
 export { Calendar, type CalendarProps, type CalendarSystem, DateField, type DateFieldProps, DatePicker, type DatePickerAppearance, type DatePickerPreset, type DatePickerPresetRenderProps, DatePickerPresets, type DatePickerPresetsProps, type DatePickerProps, type DatePickerSize, DateRangePicker, type DateRangePickerPreset, type DateRangePickerPresetRenderProps, DateRangePickerPresets, type DateRangePickerPresetsProps, type DateRangePickerProps, FieldSegment, type MobilePickerPresentation, type MobilePickerSizeMode, type PickerOverlayMode, RangeCalendar, type RangeCalendarProps, TimeField, type TimeFieldProps, createCalendar, resolveLocale };

@@ -1,9 +1,10 @@
 import { cn } from '@virtari/utils';
+import { forwardRef } from 'react';
 import { Slot, Slottable } from '@radix-ui/react-slot';
 import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
 
 // src/Button.tsx
-function Button({
+var Button = forwardRef(function Button2({
   color = "primary",
   variant = "solid",
   size = "md",
@@ -18,9 +19,8 @@ function Button({
   disabled,
   className,
   children,
-  ref,
   ...props
-}) {
+}, forwardedRef) {
   const Comp = asChild ? Slot : "button";
   const isDisabled = disabled || loading;
   const resolvedColor = variant === "destructive" ? "danger" : color;
@@ -29,7 +29,7 @@ function Button({
     /* @__PURE__ */ jsxs(
       Comp,
       {
-        ref,
+        ref: forwardedRef,
         className: cn("vds-button", className),
         "data-color": resolvedColor,
         "data-variant": resolvedVariant,
@@ -52,6 +52,7 @@ function Button({
     ),
     loading && /* @__PURE__ */ jsx("span", { className: "vds-sr-only", role: "status", "aria-live": "polite", children: loadingText })
   ] });
-}
+});
+Button.displayName = "Button";
 
 export { Button };

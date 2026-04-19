@@ -1,0 +1,113 @@
+@import "./LanguagePicker.tokens.css";
+
+@layer design-system.components {
+  /* ── Trigger: single-line [flag] English [caret] ──────────
+   * Lives inside ComboboxTrigger's .vds-combobox-trigger-label, so it
+   * just needs to sit on the baseline next to the chevron. */
+  .vds-language-picker-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--language-picker-option-gap);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  .vds-language-picker-trigger-flag {
+    --flag-size: var(--language-picker-flag-size);
+    flex: none;
+  }
+
+  .vds-language-picker-trigger-name {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: var(--language-picker-native-font-weight);
+  }
+
+  /* ── Popover option: two-line stack ─────────────────────
+   *   [flag]  Persian       ← primary, full color, sits at top
+   *           فارسی         ← subtitle, muted + xs size
+   * Flag is centered against the stack. Native wrapped in <bdi lang>
+   * so scripts shape correctly regardless of document dir. */
+  .vds-language-picker-option {
+    display: flex;
+    align-items: center;
+    gap: var(--language-picker-option-gap);
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .vds-language-picker-option-flag {
+    --flag-size: var(--language-picker-option-flag-size);
+    flex: none;
+    align-self: center;
+  }
+
+  .vds-language-picker-option-names {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-inline-size: 0;
+    flex: 1 1 auto;
+    line-height: 1.15;
+  }
+
+  .vds-language-picker-option-primary {
+    font-weight: var(--language-picker-native-font-weight);
+    color: var(--vds-color-text, #111827);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .vds-language-picker-option-subtitle {
+    color: var(--language-picker-english-color);
+    font-size: var(--language-picker-english-font-size);
+    /* Script fallbacks so e.g. Thai or CJK native names shape correctly
+     * even when Vazirmatn/Inter lack the glyph range. */
+    font-family: var(--vds-font-sans), "Noto Sans", system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    unicode-bidi: plaintext;
+  }
+
+  /* ── Standalone LanguageLabel ──────────────────────────── */
+  .vds-language-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--language-label-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-language-label-flag {
+    --flag-size: var(--language-label-flag-size);
+    flex: none;
+  }
+
+  .vds-language-label-stack {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    min-inline-size: 0;
+    line-height: 1.15;
+  }
+
+  .vds-language-label-primary {
+    font-weight: var(--language-picker-native-font-weight);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .vds-language-label-subtitle {
+    color: var(--language-picker-english-color);
+    font-size: var(--language-picker-english-font-size);
+    font-family: var(--vds-font-sans), "Noto Sans", system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    unicode-bidi: plaintext;
+  }
+}

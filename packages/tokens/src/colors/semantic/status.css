@@ -3,7 +3,7 @@
    * ── Status (intent) semantic layer (NEW, additive) ──
    *
    * Expands each intent (primary/success/warning/danger/info/accent) to
-   * the full Radix-style 12-step semantic role coverage:
+   * the full 12-step semantic role coverage:
    *
    *   {intent}-bg-subtle    app-level intent tint (canvas accent)
    *   {intent}-bg           component-level muted bg (badges, alerts)

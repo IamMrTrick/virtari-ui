@@ -8,6 +8,11 @@
     cursor: pointer;
     touch-action: none;
     user-select: none;
+
+    &[data-disabled] {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
   }
 
   .vds-slider-track {
@@ -24,6 +29,10 @@
     block-size: 100%;
     background-color: var(--vds-color-primary-500);
     border-radius: inherit;
+
+    .vds-slider[data-disabled] & {
+      background-color: var(--vds-color-gray-400, #9ca3af);
+    }
   }
 
   .vds-slider-thumb {
@@ -45,6 +54,15 @@
     &:focus-visible {
       outline: 2px solid var(--vds-color-ring);
       outline-offset: 2px;
+    }
+
+    .vds-slider[data-disabled] & {
+      cursor: not-allowed;
+      border-color: var(--vds-color-gray-400, #9ca3af);
+    }
+
+    .vds-slider[data-disabled] &:hover {
+      scale: 1;
     }
   }
 }

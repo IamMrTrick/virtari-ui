@@ -420,6 +420,92 @@ function Combobox({
   const ctx = useCombobox(hookProps);
   return /* @__PURE__ */ jsxRuntime.jsx(ComboboxProvider, { value: ctx, children: /* @__PURE__ */ jsxRuntime.jsx(ComboboxVisualContext.Provider, { value: { size, appearance }, children: /* @__PURE__ */ jsxRuntime.jsx(PopoverPrimitive__namespace.Root, { open: ctx.open, onOpenChange: ctx.setOpen, children }) }) });
 }
+function ComboboxChipList({ items, chipSize, onRemove }) {
+  const containerRef = react.useRef(null);
+  const measureRef = react.useRef(null);
+  const [visibleCount, setVisibleCount] = react.useState(items.length);
+  react.useLayoutEffect(() => {
+    const container = containerRef.current;
+    const measure = measureRef.current;
+    if (!container || !measure) return;
+    const recompute = () => {
+      const cs = getComputedStyle(container);
+      const gap = parseFloat(cs.columnGap || cs.gap) || 0;
+      const width = container.clientWidth;
+      const children = measure.children;
+      const chipEls = [];
+      for (let i = 0; i < items.length; i += 1) {
+        const el = children.item(i);
+        if (el instanceof HTMLElement) chipEls.push(el);
+      }
+      const counterEl = children.item(items.length);
+      const counterWidth = counterEl instanceof HTMLElement ? counterEl.offsetWidth : 0;
+      let used = 0;
+      let fits = 0;
+      for (let i = 0; i < chipEls.length; i += 1) {
+        const w = chipEls[i].offsetWidth;
+        const next = used + (i > 0 ? gap : 0) + w;
+        if (next <= width) {
+          used = next;
+          fits = i + 1;
+        } else {
+          break;
+        }
+      }
+      if (fits < items.length) {
+        while (fits > 0) {
+          let total = 0;
+          for (let i = 0; i < fits; i += 1) {
+            total += (i > 0 ? gap : 0) + chipEls[i].offsetWidth;
+          }
+          total += gap + counterWidth;
+          if (total <= width) break;
+          fits -= 1;
+        }
+      }
+      setVisibleCount(fits);
+    };
+    recompute();
+    const obs = new ResizeObserver(recompute);
+    obs.observe(container);
+    return () => obs.disconnect();
+  }, [items]);
+  const hidden = items.length - visibleCount;
+  const visibleItems = hidden > 0 ? items.slice(0, visibleCount) : items;
+  return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { ref: containerRef, className: "vds-combobox-trigger-chips", children: [
+      visibleItems.map((item) => /* @__PURE__ */ jsxRuntime.jsxs(reactChip.Chip, { size: chipSize, appearance: "soft", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(reactChip.ChipLabel, { children: item.label }),
+        /* @__PURE__ */ jsxRuntime.jsx(
+          reactChip.ChipRemove,
+          {
+            tabIndex: -1,
+            "aria-label": `Remove ${item.label}`,
+            onPointerDown: (e) => e.preventDefault(),
+            onClick: (e) => {
+              e.stopPropagation();
+              onRemove(item.value);
+            }
+          }
+        )
+      ] }, item.value)),
+      hidden > 0 ? /* @__PURE__ */ jsxRuntime.jsx(reactChip.Chip, { size: chipSize, appearance: "soft", "aria-label": `${hidden} more selected`, children: /* @__PURE__ */ jsxRuntime.jsxs(reactChip.ChipLabel, { children: [
+        "+",
+        hidden
+      ] }) }) : null
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { ref: measureRef, className: "vds-combobox-trigger-chips-measure", "aria-hidden": "true", children: [
+      items.map((item) => /* @__PURE__ */ jsxRuntime.jsxs(reactChip.Chip, { size: chipSize, appearance: "soft", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(reactChip.ChipLabel, { children: item.label }),
+        /* @__PURE__ */ jsxRuntime.jsx(reactChip.ChipRemove, { tabIndex: -1 })
+      ] }, item.value)),
+      /* @__PURE__ */ jsxRuntime.jsx(reactChip.Chip, { size: chipSize, appearance: "soft", children: /* @__PURE__ */ jsxRuntime.jsxs(reactChip.ChipLabel, { children: [
+        "+",
+        items.length
+      ] }) })
+    ] })
+  ] });
+}
 function ComboboxTrigger({
   placeholder = "Select\u2026",
   clearable,
@@ -500,21 +586,14 @@ function ComboboxTrigger({
       onKeyDown: handleKeyDown,
       ...props,
       children: [
-        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "vds-combobox-trigger-value", children: multiple ? selectedItems.length === 0 ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-combobox-trigger-placeholder", children: placeholder }) : selectedItems.map((item) => /* @__PURE__ */ jsxRuntime.jsxs(reactChip.Chip, { size: chipSize, appearance: "soft", children: [
-          /* @__PURE__ */ jsxRuntime.jsx(reactChip.ChipLabel, { children: item.label }),
-          /* @__PURE__ */ jsxRuntime.jsx(
-            reactChip.ChipRemove,
-            {
-              tabIndex: -1,
-              "aria-label": `Remove ${item.label}`,
-              onPointerDown: (e) => e.preventDefault(),
-              onClick: (e) => {
-                e.stopPropagation();
-                removeValue(item.value);
-              }
-            }
-          )
-        ] }, item.value)) : selectedItems[0] ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-combobox-trigger-label", children: renderValue ? renderValue(selectedItems[0]) : selectedItems[0].label }) : /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-combobox-trigger-placeholder", children: placeholder }) }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "vds-combobox-trigger-value", children: multiple ? selectedItems.length === 0 ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-combobox-trigger-placeholder", children: placeholder }) : /* @__PURE__ */ jsxRuntime.jsx(
+          ComboboxChipList,
+          {
+            items: selectedItems,
+            chipSize,
+            onRemove: removeValue
+          }
+        ) : selectedItems[0] ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-combobox-trigger-label", children: renderValue ? renderValue(selectedItems[0]) : selectedItems[0].label }) : /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-combobox-trigger-placeholder", children: placeholder }) }),
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-combobox-trigger-actions", children: [
           clearable && hasValue && !disabled ? /* @__PURE__ */ jsxRuntime.jsx(
             "button",
@@ -952,3 +1031,4 @@ exports.SelectLabel = SelectLabel;
 exports.SelectSeparator = SelectSeparator;
 exports.SelectTrigger = SelectTrigger;
 exports.SelectValue = SelectValue;
+exports.useComboboxContext = useComboboxContext;

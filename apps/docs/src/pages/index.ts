@@ -40,12 +40,16 @@ export { NavPage } from "./NavPage";
 export { SidebarPage } from "./SidebarPage";
 export { DatePickerPage } from "./DatePickerPage";
 export { DataTablePage } from "./DataTablePage";
+export { DataTableUsersPage } from "./DataTableUsersPage";
 export { TablePage } from "./TablePage";
 export { UtilitiesPage } from "./UtilitiesPage";
 export { RTLPage } from "./RTLPage";
 export { IconsPage } from "./IconsPage";
 export { HeadingPage } from "./HeadingPage";
 export { TextPage } from "./TextPage";
+export { FlagPage } from "./FlagPage";
+export { PhoneInputPage } from "./PhoneInputPage";
+export { LanguagePickerPage } from "./LanguagePickerPage";
 
 export const PAGE_META: Record<string, { title: string; description: string }> = {
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },
@@ -62,7 +66,11 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   textarea: { title: "Textarea", description: "Multi-line text input with auto-resize." },
   select: { title: "Select", description: "Dropdown selector with groups and search." },
   checkbox: { title: "Checkbox", description: "Multi-select with indeterminate state." },
-  "radio-group": { title: "Radio Group", description: "Single choice from a list of options." },
+  "radio-group": {
+    title: "Radio Group",
+    description:
+      "Single-choice primitive with 3 sizes, error state, cards (row + icon-grid), segmented button group, and pill filters.",
+  },
   switch: { title: "Switch", description: "Toggle control for binary states." },
   toggle: { title: "Toggle", description: "Pressable toggle button." },
   slider: { title: "Slider", description: "Range input for numeric values." },
@@ -157,9 +165,29 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     description:
       "Excel-like resize, virtualization (10k+ rows), pinning, grouping, inline edit, server-side — built on TanStack.",
   },
+  "data-table-users": {
+    title: "Users — Data Table showcase",
+    description:
+      "Production-grade users table — view switch, search, filter bar + drawer, customize columns, bulk actions, refresh, export, add — composed entirely from the design-system primitives.",
+  },
   table: {
     title: "Table",
     description:
       "Semantic HTML table — 4 variants, 3 row styles, 3 sizes, density, sortable headers, sticky header/columns, selection, and full RTL.",
+  },
+  flag: {
+    title: "Flag",
+    description:
+      "271 country flags vendored from flag-icons (MIT) — tree-shakable named components plus a dynamic <Flag code>. Includes sub-regions like gb-eng and es-ct.",
+  },
+  "phone-input": {
+    title: "Phone Input",
+    description:
+      "Tel input with country picker, dial-code prefix, format-as-you-type, Persian/Arabic digit normalization, full ARIA, and autofill hints — composed on top of <Input> + <Combobox>.",
+  },
+  "language-picker": {
+    title: "Language Picker",
+    description:
+      "Locale selector with flag · native · English display. 240 languages with curated BCP-47 → flag mapping for accurate header switchers.",
   },
 };

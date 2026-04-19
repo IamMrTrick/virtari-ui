@@ -141,6 +141,7 @@ const ICONS: Record<string, ReactNode> = {
   collapsible: <IconChevronDown {...navIconProps} />,
   "scroll-area": <IconArrowsVertical {...navIconProps} />,
   "data-table": <IconTable {...navIconProps} />,
+  "data-table-users": <IconUserCircle {...navIconProps} />,
   table: <IconTableRow {...navIconProps} />,
 };
 
@@ -179,6 +180,8 @@ const NAV_ITEMS: NavGroupData[] = [
       { label: "Toggle", path: "toggle" },
       { label: "Slider", path: "slider" },
       { label: "Date Picker", path: "date-picker" },
+      { label: "Phone Input", path: "phone-input" },
+      { label: "Language Picker", path: "language-picker" },
       { label: "Label", path: "label" },
     ],
   },
@@ -188,6 +191,7 @@ const NAV_ITEMS: NavGroupData[] = [
       { label: "Avatar", path: "avatar" },
       { label: "Badge", path: "badge" },
       { label: "Chip", path: "chip" },
+      { label: "Flag", path: "flag" },
       { label: "Card", path: "card" },
       { label: "Heading", path: "heading" },
       { label: "Text", path: "text" },
@@ -233,6 +237,7 @@ const NAV_ITEMS: NavGroupData[] = [
     items: [
       { label: "Table", path: "table" },
       { label: "Data Table", path: "data-table" },
+      { label: "Users showcase", path: "data-table-users" },
     ],
   },
 ];

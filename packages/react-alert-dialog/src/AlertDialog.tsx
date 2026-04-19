@@ -8,7 +8,7 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
  * backdrop / intent variants look identical to Dialog. The only
  * differences are semantic:
  *
- *   • role="alertdialog" via @radix-ui/react-alert-dialog
+ *   • role="alertdialog" via the underlying primitive
  *   • Escape and outside-click do NOT dismiss by default
  *   • Resolution is via <AlertDialogAction> or <AlertDialogCancel>
  *   • No `showCloseButton` / `preventCloseOn*` props — by design
@@ -69,9 +69,9 @@ export function AlertDialogOverlay({
 
 /* ── Content ── */
 
-type RadixContentProps = React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>;
+type PrimitiveContentProps = React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>;
 
-export interface AlertDialogContentProps extends RadixContentProps {
+export interface AlertDialogContentProps extends PrimitiveContentProps {
   /** Max-width variant. Defaults to `"md"`. */
   size?: AlertDialogSize;
   /** Enter/exit animation preset. Defaults to `"scale"`. */

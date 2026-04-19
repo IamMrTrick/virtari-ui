@@ -119,6 +119,12 @@ interface DataTableToolbarProps extends HTMLAttributes<HTMLDivElement> {
 }
 declare const DataTableToolbar: react.ForwardRefExoticComponent<DataTableToolbarProps & react.RefAttributes<HTMLDivElement>>;
 interface DataTableScrollAreaProps extends HTMLAttributes<HTMLDivElement> {
+    /**
+     * Enable click-and-drag panning of the scroll area (like Google Sheets /
+     * Figma canvas). Buttons/links/inputs/resize-handles remain clickable.
+     * Default: `true`.
+     */
+    scrollDrag?: boolean;
 }
 declare const DataTableScrollArea: react.ForwardRefExoticComponent<DataTableScrollAreaProps & react.RefAttributes<HTMLDivElement>>;
 interface DataTableTableProps extends TableHTMLAttributes<HTMLTableElement> {

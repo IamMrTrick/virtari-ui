@@ -47,6 +47,9 @@
 @import "../../../../packages/react-header/dist/Header.css";
 @import "../../../../packages/react-nav/dist/Nav.css";
 @import "../../../../packages/react-sidebar/dist/Sidebar.css";
+@import "@virtari/react-flag/styles";
+@import "@virtari/react-phone-input/styles";
+@import "@virtari/react-language-picker/styles";
 
 /* Docs app styles */
 @import "./docs.css";

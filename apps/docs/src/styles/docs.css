@@ -83,6 +83,9 @@ body {
   font-weight: var(--vds-font-weight-semibold);
   line-height: var(--vds-leading-tight);
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .docs-header-description {
@@ -122,6 +125,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   inline-size: 2.25rem;
   block-size: 2.25rem;
   border: 1px solid var(--vds-color-border-muted);
@@ -142,6 +146,21 @@ body {
 .docs-settings-trigger:focus-visible {
   outline: 2px solid var(--vds-color-primary, currentColor);
   outline-offset: 2px;
+}
+
+/* Keep the end section (settings gear) pinned — never let a long title squeeze it. */
+.docs-header .vds-header__section[data-side="end"] {
+  flex-shrink: 0;
+}
+
+/* Let the start column shrink below its intrinsic content size so the title/description
+   ellipsis can actually kick in — default `auto` grid tracks grow to fit content and would
+   push the end section (settings gear) out from under the viewport. */
+.docs-header .vds-header__row-inner {
+  grid-template-columns: minmax(0, auto) 1fr auto;
+}
+.docs-header .vds-header__section[data-side="start"] {
+  min-inline-size: 0;
 }
 
 .docs-content {
@@ -563,7 +582,13 @@ body {
   }
 
   .docs-content {
-    padding: var(--vds-space-4);
+    padding: var(--vds-space-3);
+    gap: var(--vds-space-6);
+  }
+
+  /* Shrink the header's built-in gutter to match the tighter mobile content padding. */
+  .docs-header .vds-header__row {
+    --row-padding-inline: var(--vds-space-3);
   }
 }
 

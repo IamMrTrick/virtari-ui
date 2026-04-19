@@ -1,0 +1,39 @@
+@layer components {
+  .vds-checkbox-field {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--checkbox-field-gap);
+    cursor: pointer;
+    color: var(--checkbox-field-label-color);
+    font-family: inherit;
+    line-height: 1.4;
+  }
+
+  .vds-checkbox-field[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .vds-checkbox-field > .vds-checkbox {
+    margin-block-start: var(--checkbox-field-align-block-start);
+  }
+
+  .vds-checkbox-field-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--checkbox-field-label-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-checkbox-field-label {
+    font-size: var(--checkbox-field-font-size);
+    font-weight: var(--checkbox-field-label-font-weight);
+    color: var(--checkbox-field-label-color);
+  }
+
+  .vds-checkbox-field-description {
+    font-size: var(--checkbox-field-description-font-size);
+    font-weight: var(--vds-font-weight-normal, 400);
+    color: var(--checkbox-field-description-color);
+  }
+}

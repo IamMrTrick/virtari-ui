@@ -2,15 +2,13 @@ import { cn } from "@virtari/utils";
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
-  type PointerEvent as ReactPointerEvent,
   type ReactNode,
   type Ref,
-  type WheelEvent as ReactWheelEvent,
 } from "react";
+import { ScrollWheel } from "./Wheel";
 import { useTimeField, useDateSegment } from "@react-aria/datepicker";
 import {
   useTimeFieldState,
@@ -22,7 +20,7 @@ import { useLocale } from "@react-aria/i18n";
 import { Time } from "@internationalized/date";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import type { DatePickerAppearance, DatePickerSize } from "./context";
-import { StaticFieldSegments } from "./DateField";
+import { StaticFieldSegments, padTimeSegmentText } from "./DateField";
 import {
   MobilePickerSurface,
   type MobilePickerPresentation,
@@ -61,6 +59,18 @@ export interface TimeFieldProps {
   showPicker?: boolean;
   showMilliseconds?: boolean;
   millisecondStep?: number;
+  /**
+   * Seeded time when the picker opens with no current value.
+   * Defaults to the user's current local time (see `nowAsTime()`).
+   */
+  defaultTimeValue?: TimeValue;
+  /**
+   * When provided, intercepts field/trigger clicks and replaces the
+   * default "open internal picker" behavior. The internal popover + mobile
+   * surface are suppressed — parent owns picker presentation.
+   * Used by DatePicker mobile step 1 to route to its time step.
+   */
+  onTriggerClick?: () => void;
   overlayMode?: PickerOverlayMode;
   mobilePresentation?: MobilePickerPresentation;
   mobileSizeMode?: MobilePickerSizeMode;
@@ -89,6 +99,8 @@ export function TimeField({
   showPicker = true,
   showMilliseconds,
   millisecondStep = 10,
+  defaultTimeValue,
+  onTriggerClick,
   overlayMode = "auto",
   mobilePresentation = "drawer",
   mobileSizeMode = "content",
@@ -116,22 +128,26 @@ export function TimeField({
   );
 
   const isInvalid = invalid ?? state.isInvalid;
+  const delegatedToParent = !!onTriggerClick;
   const canOpenPicker = showPicker && !props.isDisabled && !props.isReadOnly;
-  const usesSurfaceField = showPicker && useSheetSurface;
+  const usesSurfaceField = showPicker && (useSheetSurface || delegatedToParent);
   const pickerTitle = label ?? "Set time";
   const resolvedGranularity = props.granularity ?? "minute";
   const closePicker = () => setPickerOpen(false);
-  const [surfaceDraftTime, setSurfaceDraftTime] = useState<TimeValue>(
-    () => ((state.timeValue ?? new Time()).copy() as TimeValue),
+  const seedTime = useCallback(
+    () => ((state.timeValue ?? defaultTimeValue ?? nowAsTime(resolvedGranularity)).copy() as TimeValue),
+    [state.timeValue, defaultTimeValue, resolvedGranularity],
   );
+  const [surfaceDraftTime, setSurfaceDraftTime] = useState<TimeValue>(seedTime);
 
   useEffect(() => {
     if (!pickerOpen) {
       return;
     }
-    setSurfaceDraftTime((state.timeValue ?? new Time()).copy() as TimeValue);
+    setSurfaceDraftTime(seedTime());
   }, [
     pickerOpen,
+    seedTime,
     state.timeValue?.hour,
     state.timeValue?.minute,
     state.timeValue?.second,
@@ -153,6 +169,13 @@ export function TimeField({
     />
   );
 
+  const openOrDelegate = () => {
+    if (delegatedToParent) {
+      onTriggerClick?.();
+    } else {
+      setPickerOpen(true);
+    }
+  };
   const fieldGroup = (
     <div
       {...fieldProps}
@@ -166,7 +189,7 @@ export function TimeField({
         }
 
         if (usesSurfaceField || event.target === event.currentTarget) {
-          setPickerOpen(true);
+          openOrDelegate();
         }
       }}
     >
@@ -185,11 +208,11 @@ export function TimeField({
           className="vds-time-field-picker-trigger"
           aria-label="Open time picker"
           aria-haspopup="dialog"
-          aria-expanded={pickerOpen}
+          aria-expanded={delegatedToParent ? undefined : pickerOpen}
           disabled={!canOpenPicker}
           onClick={(event) => {
             event.stopPropagation();
-            setPickerOpen(true);
+            openOrDelegate();
           }}
         >
           <ClockIcon />
@@ -215,7 +238,7 @@ export function TimeField({
         </span>
       ) : null}
 
-      {showPicker && usePopoverSurface ? (
+      {showPicker && !delegatedToParent && usePopoverSurface ? (
         <PopoverPrimitive.Root open={pickerOpen} onOpenChange={setPickerOpen}>
           <PopoverPrimitive.Anchor asChild>{fieldGroup}</PopoverPrimitive.Anchor>
           <PopoverPrimitive.Portal>
@@ -232,6 +255,7 @@ export function TimeField({
                 granularity={resolvedGranularity}
                 showMilliseconds={showMilliseconds}
                 millisecondStep={millisecondStep}
+                defaultTimeValue={defaultTimeValue}
                 onClose={closePicker}
               />
             </PopoverPrimitive.Content>
@@ -241,7 +265,7 @@ export function TimeField({
         fieldGroup
       )}
 
-      {showPicker && useSheetSurface ? (
+      {showPicker && !delegatedToParent && useSheetSurface ? (
         <MobilePickerSurface
           open={pickerOpen}
           onOpenChange={setPickerOpen}
@@ -292,7 +316,7 @@ function TimeSegment({ segment, state }: TimeSegmentProps) {
       data-type={segment.type}
       data-placeholder={segment.isPlaceholder ? "true" : undefined}
     >
-      {segment.text}
+      {padTimeSegmentText(segment)}
     </div>
   );
 }
@@ -303,6 +327,7 @@ interface TimePickerPanelProps {
   granularity: "hour" | "minute" | "second";
   showMilliseconds?: boolean;
   millisecondStep: number;
+  defaultTimeValue?: TimeValue;
   onClose: () => void;
 }
 
@@ -312,13 +337,14 @@ function TimePickerPanel({
   granularity,
   showMilliseconds,
   millisecondStep,
+  defaultTimeValue,
   onClose,
 }: TimePickerPanelProps) {
-  const sourceTime = state.timeValue ?? new Time();
-  const [draftTime, setDraftTime] = useState<TimeValue>(() => sourceTime.copy());
+  const sourceTime = state.timeValue ?? defaultTimeValue ?? nowAsTime(granularity);
+  const [draftTime, setDraftTime] = useState<TimeValue>(() => sourceTime.copy() as TimeValue);
 
   useEffect(() => {
-    setDraftTime(sourceTime.copy());
+    setDraftTime(sourceTime.copy() as TimeValue);
   }, [sourceTime.hour, sourceTime.minute, sourceTime.second, sourceTime.millisecond]);
 
   const commit = () => {
@@ -375,7 +401,7 @@ export function TimePickerEditor({
 
   return (
     <div className="vds-time-picker-wheels" role="group" aria-label="Time picker">
-      <TimeWheel
+      <ScrollWheel
         label="Hour"
         values={hours}
         value={selectedHour}
@@ -391,7 +417,7 @@ export function TimePickerEditor({
       {showMinute ? (
         <>
           <TimeColon />
-          <TimeWheel
+          <ScrollWheel
             label="Minute"
             values={minutes}
             value={value.minute}
@@ -403,7 +429,7 @@ export function TimePickerEditor({
       {showSecond ? (
         <>
           <TimeColon />
-          <TimeWheel
+          <ScrollWheel
             label="Second"
             values={seconds}
             value={value.second}
@@ -415,8 +441,8 @@ export function TimePickerEditor({
       {showMilliseconds ? (
         <>
           <TimeColon variant="dot" />
-          <TimeWheel
-            label="Millisecond"
+          <ScrollWheel
+            label="MS"
             values={milliseconds}
             value={nearestValue(milliseconds, value.millisecond)}
             formatValue={(nextValue) => String(nextValue).padStart(3, "0")}
@@ -425,7 +451,7 @@ export function TimePickerEditor({
         </>
       ) : null}
       {showPeriod ? (
-        <TimeWheel
+        <ScrollWheel
           label="AM/PM"
           values={[0, 1]}
           value={selectedPeriod}
@@ -444,326 +470,10 @@ export function TimePickerEditor({
   );
 }
 
-interface TimeWheelProps {
-  label: string;
-  values: number[];
-  value: number;
-  formatValue: (value: number) => string;
-  onChange: (value: number) => void;
-  variant?: "number" | "period";
-}
-
 function TimeColon({ variant = "colon" }: { variant?: "colon" | "dot" }) {
   return (
     <div className="vds-time-picker-colon" data-variant={variant} aria-hidden="true">
       {variant === "dot" ? "." : ":"}
-    </div>
-  );
-}
-
-function TimeWheel({
-  label,
-  values,
-  value,
-  formatValue,
-  onChange,
-  variant = "number",
-}: TimeWheelProps) {
-  const wheelRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef(new Map<number, HTMLButtonElement>());
-  const scrollTimerRef = useRef<number | null>(null);
-  const valueRef = useRef(value);
-  const onChangeRef = useRef(onChange);
-  const [activeValue, setActiveValue] = useState(value);
-  const [dragging, setDragging] = useState(false);
-  const dragStateRef = useRef({
-    active: false,
-    pointerId: -1,
-    pointerType: "",
-    startY: 0,
-    lastY: 0,
-    startScrollTop: 0,
-    moved: false,
-    velocity: 0,
-    velocityTime: 0,
-  });
-  const centeredOnceRef = useRef(false);
-
-  const centerValue = useCallback(
-    (nextValue: number, behavior: ScrollBehavior) => {
-      const wheel = wheelRef.current;
-      const item = itemRefs.current.get(nextValue);
-      if (!wheel || !item) {
-        return;
-      }
-      const targetTop = item.offsetTop - (wheel.clientHeight - item.offsetHeight) / 2;
-      wheel.scrollTo({ top: targetTop, behavior });
-    },
-    [],
-  );
-
-  const getNearestValue = useCallback((): number => {
-    const wheel = wheelRef.current;
-    if (!wheel) {
-      return valueRef.current;
-    }
-    const center = wheel.scrollTop + wheel.clientHeight / 2;
-    let nearest = valueRef.current;
-    let nearestDistance = Number.POSITIVE_INFINITY;
-    for (const itemValue of values) {
-      const item = itemRefs.current.get(itemValue);
-      if (!item) continue;
-      const itemCenter = item.offsetTop + item.offsetHeight / 2;
-      const distance = Math.abs(itemCenter - center);
-      if (distance < nearestDistance) {
-        nearest = itemValue;
-        nearestDistance = distance;
-      }
-    }
-    return nearest;
-  }, [values]);
-
-  const commitNearest = useCallback(
-    (behavior: ScrollBehavior = "smooth") => {
-      const nearest = getNearestValue();
-      if (nearest !== valueRef.current) {
-        onChangeRef.current(nearest);
-      }
-      centerValue(nearest, behavior);
-    },
-    [centerValue, getNearestValue],
-  );
-
-  const scheduleSnap = useCallback(
-    (delay = 90, behavior: ScrollBehavior = "smooth") => {
-      if (scrollTimerRef.current !== null) {
-        window.clearTimeout(scrollTimerRef.current);
-      }
-      scrollTimerRef.current = window.setTimeout(() => {
-        commitNearest(behavior);
-      }, delay);
-    },
-    [commitNearest],
-  );
-
-  const stepValue = useCallback(
-    (delta: number) => {
-      if (!delta || values.length === 0) return;
-      const currentIndex = values.indexOf(valueRef.current);
-      const nearestIndex = values.indexOf(getNearestValue());
-      const baseIndex = currentIndex >= 0 ? currentIndex : Math.max(nearestIndex, 0);
-      const nextIndex = clamp(baseIndex + delta, 0, values.length - 1);
-      const nextValue = values[nextIndex];
-      if (nextValue === undefined) return;
-      if (nextValue !== valueRef.current) {
-        onChangeRef.current(nextValue);
-      }
-      setActiveValue(nextValue);
-      centerValue(nextValue, "smooth");
-    },
-    [centerValue, getNearestValue, values],
-  );
-
-  useEffect(() => {
-    valueRef.current = value;
-    onChangeRef.current = onChange;
-    setActiveValue(value);
-  }, [value, onChange]);
-
-  useLayoutEffect(() => {
-    if (!wheelRef.current) return;
-    if (!centeredOnceRef.current) {
-      centerValue(value, "auto");
-      centeredOnceRef.current = true;
-      return;
-    }
-    if (!dragging) {
-      centerValue(value, "auto");
-    }
-  }, [centerValue, dragging, value]);
-
-  useEffect(() => {
-    return () => {
-      if (scrollTimerRef.current !== null) {
-        window.clearTimeout(scrollTimerRef.current);
-      }
-    };
-  }, []);
-
-  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const wheel = wheelRef.current;
-    if (!wheel) return;
-    // Let primary-button mouse and pen drag; touch uses native scrolling.
-    if (event.pointerType === "touch") return;
-    if (event.pointerType === "mouse" && event.button !== 0) return;
-
-    dragStateRef.current = {
-      active: true,
-      pointerId: event.pointerId,
-      pointerType: event.pointerType,
-      startY: event.clientY,
-      lastY: event.clientY,
-      startScrollTop: wheel.scrollTop,
-      moved: false,
-      velocity: 0,
-      velocityTime: performance.now(),
-    };
-    setDragging(true);
-    try {
-      wheel.setPointerCapture(event.pointerId);
-    } catch {
-      /* noop */
-    }
-  };
-
-  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const wheel = wheelRef.current;
-    const dragState = dragStateRef.current;
-    if (!wheel || !dragState.active || dragState.pointerId !== event.pointerId) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    const now = performance.now();
-    const delta = event.clientY - dragState.startY;
-    if (Math.abs(delta) > 3) {
-      dragState.moved = true;
-    }
-    const dt = Math.max(1, now - dragState.velocityTime);
-    dragState.velocity = (event.clientY - dragState.lastY) / dt;
-    dragState.lastY = event.clientY;
-    dragState.velocityTime = now;
-
-    wheel.scrollTop = dragState.startScrollTop - delta;
-  };
-
-  const handlePointerRelease = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const wheel = wheelRef.current;
-    const dragState = dragStateRef.current;
-    if (!wheel || !dragState.active || dragState.pointerId !== event.pointerId) return;
-
-    try {
-      wheel.releasePointerCapture(event.pointerId);
-    } catch {
-      /* noop */
-    }
-    dragState.active = false;
-    setDragging(false);
-
-    // Apply a small momentum flick based on recent velocity.
-    const flick = Math.max(-6, Math.min(6, Math.round(dragState.velocity * -60)));
-    if (flick !== 0) {
-      stepValue(flick);
-    } else {
-      scheduleSnap();
-    }
-  };
-
-  const handleWheel = (event: ReactWheelEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    event.preventDefault();
-
-    const multiplier =
-      event.deltaMode === 1
-        ? 16
-        : event.deltaMode === 2
-          ? event.currentTarget.clientHeight
-          : 1;
-    const threshold = 24;
-    const raw = event.deltaY * multiplier;
-    const steps = Math.trunc(raw / threshold) || (raw === 0 ? 0 : raw > 0 ? 1 : -1);
-    if (steps !== 0) {
-      stepValue(steps);
-    }
-  };
-
-  return (
-    <div className="vds-time-wheel" data-variant={variant}>
-      <div className="vds-time-wheel-header" aria-hidden="true">
-        {label}
-      </div>
-      <div
-        ref={wheelRef}
-        className="vds-time-wheel-track"
-        role="listbox"
-        aria-label={label}
-        data-dragging={dragging ? "true" : undefined}
-        data-vds-drawer-no-drag=""
-        onWheelCapture={handleWheel}
-        onScroll={() => {
-          setActiveValue(getNearestValue());
-          if (!dragStateRef.current.active) {
-            scheduleSnap(120);
-          }
-        }}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerRelease}
-        onPointerCancel={handlePointerRelease}
-        onLostPointerCapture={() => {
-          dragStateRef.current.active = false;
-          setDragging(false);
-        }}
-      >
-        {values.map((itemValue) => {
-          const selected = itemValue === activeValue;
-          return (
-            <button
-              key={itemValue}
-              ref={(node) => {
-                if (node) {
-                  itemRefs.current.set(itemValue, node);
-                } else {
-                  itemRefs.current.delete(itemValue);
-                }
-              }}
-              type="button"
-              className="vds-time-wheel-item"
-              role="option"
-              data-value={itemValue}
-              data-selected={selected ? "true" : undefined}
-              aria-selected={selected}
-              aria-label={`${label} ${formatValue(itemValue)}`}
-              tabIndex={selected ? 0 : -1}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowDown") {
-                  event.preventDefault();
-                  stepValue(1);
-                } else if (event.key === "ArrowUp") {
-                  event.preventDefault();
-                  stepValue(-1);
-                } else if (event.key === "Home") {
-                  event.preventDefault();
-                  const first = values[0];
-                  if (first !== undefined) {
-                    setActiveValue(first);
-                    onChangeRef.current(first);
-                    centerValue(first, "smooth");
-                  }
-                } else if (event.key === "End") {
-                  event.preventDefault();
-                  const last = values[values.length - 1];
-                  if (last !== undefined) {
-                    setActiveValue(last);
-                    onChangeRef.current(last);
-                    centerValue(last, "smooth");
-                  }
-                }
-              }}
-              onClick={() => {
-                if (dragStateRef.current.moved) {
-                  dragStateRef.current.moved = false;
-                  return;
-                }
-                setActiveValue(itemValue);
-                onChange(itemValue);
-              }}
-            >
-              {formatValue(itemValue)}
-            </button>
-          );
-        })}
-      </div>
     </div>
   );
 }
@@ -830,6 +540,16 @@ export function formatTimeValue(
   }
 
   return formatted;
+}
+
+export function nowAsTime(
+  granularity: "hour" | "minute" | "second" = "minute",
+): TimeValue {
+  const now = new Date();
+  const hour = now.getHours();
+  const minute = granularity === "hour" ? 0 : now.getMinutes();
+  const second = granularity === "second" ? now.getSeconds() : 0;
+  return new Time(hour, minute, second) as TimeValue;
 }
 
 function to12Hour(hour: number): number {

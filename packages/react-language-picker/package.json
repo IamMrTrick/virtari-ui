@@ -1,0 +1,48 @@
+{
+  "name": "@virtari/react-language-picker",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles": "./dist/LanguagePicker.css",
+    "./tokens": "./dist/LanguagePicker.tokens.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "codegen": "node scripts/build-languages.mjs",
+    "build": "pnpm codegen && tsup && postcss src/LanguagePicker.tokens.css -o dist/LanguagePicker.tokens.css && postcss src/LanguagePicker.css -o dist/LanguagePicker.css",
+    "clean": "rm -rf dist src/generated",
+    "typecheck": "pnpm codegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@virtari/react-flag": "workspace:*",
+    "@virtari/react-select": "workspace:*",
+    "@virtari/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@cospired/i18n-iso-languages": "^4.2.0",
+    "@types/react": "^19.2.14",
+    "iso-639-1": "^3.1.5",
+    "react": "^19.2.5",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  }
+}

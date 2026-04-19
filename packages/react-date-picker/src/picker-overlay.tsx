@@ -24,6 +24,7 @@ import {
 export type MobilePickerPresentation = "drawer" | "dialog";
 export type MobilePickerSizeMode = "content" | "full";
 export type PickerOverlayMode = "auto" | "popover" | "drawer" | "dialog";
+export type PickerDialogSize = "sm" | "md" | "lg";
 
 const MOBILE_BREAKPOINT = 42;
 
@@ -111,6 +112,9 @@ interface MobilePickerSurfaceProps {
   trailingAction?: ReactNode;
   presentation?: MobilePickerPresentation;
   sizeMode?: MobilePickerSizeMode;
+  /** Dialog size when `presentation === "dialog"` and `sizeMode !== "full"`.
+   * Controls how wide the desktop dialog renders. */
+  dialogSize?: PickerDialogSize;
   className?: string;
   bodyClassName?: string;
   footerClassName?: string;
@@ -127,6 +131,7 @@ export function MobilePickerSurface({
   trailingAction,
   presentation = "drawer",
   sizeMode = "content",
+  dialogSize = "sm",
   className,
   bodyClassName,
   footerClassName,
@@ -137,7 +142,7 @@ export function MobilePickerSurface({
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
-          size={sizeMode === "full" ? "full" : "lg"}
+          size={sizeMode === "full" ? "full" : dialogSize}
           responsive={sizeMode === "full"}
           backdrop="blur"
           className={cn("vds-picker-mobile-surface", "vds-picker-mobile-dialog", className)}

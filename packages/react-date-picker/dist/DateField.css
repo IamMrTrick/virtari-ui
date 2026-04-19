@@ -1583,6 +1583,861 @@
 }
 
 @layer design-system.components {
+  /* =========================================================================
+   * 1. Base component tokens (atomic radio)
+   *    Radio is circular, proportional to text — NOT on the height ramp.
+   *    sm (14px) pairs with small text, md (18px) with body, lg (22px) with headings.
+   *    Fallbacks keep the package usable without @virtari/tokens.
+   * ========================================================================= */
+  .vds-radio-item {
+    /* ── Geometry ── */
+    --radio-size: 1.125rem;
+    --radio-dot-size: 0.5rem;
+    --radio-border-width: 2px;
+
+    /* ── Motion ── */
+    --radio-transition-duration: var(--vds-duration-fast, 120ms);
+    --radio-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* ── Focus ── */
+    --radio-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
+    --radio-focus-ring-width: 2px;
+    --radio-focus-ring-offset: 2px;
+
+    /* ── Default palette (unchecked) ── */
+    --radio-bg: var(--vds-color-surface, #ffffff);
+    --radio-bg-hover: var(
+      --vds-color-primary-bg-subtle,
+      color-mix(in oklch, currentColor 8%, transparent)
+    );
+    --radio-border-color: var(--vds-color-border, #d1d5db);
+    --radio-border-color-hover: var(
+      --vds-color-primary-solid,
+      oklch(0.55 0.2 265)
+    );
+    --radio-dot-color: var(--vds-color-on-solid, #ffffff);
+
+    /* ── Checked palette ── */
+    --radio-bg-checked: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+    --radio-bg-checked-hover: var(
+      --vds-color-primary-solid-hover,
+      oklch(0.5 0.2 265)
+    );
+    --radio-border-color-checked: var(
+      --vds-color-primary-solid,
+      oklch(0.55 0.2 265)
+    );
+    --radio-border-color-checked-hover: var(
+      --vds-color-primary-solid-hover,
+      oklch(0.5 0.2 265)
+    );
+  }
+
+  /* =========================================================================
+   * 2. Sizes — redefine geometry tokens only.
+   * ========================================================================= */
+  .vds-radio-item[data-size="sm"] {
+    --radio-size: 0.875rem;
+    --radio-dot-size: 0.375rem;
+  }
+
+  /* md = defaults */
+
+  .vds-radio-item[data-size="lg"] {
+    --radio-size: 1.375rem;
+    --radio-dot-size: 0.625rem;
+  }
+
+  /* =========================================================================
+   * 3. Error palette — overrides unchecked + checked colors when [data-error]
+   *    is set. Focus ring swaps to danger.
+   * ========================================================================= */
+  .vds-radio-item[data-error] {
+    --radio-border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    --radio-border-color-hover: var(
+      --vds-color-danger-solid-hover,
+      oklch(0.5 0.195 25)
+    );
+    --radio-bg-hover: var(
+      --vds-color-danger-bg-subtle,
+      color-mix(in oklch, currentColor 8%, transparent)
+    );
+
+    --radio-bg-checked: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    --radio-bg-checked-hover: var(
+      --vds-color-danger-solid-hover,
+      oklch(0.5 0.195 25)
+    );
+    --radio-border-color-checked: var(
+      --vds-color-danger-solid,
+      oklch(0.555 0.2 25)
+    );
+    --radio-border-color-checked-hover: var(
+      --vds-color-danger-solid-hover,
+      oklch(0.5 0.195 25)
+    );
+
+    --radio-focus-ring-color: var(
+      --vds-color-danger-solid,
+      oklch(0.555 0.2 25)
+    );
+  }
+
+  /* =========================================================================
+   * 4. Field tokens — label row wrapping a single radio + text stack.
+   * ========================================================================= */
+  .vds-radio-field {
+    --radio-field-gap: var(--vds-space-2, 0.5rem);
+    --radio-field-label-gap: var(--vds-space-1, 0.25rem);
+    --radio-field-font-size: var(--vds-text-sm, 0.875rem);
+    --radio-field-label-color: var(--vds-color-text, #111827);
+    --radio-field-description-color: var(--vds-color-text-muted, #6b7280);
+    --radio-field-description-font-size: var(--vds-text-xs, 0.75rem);
+    --radio-field-label-font-weight: var(--vds-font-weight-medium, 500);
+    --radio-field-align-block-start: 0.125rem;
+  }
+
+  .vds-radio-field[data-error] {
+    --radio-field-label-color: var(--vds-color-danger-text, oklch(0.45 0.17 25));
+  }
+
+  /* =========================================================================
+   * 5. Group tokens — radiogroup wrapper with label / description / error.
+   * ========================================================================= */
+  .vds-radio-group {
+    --radio-group-gap: var(--vds-space-3, 0.75rem);
+    --radio-group-items-gap: var(--vds-space-3, 0.75rem);
+    --radio-group-label-font-size: var(--vds-text-sm, 0.875rem);
+    --radio-group-label-font-weight: var(--vds-font-weight-semibold, 600);
+    --radio-group-label-color: var(--vds-color-text, #111827);
+    --radio-group-description-font-size: var(--vds-text-xs, 0.75rem);
+    --radio-group-description-color: var(--vds-color-text-muted, #6b7280);
+    --radio-group-required-color: var(
+      --vds-color-danger-solid,
+      oklch(0.555 0.2 25)
+    );
+    --radio-group-error-color: var(--vds-color-danger-text, oklch(0.45 0.17 25));
+    --radio-group-error-font-size: var(--vds-text-xs, 0.75rem);
+    --radio-group-error-gap: var(--vds-space-1, 0.25rem);
+  }
+
+  /* =========================================================================
+   * 6. Card tokens — card-style selection (row + icon-grid layouts).
+   * ========================================================================= */
+  .vds-radio-card {
+    --radio-card-padding-block: var(--vds-space-3, 0.75rem);
+    --radio-card-padding-inline: var(--vds-space-3-5, 0.875rem);
+    --radio-card-gap: var(--vds-space-3, 0.75rem);
+    --radio-card-radius: var(--vds-radius-radio-card, 0.75rem);
+    --radio-card-border-width: 1.5px;
+    --radio-card-transition-duration: var(--vds-duration-fast, 120ms);
+    --radio-card-transition-easing: var(
+      --vds-ease-out,
+      cubic-bezier(0, 0, 0.2, 1)
+    );
+
+    /* Typography */
+    --radio-card-label-font-size: var(--vds-text-sm, 0.875rem);
+    --radio-card-label-font-weight: var(--vds-font-weight-semibold, 600);
+    --radio-card-label-color: var(--vds-color-text, #111827);
+    --radio-card-description-font-size: var(--vds-text-xs, 0.75rem);
+    --radio-card-description-color: var(--vds-color-text-muted, #6b7280);
+    --radio-card-trailing-color: var(--vds-color-text, #111827);
+    --radio-card-trailing-font-size: var(--vds-text-sm, 0.875rem);
+
+    /* Default palette */
+    --radio-card-bg: var(--vds-color-surface, #ffffff);
+    --radio-card-border-color: var(--vds-color-border, #d1d5db);
+
+    /* Hover */
+    --radio-card-bg-hover: var(
+      --vds-color-primary-bg-subtle,
+      color-mix(in oklch, currentColor 4%, transparent)
+    );
+    --radio-card-border-color-hover: var(
+      --vds-color-primary-solid,
+      oklch(0.55 0.2 265)
+    );
+
+    /* Checked (selected) — subtle primary wash + solid border */
+    --radio-card-bg-checked: var(
+      --vds-color-primary-bg-subtle,
+      color-mix(in oklch, currentColor 8%, transparent)
+    );
+    --radio-card-border-color-checked: var(
+      --vds-color-primary-solid,
+      oklch(0.55 0.2 265)
+    );
+
+    /* Badge */
+    --radio-card-badge-font-size: var(--vds-text-xs, 0.75rem);
+    --radio-card-badge-font-weight: var(--vds-font-weight-medium, 500);
+    --radio-card-badge-color: var(--vds-color-primary-text, oklch(0.45 0.17 265));
+
+    /* Focus ring (focus-within on outer card) */
+    --radio-card-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
+    --radio-card-focus-ring-width: 2px;
+    --radio-card-focus-ring-offset: 2px;
+
+    /* Icon container (for icon-grid layout) */
+    --radio-card-icon-size: 2.5rem;
+    --radio-card-icon-radius: var(--vds-radius-md, 0.5rem);
+    --radio-card-icon-bg: var(
+      --vds-color-primary-bg-subtle,
+      color-mix(in oklch, currentColor 8%, transparent)
+    );
+    --radio-card-icon-color: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+    --radio-card-icon-glyph-size: 1.25rem;
+  }
+
+  .vds-radio-card[data-error] {
+    --radio-card-border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    --radio-card-border-color-hover: var(
+      --vds-color-danger-solid-hover,
+      oklch(0.5 0.195 25)
+    );
+    --radio-card-bg-hover: var(
+      --vds-color-danger-bg-subtle,
+      color-mix(in oklch, currentColor 4%, transparent)
+    );
+    --radio-card-border-color-checked: var(
+      --vds-color-danger-solid,
+      oklch(0.555 0.2 25)
+    );
+    --radio-card-bg-checked: var(
+      --vds-color-danger-bg-subtle,
+      color-mix(in oklch, currentColor 8%, transparent)
+    );
+    --radio-card-focus-ring-color: var(
+      --vds-color-danger-solid,
+      oklch(0.555 0.2 25)
+    );
+    --radio-card-icon-bg: var(
+      --vds-color-danger-bg-subtle,
+      color-mix(in oklch, currentColor 8%, transparent)
+    );
+    --radio-card-icon-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  /* =========================================================================
+   * 7. Segmented radio tokens — connected button row (toolbar-style).
+   * ========================================================================= */
+  .vds-segmented-radio {
+    --segmented-track-bg: var(--vds-color-bg-muted, oklch(0.96 0 0));
+    --segmented-track-border-color: var(--vds-color-border, #d1d5db);
+    --segmented-track-border-width: 1px;
+    --segmented-radius: var(--vds-radius-segmented, 0.5rem);
+    --segmented-padding: 0.125rem;
+
+    --segmented-item-height: var(--vds-size-md, 2.25rem);
+    --segmented-item-padding-inline: var(--vds-space-3, 0.75rem);
+    --segmented-item-font-size: var(--vds-text-sm, 0.875rem);
+    --segmented-item-font-weight: var(--vds-font-weight-medium, 500);
+    --segmented-item-color: var(--vds-color-text-muted, #6b7280);
+    --segmented-item-color-hover: var(--vds-color-text, #111827);
+
+    --segmented-item-checked-bg: var(--vds-color-surface, #ffffff);
+    --segmented-item-checked-color: var(--vds-color-text, #111827);
+    --segmented-item-checked-shadow:
+      0 1px 2px 0 color-mix(in oklch, currentColor 10%, transparent);
+
+    --segmented-transition-duration: var(--vds-duration-fast, 120ms);
+    --segmented-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    --segmented-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
+    --segmented-focus-ring-width: 2px;
+    --segmented-focus-ring-offset: 2px;
+  }
+
+  .vds-segmented-radio[data-size="sm"] {
+    --segmented-item-height: var(--vds-size-sm, 2rem);
+    --segmented-item-padding-inline: var(--vds-space-2-5, 0.625rem);
+    --segmented-item-font-size: var(--vds-text-xs, 0.75rem);
+  }
+
+  .vds-segmented-radio[data-size="lg"] {
+    --segmented-item-height: var(--vds-size-lg, 2.5rem);
+    --segmented-item-padding-inline: var(--vds-space-4, 1rem);
+    --segmented-item-font-size: var(--vds-text-sm, 0.875rem);
+  }
+
+  /* =========================================================================
+   * 8. Pill radio tokens — chip-shaped selectable tags.
+   * ========================================================================= */
+  .vds-pill-radio {
+    --pill-radio-gap: var(--vds-space-2, 0.5rem);
+
+    --pill-radio-item-height: var(--vds-size-sm, 2rem);
+    --pill-radio-item-padding-inline: var(--vds-space-3-5, 0.875rem);
+    --pill-radio-item-font-size: var(--vds-text-sm, 0.875rem);
+    --pill-radio-item-font-weight: var(--vds-font-weight-medium, 500);
+    --pill-radio-item-radius: var(--vds-radius-pill-radio, 9999px);
+    --pill-radio-item-border-width: 1.5px;
+
+    /* Default palette */
+    --pill-radio-item-bg: var(--vds-color-surface, #ffffff);
+    --pill-radio-item-border-color: var(--vds-color-border, #d1d5db);
+    --pill-radio-item-color: var(--vds-color-text, #111827);
+
+    /* Hover */
+    --pill-radio-item-bg-hover: var(
+      --vds-color-primary-bg-subtle,
+      color-mix(in oklch, currentColor 4%, transparent)
+    );
+    --pill-radio-item-border-color-hover: var(
+      --vds-color-primary-solid,
+      oklch(0.55 0.2 265)
+    );
+
+    /* Checked */
+    --pill-radio-item-bg-checked: var(
+      --vds-color-primary-bg-subtle,
+      color-mix(in oklch, currentColor 8%, transparent)
+    );
+    --pill-radio-item-border-color-checked: var(
+      --vds-color-primary-solid,
+      oklch(0.55 0.2 265)
+    );
+    --pill-radio-item-color-checked: var(
+      --vds-color-primary-text,
+      oklch(0.45 0.17 265)
+    );
+
+    --pill-radio-transition-duration: var(--vds-duration-fast, 120ms);
+    --pill-radio-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    --pill-radio-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
+    --pill-radio-focus-ring-width: 2px;
+    --pill-radio-focus-ring-offset: 2px;
+  }
+
+  .vds-pill-radio[data-size="sm"] {
+    --pill-radio-item-height: var(--vds-size-xs, 1.75rem);
+    --pill-radio-item-padding-inline: var(--vds-space-3, 0.75rem);
+    --pill-radio-item-font-size: var(--vds-text-xs, 0.75rem);
+  }
+
+  .vds-pill-radio[data-size="lg"] {
+    --pill-radio-item-height: var(--vds-size-md, 2.25rem);
+    --pill-radio-item-padding-inline: var(--vds-space-4, 1rem);
+    --pill-radio-item-font-size: var(--vds-text-sm, 0.875rem);
+  }
+}
+
+@layer components {
+  .vds-radio-field {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--radio-field-gap);
+    cursor: pointer;
+    min-inline-size: 0;
+  }
+
+  .vds-radio-field[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .vds-radio-field > .vds-radio-item {
+    margin-block-start: var(--radio-field-align-block-start);
+    flex-shrink: 0;
+  }
+
+  .vds-radio-field-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radio-field-label-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-radio-field-label {
+    font-size: var(--radio-field-font-size);
+    font-weight: var(--radio-field-label-font-weight);
+    color: var(--radio-field-label-color);
+    line-height: 1.4;
+  }
+
+  .vds-radio-field-description {
+    font-size: var(--radio-field-description-font-size);
+    color: var(--radio-field-description-color);
+    font-weight: var(--vds-font-weight-normal, 400);
+    line-height: 1.5;
+  }
+}
+
+@layer components {
+  .vds-radio-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--radio-card-gap);
+    padding: var(--radio-card-padding-block) var(--radio-card-padding-inline);
+    border: var(--radio-card-border-width) solid var(--radio-card-border-color);
+    border-radius: var(--radio-card-radius);
+    background-color: var(--radio-card-bg);
+    color: var(--radio-card-label-color);
+    cursor: pointer;
+    transition:
+      background-color var(--radio-card-transition-duration)
+        var(--radio-card-transition-easing),
+      border-color var(--radio-card-transition-duration)
+        var(--radio-card-transition-easing),
+      box-shadow var(--radio-card-transition-duration)
+        var(--radio-card-transition-easing);
+    isolation: isolate;
+  }
+
+  /* ── Hover ── */
+  .vds-radio-card:hover:not([data-disabled]) {
+    background-color: var(--radio-card-bg-hover);
+    border-color: var(--radio-card-border-color-hover);
+  }
+
+  /* ── Focus-within (inner radio owns keyboard focus) ── */
+  .vds-radio-card:focus-within {
+    outline: var(--radio-card-focus-ring-width) solid
+      var(--radio-card-focus-ring-color);
+    outline-offset: var(--radio-card-focus-ring-offset);
+    border-color: var(--radio-card-border-color-hover);
+  }
+
+  /* ── Selected (derived from inner radio :has()) ── */
+  .vds-radio-card:has(.vds-radio-card-input[data-state="checked"]) {
+    background-color: var(--radio-card-bg-checked);
+    border-color: var(--radio-card-border-color-checked);
+  }
+
+  /* ── Disabled ── */
+  .vds-radio-card[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  /* ── Body / text layout ── */
+  .vds-radio-card-body {
+    display: flex;
+    flex: 1;
+    min-inline-size: 0;
+    gap: var(--radio-card-gap);
+    align-items: flex-start;
+  }
+
+  .vds-radio-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+    min-inline-size: 0;
+    flex: 1;
+  }
+
+  .vds-radio-card-label-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--vds-space-3, 0.75rem);
+    min-inline-size: 0;
+  }
+
+  .vds-radio-card-label {
+    font-size: var(--radio-card-label-font-size);
+    font-weight: var(--radio-card-label-font-weight);
+    color: var(--radio-card-label-color);
+    line-height: 1.4;
+    min-inline-size: 0;
+  }
+
+  .vds-radio-card-description {
+    font-size: var(--radio-card-description-font-size);
+    color: var(--radio-card-description-color);
+    font-weight: var(--vds-font-weight-normal, 400);
+    line-height: 1.5;
+  }
+
+  .vds-radio-card-trailing {
+    flex-shrink: 0;
+    font-size: var(--radio-card-trailing-font-size);
+    font-weight: var(--radio-card-label-font-weight);
+    color: var(--radio-card-trailing-color);
+    white-space: nowrap;
+  }
+
+  .vds-radio-card-badge {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-size: var(--radio-card-badge-font-size);
+    font-weight: var(--radio-card-badge-font-weight);
+    color: var(--radio-card-badge-color);
+    margin-block-start: var(--vds-space-0-5, 0.125rem);
+  }
+
+  /* =========================================================================
+   * Row layout (default) — [radio][content + trailing]
+   * ========================================================================= */
+  .vds-radio-card[data-layout="row"] {
+    flex-direction: row;
+  }
+
+  .vds-radio-card[data-layout="row"] > .vds-radio-card-input {
+    margin-block-start: 0.125rem;
+  }
+
+  /* =========================================================================
+   * Icon-grid layout — icon centered on top, text below, radio in corner.
+   * ========================================================================= */
+  .vds-radio-card[data-layout="icon-grid"] {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--vds-space-2, 0.5rem);
+    padding-block: var(--vds-space-4, 1rem);
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] > .vds-radio-card-input {
+    position: absolute;
+    inset-block-start: var(--vds-space-2-5, 0.625rem);
+    inset-inline-end: var(--vds-space-2-5, 0.625rem);
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] .vds-radio-card-body {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] .vds-radio-card-text {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] .vds-radio-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--radio-card-icon-size);
+    block-size: var(--radio-card-icon-size);
+    border-radius: var(--radio-card-icon-radius);
+    background-color: var(--radio-card-icon-bg);
+    color: var(--radio-card-icon-color);
+    flex-shrink: 0;
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] .vds-radio-card-icon svg {
+    inline-size: var(--radio-card-icon-glyph-size);
+    block-size: var(--radio-card-icon-glyph-size);
+  }
+}
+
+@layer components {
+  .vds-segmented-radio {
+    display: inline-flex;
+    align-items: stretch;
+    padding: var(--segmented-padding);
+    background-color: var(--segmented-track-bg);
+    border: var(--segmented-track-border-width) solid
+      var(--segmented-track-border-color);
+    border-radius: var(--segmented-radius);
+    min-inline-size: 0;
+  }
+
+  .vds-segmented-radio[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vds-segmented-radio-item {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-2, 0.5rem);
+    min-inline-size: 0;
+    block-size: var(--segmented-item-height);
+    padding-inline: var(--segmented-item-padding-inline);
+    font-family: inherit;
+    font-size: var(--segmented-item-font-size);
+    font-weight: var(--segmented-item-font-weight);
+    color: var(--segmented-item-color);
+    background-color: transparent;
+    border: 0;
+    border-radius: calc(var(--segmented-radius) - var(--segmented-padding));
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color var(--segmented-transition-duration)
+        var(--segmented-transition-easing),
+      color var(--segmented-transition-duration)
+        var(--segmented-transition-easing),
+      box-shadow var(--segmented-transition-duration)
+        var(--segmented-transition-easing);
+    flex: 1;
+  }
+
+  /* ── Hover ── */
+  .vds-segmented-radio-item:hover:not(:disabled):not([data-state="checked"]) {
+    color: var(--segmented-item-color-hover);
+  }
+
+  /* ── Checked (selected) — elevated white tile over muted track ── */
+  .vds-segmented-radio-item[data-state="checked"] {
+    background-color: var(--segmented-item-checked-bg);
+    color: var(--segmented-item-checked-color);
+    box-shadow: var(--segmented-item-checked-shadow);
+  }
+
+  /* ── Focus ring ── */
+  .vds-segmented-radio-item:focus-visible {
+    outline: var(--segmented-focus-ring-width) solid
+      var(--segmented-focus-ring-color);
+    outline-offset: var(--segmented-focus-ring-offset);
+    z-index: 1;
+  }
+
+  /* ── Disabled ── */
+  .vds-segmented-radio-item:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* ── Error — entire segmented group shows danger state ── */
+  .vds-segmented-radio[data-error] {
+    border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  .vds-segmented-radio[data-error] .vds-segmented-radio-item:focus-visible {
+    outline-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+}
+
+@layer components {
+  .vds-pill-radio {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--pill-radio-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-pill-radio[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vds-pill-radio-item {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-1-5, 0.375rem);
+    block-size: var(--pill-radio-item-height);
+    padding-inline: var(--pill-radio-item-padding-inline);
+    font-family: inherit;
+    font-size: var(--pill-radio-item-font-size);
+    font-weight: var(--pill-radio-item-font-weight);
+    color: var(--pill-radio-item-color);
+    background-color: var(--pill-radio-item-bg);
+    border: var(--pill-radio-item-border-width) solid
+      var(--pill-radio-item-border-color);
+    border-radius: var(--pill-radio-item-radius);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color var(--pill-radio-transition-duration)
+        var(--pill-radio-transition-easing),
+      border-color var(--pill-radio-transition-duration)
+        var(--pill-radio-transition-easing),
+      color var(--pill-radio-transition-duration)
+        var(--pill-radio-transition-easing);
+  }
+
+  /* ── Hover ── */
+  .vds-pill-radio-item:hover:not(:disabled):not([data-state="checked"]) {
+    background-color: var(--pill-radio-item-bg-hover);
+    border-color: var(--pill-radio-item-border-color-hover);
+  }
+
+  /* ── Checked (selected) ── */
+  .vds-pill-radio-item[data-state="checked"] {
+    background-color: var(--pill-radio-item-bg-checked);
+    border-color: var(--pill-radio-item-border-color-checked);
+    color: var(--pill-radio-item-color-checked);
+  }
+
+  /* ── Focus ring ── */
+  .vds-pill-radio-item:focus-visible {
+    outline: var(--pill-radio-focus-ring-width) solid
+      var(--pill-radio-focus-ring-color);
+    outline-offset: var(--pill-radio-focus-ring-offset);
+  }
+
+  /* ── Disabled ── */
+  .vds-pill-radio-item:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* ── Error ── */
+  .vds-pill-radio[data-error] .vds-pill-radio-item {
+    border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  .vds-pill-radio[data-error] .vds-pill-radio-item:focus-visible {
+    outline-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+}
+
+@layer components {
+  /* =========================================================================
+   * Atomic radio — circular selector with inner dot.
+   * ========================================================================= */
+  .vds-radio-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    inline-size: var(--radio-size);
+    block-size: var(--radio-size);
+    padding: 0;
+    border: var(--radio-border-width) solid var(--radio-border-color);
+    border-radius: var(--vds-radius-full, 9999px);
+    background-color: var(--radio-bg);
+    color: var(--radio-dot-color);
+    cursor: pointer;
+    transition:
+      background-color var(--radio-transition-duration)
+        var(--radio-transition-easing),
+      border-color var(--radio-transition-duration)
+        var(--radio-transition-easing),
+      box-shadow var(--radio-transition-duration) var(--radio-transition-easing);
+  }
+
+  /* ── Hover (unchecked) ── */
+  .vds-radio-item:hover:not(:disabled):not([data-state="checked"]) {
+    border-color: var(--radio-border-color-hover);
+    background-color: var(--radio-bg-hover);
+  }
+
+  /* ── Checked ── */
+  .vds-radio-item[data-state="checked"] {
+    background-color: var(--radio-bg-checked);
+    border-color: var(--radio-border-color-checked);
+  }
+
+  .vds-radio-item[data-state="checked"]:hover:not(:disabled) {
+    background-color: var(--radio-bg-checked-hover);
+    border-color: var(--radio-border-color-checked-hover);
+  }
+
+  /* ── Focus ring ── */
+  .vds-radio-item:focus-visible {
+    outline: var(--radio-focus-ring-width) solid var(--radio-focus-ring-color);
+    outline-offset: var(--radio-focus-ring-offset);
+  }
+
+  /* ── Disabled ── */
+  .vds-radio-item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ── Indicator / inner dot ── */
+  .vds-radio-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .vds-radio-indicator::after {
+    content: "";
+    display: block;
+    inline-size: var(--radio-dot-size);
+    block-size: var(--radio-dot-size);
+    border-radius: var(--vds-radius-full, 9999px);
+    background-color: var(--radio-dot-color);
+    animation: vds-scale-in var(--radio-transition-duration)
+      var(--radio-transition-easing);
+  }
+
+  /* =========================================================================
+   * Group wrapper — fieldset-like container with label / description / error.
+   * The primitive RadioGroup.Root IS this element; we hang label/description/error
+   * as siblings next to the items, keeping keyboard roving tabindex intact.
+   * ========================================================================= */
+  .vds-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radio-group-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-radio-group-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+  }
+
+  .vds-radio-group-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    font-size: var(--radio-group-label-font-size);
+    font-weight: var(--radio-group-label-font-weight);
+    color: var(--radio-group-label-color);
+    line-height: 1.4;
+  }
+
+  .vds-radio-group-required {
+    color: var(--radio-group-required-color);
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
+
+  .vds-radio-group-description {
+    font-size: var(--radio-group-description-font-size);
+    color: var(--radio-group-description-color);
+    line-height: 1.5;
+  }
+
+  .vds-radio-group-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radio-group-items-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-radio-group[data-orientation="horizontal"] .vds-radio-group-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--radio-group-items-gap);
+  }
+
+  .vds-radio-group-error {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--radio-group-error-gap);
+    margin: 0;
+    font-size: var(--radio-group-error-font-size);
+    color: var(--radio-group-error-color);
+    line-height: 1.4;
+  }
+
+  .vds-radio-group-error-icon {
+    flex-shrink: 0;
+    color: currentColor;
+  }
+
+  .vds-radio-group[data-disabled] {
+    opacity: 0.7;
+  }
+}
+
+@layer design-system.components {
   /* ─────────────────────────────────────────────
    * DateField — tokens
    * Also reused by TimeField + DatePicker + DateRangePicker
@@ -1641,14 +2496,16 @@
     --time-picker-wheel-header-height: 1.5rem;
     --time-picker-wheel-header-offset: calc(var(--time-picker-wheel-header-height) / 2);
     --time-picker-wheel-font-size: var(--vds-text-xl, 1.25rem);
-    --time-picker-wheel-muted-text: color-mix(in oklab, var(--date-field-text-color) 36%, transparent);
-    --time-picker-wheel-hover-text: color-mix(in oklab, var(--date-field-text-color) 72%, transparent);
-    --time-picker-wheel-selected-text: var(--vds-color-white, #ffffff);
+    --time-picker-wheel-muted-text: var(--vds-color-text-muted, #6b7280);
+    --time-picker-wheel-hover-text: color-mix(in oklab, var(--date-field-text-color) 72%, var(--vds-color-text-muted, #6b7280));
+    --time-picker-wheel-selected-text: var(--vds-color-text, #111827);
     --time-picker-wheel-header-color: var(--vds-color-text-muted, #6b7280);
     --time-picker-wheel-colon-color: color-mix(in oklab, var(--date-field-text-color) 55%, transparent);
-    --time-picker-wheel-selection-bg: var(--vds-color-neutral-a7, rgb(0 0 0 / 0.44));
-    --time-picker-wheel-selection-border: var(--vds-color-neutral-a8, rgb(0 0 0 / 0.56));
-    --time-picker-wheel-selection-shadow: color-mix(in oklab, var(--vds-color-black-a4, rgb(0 0 0 / 0.2)) 100%, transparent);
+    --time-picker-wheel-selection-bg: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 18%, transparent);
+    --time-picker-wheel-selection-border: var(--vds-color-ring, var(--vds-color-primary-500, #6366f1));
+    --time-picker-wheel-selection-divider: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 70%, transparent);
+    --time-picker-wheel-selection-ring: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 28%, transparent);
+    --time-picker-wheel-selection-shadow: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 32%, transparent);
   }
 
   /* ── Appearance variants ── */
@@ -2043,12 +2900,12 @@
   .vds-time-picker-panel {
     display: flex;
     flex-direction: column;
-    gap: var(--vds-space-4, 1rem);
+    gap: var(--vds-space-3, 0.75rem);
     min-inline-size: 0;
-    padding: var(--vds-space-4, 1rem);
+    padding: var(--vds-space-3, 0.75rem);
     font-family: var(--date-field-font-family);
     color: var(--date-field-text-color);
-    background: var(--time-picker-surface-bg);
+    background: transparent;
   }
 
   .vds-time-picker-wheels {
@@ -2060,9 +2917,8 @@
     inline-size: 100%;
     min-inline-size: 0;
     min-block-size: var(--time-picker-wheel-height);
-    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
-    border-radius: var(--time-picker-surface-inner-radius);
-    background: var(--time-picker-wheel-surface-bg);
+    padding: 0;
+    background: transparent;
     overflow: hidden;
   }
 
@@ -2070,25 +2926,11 @@
     content: "";
     position: absolute;
     z-index: 1;
-    inset-inline: var(--vds-space-2, 0.5rem);
+    inset-inline: var(--vds-space-1, 0.25rem);
     inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2) + var(--time-picker-wheel-header-offset));
     block-size: var(--time-picker-wheel-item-height);
-    border-radius: var(--vds-radius-sm, 0.25rem);
+    border-radius: var(--vds-radius-md, 0.375rem);
     background: var(--time-picker-wheel-selection-bg);
-    box-shadow:
-      inset 0 0 0 1px var(--time-picker-wheel-selection-border),
-      0 0.25rem 0.875rem -0.5rem var(--time-picker-wheel-selection-shadow);
-    pointer-events: none;
-  }
-
-  .vds-time-picker-wheels::after {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    inset-inline: var(--vds-space-2, 0.5rem);
-    inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2) + var(--time-picker-wheel-header-offset));
-    block-size: var(--time-picker-wheel-item-height);
-    border-block: 1px solid var(--time-picker-wheel-selection-border);
     pointer-events: none;
   }
 
@@ -2098,7 +2940,10 @@
     align-items: center;
     justify-content: center;
     min-inline-size: 0.75rem;
-    padding-block-start: var(--time-picker-wheel-header-height);
+    /* Colon glyph "ascends" visually higher than a digit within the same
+     * line-box — push it down ~0.2em so the dots sit on the optical
+     * centerline shared with the neighbouring numbers. */
+    padding-block-start: calc(var(--time-picker-wheel-header-height) + 0.22em);
     font-size: var(--time-picker-wheel-font-size);
     font-weight: var(--vds-font-weight-semibold, 600);
     color: var(--time-picker-wheel-colon-color);
@@ -2197,12 +3042,22 @@
     letter-spacing: -0.01em;
     scroll-snap-align: center;
     cursor: pointer;
+    opacity: 0.38;
     transition:
       color var(--date-field-transition-duration) var(--date-field-transition-easing),
       transform var(--date-field-transition-duration) var(--date-field-transition-easing),
+      opacity var(--date-field-transition-duration) var(--date-field-transition-easing),
       background-color var(--date-field-transition-duration) var(--date-field-transition-easing),
       box-shadow var(--date-field-transition-duration) var(--date-field-transition-easing);
   }
+
+  /* Stepped fade by distance from the active (center) row.
+   * Strong contrast so the selected row clearly dominates. */
+  .vds-time-wheel-item[data-distance="0"] { opacity: 1; }
+  .vds-time-wheel-item[data-distance="1"] { opacity: 0.42; }
+  .vds-time-wheel-item[data-distance="2"] { opacity: 0.24; }
+  .vds-time-wheel-item[data-distance="3"] { opacity: 0.14; }
+  .vds-time-wheel-item[data-distance="4"] { opacity: 0.07; }
 
   .vds-time-wheel[data-variant="period"] .vds-time-wheel-item {
     font-size: var(--vds-text-sm, 0.875rem);
@@ -2211,6 +3066,7 @@
 
   .vds-time-wheel-item:hover {
     color: var(--time-picker-wheel-hover-text);
+    opacity: 0.9;
   }
 
   .vds-time-wheel-item:focus-visible {
@@ -2219,10 +3075,10 @@
 
   .vds-time-wheel-item[data-selected="true"] {
     color: var(--time-picker-wheel-selected-text);
-    background: color-mix(in oklab, var(--time-picker-wheel-selection-bg) 92%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--time-picker-wheel-selection-border) 92%, transparent);
-    transform: scale(1.04);
+    background: transparent;
+    transform: scale(1.08);
     font-weight: var(--vds-font-weight-bold, 700);
+    opacity: 1;
   }
 
   .vds-time-picker-actions {

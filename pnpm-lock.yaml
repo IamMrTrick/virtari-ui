@@ -104,6 +104,9 @@ importers:
       '@virtari/react-dropdown-menu':
         specifier: workspace:*
         version: link:../../packages/react-dropdown-menu
+      '@virtari/react-flag':
+        specifier: workspace:*
+        version: link:../../packages/react-flag
       '@virtari/react-header':
         specifier: workspace:*
         version: link:../../packages/react-header
@@ -119,12 +122,18 @@ importers:
       '@virtari/react-label':
         specifier: workspace:*
         version: link:../../packages/react-label
+      '@virtari/react-language-picker':
+        specifier: workspace:*
+        version: link:../../packages/react-language-picker
       '@virtari/react-layout':
         specifier: workspace:*
         version: link:../../packages/react-layout
       '@virtari/react-nav':
         specifier: workspace:*
         version: link:../../packages/react-nav
+      '@virtari/react-phone-input':
+        specifier: workspace:*
+        version: link:../../packages/react-phone-input
       '@virtari/react-popover':
         specifier: workspace:*
         version: link:../../packages/react-popover
@@ -606,6 +615,9 @@ importers:
       '@virtari/react-icons':
         specifier: workspace:*
         version: link:../react-icons
+      '@virtari/react-radio-group':
+        specifier: workspace:*
+        version: link:../react-radio-group
       '@virtari/utils':
         specifier: workspace:*
         version: link:../utils
@@ -700,6 +712,31 @@ importers:
       '@types/react':
         specifier: ^19.2.14
         version: 19.2.14
+      react:
+        specifier: ^19.2.5
+        version: 19.2.5
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(postcss@8.5.10)(typescript@5.9.3)(yaml@2.8.3)
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+
+  packages/react-flag:
+    dependencies:
+      '@virtari/utils':
+        specifier: workspace:*
+        version: link:../utils
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.5(react@19.2.5)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+      flag-icons:
+        specifier: ^7.2.3
+        version: 7.5.0
       react:
         specifier: ^19.2.5
         version: 19.2.5
@@ -826,6 +863,40 @@ importers:
         specifier: ^5.5.0
         version: 5.9.3
 
+  packages/react-language-picker:
+    dependencies:
+      '@virtari/react-flag':
+        specifier: workspace:*
+        version: link:../react-flag
+      '@virtari/react-select':
+        specifier: workspace:*
+        version: link:../react-select
+      '@virtari/utils':
+        specifier: workspace:*
+        version: link:../utils
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.5(react@19.2.5)
+    devDependencies:
+      '@cospired/i18n-iso-languages':
+        specifier: ^4.2.0
+        version: 4.2.0
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+      iso-639-1:
+        specifier: ^3.1.5
+        version: 3.1.5
+      react:
+        specifier: ^19.2.5
+        version: 19.2.5
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(postcss@8.5.10)(typescript@5.9.3)(yaml@2.8.3)
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+
   packages/react-layout:
     dependencies:
       '@virtari/utils':
@@ -875,6 +946,49 @@ importers:
       typescript:
         specifier: ^5.5.0
         version: 5.9.3
+
+  packages/react-phone-input:
+    dependencies:
+      '@radix-ui/react-popover':
+        specifier: ^1.1.15
+        version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@virtari/react-flag':
+        specifier: workspace:*
+        version: link:../react-flag
+      '@virtari/react-input':
+        specifier: workspace:*
+        version: link:../react-input
+      '@virtari/react-select':
+        specifier: workspace:*
+        version: link:../react-select
+      '@virtari/utils':
+        specifier: workspace:*
+        version: link:../utils
+      libphonenumber-js:
+        specifier: ^1.11.0
+        version: 1.12.41
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.5(react@19.2.5)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+      i18n-iso-countries:
+        specifier: ^7.14.0
+        version: 7.14.0
+      react:
+        specifier: ^19.2.5
+        version: 19.2.5
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(postcss@8.5.10)(typescript@5.9.3)(yaml@2.8.3)
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+      world-countries:
+        specifier: ^5.1.0
+        version: 5.1.0
 
   packages/react-popover:
     dependencies:
@@ -931,6 +1045,9 @@ importers:
       '@radix-ui/react-radio-group':
         specifier: ^1.3.8
         version: 1.3.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@virtari/react-icons':
+        specifier: workspace:*
+        version: link:../react-icons
       '@virtari/utils':
         specifier: workspace:*
         version: link:../utils
@@ -938,6 +1055,9 @@ importers:
         specifier: ^18.0.0 || ^19.0.0
         version: 19.2.5(react@19.2.5)
     devDependencies:
+      '@tabler/icons-react':
+        specifier: ^3.0.0
+        version: 3.41.1(react@19.2.5)
       '@types/react':
         specifier: ^19.2.14
         version: 19.2.14
@@ -1356,6 +1476,10 @@ importers:
         version: 5.9.3
 
 packages:
+
+  '@cospired/i18n-iso-languages@4.2.0':
+    resolution: {integrity: sha512-vy8cq1176MTxVwB1X9niQjcIYOH29F8Huxtx8hLmT5Uz3l1ztGDGri8KN/4zE7LV2mCT7JrcAoNV/I9yb+lNUw==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
   '@csstools/cascade-layer-name-parser@2.0.5':
     resolution: {integrity: sha512-p1ko5eHgV+MgXFVa4STPKpvPxr6ReS8oS2jzTukjR74i5zJNyWO1ZM1m8YKBXnzDKWfBN1ztLYlHxbVemDD88A==}
@@ -2687,6 +2811,9 @@ packages:
   detect-node-es@1.1.0:
     resolution: {integrity: sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==}
 
+  diacritics@1.3.0:
+    resolution: {integrity: sha512-wlwEkqcsaxvPJML+rDh/2iS824jbREk6DUMUKkEaSlxdYHeS43cClJtsWglvw2RfeXGm6ohKDqsXteJ5sP5enA==}
+
   electron-to-chromium@1.5.339:
     resolution: {integrity: sha512-Is+0BBHJ4NrdpAYiperrmp53pLywG/yV/6lIMTAnhxvzj/Cmn5Q/ogSHC6AKe7X+8kPLxxFk0cs5oc/3j/fxIg==}
 
@@ -2722,6 +2849,9 @@ packages:
   fix-dts-default-cjs-exports@1.0.1:
     resolution: {integrity: sha512-pVIECanWFC61Hzl2+oOCtoJ3F17kglZC/6N94eRWycFgBH35hHx0Li604ZIzhseh97mf2p0cv7vVrOZGoqhlEg==}
 
+  flag-icons@7.5.0:
+    resolution: {integrity: sha512-kd+MNXviFIg5hijH766tt+3x76ele1AXlo4zDdCxIvqWZhKt4T83bOtxUOOMlTx/EcFdUMH5yvQgYlFh1EqqFg==}
+
   fraction.js@5.3.4:
     resolution: {integrity: sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==}
 
@@ -2756,6 +2886,10 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
+  i18n-iso-countries@7.14.0:
+    resolution: {integrity: sha512-nXHJZYtNrfsi1UQbyRqm3Gou431elgLjKl//CYlnBGt5aTWdRPH1PiS2T/p/n8Q8LnqYqzQJik3Q7mkwvLokeg==}
+    engines: {node: '>= 12'}
+
   intl-messageformat@10.7.18:
     resolution: {integrity: sha512-m3Ofv/X/tV8Y3tHXLohcuVuhWKo7BBq62cqY15etqmLxg2DZ34AGGgQDeR+SCta2+zICb1NX83af0GJmbQ1++g==}
 
@@ -2783,12 +2917,19 @@ packages:
     resolution: {integrity: sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==}
     engines: {node: '>=0.12.0'}
 
+  iso-639-1@3.1.5:
+    resolution: {integrity: sha512-gXkz5+KN7HrG0Q5UGqSMO2qB9AsbEeyLP54kF1YrMsIxmu+g4BdB7rflReZTSTZGpfj8wywu6pfPBCylPIzGQA==}
+    engines: {node: '>=6.0'}
+
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
     engines: {node: '>=10'}
 
   jsonfile@6.2.0:
     resolution: {integrity: sha512-FGuPw30AdOIUTRMC2OMRtQV+jkVj2cfPqSeWXv1NEAJ1qZ5zb1X6z1mFhbfOB/iy3ssJCD+3KuZ8r8C3uVFlAg==}
+
+  libphonenumber-js@1.12.41:
+    resolution: {integrity: sha512-lsmMmGXBxXIK/VMLEj0kL6MtUs1kBGj1nTCzi6zgQoG1DEwqwt2DQyHxcLykceIxAnfE3hya7NuIh6PpC6S3fA==}
 
   lightningcss-android-arm64@1.32.0:
     resolution: {integrity: sha512-YK7/ClTt4kAK0vo6w3X+Pnm0D2cf2vPHbhOXdoNti1Ga0al1P4TBZhwjATvjNwLEBCnKvjJc2jQgHXH0NEwlAg==}
@@ -3268,6 +3409,9 @@ packages:
       yaml:
         optional: true
 
+  world-countries@5.1.0:
+    resolution: {integrity: sha512-CXR6EBvTbArDlDDIWU3gfKb7Qk0ck2WNZ234b/A0vuecPzIfzzxH+O6Ejnvg1sT8XuiZjVlzOH0h08ZtaO7g0w==}
+
   wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
     engines: {node: '>=10'}
@@ -3290,6 +3434,8 @@ packages:
     engines: {node: '>=12'}
 
 snapshots:
+
+  '@cospired/i18n-iso-languages@4.2.0': {}
 
   '@csstools/cascade-layer-name-parser@2.0.5(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)':
     dependencies:
@@ -4449,6 +4595,8 @@ snapshots:
 
   detect-node-es@1.1.0: {}
 
+  diacritics@1.3.0: {}
+
   electron-to-chromium@1.5.339: {}
 
   emoji-regex@8.0.0: {}
@@ -4500,6 +4648,8 @@ snapshots:
       mlly: 1.8.2
       rollup: 4.60.1
 
+  flag-icons@7.5.0: {}
+
   fraction.js@5.3.4: {}
 
   fs-extra@11.3.4:
@@ -4527,6 +4677,10 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
+  i18n-iso-countries@7.14.0:
+    dependencies:
+      diacritics: 1.3.0
+
   intl-messageformat@10.7.18:
     dependencies:
       '@formatjs/ecma402-abstract': 2.3.6
@@ -4552,6 +4706,8 @@ snapshots:
 
   is-number@7.0.0: {}
 
+  iso-639-1@3.1.5: {}
+
   joycon@3.1.1: {}
 
   jsonfile@6.2.0:
@@ -4559,6 +4715,8 @@ snapshots:
       universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
+
+  libphonenumber-js@1.12.41: {}
 
   lightningcss-android-arm64@1.32.0:
     optional: true
@@ -4999,6 +5157,8 @@ snapshots:
       esbuild: 0.27.7
       fsevents: 2.3.3
       yaml: 2.8.3
+
+  world-countries@5.1.0: {}
 
   wrap-ansi@7.0.0:
     dependencies:

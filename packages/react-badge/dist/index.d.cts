@@ -36,7 +36,7 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
     onRemove?: (e: MouseEvent<HTMLButtonElement>) => void;
     /** Accessible label for the close button (default "Remove"). */
     removeLabel?: string;
-    /** Render as child element (polymorphic via Radix Slot). */
+    /** Render as child element (polymorphic via Slot). */
     asChild?: boolean;
     ref?: Ref<HTMLSpanElement>;
 }

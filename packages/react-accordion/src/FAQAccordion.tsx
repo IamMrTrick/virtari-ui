@@ -14,7 +14,7 @@ import {
 
 /** A single question/answer pair. `answer` may be plain text or rich ReactNode. */
 export interface FAQItem {
-  /** Stable id for Radix controlled state + anchor links. Required. */
+  /** Stable id for controlled state + anchor links. Required. */
   id: string;
   question: string;
   /** Rich node rendered inside the body. */
@@ -33,7 +33,7 @@ export interface FAQAccordionProps {
   defaultOpen?: string[];
   /**
    * Allow multiple open at once. Default: true — UX-friendly for FAQ since
-   * users often want to compare answers. Radix handles either mode.
+   * users often want to compare answers. Either mode is supported.
    */
   allowMultiple?: boolean;
   /** Shape variant forwarded to the underlying Accordion. Default: `contained`. */

@@ -1,0 +1,76 @@
+@layer components {
+  .vds-pill-radio {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--pill-radio-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-pill-radio[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vds-pill-radio-item {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-1-5, 0.375rem);
+    block-size: var(--pill-radio-item-height);
+    padding-inline: var(--pill-radio-item-padding-inline);
+    font-family: inherit;
+    font-size: var(--pill-radio-item-font-size);
+    font-weight: var(--pill-radio-item-font-weight);
+    color: var(--pill-radio-item-color);
+    background-color: var(--pill-radio-item-bg);
+    border: var(--pill-radio-item-border-width) solid
+      var(--pill-radio-item-border-color);
+    border-radius: var(--pill-radio-item-radius);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color var(--pill-radio-transition-duration)
+        var(--pill-radio-transition-easing),
+      border-color var(--pill-radio-transition-duration)
+        var(--pill-radio-transition-easing),
+      color var(--pill-radio-transition-duration)
+        var(--pill-radio-transition-easing);
+  }
+
+  /* ── Hover ── */
+  .vds-pill-radio-item:hover:not(:disabled):not([data-state="checked"]) {
+    background-color: var(--pill-radio-item-bg-hover);
+    border-color: var(--pill-radio-item-border-color-hover);
+  }
+
+  /* ── Checked (selected) ── */
+  .vds-pill-radio-item[data-state="checked"] {
+    background-color: var(--pill-radio-item-bg-checked);
+    border-color: var(--pill-radio-item-border-color-checked);
+    color: var(--pill-radio-item-color-checked);
+  }
+
+  /* ── Focus ring ── */
+  .vds-pill-radio-item:focus-visible {
+    outline: var(--pill-radio-focus-ring-width) solid
+      var(--pill-radio-focus-ring-color);
+    outline-offset: var(--pill-radio-focus-ring-offset);
+  }
+
+  /* ── Disabled ── */
+  .vds-pill-radio-item:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* ── Error ── */
+  .vds-pill-radio[data-error] .vds-pill-radio-item {
+    border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  .vds-pill-radio[data-error] .vds-pill-radio-item:focus-visible {
+    outline-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
-import { useDataTableContext, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-W5DPMDC5.js';
-export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-W5DPMDC5.js';
+import { useDataTableContext, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-ZLYJOQMF.js';
+export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-ZLYJOQMF.js';
 import { forwardRef, useRef, useEffect, useMemo, useState, useCallback } from 'react';
 import { cn } from '@virtari/utils';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
@@ -1606,7 +1606,8 @@ function DataTableBoardCard({
       children: columns.map((column) => {
         const cell = row.getVisibleCells().find((c) => c.column.id === column.id);
         if (!cell) return null;
-        const label = String(column.columnDef.header ?? column.id);
+        const headerDef = column.columnDef.header;
+        const label = typeof headerDef === "string" ? headerDef : column.id;
         return /* @__PURE__ */ jsxs("div", { className: "vds-data-table-board-field", children: [
           /* @__PURE__ */ jsx("div", { className: "vds-data-table-board-label", children: label }),
           /* @__PURE__ */ jsx("div", { className: "vds-data-table-board-value", children: flexRender(column.columnDef.cell, cell.getContext()) })

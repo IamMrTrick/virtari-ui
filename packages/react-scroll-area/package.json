@@ -8,11 +8,18 @@
       "import": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
       "require": { "types": "./dist/index.d.cts", "default": "./dist/index.cjs" }
     },
-    "./styles": "./dist/ScrollArea.css"
+    "./styles": {
+      "style": "./dist/ScrollArea.css",
+      "default": "./dist/ScrollArea.css"
+    },
+    "./tokens": {
+      "style": "./dist/ScrollArea.tokens.css",
+      "default": "./dist/ScrollArea.tokens.css"
+    }
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup && postcss src/ScrollArea.css -o dist/ScrollArea.css",
+    "build": "tsup && postcss src/ScrollArea.tokens.css -o dist/ScrollArea.tokens.css && postcss src/ScrollArea.css -o dist/ScrollArea.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

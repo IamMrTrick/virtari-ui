@@ -1,4 +1,4 @@
-/* ── Select (Radix-based) ── */
+/* ── Select ── */
 export {
   Select,
   SelectGroup,
@@ -50,6 +50,7 @@ export type {
   ComboboxLoadingProps,
   ComboboxItemData,
 } from "./Combobox";
+export { useComboboxContext } from "./use-combobox";
 export type {
   ComboboxFilter,
   UseComboboxProps,

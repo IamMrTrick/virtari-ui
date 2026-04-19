@@ -85,7 +85,12 @@ function DataTableBoardCard({
           .getVisibleCells()
           .find((c) => c.column.id === column.id);
         if (!cell) return null;
-        const label = String(column.columnDef.header ?? column.id);
+        /* Guard: header may be a function (e.g. `() => <SelectAllCheckbox/>`).
+         * Stringifying a function leaks its source code into the DOM. Fall
+         * back to the column id when the header isn't a plain string. */
+        const headerDef = column.columnDef.header;
+        const label =
+          typeof headerDef === "string" ? headerDef : column.id;
         return (
           <div key={column.id} className="vds-data-table-board-field">
             <div className="vds-data-table-board-label">{label}</div>

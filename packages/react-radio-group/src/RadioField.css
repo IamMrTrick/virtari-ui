@@ -1,0 +1,40 @@
+@layer components {
+  .vds-radio-field {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--radio-field-gap);
+    cursor: pointer;
+    min-inline-size: 0;
+  }
+
+  .vds-radio-field[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .vds-radio-field > .vds-radio-item {
+    margin-block-start: var(--radio-field-align-block-start);
+    flex-shrink: 0;
+  }
+
+  .vds-radio-field-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radio-field-label-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-radio-field-label {
+    font-size: var(--radio-field-font-size);
+    font-weight: var(--radio-field-label-font-weight);
+    color: var(--radio-field-label-color);
+    line-height: 1.4;
+  }
+
+  .vds-radio-field-description {
+    font-size: var(--radio-field-description-font-size);
+    color: var(--radio-field-description-color);
+    font-weight: var(--vds-font-weight-normal, 400);
+    line-height: 1.5;
+  }
+}

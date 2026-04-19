@@ -18,8 +18,8 @@ interface DialogOverlayProps extends React.ComponentPropsWithoutRef<typeof Dialo
     ref?: Ref<ComponentRef<typeof DialogPrimitive.Overlay>>;
 }
 declare function DialogOverlay({ backdrop, className, ref, ...props }: DialogOverlayProps): react_jsx_runtime.JSX.Element;
-type RadixContentProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>;
-interface DialogContentProps extends RadixContentProps {
+type PrimitiveContentProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>;
+interface DialogContentProps extends PrimitiveContentProps {
     /** Max-width variant. Defaults to `"md"`. */
     size?: DialogSize;
     /** Enter/exit animation preset. Defaults to `"scale"`. */
@@ -34,7 +34,7 @@ interface DialogContentProps extends RadixContentProps {
     showCloseButton?: boolean;
     /** Accessible label for the built-in close button. Defaults to `"Close"`. */
     closeButtonLabel?: string;
-    /** Custom portal target. Falls back to Radix default (`document.body`). */
+    /** Custom portal target. Falls back to `document.body`. */
     container?: HTMLElement | null;
     /** Block close when the user clicks/taps outside the content. */
     preventCloseOnOutsideClick?: boolean;

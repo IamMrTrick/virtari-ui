@@ -1,5 +1,6 @@
 @layer components {
   .vds-collapsible-content {
+    --vds-collapsible-content-height: var(--radix-collapsible-content-height);
     overflow: hidden;
   }
 
@@ -13,11 +14,11 @@
 
   @keyframes vds-collapsible-expand {
     from { block-size: 0; }
-    to { block-size: var(--radix-collapsible-content-height); }
+    to { block-size: var(--vds-collapsible-content-height); }
   }
 
   @keyframes vds-collapsible-collapse {
-    from { block-size: var(--radix-collapsible-content-height); }
+    from { block-size: var(--vds-collapsible-content-height); }
     to { block-size: 0; }
   }
 }

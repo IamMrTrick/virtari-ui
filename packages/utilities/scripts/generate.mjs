@@ -331,10 +331,21 @@ for (const k of Z_KEYS) {
 
 /* ───────────────────────────── emitters ───────────────────────────── */
 
+function escapePrefix(prefix) {
+  // CSS identifiers cannot start with a digit. Escape a leading digit as its
+  // hex codepoint followed by a space, per CSS Syntax spec (e.g. "2xl" → "\32 xl").
+  if (/^\d/.test(prefix)) {
+    const code = prefix.charCodeAt(0).toString(16);
+    return `\\${code} ${prefix.slice(1)}`;
+  }
+  return prefix;
+}
+
 function toCss(list, prefix = "") {
   // prefix is the breakpoint: "sm", "md", etc. "" means base.
+  const escapedPrefix = prefix ? escapePrefix(prefix) : "";
   const lines = list.map(([cls, decl]) => {
-    const selector = prefix ? `.${prefix}\\:${cls}` : `.${cls}`;
+    const selector = prefix ? `.${escapedPrefix}\\:${cls}` : `.${cls}`;
     return `${selector} { ${decl} }`;
   });
   return lines.join("\n");

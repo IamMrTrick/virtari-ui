@@ -491,8 +491,8 @@
     flex: 0 0 100%;
     min-inline-size: 0;
   }
-  /* Force-mounted, non-active panels still carry `hidden` from Radix; show
-     them so they can participate in the carousel layout. */
+  /* Force-mounted, non-active panels still carry `hidden` from the primitive;
+     show them so they can participate in the carousel layout. */
   .vds-tabs-panels-slide > .vds-tabs-content[hidden] {
     display: block;
   }

@@ -473,6 +473,114 @@ function useHorizontalScrollShadow(ref) {
   }, [ref]);
   return state;
 }
+function useScrollDrag(ref, enabled) {
+  const stateRef = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !enabled) return;
+    const isInteractive = (target) => {
+      if (!(target instanceof Element)) return false;
+      return Boolean(
+        target.closest(
+          [
+            /* The entire header area owns its own gestures: sort (click),
+             * resize (drag edge), reorder (drag body). Scroll-drag would
+             * steal those — so never start panning from inside <thead>. */
+            "thead",
+            "th",
+            ".vds-data-table-header",
+            ".vds-data-table-header-cell",
+            /* Interactive controls inside the body. */
+            "button",
+            "a",
+            "input",
+            "select",
+            "textarea",
+            "[role='button']",
+            "[role='checkbox']",
+            "[role='switch']",
+            "[role='menu']",
+            "[role='menuitem']",
+            "[role='combobox']",
+            "[contenteditable='true']",
+            "[contenteditable='']",
+            "[data-no-scroll-drag]",
+            ".vds-data-table-resize-handle",
+            ".vds-data-table-sort-trigger",
+            ".vds-data-table-drag-handle",
+            ".vds-data-table-actions-cell-trigger",
+            ".vds-data-table-link-cell"
+          ].join(",")
+        )
+      );
+    };
+    const onPointerDown = (e) => {
+      if (e.button !== 0) return;
+      if (isInteractive(e.target)) return;
+      if (el.ownerDocument.querySelector(".vds-data-table[data-resizing]")) return;
+      stateRef.current = {
+        active: true,
+        startX: e.clientX,
+        startY: e.clientY,
+        scrollLeft: el.scrollLeft,
+        scrollTop: el.scrollTop,
+        pointerId: e.pointerId,
+        moved: false
+      };
+      el.setAttribute("data-scroll-dragging", "");
+    };
+    const onPointerMove = (e) => {
+      const s = stateRef.current;
+      if (!s || !s.active) return;
+      const dx = e.clientX - s.startX;
+      const dy = e.clientY - s.startY;
+      if (!s.moved && Math.hypot(dx, dy) > 4) {
+        s.moved = true;
+        try {
+          el.setPointerCapture(s.pointerId);
+        } catch {
+        }
+      }
+      if (s.moved) {
+        el.scrollLeft = s.scrollLeft - dx;
+        el.scrollTop = s.scrollTop - dy;
+      }
+    };
+    const end = () => {
+      const s = stateRef.current;
+      if (!s) return;
+      if (s.active) {
+        try {
+          el.releasePointerCapture(s.pointerId);
+        } catch {
+        }
+      }
+      stateRef.current = null;
+      el.removeAttribute("data-scroll-dragging");
+    };
+    const onPointerUp = () => end();
+    const onPointerCancel = () => end();
+    const onClickCapture = (e) => {
+      const s = stateRef.current;
+      if (s && s.moved) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    el.addEventListener("pointerdown", onPointerDown);
+    el.addEventListener("pointermove", onPointerMove);
+    el.addEventListener("pointerup", onPointerUp);
+    el.addEventListener("pointercancel", onPointerCancel);
+    el.addEventListener("click", onClickCapture, true);
+    return () => {
+      el.removeEventListener("pointerdown", onPointerDown);
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerup", onPointerUp);
+      el.removeEventListener("pointercancel", onPointerCancel);
+      el.removeEventListener("click", onClickCapture, true);
+    };
+  }, [ref, enabled]);
+}
 function useKeyboardGridNav(enabled, scrollRef) {
   const handler = useCallback(
     (e) => {
@@ -896,12 +1004,14 @@ var DataTableToolbar = forwardRef(
     );
   }
 );
-var DataTableScrollArea = forwardRef(function DataTableScrollArea2({ className, children, ...props }, ref) {
+var DataTableScrollArea = forwardRef(function DataTableScrollArea2({ className, children, scrollDrag = true, ...props }, ref) {
   const { scrollRef } = useDataTableContext();
+  useScrollDrag(scrollRef, scrollDrag);
   return /* @__PURE__ */ jsx(
     "div",
     {
       ref: composeRefs(scrollRef, ref),
+      "data-scroll-drag": scrollDrag ? "" : void 0,
       className: cn("vds-data-table-scroll-area", className),
       ...props,
       children
@@ -1411,9 +1521,13 @@ var DataTableResizeHandle = forwardRef(function DataTableResizeHandle2({ header,
       "data-resizing": boolAttr(isResizing),
       className: cn("vds-data-table-resize-handle", className),
       onPointerDown: (e) => {
+        e.stopPropagation();
         header.getResizeHandler()(e);
       },
-      onTouchStart: (e) => header.getResizeHandler()(e),
+      onTouchStart: (e) => {
+        e.stopPropagation();
+        header.getResizeHandler()(e);
+      },
       onDoubleClick: (e) => {
         e.preventDefault();
         fit();

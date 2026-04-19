@@ -242,7 +242,7 @@
     position: relative;
   }
 
-  /* ── Header wrapper (semantic <h2>/<h3>/... or Radix default) ── */
+  /* ── Header wrapper (semantic <h2>/<h3>/... or primitive default) ── */
   .vds-accordion-header {
     display: flex;
     margin: 0;
@@ -358,6 +358,7 @@
 
   /* ── Content ── */
   .vds-accordion-content {
+    --vds-accordion-content-height: var(--vds-accordion-content-height);
     overflow: hidden;
     font-size:   var(--accordion-content-font-size);
     line-height: var(--accordion-content-line-height);
@@ -392,11 +393,11 @@
 
   @keyframes vds-accordion-expand {
     from { block-size: 0; }
-    to   { block-size: var(--radix-accordion-content-height); }
+    to   { block-size: var(--vds-accordion-content-height); }
   }
 
   @keyframes vds-accordion-collapse {
-    from { block-size: var(--radix-accordion-content-height); }
+    from { block-size: var(--vds-accordion-content-height); }
     to   { block-size: 0; }
   }
 }

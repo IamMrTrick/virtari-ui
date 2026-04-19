@@ -51,6 +51,70 @@
     font: inherit;
     text-transform: inherit;
     cursor: pointer;
+    overflow: hidden;
+  }
+
+  .vds-slot-counter {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 1ch;
+    line-height: 1.1;
+    overflow: hidden;
+    vertical-align: baseline;
+  }
+
+  .vds-slot-counter-current,
+  .vds-slot-counter-prev {
+    display: inline-block;
+    white-space: nowrap;
+    will-change: transform, opacity;
+  }
+
+  .vds-slot-counter-prev {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+  }
+
+  .vds-slot-counter[data-direction="up"] .vds-slot-counter-current {
+    animation: vds-slot-in-up 260ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .vds-slot-counter[data-direction="up"] .vds-slot-counter-prev {
+    animation: vds-slot-out-up 260ms cubic-bezier(0.4, 0, 0.8, 0.4) both;
+  }
+  .vds-slot-counter[data-direction="down"] .vds-slot-counter-current {
+    animation: vds-slot-in-down 260ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .vds-slot-counter[data-direction="down"] .vds-slot-counter-prev {
+    animation: vds-slot-out-down 260ms cubic-bezier(0.4, 0, 0.8, 0.4) both;
+  }
+
+  @keyframes vds-slot-in-up {
+    from { transform: translateY(85%); opacity: 0; }
+    60%  { opacity: 1; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes vds-slot-out-up {
+    from { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(-90%); opacity: 0; }
+  }
+  @keyframes vds-slot-in-down {
+    from { transform: translateY(-85%); opacity: 0; }
+    60%  { opacity: 1; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes vds-slot-out-down {
+    from { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(90%); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-slot-counter-current,
+    .vds-slot-counter-prev {
+      animation: none !important;
+    }
   }
 
   .vds-calendar-heading-button:hover {
@@ -169,6 +233,122 @@
     color: var(--calendar-cell-selected-text);
   }
 
+  .vds-calendar-wheel-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-3, 0.75rem);
+    inline-size: 100%;
+    min-inline-size: min(21rem, calc(100vw - 2rem));
+    min-block-size: 0;
+  }
+
+  .vds-calendar-year-wheel {
+    /* Hoist the wheel-geometry tokens here so they are defined regardless
+     * of whether the calendar sits inside a TimeField / DatePicker scope.
+     * Without these, the ::before/::after spacers on the wheel track
+     * collapse to zero and the tail end of the list becomes unreachable. */
+    --time-picker-wheel-height: 11rem;
+    --time-picker-wheel-item-height: 2.5rem;
+    --time-picker-wheel-font-size: var(--vds-text-lg, 1.125rem);
+    --time-picker-wheel-muted-text: var(--vds-color-text-muted, #6b7280);
+    --time-picker-wheel-hover-text: color-mix(
+      in oklab,
+      var(--vds-color-text, #111827) 72%,
+      var(--vds-color-text-muted, #6b7280)
+    );
+    --time-picker-wheel-selected-text: var(--vds-color-text, #111827);
+    --time-picker-wheel-selection-bg: color-mix(
+      in oklab,
+      var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 18%,
+      transparent
+    );
+    --vds-year-wheel-height: var(--time-picker-wheel-height);
+    position: relative;
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+    inline-size: 100%;
+    block-size: var(--vds-year-wheel-height);
+    padding: 0;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .vds-calendar-year-wheel::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset-inline: var(--vds-space-1, 0.25rem);
+    inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2));
+    block-size: var(--time-picker-wheel-item-height);
+    border-radius: var(--vds-radius-md, 0.375rem);
+    background: var(--time-picker-wheel-selection-bg);
+    pointer-events: none;
+  }
+
+  .vds-calendar-year-wheel .vds-time-wheel {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    max-inline-size: none;
+    inline-size: 100%;
+  }
+
+  .vds-calendar-year-wheel .vds-time-wheel-track {
+    block-size: var(--vds-year-wheel-height);
+  }
+
+  .vds-calendar-year-wheel .vds-time-wheel-track::before,
+  .vds-calendar-year-wheel .vds-time-wheel-track::after {
+    flex: 0 0 calc((var(--vds-year-wheel-height) - var(--time-picker-wheel-item-height)) / 2);
+  }
+
+  .vds-calendar-year-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--vds-space-2, 0.5rem);
+  }
+
+  .vds-calendar-year-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--vds-size-md, 2.5rem);
+    padding-inline: var(--vds-space-3, 0.75rem);
+    border: 1px solid transparent;
+    border-radius: var(--vds-radius-element, 0.5rem);
+    font: inherit;
+    font-size: var(--vds-text-sm, 0.875rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    cursor: pointer;
+    transition:
+      background-color var(--date-field-transition-duration) var(--date-field-transition-easing),
+      color var(--date-field-transition-duration) var(--date-field-transition-easing),
+      border-color var(--date-field-transition-duration) var(--date-field-transition-easing);
+  }
+
+  .vds-calendar-year-action--secondary {
+    background: var(--vds-color-bg-subtle, #f3f4f6);
+    color: var(--vds-color-text, #111827);
+  }
+
+  .vds-calendar-year-action--secondary:hover {
+    background: var(--vds-color-bg-muted, #e5e7eb);
+  }
+
+  .vds-calendar-year-action--primary {
+    background: var(--vds-color-primary-600, #4f46e5);
+    color: var(--vds-color-primary-contrast, #ffffff);
+  }
+
+  .vds-calendar-year-action--primary:hover {
+    background: var(--vds-color-primary-700, #4338ca);
+  }
+
+  .vds-calendar-year-action:focus-visible {
+    outline: var(--date-field-focus-ring-width, 2px) solid var(--date-field-focus-ring-color, var(--vds-color-ring, #6366f1));
+    outline-offset: 1px;
+  }
+
   .vds-calendar-weekday {
     padding-block-end: var(--calendar-cell-gap);
     inline-size: var(--calendar-cell-size);
@@ -251,22 +431,45 @@
     background: var(--calendar-cell-selected-bg-hover);
   }
 
-  .vds-calendar-range .vds-calendar-cell[data-range-middle="true"] {
-    background: var(--calendar-range-bg);
+  /* ─────────────────────────────────────────────
+   * Range selection
+   * - Faded strip is painted on the <td> and grown outward with a
+   *   pseudo-element so it bridges the `border-spacing` gap between tds.
+   * - Start/end cells grow their button to the full td width so the solid
+   *   primary pill matches the faded strip in height AND width.
+   * - Hover state is overridden explicitly because the generic
+   *   `.vds-calendar-cell:hover` selector has higher specificity than the
+   *   single-class + attribute range rules.
+   * ───────────────────────────────────────────── */
+
+  /* Middle cell: transparent button — strip comes from td pseudo. */
+  .vds-calendar-range .vds-calendar-cell[data-range-middle="true"],
+  .vds-calendar-range .vds-calendar-cell[data-range-middle="true"]:hover,
+  .vds-calendar-range .vds-calendar-cell[data-range-middle="true"]:focus-visible {
+    background: transparent;
     color: var(--calendar-range-text);
     border-radius: 0;
   }
 
-  .vds-calendar-range .vds-calendar-cell[data-range-start="true"] {
+  /* Start/end cell: solid pill that fills the whole td (matches the
+   * faded strip size the user sees underneath). */
+  .vds-calendar-range .vds-calendar-cell[data-range-start="true"],
+  .vds-calendar-range .vds-calendar-cell[data-range-end="true"],
+  .vds-calendar-range .vds-calendar-cell[data-range-start="true"]:hover,
+  .vds-calendar-range .vds-calendar-cell[data-range-end="true"]:hover,
+  .vds-calendar-range .vds-calendar-cell[data-range-start="true"]:focus-visible,
+  .vds-calendar-range .vds-calendar-cell[data-range-end="true"]:focus-visible {
+    inline-size: 100%;
     background: var(--calendar-range-endpoint-bg);
     color: var(--calendar-range-endpoint-text);
+  }
+
+  .vds-calendar-range .vds-calendar-cell[data-range-start="true"] {
     border-start-end-radius: 0;
     border-end-end-radius: 0;
   }
 
   .vds-calendar-range .vds-calendar-cell[data-range-end="true"] {
-    background: var(--calendar-range-endpoint-bg);
-    color: var(--calendar-range-endpoint-text);
     border-start-start-radius: 0;
     border-end-start-radius: 0;
   }
@@ -275,20 +478,51 @@
     border-radius: var(--calendar-cell-radius);
   }
 
+  /* td enablement for overflow pseudo (bridges border-spacing gap). */
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-middle="true"]),
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-start="true"]),
   .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-end="true"]) {
+    position: relative;
+    isolation: isolate;
+    background: transparent;
+  }
+
+  .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-middle="true"])::before,
+  .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-start="true"])::after,
+  .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-end="true"])::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
     background: var(--calendar-range-bg);
+    pointer-events: none;
+    z-index: -1;
   }
 
-  .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-start="true"]) {
-    border-start-start-radius: var(--calendar-cell-radius);
-    border-end-start-radius: var(--calendar-cell-radius);
+  /* Middle strip: extend outward by half the grid gap on each side so two
+   * adjacent middle tds visually fuse across the border-spacing. */
+  .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-middle="true"])::before {
+    inset-inline-start: calc(var(--calendar-cell-gap, 2px) * -1);
+    inset-inline-end: calc(var(--calendar-cell-gap, 2px) * -1);
   }
 
-  .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-end="true"]) {
-    border-start-end-radius: var(--calendar-cell-radius);
-    border-end-end-radius: var(--calendar-cell-radius);
+  /* Start: faded strip extends from the button's inner edge out past the
+   * td's inline-end, bridging to the next (middle) td. */
+  .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-start="true"])::after {
+    inset-inline-start: 50%;
+    inset-inline-end: calc(var(--calendar-cell-gap, 2px) * -1);
+  }
+
+  /* End: mirror. */
+  .vds-calendar-range .vds-calendar-cell-td:has(.vds-calendar-cell[data-range-end="true"])::after {
+    inset-inline-start: calc(var(--calendar-cell-gap, 2px) * -1);
+    inset-inline-end: 50%;
+  }
+
+  /* Single-day range: no bridging strip needed. */
+  .vds-calendar-range .vds-calendar-cell-td:has(
+    .vds-calendar-cell[data-range-start="true"][data-range-end="true"]
+  )::after {
+    content: none;
   }
 
   .vds-calendar-footer {

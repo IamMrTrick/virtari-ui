@@ -26,6 +26,17 @@
     overflow: auto;
     scrollbar-gutter: stable;
   }
+  /* Drag-to-pan cursor: `grab` when the feature is on, `grabbing` during drag.
+   * Only applied when horizontal overflow exists (so we don't hint at drag
+   * when the table already fits). `:where()` keeps specificity at 0 so
+   * consumers can override easily. */
+  :where(.vds-data-table[data-scrolled-x]) .vds-data-table-scroll-area[data-scroll-drag] {
+    cursor: grab;
+  }
+  .vds-data-table-scroll-area[data-scroll-dragging] {
+    cursor: grabbing !important;
+    user-select: none;
+  }
 
   /* ───── Table element ──────────────────────────────────────── */
   .vds-data-table-table {
@@ -1513,6 +1524,104 @@
     flex: 1;
     font-size: var(--vds-text-sm, 0.875rem);
     color: var(--data-table-cell-color);
+  }
+
+  /* ───── Filter bar (chip row beneath the toolbar) ──────────── */
+  .vds-data-table-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    padding-inline: var(--data-table-cell-padding-inline);
+    padding-block: var(--vds-space-2, 0.5rem);
+    background-color: var(--data-table-bg);
+    border-block-end: var(--data-table-border-width) solid
+      var(--data-table-border-color);
+  }
+  .vds-data-table-filter-bar:empty {
+    display: none;
+  }
+
+  .vds-data-table-filter-chip {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1-5, 0.375rem);
+    padding: 4px var(--vds-space-2-5, 0.625rem);
+    background-color: var(--data-table-toolbar-button-bg-hover);
+    border: 1px solid var(--vds-color-border-muted, var(--vds-color-border, #d1d5db));
+    border-radius: 999px;
+    color: var(--data-table-cell-color);
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    cursor: pointer;
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-filter-chip:hover {
+    background-color: color-mix(
+      in oklch,
+      var(--data-table-toolbar-button-bg-hover),
+      var(--data-table-cell-color) 6%
+    );
+  }
+  .vds-data-table-filter-chip:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
+  }
+  .vds-data-table-filter-chip-label {
+    color: var(--vds-color-text-muted, #9ca3af);
+  }
+  .vds-data-table-filter-chip-value {
+    color: var(--data-table-cell-color);
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
+  .vds-data-table-filter-chip-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1rem;
+    block-size: 1rem;
+    margin-inline-start: 2px;
+    border-radius: 999px;
+    color: var(--vds-color-text-muted, #9ca3af);
+    font-size: 14px;
+    line-height: 1;
+    transition: background-color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-filter-chip-remove:hover {
+    background-color: color-mix(
+      in oklch,
+      var(--data-table-cell-color),
+      transparent 80%
+    );
+    color: var(--data-table-cell-color);
+  }
+
+  .vds-data-table-filter-add {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    padding: 4px var(--vds-space-2-5, 0.625rem);
+    color: var(--vds-color-text-muted, #9ca3af);
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color var(--data-table-transition-duration)
+      var(--data-table-transition-easing);
+  }
+  .vds-data-table-filter-add:hover {
+    color: var(--data-table-cell-color);
+    background-color: var(--data-table-toolbar-button-bg-hover);
+  }
+  .vds-data-table-filter-add:focus-visible {
+    outline: var(--data-table-focus-ring-width) solid
+      var(--data-table-focus-ring-color);
+    outline-offset: 2px;
   }
 
   /* ───── Reduced motion ─────────────────────────────────────── */

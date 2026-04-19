@@ -378,8 +378,10 @@
 
   /* When position="popper", match trigger width */
   .vds-select-content[data-position="popper"] > .vds-select-viewport {
-    inline-size: var(--radix-select-trigger-width);
-    max-block-size: var(--radix-select-content-available-height);
+    --vds-select-trigger-width: var(--radix-select-trigger-width);
+    --vds-select-content-available-height: var(--radix-select-content-available-height);
+    inline-size: var(--vds-select-trigger-width);
+    max-block-size: var(--vds-select-content-available-height);
   }
 
   /* ── Item ── */

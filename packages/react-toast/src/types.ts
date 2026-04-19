@@ -36,7 +36,7 @@ export type ToastTimerMode = "parallel" | "sequential";
 /**
  * Controls what interaction pauses the auto-dismiss timer.
  *  - "hover" — timer pauses while the viewport is hovered or any toast is
- *              focused (default; matches Radix built-in pause behavior).
+ *              focused (default; matches the primitive's built-in pause behavior).
  *  - "press" — timer only pauses while the user is actively pressing
  *              (pointer down) on the toast body. Hover is ignored.
  */

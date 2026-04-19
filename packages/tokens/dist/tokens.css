@@ -49,7 +49,7 @@
    * ── Neutral 12-step scale ──
    *
    * Hand-tuned OKLCH scale for neutral surfaces, borders and text.
-   * Each step has a specific semantic role (Radix-style):
+   * Each step has a specific semantic role (industry-standard 12-step):
    *
    *   1   App canvas
    *   2   Subtle bg (cards on app)
@@ -334,7 +334,7 @@
    * Plus per-intent alpha (primary-a1..12, success-a1..12, etc.) for
    * subtle intent backgrounds and hover overlays in component CSS.
    *
-   * Percentages are Radix-canonical (industry-tested).
+   * Percentages are industry-tested.
    */
 
   :root {
@@ -366,7 +366,7 @@
     --vds-color-white-a11: oklch(1 0 0 / 0.90);
     --vds-color-white-a12: oklch(1 0 0 / 0.95);
 
-    /* ─── Neutral alpha — light (black tint, Radix-tuned) ─── */
+    /* ─── Neutral alpha — light (black tint, industry-tuned) ─── */
     --vds-color-neutral-a1:  oklch(0 0 0 / 0.012);
     --vds-color-neutral-a2:  oklch(0 0 0 / 0.024);
     --vds-color-neutral-a3:  oklch(0 0 0 / 0.059);
@@ -380,7 +380,7 @@
     --vds-color-neutral-a11: oklch(0 0 0 / 0.608);
     --vds-color-neutral-a12: oklch(0 0 0 / 0.875);
 
-    /* ─── Per-intent alpha — light (intent solid 9 with Radix percentages) ─── */
+    /* ─── Per-intent alpha — light (intent solid 9 with industry percentages) ─── */
     --vds-color-primary-a1:  oklch(0.55 0.20 265 / 0.020);
     --vds-color-primary-a2:  oklch(0.55 0.20 265 / 0.040);
     --vds-color-primary-a3:  oklch(0.55 0.20 265 / 0.080);
@@ -462,7 +462,7 @@
 
   /* ─── Dark mode overrides ─── */
   [data-theme="dark"] {
-    /* Neutral alpha — dark (white tint, Radix-tuned) */
+    /* Neutral alpha — dark (white tint, industry-tuned) */
     --vds-color-neutral-a1:  oklch(1 0 0 / 0.000);
     --vds-color-neutral-a2:  oklch(1 0 0 / 0.035);
     --vds-color-neutral-a3:  oklch(1 0 0 / 0.070);
@@ -917,8 +917,8 @@
    *
    * Provides:
    *   • Full neutral 12-step semantic exposure for advanced use cases
-   *     (data tables, code editors, financial dashboards) — same names
-   *     used in Radix, allowing direct port of patterns.
+   *     (data tables, code editors, financial dashboards) — using the
+   *     industry-standard 12-step scale, allowing direct port of patterns.
    *   • Modern elevation aliases tuned for both modes.
    *   • Strong/light overlay variants and dedicated shadow tints
    *     (so components stop hardcoding `black` in shadows).
@@ -1107,7 +1107,7 @@
    * ── Status (intent) semantic layer (NEW, additive) ──
    *
    * Expands each intent (primary/success/warning/danger/info/accent) to
-   * the full Radix-style 12-step semantic role coverage:
+   * the full 12-step semantic role coverage:
    *
    *   {intent}-bg-subtle    app-level intent tint (canvas accent)
    *   {intent}-bg           component-level muted bg (badges, alerts)
@@ -1465,6 +1465,10 @@
     /* Checkbox — cap at md (8px) so it never reads as a radio */
     --vds-radius-checkbox: min(var(--vds-radius-element), var(--vds-radius-md));
 
+    /* Checkbox card — follow card radius family (xl cap) so card-style
+     * selections match sibling surfaces like Card / Alert / Toast. */
+    --vds-radius-checkbox-card: var(--vds-radius-card);
+
     /* Textarea — cap at lg (12px) so big multi-line corners stay readable */
     --vds-radius-textarea: min(var(--vds-radius-element), var(--vds-radius-lg));
 
@@ -1477,10 +1481,11 @@
     --vds-radius-chip: var(--vds-radius-badge);
 
     /* Floating content panels with list-based content —
-     * cap at md (8px) so they never become fully pill.
+     * cap at xl (16px / 24px in pill) so they stay readable: pill mode makes
+     * the popover noticeably rounder, but never a full circle.
      * (Popover / DropdownMenu intentionally stay on --vds-radius-surface,
      * which tops out at 2xl=24px in pill — acceptable for those panels.) */
-    --vds-radius-select-content: min(var(--vds-radius-element), var(--vds-radius-md));
+    --vds-radius-select-content: min(var(--vds-radius-element), var(--vds-radius-xl));
     --vds-radius-tooltip:        min(var(--vds-radius-element), var(--vds-radius-md));
 
     /* Alert (banner-style container) — cap at xl (16px), matches card/toast */
@@ -1498,6 +1503,24 @@
      * creates visible wedges where the sticky-header divider and scrollbar
      * meet the rounded corners. */
     --vds-radius-data-table: min(var(--vds-radius-surface), var(--vds-radius-md));
+
+    /* Radio card — follow card radius family (xl cap) so card-style
+     * selections match sibling surfaces and the checkbox card. */
+    --vds-radius-radio-card: var(--vds-radius-card);
+
+    /* Segmented radio — cap at md (8px). Outer group keeps a clean corner
+     * but inner segment dividers would blur if pill-mode rounded them too much. */
+    --vds-radius-segmented: min(var(--vds-radius-element), var(--vds-radius-md));
+
+    /* Pill radio — always pill-shaped, mirroring badge/chip. */
+    --vds-radius-pill-radio: var(--vds-radius-badge);
+
+    /* Scrollbar thumb — cap via primitive so pill mode can't bloat the
+     * thumb into a full circle. Thumbs are 8–10px thick; 9999px radius
+     * makes them capsules/circles which reads as a UI glitch. The
+     * primitive --vds-radius-3 (6px) is mode-invariant, while
+     * --vds-radius-sm still lets sharp mode tighten to 2px. */
+    --vds-radius-scrollbar-thumb: min(var(--vds-radius-sm), var(--vds-radius-3));
   }
 }
 @layer tokens {

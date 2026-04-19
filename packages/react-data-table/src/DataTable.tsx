@@ -47,6 +47,7 @@ import { useControllableState } from "./use-controllable-state";
 import { useColumnResize } from "./use-column-resize";
 import { useAutoFitColumn } from "./use-auto-fit-column";
 import { useHorizontalScrollShadow } from "./utils/scroll-sync";
+import { useScrollDrag } from "./utils/use-scroll-drag";
 import { useDataTableVirtualizer } from "./virtualizer";
 import { useKeyboardGridNav } from "./use-keyboard-grid-nav";
 import { useSrAnnouncements } from "./utils/announce";
@@ -474,16 +475,28 @@ export const DataTableToolbar = forwardRef<HTMLDivElement, DataTableToolbarProps
  * ──────────────────────────────────────────────────────────── */
 
 export interface DataTableScrollAreaProps
-  extends HTMLAttributes<HTMLDivElement> {}
+  extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * Enable click-and-drag panning of the scroll area (like Google Sheets /
+   * Figma canvas). Buttons/links/inputs/resize-handles remain clickable.
+   * Default: `true`.
+   */
+  scrollDrag?: boolean;
+}
 
 export const DataTableScrollArea = forwardRef<
   HTMLDivElement,
   DataTableScrollAreaProps
->(function DataTableScrollArea({ className, children, ...props }, ref) {
+>(function DataTableScrollArea(
+  { className, children, scrollDrag = true, ...props },
+  ref,
+) {
   const { scrollRef } = useDataTableContext();
+  useScrollDrag(scrollRef, scrollDrag);
   return (
     <div
       ref={composeRefs(scrollRef, ref)}
+      data-scroll-drag={scrollDrag ? "" : undefined}
       className={cn("vds-data-table-scroll-area", className)}
       {...props}
     >
@@ -1255,7 +1268,7 @@ export const DataTableGlobalFilter = forwardRef<
 
 /* ────────────────────────────────────────────────────────────
  * Row / header selection checkboxes — uses Virtari Checkbox
- * (which wraps Radix Checkbox and handles indeterminate).
+ * (which wraps the Checkbox primitive and handles indeterminate).
  * ──────────────────────────────────────────────────────────── */
 
 export interface DataTableSelectAllCheckboxProps {
@@ -1364,10 +1377,17 @@ export const DataTableResizeHandle = forwardRef<
       data-resizing={boolAttr(isResizing)}
       className={cn("vds-data-table-resize-handle", className)}
       onPointerDown={(e) => {
+        /* Stop the pointerdown from reaching the header cell — otherwise
+         * dnd-kit's column-reorder listeners on the cell would steal the
+         * gesture. Resize must always win on the resize handle. */
+        e.stopPropagation();
         /* Let TanStack's internal resize state machine do the drag. */
         header.getResizeHandler()(e);
       }}
-      onTouchStart={(e) => header.getResizeHandler()(e)}
+      onTouchStart={(e) => {
+        e.stopPropagation();
+        header.getResizeHandler()(e);
+      }}
       onDoubleClick={(e) => {
         e.preventDefault();
         fit();

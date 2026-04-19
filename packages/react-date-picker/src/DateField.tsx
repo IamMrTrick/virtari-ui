@@ -128,7 +128,7 @@ export function FieldSegment({ segment, state }: FieldSegmentProps) {
       data-type={segment.type}
       data-placeholder={segment.isPlaceholder ? "true" : undefined}
     >
-      {segment.text}
+      {padSegmentText(segment)}
     </div>
   );
 }
@@ -148,9 +148,33 @@ export function StaticFieldSegments({ segments, className }: StaticFieldSegments
           data-type={segment.type}
           data-placeholder={segment.isPlaceholder ? "true" : undefined}
         >
-          {segment.text}
+          {padSegmentText(segment)}
         </span>
       ))}
     </div>
   );
 }
+
+/** Pads single-digit numeric segments with a leading zero so the field
+ *  always reads "07/03/2026" rather than "7/3/2026". Placeholder segments
+ *  (the "dd" / "mm" / "hh" hints) are left untouched. */
+function padSegmentText(segment: DateSegment): string {
+  if (segment.isPlaceholder) return segment.text;
+  if (!PADDABLE_SEGMENT_TYPES.has(segment.type)) return segment.text;
+  if (segment.text.length === 1 && /^\d$/.test(segment.text)) {
+    return `0${segment.text}`;
+  }
+  return segment.text;
+}
+
+/** Re-exported so TimeField can apply the same zero-padding to its own
+ *  segments without duplicating the rule. */
+export const padTimeSegmentText = padSegmentText;
+
+const PADDABLE_SEGMENT_TYPES = new Set<DateSegment["type"]>([
+  "day",
+  "month",
+  "hour",
+  "minute",
+  "second",
+]);

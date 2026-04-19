@@ -153,7 +153,7 @@
     .vds-tooltip-content[data-side="right"][data-state="closed"] { animation-name: vds-tooltip-out-to-left; }
 
   /* ─────────────────────────────────────────────
-   * Arrow — Radix renders an <svg> we color via fill
+   * Arrow — the primitive renders an <svg> we color via fill
    * ───────────────────────────────────────────── */
   .vds-tooltip-arrow {
     fill: var(--tooltip-arrow-fill);

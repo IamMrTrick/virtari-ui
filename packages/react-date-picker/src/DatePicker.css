@@ -178,6 +178,38 @@
     inline-size: 100%;
   }
 
+  /* Embedded inline time input (desktop + mobile combined view) */
+  .vds-date-picker-time[data-embedded="true"] {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--vds-space-1-5, 0.375rem);
+    padding: var(--vds-space-3, 0.75rem);
+  }
+
+  .vds-date-picker-time-label {
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--date-field-label-color);
+    letter-spacing: 0.02em;
+  }
+
+  .vds-date-picker-time[data-embedded="true"] .vds-time-field {
+    inline-size: 100%;
+  }
+
+  .vds-date-picker-time[data-embedded="true"] .vds-time-field-group {
+    display: flex;
+    inline-size: 100%;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    justify-content: space-between;
+  }
+
+  .vds-date-picker-time[data-embedded="true"] .vds-time-field-segments {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
   .vds-date-picker-footer {
     padding: var(--vds-space-3, 0.75rem);
     border-block-start: 1px solid var(--vds-color-border-muted, #e5e7eb);

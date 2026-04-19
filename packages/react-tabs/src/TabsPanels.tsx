@@ -86,7 +86,7 @@ export function TabsPanels({
     return () => mq.removeEventListener?.("change", apply);
   }, [touchOnly]);
 
-  /* Track which panel is active via DOM attribute (Radix sets
+  /* Track which panel is active via DOM attribute (the primitive sets
      data-state="active" on the visible panel). */
   useLayoutEffect(() => {
     const container = containerRef.current;
@@ -129,8 +129,8 @@ export function TabsPanels({
       if (!panel) return false;
       const root = container.closest<HTMLElement>(".vds-tabs") ?? document.body;
 
-      /* Primary: Radix writes the owning trigger ID onto the panel via
-         `aria-labelledby`, so we can hop straight to the exact trigger
+      /* Primary: the primitive writes the owning trigger ID onto the panel
+         via `aria-labelledby`, so we can hop straight to the exact trigger
          without depending on selector quirks. */
       let trigger: HTMLButtonElement | null = null;
       const triggerId = panel.getAttribute("aria-labelledby");
@@ -149,8 +149,8 @@ export function TabsPanels({
         );
       }
 
-      /* Fallback: match by index within the nearest tablist (Radix renders
-         triggers in the same order as contents). */
+      /* Fallback: match by index within the nearest tablist (the primitive
+         renders triggers in the same order as contents). */
       if (!trigger) {
         const tablist = root.querySelector('[role="tablist"]');
         const triggers =

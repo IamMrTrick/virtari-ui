@@ -261,15 +261,38 @@
     cursor: progress;
   }
 
-  /* ── Value area (grows, wraps chips) ── */
+  /* ── Value area (grows, keeps chips on one line) ── */
   .vds-combobox-trigger-value {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
     gap: var(--combobox-trigger-chip-gap);
     flex: 1 1 auto;
     min-inline-size: 0;
     overflow: hidden;
+  }
+
+  /* Inline chip row — container measured for overflow collapse */
+  .vds-combobox-trigger-chips {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: var(--combobox-trigger-chip-gap);
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+  }
+
+  /* Off-screen clone used purely to measure each chip's natural width */
+  .vds-combobox-trigger-chips-measure {
+    position: absolute;
+    inset-inline-start: -9999px;
+    inset-block-start: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--combobox-trigger-chip-gap);
+    visibility: hidden;
+    pointer-events: none;
+    white-space: nowrap;
   }
 
   .vds-combobox-trigger-label {
@@ -361,10 +384,11 @@
 
   /* ── Content (popover) ── */
   .vds-combobox-content {
+    --vds-popover-trigger-width: var(--radix-popover-trigger-width);
     z-index: var(--combobox-content-z-index);
     min-inline-size: var(--combobox-content-min-inline-size);
     /* Match trigger width when wider */
-    inline-size: var(--radix-popover-trigger-width, auto);
+    inline-size: var(--vds-popover-trigger-width, auto);
     max-inline-size: min(90vw, 32rem);
     background-color: var(--combobox-content-bg);
     border: var(--combobox-content-border-width) solid var(--combobox-content-border-color);

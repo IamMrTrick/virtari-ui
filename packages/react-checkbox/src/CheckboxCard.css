@@ -1,0 +1,159 @@
+@layer components {
+  .vds-checkbox-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--checkbox-card-gap);
+    padding: var(--checkbox-card-padding-block) var(--checkbox-card-padding-inline);
+    border: var(--checkbox-card-border-width) solid var(--checkbox-card-border-color);
+    border-radius: var(--checkbox-card-radius);
+    background-color: var(--checkbox-card-bg);
+    color: var(--checkbox-card-label-color);
+    cursor: pointer;
+    transition:
+      background-color var(--checkbox-card-transition-duration) var(--checkbox-card-transition-easing),
+      border-color var(--checkbox-card-transition-duration) var(--checkbox-card-transition-easing),
+      box-shadow var(--checkbox-card-transition-duration) var(--checkbox-card-transition-easing);
+    isolation: isolate;
+  }
+
+  /* ── Hover ── */
+  .vds-checkbox-card:hover:not([data-disabled]) {
+    background-color: var(--checkbox-card-bg-hover);
+    border-color: var(--checkbox-card-border-color-hover);
+  }
+
+  /* ── Focus-within (the inner Checkbox owns keyboard focus) ── */
+  .vds-checkbox-card:focus-within {
+    outline: var(--checkbox-card-focus-ring-width) solid var(--checkbox-card-focus-ring-color);
+    outline-offset: var(--checkbox-card-focus-ring-offset);
+    border-color: var(--checkbox-card-border-color-hover);
+  }
+
+  /* ── Checked / Indeterminate — derived from inner checkbox state ── */
+  .vds-checkbox-card:has(.vds-checkbox-card-input[data-state="checked"]),
+  .vds-checkbox-card:has(.vds-checkbox-card-input[data-state="indeterminate"]) {
+    background-color: var(--checkbox-card-bg-checked);
+    border-color: var(--checkbox-card-border-color-checked);
+  }
+
+  /* ── Disabled ── */
+  .vds-checkbox-card[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  /* ── Body / text layout ── */
+  .vds-checkbox-card-body {
+    display: flex;
+    flex: 1;
+    min-inline-size: 0;
+    gap: var(--checkbox-card-gap);
+    align-items: flex-start;
+  }
+
+  .vds-checkbox-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+    min-inline-size: 0;
+    flex: 1;
+  }
+
+  .vds-checkbox-card-label-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--vds-space-3, 0.75rem);
+    min-inline-size: 0;
+  }
+
+  .vds-checkbox-card-label {
+    font-size: var(--checkbox-card-label-font-size);
+    font-weight: var(--checkbox-card-label-font-weight);
+    color: var(--checkbox-card-label-color);
+    line-height: 1.4;
+    min-inline-size: 0;
+  }
+
+  .vds-checkbox-card-description {
+    font-size: var(--checkbox-card-description-font-size);
+    color: var(--checkbox-card-description-color);
+    font-weight: var(--vds-font-weight-normal, 400);
+    line-height: 1.5;
+  }
+
+  .vds-checkbox-card-trailing {
+    flex-shrink: 0;
+    font-size: var(--checkbox-card-trailing-font-size);
+    font-weight: var(--checkbox-card-label-font-weight);
+    color: var(--checkbox-card-trailing-color);
+    white-space: nowrap;
+  }
+
+  .vds-checkbox-card-badge {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-size: var(--checkbox-card-badge-font-size);
+    font-weight: var(--checkbox-card-badge-font-weight);
+    color: var(--checkbox-card-badge-color);
+    margin-block-start: var(--vds-space-0-5, 0.125rem);
+  }
+
+  /* =========================================================================
+   * Row layout (default) — [checkbox][content + trailing]
+   * ========================================================================= */
+  .vds-checkbox-card[data-layout="row"] {
+    flex-direction: row;
+  }
+
+  .vds-checkbox-card[data-layout="row"] > .vds-checkbox-card-input {
+    margin-block-start: 0.125rem;
+  }
+
+  /* =========================================================================
+   * Icon-grid layout — icon centered on top, text below, checkbox in corner
+   * ========================================================================= */
+  .vds-checkbox-card[data-layout="icon-grid"] {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--vds-space-2, 0.5rem);
+    padding-block: var(--vds-space-4, 1rem);
+  }
+
+  .vds-checkbox-card[data-layout="icon-grid"] > .vds-checkbox-card-input {
+    position: absolute;
+    inset-block-start: var(--vds-space-2-5, 0.625rem);
+    inset-inline-end: var(--vds-space-2-5, 0.625rem);
+  }
+
+  .vds-checkbox-card[data-layout="icon-grid"] .vds-checkbox-card-body {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+
+  .vds-checkbox-card[data-layout="icon-grid"] .vds-checkbox-card-text {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vds-checkbox-card[data-layout="icon-grid"] .vds-checkbox-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--checkbox-card-icon-size);
+    block-size: var(--checkbox-card-icon-size);
+    border-radius: var(--checkbox-card-icon-radius);
+    background-color: var(--checkbox-card-icon-bg);
+    color: var(--checkbox-card-icon-color);
+    flex-shrink: 0;
+  }
+
+  .vds-checkbox-card[data-layout="icon-grid"] .vds-checkbox-card-icon svg {
+    inline-size: var(--checkbox-card-icon-glyph-size);
+    block-size: var(--checkbox-card-icon-glyph-size);
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "@virtari/react-phone-input",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles": "./dist/PhoneInput.css",
+    "./tokens": "./dist/PhoneInput.tokens.css"
+  },
+  "files": [
+    "dist",
+    "ATTRIBUTION.md"
+  ],
+  "scripts": {
+    "codegen": "node scripts/build-countries.mjs",
+    "build": "pnpm codegen && tsup && postcss src/PhoneInput.tokens.css -o dist/PhoneInput.tokens.css && postcss src/PhoneInput.css -o dist/PhoneInput.css",
+    "clean": "rm -rf dist src/generated",
+    "typecheck": "pnpm codegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@radix-ui/react-popover": "^1.1.15",
+    "@virtari/react-flag": "workspace:*",
+    "@virtari/react-input": "workspace:*",
+    "@virtari/react-select": "workspace:*",
+    "@virtari/utils": "workspace:*",
+    "libphonenumber-js": "^1.11.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "i18n-iso-countries": "^7.14.0",
+    "react": "^19.2.5",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0",
+    "world-countries": "^5.1.0"
+  }
+}

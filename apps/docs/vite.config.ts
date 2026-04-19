@@ -25,6 +25,6 @@ export default defineConfig({
         new URL("../../packages/utils/dist/index.js", import.meta.url),
       ),
     },
-    conditions: ["import", "module", "browser", "default"],
+    conditions: ["style", "import", "module", "browser", "default"],
   },
 });

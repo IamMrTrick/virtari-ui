@@ -67,6 +67,7 @@
     "@virtari/react-dialog": "workspace:*",
     "@virtari/react-drawer": "workspace:*",
     "@virtari/react-icons": "workspace:*",
+    "@virtari/react-radio-group": "workspace:*",
     "@virtari/utils": "workspace:*"
   },
   "peerDependencies": {

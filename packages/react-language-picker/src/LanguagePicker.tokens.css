@@ -1,0 +1,27 @@
+@layer design-system.components {
+  .vds-language-picker {
+    --language-picker-option-gap: var(--vds-space-2, 0.5rem);
+    --language-picker-flag-size: 1.125rem;          /* trigger (single-line) */
+    --language-picker-option-flag-size: 1.375rem;    /* popover option (two-line) */
+    --language-picker-english-color: var(--vds-color-text-muted, #6b7280);
+    --language-picker-english-font-size: var(--vds-text-xs, 0.75rem);
+    --language-picker-native-font-weight: var(--vds-font-weight-medium, 500);
+  }
+
+  /* Tighter popover flag when the Combobox runs at sm/xs. */
+  .vds-combobox-content[data-size="2xs"] .vds-language-picker-option,
+  .vds-combobox-content[data-size="xs"] .vds-language-picker-option,
+  .vds-combobox-content[data-size="sm"] .vds-language-picker-option {
+    --language-picker-option-flag-size: 1.125rem;
+  }
+  .vds-combobox-content[data-size="lg"] .vds-language-picker-option,
+  .vds-combobox-content[data-size="xl"] .vds-language-picker-option,
+  .vds-combobox-content[data-size="2xl"] .vds-language-picker-option {
+    --language-picker-option-flag-size: 1.5rem;
+  }
+
+  .vds-language-label {
+    --language-label-gap: var(--vds-space-2, 0.5rem);
+    --language-label-flag-size: 1.375rem;
+  }
+}

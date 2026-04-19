@@ -61,7 +61,7 @@
   }
 
   /* ─────────────────────────────────────────────
-   * Arrow — Radix renders an <svg> we color via fill
+   * Arrow — the primitive renders an <svg> we color via fill
    * ───────────────────────────────────────────── */
   .vds-tooltip-arrow {
     fill: var(--tooltip-arrow-fill);

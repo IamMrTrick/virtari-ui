@@ -5,17 +5,15 @@ import {
   useDateRangePickerState,
   useDateFieldState,
   type DateRange,
+  type TimeValue,
 } from "@react-stately/datepicker";
 import { useLocale } from "@react-aria/i18n";
-import { Time } from "@internationalized/date";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { Button } from "@virtari/react-button";
-import { IconChevronLeft } from "@virtari/react-icons";
 import { createCalendar, resolveLocale, type CalendarSystem, type DateValue } from "./date-utils";
 import type { DatePickerSize, DatePickerAppearance } from "./context";
-import { RangeCalendar } from "./Calendar";
+import { RangeCalendar, type CalendarView, type CalendarHandle } from "./Calendar";
 import { FieldSegment, StaticFieldSegments } from "./DateField";
-import { TimeField, TimePickerEditor, formatTimeValue } from "./TimeField";
+import { TimeField, TimePickerEditor, nowAsTime } from "./TimeField";
 import { toButtonProps } from "./aria-button";
 import {
   MobilePickerSurface,
@@ -45,6 +43,11 @@ export interface DateRangePickerProps {
   showTimePicker?: boolean;
   showMilliseconds?: boolean;
   millisecondStep?: number;
+  /**
+   * Seeded time (applied to both start and end) when the picker opens
+   * without a value. Defaults to the user's current local time (now).
+   */
+  defaultTimeValue?: TimeValue;
   allowsNonContiguousRanges?: boolean;
   autoFocus?: boolean;
   startName?: string;
@@ -90,6 +93,7 @@ export function DateRangePicker({
   overlayMode = "auto",
   mobilePresentation = "drawer",
   mobileSizeMode = "full",
+  defaultTimeValue,
   ref,
   ...props
 }: DateRangePickerProps) {
@@ -104,6 +108,10 @@ export function DateRangePicker({
     : preferredOverlayMode;
   const usePopoverSurface = resolvedOverlayMode === "popover";
   const useSheetSurface = resolvedOverlayMode === "drawer" || resolvedOverlayMode === "dialog";
+  // Desktop dialogs should size to content rather than going full-screen; the
+  // `mobileSizeMode="full"` default is intended for mobile drawers.
+  const effectiveSizeMode =
+    !isMobile && resolvedOverlayMode === "dialog" ? "content" : mobileSizeMode;
 
   const state = useDateRangePickerState({
     ...props,
@@ -112,11 +120,14 @@ export function DateRangePicker({
   });
   const [draftRange, setDraftRange] = useState<DateRange | null>(toCompleteRange(state.value));
   const [mobileView, setMobileView] = useState<"date" | "start-time" | "end-time">("date");
+  const [calendarView, setCalendarView] = useState<CalendarView>("days");
+  const calendarApiRef = useRef<CalendarHandle | null>(null);
 
   useEffect(() => {
     if (!state.isOpen) {
       setDraftRange(toCompleteRange(state.value));
       setMobileView("date");
+      setCalendarView("days");
     }
   }, [state.isOpen, state.value]);
 
@@ -124,6 +135,7 @@ export function DateRangePicker({
     if (state.isOpen) {
       setDraftRange(toCompleteRange(state.value));
       setMobileView("date");
+      setCalendarView("days");
     }
   }, [state.isOpen]);
 
@@ -178,42 +190,96 @@ export function DateRangePicker({
   const isInvalid = invalid ?? state.isInvalid;
   const isSplitLayout = state.hasTime && (size === "lg" || size === "xl" || size === "2xl");
   const triggerUsesReadonlyField = useSheetSurface;
-  const timeGranularity = props.granularity === "day" ? "hour" : props.granularity ?? "hour";
-  const startTimeSummary = formatTimeValue(draftState.timeRange?.start ?? null, {
-    hourCycle: props.hourCycle,
-    granularity: timeGranularity,
-    showMilliseconds: props.showMilliseconds,
-  });
-  const endTimeSummary = formatTimeValue(draftState.timeRange?.end ?? null, {
-    hourCycle: props.hourCycle,
-    granularity: timeGranularity,
-    showMilliseconds: props.showMilliseconds,
-  });
-  const draftStartTime = (draftState.timeRange?.start ?? new Time()).copy();
-  const draftEndTime = (draftState.timeRange?.end ?? new Time()).copy();
+  const timeGranularity: "hour" | "minute" | "second" =
+    props.granularity === "day" ? "hour" : props.granularity ?? "hour";
+
+  // Seed both start and end time on open so picking a range alone produces
+  // complete DateTimes (prevents the "apply twice" symptom on the range picker).
+  useEffect(() => {
+    if (!state.isOpen || !state.hasTime) return;
+    const seed = defaultTimeValue ?? nowAsTime(timeGranularity);
+    if (draftState.timeRange?.start == null) {
+      draftState.setTime("start", seed);
+    }
+    if (draftState.timeRange?.end == null) {
+      draftState.setTime("end", seed);
+    }
+  }, [state.isOpen, state.hasTime, draftState, defaultTimeValue, timeGranularity]);
+
+  const fallbackTime = () =>
+    (defaultTimeValue ?? nowAsTime(timeGranularity));
+  const draftStartTime = (draftState.timeRange?.start ?? fallbackTime()).copy() as TimeValue;
+  const draftEndTime = (draftState.timeRange?.end ?? fallbackTime()).copy() as TimeValue;
   const renderedPresets = typeof presets === "function"
     ? presets({
         value: draftRange,
         setValue: setDraftRange,
       })
     : presets;
-  const applyDisabled = Boolean(
-    draftState.value &&
-    ((!draftState.value.start && draftState.value.end) ||
-      (draftState.value.start && !draftState.value.end)),
+  const applyDisabled = state.hasTime
+    ? !(draftState.value?.start && draftState.value?.end)
+    : !(draftState.dateRange?.start && draftState.dateRange?.end);
+  const commitAndClose = () => {
+    state.setValue(toCompleteRange(draftState.value));
+    state.setOpen(false);
+  };
+  const resetAndClose = () => {
+    setDraftRange(toCompleteRange(state.value));
+    state.setOpen(false);
+  };
+  const buttonSize = size === "2xs" || size === "xs" ? "sm" : "md";
+  const actionBarByCalendarView = (): ReactNode => {
+    if (calendarView === "months") {
+      return (
+        <PickerActionBar
+          className="vds-date-range-picker-actions"
+          buttonSize={buttonSize}
+          cancelLabel="Cancel"
+          applyLabel="Change Month"
+          onCancel={() => calendarApiRef.current?.cancelDraft()}
+          onApply={() => calendarApiRef.current?.applyMonthDraft()}
+        />
+      );
+    }
+    if (calendarView === "years") {
+      return (
+        <PickerActionBar
+          className="vds-date-range-picker-actions"
+          buttonSize={buttonSize}
+          cancelLabel="Cancel"
+          applyLabel="Change Year"
+          onCancel={() => calendarApiRef.current?.cancelDraft()}
+          onApply={() => calendarApiRef.current?.applyYearDraft()}
+        />
+      );
+    }
+    return (
+      <PickerActionBar
+        className="vds-date-range-picker-actions"
+        buttonSize={buttonSize}
+        applyDisabled={applyDisabled}
+        onCancel={resetAndClose}
+        onApply={commitAndClose}
+      />
+    );
+  };
+  const actionBarDateView = actionBarByCalendarView();
+  const hasRangeSelected = Boolean(
+    draftState.dateRange?.start && draftState.dateRange?.end,
   );
-  const actionBar = (
+  const actionBarTimeView = (
     <PickerActionBar
       className="vds-date-range-picker-actions"
-      buttonSize={size === "2xs" || size === "xs" ? "sm" : "md"}
-      applyDisabled={applyDisabled}
-      onCancel={() => {
-        setDraftRange(toCompleteRange(state.value));
-        state.setOpen(false);
-      }}
+      buttonSize={buttonSize}
+      cancelLabel="Cancel"
+      applyLabel="Set Time"
+      onCancel={resetAndClose}
       onApply={() => {
-        state.setValue(toCompleteRange(draftState.value));
-        state.setOpen(false);
+        if (hasRangeSelected) {
+          commitAndClose();
+        } else {
+          setMobileView("date");
+        }
       }}
     />
   );
@@ -236,6 +302,9 @@ export function DateRangePicker({
       appearance={appearance}
       invalid={isInvalid}
       locale={usedLocale}
+      apiRef={calendarApiRef}
+      onViewChange={setCalendarView}
+      hideInternalActions
     />
   );
 
@@ -252,7 +321,7 @@ export function DateRangePicker({
         >
           {rangeCalendar}
           {state.hasTime ? (
-            <div className="vds-date-range-picker-time">
+            <div className="vds-date-range-picker-time" data-embedded="true">
               <TimeField
                 value={draftState.timeRange?.start ?? null}
                 onChange={(value) => {
@@ -260,16 +329,14 @@ export function DateRangePicker({
                     draftState.setTime("start", value);
                   }
                 }}
-                granularity={
-                  props.granularity === "day" ? "hour" : props.granularity ?? "hour"
-                }
+                granularity={timeGranularity}
                 hourCycle={props.hourCycle}
                 hideTimeZone={props.hideTimeZone}
                 showPicker={props.showTimePicker ?? true}
+                overlayMode="popover"
                 showMilliseconds={props.showMilliseconds}
                 millisecondStep={props.millisecondStep}
-                mobilePresentation={mobilePresentation}
-                mobileSizeMode="content"
+                defaultTimeValue={defaultTimeValue}
                 size={size}
                 appearance={appearance}
                 label="Start time"
@@ -282,16 +349,14 @@ export function DateRangePicker({
                     draftState.setTime("end", value);
                   }
                 }}
-                granularity={
-                  props.granularity === "day" ? "hour" : props.granularity ?? "hour"
-                }
+                granularity={timeGranularity}
                 hourCycle={props.hourCycle}
                 hideTimeZone={props.hideTimeZone}
                 showPicker={props.showTimePicker ?? true}
+                overlayMode="popover"
                 showMilliseconds={props.showMilliseconds}
                 millisecondStep={props.millisecondStep}
-                mobilePresentation={mobilePresentation}
-                mobileSizeMode="content"
+                defaultTimeValue={defaultTimeValue}
                 size={size}
                 appearance={appearance}
                 label="End time"
@@ -304,7 +369,7 @@ export function DateRangePicker({
           ) : null}
         </div>
       </div>
-      {actionBar}
+      {actionBarDateView}
     </div>
   );
 
@@ -415,21 +480,10 @@ export function DateRangePicker({
                 : label ?? "Select range"
           }
           presentation={resolvedOverlayMode}
-          sizeMode={mobileSizeMode}
+          sizeMode={effectiveSizeMode}
+          dialogSize={mobileView === "date" ? "lg" : "sm"}
           bodyClassName="vds-date-range-picker-mobile-body"
-          leadingAction={mobileView !== "date" ? (
-            <Button
-              type="button"
-              color="neutral"
-              variant="ghost"
-              size="sm"
-              leftSection={<IconChevronLeft size={14} stroke={1.75} aria-hidden focusable={false} />}
-              onClick={() => setMobileView("date")}
-            >
-              Back
-            </Button>
-          ) : null}
-          footer={actionBar}
+          footer={mobileView !== "date" ? actionBarTimeView : actionBarDateView}
         >
           {mobileView === "start-time" || mobileView === "end-time" ? (
             <div className="vds-date-range-picker-mobile-panel vds-date-range-picker-mobile-time-panel">
@@ -463,42 +517,55 @@ export function DateRangePicker({
                     isDateUnavailable={props.isDateUnavailable}
                     isDisabled={props.isDisabled}
                     isReadOnly={props.isReadOnly}
-                  allowsNonContiguousRanges={props.allowsNonContiguousRanges}
-                  aria-label={props["aria-label"] ?? "Date range calendar"}
-                  visibleDuration={{ months: 2 }}
-                  pageBehavior="single"
-                  size={size}
-                  appearance={appearance}
-                  invalid={isInvalid}
-                  locale={usedLocale}
-                  className="vds-date-range-picker-mobile-calendar"
-                />
+                    allowsNonContiguousRanges={props.allowsNonContiguousRanges}
+                    aria-label={props["aria-label"] ?? "Date range calendar"}
+                    visibleDuration={{ months: 2 }}
+                    pageBehavior="single"
+                    size={size}
+                    appearance={appearance}
+                    invalid={isInvalid}
+                    locale={usedLocale}
+                    className="vds-date-range-picker-mobile-calendar"
+                    apiRef={calendarApiRef}
+                    onViewChange={setCalendarView}
+                    hideInternalActions
+                  />
                   {state.hasTime ? (
-                    <div className="vds-date-range-picker-time" data-mobile-time-links="true">
-                      <Button
-                        type="button"
-                        color="neutral"
-                        variant="soft"
-                        fullWidth
-                        className="vds-picker-mobile-mode-link"
-                        onClick={() => setMobileView("start-time")}
-                        disabled={!draftState.dateRange?.start}
-                      >
-                        <span className="vds-picker-mobile-mode-label">Start time</span>
-                        <span className="vds-picker-mobile-mode-value">{startTimeSummary}</span>
-                      </Button>
-                      <Button
-                        type="button"
-                        color="neutral"
-                        variant="soft"
-                        fullWidth
-                        className="vds-picker-mobile-mode-link"
-                        onClick={() => setMobileView("end-time")}
-                        disabled={!draftState.dateRange?.end}
-                      >
-                        <span className="vds-picker-mobile-mode-label">End time</span>
-                        <span className="vds-picker-mobile-mode-value">{endTimeSummary}</span>
-                      </Button>
+                    <div
+                      className="vds-date-range-picker-time"
+                      data-embedded="true"
+                      data-mobile-time-links="true"
+                    >
+                      <TimeField
+                        value={draftState.timeRange?.start ?? draftStartTime}
+                        granularity={timeGranularity}
+                        hourCycle={props.hourCycle}
+                        hideTimeZone={props.hideTimeZone}
+                        showPicker
+                        showMilliseconds={props.showMilliseconds}
+                        millisecondStep={props.millisecondStep}
+                        defaultTimeValue={defaultTimeValue}
+                        onTriggerClick={() => setMobileView("start-time")}
+                        size={size}
+                        appearance={appearance}
+                        label="Start time"
+                        aria-label="Start time"
+                      />
+                      <TimeField
+                        value={draftState.timeRange?.end ?? draftEndTime}
+                        granularity={timeGranularity}
+                        hourCycle={props.hourCycle}
+                        hideTimeZone={props.hideTimeZone}
+                        showPicker
+                        showMilliseconds={props.showMilliseconds}
+                        millisecondStep={props.millisecondStep}
+                        defaultTimeValue={defaultTimeValue}
+                        onTriggerClick={() => setMobileView("end-time")}
+                        size={size}
+                        appearance={appearance}
+                        label="End time"
+                        aria-label="End time"
+                      />
                     </div>
                   ) : null}
                   {footer ? (

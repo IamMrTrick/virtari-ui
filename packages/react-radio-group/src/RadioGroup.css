@@ -1,54 +1,152 @@
-@layer components {
-  .vds-radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vds-space-2);
-  }
+@import "./RadioGroup.tokens.css";
+@import "./RadioField.css";
+@import "./RadioCard.css";
+@import "./SegmentedRadio.css";
+@import "./PillRadio.css";
 
+@layer components {
+  /* =========================================================================
+   * Atomic radio — circular selector with inner dot.
+   * ========================================================================= */
   .vds-radio-item {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    inline-size: var(--vds-space-5);
-    block-size: var(--vds-space-5);
-    border: 2px solid var(--vds-color-border);
-    border-radius: var(--vds-radius-full);
-    background-color: var(--vds-color-surface);
+    inline-size: var(--radio-size);
+    block-size: var(--radio-size);
+    padding: 0;
+    border: var(--radio-border-width) solid var(--radio-border-color);
+    border-radius: var(--vds-radius-full, 9999px);
+    background-color: var(--radio-bg);
+    color: var(--radio-dot-color);
     cursor: pointer;
     transition:
-      background-color var(--vds-duration-fast) var(--vds-ease-out),
-      border-color var(--vds-duration-fast) var(--vds-ease-out);
-
-    &[data-state="checked"] {
-      border-color: var(--vds-color-primary-500);
-      background-color: var(--vds-color-primary-500);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+      background-color var(--radio-transition-duration)
+        var(--radio-transition-easing),
+      border-color var(--radio-transition-duration)
+        var(--radio-transition-easing),
+      box-shadow var(--radio-transition-duration) var(--radio-transition-easing);
   }
 
+  /* ── Hover (unchecked) ── */
+  .vds-radio-item:hover:not(:disabled):not([data-state="checked"]) {
+    border-color: var(--radio-border-color-hover);
+    background-color: var(--radio-bg-hover);
+  }
+
+  /* ── Checked ── */
+  .vds-radio-item[data-state="checked"] {
+    background-color: var(--radio-bg-checked);
+    border-color: var(--radio-border-color-checked);
+  }
+
+  .vds-radio-item[data-state="checked"]:hover:not(:disabled) {
+    background-color: var(--radio-bg-checked-hover);
+    border-color: var(--radio-border-color-checked-hover);
+  }
+
+  /* ── Focus ring ── */
+  .vds-radio-item:focus-visible {
+    outline: var(--radio-focus-ring-width) solid var(--radio-focus-ring-color);
+    outline-offset: var(--radio-focus-ring-offset);
+  }
+
+  /* ── Disabled ── */
+  .vds-radio-item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ── Indicator / inner dot ── */
   .vds-radio-indicator {
     display: flex;
     align-items: center;
     justify-content: center;
+    inline-size: 100%;
+    block-size: 100%;
+  }
 
-    &::after {
-      content: "";
-      display: block;
-      inline-size: var(--vds-space-2);
-      block-size: var(--vds-space-2);
-      border-radius: var(--vds-radius-full);
-      background-color: var(--vds-color-on-solid);
-      animation: vds-scale-in var(--vds-duration-fast) var(--vds-ease-out);
-    }
+  .vds-radio-indicator::after {
+    content: "";
+    display: block;
+    inline-size: var(--radio-dot-size);
+    block-size: var(--radio-dot-size);
+    border-radius: var(--vds-radius-full, 9999px);
+    background-color: var(--radio-dot-color);
+    animation: vds-scale-in var(--radio-transition-duration)
+      var(--radio-transition-easing);
+  }
+
+  /* =========================================================================
+   * Group wrapper — fieldset-like container with label / description / error.
+   * The primitive RadioGroup.Root IS this element; we hang label/description/error
+   * as siblings next to the items, keeping keyboard roving tabindex intact.
+   * ========================================================================= */
+  .vds-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radio-group-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-radio-group-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+  }
+
+  .vds-radio-group-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    font-size: var(--radio-group-label-font-size);
+    font-weight: var(--radio-group-label-font-weight);
+    color: var(--radio-group-label-color);
+    line-height: 1.4;
+  }
+
+  .vds-radio-group-required {
+    color: var(--radio-group-required-color);
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
+
+  .vds-radio-group-description {
+    font-size: var(--radio-group-description-font-size);
+    color: var(--radio-group-description-color);
+    line-height: 1.5;
+  }
+
+  .vds-radio-group-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radio-group-items-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-radio-group[data-orientation="horizontal"] .vds-radio-group-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--radio-group-items-gap);
+  }
+
+  .vds-radio-group-error {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--radio-group-error-gap);
+    margin: 0;
+    font-size: var(--radio-group-error-font-size);
+    color: var(--radio-group-error-color);
+    line-height: 1.4;
+  }
+
+  .vds-radio-group-error-icon {
+    flex-shrink: 0;
+    color: currentColor;
+  }
+
+  .vds-radio-group[data-disabled] {
+    opacity: 0.7;
   }
 }

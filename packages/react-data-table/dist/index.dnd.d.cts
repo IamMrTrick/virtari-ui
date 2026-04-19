@@ -3,7 +3,7 @@ import { DndContextProps, SensorDescriptor, SensorOptions, DragEndEvent } from '
 import * as react from 'react';
 import { ReactNode } from 'react';
 import { ColumnOrderState } from '@tanstack/react-table';
-import { D as DataTableHeaderCellProps } from './DataTable-DoUCBg76.cjs';
+import { D as DataTableHeaderCellProps } from './DataTable-BO53g--v.cjs';
 import { SortingStrategy } from '@dnd-kit/sortable';
 
 interface DataTableDndProviderProps {

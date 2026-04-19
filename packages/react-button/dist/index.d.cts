@@ -1,5 +1,5 @@
-import * as react_jsx_runtime from 'react/jsx-runtime';
-import { ReactNode, Ref } from 'react';
+import * as react from 'react';
+import { ReactNode } from 'react';
 
 /** Intent palette — orthogonal to variant. Picks the hue family. */
 type ButtonColor = "primary" | "success" | "warning" | "danger" | "info" | "accent" | "neutral" | "contrast";
@@ -35,7 +35,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: ButtonVariant;
     /** Size preset */
     size?: ButtonSize;
-    /** Render as child element (polymorphic via Radix Slot) */
+    /** Render as child element (polymorphic via Slot) */
     asChild?: boolean;
     /** Show loading spinner and disable interaction */
     loading?: boolean;
@@ -51,8 +51,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     effect?: ButtonEffect;
     /** Attention animation (requires animations CSS import) */
     animation?: ButtonAnimation;
-    ref?: Ref<HTMLButtonElement>;
 }
-declare function Button({ color, variant, size, asChild, loading, loadingText, leftSection, rightSection, fullWidth, effect, animation, disabled, className, children, ref, ...props }: ButtonProps): react_jsx_runtime.JSX.Element;
+declare const Button: react.ForwardRefExoticComponent<ButtonProps & react.RefAttributes<HTMLButtonElement>>;
 
 export { Button, type ButtonAnimation, type ButtonColor, type ButtonEffect, type ButtonProps, type ButtonSize, type ButtonVariant };

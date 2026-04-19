@@ -16,8 +16,8 @@ interface AlertDialogOverlayProps extends React.ComponentPropsWithoutRef<typeof 
     ref?: Ref<ComponentRef<typeof AlertDialogPrimitive.Overlay>>;
 }
 declare function AlertDialogOverlay({ backdrop, className, ref, ...props }: AlertDialogOverlayProps): react_jsx_runtime.JSX.Element;
-type RadixContentProps = React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>;
-interface AlertDialogContentProps extends RadixContentProps {
+type PrimitiveContentProps = React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>;
+interface AlertDialogContentProps extends PrimitiveContentProps {
     /** Max-width variant. Defaults to `"md"`. */
     size?: AlertDialogSize;
     /** Enter/exit animation preset. Defaults to `"scale"`. */

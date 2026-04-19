@@ -16,13 +16,14 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./styles": "./dist/Checkbox.css"
+    "./styles": "./dist/Checkbox.css",
+    "./tokens": "./dist/Checkbox.tokens.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup && postcss src/Checkbox.css -o dist/Checkbox.css",
+    "build": "tsup && postcss src/Checkbox.tokens.css -o dist/Checkbox.tokens.css && postcss src/Checkbox.css -o dist/Checkbox.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

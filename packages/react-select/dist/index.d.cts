@@ -89,6 +89,7 @@ interface ComboboxContextValue {
     getItemId: (index: number) => string;
     handleInputKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
+declare function useComboboxContext(): ComboboxContextValue;
 interface UseComboboxProps<T extends ComboboxItemData = ComboboxItemData> {
     items: T[];
     value?: string | string[];
@@ -164,4 +165,4 @@ interface ComboboxLoadingProps extends React.HTMLAttributes<HTMLDivElement> {
 declare function ComboboxLoading({ className, children, ref, ...props }: ComboboxLoadingProps): react_jsx_runtime.JSX.Element | null;
 declare function ComboboxSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): react_jsx_runtime.JSX.Element;
 
-export { Combobox, type ComboboxAppearance, ComboboxContent, type ComboboxContentProps, type ComboboxContextValue, ComboboxEmpty, type ComboboxEmptyProps, type ComboboxFilter, ComboboxGroup, type ComboboxGroupProps, ComboboxInput, type ComboboxInputProps, ComboboxItem, type ComboboxItemData, type ComboboxItemProps, ComboboxList, type ComboboxListProps, ComboboxLoading, type ComboboxLoadingProps, ComboboxOptions, type ComboboxOptionsProps, type ComboboxProps, ComboboxSeparator, type ComboboxSize, ComboboxTrigger, type ComboboxTriggerProps, Select, type SelectAppearance, SelectContent, type SelectContentProps, SelectEmpty, type SelectEmptyProps, SelectGroup, SelectItem, type SelectItemProps, SelectLabel, type SelectLabelProps, SelectSeparator, type SelectSeparatorProps, type SelectSize, SelectTrigger, type SelectTriggerProps, SelectValue, type UseComboboxProps };
+export { Combobox, type ComboboxAppearance, ComboboxContent, type ComboboxContentProps, type ComboboxContextValue, ComboboxEmpty, type ComboboxEmptyProps, type ComboboxFilter, ComboboxGroup, type ComboboxGroupProps, ComboboxInput, type ComboboxInputProps, ComboboxItem, type ComboboxItemData, type ComboboxItemProps, ComboboxList, type ComboboxListProps, ComboboxLoading, type ComboboxLoadingProps, ComboboxOptions, type ComboboxOptionsProps, type ComboboxProps, ComboboxSeparator, type ComboboxSize, ComboboxTrigger, type ComboboxTriggerProps, Select, type SelectAppearance, SelectContent, type SelectContentProps, SelectEmpty, type SelectEmptyProps, SelectGroup, SelectItem, type SelectItemProps, SelectLabel, type SelectLabelProps, SelectSeparator, type SelectSeparatorProps, type SelectSize, SelectTrigger, type SelectTriggerProps, SelectValue, type UseComboboxProps, useComboboxContext };

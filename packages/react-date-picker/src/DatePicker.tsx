@@ -4,17 +4,15 @@ import { useDatePicker, useDateField } from "@react-aria/datepicker";
 import {
   useDatePickerState,
   useDateFieldState,
+  type TimeValue,
 } from "@react-stately/datepicker";
 import { useLocale } from "@react-aria/i18n";
-import { Time } from "@internationalized/date";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { Button } from "@virtari/react-button";
-import { IconChevronLeft } from "@virtari/react-icons";
 import { createCalendar, resolveLocale, type CalendarSystem, type DateValue } from "./date-utils";
 import type { DatePickerSize, DatePickerAppearance } from "./context";
-import { Calendar } from "./Calendar";
+import { Calendar, type CalendarView, type CalendarHandle } from "./Calendar";
 import { FieldSegment, StaticFieldSegments } from "./DateField";
-import { TimeField, TimePickerEditor, formatTimeValue } from "./TimeField";
+import { TimeField, TimePickerEditor, nowAsTime } from "./TimeField";
 import { toButtonProps } from "./aria-button";
 import {
   MobilePickerSurface,
@@ -44,6 +42,11 @@ export interface DatePickerProps {
   showTimePicker?: boolean;
   showMilliseconds?: boolean;
   millisecondStep?: number;
+  /**
+   * Seeded time when the picker opens without a value. Defaults to the user's
+   * current local time (now). Pass any `TimeValue` to override.
+   */
+  defaultTimeValue?: TimeValue;
   autoFocus?: boolean;
   name?: string;
 
@@ -87,6 +90,7 @@ export function DatePicker({
   overlayMode = "auto",
   mobilePresentation = "drawer",
   mobileSizeMode = "content",
+  defaultTimeValue,
   ref,
   ...props
 }: DatePickerProps) {
@@ -109,11 +113,14 @@ export function DatePicker({
   });
   const [draftValue, setDraftValue] = useState<DateValue | null>(state.value);
   const [mobileView, setMobileView] = useState<"date" | "time">("date");
+  const [calendarView, setCalendarView] = useState<CalendarView>("days");
+  const calendarApiRef = useRef<CalendarHandle | null>(null);
 
   useEffect(() => {
     if (!state.isOpen) {
       setDraftValue(state.value);
       setMobileView("date");
+      setCalendarView("days");
     }
   }, [state.isOpen, state.value]);
 
@@ -121,6 +128,7 @@ export function DatePicker({
     if (state.isOpen) {
       setDraftValue(state.value);
       setMobileView("date");
+      setCalendarView("days");
     }
   }, [state.isOpen]);
 
@@ -158,29 +166,91 @@ export function DatePicker({
   const isInvalid = invalid ?? state.isInvalid;
   const isSplitLayout = state.hasTime && (size === "lg" || size === "xl" || size === "2xl");
   const triggerUsesReadonlyField = useSheetSurface;
-  const draftTimeValue = (draftPickerState.timeValue ?? new Time()).copy();
-  const timeSummary = formatTimeValue(draftPickerState.timeValue, {
-    hourCycle: props.hourCycle,
-    granularity: props.granularity === "day" ? "hour" : props.granularity ?? "hour",
-    showMilliseconds: props.showMilliseconds,
-  });
+  const timeGranularity: "hour" | "minute" | "second" =
+    props.granularity === "day" ? "hour" : props.granularity ?? "hour";
+
+  // Seed time on open so picking a date alone produces a complete DateTime
+  // (otherwise react-stately leaves `draftPickerState.value` null until both
+  // parts exist — which caused the "apply twice" symptom).
+  useEffect(() => {
+    if (!state.isOpen || !state.hasTime) return;
+    if (draftPickerState.timeValue != null) return;
+    const seed = defaultTimeValue ?? nowAsTime(timeGranularity);
+    draftPickerState.setTimeValue(seed);
+  }, [state.isOpen, state.hasTime, draftPickerState, defaultTimeValue, timeGranularity]);
+
+  const draftTimeValue = (
+    draftPickerState.timeValue ?? defaultTimeValue ?? nowAsTime(timeGranularity)
+  ).copy() as TimeValue;
   const renderedPresets = typeof presets === "function"
     ? presets({
         value: draftValue,
         setValue: setDraftValue,
       })
     : presets;
-  const actionBar = (
+  const applyDisabled = state.hasTime
+    ? draftPickerState.value == null
+    : draftPickerState.dateValue == null;
+  const commitAndClose = () => {
+    state.setValue(draftPickerState.value);
+    state.setOpen(false);
+  };
+  const resetAndClose = () => {
+    setDraftValue(state.value);
+    state.setOpen(false);
+  };
+  const buttonSize = size === "2xs" || size === "xs" ? "sm" : "md";
+
+  const actionBarByCalendarView = (): ReactNode => {
+    if (calendarView === "months") {
+      return (
+        <PickerActionBar
+          className="vds-date-picker-actions"
+          buttonSize={buttonSize}
+          cancelLabel="Cancel"
+          applyLabel="Change Month"
+          onCancel={() => calendarApiRef.current?.cancelDraft()}
+          onApply={() => calendarApiRef.current?.applyMonthDraft()}
+        />
+      );
+    }
+    if (calendarView === "years") {
+      return (
+        <PickerActionBar
+          className="vds-date-picker-actions"
+          buttonSize={buttonSize}
+          cancelLabel="Cancel"
+          applyLabel="Change Year"
+          onCancel={() => calendarApiRef.current?.cancelDraft()}
+          onApply={() => calendarApiRef.current?.applyYearDraft()}
+        />
+      );
+    }
+    return (
+      <PickerActionBar
+        className="vds-date-picker-actions"
+        buttonSize={buttonSize}
+        applyDisabled={applyDisabled}
+        onCancel={resetAndClose}
+        onApply={commitAndClose}
+      />
+    );
+  };
+  const actionBarDateView = actionBarByCalendarView();
+  const hasDateSelected = draftPickerState.dateValue != null;
+  const actionBarTimeView = (
     <PickerActionBar
       className="vds-date-picker-actions"
-      buttonSize={size === "2xs" || size === "xs" ? "sm" : "md"}
-      onCancel={() => {
-        setDraftValue(state.value);
-        state.setOpen(false);
-      }}
+      buttonSize={buttonSize}
+      cancelLabel="Cancel"
+      applyLabel="Set Time"
+      onCancel={resetAndClose}
       onApply={() => {
-        state.setValue(draftPickerState.value);
-        state.setOpen(false);
+        if (hasDateSelected) {
+          commitAndClose();
+        } else {
+          setMobileView("date");
+        }
       }}
     />
   );
@@ -210,9 +280,13 @@ export function DatePicker({
             appearance={appearance}
             invalid={isInvalid}
             locale={usedLocale}
+            apiRef={calendarApiRef}
+            onViewChange={setCalendarView}
+            hideInternalActions
           />
           {state.hasTime ? (
-            <div className="vds-date-picker-time">
+            <div className="vds-date-picker-time" data-embedded="true">
+              <span className="vds-date-picker-time-label">Time</span>
               <TimeField
                 value={draftPickerState.timeValue ?? null}
                 onChange={(value) => {
@@ -220,16 +294,14 @@ export function DatePicker({
                     draftPickerState.setTimeValue(value);
                   }
                 }}
-                granularity={
-                  props.granularity === "day" ? "hour" : props.granularity ?? "hour"
-                }
+                granularity={timeGranularity}
                 hourCycle={props.hourCycle}
                 hideTimeZone={props.hideTimeZone}
                 showPicker={props.showTimePicker ?? true}
                 showMilliseconds={props.showMilliseconds}
                 millisecondStep={props.millisecondStep}
-                mobilePresentation={mobilePresentation}
-                mobileSizeMode="content"
+                defaultTimeValue={defaultTimeValue}
+                overlayMode="popover"
                 size={size}
                 appearance={appearance}
                 aria-label="Time"
@@ -241,7 +313,7 @@ export function DatePicker({
           ) : null}
         </div>
       </div>
-      {actionBar}
+      {actionBarDateView}
     </div>
   );
 
@@ -328,20 +400,9 @@ export function DatePicker({
           title={mobileView === "time" ? "Select time" : label ?? "Select date"}
           presentation={resolvedOverlayMode}
           sizeMode={mobileSizeMode}
+          dialogSize={mobileView === "time" ? "sm" : "md"}
           bodyClassName="vds-date-picker-mobile-body"
-          leadingAction={mobileView === "time" ? (
-            <Button
-              type="button"
-              color="neutral"
-              variant="ghost"
-              size="sm"
-              leftSection={<IconChevronLeft size={14} stroke={1.75} aria-hidden focusable={false} />}
-              onClick={() => setMobileView("date")}
-            >
-              Back
-            </Button>
-          ) : null}
-          footer={actionBar}
+          footer={mobileView === "time" ? actionBarTimeView : actionBarDateView}
         >
           {mobileView === "time" ? (
             <div className="vds-date-picker-mobile-panel vds-date-picker-mobile-time-panel">
@@ -350,9 +411,7 @@ export function DatePicker({
                 value={draftTimeValue}
                 onChange={(value) => draftPickerState.setTimeValue(value)}
                 hourCycle={props.hourCycle}
-                granularity={
-                  props.granularity === "day" ? "hour" : props.granularity ?? "hour"
-                }
+                granularity={timeGranularity}
                 showMilliseconds={props.showMilliseconds}
                 millisecondStep={props.millisecondStep ?? 10}
               />
@@ -382,19 +441,28 @@ export function DatePicker({
                     appearance={appearance}
                     invalid={isInvalid}
                     locale={usedLocale}
+                    apiRef={calendarApiRef}
+                    onViewChange={setCalendarView}
+                    hideInternalActions
                   />
                   {state.hasTime ? (
-                    <Button
-                      type="button"
-                      color="neutral"
-                      variant="soft"
-                      fullWidth
-                      className="vds-picker-mobile-mode-link"
-                      onClick={() => setMobileView("time")}
-                    >
-                      <span className="vds-picker-mobile-mode-label">Time</span>
-                      <span className="vds-picker-mobile-mode-value">{timeSummary}</span>
-                    </Button>
+                    <div className="vds-date-picker-time" data-embedded="true">
+                      <span className="vds-date-picker-time-label">Time</span>
+                      <TimeField
+                        value={draftPickerState.timeValue ?? draftTimeValue}
+                        granularity={timeGranularity}
+                        hourCycle={props.hourCycle}
+                        hideTimeZone={props.hideTimeZone}
+                        showPicker
+                        showMilliseconds={props.showMilliseconds}
+                        millisecondStep={props.millisecondStep}
+                        defaultTimeValue={defaultTimeValue}
+                        onTriggerClick={() => setMobileView("time")}
+                        size={size}
+                        appearance={appearance}
+                        aria-label="Time"
+                      />
+                    </div>
                   ) : null}
                   {footer ? (
                     <div className="vds-date-picker-footer">{footer}</div>

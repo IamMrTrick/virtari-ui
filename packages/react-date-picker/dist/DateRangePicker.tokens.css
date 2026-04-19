@@ -57,14 +57,16 @@
     --time-picker-wheel-header-height: 1.5rem;
     --time-picker-wheel-header-offset: calc(var(--time-picker-wheel-header-height) / 2);
     --time-picker-wheel-font-size: var(--vds-text-xl, 1.25rem);
-    --time-picker-wheel-muted-text: color-mix(in oklab, var(--date-field-text-color) 36%, transparent);
-    --time-picker-wheel-hover-text: color-mix(in oklab, var(--date-field-text-color) 72%, transparent);
-    --time-picker-wheel-selected-text: var(--vds-color-white, #ffffff);
+    --time-picker-wheel-muted-text: var(--vds-color-text-muted, #6b7280);
+    --time-picker-wheel-hover-text: color-mix(in oklab, var(--date-field-text-color) 72%, var(--vds-color-text-muted, #6b7280));
+    --time-picker-wheel-selected-text: var(--vds-color-text, #111827);
     --time-picker-wheel-header-color: var(--vds-color-text-muted, #6b7280);
     --time-picker-wheel-colon-color: color-mix(in oklab, var(--date-field-text-color) 55%, transparent);
-    --time-picker-wheel-selection-bg: var(--vds-color-neutral-a7, rgb(0 0 0 / 0.44));
-    --time-picker-wheel-selection-border: var(--vds-color-neutral-a8, rgb(0 0 0 / 0.56));
-    --time-picker-wheel-selection-shadow: color-mix(in oklab, var(--vds-color-black-a4, rgb(0 0 0 / 0.2)) 100%, transparent);
+    --time-picker-wheel-selection-bg: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 18%, transparent);
+    --time-picker-wheel-selection-border: var(--vds-color-ring, var(--vds-color-primary-500, #6366f1));
+    --time-picker-wheel-selection-divider: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 70%, transparent);
+    --time-picker-wheel-selection-ring: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 28%, transparent);
+    --time-picker-wheel-selection-shadow: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 32%, transparent);
   }
 
   /* ── Appearance variants ── */

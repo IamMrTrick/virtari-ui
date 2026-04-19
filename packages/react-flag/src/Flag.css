@@ -1,0 +1,39 @@
+@import "./Flag.tokens.css";
+
+@layer design-system.components {
+  .vds-flag {
+    display: inline-block;
+    inline-size: var(--flag-size);
+    block-size: auto;
+    aspect-ratio: var(--flag-aspect);
+    border-radius: var(--flag-border-radius);
+    box-shadow: 0 0 0 var(--flag-outline-width) var(--flag-outline-color) inset,
+      var(--flag-shadow);
+    overflow: hidden;
+    flex: none;
+    vertical-align: middle;
+    user-select: none;
+  }
+
+  .vds-flag[data-rounded="full"] {
+    border-radius: var(--vds-radius-full, 9999px);
+    /* Circular flags need 1:1, else they clip oddly. */
+    --flag-aspect: 1 / 1;
+  }
+
+  .vds-flag[data-rounded=""] {
+    /* default rounded=true: use token-default radius */
+  }
+
+  .vds-flag[data-rounded]:not([data-rounded=""]):not([data-rounded="full"]) {
+    border-radius: 0;
+    box-shadow: 0 0 0 var(--flag-outline-width) var(--flag-outline-color) inset;
+  }
+
+  .vds-flag-placeholder {
+    inline-size: var(--flag-size, 1.25rem);
+    aspect-ratio: var(--flag-aspect, 4 / 3);
+    background: color-mix(in oklch, currentColor 10%, transparent);
+    border-radius: var(--flag-border-radius, 0.25rem);
+  }
+}

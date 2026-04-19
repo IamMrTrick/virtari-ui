@@ -4,8 +4,8 @@
    *
    * Provides:
    *   • Full neutral 12-step semantic exposure for advanced use cases
-   *     (data tables, code editors, financial dashboards) — same names
-   *     used in Radix, allowing direct port of patterns.
+   *     (data tables, code editors, financial dashboards) — using the
+   *     industry-standard 12-step scale, allowing direct port of patterns.
    *   • Modern elevation aliases tuned for both modes.
    *   • Strong/light overlay variants and dedicated shadow tints
    *     (so components stop hardcoding `black` in shadows).
