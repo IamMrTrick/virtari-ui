@@ -1,6 +1,26 @@
 {
   "name": "@virtari/react-switch",
   "version": "0.1.0",
+  "description": "Virtari switch — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-switch#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-switch"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "switch"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -19,8 +39,13 @@
     "./styles": "./dist/Switch.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/Switch.css -o dist/Switch.css",
     "clean": "rm -rf dist",

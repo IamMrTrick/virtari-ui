@@ -1,6 +1,26 @@
 {
   "name": "@virtari/react-text",
   "version": "0.1.0",
+  "description": "Virtari text — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-text#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-text"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "text"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -22,8 +42,13 @@
     "./heading/tokens": "./dist/Heading.tokens.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/Text.tokens.css -o dist/Text.tokens.css && postcss src/Text.css -o dist/Text.css && postcss src/Heading.tokens.css -o dist/Heading.tokens.css && postcss src/Heading.css -o dist/Heading.css",
     "clean": "rm -rf dist",

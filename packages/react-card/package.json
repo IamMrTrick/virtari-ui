@@ -1,6 +1,26 @@
 {
   "name": "@virtari/react-card",
   "version": "0.1.0",
+  "description": "Virtari card — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-card#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-card"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "card"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -19,12 +39,20 @@
     "./styles": "./dist/Card.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/Card.css -o dist/Card.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@virtari/utils": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -35,8 +63,5 @@
     "@types/react": "^19.2.14",
     "typescript": "^5.5.0",
     "tsup": "^8.0.0"
-  },
-  "dependencies": {
-    "@virtari/utils": "workspace:*"
   }
 }

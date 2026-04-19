@@ -1,6 +1,26 @@
 {
   "name": "@virtari/react-chip",
   "version": "0.1.0",
+  "description": "Virtari chip — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-chip#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-chip"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "chip"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -20,8 +40,13 @@
     "./tokens": "./dist/Chip.tokens.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/Chip.tokens.css -o dist/Chip.tokens.css && postcss src/Chip.css -o dist/Chip.css",
     "clean": "rm -rf dist",

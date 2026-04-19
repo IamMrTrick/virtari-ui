@@ -1,12 +1,41 @@
 {
   "name": "@virtari/react-date-picker",
   "version": "0.1.0",
+  "description": "Virtari date picker — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-date-picker#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-date-picker"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "date",
+    "picker"
+  ],
   "type": "module",
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
-      "import": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
-      "require": { "types": "./dist/index.d.cts", "default": "./dist/index.cjs" }
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./styles": {
       "style": "./dist/DatePicker.css",
@@ -49,7 +78,15 @@
       "default": "./dist/DateRangePicker.tokens.css"
     }
   },
-  "files": ["dist", "THIRD_PARTY_LICENSES.txt"],
+  "files": [
+    "dist",
+    "THIRD_PARTY_LICENSES.txt",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/DatePicker.tokens.css -o dist/DatePicker.tokens.css && postcss src/DatePicker.css -o dist/DatePicker.css && postcss src/Calendar.tokens.css -o dist/Calendar.tokens.css && postcss src/Calendar.css -o dist/Calendar.css && postcss src/DateField.tokens.css -o dist/DateField.tokens.css && postcss src/DateField.css -o dist/DateField.css && postcss src/TimeField.tokens.css -o dist/TimeField.tokens.css && postcss src/TimeField.css -o dist/TimeField.css && postcss src/DateRangePicker.tokens.css -o dist/DateRangePicker.tokens.css && postcss src/DateRangePicker.css -o dist/DateRangePicker.css",
     "clean": "rm -rf dist",

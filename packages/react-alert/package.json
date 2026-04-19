@@ -1,6 +1,26 @@
 {
   "name": "@virtari/react-alert",
   "version": "0.1.0",
+  "description": "Virtari alert — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-alert#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-alert"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "alert"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -20,8 +40,13 @@
     "./tokens": "./dist/Alert.tokens.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/Alert.tokens.css -o dist/Alert.tokens.css && postcss src/Alert.css -o dist/Alert.css",
     "clean": "rm -rf dist",

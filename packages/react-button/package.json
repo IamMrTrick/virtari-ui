@@ -1,6 +1,26 @@
 {
   "name": "@virtari/react-button",
   "version": "0.1.0",
+  "description": "Virtari button — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-button#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-button"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "button"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -22,8 +42,13 @@
     "./tokens": "./dist/Button.tokens.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/Button.tokens.css -o dist/Button.tokens.css && postcss src/Button.css -o dist/Button.css && postcss src/effects.css -o dist/effects.css && postcss src/animations.css -o dist/animations.css",
     "clean": "rm -rf dist",

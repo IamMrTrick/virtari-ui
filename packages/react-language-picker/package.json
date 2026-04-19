@@ -1,6 +1,27 @@
 {
   "name": "@virtari/react-language-picker",
   "version": "0.1.0",
+  "description": "Virtari language picker — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-language-picker#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-language-picker"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "language",
+    "picker"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -20,8 +41,13 @@
     "./tokens": "./dist/LanguagePicker.tokens.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "codegen": "node scripts/build-languages.mjs",
     "build": "pnpm codegen && tsup && postcss src/LanguagePicker.tokens.css -o dist/LanguagePicker.tokens.css && postcss src/LanguagePicker.css -o dist/LanguagePicker.css",

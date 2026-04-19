@@ -1,6 +1,26 @@
 {
   "name": "@virtari/react-icons",
   "version": "0.1.0",
+  "description": "Virtari icons — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-icons#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-icons"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "icons"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -20,8 +40,13 @@
     "./tokens": "./dist/Icon.tokens.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/Icon.tokens.css -o dist/Icon.tokens.css && postcss src/Icon.css -o dist/Icon.css",
     "clean": "rm -rf dist",

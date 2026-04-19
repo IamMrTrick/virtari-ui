@@ -1,6 +1,27 @@
 {
   "name": "@virtari/react-phone-input",
   "version": "0.1.0",
+  "description": "Virtari phone input — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-phone-input#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-phone-input"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "phone",
+    "input"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -21,8 +42,13 @@
   },
   "files": [
     "dist",
-    "ATTRIBUTION.md"
+    "ATTRIBUTION.md",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "codegen": "node scripts/build-countries.mjs",
     "build": "pnpm codegen && tsup && postcss src/PhoneInput.tokens.css -o dist/PhoneInput.tokens.css && postcss src/PhoneInput.css -o dist/PhoneInput.css",

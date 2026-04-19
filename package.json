@@ -9,9 +9,14 @@
     "build:utilities": "pnpm --filter @virtari/utilities run build",
     "dev": "pnpm --filter @virtari/docs run dev",
     "clean": "pnpm -r run clean",
-    "typecheck": "pnpm -r run typecheck"
+    "typecheck": "pnpm -r run typecheck",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm run build && changeset publish",
+    "sync:metadata": "node scripts/add-package-metadata.mjs && node scripts/sync-package-docs.mjs"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "autoprefixer": "^10.5.0",
     "postcss": "^8.5.10",
     "postcss-cli": "^11.0.1",

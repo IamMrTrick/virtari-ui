@@ -1,6 +1,26 @@
 {
   "name": "@virtari/react-toggle",
   "version": "0.1.0",
+  "description": "Virtari toggle — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-toggle#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-toggle"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "toggle"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -19,8 +39,13 @@
     "./styles": "./dist/Toggle.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/Toggle.css -o dist/Toggle.css",
     "clean": "rm -rf dist",

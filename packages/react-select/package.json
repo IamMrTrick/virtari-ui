@@ -1,6 +1,26 @@
 {
   "name": "@virtari/react-select",
   "version": "0.1.0",
+  "description": "Virtari select — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-select#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-select"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "select"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -34,8 +54,13 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/Select.tokens.css -o dist/Select.tokens.css && postcss src/Select.css -o dist/Select.css && postcss src/Combobox.tokens.css -o dist/Combobox.tokens.css && postcss src/Combobox.css -o dist/Combobox.css",
     "clean": "rm -rf dist",

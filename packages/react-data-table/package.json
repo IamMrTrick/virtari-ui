@@ -1,6 +1,27 @@
 {
   "name": "@virtari/react-data-table",
   "version": "0.1.0",
+  "description": "Virtari data table — accessible React component built on CSS variables and logical properties.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-data-table#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-data-table"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "data",
+    "table"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -36,8 +57,13 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && postcss src/DataTable.tokens.css -o dist/DataTable.tokens.css && postcss src/DataTable.css -o dist/DataTable.css",
     "dev": "tsup --watch",
@@ -67,9 +93,15 @@
     "@dnd-kit/utilities": "^3.2.0"
   },
   "peerDependenciesMeta": {
-    "@dnd-kit/core": { "optional": true },
-    "@dnd-kit/sortable": { "optional": true },
-    "@dnd-kit/utilities": { "optional": true }
+    "@dnd-kit/core": {
+      "optional": true
+    },
+    "@dnd-kit/sortable": {
+      "optional": true
+    },
+    "@dnd-kit/utilities": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@dnd-kit/core": "^6.1.0",

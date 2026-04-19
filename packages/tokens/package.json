@@ -1,6 +1,26 @@
 {
   "name": "@virtari/tokens",
   "version": "0.1.0",
+  "description": "Design tokens (colors, spacing, typography, radii, shadows, motion) as CSS variables.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/tokens#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/tokens"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "tokens"
+  ],
   "type": "module",
   "exports": {
     ".": "./dist/tokens.css",
@@ -32,7 +52,15 @@
     "./layout/semantic": "./src/layout/semantic.css",
     "./layout/components": "./src/layout/components.css"
   },
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "postcss src/index.css -o dist/tokens.css",
     "clean": "rm -rf dist"
