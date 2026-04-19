@@ -2,7 +2,7 @@
   "name": "@virtari/react-skeleton",
   "version": "0.1.0",
   "description": "Virtari skeleton — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-skeleton#readme",
   "repository": {
@@ -44,7 +44,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup && postcss src/Skeleton.css -o dist/Skeleton.css",

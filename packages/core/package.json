@@ -2,7 +2,7 @@
   "name": "@virtari/core",
   "version": "0.1.0",
   "description": "Base reset, layers, and global primitives for the Virtari design system.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/core#readme",
   "repository": {
@@ -31,7 +31,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "postcss src/index.css -o dist/core.css",

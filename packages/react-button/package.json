@@ -2,7 +2,7 @@
   "name": "@virtari/react-button",
   "version": "0.1.0",
   "description": "Virtari button — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-button#readme",
   "repository": {
@@ -47,7 +47,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup && postcss src/Button.tokens.css -o dist/Button.tokens.css && postcss src/Button.css -o dist/Button.css && postcss src/effects.css -o dist/effects.css && postcss src/animations.css -o dist/animations.css",

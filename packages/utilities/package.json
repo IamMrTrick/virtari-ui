@@ -2,7 +2,7 @@
   "name": "@virtari/utilities",
   "version": "0.1.0",
   "description": "Utility CSS classes (spacing, sizing, layout, z-index) driven by Virtari tokens.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/utilities#readme",
   "repository": {
@@ -34,7 +34,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "node scripts/generate.mjs && postcss dist/_expanded.css -o dist/utilities.css && rm dist/_expanded.css",

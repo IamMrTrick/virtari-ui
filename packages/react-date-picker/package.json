@@ -2,7 +2,7 @@
   "name": "@virtari/react-date-picker",
   "version": "0.1.0",
   "description": "Virtari date picker — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-date-picker#readme",
   "repository": {
@@ -85,7 +85,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup && postcss src/DatePicker.tokens.css -o dist/DatePicker.tokens.css && postcss src/DatePicker.css -o dist/DatePicker.css && postcss src/Calendar.tokens.css -o dist/Calendar.tokens.css && postcss src/Calendar.css -o dist/Calendar.css && postcss src/DateField.tokens.css -o dist/DateField.tokens.css && postcss src/DateField.css -o dist/DateField.css && postcss src/TimeField.tokens.css -o dist/TimeField.tokens.css && postcss src/TimeField.css -o dist/TimeField.css && postcss src/DateRangePicker.tokens.css -o dist/DateRangePicker.tokens.css && postcss src/DateRangePicker.css -o dist/DateRangePicker.css",

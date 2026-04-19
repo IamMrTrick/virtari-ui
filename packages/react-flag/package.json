@@ -2,7 +2,7 @@
   "name": "@virtari/react-flag",
   "version": "0.1.0",
   "description": "Virtari flag — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-flag#readme",
   "repository": {
@@ -52,7 +52,8 @@
     "README.md"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "codegen": "node scripts/build-flags.mjs",

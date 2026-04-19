@@ -1,7 +1,10 @@
 /**
- * Copy the root LICENSE into every publishable package, and drop a starter
- * README.md where one doesn't exist yet. Existing READMEs are left alone so
- * hand-written docs survive.
+ * Sync LICENSE and README.md across every publishable package.
+ *
+ * - LICENSE: always overwritten from the root LICENSE so all packages ship the
+ *   same proprietary notice.
+ * - README.md: regenerated from the starter template below. Any existing
+ *   hand-written README listed in KEEP_README is preserved verbatim.
  *
  * Run: `node scripts/sync-package-docs.mjs`
  */
@@ -15,6 +18,10 @@ const PACKAGES_DIR = path.join(ROOT, "packages");
 const ROOT_LICENSE = path.join(ROOT, "LICENSE");
 
 const REPO_URL = "https://github.com/IamMrTrick/virtari-design-system";
+const REGISTRY = "https://npm.pkg.github.com";
+
+/** Directory names under packages/ whose READMEs you do not want auto-regenerated. */
+const KEEP_README = new Set(["react-date-picker"]);
 
 function readPkg(dir) {
   const p = path.join(dir, "package.json");
@@ -35,19 +42,35 @@ function hasCssExport(pkg) {
 
 function readmeFor(pkg) {
   const name = pkg.name;
-  const short = name.replace(/^@virtari\//, "");
   const desc = pkg.description ?? "";
   const cssNote = hasCssExport(pkg)
-    ? `\n### Import styles\n\n\`\`\`ts\nimport "${name}/styles";\n\`\`\`\n\nStyles are written in the \`design-system.components\` CSS layer so they compose with your app's cascade.\n`
+    ? `\n### Import styles\n\n\`\`\`ts\nimport "${name}/styles";\n\`\`\`\n\nStyles sit in the \`design-system.components\` cascade layer so your app can override them without \`!important\`.\n`
     : "";
 
   return `# ${name}
 
 ${desc}
 
+> **Private package.** Published to GitHub Packages and consumable only with a GitHub Personal Access Token that has \`read:packages\` scope. See [Install from GitHub Packages](#install-from-github-packages) below.
+
 ---
 
-## Install
+## Install from GitHub Packages
+
+Create or edit \`.npmrc\` at the root of the consuming project:
+
+\`\`\`ini
+@virtari:registry=${REGISTRY}
+//npm.pkg.github.com/:_authToken=\${GITHUB_TOKEN}
+\`\`\`
+
+Export a token with \`read:packages\` permission (locally or in CI):
+
+\`\`\`bash
+export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx
+\`\`\`
+
+Then install as you would any scoped package:
 
 \`\`\`bash
 npm install ${name}
@@ -59,37 +82,37 @@ yarn add ${name}
 
 ## Peer dependencies
 
-Requires \`react\` \`^18\` or \`^19\` alongside \`react-dom\`.
+\`react\` \`^18\` or \`^19\`, alongside \`react-dom\`.
 
 ## Usage
 
 \`\`\`tsx
-import { /* ... */ } from "${name}";
+import { /* … */ } from "${name}";
 \`\`\`
 ${cssNote}
 ## Design tokens
 
-This package reads from \`@virtari/tokens\` CSS variables. Import the token layer once at the root of your app:
+This package reads \`@virtari/tokens\` CSS variables. Import the token layer once at the root of your app:
 
 \`\`\`ts
 import "@virtari/tokens";
 \`\`\`
 
-Every visual primitive can be themed by overriding \`--vds-*\` custom properties.
+Override any \`--vds-*\` custom property at \`:root\` (or a subtree) to retheme.
 
 ## Accessibility & RTL
 
-All components use logical CSS properties (\`margin-inline\`, \`padding-block\`, …) and \`:dir(rtl)\` overrides, so layouts flip automatically when the host document sets \`dir="rtl"\`.
-
-## License
-
-[MIT](./LICENSE) © Virtari
+All components use logical CSS properties (\`margin-inline\`, \`padding-block\`, …) and \`:dir(rtl)\` overrides where logical props cannot express the rule. Layouts flip automatically when the host document sets \`dir="rtl"\`.
 
 ## Links
 
 - [Repository](${REPO_URL})
 - [Issues](${REPO_URL}/issues)
 - [Changelog](./CHANGELOG.md)
+
+## License
+
+Proprietary. See [LICENSE](./LICENSE).
 `;
 }
 
@@ -104,28 +127,24 @@ function main() {
     .readdirSync(PACKAGES_DIR, { withFileTypes: true })
     .filter((e) => e.isDirectory());
 
-  let license = 0;
-  let readme = 0;
+  let licenseCount = 0;
+  let readmeCount = 0;
 
   for (const entry of entries) {
     const dir = path.join(PACKAGES_DIR, entry.name);
     const pkg = readPkg(dir);
     if (!pkg || !pkg.name) continue;
 
-    const licensePath = path.join(dir, "LICENSE");
-    if (!fs.existsSync(licensePath)) {
-      fs.writeFileSync(licensePath, licenseContents);
-      license++;
-    }
+    fs.writeFileSync(path.join(dir, "LICENSE"), licenseContents);
+    licenseCount++;
 
-    const readmePath = path.join(dir, "README.md");
-    if (!fs.existsSync(readmePath)) {
-      fs.writeFileSync(readmePath, readmeFor(pkg));
-      readme++;
+    if (!KEEP_README.has(entry.name)) {
+      fs.writeFileSync(path.join(dir, "README.md"), readmeFor(pkg));
+      readmeCount++;
     }
   }
 
-  console.log(`[docs] wrote ${license} LICENSE files, ${readme} starter READMEs.`);
+  console.log(`[docs] synced ${licenseCount} LICENSE files, ${readmeCount} READMEs.`);
 }
 
 main();

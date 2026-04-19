@@ -1,12 +1,13 @@
 # Contributing to Virtari
 
-Thanks for working on Virtari. This guide covers the day-to-day workflow, conventions, and release process.
+Thanks for working on Virtari. This guide covers the day-to-day workflow, conventions, and private release process.
 
 ## Prerequisites
 
 - **Node** ≥ 22
 - **pnpm** ≥ 10 (enable via `corepack enable`)
 - A recent Chromium or Firefox for the docs playground
+- A GitHub account with access to this repository
 
 ## Getting started
 
@@ -25,7 +26,7 @@ pnpm run dev
 - `packages/core/` — reset + global layer declarations.
 - `packages/utilities/` — utility CSS (spacing, sizing, z-index) generated from tokens.
 - `packages/utils/` — shared internal helpers (no public API surface guarantees).
-- `packages/react-<name>/` — one package per component. Public API.
+- `packages/react-<name>/` — one package per component. Public-within-the-org API.
 - `apps/docs/` — Vite playground; not published.
 - `scripts/` — repo maintenance scripts (metadata, docs sync).
 
@@ -53,12 +54,77 @@ The docs app consumes packages through their `dist/` via the `exports` map in ea
 
 1. `cp -R packages/react-button packages/react-<name>` as a starting skeleton.
 2. Rename files, class prefixes, and the `name` field in `package.json`.
-3. Run `pnpm run sync:metadata` — this normalizes `description`, `repository`, `keywords`, `publishConfig`, and generates a starter `README.md` + `LICENSE`.
+3. Run `pnpm run sync:metadata` — this normalizes `description`, `repository`, `keywords`, `publishConfig`, and regenerates `README.md` + `LICENSE`.
 4. Add the new page to [`apps/docs`](./apps/docs/src/pages) and register it in `apps/docs/src/App.tsx`.
 5. `pnpm install` to link the workspace.
 6. `pnpm changeset` to record the change.
 
-## Changesets & releasing
+---
+
+## Private publishing: GitHub Packages
+
+Virtari is **not** on the public npm registry. Packages are published to **GitHub Packages** — a private npm-compatible registry tied to the repository owner.
+
+### Scope & ownership
+
+GitHub Packages requires the npm scope to match the GitHub owner. Our packages are scoped `@virtari`, so this repository must be owned by either:
+
+- a **GitHub organization named `virtari`**, _or_
+- a user/org, with the scope in every `package.json` renamed to match that owner.
+
+If you need to switch scope, edit the scope everywhere:
+
+```bash
+# example: rename @virtari → @iammrtrick
+node -e "
+  const fs=require('fs'),path=require('path');
+  for (const d of fs.readdirSync('packages')) {
+    const p=path.join('packages',d,'package.json');
+    if (!fs.existsSync(p)) continue;
+    let s=fs.readFileSync(p,'utf8');
+    s=s.replace(/@virtari\\//g,'@iammrtrick/');
+    fs.writeFileSync(p,s);
+  }
+"
+```
+
+Also update the internal `@virtari:registry=…` lines in consumer `.npmrc` files and any hard-coded scope references (e.g. in workflow's `Setup Node` step: `scope: "@virtari"`).
+
+### Consumer setup
+
+Every project that installs Virtari packages needs:
+
+**1. `.npmrc` in the project root:**
+
+```ini
+@virtari:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+**2. A GitHub Personal Access Token (classic) with `read:packages`** exported as `GITHUB_TOKEN` in the shell or CI.
+
+Install as usual:
+
+```bash
+pnpm add @virtari/react-button
+```
+
+### Publisher setup
+
+The [Release workflow](./.github/workflows/release.yml) uses the built-in `GITHUB_TOKEN` (with `packages: write` permission declared at the top of the workflow). **No manual secret is required** — GitHub Actions provides the token automatically.
+
+For local/manual publishes:
+
+```bash
+export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx   # needs write:packages
+echo "@virtari:registry=https://npm.pkg.github.com" > ~/.npmrc
+echo "//npm.pkg.github.com/:_authToken=\${GITHUB_TOKEN}" >> ~/.npmrc
+pnpm run release
+```
+
+---
+
+## Changesets workflow
 
 We use [Changesets](https://github.com/changesets/changesets) to version and publish independently.
 
@@ -78,9 +144,9 @@ On every push to `main`, the [`Release`](./.github/workflows/release.yml) workfl
 
 1. Reads pending changesets.
 2. Opens (or updates) a **"Version packages"** PR that applies version bumps and writes `CHANGELOG.md` entries.
-3. When that PR is merged, the workflow publishes the affected packages to npm.
+3. When that PR is merged, the workflow publishes the affected packages to GitHub Packages.
 
-The workflow needs one secret: `NPM_TOKEN` (an npm automation token with publish rights on the `@virtari` scope). Add it at **Settings → Secrets and variables → Actions**.
+The workflow authenticates with the auto-provided `GITHUB_TOKEN`. Nothing to configure.
 
 ### Manual release (escape hatch)
 
@@ -107,4 +173,4 @@ Short, conventional prefixes keep history scannable:
 
 ## License
 
-By contributing, you agree your changes ship under the repository's [MIT license](./LICENSE).
+This is proprietary software. By contributing you assign copyright of your contributions to the project owner, under the terms of the repository's [LICENSE](./LICENSE).

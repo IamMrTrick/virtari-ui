@@ -3,9 +3,9 @@
 # Virtari Design System
 
 A production-grade, multi-brand React + CSS design system.
-Token-driven, accessibility-first, RTL-safe, and published as independent packages.
+Token-driven, accessibility-first, RTL-safe, and shipped as independent packages through **GitHub Packages** (private).
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![License: Proprietary](https://img.shields.io/badge/license-Proprietary-lightgrey.svg)](./LICENSE)
 [![pnpm](https://img.shields.io/badge/pnpm-10-f69220.svg)](https://pnpm.io/)
 [![Changesets](https://img.shields.io/badge/versioning-changesets-5b9dd9.svg)](https://github.com/changesets/changesets)
 
@@ -20,7 +20,7 @@ Token-driven, accessibility-first, RTL-safe, and published as independent packag
 - **Composable CSS layers.** Styles sit in the `design-system.components` cascade layer, so consumer apps can always override without `!important`.
 - **Accessible by default.** Built on Radix, React Aria, and strict semantic HTML — focus management, ARIA wiring, and keyboard support are non-optional.
 - **No framework lock-in.** Packages ship ESM + CJS + CSS. Use them in Next.js, Remix, Vite, Astro, or any React host.
-- **Atomic, independent releases.** Each component is its own package — import only what you use. Versioned with [Changesets](https://github.com/changesets/changesets).
+- **Atomic, independent releases.** Each component is its own package — import only what you use. Versioned with [Changesets](https://github.com/changesets/changesets) and published privately to GitHub Packages.
 
 ## Package map
 
@@ -34,27 +34,44 @@ Token-driven, accessibility-first, RTL-safe, and published as independent packag
 
 Full list: [`packages/`](./packages). Each package has its own README with install and usage.
 
-## Install
+---
 
-Pick only what you need — everything is independent on npm.
+## Installing in a consumer project
+
+Virtari is private — packages live on **GitHub Packages**, not the public npm registry. Every consuming project needs two things:
+
+### 1. A `.npmrc` at the project root
+
+```ini
+@virtari:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+### 2. A GitHub Personal Access Token (classic) with `read:packages`
+
+Generate one at [github.com/settings/tokens](https://github.com/settings/tokens) and export it in your shell or CI:
 
 ```bash
-# foundations (recommended for every app)
-pnpm add @virtari/tokens @virtari/core
+export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx
+```
 
-# a few components
+Then install only what you need:
+
+```bash
+pnpm add @virtari/tokens @virtari/core
 pnpm add @virtari/react-button @virtari/react-input @virtari/react-dialog
 ```
 
-Wire the foundations once at the app root:
+> **Prerequisite for publishing under `@virtari`:** GitHub Packages requires the npm scope to match a GitHub owner. You need either (a) a GitHub **organization named `virtari`** that owns this repository, or (b) to rename the scope to match your user/org name. See [CONTRIBUTING.md](./CONTRIBUTING.md#scope--ownership) for details.
+
+### Wire the foundations once at the app root
 
 ```ts
 // app entry
-import "@virtari/tokens";          // CSS variables
-import "@virtari/core";             // reset + layers
-import "@virtari/react-button/styles";
+import "@virtari/tokens";                     // CSS variables
+import "@virtari/core";                       // reset + layers
+import "@virtari/react-button/styles";        // one per component
 import "@virtari/react-input/styles";
-// …one import per component you use
 ```
 
 Then use the components as normal React:
@@ -72,6 +89,8 @@ export function SignIn() {
   );
 }
 ```
+
+---
 
 ## Theming
 
@@ -92,6 +111,8 @@ Override any token at the scope you want — document, section, or single compon
 
 Dark mode and brand switching are both just custom-property cascades — there is no JS toggle required.
 
+---
+
 ## Repository layout
 
 ```
@@ -104,7 +125,7 @@ virtari-design-system/
 │   ├── utilities/             # utility classes
 │   ├── utils/                 # internal helpers
 │   └── react-<name>/          # one package per component
-├── scripts/                   # repo maintenance (metadata sync, docs sync)
+├── scripts/                   # repo maintenance (metadata, docs sync)
 ├── .changeset/                # pending version/publish intents
 └── .github/workflows/         # CI + release automation
 ```
@@ -119,22 +140,22 @@ pnpm run typecheck     # strict type check across the workspace
 ```
 
 - Node 22+, pnpm 10+.
-- The docs app imports packages through their published `exports`, so an edit to a package requires a rebuild (`pnpm --filter @virtari/react-<name> build`) to reflect in the browser — HMR works on the docs source itself.
+- The docs app imports packages through their published `exports`, so an edit to a package source requires a rebuild of that package (`pnpm --filter @virtari/react-<name> build`) to reflect in the browser. HMR works on the docs source itself.
 
 ## Releasing
 
-Releases are fully automated via Changesets + GitHub Actions:
+Private releases are fully automated by Changesets + GitHub Actions:
 
 1. Make your changes on a feature branch.
 2. `pnpm changeset` — describe the change and pick semver bumps.
 3. Open a PR. CI builds + typechecks.
-4. After merge to `main`, a bot opens a "Version packages" PR containing the version bumps and changelog entries.
-5. Merge that PR — CI publishes the affected packages to npm.
+4. After merge to `main`, a bot opens a "Version packages" PR containing bumps and `CHANGELOG.md` entries.
+5. Merge that PR — CI publishes the affected packages to **GitHub Packages** under the repo owner's namespace.
 
-`NPM_TOKEN` must be set in the repo's GitHub Actions secrets.
+No npm token is required — the built-in `GITHUB_TOKEN` (with `packages: write` permission) is enough.
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full flow.
 
 ## License
 
-[MIT](./LICENSE) © Virtari
+Proprietary. See [LICENSE](./LICENSE). Unauthorized redistribution is prohibited.

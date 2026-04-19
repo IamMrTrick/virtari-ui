@@ -2,7 +2,7 @@
   "name": "@virtari/react-avatar",
   "version": "0.1.0",
   "description": "Virtari avatar — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-avatar#readme",
   "repository": {
@@ -44,7 +44,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup && postcss src/Avatar.css -o dist/Avatar.css",

@@ -2,7 +2,7 @@
   "name": "@virtari/react-radio-group",
   "version": "0.2.0",
   "description": "Virtari radio group — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-radio-group#readme",
   "repository": {
@@ -46,7 +46,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup && postcss src/RadioGroup.tokens.css -o dist/RadioGroup.tokens.css && postcss src/RadioGroup.css -o dist/RadioGroup.css",

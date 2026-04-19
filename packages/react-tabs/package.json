@@ -2,7 +2,7 @@
   "name": "@virtari/react-tabs",
   "version": "0.1.0",
   "description": "Virtari tabs — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-tabs#readme",
   "repository": {
@@ -51,7 +51,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup && postcss src/Tabs.tokens.css -o dist/Tabs.tokens.css && postcss src/Tabs.css -o dist/Tabs.css",

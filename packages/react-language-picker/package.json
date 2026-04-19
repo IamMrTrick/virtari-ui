@@ -2,7 +2,7 @@
   "name": "@virtari/react-language-picker",
   "version": "0.1.0",
   "description": "Virtari language picker — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-language-picker#readme",
   "repository": {
@@ -46,7 +46,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "codegen": "node scripts/build-languages.mjs",

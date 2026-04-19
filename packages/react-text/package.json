@@ -2,7 +2,7 @@
   "name": "@virtari/react-text",
   "version": "0.1.0",
   "description": "Virtari text — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-text#readme",
   "repository": {
@@ -47,7 +47,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup && postcss src/Text.tokens.css -o dist/Text.tokens.css && postcss src/Text.css -o dist/Text.css && postcss src/Heading.tokens.css -o dist/Heading.tokens.css && postcss src/Heading.css -o dist/Heading.css",

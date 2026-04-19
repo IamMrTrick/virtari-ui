@@ -2,7 +2,7 @@
   "name": "@virtari/tokens",
   "version": "0.1.0",
   "description": "Design tokens (colors, spacing, typography, radii, shadows, motion) as CSS variables.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/tokens#readme",
   "repository": {
@@ -59,7 +59,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "postcss src/index.css -o dist/tokens.css",

@@ -2,7 +2,7 @@
   "name": "@virtari/react-badge",
   "version": "0.1.0",
   "description": "Virtari badge — accessible React component built on CSS variables and logical properties.",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Virtari",
   "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-badge#readme",
   "repository": {
@@ -45,7 +45,8 @@
     "LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup && postcss src/Badge.tokens.css -o dist/Badge.tokens.css && postcss src/Badge.css -o dist/Badge.css",

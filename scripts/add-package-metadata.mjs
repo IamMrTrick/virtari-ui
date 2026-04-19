@@ -5,6 +5,8 @@
  * `repository`, `homepage`, `bugs`, `keywords`, `publishConfig`, and
  * `sideEffects`. Existing values are preserved — this only fills gaps.
  *
+ * `publishConfig` is wired to GitHub Packages (private, per-account/org).
+ *
  * Run: `node scripts/add-package-metadata.mjs`
  */
 import fs from "node:fs";
@@ -17,7 +19,8 @@ const PACKAGES_DIR = path.join(ROOT, "packages");
 
 const REPO_URL = "https://github.com/IamMrTrick/virtari-design-system";
 const AUTHOR = "Virtari";
-const LICENSE = "MIT";
+const LICENSE = "UNLICENSED";
+const GH_REGISTRY = "https://npm.pkg.github.com";
 
 /** Per-package short descriptions. Any package not listed falls back to auto. */
 const DESCRIPTIONS = {
@@ -93,10 +96,10 @@ function updatePackage(pkgDir) {
   if (!pkg.name) return null;
 
   pkg.description ??= describe(pkg.name);
-  pkg.license ??= LICENSE;
+  pkg.license = LICENSE;
   pkg.author ??= AUTHOR;
   pkg.homepage ??= `${REPO_URL}/tree/main/packages/${dirName}#readme`;
-  pkg.repository ??= {
+  pkg.repository = {
     type: "git",
     url: `git+${REPO_URL}.git`,
     directory: `packages/${dirName}`,
@@ -104,11 +107,10 @@ function updatePackage(pkgDir) {
   pkg.bugs ??= { url: `${REPO_URL}/issues` };
   pkg.keywords = [...new Set([...(pkg.keywords ?? []), ...keywordsFor(pkg.name)])];
 
-  if (!pkg.publishConfig) {
-    pkg.publishConfig = { access: "public" };
-  } else if (!pkg.publishConfig.access) {
-    pkg.publishConfig.access = "public";
-  }
+  pkg.publishConfig = {
+    access: "restricted",
+    registry: GH_REGISTRY,
+  };
 
   if (pkg.files && Array.isArray(pkg.files)) {
     const files = new Set(pkg.files);
