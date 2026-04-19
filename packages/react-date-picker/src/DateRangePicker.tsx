@@ -30,6 +30,9 @@ export interface DateRangePickerProps {
   hourCycle?: 12 | 24;
   hideTimeZone?: boolean;
   shouldCloseOnSelect?: boolean;
+  showTimePicker?: boolean;
+  showMilliseconds?: boolean;
+  millisecondStep?: number;
   allowsNonContiguousRanges?: boolean;
   autoFocus?: boolean;
   startName?: string;
@@ -215,6 +218,9 @@ export function DateRangePicker({
                       }
                       hourCycle={props.hourCycle}
                       hideTimeZone={props.hideTimeZone}
+                      showPicker={props.showTimePicker ?? true}
+                      showMilliseconds={props.showMilliseconds}
+                      millisecondStep={props.millisecondStep}
                       size={size}
                       appearance={appearance}
                       aria-label="Start time"
@@ -230,6 +236,9 @@ export function DateRangePicker({
                       }
                       hourCycle={props.hourCycle}
                       hideTimeZone={props.hideTimeZone}
+                      showPicker={props.showTimePicker ?? true}
+                      showMilliseconds={props.showMilliseconds}
+                      millisecondStep={props.millisecondStep}
                       size={size}
                       appearance={appearance}
                       aria-label="End time"

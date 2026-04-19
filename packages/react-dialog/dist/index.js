@@ -1,5 +1,7 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { IconX } from '@virtari/react-icons';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
 // src/Dialog.tsx
@@ -156,18 +158,7 @@ function DialogCloseIcon({
   ) });
 }
 function DefaultCloseGlyph() {
-  return /* @__PURE__ */ jsx(
-    "svg",
-    {
-      viewBox: "0 0 16 16",
-      fill: "none",
-      stroke: "currentColor",
-      strokeWidth: "1.75",
-      strokeLinecap: "round",
-      "aria-hidden": "true",
-      children: /* @__PURE__ */ jsx("path", { d: "M3.5 3.5l9 9M12.5 3.5l-9 9" })
-    }
-  );
+  return /* @__PURE__ */ jsx(IconX, { size: 16, stroke: 1.75, "aria-hidden": true, focusable: false });
 }
 
 export { Dialog, DialogBody, DialogClose, DialogCloseIcon, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };

@@ -1,6 +1,7 @@
 import { cn } from "@virtari/utils";
 import type { ComponentRef, MouseEvent, ReactNode, Ref } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
+import { IconCheck, IconChevronDown, IconLoader2, IconX } from "@virtari/react-icons";
 
 /* ── Root ── */
 export const Select = SelectPrimitive.Root;
@@ -66,54 +67,16 @@ export function SelectTrigger({
               onClear?.();
             }}
           >
-            <svg
-              viewBox="0 0 12 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M9 3L3 9M3 3L9 9"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <IconX size={12} stroke={1.5} aria-hidden focusable={false} />
           </button>
         ) : null}
         {loading ? (
           <span className="vds-select-spinner" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle
-                cx="12"
-                cy="12"
-                r="9"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeDasharray="40 60"
-                opacity="0.9"
-              />
-            </svg>
+            <IconLoader2 size={24} stroke={2.5} aria-hidden focusable={false} />
           </span>
         ) : (
           <SelectPrimitive.Icon className="vds-select-icon">
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M3 4.5L6 7.5L9 4.5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <IconChevronDown size={12} stroke={1.5} aria-hidden focusable={false} />
           </SelectPrimitive.Icon>
         )}
       </span>
@@ -170,21 +133,7 @@ export function SelectItem({ className, children, ref, ...props }: SelectItemPro
     >
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator className="vds-select-item-indicator">
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M10 3L4.5 8.5L2 6"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <IconCheck size={12} stroke={2} aria-hidden focusable={false} />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );

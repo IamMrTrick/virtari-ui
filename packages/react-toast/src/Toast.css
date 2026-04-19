@@ -61,8 +61,8 @@
     inset-inline-start: 50%;
     transform: translateX(-50%);
   }
-  [dir="rtl"] .vds-toaster--top-center,
-  [dir="rtl"] .vds-toaster--bottom-center {
+  :dir(rtl) .vds-toaster--top-center,
+  :dir(rtl) .vds-toaster--bottom-center {
     transform: translateX(50%);
   }
 
@@ -493,7 +493,7 @@
     animation: vds-toast-icon-slide var(--vds-duration-normal) var(--vds-ease-out) 40ms both;
   }
 
-  [dir="rtl"] .vds-toast[data-index="0"][data-state="open"][data-type="info"] .vds-toast__icon > svg {
+  :dir(rtl) .vds-toast[data-index="0"][data-state="open"][data-type="info"] .vds-toast__icon > svg {
     animation-name: vds-toast-icon-slide-rtl;
   }
 

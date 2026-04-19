@@ -32,6 +32,32 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
 }
 declare function Section({ as: Tag, padding, gutter, width, maxInlineSize, contained, background, align, gap, fullHeight, className, style, children, ref, ...rest }: SectionProps): react_jsx_runtime.JSX.Element;
 
+/**
+ * Semantic `<main>` landmark — the dominant content of the page. Render
+ * **exactly one** `<Main>` per document (HTML spec: any further `<main>`
+ * elements must be hidden with `hidden`).
+ *
+ * Structurally identical to `<Section>` (outer band + inner container, same
+ * `padding` / `gutter` / `width` / `contained` / `background` / `align` /
+ * `gap` / `fullHeight` props) with Main-specific defaults:
+ *
+ *   - `as="main"` — locked to the landmark tag
+ *   - `id="main"` — so `<a href="#main">Skip to content</a>` anchors land here
+ *   - `tabIndex={-1}` — lets JS / skip-links focus the region programmatically
+ *     without adding it to the tab order
+ *   - `padding="none"` — `<main>` usually contains child `<Section>`s that own
+ *     their own vertical rhythm; override when you want block padding
+ *   - `gutter="none"` — same reasoning for inline padding
+ *
+ * All overrides are possible via props — the defaults above just encode the
+ * common case where `<Main>` is a thin landmark wrapping self-padded
+ * `<Section>`s.
+ */
+interface MainProps extends Omit<SectionProps, "as"> {
+    ref?: Ref<HTMLElement>;
+}
+declare function Main({ id, tabIndex, padding, gutter, contained, className, ...rest }: MainProps): react_jsx_runtime.JSX.Element;
+
 type RowMode = "grid" | "flex";
 type RowCols = 1 | 2 | 3 | 4 | 6 | 8 | 12;
 type RowGap = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
@@ -168,4 +194,4 @@ interface CenterProps extends HTMLAttributes<HTMLElement> {
 }
 declare function Center({ as: Tag, maxWidth, gutter, intrinsic, maxInlineSize, className, style, ref, ...rest }: CenterProps): react_jsx_runtime.JSX.Element;
 
-export { Center, type CenterGutter, type CenterMaxWidth, type CenterProps, Cluster, type ClusterAlign, type ClusterGap, type ClusterJustify, type ClusterProps, Col, type ColAlign, type ColJustify, type ColProps, type ColSpan, Container, type ContainerGutter, type ContainerProps, type ContainerWidth, Grid, type GridGap, type GridProps, Row, type RowAlign, type RowCols, type RowGap, type RowJustify, type RowMode, type RowProps, Section, type SectionAlign, type SectionBackground, type SectionGap, type SectionGutter, type SectionPadding, type SectionProps, type SectionWidth, Sidebar, type SidebarGap, type SidebarProps, type SidebarSide, Stack, type StackGap, type StackProps };
+export { Center, type CenterGutter, type CenterMaxWidth, type CenterProps, Cluster, type ClusterAlign, type ClusterGap, type ClusterJustify, type ClusterProps, Col, type ColAlign, type ColJustify, type ColProps, type ColSpan, Container, type ContainerGutter, type ContainerProps, type ContainerWidth, Grid, type GridGap, type GridProps, Main, type MainProps, Row, type RowAlign, type RowCols, type RowGap, type RowJustify, type RowMode, type RowProps, Section, type SectionAlign, type SectionBackground, type SectionGap, type SectionGutter, type SectionPadding, type SectionProps, type SectionWidth, Sidebar, type SidebarGap, type SidebarProps, type SidebarSide, Stack, type StackGap, type StackProps };

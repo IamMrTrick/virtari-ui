@@ -1,12 +1,17 @@
 import { cn } from "@virtari/utils";
 import {
-  useImperativeHandle,
   useRef,
   type ComponentRef,
   type Ref,
+  type RefObject,
 } from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { useTabsIndicator } from "./use-tabs-indicator";
+import { useTabsSwipe } from "./use-tabs-swipe";
+import {
+  useResponsiveOrientation,
+  type TabsOrientation,
+} from "./use-responsive-orientation";
 
 export type TabsVariant =
   | "underline"
@@ -21,10 +26,71 @@ export type TabsVariant =
 
 export type TabsSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 
-/* ── Root ── */
-export const Tabs = TabsPrimitive.Root;
+function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
+  return (node: T | null) => {
+    for (const ref of refs) {
+      if (!ref) continue;
+      if (typeof ref === "function") ref(node);
+      else (ref as RefObject<T | null>).current = node;
+    }
+  };
+}
 
-/* ── List ── */
+/* ─────────────────────────────────────────────
+ * Root
+ * ───────────────────────────────────────────── */
+export interface TabsProps
+  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
+  /** Collapse `orientation="vertical"` back to horizontal when the Tabs
+   *  container is narrower than this (in px). Pass `undefined` to disable. */
+  collapseAt?: number;
+  /** Enable touch swipe on the active content to switch to prev/next tab.
+   *  Only active in horizontal orientation. */
+  swipeable?: boolean;
+  /** Minimum horizontal drag (px) to commit a swipe. Default 60. */
+  swipeThreshold?: number;
+  /** Max visual translation (px) while dragging. Default 80. */
+  swipeMaxOffset?: number;
+  ref?: Ref<ComponentRef<typeof TabsPrimitive.Root>>;
+}
+
+export function Tabs({
+  className,
+  orientation = "horizontal",
+  collapseAt,
+  swipeable = false,
+  swipeThreshold = 60,
+  swipeMaxOffset = 80,
+  ref,
+  ...props
+}: TabsProps) {
+  const rootRef = useRef<ComponentRef<typeof TabsPrimitive.Root>>(null);
+
+  const effectiveOrientation = useResponsiveOrientation(
+    rootRef,
+    orientation as TabsOrientation,
+    collapseAt,
+  );
+
+  useTabsSwipe(rootRef, {
+    enabled: swipeable && effectiveOrientation === "horizontal",
+    threshold: swipeThreshold,
+    maxOffset: swipeMaxOffset,
+  });
+
+  return (
+    <TabsPrimitive.Root
+      ref={mergeRefs(rootRef, ref)}
+      orientation={effectiveOrientation}
+      className={cn("vds-tabs", className)}
+      {...props}
+    />
+  );
+}
+
+/* ─────────────────────────────────────────────
+ * List
+ * ───────────────────────────────────────────── */
 export interface TabsListProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {
   variant?: TabsVariant;
@@ -44,13 +110,11 @@ export function TabsList({
   ...props
 }: TabsListProps) {
   const innerRef = useRef<ComponentRef<typeof TabsPrimitive.List>>(null);
-  useImperativeHandle(ref, () => innerRef.current as HTMLDivElement, []);
-
   useTabsIndicator(innerRef, animatedIndicator);
 
   return (
     <TabsPrimitive.List
-      ref={innerRef}
+      ref={mergeRefs(innerRef, ref)}
       className={cn("vds-tabs-list", className)}
       data-variant={variant}
       data-size={size}
@@ -61,7 +125,9 @@ export function TabsList({
   );
 }
 
-/* ── Trigger ── */
+/* ─────────────────────────────────────────────
+ * Trigger
+ * ───────────────────────────────────────────── */
 export interface TabsTriggerProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
   ref?: Ref<ComponentRef<typeof TabsPrimitive.Trigger>>;
@@ -77,7 +143,9 @@ export function TabsTrigger({ className, ref, ...props }: TabsTriggerProps) {
   );
 }
 
-/* ── Content ── */
+/* ─────────────────────────────────────────────
+ * Content
+ * ───────────────────────────────────────────── */
 export interface TabsContentProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> {
   ref?: Ref<ComponentRef<typeof TabsPrimitive.Content>>;

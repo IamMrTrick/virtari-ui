@@ -1,0 +1,57 @@
+@import "./Icon.tokens.css";
+
+@layer design-system.components {
+  .vds-icon {
+    display: inline-block;
+    flex-shrink: 0;
+    color: currentColor;
+    stroke-width: var(--vds-icon-stroke);
+    vertical-align: middle;
+  }
+
+  .vds-icon[data-size="xs"] {
+    width: var(--vds-icon-size-xs);
+    height: var(--vds-icon-size-xs);
+  }
+  .vds-icon[data-size="sm"] {
+    width: var(--vds-icon-size-sm);
+    height: var(--vds-icon-size-sm);
+  }
+  .vds-icon[data-size="md"] {
+    width: var(--vds-icon-size-md);
+    height: var(--vds-icon-size-md);
+  }
+  .vds-icon[data-size="lg"] {
+    width: var(--vds-icon-size-lg);
+    height: var(--vds-icon-size-lg);
+  }
+  .vds-icon[data-size="xl"] {
+    width: var(--vds-icon-size-xl);
+    height: var(--vds-icon-size-xl);
+  }
+
+  .vds-icon[data-color="muted"] {
+    color: var(--vds-color-text-muted, currentColor);
+  }
+  .vds-icon[data-color="subtle"] {
+    color: var(--vds-color-text-subtle, currentColor);
+  }
+  .vds-icon[data-color="primary"] {
+    color: var(--vds-color-primary, currentColor);
+  }
+  .vds-icon[data-color="secondary"] {
+    color: var(--vds-color-secondary, currentColor);
+  }
+  .vds-icon[data-color="success"] {
+    color: var(--vds-color-success, currentColor);
+  }
+  .vds-icon[data-color="warning"] {
+    color: var(--vds-color-warning, currentColor);
+  }
+  .vds-icon[data-color="danger"] {
+    color: var(--vds-color-danger, currentColor);
+  }
+  .vds-icon[data-color="info"] {
+    color: var(--vds-color-info, currentColor);
+  }
+}

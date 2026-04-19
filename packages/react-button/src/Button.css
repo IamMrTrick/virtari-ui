@@ -25,6 +25,13 @@
     line-height: var(--button-line-height);
     letter-spacing: var(--button-letter-spacing);
 
+    /* Trim ascender space above cap-height and descender below baseline so
+     * flex centering lines up the visible glyph, not the full em-box. Newer
+     * syntax (Chrome 133+, Safari 18.2+); fallback is the raw line-height:1. */
+    text-box: trim-both cap alphabetic;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;

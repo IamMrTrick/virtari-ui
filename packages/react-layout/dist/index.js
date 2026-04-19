@@ -39,6 +39,29 @@ function Section({
     }
   );
 }
+function Main({
+  id = "main",
+  tabIndex = -1,
+  padding = "none",
+  gutter = "none",
+  contained = true,
+  className,
+  ...rest
+}) {
+  return /* @__PURE__ */ jsx(
+    Section,
+    {
+      as: "main",
+      id,
+      tabIndex,
+      padding,
+      gutter,
+      contained,
+      className: cn("vds-main", className),
+      ...rest
+    }
+  );
+}
 function Row({
   as: Tag = "div",
   mode = "grid",
@@ -232,16 +255,16 @@ function Sidebar({
 }) {
   const mergedStyle = { ...style };
   if (sideWidth) {
-    mergedStyle["--sidebar-side-width"] = sideWidth;
+    mergedStyle["--split-side-width"] = sideWidth;
   }
   if (contentMin) {
-    mergedStyle["--sidebar-content-min"] = contentMin;
+    mergedStyle["--split-content-min"] = contentMin;
   }
   return /* @__PURE__ */ jsx(
     Tag,
     {
       ref,
-      className: cn("vds-sidebar", className),
+      className: cn("vds-split", className),
       "data-side": side,
       "data-gap": gap,
       style: mergedStyle,
@@ -275,4 +298,4 @@ function Center({
   );
 }
 
-export { Center, Cluster, Col, Container, Grid, Row, Section, Sidebar, Stack };
+export { Center, Cluster, Col, Container, Grid, Main, Row, Section, Sidebar, Stack };

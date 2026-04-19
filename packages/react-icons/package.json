@@ -1,0 +1,45 @@
+{
+  "name": "@virtari/react-icons",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles": "./dist/Icon.css",
+    "./tokens": "./dist/Icon.tokens.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && postcss src/Icon.tokens.css -o dist/Icon.tokens.css && postcss src/Icon.css -o dist/Icon.css",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@virtari/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "@tabler/icons-react": "^3.0.0",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@tabler/icons-react": "^3.0.0",
+    "@types/react": "^19.2.14",
+    "react": "^19.2.5",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  }
+}

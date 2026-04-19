@@ -1,5 +1,7 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import { IconCheck, IconMinus } from '@virtari/react-icons';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
 // src/Checkbox.tsx
@@ -13,40 +15,23 @@ function Checkbox({ size = "md", className, ref, ...props }) {
       ...props,
       children: /* @__PURE__ */ jsxs(CheckboxPrimitive.Indicator, { className: "vds-checkbox-indicator", children: [
         /* @__PURE__ */ jsx(
-          "svg",
+          IconCheck,
           {
             className: "vds-checkbox-check",
-            viewBox: "0 0 12 12",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /* @__PURE__ */ jsx(
-              "path",
-              {
-                d: "M10 3L4.5 8.5L2 6",
-                stroke: "currentColor",
-                strokeWidth: "2",
-                strokeLinecap: "round",
-                strokeLinejoin: "round"
-              }
-            )
+            size: 12,
+            stroke: 2.5,
+            "aria-hidden": true,
+            focusable: false
           }
         ),
         /* @__PURE__ */ jsx(
-          "svg",
+          IconMinus,
           {
             className: "vds-checkbox-indeterminate",
-            viewBox: "0 0 12 12",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /* @__PURE__ */ jsx(
-              "path",
-              {
-                d: "M2.5 6H9.5",
-                stroke: "currentColor",
-                strokeWidth: "2",
-                strokeLinecap: "round"
-              }
-            )
+            size: 12,
+            stroke: 2.5,
+            "aria-hidden": true,
+            focusable: false
           }
         )
       ] })

@@ -20,6 +20,7 @@ import {
 } from "@internationalized/date";
 import { createCalendar, resolveLocale, type CalendarSystem, type DateValue } from "./date-utils";
 import type { DatePickerSize, DatePickerAppearance } from "./context";
+import { IconChevronLeft, IconChevronRight } from "@virtari/react-icons";
 
 /* ──────────────────────────────────────────────────────────── *
  * Shared visual props
@@ -43,19 +44,11 @@ interface CalendarVisualProps {
  * ──────────────────────────────────────────────────────────── */
 
 function ChevronLeft() {
-  return (
-    <svg viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false">
-      <path d="M7.5 3L4.5 6L7.5 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  return <IconChevronLeft size={12} stroke={1.5} aria-hidden focusable={false} />;
 }
 
 function ChevronRight() {
-  return (
-    <svg viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false">
-      <path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  return <IconChevronRight size={12} stroke={1.5} aria-hidden focusable={false} />;
 }
 
 /* ──────────────────────────────────────────────────────────── *

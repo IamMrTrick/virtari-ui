@@ -25,7 +25,7 @@ type ButtonVariant = "solid" | "outline" | "ghost" | "soft" | "link"
  */
 type ButtonSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 /** Visual effects — requires importing `@virtari/react-button/styles/effects` */
-type ButtonEffect = "shine" | "raised" | "glow" | "glass" | "outline-glow";
+type ButtonEffect = "shine" | "raised" | "glow" | "glass" | "outline-glow" | "candy";
 /** Attention animations — requires importing `@virtari/react-button/styles/animations` */
 type ButtonAnimation = "pulse" | "bounce" | "shake" | "jiggle";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

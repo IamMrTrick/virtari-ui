@@ -1,0 +1,231 @@
+@layer design-system.components {
+  /* =========================================================================
+   * 1. Base component tokens
+   *    Layout, typography, motion — orthogonal to variant/size/color.
+   *    Defaults: variant=plain, size=md, color=neutral, iconType=chevron.
+   *    Fallbacks keep the package usable without @virtari/tokens.
+   * ========================================================================= */
+  .vds-accordion {
+    /* ── Layout ── */
+    --accordion-gap:              0;
+    --accordion-item-padding:     0;
+    --accordion-item-radius:      0;
+    --accordion-item-border:      0;
+    --accordion-item-border-color: var(--vds-color-border-muted, #e5e7eb);
+
+    /* Trigger (header button) */
+    --accordion-trigger-padding-block:  var(--vds-space-4, 1rem);
+    --accordion-trigger-padding-inline: 0;
+    --accordion-trigger-gap:            var(--vds-space-3, 0.75rem);
+    --accordion-trigger-font-family:    var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --accordion-trigger-font-size:      var(--vds-text-sm, 0.875rem);
+    --accordion-trigger-font-weight:    var(--vds-font-weight-medium, 500);
+    --accordion-trigger-line-height:    var(--vds-leading-tight, 1.35);
+
+    /* Content body */
+    --accordion-content-padding-block-start: 0;
+    --accordion-content-padding-block-end:   var(--vds-space-4, 1rem);
+    --accordion-content-padding-inline:      0;
+    --accordion-content-font-size:           var(--vds-text-sm, 0.875rem);
+    --accordion-content-line-height:         var(--vds-leading-relaxed, 1.625);
+
+    /* Icon indicator */
+    --accordion-icon-size:      1rem;
+    --accordion-icon-stroke:    1.5;
+    --accordion-icon-color:     var(--vds-color-text-muted, #6b7280);
+
+    /* ── Motion ── */
+    --accordion-transition-duration: var(--vds-duration-normal, 200ms);
+    --accordion-transition-easing:   var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* ── Focus ── */
+    --accordion-focus-ring-color:  var(--vds-color-ring, #4f46e5);
+    --accordion-focus-ring-width:  2px;
+    --accordion-focus-ring-offset: 2px;
+
+    /* ── Color palette — default: neutral (orthogonal to variant) ── */
+    --accordion-color-text:        var(--vds-color-text, #111827);
+    --accordion-color-text-muted:  var(--vds-color-text-muted, #6b7280);
+    --accordion-color-text-hover:  var(--vds-color-text, #111827);
+    --accordion-color-bg:          transparent;
+    --accordion-color-bg-hover:    var(--vds-color-neutral-3, rgb(0 0 0 / 0.03));
+    --accordion-color-bg-active:   var(--vds-color-neutral-4, rgb(0 0 0 / 0.06));
+    --accordion-color-border:      var(--vds-color-border-muted, #e5e7eb);
+    --accordion-color-accent:      var(--vds-color-primary-solid, #4f46e5);
+
+    /* ── Rendering tokens ── */
+    --accordion-bg:          var(--accordion-color-bg);
+    --accordion-bg-hover:    var(--accordion-color-bg-hover);
+    --accordion-border:      transparent;
+    --accordion-text:        var(--accordion-color-text);
+    --accordion-text-hover:  var(--accordion-color-text-hover);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--accordion-gap);
+  }
+
+  /* =========================================================================
+   * 2. Color palettes — redefine --accordion-color-* meta tokens.
+   *    Apply on the root or on an item for per-row accent coloring.
+   * ========================================================================= */
+
+  .vds-accordion[data-color="primary"],
+  .vds-accordion-item[data-color="primary"] {
+    --accordion-color-accent:     var(--vds-color-primary-solid, #4f46e5);
+    --accordion-color-bg-hover:   var(--vds-color-primary-bg, #eef2ff);
+    --accordion-color-text-hover: var(--vds-color-primary-text, #3730a3);
+  }
+  .vds-accordion[data-color="accent"],
+  .vds-accordion-item[data-color="accent"] {
+    --accordion-color-accent:     var(--vds-color-accent-solid, #f97316);
+    --accordion-color-bg-hover:   var(--vds-color-accent-bg, #ffedd5);
+    --accordion-color-text-hover: var(--vds-color-accent-text, #7c2d12);
+  }
+  .vds-accordion[data-color="success"],
+  .vds-accordion-item[data-color="success"] {
+    --accordion-color-accent:     var(--vds-color-success-solid, #16a34a);
+    --accordion-color-bg-hover:   var(--vds-color-success-bg, #dcfce7);
+    --accordion-color-text-hover: var(--vds-color-success-text, #166534);
+  }
+  .vds-accordion[data-color="danger"],
+  .vds-accordion-item[data-color="danger"] {
+    --accordion-color-accent:     var(--vds-color-danger-solid, #dc2626);
+    --accordion-color-bg-hover:   var(--vds-color-danger-bg, #fee2e2);
+    --accordion-color-text-hover: var(--vds-color-danger-text, #991b1b);
+  }
+  .vds-accordion[data-color="warning"],
+  .vds-accordion-item[data-color="warning"] {
+    --accordion-color-accent:     var(--vds-color-warning-solid, #f59e0b);
+    --accordion-color-bg-hover:   var(--vds-color-warning-bg, #fef3c7);
+    --accordion-color-text-hover: var(--vds-color-warning-text, #78350f);
+  }
+
+  /* =========================================================================
+   * 3. Variants — shape/frame of each item.
+   *    Each variant redefines layout-only tokens; palette stays orthogonal.
+   * ========================================================================= */
+
+  /* plain — divider-based (default). Border-bottom on every item. */
+  .vds-accordion[data-variant="plain"] {
+    --accordion-gap: 0;
+  }
+  .vds-accordion[data-variant="plain"] .vds-accordion-item {
+    border-block-end: 1px solid var(--accordion-color-border);
+  }
+  .vds-accordion[data-variant="plain"] .vds-accordion-item:last-child {
+    border-block-end: 0;
+  }
+
+  /* bordered — every item framed individually, stacked with shared borders.
+   * Inline padding lives on the trigger/content (not the item) so the hover
+   * background paints edge-to-edge instead of leaving bare strips on the sides. */
+  .vds-accordion[data-variant="bordered"] {
+    --accordion-gap: 0;
+    --accordion-item-radius:     var(--vds-radius-element, 0.5rem);
+    --accordion-trigger-padding-block:  var(--vds-space-3, 0.75rem);
+    --accordion-trigger-padding-inline: var(--vds-space-4, 1rem);
+    --accordion-content-padding-block-end: var(--vds-space-3, 0.75rem);
+    --accordion-content-padding-inline:    var(--vds-space-4, 1rem);
+    border: 1px solid var(--accordion-color-border);
+    border-radius: var(--accordion-item-radius);
+    overflow: clip;
+  }
+  .vds-accordion[data-variant="bordered"] .vds-accordion-item {
+    border-block-end: 1px solid var(--accordion-color-border);
+  }
+  .vds-accordion[data-variant="bordered"] .vds-accordion-item:last-child {
+    border-block-end: 0;
+  }
+
+  /* separated — each item a standalone card with its own frame and gap.
+   * `overflow: clip` on the item keeps the trigger's hover background clipped
+   * to the rounded card edge. */
+  .vds-accordion[data-variant="separated"] {
+    --accordion-gap: var(--vds-space-2, 0.5rem);
+    --accordion-item-radius:  var(--vds-radius-element, 0.5rem);
+    --accordion-trigger-padding-block:  var(--vds-space-3, 0.75rem);
+    --accordion-trigger-padding-inline: var(--vds-space-4, 1rem);
+    --accordion-content-padding-block-end: var(--vds-space-3, 0.75rem);
+    --accordion-content-padding-inline:    var(--vds-space-4, 1rem);
+  }
+  .vds-accordion[data-variant="separated"] .vds-accordion-item {
+    border: 1px solid var(--accordion-color-border);
+    border-radius: var(--accordion-item-radius);
+    background-color: var(--vds-color-surface, transparent);
+    overflow: clip;
+    transition: border-color var(--accordion-transition-duration) var(--accordion-transition-easing),
+                box-shadow var(--accordion-transition-duration) var(--accordion-transition-easing);
+  }
+  .vds-accordion[data-variant="separated"] .vds-accordion-item[data-state="open"] {
+    border-color: var(--accordion-color-accent);
+  }
+
+  /* filled — soft tinted background per item. Best for FAQ cards. */
+  .vds-accordion[data-variant="filled"] {
+    --accordion-gap: var(--vds-space-2, 0.5rem);
+    --accordion-item-radius:  var(--vds-radius-element, 0.5rem);
+    --accordion-trigger-padding-block:  var(--vds-space-3, 0.75rem);
+    --accordion-trigger-padding-inline: var(--vds-space-4, 1rem);
+    --accordion-content-padding-block-end: var(--vds-space-3, 0.75rem);
+    --accordion-content-padding-inline:    var(--vds-space-4, 1rem);
+  }
+  .vds-accordion[data-variant="filled"] .vds-accordion-item {
+    background-color: var(--vds-color-neutral-2, rgb(0 0 0 / 0.025));
+    border-radius: var(--accordion-item-radius);
+    overflow: clip;
+  }
+  .vds-accordion[data-variant="filled"] .vds-accordion-item[data-state="open"] {
+    background-color: var(--vds-color-neutral-3, rgb(0 0 0 / 0.05));
+  }
+
+  /* ghost — no frame at all, only hover tint on the trigger. */
+  .vds-accordion[data-variant="ghost"] {
+    --accordion-gap: 0;
+    --accordion-trigger-padding-inline: var(--vds-space-3, 0.75rem);
+    --accordion-content-padding-inline: var(--vds-space-3, 0.75rem);
+  }
+  .vds-accordion[data-variant="ghost"] .vds-accordion-trigger {
+    border-radius: var(--vds-radius-element, 0.375rem);
+  }
+
+  /* contained — one outer frame with dividers inside. Best for long FAQ. */
+  .vds-accordion[data-variant="contained"] {
+    --accordion-gap: 0;
+    --accordion-item-radius:  var(--vds-radius-container, 0.75rem);
+    --accordion-trigger-padding-inline: var(--vds-space-5, 1.25rem);
+    --accordion-content-padding-inline: var(--vds-space-5, 1.25rem);
+    border: 1px solid var(--accordion-color-border);
+    border-radius: var(--accordion-item-radius);
+    background-color: var(--vds-color-surface, transparent);
+    overflow: clip;
+  }
+  .vds-accordion[data-variant="contained"] .vds-accordion-item {
+    border-block-end: 1px solid var(--accordion-color-border);
+  }
+  .vds-accordion[data-variant="contained"] .vds-accordion-item:last-child {
+    border-block-end: 0;
+  }
+
+  /* =========================================================================
+   * 4. Sizes — redefine layout-only tokens.
+   * ========================================================================= */
+
+  .vds-accordion[data-size="sm"] {
+    --accordion-trigger-padding-block: var(--vds-space-2-5, 0.625rem);
+    --accordion-trigger-font-size:     var(--vds-text-sm, 0.875rem);
+    --accordion-content-padding-block-end: var(--vds-space-2-5, 0.625rem);
+    --accordion-content-font-size:     var(--vds-text-xs, 0.8125rem);
+    --accordion-icon-size: 0.875rem;
+  }
+
+  /* md is the base */
+
+  .vds-accordion[data-size="lg"] {
+    --accordion-trigger-padding-block: var(--vds-space-5, 1.25rem);
+    --accordion-trigger-font-size:     var(--vds-text-base, 1rem);
+    --accordion-content-padding-block-end: var(--vds-space-5, 1.25rem);
+    --accordion-content-font-size:     var(--vds-text-base, 1rem);
+    --accordion-icon-size: 1.25rem;
+  }
+}

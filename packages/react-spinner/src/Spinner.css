@@ -13,7 +13,7 @@
     inline-size: var(--_spinner-size);
     block-size: var(--_spinner-size);
     border: var(--_spinner-border) solid var(--vds-color-primary-500);
-    border-right-color: transparent;
+    border-inline-end-color: transparent;
     border-radius: var(--vds-radius-full);
     animation: vds-spin 0.6s linear infinite;
 

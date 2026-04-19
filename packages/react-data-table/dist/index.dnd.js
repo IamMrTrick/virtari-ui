@@ -1,4 +1,5 @@
-import { DataTableHeaderCell, useDataTableContext } from './chunk-QLU6FKI2.js';
+"use client";
+import { DataTableHeaderCell, useDataTableContext } from './chunk-W5DPMDC5.js';
 import { useSensors, useSensor, PointerSensor, KeyboardSensor, DndContext, closestCenter } from '@dnd-kit/core';
 import { useSortable, sortableKeyboardCoordinates, horizontalListSortingStrategy, SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { forwardRef, useMemo, useCallback, useState, useEffect } from 'react';
@@ -8,6 +9,7 @@ import { cn } from '@virtari/utils';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerBody } from '@virtari/react-drawer';
 import { Input } from '@virtari/react-input';
 import { Switch } from '@virtari/react-switch';
+import { IconGripVertical } from '@virtari/react-icons';
 
 function useColumnDnd(options = {}) {
   const { table } = useDataTableContext();
@@ -238,14 +240,7 @@ function SortableColumnItem({ column, onToggle }) {
             ...listeners,
             "aria-label": "Drag to reorder",
             className: "vds-data-table-customize-item-drag",
-            children: /* @__PURE__ */ jsxs("svg", { width: "10", height: "14", viewBox: "0 0 10 14", "aria-hidden": "true", fill: "currentColor", children: [
-              /* @__PURE__ */ jsx("circle", { cx: "3", cy: "3", r: "1" }),
-              /* @__PURE__ */ jsx("circle", { cx: "7", cy: "3", r: "1" }),
-              /* @__PURE__ */ jsx("circle", { cx: "3", cy: "7", r: "1" }),
-              /* @__PURE__ */ jsx("circle", { cx: "7", cy: "7", r: "1" }),
-              /* @__PURE__ */ jsx("circle", { cx: "3", cy: "11", r: "1" }),
-              /* @__PURE__ */ jsx("circle", { cx: "7", cy: "11", r: "1" })
-            ] })
+            children: /* @__PURE__ */ jsx(IconGripVertical, { size: 14, stroke: 1.75, "aria-hidden": true, focusable: false })
           }
         ),
         column.icon && /* @__PURE__ */ jsx("span", { className: "vds-data-table-customize-item-icon", children: column.icon }),

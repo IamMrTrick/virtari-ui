@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import type { ReactNode } from "react";
 import { cn } from "@virtari/utils";
+import { IconCheck, IconCopy } from "@virtari/react-icons";
 
 export interface CopyableCellProps {
   children: ReactNode;
@@ -57,14 +58,9 @@ export function CopyableCell({
         tabIndex={-1}
       >
         {copied ? (
-          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" fill="none">
-            <path d="M2.5 6.5 5 9l4.5-5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <IconCheck size={12} stroke={2} aria-hidden focusable={false} />
         ) : (
-          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" fill="none">
-            <rect x="3.5" y="3.5" width="6" height="7" rx="1" stroke="currentColor" strokeWidth="1.1" />
-            <path d="M5 3.5v-.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-.5" stroke="currentColor" strokeWidth="1.1" />
-          </svg>
+          <IconCopy size={12} stroke={1.75} aria-hidden focusable={false} />
         )}
       </button>
     </span>

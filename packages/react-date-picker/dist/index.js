@@ -1,15 +1,17 @@
+"use client";
 import { cn } from '@virtari/utils';
-import { useRef } from 'react';
+import { useRef, useState, useMemo, useEffect } from 'react';
 import { useCalendar, useRangeCalendar, useCalendarGrid, useCalendarCell } from '@react-aria/calendar';
 import { useCalendarState, useRangeCalendarState } from '@react-stately/calendar';
 import { useLocale } from '@react-aria/i18n';
 export { I18nProvider, useLocale } from '@react-aria/i18n';
-import { GregorianCalendar, TaiwanCalendar, EthiopicAmeteAlemCalendar, EthiopicCalendar, IndianCalendar, HebrewCalendar, JapaneseCalendar, BuddhistCalendar, IslamicTabularCalendar, IslamicCivilCalendar, IslamicUmalquraCalendar, PersianCalendar, getWeeksInMonth, isSameDay } from '@internationalized/date';
+import { GregorianCalendar, TaiwanCalendar, EthiopicAmeteAlemCalendar, EthiopicCalendar, IndianCalendar, HebrewCalendar, JapaneseCalendar, BuddhistCalendar, IslamicTabularCalendar, IslamicCivilCalendar, IslamicUmalquraCalendar, PersianCalendar, getWeeksInMonth, isSameDay, Time } from '@internationalized/date';
 export { BuddhistCalendar, CalendarDate, CalendarDateTime, EthiopicCalendar, GregorianCalendar, HebrewCalendar, IndianCalendar, IslamicCivilCalendar, IslamicUmalquraCalendar, JapaneseCalendar, PersianCalendar, TaiwanCalendar, Time, ZonedDateTime, endOfMonth, endOfWeek, endOfYear, getLocalTimeZone, isSameDay, isSameMonth, isSameYear, isToday, isWeekend, now, parseAbsolute, parseDate, parseDateTime, parseTime, parseZonedDateTime, startOfMonth, startOfWeek, startOfYear, toCalendar, toCalendarDate, toCalendarDateTime, toZoned, today } from '@internationalized/date';
+import { IconChevronRight, IconChevronLeft } from '@virtari/react-icons';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import { useDateField, useDateSegment, useTimeField, useDatePicker, useDateRangePicker } from '@react-aria/datepicker';
 import { useDateFieldState, useTimeFieldState, useDatePickerState, useDateRangePickerState } from '@react-stately/datepicker';
-import * as PopoverPrimitive from '@radix-ui/react-popover';
+import * as PopoverPrimitive2 from '@radix-ui/react-popover';
 
 // src/Calendar.tsx
 function createCalendar(identifier) {
@@ -46,10 +48,10 @@ function resolveLocale(locale, calendar) {
   return locale.includes("-u-") ? locale : `${locale}-u-ca-${calendar}`;
 }
 function ChevronLeft() {
-  return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 12 12", fill: "none", "aria-hidden": "true", focusable: "false", children: /* @__PURE__ */ jsx("path", { d: "M7.5 3L4.5 6L7.5 9", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) });
+  return /* @__PURE__ */ jsx(IconChevronLeft, { size: 12, stroke: 1.5, "aria-hidden": true, focusable: false });
 }
 function ChevronRight() {
-  return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 12 12", fill: "none", "aria-hidden": "true", focusable: "false", children: /* @__PURE__ */ jsx("path", { d: "M4.5 3L7.5 6L4.5 9", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) });
+  return /* @__PURE__ */ jsx(IconChevronRight, { size: 12, stroke: 1.5, "aria-hidden": true, focusable: false });
 }
 function Calendar({
   size = "md",
@@ -306,10 +308,14 @@ function TimeField({
   description,
   errorMessage,
   className,
+  showPicker = true,
+  showMilliseconds,
+  millisecondStep = 10,
   ref,
   ...props
 }) {
   const { locale: detectedLocale, direction } = useLocale();
+  const [pickerOpen, setPickerOpen] = useState(false);
   const state = useTimeFieldState({
     ...props,
     isInvalid: invalid ?? props.isInvalid,
@@ -322,6 +328,7 @@ function TimeField({
     localRef
   );
   const isInvalid = invalid ?? state.isInvalid;
+  const canOpenPicker = showPicker && !props.isDisabled && !props.isReadOnly;
   return /* @__PURE__ */ jsxs(
     "div",
     {
@@ -332,17 +339,63 @@ function TimeField({
       "data-disabled": props.isDisabled ? "true" : void 0,
       "data-readonly": props.isReadOnly ? "true" : void 0,
       "data-dir": direction,
+      "data-picker": showPicker ? "true" : void 0,
       children: [
         label ? /* @__PURE__ */ jsx("span", { ...labelProps, className: "vds-time-field-label", children: label }) : null,
-        /* @__PURE__ */ jsx(
-          "div",
-          {
-            ...fieldProps,
-            ref: ref ?? localRef,
-            className: "vds-time-field-group",
-            children: state.segments.map((segment, i) => /* @__PURE__ */ jsx(TimeSegment, { segment, state }, i))
-          }
-        ),
+        /* @__PURE__ */ jsxs(PopoverPrimitive2.Root, { open: pickerOpen, onOpenChange: setPickerOpen, children: [
+          /* @__PURE__ */ jsx(PopoverPrimitive2.Anchor, { asChild: true, children: /* @__PURE__ */ jsxs(
+            "div",
+            {
+              ...fieldProps,
+              ref: composeRefs(ref, localRef),
+              className: "vds-time-field-group",
+              onClick: (event) => {
+                fieldProps.onClick?.(event);
+                if (canOpenPicker) {
+                  setPickerOpen(true);
+                }
+              },
+              children: [
+                /* @__PURE__ */ jsx("div", { className: "vds-time-field-segments", children: state.segments.map((segment, i) => /* @__PURE__ */ jsx(TimeSegment, { segment, state }, i)) }),
+                showPicker ? /* @__PURE__ */ jsx(
+                  "button",
+                  {
+                    type: "button",
+                    className: "vds-time-field-picker-trigger",
+                    "aria-label": "Open time picker",
+                    disabled: !canOpenPicker,
+                    onClick: (event) => {
+                      event.stopPropagation();
+                      setPickerOpen(true);
+                    },
+                    children: /* @__PURE__ */ jsx(ClockIcon, {})
+                  }
+                ) : null
+              ]
+            }
+          ) }),
+          showPicker ? /* @__PURE__ */ jsx(PopoverPrimitive2.Portal, { children: /* @__PURE__ */ jsx(
+            PopoverPrimitive2.Content,
+            {
+              sideOffset: 8,
+              align: "start",
+              collisionPadding: 8,
+              className: "vds-time-field-picker-content",
+              onOpenAutoFocus: (event) => event.preventDefault(),
+              children: /* @__PURE__ */ jsx(
+                TimePickerPanel,
+                {
+                  state,
+                  hourCycle: props.hourCycle,
+                  granularity: props.granularity ?? "minute",
+                  showMilliseconds,
+                  millisecondStep,
+                  onClose: () => setPickerOpen(false)
+                }
+              )
+            }
+          ) }) : null
+        ] }),
         description ? /* @__PURE__ */ jsx("span", { ...descriptionProps, className: "vds-time-field-description", children: description }) : null,
         isInvalid && errorMessage ? /* @__PURE__ */ jsx("span", { ...errorMessageProps, className: "vds-time-field-error", children: errorMessage }) : null
       ]
@@ -363,6 +416,328 @@ function TimeSegment({ segment, state }) {
       children: segment.text
     }
   );
+}
+function TimePickerPanel({
+  state,
+  hourCycle,
+  granularity,
+  showMilliseconds,
+  millisecondStep,
+  onClose
+}) {
+  const sourceTime = state.timeValue ?? new Time();
+  const [draftTime, setDraftTime] = useState(() => sourceTime.copy());
+  const resolvedHourCycle = hourCycle ?? 24;
+  const hours = resolvedHourCycle === 12 ? range(1, 12) : range(1, 24);
+  const minutes = range(0, 59);
+  const seconds = range(0, 59);
+  const milliseconds = useMemo(
+    () => getMillisecondValues(draftTime.millisecond, millisecondStep),
+    [draftTime.millisecond, millisecondStep]
+  );
+  const columnCount = 1 + (granularity !== "hour" || showMilliseconds ? 1 : 0) + (granularity === "second" || showMilliseconds ? 1 : 0) + (showMilliseconds ? 1 : 0) + (resolvedHourCycle === 12 ? 1 : 0);
+  useEffect(() => {
+    setDraftTime(sourceTime.copy());
+  }, [sourceTime.hour, sourceTime.minute, sourceTime.second, sourceTime.millisecond]);
+  const setDraft = (fields) => {
+    setDraftTime((current) => current.set(fields));
+  };
+  const commit = () => {
+    state.setValue(draftTime);
+    onClose();
+  };
+  const selectedHour = resolvedHourCycle === 12 ? to12Hour(draftTime.hour) : draftTime.hour === 0 ? 24 : draftTime.hour;
+  const selectedPeriod = draftTime.hour >= 12 ? 1 : 0;
+  const periodValues = [0, 1];
+  return /* @__PURE__ */ jsxs("div", { className: "vds-time-picker-panel", "data-columns": columnCount, children: [
+    /* @__PURE__ */ jsx("div", { className: "vds-time-picker-header", children: /* @__PURE__ */ jsx("span", { className: "vds-time-picker-title", children: "Set time" }) }),
+    /* @__PURE__ */ jsxs("div", { className: "vds-time-picker-wheels", "data-columns": columnCount, children: [
+      /* @__PURE__ */ jsx(
+        TimeWheel,
+        {
+          label: "Hour",
+          values: hours,
+          value: selectedHour,
+          formatValue: (value) => resolvedHourCycle === 12 ? String(value) : pad2(value),
+          onChange: (value) => {
+            if (resolvedHourCycle === 12) {
+              setDraft({ hour: from12Hour(value, selectedPeriod === 1) });
+              return;
+            }
+            setDraft({ hour: value === 24 ? 0 : value });
+          }
+        }
+      ),
+      granularity !== "hour" || showMilliseconds ? /* @__PURE__ */ jsx(
+        TimeWheel,
+        {
+          label: "Minute",
+          values: minutes,
+          value: draftTime.minute,
+          formatValue: pad2,
+          onChange: (value) => setDraft({ minute: value })
+        }
+      ) : null,
+      granularity === "second" || showMilliseconds ? /* @__PURE__ */ jsx(
+        TimeWheel,
+        {
+          label: "Second",
+          values: seconds,
+          value: draftTime.second,
+          formatValue: pad2,
+          onChange: (value) => setDraft({ second: value })
+        }
+      ) : null,
+      showMilliseconds ? /* @__PURE__ */ jsx(
+        TimeWheel,
+        {
+          label: "MS",
+          values: milliseconds,
+          value: nearestValue(milliseconds, draftTime.millisecond),
+          formatValue: (value) => String(value).padStart(3, "0"),
+          onChange: (value) => setDraft({ millisecond: value })
+        }
+      ) : null,
+      resolvedHourCycle === 12 ? /* @__PURE__ */ jsx(
+        TimeWheel,
+        {
+          label: "Period",
+          values: periodValues,
+          value: selectedPeriod,
+          formatValue: (value) => value === 1 ? "PM" : "AM",
+          onChange: (value) => {
+            const wantsPm = value === 1;
+            if (wantsPm === draftTime.hour >= 12) {
+              return;
+            }
+            setDraft({ hour: wantsPm ? draftTime.hour + 12 : draftTime.hour - 12 });
+          }
+        }
+      ) : null
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "vds-time-picker-actions", children: [
+      /* @__PURE__ */ jsx(
+        "button",
+        {
+          type: "button",
+          className: "vds-time-picker-action",
+          "data-variant": "secondary",
+          onClick: onClose,
+          children: "Cancel"
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        "button",
+        {
+          type: "button",
+          className: "vds-time-picker-action",
+          "data-variant": "primary",
+          onClick: commit,
+          children: "Save"
+        }
+      )
+    ] })
+  ] });
+}
+function TimeWheel({ label, values, value, formatValue, onChange }) {
+  const wheelRef = useRef(null);
+  const scrollTimerRef = useRef(null);
+  const valueRef = useRef(value);
+  const onChangeRef = useRef(onChange);
+  const dragStateRef = useRef({
+    pointerId: -1,
+    startY: 0,
+    startScrollTop: 0,
+    moved: false,
+    wasDragging: false
+  });
+  const centerValue = (nextValue, behavior) => {
+    const wheel = wheelRef.current;
+    const item = wheel?.querySelector(`[data-value="${nextValue}"]`);
+    item?.scrollIntoView({ block: "center", inline: "nearest", behavior });
+  };
+  const selectNearest = (behavior = "smooth") => {
+    const wheel = wheelRef.current;
+    if (!wheel) return;
+    const wheelRect = wheel.getBoundingClientRect();
+    const wheelCenter = wheelRect.top + wheelRect.height / 2;
+    let nearest = valueRef.current;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    wheel.querySelectorAll(".vds-time-wheel-item").forEach((item) => {
+      const itemRect = item.getBoundingClientRect();
+      const itemCenter = itemRect.top + itemRect.height / 2;
+      const distance = Math.abs(itemCenter - wheelCenter);
+      const itemValue = Number(item.dataset.value);
+      if (distance < nearestDistance && Number.isFinite(itemValue)) {
+        nearest = itemValue;
+        nearestDistance = distance;
+      }
+    });
+    if (nearest !== valueRef.current) {
+      onChangeRef.current(nearest);
+    }
+    centerValue(nearest, behavior);
+  };
+  const scheduleSnap = () => {
+    if (scrollTimerRef.current !== null) {
+      window.clearTimeout(scrollTimerRef.current);
+    }
+    scrollTimerRef.current = window.setTimeout(selectNearest, 90);
+  };
+  useEffect(() => {
+    valueRef.current = value;
+    onChangeRef.current = onChange;
+  }, [value, onChange]);
+  useEffect(() => {
+    centerValue(value, "auto");
+  }, [value]);
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current !== null) {
+        window.clearTimeout(scrollTimerRef.current);
+      }
+    };
+  }, []);
+  const handlePointerDown = (event) => {
+    const wheel = wheelRef.current;
+    if (!wheel) return;
+    dragStateRef.current = {
+      pointerId: event.pointerId,
+      startY: event.clientY,
+      startScrollTop: wheel.scrollTop,
+      moved: false,
+      wasDragging: false
+    };
+    wheel.setPointerCapture(event.pointerId);
+  };
+  const handlePointerMove = (event) => {
+    const wheel = wheelRef.current;
+    const drag = dragStateRef.current;
+    if (!wheel || drag.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const delta = event.clientY - drag.startY;
+    if (Math.abs(delta) > 3) {
+      drag.moved = true;
+      drag.wasDragging = true;
+    }
+    wheel.scrollTop = drag.startScrollTop - delta;
+    scheduleSnap();
+  };
+  const handlePointerUp = (event) => {
+    const wheel = wheelRef.current;
+    const drag = dragStateRef.current;
+    if (!wheel || drag.pointerId !== event.pointerId) return;
+    wheel.releasePointerCapture(event.pointerId);
+    drag.pointerId = -1;
+    selectNearest();
+    window.setTimeout(() => {
+      drag.wasDragging = false;
+    });
+  };
+  const handleWheel = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const multiplier = event.deltaMode === 1 ? 36 : event.deltaMode === 2 ? event.currentTarget.clientHeight : 1;
+    event.currentTarget.scrollTop += event.deltaY * multiplier;
+    scheduleSnap();
+  };
+  return /* @__PURE__ */ jsxs("div", { className: "vds-time-wheel", "data-label": label, children: [
+    /* @__PURE__ */ jsx("div", { className: "vds-time-wheel-label", children: label }),
+    /* @__PURE__ */ jsx(
+      "div",
+      {
+        ref: wheelRef,
+        className: "vds-time-wheel-track",
+        onWheelCapture: handleWheel,
+        onScroll: scheduleSnap,
+        onPointerDown: handlePointerDown,
+        onPointerMove: handlePointerMove,
+        onPointerUp: handlePointerUp,
+        onPointerCancel: handlePointerUp,
+        children: values.map((itemValue) => {
+          const selected = itemValue === value;
+          return /* @__PURE__ */ jsx(
+            "button",
+            {
+              type: "button",
+              className: "vds-time-wheel-item",
+              "data-value": itemValue,
+              "data-selected": selected ? "true" : void 0,
+              "aria-pressed": selected,
+              "aria-label": `${label} ${formatValue(itemValue)}`,
+              onClick: () => {
+                if (dragStateRef.current.wasDragging) return;
+                onChange(itemValue);
+              },
+              children: formatValue(itemValue)
+            },
+            itemValue
+          );
+        })
+      }
+    )
+  ] });
+}
+function ClockIcon() {
+  return /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 16 16", fill: "none", "aria-hidden": "true", focusable: "false", children: [
+    /* @__PURE__ */ jsx("circle", { cx: "8", cy: "8", r: "5.5", stroke: "currentColor", strokeWidth: "1.25" }),
+    /* @__PURE__ */ jsx(
+      "path",
+      {
+        d: "M8 4.75V8L10.25 9.35",
+        stroke: "currentColor",
+        strokeWidth: "1.25",
+        strokeLinecap: "round",
+        strokeLinejoin: "round"
+      }
+    )
+  ] });
+}
+function range(start, end) {
+  return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+}
+function pad2(value) {
+  return String(value).padStart(2, "0");
+}
+function to12Hour(hour) {
+  const remainder = hour % 12;
+  return remainder === 0 ? 12 : remainder;
+}
+function from12Hour(hour, isPm) {
+  if (hour === 12) {
+    return isPm ? 12 : 0;
+  }
+  return isPm ? hour + 12 : hour;
+}
+function getMillisecondValues(current, step) {
+  const normalizedStep = Math.max(1, Math.min(250, Math.round(step)));
+  const values = [];
+  for (let value = 0; value <= 999; value += normalizedStep) {
+    values.push(value);
+  }
+  if (!values.includes(current)) {
+    values.push(current);
+    values.sort((a, b) => a - b);
+  }
+  return values;
+}
+function nearestValue(values, value) {
+  return values.reduce(
+    (nearest, item) => Math.abs(item - value) < Math.abs(nearest - value) ? item : nearest
+  );
+}
+function composeRefs(...refs) {
+  return (node) => {
+    refs.forEach((ref) => {
+      if (!ref) return;
+      if (typeof ref === "function") {
+        ref(node);
+      } else {
+        ref.current = node;
+      }
+    });
+  };
 }
 function DatePicker({
   size = "md",
@@ -422,8 +797,8 @@ function DatePicker({
       "data-dir": direction,
       children: [
         label ? /* @__PURE__ */ jsx("span", { ...labelProps, className: "vds-date-picker-label", children: label }) : null,
-        /* @__PURE__ */ jsxs(PopoverPrimitive.Root, { open: state.isOpen, onOpenChange: state.setOpen, children: [
-          /* @__PURE__ */ jsx(PopoverPrimitive.Anchor, { asChild: true, children: /* @__PURE__ */ jsxs(
+        /* @__PURE__ */ jsxs(PopoverPrimitive2.Root, { open: state.isOpen, onOpenChange: state.setOpen, children: [
+          /* @__PURE__ */ jsx(PopoverPrimitive2.Anchor, { asChild: true, children: /* @__PURE__ */ jsxs(
             "div",
             {
               ...groupProps,
@@ -439,7 +814,7 @@ function DatePicker({
                     children: fieldState.segments.map((segment, i) => /* @__PURE__ */ jsx(FieldSegment, { segment, state: fieldState }, i))
                   }
                 ),
-                /* @__PURE__ */ jsx(PopoverPrimitive.Trigger, { asChild: true, children: /* @__PURE__ */ jsx(
+                /* @__PURE__ */ jsx(PopoverPrimitive2.Trigger, { asChild: true, children: /* @__PURE__ */ jsx(
                   "button",
                   {
                     ...buttonProps,
@@ -452,8 +827,8 @@ function DatePicker({
               ]
             }
           ) }),
-          /* @__PURE__ */ jsx(PopoverPrimitive.Portal, { children: /* @__PURE__ */ jsx(
-            PopoverPrimitive.Content,
+          /* @__PURE__ */ jsx(PopoverPrimitive2.Portal, { children: /* @__PURE__ */ jsx(
+            PopoverPrimitive2.Content,
             {
               ...dialogProps,
               sideOffset: 6,
@@ -480,6 +855,9 @@ function DatePicker({
                       granularity: props.granularity === "day" ? "hour" : props.granularity ?? "hour",
                       hourCycle: props.hourCycle,
                       hideTimeZone: props.hideTimeZone,
+                      showPicker: props.showTimePicker ?? true,
+                      showMilliseconds: props.showMilliseconds,
+                      millisecondStep: props.millisecondStep,
                       size,
                       appearance,
                       "aria-label": "Time"
@@ -614,8 +992,8 @@ function DateRangePicker({
       "data-dir": direction,
       children: [
         label ? /* @__PURE__ */ jsx("span", { ...labelProps, className: "vds-date-range-picker-label", children: label }) : null,
-        /* @__PURE__ */ jsxs(PopoverPrimitive.Root, { open: state.isOpen, onOpenChange: state.setOpen, children: [
-          /* @__PURE__ */ jsx(PopoverPrimitive.Anchor, { asChild: true, children: /* @__PURE__ */ jsxs(
+        /* @__PURE__ */ jsxs(PopoverPrimitive2.Root, { open: state.isOpen, onOpenChange: state.setOpen, children: [
+          /* @__PURE__ */ jsx(PopoverPrimitive2.Anchor, { asChild: true, children: /* @__PURE__ */ jsxs(
             "div",
             {
               ...groupProps,
@@ -641,7 +1019,7 @@ function DateRangePicker({
                     children: endFieldState.segments.map((segment, i) => /* @__PURE__ */ jsx(FieldSegment, { segment, state: endFieldState }, i))
                   }
                 ),
-                /* @__PURE__ */ jsx(PopoverPrimitive.Trigger, { asChild: true, children: /* @__PURE__ */ jsx(
+                /* @__PURE__ */ jsx(PopoverPrimitive2.Trigger, { asChild: true, children: /* @__PURE__ */ jsx(
                   "button",
                   {
                     ...buttonProps,
@@ -654,8 +1032,8 @@ function DateRangePicker({
               ]
             }
           ) }),
-          /* @__PURE__ */ jsx(PopoverPrimitive.Portal, { children: /* @__PURE__ */ jsx(
-            PopoverPrimitive.Content,
+          /* @__PURE__ */ jsx(PopoverPrimitive2.Portal, { children: /* @__PURE__ */ jsx(
+            PopoverPrimitive2.Content,
             {
               ...dialogProps,
               sideOffset: 6,
@@ -683,6 +1061,9 @@ function DateRangePicker({
                         granularity: props.granularity === "day" ? "hour" : props.granularity ?? "hour",
                         hourCycle: props.hourCycle,
                         hideTimeZone: props.hideTimeZone,
+                        showPicker: props.showTimePicker ?? true,
+                        showMilliseconds: props.showMilliseconds,
+                        millisecondStep: props.millisecondStep,
                         size,
                         appearance,
                         "aria-label": "Start time"
@@ -696,6 +1077,9 @@ function DateRangePicker({
                         granularity: props.granularity === "day" ? "hour" : props.granularity ?? "hour",
                         hourCycle: props.hourCycle,
                         hideTimeZone: props.hideTimeZone,
+                        showPicker: props.showTimePicker ?? true,
+                        showMilliseconds: props.showMilliseconds,
+                        millisecondStep: props.millisecondStep,
                         size,
                         appearance,
                         "aria-label": "End time"

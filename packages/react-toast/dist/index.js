@@ -1,6 +1,8 @@
+"use client";
 import { memo, useRef, useState, useEffect, useCallback, useMemo, useSyncExternalStore } from 'react';
 import * as ToastPrimitive3 from '@radix-ui/react-toast';
 import { cn } from '@virtari/utils';
+import { IconCircleCheck, IconCircleX, IconAlertTriangle, IconInfoCircle, IconLoader2, IconX } from '@virtari/react-icons';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
 // src/Toaster.tsx
@@ -102,93 +104,35 @@ var toastStore = {
     commit([]);
   }
 };
-var SVG_PROPS = {
-  width: 20,
-  height: 20,
-  viewBox: "0 0 20 20",
-  fill: "none",
+var ICON_PROPS = {
+  size: 20,
+  stroke: 1.75,
   "aria-hidden": true,
   focusable: false
 };
 var SuccessIcon = memo(function SuccessIcon2() {
-  return /* @__PURE__ */ jsx("svg", { ...SVG_PROPS, children: /* @__PURE__ */ jsx(
-    "path",
-    {
-      d: "M16.25 5.625 7.5 14.375 3.75 10.625",
-      stroke: "currentColor",
-      strokeWidth: 2,
-      strokeLinecap: "round",
-      strokeLinejoin: "round"
-    }
-  ) });
+  return /* @__PURE__ */ jsx(IconCircleCheck, { ...ICON_PROPS });
 });
 var ErrorIcon = memo(function ErrorIcon2() {
-  return /* @__PURE__ */ jsx("svg", { ...SVG_PROPS, children: /* @__PURE__ */ jsx(
-    "path",
-    {
-      d: "M15 5 5 15M5 5l10 10",
-      stroke: "currentColor",
-      strokeWidth: 2,
-      strokeLinecap: "round",
-      strokeLinejoin: "round"
-    }
-  ) });
+  return /* @__PURE__ */ jsx(IconCircleX, { ...ICON_PROPS });
 });
 var WarningIcon = memo(function WarningIcon2() {
-  return /* @__PURE__ */ jsx("svg", { ...SVG_PROPS, children: /* @__PURE__ */ jsx(
-    "path",
-    {
-      d: "M10 6.25v4.375M10 14.375h.008M18.125 10a8.125 8.125 0 1 1-16.25 0 8.125 8.125 0 0 1 16.25 0Z",
-      stroke: "currentColor",
-      strokeWidth: 2,
-      strokeLinecap: "round",
-      strokeLinejoin: "round"
-    }
-  ) });
+  return /* @__PURE__ */ jsx(IconAlertTriangle, { ...ICON_PROPS });
 });
 var InfoIcon = memo(function InfoIcon2() {
-  return /* @__PURE__ */ jsx("svg", { ...SVG_PROPS, children: /* @__PURE__ */ jsx(
-    "path",
-    {
-      d: "M10 9.375v5M10 6.25h.008M18.125 10a8.125 8.125 0 1 1-16.25 0 8.125 8.125 0 0 1 16.25 0Z",
-      stroke: "currentColor",
-      strokeWidth: 2,
-      strokeLinecap: "round",
-      strokeLinejoin: "round"
-    }
-  ) });
+  return /* @__PURE__ */ jsx(IconInfoCircle, { ...ICON_PROPS });
 });
 var LoadingIcon = memo(function LoadingIcon2() {
-  return /* @__PURE__ */ jsx("svg", { ...SVG_PROPS, className: "vds-toast__spinner", children: /* @__PURE__ */ jsx(
-    "path",
-    {
-      d: "M10 1.875A8.125 8.125 0 1 1 1.875 10",
-      stroke: "currentColor",
-      strokeWidth: 2,
-      strokeLinecap: "round"
-    }
-  ) });
+  return /* @__PURE__ */ jsx(IconLoader2, { ...ICON_PROPS, className: "vds-toast__spinner" });
 });
 var CloseIcon = memo(function CloseIcon2() {
   return /* @__PURE__ */ jsx(
-    "svg",
+    IconX,
     {
-      width: 12,
-      height: 12,
-      viewBox: "0 0 12 12",
-      fill: "none",
+      size: 12,
+      stroke: 1.75,
       "aria-hidden": true,
-      focusable: false,
-      children: /* @__PURE__ */ jsx(
-        "path",
-        {
-          d: "M9 3 3 9M3 3l6 6",
-          stroke: "currentColor",
-          strokeWidth: 1.5,
-          strokeLinecap: "round",
-          strokeLinejoin: "round"
-        }
-      )
+      focusable: false
     }
   );
 });

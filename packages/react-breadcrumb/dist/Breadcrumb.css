@@ -1,0 +1,308 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Base component tokens
+   *    Semantic → component mapping with fallbacks
+   *    so the package works standalone if dropped
+   *    into a project without @virtari/tokens.
+   * ───────────────────────────────────────────── */
+  .vds-breadcrumb {
+    /* Layout */
+    --breadcrumb-gap: var(--vds-space-2, 0.5rem);
+    --breadcrumb-row-gap: var(--vds-space-1, 0.25rem);
+    --breadcrumb-item-padding-inline: var(--vds-space-2, 0.5rem);
+    --breadcrumb-item-padding-block: var(--vds-space-1, 0.25rem);
+    --breadcrumb-item-radius: var(--vds-radius-sm, 0.375rem);
+    --breadcrumb-item-border-width: 1px;
+    --breadcrumb-item-border-color: transparent;
+    --breadcrumb-item-bg: transparent;
+    --breadcrumb-item-bg-hover: transparent;
+
+    /* Typography */
+    --breadcrumb-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --breadcrumb-font-size: var(--vds-text-sm, 0.875rem);
+    --breadcrumb-font-weight: var(--vds-font-weight-normal, 400);
+    --breadcrumb-page-weight: var(--vds-font-weight-medium, 500);
+    --breadcrumb-line-height: var(--vds-leading-tight, 1.25);
+
+    /* Truncation cap (per item) */
+    --breadcrumb-item-max-inline-size: 16ch;
+
+    /* Icon slot (separator + leading icon) */
+    --breadcrumb-icon-size: 1em;
+    --breadcrumb-leading-icon-size: 1em;
+
+    /* Colors — neutral default */
+    --breadcrumb-link-color: var(--vds-color-text-muted, #6b7280);
+    --breadcrumb-link-color-hover: var(--vds-color-text, #111827);
+    --breadcrumb-link-text-decoration: none;
+    --breadcrumb-link-text-decoration-hover: none;
+    --breadcrumb-page-color: var(--vds-color-text, #111827);
+    --breadcrumb-separator-color: var(--vds-color-text-subtle, #9ca3af);
+
+    /* Motion */
+    --breadcrumb-transition-duration: var(--vds-duration-fast, 100ms);
+    --breadcrumb-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* Focus */
+    --breadcrumb-focus-ring-color: var(--vds-color-ring, #6366f1);
+    --breadcrumb-focus-ring-width: 2px;
+    --breadcrumb-focus-ring-offset: 2px;
+  }
+
+  /* ─────────────────────────────────────────────
+   * 2. Sizes (2xs..xl) — re-tune typography + paddings
+   * ───────────────────────────────────────────── */
+  .vds-breadcrumb[data-size="2xs"] {
+    --breadcrumb-gap: var(--vds-space-1, 0.25rem);
+    --breadcrumb-item-padding-inline: var(--vds-space-1, 0.25rem);
+    --breadcrumb-item-padding-block: var(--vds-space-0-5, 0.125rem);
+    --breadcrumb-font-size: 0.6875rem; /* 11px — below text-xs, scoped here */
+    --breadcrumb-line-height: var(--vds-leading-none, 1);
+  }
+  .vds-breadcrumb[data-size="xs"] {
+    --breadcrumb-gap: var(--vds-space-1, 0.25rem);
+    --breadcrumb-item-padding-inline: var(--vds-space-1-5, 0.375rem);
+    --breadcrumb-item-padding-block: var(--vds-space-0-5, 0.125rem);
+    --breadcrumb-font-size: var(--vds-text-xs, 0.75rem);
+  }
+  .vds-breadcrumb[data-size="sm"] {
+    --breadcrumb-gap: var(--vds-space-1-5, 0.375rem);
+    --breadcrumb-item-padding-inline: var(--vds-space-2, 0.5rem);
+    --breadcrumb-item-padding-block: var(--vds-space-1, 0.25rem);
+    --breadcrumb-font-size: var(--vds-text-xs, 0.75rem);
+  }
+  /* md is the default — no override needed */
+  .vds-breadcrumb[data-size="lg"] {
+    --breadcrumb-gap: var(--vds-space-2-5, 0.625rem);
+    --breadcrumb-item-padding-inline: var(--vds-space-3, 0.75rem);
+    --breadcrumb-item-padding-block: var(--vds-space-1-5, 0.375rem);
+    --breadcrumb-font-size: var(--vds-text-base, 1rem);
+  }
+  .vds-breadcrumb[data-size="xl"] {
+    --breadcrumb-gap: var(--vds-space-3, 0.75rem);
+    --breadcrumb-item-padding-inline: var(--vds-space-3-5, 0.875rem);
+    --breadcrumb-item-padding-block: var(--vds-space-2, 0.5rem);
+    --breadcrumb-font-size: var(--vds-text-lg, 1.125rem);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 3. Variants — visual treatment of items/links
+   *    (default = text-only with hover color shift)
+   * ───────────────────────────────────────────── */
+
+  /* Underline — hover shows underline on links */
+  .vds-breadcrumb[data-variant="underline"] {
+    --breadcrumb-link-text-decoration-hover: underline;
+  }
+
+  /* Ghost — hover paints a subtle bg pill behind items */
+  .vds-breadcrumb[data-variant="ghost"] {
+    --breadcrumb-item-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
+  }
+
+  /* Soft — items always have a muted bg pill */
+  .vds-breadcrumb[data-variant="soft"] {
+    --breadcrumb-item-bg: var(--vds-color-bg-muted, #e5e7eb);
+    --breadcrumb-item-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
+    --breadcrumb-link-color: var(--vds-color-text, #111827);
+    --breadcrumb-link-color-hover: var(--vds-color-primary-emphasis, #6366f1);
+  }
+
+  /* Solid — current page reads as a strong pill, links stay text-only */
+  .vds-breadcrumb[data-variant="solid"] {
+    --breadcrumb-item-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
+    --breadcrumb-page-color: var(--vds-color-on-primary, #ffffff);
+  }
+}
+
+@layer design-system.components {
+  /* ── Root <nav> ── */
+  .vds-breadcrumb {
+    display: block;
+    color: var(--breadcrumb-link-color);
+    font-family: var(--breadcrumb-font-family);
+    font-size: var(--breadcrumb-font-size);
+    font-weight: var(--breadcrumb-font-weight);
+    line-height: var(--breadcrumb-line-height);
+  }
+
+  /* ── List <ol> ── */
+  .vds-breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--breadcrumb-row-gap) var(--breadcrumb-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* ── Item <li> ── */
+  .vds-breadcrumb__item {
+    display: inline-flex;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  /* ── Link <a> (or asChild) ── */
+  .vds-breadcrumb__link {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--breadcrumb-gap) / 2);
+
+    padding-inline: var(--breadcrumb-item-padding-inline);
+    padding-block: var(--breadcrumb-item-padding-block);
+
+    background-color: var(--breadcrumb-item-bg);
+    border: var(--breadcrumb-item-border-width) solid var(--breadcrumb-item-border-color);
+    border-radius: var(--breadcrumb-item-radius);
+
+    color: var(--breadcrumb-link-color);
+    -webkit-text-decoration: var(--breadcrumb-link-text-decoration);
+            text-decoration: var(--breadcrumb-link-text-decoration);
+    cursor: pointer;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+
+    max-inline-size: var(--breadcrumb-item-max-inline-size);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    transition:
+      color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing),
+      background-color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing),
+      text-decoration-color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing);
+  }
+
+  .vds-breadcrumb__link:hover {
+    color: var(--breadcrumb-link-color-hover);
+    background-color: var(--breadcrumb-item-bg-hover);
+    -webkit-text-decoration: var(--breadcrumb-link-text-decoration-hover);
+            text-decoration: var(--breadcrumb-link-text-decoration-hover);
+  }
+
+  .vds-breadcrumb__link:focus-visible {
+    outline: var(--breadcrumb-focus-ring-width) solid var(--breadcrumb-focus-ring-color);
+    outline-offset: var(--breadcrumb-focus-ring-offset);
+  }
+
+  /* Leading icon inside a link (e.g. Home shortcut) */
+  .vds-breadcrumb__link > svg,
+  .vds-breadcrumb__page > svg {
+    inline-size: var(--breadcrumb-leading-icon-size);
+    block-size: var(--breadcrumb-leading-icon-size);
+    flex: none;
+  }
+
+  /* ── Current page <span aria-current="page"> ── */
+  .vds-breadcrumb__page {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--breadcrumb-gap) / 2);
+
+    padding-inline: var(--breadcrumb-item-padding-inline);
+    padding-block: var(--breadcrumb-item-padding-block);
+
+    color: var(--breadcrumb-page-color);
+    font-weight: var(--breadcrumb-page-weight);
+
+    max-inline-size: var(--breadcrumb-item-max-inline-size);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Solid variant — current page reads as a primary pill */
+  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__page {
+    background-color: var(--vds-color-primary-emphasis, #6366f1);
+    border-radius: var(--breadcrumb-item-radius);
+  }
+
+  /* ── Separator <li aria-hidden> ── */
+  .vds-breadcrumb__separator {
+    display: inline-flex;
+    align-items: center;
+    color: var(--breadcrumb-separator-color);
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    flex: none;
+  }
+
+  .vds-breadcrumb__separator > svg {
+    inline-size: var(--breadcrumb-icon-size);
+    block-size: var(--breadcrumb-icon-size);
+  }
+
+  /* The "/" character preset uses a literal glyph, not an SVG */
+  .vds-breadcrumb__separator[data-preset="slash"]::before {
+    content: "/";
+    font-size: 1em;
+    line-height: 1;
+  }
+
+  /* RTL: directional separators (chevron / arrow) flip horizontally.
+     Slash and dot are direction-agnostic and stay as-is. */
+  :dir(rtl) .vds-breadcrumb[data-separator="chevron"] .vds-breadcrumb__separator > svg,
+  :dir(rtl) .vds-breadcrumb[data-separator="arrow"]   .vds-breadcrumb__separator > svg {
+    transform: scaleX(-1);
+  }
+
+  /* ── Ellipsis <li> with menu trigger ── */
+  .vds-breadcrumb__ellipsis {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .vds-breadcrumb__ellipsis-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding-inline: var(--breadcrumb-item-padding-inline);
+    padding-block: var(--breadcrumb-item-padding-block);
+
+    background-color: transparent;
+    border: 0;
+    border-radius: var(--breadcrumb-item-radius);
+    color: var(--breadcrumb-link-color);
+    cursor: pointer;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+
+    transition:
+      color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing),
+      background-color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing);
+  }
+
+  .vds-breadcrumb__ellipsis-trigger:hover {
+    color: var(--breadcrumb-link-color-hover);
+    background-color: var(--breadcrumb-item-bg-hover, var(--vds-color-surface-hover, #f3f4f6));
+  }
+
+  .vds-breadcrumb__ellipsis-trigger:focus-visible {
+    outline: var(--breadcrumb-focus-ring-width) solid var(--breadcrumb-focus-ring-color);
+    outline-offset: var(--breadcrumb-focus-ring-offset);
+  }
+
+  .vds-breadcrumb__ellipsis-trigger > svg {
+    inline-size: var(--breadcrumb-icon-size);
+    block-size: var(--breadcrumb-icon-size);
+  }
+
+  /* ── Visually hidden helper (used by sr-only label inside ellipsis trigger) ── */
+  .vds-breadcrumb__sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

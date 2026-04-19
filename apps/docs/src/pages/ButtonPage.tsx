@@ -21,56 +21,41 @@ import {
   Stack as LayoutStack,
 } from "@virtari/react-layout";
 import { Section, Row } from "../components";
+import {
+  IconArrowRight,
+  IconDownload as TablerIconDownload,
+  IconPlus as TablerIconPlus,
+  IconSearch as TablerIconSearch,
+  IconSparkles,
+  IconTrash as TablerIconTrash,
+} from "@virtari/react-icons";
 
 /* ─────────────────────────────── Icons ─────────────────────────────── */
 
+const DEMO_ICON = { size: 16, stroke: 1.75, "aria-hidden": true as const, focusable: false as const };
+
 function IconPlus() {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <path d="M8 3v10M3 8h10" />
-    </svg>
-  );
+  return <TablerIconPlus {...DEMO_ICON} />;
 }
 
 function IconArrow() {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 8h10M9 4l4 4-4 4" />
-    </svg>
-  );
+  return <IconArrowRight {...DEMO_ICON} />;
 }
 
 function IconTrash() {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1M6 7v5M10 7v5M4 4l1 9a1 1 0 001 1h4a1 1 0 001-1l1-9" />
-    </svg>
-  );
+  return <TablerIconTrash {...DEMO_ICON} />;
 }
 
 function IconDownload() {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8 2v8M4 7l4 4 4-4M3 13h10" />
-    </svg>
-  );
+  return <TablerIconDownload {...DEMO_ICON} />;
 }
 
 function IconSearch() {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <circle cx="7" cy="7" r="4.5" />
-      <path d="M10.5 10.5L14 14" />
-    </svg>
-  );
+  return <TablerIconSearch {...DEMO_ICON} />;
 }
 
 function IconSparkle() {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8 2v3M8 11v3M2 8h3M11 8h3M4 4l2 2M10 10l2 2M12 4l-2 2M6 10l-2 2" />
-    </svg>
-  );
+  return <IconSparkles {...DEMO_ICON} />;
 }
 
 /* ─────────────────────────────── Helpers ─────────────────────────────── */
@@ -202,7 +187,7 @@ const COLORS: ButtonColor[] = [
 ];
 const VARIANTS: ButtonVariant[] = ["solid", "outline", "ghost", "soft", "link"];
 const SIZES: ButtonSize[] = ["2xs", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"];
-const EFFECTS: (ButtonEffect | "none")[] = ["none", "shine", "raised", "glow", "glass", "outline-glow"];
+const EFFECTS: (ButtonEffect | "none")[] = ["none", "shine", "raised", "glow", "glass", "outline-glow", "candy"];
 const ANIMATIONS: (ButtonAnimation | "none")[] = ["none", "pulse", "bounce", "shake", "jiggle"];
 
 const SIZE_SPEC: Record<ButtonSize, { height: string; wcagAA: boolean; wcagAAA: boolean; apple: boolean; material: boolean; hint: string }> = {
@@ -738,11 +723,24 @@ function EffectsSection() {
       <Row>
         <Button effect="raised">Raised</Button>
         <Button effect="raised" color="danger">Raised danger</Button>
+        <Button effect="raised" color="success">Raised success</Button>
         <Button effect="raised" color="contrast">Raised contrast</Button>
         <Button effect="raised" size="lg">Raised large</Button>
       </Row>
       <Caption>
-        <strong>raised</strong> — elevated with a <strong>neutral black</strong> depth (not tinted by the button color). Presses down on click.
+        <strong>raised</strong> — elevated with a shadow in the <strong>same hue</strong> as the button, just darker. Hue is preserved via OKLCH relative color syntax. Presses down on click.
+      </Caption>
+
+      <Row>
+        <Button effect="candy">Candy</Button>
+        <Button effect="candy" color="danger">Candy danger</Button>
+        <Button effect="candy" color="success">Candy success</Button>
+        <Button effect="candy" color="warning">Candy warning</Button>
+        <Button effect="candy" color="info">Candy info</Button>
+        <Button effect="candy" size="lg">Candy large</Button>
+      </Row>
+      <Caption>
+        <strong>candy</strong> — glossy jelly surface: top specular highlight, sunk bottom edge, color-bleed shadow. Best on saturated colors. Press flattens the gloss.
       </Caption>
 
       <Row>
@@ -767,8 +765,9 @@ function EffectsSection() {
         }}
       >
         <Button effect="glass">Glass</Button>
-        <Button effect="glass" size="lg">Glass large</Button>
-        <Button effect="glass" size="sm">Glass small</Button>
+        <Button effect="glass" color="danger">Glass danger</Button>
+        <Button effect="glass" color="success">Glass success</Button>
+        <Button effect="glass" color="warning">Glass warning</Button>
         <Button effect="glass" leftSection={<IconSparkle />}>Glass icon</Button>
       </div>
       <Caption>
@@ -780,6 +779,7 @@ import "@virtari/react-button/styles/effects";
 
 <Button effect="shine">Shine</Button>
 <Button effect="raised" size="lg">Raised</Button>
+<Button effect="candy" color="danger">Candy</Button>
 <Button effect="glow" color="danger">Glow</Button>
 <Button effect="glass">Glass</Button>             // use on dark bg
 <Button effect="outline-glow" variant="outline">Outline</Button>`}</pre>

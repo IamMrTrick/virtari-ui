@@ -1,5 +1,7 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as SelectPrimitive from '@radix-ui/react-select';
+import { IconX, IconLoader2, IconChevronDown, IconCheck } from '@virtari/react-icons';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { Chip, ChipLabel, ChipRemove } from '@virtari/react-chip';
@@ -48,59 +50,10 @@ function SelectTrigger({
                 e.stopPropagation();
                 onClear?.();
               },
-              children: /* @__PURE__ */ jsx(
-                "svg",
-                {
-                  viewBox: "0 0 12 12",
-                  fill: "none",
-                  xmlns: "http://www.w3.org/2000/svg",
-                  "aria-hidden": "true",
-                  children: /* @__PURE__ */ jsx(
-                    "path",
-                    {
-                      d: "M9 3L3 9M3 3L9 9",
-                      stroke: "currentColor",
-                      strokeWidth: "1.5",
-                      strokeLinecap: "round",
-                      strokeLinejoin: "round"
-                    }
-                  )
-                }
-              )
+              children: /* @__PURE__ */ jsx(IconX, { size: 12, stroke: 1.5, "aria-hidden": true, focusable: false })
             }
           ) : null,
-          loading ? /* @__PURE__ */ jsx("span", { className: "vds-select-spinner", "aria-hidden": "true", children: /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ jsx(
-            "circle",
-            {
-              cx: "12",
-              cy: "12",
-              r: "9",
-              stroke: "currentColor",
-              strokeWidth: "2.5",
-              strokeLinecap: "round",
-              strokeDasharray: "40 60",
-              opacity: "0.9"
-            }
-          ) }) }) : /* @__PURE__ */ jsx(SelectPrimitive.Icon, { className: "vds-select-icon", children: /* @__PURE__ */ jsx(
-            "svg",
-            {
-              width: "12",
-              height: "12",
-              viewBox: "0 0 12 12",
-              fill: "none",
-              xmlns: "http://www.w3.org/2000/svg",
-              children: /* @__PURE__ */ jsx(
-                "path",
-                {
-                  d: "M3 4.5L6 7.5L9 4.5",
-                  stroke: "currentColor",
-                  strokeWidth: "1.5",
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round"
-                }
-              )
-            }
-          ) })
+          loading ? /* @__PURE__ */ jsx("span", { className: "vds-select-spinner", "aria-hidden": "true", children: /* @__PURE__ */ jsx(IconLoader2, { size: 24, stroke: 2.5, "aria-hidden": true, focusable: false }) }) : /* @__PURE__ */ jsx(SelectPrimitive.Icon, { className: "vds-select-icon", children: /* @__PURE__ */ jsx(IconChevronDown, { size: 12, stroke: 1.5, "aria-hidden": true, focusable: false }) })
         ] })
       ]
     }
@@ -136,26 +89,7 @@ function SelectItem({ className, children, ref, ...props }) {
       ...props,
       children: [
         /* @__PURE__ */ jsx(SelectPrimitive.ItemText, { children }),
-        /* @__PURE__ */ jsx(SelectPrimitive.ItemIndicator, { className: "vds-select-item-indicator", children: /* @__PURE__ */ jsx(
-          "svg",
-          {
-            width: "12",
-            height: "12",
-            viewBox: "0 0 12 12",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /* @__PURE__ */ jsx(
-              "path",
-              {
-                d: "M10 3L4.5 8.5L2 6",
-                stroke: "currentColor",
-                strokeWidth: "1.5",
-                strokeLinecap: "round",
-                strokeLinejoin: "round"
-              }
-            )
-          }
-        ) })
+        /* @__PURE__ */ jsx(SelectPrimitive.ItemIndicator, { className: "vds-select-item-indicator", children: /* @__PURE__ */ jsx(IconCheck, { size: 12, stroke: 2, "aria-hidden": true, focusable: false }) })
       ]
     }
   );

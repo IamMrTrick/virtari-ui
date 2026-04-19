@@ -1,7 +1,9 @@
+"use client";
 'use strict';
 
 var utils = require('@virtari/utils');
 var CheckboxPrimitive = require('@radix-ui/react-checkbox');
+var reactIcons = require('@virtari/react-icons');
 var jsxRuntime = require('react/jsx-runtime');
 
 function _interopNamespace(e) {
@@ -35,40 +37,23 @@ function Checkbox({ size = "md", className, ref, ...props }) {
       ...props,
       children: /* @__PURE__ */ jsxRuntime.jsxs(CheckboxPrimitive__namespace.Indicator, { className: "vds-checkbox-indicator", children: [
         /* @__PURE__ */ jsxRuntime.jsx(
-          "svg",
+          reactIcons.IconCheck,
           {
             className: "vds-checkbox-check",
-            viewBox: "0 0 12 12",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /* @__PURE__ */ jsxRuntime.jsx(
-              "path",
-              {
-                d: "M10 3L4.5 8.5L2 6",
-                stroke: "currentColor",
-                strokeWidth: "2",
-                strokeLinecap: "round",
-                strokeLinejoin: "round"
-              }
-            )
+            size: 12,
+            stroke: 2.5,
+            "aria-hidden": true,
+            focusable: false
           }
         ),
         /* @__PURE__ */ jsxRuntime.jsx(
-          "svg",
+          reactIcons.IconMinus,
           {
             className: "vds-checkbox-indeterminate",
-            viewBox: "0 0 12 12",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /* @__PURE__ */ jsxRuntime.jsx(
-              "path",
-              {
-                d: "M2.5 6H9.5",
-                stroke: "currentColor",
-                strokeWidth: "2",
-                strokeLinecap: "round"
-              }
-            )
+            size: 12,
+            stroke: 2.5,
+            "aria-hidden": true,
+            focusable: false
           }
         )
       ] })

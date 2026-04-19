@@ -26,18 +26,18 @@ export function Sidebar({
 }: SidebarProps) {
   const mergedStyle: CSSProperties = { ...style };
   if (sideWidth) {
-    (mergedStyle as Record<string, string>)["--sidebar-side-width"] =
-      sideWidth;
+    (mergedStyle as Record<string, string>)["--split-side-width"] = sideWidth;
   }
   if (contentMin) {
-    (mergedStyle as Record<string, string>)["--sidebar-content-min"] =
-      contentMin;
+    (mergedStyle as Record<string, string>)["--split-content-min"] = contentMin;
   }
 
   return (
     <Tag
       ref={ref}
-      className={cn("vds-sidebar", className)}
+      // The CSS class is `vds-split`, not `vds-sidebar` — see Sidebar.css.
+      // The component export name stays `Sidebar` for API compatibility.
+      className={cn("vds-split", className)}
       data-side={side}
       data-gap={gap}
       style={mergedStyle}

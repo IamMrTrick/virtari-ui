@@ -15,11 +15,15 @@
     --button-min-width: var(--button-height);
     --button-icon-size: 1.125rem;
 
-    /* ── Typography ── */
+    /* ── Typography ──
+     * line-height:1 keeps the glyph visually centered inside the flex box.
+     * With 1.25 leading, flex centers the text-box but the cap-height sits
+     * above the box center due to ascender bias → label looks "raised".
+     */
     --button-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --button-font-size: var(--vds-text-sm, 0.875rem);
     --button-font-weight: var(--vds-font-weight-medium, 500);
-    --button-line-height: var(--vds-leading-tight, 1.25);
+    --button-line-height: 1;
     --button-letter-spacing: var(--vds-tracking-normal, 0);
 
     /* ── Motion ── */
@@ -32,14 +36,17 @@
     --button-focus-ring-width: 2px;
     --button-focus-ring-offset: 2px;
 
-    /* ── Effects (neutral, hue-free shadow depth) ── */
-    --button-shadow-depth: light-dark(
-      color-mix(in oklch, var(--vds-color-black, #000), transparent 18%),
-      var(--vds-color-black, #000)
+    /* ── Effects: shadow of the same material ──
+     * Relative color syntax: ONLY lightness drops, chroma and hue stay
+     * exactly as the button's solid color. Prevents the perceived hue shift
+     * you get with color-mix(..., black) — where chroma is dropped too and
+     * a blue button's shadow reads as purple. Here: blue stays blue.
+     */
+    --button-shadow-depth: oklch(
+      from var(--button-color-solid) calc(l * 0.75) c h
     );
-    --button-shadow-ambient: light-dark(
-      color-mix(in oklch, var(--vds-color-black, #000), transparent 70%),
-      color-mix(in oklch, var(--vds-color-black, #000), transparent 50%)
+    --button-shadow-ambient: oklch(
+      from var(--button-color-solid) l c h / 0.35
     );
 
     /* ── Disabled ── */
@@ -142,15 +149,19 @@
     --button-color-border:       var(--button-color-solid);
   }
 
+  /* Neutral — desaturated gray button distinct from `contrast`. Uses the
+   * high-contrast step (neutral-12) as bg so both modes get ≥ 9:1 contrast
+   * with the inverted on-solid text. Softer than `contrast` though: contrast
+   * uses pure black/white, neutral stays in the warm gray-270 family. */
   .vds-button[data-color="neutral"] {
-    --button-color-solid:        var(--vds-color-neutral-9, var(--vds-color-gray-700, #404040));
-    --button-color-solid-hover:  var(--vds-color-neutral-10, var(--vds-color-gray-600, #525252));
-    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 14%);
-    --button-color-on-solid:     light-dark(var(--vds-color-white, #fff), var(--vds-color-gray-950, #0a0a0a));
+    --button-color-solid:        var(--vds-color-neutral-12, var(--vds-color-gray-900, #171717));
+    --button-color-solid-hover:  var(--vds-color-neutral-11, var(--vds-color-gray-800, #262626));
+    --button-color-solid-active: oklch(from var(--button-color-solid) calc(l * 0.85) c h);
+    --button-color-on-solid:     var(--vds-color-neutral-1, light-dark(var(--vds-color-white, #fff), var(--vds-color-gray-950, #0a0a0a)));
     --button-color-bg:           var(--vds-color-neutral-3, var(--vds-color-gray-100, #f5f5f5));
     --button-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-gray-200, #e5e5e5));
     --button-color-bg-active:    var(--vds-color-neutral-5, var(--vds-color-gray-300, #d4d4d4));
-    --button-color-text:         var(--vds-color-text, var(--vds-color-gray-900, #171717));
+    --button-color-text:         var(--vds-color-neutral-12, var(--vds-color-text, #171717));
     --button-color-border:       var(--vds-color-neutral-8, var(--vds-color-gray-400, #a3a3a3));
   }
 
@@ -331,6 +342,13 @@
     font-weight: var(--button-font-weight);
     line-height: var(--button-line-height);
     letter-spacing: var(--button-letter-spacing);
+
+    /* Trim ascender space above cap-height and descender below baseline so
+     * flex centering lines up the visible glyph, not the full em-box. Newer
+     * syntax (Chrome 133+, Safari 18.2+); fallback is the raw line-height:1. */
+    text-box: trim-both cap alphabetic;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
 
     text-decoration: none;
     white-space: nowrap;

@@ -4,6 +4,7 @@ import {
   TabsList,
   TabsTrigger,
   TabsContent,
+  TabsPanels,
   type TabsVariant,
   type TabsSize,
 } from "@virtari/react-tabs";
@@ -31,6 +32,8 @@ function DemoTabs({
   defaultValue = "overview",
   disabledItem,
   orientation,
+  collapseAt,
+  swipeable,
 }: {
   variant?: TabsVariant;
   size?: TabsSize;
@@ -39,9 +42,16 @@ function DemoTabs({
   defaultValue?: string;
   disabledItem?: string;
   orientation?: "horizontal" | "vertical";
+  collapseAt?: number;
+  swipeable?: boolean;
 }) {
   return (
-    <Tabs defaultValue={defaultValue} orientation={orientation}>
+    <Tabs
+      defaultValue={defaultValue}
+      orientation={orientation}
+      collapseAt={collapseAt}
+      swipeable={swipeable}
+    >
       <TabsList
         variant={variant}
         size={size}
@@ -112,7 +122,7 @@ export function TabsPage() {
 
       <Section
         title="Vertical orientation"
-        description="Works across every variant. List border and indicator flip to the inline axis."
+        description="List sits on the start side; content fills the rest. Pass collapseAt to fold back to horizontal when the container is narrow."
       >
         <div className="docs-tabs-stack">
           <div className="docs-stack-item">
@@ -126,6 +136,77 @@ export function TabsPage() {
           <div className="docs-stack-item">
             <h3 className="docs-subtitle">segmented · vertical</h3>
             <DemoTabs variant="segmented" orientation="vertical" />
+          </div>
+          <div className="docs-stack-item">
+            <h3 className="docs-subtitle">
+              boxed · vertical (collapseAt=520)
+            </h3>
+            <DemoTabs
+              variant="boxed"
+              orientation="vertical"
+              collapseAt={520}
+            />
+          </div>
+        </div>
+      </Section>
+
+      <Section
+        title="Carousel (mobile swipe/drag)"
+        description="Wrap content in TabsPanels to enable a carousel-style sliding track. On touch devices, users can drag left/right to navigate — with rubber-banding at the edges. Desktop pointers fall back to clicking tabs."
+      >
+        <div className="docs-tabs-stack">
+          <div className="docs-stack-item">
+            <h3 className="docs-subtitle">segmented · carousel</h3>
+            <Tabs defaultValue="overview">
+              <TabsList variant="segmented" fullWidth>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                <TabsTrigger value="reports">Reports</TabsTrigger>
+                <TabsTrigger value="settings">Settings</TabsTrigger>
+              </TabsList>
+              <TabsPanels>
+                <TabsContent value="overview">
+                  <p>
+                    Overview panel — high-level metrics. Swipe left on touch
+                    to see Analytics.
+                  </p>
+                </TabsContent>
+                <TabsContent value="analytics">
+                  <p>Analytics panel — charts, funnels, retention cohorts.</p>
+                </TabsContent>
+                <TabsContent value="reports">
+                  <p>Reports panel — exports, scheduled deliveries.</p>
+                </TabsContent>
+                <TabsContent value="settings">
+                  <p>Settings panel — preferences and integrations.</p>
+                </TabsContent>
+              </TabsPanels>
+            </Tabs>
+          </div>
+
+          <div className="docs-stack-item">
+            <h3 className="docs-subtitle">pills · carousel</h3>
+            <Tabs defaultValue="a">
+              <TabsList variant="pills">
+                <TabsTrigger value="a">Photos</TabsTrigger>
+                <TabsTrigger value="b">Albums</TabsTrigger>
+                <TabsTrigger value="c">Shared</TabsTrigger>
+              </TabsList>
+              <TabsPanels>
+                <TabsContent value="a">
+                  <p>
+                    Photos — all recent captures. Try swiping to Albums on a
+                    touch device.
+                  </p>
+                </TabsContent>
+                <TabsContent value="b">
+                  <p>Albums — grouped collections.</p>
+                </TabsContent>
+                <TabsContent value="c">
+                  <p>Shared — albums shared with you.</p>
+                </TabsContent>
+              </TabsPanels>
+            </Tabs>
           </div>
         </div>
       </Section>

@@ -1,6 +1,7 @@
 import { cn } from "@virtari/utils";
 import type { ComponentRef, Ref } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { IconX } from "@virtari/react-icons";
 
 /* ── Shared types ── */
 
@@ -258,16 +259,5 @@ export function DialogCloseIcon({
 }
 
 function DefaultCloseGlyph() {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      aria-hidden="true"
-    >
-      <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
-    </svg>
-  );
+  return <IconX size={16} stroke={1.75} aria-hidden focusable={false} />;
 }

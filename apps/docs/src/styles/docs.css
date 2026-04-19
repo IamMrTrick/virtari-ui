@@ -1,36 +1,39 @@
-/* ── Docs App Layout ── */
+/* ──────────────────────────────────────────────
+ * Docs App Layout
+ *
+ * The shell is now <Sidebar> (react-sidebar) + <main> with <Header>
+ * (react-header) inside. Layout switched from grid to flex so the
+ * sidebar can manage its own width (and rail/collapse in the future).
+ * ────────────────────────────────────────────── */
 .docs-app {
-  display: grid;
-  grid-template-columns: 16rem 1fr;
-  min-block-size: 100dvh;
+  display: flex;
+  block-size: 100dvh;
+  overflow: hidden;
   background-color: var(--vds-color-bg);
   color: var(--vds-color-text);
 }
 
-/* ── Sidebar ── */
-.docs-sidebar {
-  position: sticky;
-  inset-block-start: 0;
-  block-size: 100dvh;
-  overflow-y: auto;
-  border-inline-end: 1px solid var(--vds-color-border-muted);
-  background-color: var(--vds-color-surface);
-  padding: var(--vds-space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--vds-space-6);
+html,
+body {
+  /* Prevent a body scrollbar stacking on top of <main>'s internal scroll —
+     the app chrome is a fixed-height shell with scroll delegated to
+     <main class="docs-main"> and <SidebarBody>. */
+  block-size: 100%;
+  margin: 0;
+  overflow: hidden;
 }
 
+/* Sidebar branding row (rendered inside <SidebarHeader>) */
 .docs-sidebar-logo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--vds-space-2);
-  padding-block-end: var(--vds-space-4);
-  border-block-end: 1px solid var(--vds-color-border-muted);
+  text-decoration: none;
+  color: inherit;
 }
 
 .docs-sidebar-logo-mark {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   inline-size: 2rem;
@@ -40,6 +43,7 @@
   color: white;
   font-weight: var(--vds-font-weight-bold);
   font-size: var(--vds-text-sm);
+  flex: none;
 }
 
 .docs-sidebar-logo-text {
@@ -47,189 +51,97 @@
   font-size: var(--vds-text-sm);
 }
 
-.docs-sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: var(--vds-space-5);
+.docs-sidebar-logo--in-drawer {
+  padding-block-end: 0;
+  border-block-end: none;
 }
 
-.docs-sidebar-group-label {
-  display: block;
-  font-size: var(--vds-text-xs);
+/* ──────────────────────────────────────────────
+ * Main column — holds the <Header> + scrollable content
+ * ────────────────────────────────────────────── */
+.docs-main {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  block-size: 100dvh;
+  overflow-y: auto;
+}
+
+/* The <header> itself has display:contents (so sticky works across the
+   whole scroll container) — we only need to style the inner chrome: the
+   toggle button, the title stack, and the settings gear. */
+.docs-header-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.docs-header-title {
+  font-size: var(--vds-text-lg);
   font-weight: var(--vds-font-weight-semibold);
-  color: var(--vds-color-text-subtle);
-  text-transform: uppercase;
-  letter-spacing: var(--vds-tracking-wider);
-  margin-block-end: var(--vds-space-1);
+  line-height: var(--vds-leading-tight);
+  margin: 0;
 }
 
-.docs-sidebar-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--vds-space-0-5);
-}
-
-.docs-sidebar-link {
-  display: block;
-  inline-size: 100%;
-  text-align: start;
-  padding-inline: var(--vds-space-3);
-  padding-block: var(--vds-space-1-5);
-  font-size: var(--vds-text-sm);
+.docs-header-description {
+  font-size: var(--vds-text-xs);
   color: var(--vds-color-text-muted);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-inline-size: 48rem;
+}
+
+/* Mobile sidebar toggle (shown <= 768px). Sits inside HeaderStart. */
+.docs-sidebar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border: none;
+  background: transparent;
+  color: var(--vds-color-text-muted);
+  cursor: pointer;
   border-radius: var(--vds-radius-md);
   transition:
     background-color var(--vds-duration-fast) var(--vds-ease-out),
     color var(--vds-duration-fast) var(--vds-ease-out);
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  font-family: inherit;
-
-  &:hover {
-    background-color: var(--vds-color-bg-muted);
-    color: var(--vds-color-text);
-  }
-
-  &[data-active] {
-    background-color: var(--vds-color-primary-50);
-    color: var(--vds-color-primary-700);
-    font-weight: var(--vds-font-weight-medium);
-  }
-
-  [data-theme="dark"] &[data-active] {
-    background-color: var(--vds-color-primary-950);
-    color: var(--vds-color-primary-300);
-  }
+}
+.docs-sidebar-toggle:hover {
+  background-color: var(--vds-color-bg-muted);
+  color: var(--vds-color-text);
 }
 
-/* ── Main Content ── */
-.docs-main {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-
-.docs-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: var(--vds-space-8);
-  padding-block-end: var(--vds-space-6);
-  border-block-end: 1px solid var(--vds-color-border-muted);
-}
-
-.docs-header-title {
-  font-size: var(--vds-text-2xl);
-  font-weight: var(--vds-font-weight-bold);
-  line-height: var(--vds-leading-tight);
-}
-
-.docs-header-description {
-  font-size: var(--vds-text-sm);
-  color: var(--vds-color-text-muted);
-  margin-block-start: var(--vds-space-1);
-}
-
-.docs-header-actions {
-  display: flex;
+/* Settings gear — always visible on the end of the header. */
+.docs-settings-trigger {
+  display: inline-flex;
   align-items: center;
-  gap: var(--vds-space-2);
-  flex-shrink: 0;
-}
-
-/* ── Settings Toolbar ── */
-.docs-toolbar {
-  display: flex;
-  align-items: center;
-  gap: var(--vds-space-3);
-  background-color: var(--vds-color-bg-subtle);
+  justify-content: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
   border: 1px solid var(--vds-color-border-muted);
-  border-radius: var(--vds-radius-element);
-  padding: var(--vds-space-1-5) var(--vds-space-3);
-}
-
-.docs-toolbar-group {
-  display: flex;
-  align-items: center;
-  gap: var(--vds-space-2);
-}
-
-.docs-toolbar-label {
-  font-size: var(--vds-text-xs);
-  font-weight: var(--vds-font-weight-medium);
+  background-color: var(--vds-color-surface);
   color: var(--vds-color-text-muted);
-  white-space: nowrap;
-}
-
-.docs-toolbar-divider {
-  inline-size: 1px;
-  block-size: 1.25rem;
-  background-color: var(--vds-color-border-muted);
-}
-
-.docs-radius-switcher {
-  display: flex;
-  gap: var(--vds-space-1);
-}
-
-.docs-radius-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--vds-space-0-5);
-  padding: var(--vds-space-1) var(--vds-space-1-5);
   border-radius: var(--vds-radius-element);
-  border: 1px solid transparent;
-  background: transparent;
   cursor: pointer;
-  font-family: inherit;
   transition:
     background-color var(--vds-duration-fast) var(--vds-ease-out),
+    color var(--vds-duration-fast) var(--vds-ease-out),
     border-color var(--vds-duration-fast) var(--vds-ease-out);
-
-  &:hover {
-    background-color: var(--vds-color-bg-muted);
-  }
-
-  &[data-active] {
-    border-color: var(--vds-color-primary-500);
-    background-color: var(--vds-color-primary-50);
-  }
-
-  [data-theme="dark"] &[data-active] {
-    background-color: var(--vds-color-primary-950);
-  }
 }
-
-.docs-radius-option-label {
-  font-size: 0.625rem;
-  color: var(--vds-color-text-subtle);
-  line-height: 1;
+.docs-settings-trigger:hover {
+  background-color: var(--vds-color-bg-muted);
+  color: var(--vds-color-text);
+  border-color: var(--vds-color-border);
 }
-
-.docs-radius-preview {
-  display: block;
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
-  border: 2px solid var(--vds-color-text-muted);
-  background: transparent;
-
-  &[data-mode="sharp"] {
-    border-radius: 1px;
-  }
-
-  &[data-mode="soft"] {
-    border-radius: 4px;
-  }
-
-  &[data-mode="round"] {
-    border-radius: 6px;
-  }
-
-  &[data-mode="pill"] {
-    border-radius: 9999px;
-  }
+.docs-settings-trigger:focus-visible {
+  outline: 2px solid var(--vds-color-primary, currentColor);
+  outline-offset: 2px;
 }
 
 .docs-content {
@@ -237,7 +149,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--vds-space-10);
-  max-inline-size: 56rem;
+  max-inline-size: 80rem;
 }
 
 /* ── Section ── */
@@ -436,82 +348,222 @@
   flex-shrink: 0;
 }
 
-/* ── Sidebar Toggle (hidden on desktop) ── */
-.docs-sidebar-toggle {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  inline-size: 2rem;
-  block-size: 2rem;
-  border: none;
-  background: transparent;
-  color: var(--vds-color-text-muted);
-  cursor: pointer;
-  border-radius: var(--vds-radius-md);
-  transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
-
-  &:hover {
-    background-color: var(--vds-color-bg-muted);
-    color: var(--vds-color-text);
-  }
+/* ──────────────────────────────────────────────
+ * Settings drawer
+ * ────────────────────────────────────────────── */
+.docs-settings-drawer {
+  block-size: 100%;
 }
 
-.docs-header-start {
+.docs-settings-title {
+  font-size: var(--vds-text-lg);
+  font-weight: var(--vds-font-weight-semibold);
+  line-height: var(--vds-leading-tight);
+  margin: 0;
+}
+
+.docs-settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vds-space-6);
+  padding: var(--vds-space-4) var(--vds-space-5);
+}
+
+.docs-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vds-space-2-5);
+}
+
+.docs-settings-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.docs-settings-section-title {
+  font-size: var(--vds-text-xs);
+  font-weight: var(--vds-font-weight-semibold);
+  color: var(--vds-color-text-subtle);
+  text-transform: uppercase;
+  letter-spacing: var(--vds-tracking-wider, 0.05em);
+  margin: 0;
+}
+
+.docs-settings-section-hint {
+  font-size: var(--vds-text-xs);
+  color: var(--vds-color-text-muted);
+  margin: 0;
+  line-height: var(--vds-leading-snug, 1.35);
+}
+
+/* ── Segmented (direction) ── */
+.docs-settings-segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--vds-space-2);
+}
+
+.docs-settings-segmented-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: var(--vds-space-2) var(--vds-space-3);
+  border: 1px solid var(--vds-color-border-muted);
+  border-radius: var(--vds-radius-element);
+  background-color: var(--vds-color-surface);
+  color: var(--vds-color-text);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: start;
+  transition:
+    background-color var(--vds-duration-fast) var(--vds-ease-out),
+    border-color var(--vds-duration-fast) var(--vds-ease-out),
+    color var(--vds-duration-fast) var(--vds-ease-out);
+}
+.docs-settings-segmented-option:hover {
+  background-color: var(--vds-color-bg-muted);
+}
+.docs-settings-segmented-option[data-active] {
+  border-color: var(--vds-color-primary-emphasis, var(--vds-color-primary-500));
+  background-color: var(--vds-color-primary-muted, var(--vds-color-primary-50));
+  color: var(--vds-color-primary-muted-text, var(--vds-color-primary-700));
+}
+.docs-settings-segmented-option:focus-visible {
+  outline: 2px solid var(--vds-color-ring, var(--vds-color-primary));
+  outline-offset: 2px;
+}
+
+.docs-settings-segmented-label {
+  font-size: var(--vds-text-sm);
+  font-weight: var(--vds-font-weight-semibold);
+}
+
+.docs-settings-segmented-hint {
+  font-size: var(--vds-text-xs);
+  color: var(--vds-color-text-muted);
+}
+.docs-settings-segmented-option[data-active] .docs-settings-segmented-hint {
+  color: inherit;
+  opacity: 0.75;
+}
+
+/* ── Radius picker ── */
+.docs-settings-radius {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--vds-space-2);
+}
+
+.docs-settings-radius-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--vds-space-1-5);
+  padding: var(--vds-space-2-5) var(--vds-space-1);
+  border: 1px solid var(--vds-color-border-muted);
+  border-radius: var(--vds-radius-element);
+  background-color: var(--vds-color-surface);
+  color: var(--vds-color-text);
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    background-color var(--vds-duration-fast) var(--vds-ease-out),
+    border-color var(--vds-duration-fast) var(--vds-ease-out);
+}
+.docs-settings-radius-option:hover {
+  background-color: var(--vds-color-bg-muted);
+}
+.docs-settings-radius-option[data-active] {
+  border-color: var(--vds-color-primary-emphasis, var(--vds-color-primary-500));
+  background-color: var(--vds-color-primary-muted, var(--vds-color-primary-50));
+}
+.docs-settings-radius-option:focus-visible {
+  outline: 2px solid var(--vds-color-ring, var(--vds-color-primary));
+  outline-offset: 2px;
+}
+
+.docs-settings-radius-preview {
+  display: block;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border: 2px solid var(--vds-color-text-muted);
+}
+.docs-settings-radius-preview[data-mode="sharp"] { border-radius: 1px; }
+.docs-settings-radius-preview[data-mode="soft"]  { border-radius: 4px; }
+.docs-settings-radius-preview[data-mode="round"] { border-radius: 8px; }
+.docs-settings-radius-preview[data-mode="pill"]  { border-radius: 9999px; }
+
+.docs-settings-radius-option[data-active] .docs-settings-radius-preview {
+  border-color: var(--vds-color-primary-emphasis, var(--vds-color-primary-500));
+}
+
+.docs-settings-radius-label {
+  font-size: var(--vds-text-xs);
+  font-weight: var(--vds-font-weight-medium);
+  color: var(--vds-color-text-muted);
+}
+
+/* ── Theme toggle ── */
+.docs-settings-theme-toggle {
   display: flex;
   align-items: center;
   gap: var(--vds-space-3);
+  padding: var(--vds-space-3);
+  border: 1px solid var(--vds-color-border-muted);
+  border-radius: var(--vds-radius-element);
+  background-color: var(--vds-color-surface);
+  cursor: pointer;
+}
+
+.docs-settings-theme-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: var(--vds-radius-md);
+  background-color: var(--vds-color-bg-muted);
+  color: var(--vds-color-text);
+  flex: none;
+}
+
+.docs-settings-theme-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
   min-inline-size: 0;
 }
 
-/* ── Mobile Sidebar Drawer ── */
-.docs-sidebar-logo--in-drawer {
-  padding-block-end: 0;
-  border-block-end: none;
+.docs-settings-theme-label {
+  font-size: var(--vds-text-sm);
+  font-weight: var(--vds-font-weight-semibold);
+  color: var(--vds-color-text);
 }
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
-  .docs-app {
-    grid-template-columns: 1fr;
-  }
+.docs-settings-theme-hint {
+  font-size: var(--vds-text-xs);
+  color: var(--vds-color-text-muted);
+}
 
-  .docs-sidebar:not(.docs-sidebar--in-drawer) {
+/* ──────────────────────────────────────────────
+ * Responsive
+ * Below 768px the desktop sidebar hides and the hamburger in the
+ * header opens the mobile Drawer (rendered in the App root).
+ * ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .docs-app > .vds-sidebar {
     display: none;
   }
 
   .docs-sidebar-toggle {
-    display: flex;
-  }
-
-  .docs-header {
-    flex-direction: column;
-    gap: var(--vds-space-4);
-    padding: var(--vds-space-4);
-  }
-
-  .docs-header-actions {
-    align-self: stretch;
-  }
-
-  .docs-toolbar {
-    inline-size: 100%;
-    justify-content: center;
+    display: inline-flex;
   }
 
   .docs-content {
     padding: var(--vds-space-4);
-  }
-}
-
-@media (max-width: 480px) {
-  .docs-toolbar {
-    flex-wrap: wrap;
-    gap: var(--vds-space-2);
-  }
-
-  .docs-toolbar-divider {
-    display: none;
   }
 }
 
@@ -543,4 +595,135 @@
   flex-direction: column;
   gap: var(--vds-space-6);
   max-inline-size: 48rem;
+}
+
+/* ── Icons page ── */
+.docs-icons-search {
+  flex: 1;
+  min-inline-size: 0;
+  max-inline-size: 32rem;
+}
+
+.docs-icons-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--vds-space-1);
+  font-size: var(--vds-text-xs);
+  color: var(--vds-color-text-muted);
+}
+
+.docs-icons-field-label {
+  font-weight: var(--vds-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.docs-icons-toggle {
+  display: inline-flex;
+  border: 1px solid var(--vds-color-border-muted);
+  border-radius: var(--vds-radius-md);
+  overflow: hidden;
+  background-color: var(--vds-color-surface);
+}
+
+.docs-icons-toggle button {
+  padding: var(--vds-space-2) var(--vds-space-3);
+  font-size: var(--vds-text-sm);
+  font-weight: var(--vds-font-weight-medium);
+  color: var(--vds-color-text-muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.docs-icons-toggle button:hover {
+  color: var(--vds-color-text);
+}
+
+.docs-icons-toggle button[data-active] {
+  background-color: var(--vds-color-bg-subtle, var(--vds-color-bg));
+  color: var(--vds-color-text);
+}
+
+.docs-icons-count {
+  font-size: var(--vds-text-sm);
+  color: var(--vds-color-text-muted);
+  margin-block: var(--vds-space-2) 0;
+}
+
+.docs-icons-grid-scroll {
+  block-size: 32rem;
+  overflow-y: auto;
+  border: 1px solid var(--vds-color-border-muted);
+  border-radius: var(--vds-radius-md);
+  padding: var(--vds-space-2);
+  background-color: var(--vds-color-surface);
+}
+
+.docs-icons-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--vds-space-1);
+  padding: var(--vds-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--vds-radius-md);
+  background: transparent;
+  color: var(--vds-color-text);
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 120ms ease;
+  overflow: hidden;
+}
+
+.docs-icons-tile:hover {
+  background-color: var(--vds-color-bg-subtle, var(--vds-color-bg));
+  border-color: var(--vds-color-border-muted);
+}
+
+.docs-icons-tile:focus-visible {
+  outline: 2px solid var(--vds-color-primary, currentColor);
+  outline-offset: 2px;
+}
+
+.docs-icons-tile-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: 2.5rem;
+  color: var(--vds-color-text);
+}
+
+.docs-icons-tile-name {
+  font-size: 0.6875rem;
+  font-family: var(--vds-font-mono);
+  color: var(--vds-color-text-muted);
+  inline-size: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.docs-icons-tile[data-copied] {
+  border-color: var(--vds-color-success, var(--vds-color-primary));
+  background-color: color-mix(in oklab, var(--vds-color-success, var(--vds-color-primary)) 10%, transparent);
+}
+
+.docs-icons-tile-badge {
+  position: absolute;
+  inset-block-start: var(--vds-space-1);
+  inset-inline-end: var(--vds-space-1);
+  font-size: 0.625rem;
+  font-weight: var(--vds-font-weight-semibold);
+  color: var(--vds-color-success, var(--vds-color-primary));
+}
+
+.docs-icons-empty {
+  padding: var(--vds-space-8);
+  text-align: center;
+  color: var(--vds-color-text-muted);
+  font-size: var(--vds-text-sm);
 }

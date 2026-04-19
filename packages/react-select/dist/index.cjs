@@ -1,7 +1,9 @@
+"use client";
 'use strict';
 
 var utils = require('@virtari/utils');
 var SelectPrimitive = require('@radix-ui/react-select');
+var reactIcons = require('@virtari/react-icons');
 var jsxRuntime = require('react/jsx-runtime');
 var PopoverPrimitive = require('@radix-ui/react-popover');
 var reactChip = require('@virtari/react-chip');
@@ -71,59 +73,10 @@ function SelectTrigger({
                 e.stopPropagation();
                 onClear?.();
               },
-              children: /* @__PURE__ */ jsxRuntime.jsx(
-                "svg",
-                {
-                  viewBox: "0 0 12 12",
-                  fill: "none",
-                  xmlns: "http://www.w3.org/2000/svg",
-                  "aria-hidden": "true",
-                  children: /* @__PURE__ */ jsxRuntime.jsx(
-                    "path",
-                    {
-                      d: "M9 3L3 9M3 3L9 9",
-                      stroke: "currentColor",
-                      strokeWidth: "1.5",
-                      strokeLinecap: "round",
-                      strokeLinejoin: "round"
-                    }
-                  )
-                }
-              )
+              children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconX, { size: 12, stroke: 1.5, "aria-hidden": true, focusable: false })
             }
           ) : null,
-          loading ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-select-spinner", "aria-hidden": "true", children: /* @__PURE__ */ jsxRuntime.jsx("svg", { viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: /* @__PURE__ */ jsxRuntime.jsx(
-            "circle",
-            {
-              cx: "12",
-              cy: "12",
-              r: "9",
-              stroke: "currentColor",
-              strokeWidth: "2.5",
-              strokeLinecap: "round",
-              strokeDasharray: "40 60",
-              opacity: "0.9"
-            }
-          ) }) }) : /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.Icon, { className: "vds-select-icon", children: /* @__PURE__ */ jsxRuntime.jsx(
-            "svg",
-            {
-              width: "12",
-              height: "12",
-              viewBox: "0 0 12 12",
-              fill: "none",
-              xmlns: "http://www.w3.org/2000/svg",
-              children: /* @__PURE__ */ jsxRuntime.jsx(
-                "path",
-                {
-                  d: "M3 4.5L6 7.5L9 4.5",
-                  stroke: "currentColor",
-                  strokeWidth: "1.5",
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round"
-                }
-              )
-            }
-          ) })
+          loading ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-select-spinner", "aria-hidden": "true", children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconLoader2, { size: 24, stroke: 2.5, "aria-hidden": true, focusable: false }) }) : /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.Icon, { className: "vds-select-icon", children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconChevronDown, { size: 12, stroke: 1.5, "aria-hidden": true, focusable: false }) })
         ] })
       ]
     }
@@ -159,26 +112,7 @@ function SelectItem({ className, children, ref, ...props }) {
       ...props,
       children: [
         /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.ItemText, { children }),
-        /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.ItemIndicator, { className: "vds-select-item-indicator", children: /* @__PURE__ */ jsxRuntime.jsx(
-          "svg",
-          {
-            width: "12",
-            height: "12",
-            viewBox: "0 0 12 12",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /* @__PURE__ */ jsxRuntime.jsx(
-              "path",
-              {
-                d: "M10 3L4.5 8.5L2 6",
-                stroke: "currentColor",
-                strokeWidth: "1.5",
-                strokeLinecap: "round",
-                strokeLinejoin: "round"
-              }
-            )
-          }
-        ) })
+        /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.ItemIndicator, { className: "vds-select-item-indicator", children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconCheck, { size: 12, stroke: 2, "aria-hidden": true, focusable: false }) })
       ]
     }
   );

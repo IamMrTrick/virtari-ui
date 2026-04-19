@@ -322,11 +322,15 @@
     );
   }
 
-  /* Resize guideline overlay — full-height 1px line during drag. */
+  /* Resize guideline overlay — full-height 1px line during drag.
+     Uses physical `left` anchor because the offset from TanStack
+     (startOffset + deltaOffset) is a physical-pixel value paired with
+     physical translateX — in RTL we still want the guideline at the
+     dragged column's physical position. */
   .vds-data-table-resize-guideline {
     position: absolute;
     inset-block: 0;
-    inset-inline-start: 0;
+    left: 0;
     inline-size: var(--data-table-guideline-width);
     background-color: var(--data-table-guideline-color);
     pointer-events: none;

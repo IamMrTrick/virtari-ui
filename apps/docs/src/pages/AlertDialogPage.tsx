@@ -281,7 +281,7 @@ function IntentsSection() {
                   <Button variant="outline">Cancel</Button>
                 </AlertDialogCancel>
                 <AlertDialogAction asChild>
-                  <Button variant={intent === "destructive" ? "destructive" : "default"}>
+                  <Button variant={intent === "destructive" ? "destructive" : "solid"}>
                     Confirm
                   </Button>
                 </AlertDialogAction>

@@ -191,10 +191,11 @@ function DemoDrawer({
   title = "Drawer",
   description = "Drag the handle or dismiss with Cancel.",
   body,
+  scaleBackground = true,
   ...drawerProps
 }: DemoDrawerProps) {
   return (
-    <Drawer {...drawerProps}>
+    <Drawer scaleBackground={scaleBackground} {...drawerProps}>
       <DrawerTrigger asChild>
         <Button variant="outline">{label}</Button>
       </DrawerTrigger>
@@ -246,6 +247,7 @@ function EditProfileDrawer() {
       }
       defaultOpenState={isDesktop ? undefined : "full"}
       headerVariant="bordered"
+      scaleBackground
     >
       <DrawerTrigger asChild>
         <Button>Edit profile</Button>
@@ -418,6 +420,7 @@ function ProductFiltersDrawer() {
             ]
       }
       headerVariant="bordered"
+      scaleBackground
     >
       <DrawerTrigger asChild>
         <Button variant="outline" rightSection={activeCount > 0 ? <Badge>{activeCount}</Badge> : undefined}>
@@ -602,6 +605,7 @@ function CartDrawer() {
             ]
       }
       headerVariant="bordered"
+      scaleBackground
     >
       <DrawerTrigger asChild>
         <Button rightSection={totalItems > 0 ? <Badge>{totalItems}</Badge> : undefined}>
@@ -762,7 +766,7 @@ function MobileNavDrawer() {
   ];
 
   return (
-    <Drawer direction="left" sizeMode="fixed" size="20rem" indicator="hidden">
+    <Drawer direction="left" sizeMode="fixed" size="20rem" indicator="hidden" scaleBackground>
       <DrawerTrigger asChild>
         <Button variant="outline">Open navigation</Button>
       </DrawerTrigger>
@@ -1009,6 +1013,7 @@ function NotificationsDrawer() {
             ]
       }
       headerVariant="bordered"
+      scaleBackground
     >
       <DrawerTrigger asChild>
         <Button
@@ -1218,6 +1223,7 @@ function Playground() {
         size={sizeMode === "fixed" ? "28rem" : undefined}
         indicator={indicator}
         headerVariant={headerVariant}
+        scaleBackground
         openStates={[
           { id: "peek", size: 0.4, label: "Peek" },
           { id: "full", size: 1, label: "Full" },
@@ -1278,7 +1284,7 @@ export function DrawerPage() {
         description="The smallest complete drawer. Trigger → Content → Header → Body → Footer."
       >
         <Row>
-          <Drawer>
+          <Drawer scaleBackground>
             <DrawerTrigger asChild>
               <Button>Open drawer</Button>
             </DrawerTrigger>
@@ -1492,6 +1498,7 @@ export function DrawerPage() {
             { id: "full", size: 1, label: "Full" },
           ]}
           defaultOpenState="comfortable"
+          scaleBackground
         >
           <DrawerTrigger asChild>
             <Button>Open staged drawer</Button>
@@ -1526,6 +1533,7 @@ export function DrawerPage() {
             { id: "full", size: 1, label: "Full" },
           ]}
           minimizedState={{ id: "minimized", size: 72, label: "Minimized" }}
+          scaleBackground
         >
           <DrawerTrigger asChild>
             <Button>Open with minimized lane</Button>

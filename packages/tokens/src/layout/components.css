@@ -23,5 +23,10 @@
     --vds-row-row-gap-default: var(--vds-row-row-gap);
     --vds-row-cols-default:    var(--vds-row-cols);
     --vds-row-min-col-default: var(--vds-row-min-col);
+
+    /* Sidebar */
+    --vds-sidebar-width-default: var(--vds-sidebar-width);
+    --vds-sidebar-rail-default:  var(--vds-sidebar-rail);
+    --vds-sidebar-gap-default:   var(--vds-sidebar-gap);
   }
 }

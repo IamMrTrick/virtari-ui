@@ -1,4 +1,5 @@
 import { useState, useEffect, useSyncExternalStore } from "react";
+import { Toaster } from "@virtari/react-toast";
 import { Sidebar, MobileSidebar, Layout } from "./components";
 import {
   PAGE_META,
@@ -35,11 +36,20 @@ import {
   SpinnerPage,
   CardPage,
   KbdPage,
+  ChipPage,
   CompositionPage,
   DatePickerPage,
   DataTablePage,
   LayoutPage,
+  HeaderPage,
+  NavPage,
+  SidebarPage,
   UtilitiesPage,
+  RTLPage,
+  IconsPage,
+  HeadingPage,
+  TextPage,
+  BreadcrumbPage,
 } from "./pages";
 
 const PAGES: Record<string, () => React.JSX.Element> = {
@@ -76,11 +86,20 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   skeleton: SkeletonPage,
   spinner: SpinnerPage,
   kbd: KbdPage,
+  chip: ChipPage,
   composition: CompositionPage,
   layout: LayoutPage,
+  header: HeaderPage,
+  nav: NavPage,
+  sidebar: SidebarPage,
+  breadcrumb: BreadcrumbPage,
   "date-picker": DatePickerPage,
   "data-table": DataTablePage,
   utilities: UtilitiesPage,
+  rtl: RTLPage,
+  icons: IconsPage,
+  heading: HeadingPage,
+  text: TextPage,
 };
 
 function getHashPage(): string {
@@ -105,10 +124,12 @@ function navigate(page: string) {
 }
 
 export type RadiusMode = "sharp" | "soft" | "round" | "pill";
+export type Direction = "ltr" | "rtl";
 
 export default function App() {
   const [dark, setDark] = useState(true);
   const [radius, setRadius] = useState<RadiusMode>("soft");
+  const [direction, setDirection] = useState<Direction>("ltr");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const activePage = useHashRoute();
 
@@ -126,7 +147,9 @@ export default function App() {
     root.setAttribute("data-theme", dark ? "dark" : "light");
     if (radius !== "soft") root.setAttribute("data-radius", radius);
     else root.removeAttribute("data-radius");
-  }, [dark, radius]);
+    root.setAttribute("dir", direction);
+    root.setAttribute("lang", direction === "rtl" ? "fa" : "en");
+  }, [dark, radius, direction]);
 
   function handleNavigate(page: string) {
     navigate(page);
@@ -137,6 +160,7 @@ export default function App() {
     <div
       data-theme={dark ? "dark" : "light"}
       data-radius={radius !== "soft" ? radius : undefined}
+      data-vds-drawer-wrapper
       className="docs-app"
     >
       <Sidebar activePage={activePage} onNavigate={handleNavigate} />
@@ -151,12 +175,15 @@ export default function App() {
         onToggleDark={setDark}
         radius={radius}
         onRadiusChange={setRadius}
+        direction={direction}
+        onDirectionChange={setDirection}
         title={meta.title}
         description={meta.description}
         onToggleSidebar={() => setSidebarOpen((v) => !v)}
       >
         <Page />
       </Layout>
+      <Toaster />
     </div>
   );
 }

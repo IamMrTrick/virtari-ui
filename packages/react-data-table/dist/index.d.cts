@@ -51,10 +51,12 @@ interface StatusBadgeCellProps {
     tone: StatusTone;
     label: ReactNode;
     withDot?: boolean;
+    /** "pill" = tinted background + dot (default), "text" = colored text only. */
+    variant?: "pill" | "text";
     className?: string;
 }
-/** Pre-styled status badge with a colored dot — maps tone → background. */
-declare function StatusBadgeCell({ tone, label, withDot, className, }: StatusBadgeCellProps): react_jsx_runtime.JSX.Element;
+/** Pre-styled status badge with a colored dot + pill background. */
+declare function StatusBadgeCell({ tone, label, withDot, variant, className, }: StatusBadgeCellProps): react_jsx_runtime.JSX.Element;
 
 interface CopyableCellProps {
     children: ReactNode;
@@ -264,12 +266,22 @@ declare const Pagination: {
     readonly Default: typeof PaginationDefault;
 };
 
+type ToolbarActionButtonVariant = "ghost" | "outline" | "solid";
+type ToolbarActionButtonSize = "sm" | "md";
 interface ToolbarActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: ReactNode;
+    /** Trailing glyph (e.g. chevron-down for split-style buttons). */
+    trailingIcon?: ReactNode;
     label?: ReactNode;
     count?: number | string;
-    /** Visually emphasize (primary tint) — e.g. active filter. */
-    intent?: "neutral" | "primary";
+    /** Color intent. "primary" is the accent hue. "danger" is destructive. */
+    intent?: "neutral" | "primary" | "danger";
+    /** Visual variant. Default "ghost". */
+    variant?: ToolbarActionButtonVariant;
+    /** Size preset. Default "md". */
+    size?: ToolbarActionButtonSize;
+    /** Icon-only (skip the label slot even if provided). */
+    iconOnly?: boolean;
 }
 declare const ToolbarActionButton: react.ForwardRefExoticComponent<ToolbarActionButtonProps & react.RefAttributes<HTMLButtonElement>>;
 declare const DataTableFilterButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
@@ -280,11 +292,15 @@ declare const DataTableFilterButton: react.ForwardRefExoticComponent<Omit<Toolba
 declare const DataTableRefreshButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
     label?: ReactNode;
 } & react.RefAttributes<HTMLButtonElement>>;
+/** Export — default `variant="outline"` (matches the reference dashboard). */
 declare const DataTableExportButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
     label?: ReactNode;
 } & react.RefAttributes<HTMLButtonElement>>;
+/** Add — default `variant="solid"` with `intent="primary"` + trailing chevron. */
 declare const DataTableAddButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
     label?: ReactNode;
+} & {
+    withChevron?: boolean;
 } & react.RefAttributes<HTMLButtonElement>>;
 declare const DataTableCustomizeButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
     label?: ReactNode;
@@ -495,6 +511,8 @@ declare const DataTable: {
     } & react.RefAttributes<HTMLButtonElement>>;
     readonly AddButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
         label?: react.ReactNode;
+    } & {
+        withChevron?: boolean;
     } & react.RefAttributes<HTMLButtonElement>>;
     readonly CustomizeButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
         label?: react.ReactNode;

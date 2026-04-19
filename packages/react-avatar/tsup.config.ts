@@ -1,4 +1,5 @@
 import { defineConfig } from "tsup";
+import prependUseClient from "../../scripts/prepend-use-client.mjs";
 
 export default defineConfig({
   entry: ["src/index.ts"],
@@ -7,4 +8,5 @@ export default defineConfig({
   clean: true,
   external: ["react", "react-dom", "react/jsx-runtime"],
   treeshake: true,
+  onSuccess: prependUseClient,
 });

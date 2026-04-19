@@ -17,6 +17,7 @@
 @import "@virtari/react-select/styles";
 @import "@virtari/react-select/combobox/styles";
 @import "@virtari/react-chip/styles";
+@import "@virtari/react-breadcrumb/styles";
 @import "@virtari/react-dialog/styles";
 @import "../../../../packages/react-drawer/dist/Drawer.css";
 @import "@virtari/react-tooltip/styles";
@@ -37,9 +38,14 @@
 @import "@virtari/react-spinner/styles";
 @import "@virtari/react-card/styles";
 @import "@virtari/react-kbd/styles";
+@import "@virtari/react-text/styles";
+@import "@virtari/react-text/heading/styles";
 @import "@virtari/react-date-picker/styles";
 @import "@virtari/react-date-picker/range-picker/styles";
 @import "../../../../packages/react-layout/dist/index.css";
+@import "../../../../packages/react-header/dist/Header.css";
+@import "../../../../packages/react-nav/dist/Nav.css";
+@import "../../../../packages/react-sidebar/dist/Sidebar.css";
 
 /* Docs app styles */
 @import "./docs.css";

@@ -7,6 +7,7 @@
 
   .vds-date-field,
   .vds-time-field,
+  .vds-time-field-picker-content,
   .vds-date-picker-group,
   .vds-date-range-picker-group {
     /* Field shell (shared sizing ramp with Button/Input/Select) */
@@ -44,6 +45,21 @@
 
     --date-field-trigger-size: 1rem;
     --date-field-trigger-color: var(--vds-color-text-muted, #6b7280);
+
+    --time-picker-surface-bg: var(--vds-color-surface, #ffffff);
+    --time-picker-surface-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --time-picker-surface-shadow: var(--vds-shadow-lg, 0 18px 45px rgb(15 23 42 / 0.18));
+    --time-picker-surface-radius: var(--vds-radius-surface, 0.75rem);
+    --time-picker-wheel-height: 8.25rem;
+    --time-picker-wheel-item-height: 2.75rem;
+    --time-picker-wheel-divider-color: color-mix(in oklab, var(--vds-color-border, #d1d5db) 86%, transparent);
+    --time-picker-wheel-muted-text: color-mix(in oklab, var(--date-field-text-color) 38%, transparent);
+    --time-picker-wheel-selected-text: var(--date-field-text-color);
+    --time-picker-action-primary-bg: var(--vds-color-success-600, var(--vds-color-primary-600, #2563eb));
+    --time-picker-action-primary-text: var(--vds-color-success-contrast, var(--vds-color-primary-contrast, #ffffff));
+    --time-picker-action-secondary-bg: transparent;
+    --time-picker-action-secondary-text: var(--date-field-text-color);
+    --time-picker-action-secondary-border: var(--vds-color-border, #d1d5db);
   }
 
   /* ── Appearance variants ── */

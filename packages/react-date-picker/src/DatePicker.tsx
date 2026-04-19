@@ -29,6 +29,9 @@ export interface DatePickerProps {
   hourCycle?: 12 | 24;
   hideTimeZone?: boolean;
   shouldCloseOnSelect?: boolean;
+  showTimePicker?: boolean;
+  showMilliseconds?: boolean;
+  millisecondStep?: number;
   autoFocus?: boolean;
   name?: string;
 
@@ -179,6 +182,9 @@ export function DatePicker({
                       }
                       hourCycle={props.hourCycle}
                       hideTimeZone={props.hideTimeZone}
+                      showPicker={props.showTimePicker ?? true}
+                      showMilliseconds={props.showMilliseconds}
+                      millisecondStep={props.millisecondStep}
                       size={size}
                       appearance={appearance}
                       aria-label="Time"

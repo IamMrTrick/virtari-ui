@@ -1,3 +1,4 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { jsx } from 'react/jsx-runtime';

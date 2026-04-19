@@ -1,3 +1,4 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as TogglePrimitive from '@radix-ui/react-toggle';
 import { jsx } from 'react/jsx-runtime';

@@ -1,3 +1,4 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { jsx } from 'react/jsx-runtime';

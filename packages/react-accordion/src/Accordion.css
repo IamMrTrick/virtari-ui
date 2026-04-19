@@ -1,72 +1,172 @@
-@layer components {
-  .vds-accordion-item {
-    border-block-end: 1px solid var(--vds-color-border-muted);
+@import "./Accordion.tokens.css";
+
+@layer design-system.components {
+  /* ── Root ── */
+  .vds-accordion {
+    /* rendering rules declared in tokens file (display/flex/gap) */
   }
 
+  /* ── Item ── */
+  .vds-accordion-item {
+    /* Positioning context for absolute-positioned icons if ever needed */
+    position: relative;
+  }
+
+  /* ── Header wrapper (semantic <h2>/<h3>/... or Radix default) ── */
+  .vds-accordion-header {
+    display: flex;
+    margin: 0;
+    /* When used as a real heading, strip browser defaults so heading looks like the trigger */
+    font: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+  }
+
+  /* ── Trigger (the clickable row) ── */
   .vds-accordion-trigger {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--accordion-trigger-gap);
     inline-size: 100%;
-    padding-block: var(--vds-space-4);
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-sm);
-    font-weight: var(--vds-font-weight-medium);
-    color: var(--vds-color-text);
-    background: transparent;
-    border: none;
+    padding-block:  var(--accordion-trigger-padding-block);
+    padding-inline: var(--accordion-trigger-padding-inline);
+    font-family: var(--accordion-trigger-font-family);
+    font-size:   var(--accordion-trigger-font-size);
+    font-weight: var(--accordion-trigger-font-weight);
+    line-height: var(--accordion-trigger-line-height);
+    color: var(--accordion-text);
+    background-color: var(--accordion-bg);
+    border: 0;
+    text-align: start;
     cursor: pointer;
-    transition: color var(--vds-duration-fast) var(--vds-ease-out);
-
-    &:hover {
-      color: var(--vds-color-text-muted);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: -2px;
-      border-radius: var(--vds-radius-element);
-    }
-
-    & > svg {
-      inline-size: var(--vds-space-4);
-      block-size: var(--vds-space-4);
-      flex-shrink: 0;
-      color: var(--vds-color-text-muted);
-      transition: rotate var(--vds-duration-normal) var(--vds-ease-out);
-    }
-
-    &[data-state="open"] > svg {
-      rotate: 180deg;
-    }
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color            var(--accordion-transition-duration) var(--accordion-transition-easing),
+      background-color var(--accordion-transition-duration) var(--accordion-transition-easing);
   }
 
+  .vds-accordion-trigger:hover:not(:disabled) {
+    color: var(--accordion-text-hover);
+    background-color: var(--accordion-bg-hover);
+  }
+
+  .vds-accordion-trigger:focus-visible {
+    outline: var(--accordion-focus-ring-width) solid var(--accordion-focus-ring-color);
+    outline-offset: var(--accordion-focus-ring-offset);
+    border-radius: var(--vds-radius-element, 0.375rem);
+  }
+
+  .vds-accordion-trigger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ── Icon indicator (generic wrapper) ── */
+  .vds-accordion-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    inline-size: var(--accordion-icon-size);
+    block-size: var(--accordion-icon-size);
+    color: var(--accordion-icon-color);
+    transition: rotate var(--accordion-transition-duration) var(--accordion-transition-easing),
+                opacity var(--accordion-transition-duration) var(--accordion-transition-easing);
+  }
+
+  .vds-accordion-icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Chevron & arrow: rotate on open */
+  .vds-accordion-trigger[data-state="open"] .vds-accordion-icon[data-icon="chevron"],
+  .vds-accordion-trigger[data-state="open"] .vds-accordion-icon[data-icon="arrow"],
+  .vds-accordion-trigger[data-state="open"] .vds-accordion-icon[data-icon="caret"] {
+    rotate: 180deg;
+  }
+
+  /* Plus/minus: swap via two stacked icons. Both fade based on state. */
+  .vds-accordion-icon[data-icon="plus-minus"] {
+    position: relative;
+  }
+  .vds-accordion-icon[data-icon="plus-minus"] > svg {
+    position: absolute;
+    inset: 0;
+  }
+  .vds-accordion-icon[data-icon="plus-minus"] > .vds-accordion-icon-plus {
+    opacity: 1;
+    rotate: 0deg;
+  }
+  .vds-accordion-icon[data-icon="plus-minus"] > .vds-accordion-icon-minus {
+    opacity: 0;
+    rotate: -90deg;
+  }
+  .vds-accordion-trigger[data-state="open"] .vds-accordion-icon[data-icon="plus-minus"] > .vds-accordion-icon-plus {
+    opacity: 0;
+    rotate: 90deg;
+  }
+  .vds-accordion-trigger[data-state="open"] .vds-accordion-icon[data-icon="plus-minus"] > .vds-accordion-icon-minus {
+    opacity: 1;
+    rotate: 0deg;
+  }
+
+  /* Icon at start (leading) — reverse the row */
+  .vds-accordion-trigger[data-icon-position="start"] {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+
+  /* In RTL, arrow/caret icons should flip horizontally so they still point
+   * toward the reading direction. Chevron is vertical so unaffected. */
+  :dir(rtl) .vds-accordion-icon[data-icon="arrow"],
+  :dir(rtl) .vds-accordion-icon[data-icon="caret"] {
+    scale: -1 1;
+  }
+
+  /* ── Content ── */
   .vds-accordion-content {
     overflow: hidden;
+    font-size:   var(--accordion-content-font-size);
+    line-height: var(--accordion-content-line-height);
+    color: var(--accordion-color-text-muted);
+  }
 
-    &[data-state="open"] {
-      animation: vds-accordion-expand var(--vds-duration-normal) var(--vds-ease-out);
-    }
-
-    &[data-state="closed"] {
-      animation: vds-accordion-collapse var(--vds-duration-normal) var(--vds-ease-out);
-    }
+  .vds-accordion-content[data-state="open"] {
+    animation: vds-accordion-expand
+      var(--accordion-transition-duration) var(--accordion-transition-easing);
+  }
+  .vds-accordion-content[data-state="closed"] {
+    animation: vds-accordion-collapse
+      var(--accordion-transition-duration) var(--accordion-transition-easing);
   }
 
   .vds-accordion-content-inner {
-    padding-block-end: var(--vds-space-4);
-    font-size: var(--vds-text-sm);
-    line-height: var(--vds-leading-relaxed);
-    color: var(--vds-color-text-muted);
+    padding-block-start: var(--accordion-content-padding-block-start);
+    padding-block-end:   var(--accordion-content-padding-block-end);
+    padding-inline:      var(--accordion-content-padding-inline);
+  }
+
+  /* Respect reduced motion — skip the expand/collapse animation */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-accordion-content[data-state="open"],
+    .vds-accordion-content[data-state="closed"] {
+      animation: none;
+    }
+    .vds-accordion-icon {
+      transition: none;
+    }
   }
 
   @keyframes vds-accordion-expand {
     from { block-size: 0; }
-    to { block-size: var(--radix-accordion-content-height); }
+    to   { block-size: var(--radix-accordion-content-height); }
   }
 
   @keyframes vds-accordion-collapse {
     from { block-size: var(--radix-accordion-content-height); }
-    to { block-size: 0; }
+    to   { block-size: 0; }
   }
 }

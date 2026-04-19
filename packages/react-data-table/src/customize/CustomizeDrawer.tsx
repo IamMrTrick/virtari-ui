@@ -26,6 +26,7 @@ import {
 import { Input } from "@virtari/react-input";
 import { Switch } from "@virtari/react-switch";
 import { cn } from "@virtari/utils";
+import { IconGripVertical } from "@virtari/react-icons";
 
 export interface ColumnConfig {
   id: string;
@@ -201,14 +202,7 @@ function SortableColumnItem({ column, onToggle }: SortableColumnItemProps) {
         aria-label="Drag to reorder"
         className="vds-data-table-customize-item-drag"
       >
-        <svg width="10" height="14" viewBox="0 0 10 14" aria-hidden="true" fill="currentColor">
-          <circle cx="3" cy="3" r="1" />
-          <circle cx="7" cy="3" r="1" />
-          <circle cx="3" cy="7" r="1" />
-          <circle cx="7" cy="7" r="1" />
-          <circle cx="3" cy="11" r="1" />
-          <circle cx="7" cy="11" r="1" />
-        </svg>
+        <IconGripVertical size={14} stroke={1.75} aria-hidden focusable={false} />
       </button>
       {column.icon && (
         <span className="vds-data-table-customize-item-icon">{column.icon}</span>

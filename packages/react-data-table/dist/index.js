@@ -1,9 +1,11 @@
-import { useDataTableContext, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-QLU6FKI2.js';
-export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-QLU6FKI2.js';
+"use client";
+import { useDataTableContext, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-W5DPMDC5.js';
+export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-W5DPMDC5.js';
 import { forwardRef, useRef, useEffect, useMemo, useState, useCallback } from 'react';
 import { cn } from '@virtari/utils';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuItem } from '@virtari/react-dropdown-menu';
+import { IconFilter, IconRefresh, IconDownload, IconChevronDown, IconPlus, IconSettings, IconRotateClockwise2, IconEyeOff, IconTrash, IconX, IconSearch, IconDotsVertical, IconList, IconLayoutKanban, IconTable, IconDots, IconCheck, IconCopy, IconChevronLeft, IconFilterFilled } from '@virtari/react-icons';
 import { Avatar } from '@virtari/react-avatar';
 import { Badge } from '@virtari/react-badge';
 import { Input } from '@virtari/react-input';
@@ -166,11 +168,7 @@ function ActionsCell({ items, trigger, className }) {
         type: "button",
         "aria-label": "Row actions",
         className: cn("vds-data-table-actions-cell-trigger", className),
-        children: trigger ?? /* @__PURE__ */ jsxs("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "currentColor", children: [
-          /* @__PURE__ */ jsx("circle", { cx: "3", cy: "7", r: "1.25" }),
-          /* @__PURE__ */ jsx("circle", { cx: "7", cy: "7", r: "1.25" }),
-          /* @__PURE__ */ jsx("circle", { cx: "11", cy: "7", r: "1.25" })
-        ] })
+        children: trigger ?? /* @__PURE__ */ jsx(IconDots, { size: 14, stroke: 1.75, "aria-hidden": true, focusable: false })
       }
     ) }),
     /* @__PURE__ */ jsx(DropdownMenuContent, { align: "end", children: items.map((item, i) => /* @__PURE__ */ jsxs("div", { children: [
@@ -214,12 +212,14 @@ function StatusBadgeCell({
   tone,
   label,
   withDot = true,
+  variant = "pill",
   className
 }) {
   return /* @__PURE__ */ jsxs(
     "span",
     {
       "data-tone": tone,
+      "data-variant": variant,
       className: cn("vds-data-table-status-cell", className),
       children: [
         withDot && /* @__PURE__ */ jsx("span", { "aria-hidden": "true", className: "vds-data-table-status-cell-dot" }),
@@ -270,10 +270,7 @@ function CopyableCell({
             "aria-label": copied ? "Copied" : "Copy to clipboard",
             className: "vds-data-table-copyable-cell-button",
             tabIndex: -1,
-            children: copied ? /* @__PURE__ */ jsx("svg", { width: "12", height: "12", viewBox: "0 0 12 12", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M2.5 6.5 5 9l4.5-5.5", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) }) : /* @__PURE__ */ jsxs("svg", { width: "12", height: "12", viewBox: "0 0 12 12", "aria-hidden": "true", fill: "none", children: [
-              /* @__PURE__ */ jsx("rect", { x: "3.5", y: "3.5", width: "6", height: "7", rx: "1", stroke: "currentColor", strokeWidth: "1.1" }),
-              /* @__PURE__ */ jsx("path", { d: "M5 3.5v-.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-.5", stroke: "currentColor", strokeWidth: "1.1" })
-            ] })
+            children: copied ? /* @__PURE__ */ jsx(IconCheck, { size: 12, stroke: 2, "aria-hidden": true, focusable: false }) : /* @__PURE__ */ jsx(IconCopy, { size: 12, stroke: 1.75, "aria-hidden": true, focusable: false })
           }
         )
       ]
@@ -816,7 +813,7 @@ function DataTableFilterDrawer({
                   onClick: () => setConfigField(null),
                   "aria-label": "Back",
                   className: "vds-data-table-filter-drawer-back",
-                  children: /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M9 2L4 7l5 5", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) })
+                  children: /* @__PURE__ */ jsx(IconChevronLeft, { size: 14, stroke: 1.75, "aria-hidden": true, focusable: false })
                 }
               ),
               /* @__PURE__ */ jsx(DrawerTitle, { children: configField ? configField.label : title }),
@@ -1081,26 +1078,7 @@ function FilterPopover({
         "aria-label": `Filter ${column.id}`,
         "data-active": isActive ? "" : void 0,
         className: cn("vds-data-table-filter-trigger", className),
-        children: trigger ?? /* @__PURE__ */ jsx(
-          "svg",
-          {
-            width: "12",
-            height: "12",
-            viewBox: "0 0 12 12",
-            fill: "none",
-            "aria-hidden": "true",
-            children: /* @__PURE__ */ jsx(
-              "path",
-              {
-                d: "M1.5 2h9L7 6.5V10l-2 1V6.5L1.5 2Z",
-                stroke: "currentColor",
-                strokeWidth: "1.25",
-                strokeLinejoin: "round",
-                fill: isActive ? "currentColor" : "none"
-              }
-            )
-          }
-        )
+        children: trigger ?? (isActive ? /* @__PURE__ */ jsx(IconFilterFilled, { size: 12, stroke: 1.5, "aria-hidden": true, focusable: false }) : /* @__PURE__ */ jsx(IconFilter, { size: 12, stroke: 1.5, "aria-hidden": true, focusable: false }))
       }
     ) }),
     /* @__PURE__ */ jsx(PopoverContent, { side, align: "start", sideOffset: 4, children: /* @__PURE__ */ jsxs("div", { className: "vds-data-table-filter-popover", children: [
@@ -1407,47 +1385,54 @@ var Pagination = {
 function Glyph({ children }) {
   return /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-icon", children });
 }
-var ToolbarActionButton = forwardRef(function ToolbarActionButton2({ icon, label, count, intent = "neutral", className, children, ...props }, ref) {
+var ToolbarActionButton = forwardRef(function ToolbarActionButton2({
+  icon,
+  trailingIcon,
+  label,
+  count,
+  intent = "neutral",
+  variant = "ghost",
+  size = "md",
+  iconOnly = false,
+  className,
+  children,
+  ...props
+}, ref) {
+  const showLabel = !iconOnly && (label !== void 0 || children !== void 0);
   return /* @__PURE__ */ jsxs(
     "button",
     {
       ref,
       type: "button",
       "data-intent": intent,
+      "data-variant": variant,
+      "data-size": size,
+      "data-icon-only": iconOnly ? "" : void 0,
       className: cn("vds-data-table-toolbar-button", className),
       ...props,
       children: [
         icon && /* @__PURE__ */ jsx(Glyph, { children: icon }),
-        (label || children) && /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-label", children: children ?? label }),
-        count !== void 0 && count !== 0 && /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-count", children: count })
+        showLabel && /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-label", children: children ?? label }),
+        count !== void 0 && count !== 0 && /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-count", children: count }),
+        trailingIcon && /* @__PURE__ */ jsx(Glyph, { children: trailingIcon })
       ]
     }
   );
 });
-var SearchIcon = /* @__PURE__ */ jsxs("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: [
-  /* @__PURE__ */ jsx("circle", { cx: "6", cy: "6", r: "4", stroke: "currentColor", strokeWidth: "1.25" }),
-  /* @__PURE__ */ jsx("path", { d: "m9.5 9.5 3 3", stroke: "currentColor", strokeWidth: "1.25", strokeLinecap: "round" })
-] });
-var FilterIcon = /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M2 3h10L8 8v3l-2 1V8L2 3Z", stroke: "currentColor", strokeWidth: "1.25", strokeLinejoin: "round" }) });
-var RefreshIcon = /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M12 7a5 5 0 1 1-1.5-3.5L12 5V2", stroke: "currentColor", strokeWidth: "1.25", strokeLinecap: "round", strokeLinejoin: "round" }) });
-var DownloadIcon = /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M7 2v7m0 0 3-3m-3 3L4 6M2.5 11h9", stroke: "currentColor", strokeWidth: "1.25", strokeLinecap: "round", strokeLinejoin: "round" }) });
-var PlusIcon = /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M7 2v10M2 7h10", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round" }) });
-var SettingsIcon = /* @__PURE__ */ jsxs("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: [
-  /* @__PURE__ */ jsx("circle", { cx: "7", cy: "7", r: "2", stroke: "currentColor", strokeWidth: "1.25" }),
-  /* @__PURE__ */ jsx(
-    "path",
-    {
-      d: "M7 1v2M7 11v2M1 7h2M11 7h2M2.8 2.8l1.4 1.4M9.8 9.8l1.4 1.4M2.8 11.2l1.4-1.4M9.8 4.2l1.4-1.4",
-      stroke: "currentColor",
-      strokeWidth: "1.25",
-      strokeLinecap: "round"
-    }
-  )
-] });
-var RotateCcwIcon = /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M2 7a5 5 0 1 0 1.5-3.5L2 5V2", stroke: "currentColor", strokeWidth: "1.25", strokeLinecap: "round", strokeLinejoin: "round" }) });
-var EyeOffIcon = /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M1.5 3 12.5 11M3 5.5C1.8 6.6 1.5 7 1.5 7s2.5 4 5.5 4c1 0 2-.3 2.8-.7M6 4.1a6 6 0 0 1 1-.1c3 0 5.5 4 5.5 4s-.4.7-1.3 1.5", stroke: "currentColor", strokeWidth: "1.25", strokeLinecap: "round" }) });
-var TrashIcon = /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M3 4h8m-1 0v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4m2 0V3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1", stroke: "currentColor", strokeWidth: "1.25", strokeLinecap: "round", strokeLinejoin: "round" }) });
-var XIcon = /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M3 3l8 8M11 3l-8 8", stroke: "currentColor", strokeWidth: "1.25", strokeLinecap: "round" }) });
+var TOOLBAR_ICON = { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false };
+var CHEVRON_ICON = { size: 12, stroke: 1.5, "aria-hidden": true, focusable: false };
+var SearchIcon = /* @__PURE__ */ jsx(IconSearch, { ...TOOLBAR_ICON });
+var FilterIcon = /* @__PURE__ */ jsx(IconFilter, { ...TOOLBAR_ICON });
+var RefreshIcon = /* @__PURE__ */ jsx(IconRefresh, { ...TOOLBAR_ICON });
+var DownloadIcon = /* @__PURE__ */ jsx(IconDownload, { ...TOOLBAR_ICON });
+var PlusIcon = /* @__PURE__ */ jsx(IconPlus, { ...TOOLBAR_ICON });
+var SettingsIcon = /* @__PURE__ */ jsx(IconSettings, { ...TOOLBAR_ICON });
+var RotateCcwIcon = /* @__PURE__ */ jsx(IconRotateClockwise2, { ...TOOLBAR_ICON });
+var EyeOffIcon = /* @__PURE__ */ jsx(IconEyeOff, { ...TOOLBAR_ICON });
+var TrashIcon = /* @__PURE__ */ jsx(IconTrash, { ...TOOLBAR_ICON });
+var XIcon = /* @__PURE__ */ jsx(IconX, { ...TOOLBAR_ICON });
+var MoreIcon = /* @__PURE__ */ jsx(IconDotsVertical, { ...TOOLBAR_ICON });
+var ChevronDownIcon = /* @__PURE__ */ jsx(IconChevronDown, { ...CHEVRON_ICON });
 var DataTableFilterButton = forwardRef(function DataTableFilterButton2({ label = "Filter", count, intent, ...props }, ref) {
   return /* @__PURE__ */ jsx(
     ToolbarActionButton,
@@ -1467,24 +1452,40 @@ var DataTableRefreshButton = forwardRef(
   }
 );
 var DataTableExportButton = forwardRef(
-  function DataTableExportButton2({ label = "Export", ...props }, ref) {
-    return /* @__PURE__ */ jsx(ToolbarActionButton, { ref, icon: DownloadIcon, label, ...props });
-  }
-);
-var DataTableAddButton = forwardRef(
-  function DataTableAddButton2({ label = "Add", intent = "primary", ...props }, ref) {
+  function DataTableExportButton2({ label = "Export", variant = "outline", ...props }, ref) {
     return /* @__PURE__ */ jsx(
       ToolbarActionButton,
       {
         ref,
-        icon: PlusIcon,
+        icon: DownloadIcon,
         label,
-        intent,
+        variant,
         ...props
       }
     );
   }
 );
+var DataTableAddButton = forwardRef(function DataTableAddButton2({
+  label = "Add",
+  intent = "primary",
+  variant = "solid",
+  withChevron = false,
+  trailingIcon,
+  ...props
+}, ref) {
+  return /* @__PURE__ */ jsx(
+    ToolbarActionButton,
+    {
+      ref,
+      icon: PlusIcon,
+      label,
+      intent,
+      variant,
+      trailingIcon: trailingIcon ?? (withChevron ? ChevronDownIcon : void 0),
+      ...props
+    }
+  );
+});
 var DataTableCustomizeButton = forwardRef(
   function DataTableCustomizeButton2({ label = "Customize", ...props }, ref) {
     return /* @__PURE__ */ jsx(ToolbarActionButton, { ref, icon: SettingsIcon, label, ...props });
@@ -1497,14 +1498,14 @@ var DataTableHideColumnsButton = forwardRef(function DataTableHideColumnsButton2
   return /* @__PURE__ */ jsx(ToolbarActionButton, { ref, icon: EyeOffIcon, label, ...props });
 });
 var DataTableDeleteButton = forwardRef(
-  function DataTableDeleteButton2({ label = "Delete", ...props }, ref) {
+  function DataTableDeleteButton2({ label = "Delete", intent = "danger", ...props }, ref) {
     return /* @__PURE__ */ jsx(
       ToolbarActionButton,
       {
         ref,
         icon: TrashIcon,
         label,
-        "data-intent": "danger",
+        intent,
         ...props
       }
     );
@@ -1519,11 +1520,42 @@ var DataTableCloseButton = forwardRef(
         icon: XIcon,
         "aria-label": props["aria-label"] ?? "Close",
         label,
+        iconOnly: label === void 0,
         ...props
       }
     );
   }
 );
+forwardRef(
+  function DataTableSearchButton2({ label = "Search", ...props }, ref) {
+    return /* @__PURE__ */ jsx(
+      ToolbarActionButton,
+      {
+        ref,
+        icon: SearchIcon,
+        label,
+        ...props
+      }
+    );
+  }
+);
+forwardRef(
+  function DataTableMoreButton2({ ...props }, ref) {
+    return /* @__PURE__ */ jsx(
+      ToolbarActionButton,
+      {
+        ref,
+        icon: MoreIcon,
+        iconOnly: true,
+        "aria-label": props["aria-label"] ?? "More",
+        ...props
+      }
+    );
+  }
+);
+forwardRef(function DataTableRowAction2({ size = "sm", variant = "ghost", ...props }, ref) {
+  return /* @__PURE__ */ jsx(ToolbarActionButton, { ref, size, variant, ...props });
+});
 var DataTableSearchIcon = SearchIcon;
 var DataTableBoard = forwardRef(
   function DataTableBoard2({ className, renderCard, emptyMessage, skipColumns = [], ...props }, ref) {
@@ -1660,17 +1692,9 @@ var DEFAULT_LABELS = {
   list: "List"
 };
 var DEFAULT_ICONS = {
-  table: /* @__PURE__ */ jsxs("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: [
-    /* @__PURE__ */ jsx("rect", { x: "1.5", y: "2", width: "11", height: "10", rx: "1.5", stroke: "currentColor", strokeWidth: "1.25" }),
-    /* @__PURE__ */ jsx("path", { d: "M1.5 5.5h11M5 2v10", stroke: "currentColor", strokeWidth: "1.25" })
-  ] }),
-  board: /* @__PURE__ */ jsxs("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: [
-    /* @__PURE__ */ jsx("rect", { x: "1.5", y: "1.5", width: "4.5", height: "4.5", rx: "1", stroke: "currentColor", strokeWidth: "1.25" }),
-    /* @__PURE__ */ jsx("rect", { x: "8", y: "1.5", width: "4.5", height: "4.5", rx: "1", stroke: "currentColor", strokeWidth: "1.25" }),
-    /* @__PURE__ */ jsx("rect", { x: "1.5", y: "8", width: "4.5", height: "4.5", rx: "1", stroke: "currentColor", strokeWidth: "1.25" }),
-    /* @__PURE__ */ jsx("rect", { x: "8", y: "8", width: "4.5", height: "4.5", rx: "1", stroke: "currentColor", strokeWidth: "1.25" })
-  ] }),
-  list: /* @__PURE__ */ jsx("svg", { width: "14", height: "14", viewBox: "0 0 14 14", "aria-hidden": "true", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M2 3.5h10M2 7h10M2 10.5h10", stroke: "currentColor", strokeWidth: "1.25", strokeLinecap: "round" }) })
+  table: /* @__PURE__ */ jsx(IconTable, { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false }),
+  board: /* @__PURE__ */ jsx(IconLayoutKanban, { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false }),
+  list: /* @__PURE__ */ jsx(IconList, { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false })
 };
 var DataTableViewModeToggle = forwardRef(function DataTableViewModeToggle2({ modes = DEFAULT_MODES, labels, icons, className, ...props }, ref) {
   const { viewMode, setViewMode } = useDataTableContext();

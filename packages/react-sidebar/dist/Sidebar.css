@@ -1,0 +1,260 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Root tokens
+   *    The <aside> landmark owns the width, rail width,
+   *    sticky offset (below-header mode), background, and
+   *    the transition used for collapse/expand.
+   * ───────────────────────────────────────────── */
+  .vds-sidebar {
+    /* Geometry */
+    --sidebar-width:         var(--vds-sidebar-width-default, 16rem);
+    --sidebar-rail:          var(--vds-sidebar-rail-default, 3.5rem);
+    --sidebar-sticky-offset: 0px;
+    --sidebar-inline-size:   var(--sidebar-width);
+    --sidebar-block-size:    100svh;
+
+    /* Padding around direct children (header / body / footer) */
+    --sidebar-padding-block:  var(--vds-space-2, 0.5rem);
+    --sidebar-padding-inline: var(--vds-space-3, 0.75rem);
+    --sidebar-section-gap:    var(--vds-sidebar-gap-default, 0.25rem);
+
+    /*
+     * Header / footer minimum heights.
+     * Default `0` — region is content-driven (brand row, stacked search +
+     * brand, user card, etc. each dictate their own height).
+     *
+     * Set to a concrete value when you need visual alignment with a page
+     * <Header> row:
+     *   <VdsSidebar style={{ "--sidebar-header-min-block-size": "5rem" }}>
+     * or on a wrapping element:
+     *   .app-shell { --sidebar-header-min-block-size: 5rem; }
+     */
+    --sidebar-header-min-block-size: 0;
+    --sidebar-footer-min-block-size: 0;
+
+    /* Surfaces */
+    --sidebar-background: var(--vds-color-surface, #ffffff);
+    --sidebar-text-color: var(--vds-color-text, #111827);
+    --sidebar-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --sidebar-border-inline: 1px solid var(--sidebar-border-color);
+
+    /* Rail gutter (inline padding when collapsed — smaller so icons center) */
+    --sidebar-rail-padding-inline: var(--vds-space-2, 0.5rem);
+
+    /* Motion */
+    --sidebar-transition-duration: var(--vds-duration-base, 200ms);
+    --sidebar-transition-easing:   var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* Z-index — below Header (30-32) so Header overlays it when they stack */
+    --sidebar-z: 20;
+
+    /* Trigger (icon button) — respects .vds-sidebar-trigger default sizing */
+    --sidebar-trigger-size:   var(--vds-size-sm, 2rem);
+    --sidebar-trigger-radius: var(--vds-radius-element, 0.5rem);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 2. Size presets (expanded width)
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-size="sm"] { --sidebar-width: var(--vds-sidebar-width-sm, 12rem); }
+  .vds-sidebar[data-size="md"] { --sidebar-width: var(--vds-sidebar-width-md, 16rem); }
+  .vds-sidebar[data-size="lg"] { --sidebar-width: var(--vds-sidebar-width-lg, 20rem); }
+  .vds-sidebar[data-size="xl"] { --sidebar-width: var(--vds-sidebar-width-xl, 24rem); }
+
+  /* ─────────────────────────────────────────────
+   * 3. Modes — full-height vs below-header
+   *
+   * full-height: sidebar takes the whole viewport height; user places
+   * it *beside* the header (Layout A — GitHub/Linear/Notion style).
+   *
+   * below-header: sidebar starts below a sticky header; its block-size
+   * subtracts the header's sticky offset so it never overlaps.
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-mode="full-height"] {
+    --sidebar-sticky-offset: 0px;
+    --sidebar-block-size: 100svh;
+  }
+
+  .vds-sidebar[data-mode="below-header"] {
+    --sidebar-block-size: calc(100svh - var(--sidebar-sticky-offset));
+  }
+
+  /* ─────────────────────────────────────────────
+   * 4. Background presets
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-background="none"]    { --sidebar-background: transparent; }
+  .vds-sidebar[data-background="surface"] { --sidebar-background: var(--vds-color-surface, #ffffff); }
+  .vds-sidebar[data-background="subtle"]  { --sidebar-background: var(--vds-color-bg-subtle, #f9fafb); }
+  .vds-sidebar[data-background="muted"]   { --sidebar-background: var(--vds-color-bg-muted, #f3f4f6); }
+
+  /* ─────────────────────────────────────────────
+   * 5. Bordered — the side-adjacent divider between sidebar and content
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-bordered="false"] { --sidebar-border-inline: 0; }
+
+  /* ─────────────────────────────────────────────
+   * 6. Collapsed — inline-size flips to the rail width
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-collapsed="true"] {
+    --sidebar-inline-size:   var(--sidebar-rail);
+    --sidebar-padding-inline: var(--sidebar-rail-padding-inline);
+  }
+}
+
+@layer design-system.components {
+  /* ── Root <aside> ── */
+  .vds-sidebar {
+    position: sticky;
+    top: var(--sidebar-sticky-offset);
+    z-index: var(--sidebar-z);
+
+    flex: none;
+    display: flex;
+    flex-direction: column;
+
+    inline-size: var(--sidebar-inline-size);
+    block-size: var(--sidebar-block-size);
+    min-block-size: 0;
+
+    background-color: var(--sidebar-background);
+    color: var(--sidebar-text-color);
+
+    /* Side-specific border (inline-end in `start`, inline-start in `end`) */
+    border-inline-end: var(--sidebar-border-inline);
+
+    transition:
+      inline-size var(--sidebar-transition-duration) var(--sidebar-transition-easing),
+      padding-inline var(--sidebar-transition-duration) var(--sidebar-transition-easing);
+    will-change: inline-size;
+    overflow: hidden;
+  }
+
+  .vds-sidebar[data-side="end"] {
+    border-inline-end: 0;
+    border-inline-start: var(--sidebar-border-inline);
+  }
+
+  /* ── Header — branding / logo area ──
+   * Content-driven height. If you need to align visually with a page
+   * <Header> row, override `--sidebar-header-min-block-size` on the
+   * sidebar root (or a wrapping chrome element):
+   *   <VdsSidebar style={{ "--sidebar-header-min-block-size": "5rem" }}>
+   */
+  .vds-sidebar__header {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    min-block-size: var(--sidebar-header-min-block-size, 0);
+    padding-block: var(--sidebar-padding-block);
+    padding-inline: var(--sidebar-padding-inline);
+  }
+
+  /* ── Body — main scrollable nav area ── */
+  .vds-sidebar__body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sidebar-section-gap);
+    padding-block: var(--sidebar-padding-block);
+    padding-inline: var(--sidebar-padding-inline);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* ── Footer — pinned to bottom ── */
+  .vds-sidebar__footer {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    min-block-size: var(--sidebar-footer-min-block-size, 0);
+    padding-block: var(--sidebar-padding-block);
+    padding-inline: var(--sidebar-padding-inline);
+  }
+
+  /* ── Separator ── */
+  .vds-sidebar__separator {
+    flex: none;
+    block-size: 1px;
+    margin-inline: var(--sidebar-padding-inline);
+    background-color: var(--sidebar-border-color);
+    border: 0;
+  }
+
+  /* ── Trigger (collapse toggle button) ── */
+  .vds-sidebar-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+
+    inline-size: var(--sidebar-trigger-size);
+    block-size: var(--sidebar-trigger-size);
+    padding: 0;
+
+    background-color: transparent;
+    color: inherit;
+    border: 0;
+    border-radius: var(--sidebar-trigger-radius);
+    cursor: pointer;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+
+    transition:
+      background-color var(--sidebar-transition-duration) var(--sidebar-transition-easing),
+      color var(--sidebar-transition-duration) var(--sidebar-transition-easing);
+  }
+
+  .vds-sidebar-trigger:hover {
+    background-color: var(--vds-color-surface-hover, color-mix(in oklch, currentColor 8%, transparent));
+  }
+  .vds-sidebar-trigger:active {
+    background-color: var(--vds-color-surface-active, color-mix(in oklch, currentColor 14%, transparent));
+  }
+  .vds-sidebar-trigger:focus-visible {
+    outline: 2px solid var(--vds-color-ring, currentColor);
+    outline-offset: 2px;
+  }
+
+  /* Rotation only applies to the built-in chevron icon. Custom children
+     (e.g. directional Tabler icons like IconLayoutSidebarLeftCollapse vs
+     IconLayoutSidebarLeftExpand) carry their own visual direction, so we
+     don't spin them. */
+  .vds-sidebar-trigger__chevron {
+    transition: transform var(--sidebar-transition-duration) var(--sidebar-transition-easing);
+  }
+  .vds-sidebar-trigger[data-collapsed="true"] .vds-sidebar-trigger__chevron {
+    transform: rotate(180deg);
+  }
+  /* RTL sidebar on end-side: reverse the chevron */
+  .vds-sidebar[data-side="end"] .vds-sidebar-trigger[data-collapsed="true"] .vds-sidebar-trigger__chevron,
+  [dir="rtl"] .vds-sidebar-trigger[data-collapsed="true"] .vds-sidebar-trigger__chevron {
+    transform: rotate(0deg);
+  }
+  [dir="rtl"] .vds-sidebar-trigger__chevron,
+  .vds-sidebar[data-side="end"] .vds-sidebar-trigger__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ── When collapsed: center subpart content (icons) ── */
+  .vds-sidebar[data-collapsed="true"] .vds-sidebar__header,
+  .vds-sidebar[data-collapsed="true"] .vds-sidebar__footer {
+    justify-content: center;
+  }
+
+  /* Rail-mode behaviour of @virtari/react-nav is owned by the Nav
+   * component itself — pass `collapsed={sidebarCollapsed}` to <Nav> and
+   * it handles labels, badges, chevrons, and submenu mode natively. */
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-sidebar,
+    .vds-sidebar-trigger,
+    .vds-sidebar-trigger__chevron {
+      transition: none;
+    }
+  }
+}

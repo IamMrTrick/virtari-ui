@@ -12,11 +12,11 @@
       var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --data-table-font-size:            var(--vds-text-sm, 0.875rem);
     --data-table-line-height:          var(--vds-leading-normal, 1.5);
-    --data-table-cell-padding-inline:  var(--vds-space-3, 0.75rem);
-    --data-table-cell-padding-block:   var(--vds-space-2, 0.5rem);
-    --data-table-row-height:           var(--vds-size-md, 2.5rem);
-    --data-table-header-row-height:    var(--vds-size-md, 2.25rem);
-    --data-table-footer-row-height:    var(--vds-size-md, 2.25rem);
+    --data-table-cell-padding-inline:  var(--vds-space-4, 1rem);
+    --data-table-cell-padding-block:   var(--vds-space-2-5, 0.625rem);
+    --data-table-row-height:           2.75rem;
+    --data-table-header-row-height:    2.75rem;
+    --data-table-footer-row-height:    2.75rem;
     --data-table-col-min-width:        4rem;
     --data-table-col-default-width:    10rem;
 
@@ -25,7 +25,12 @@
     --data-table-header-bg:            var(--vds-color-surface-raised, #f9fafb);
     --data-table-row-bg:               var(--vds-color-surface, #ffffff);
     --data-table-row-bg-alt:           var(--vds-color-surface-raised, #f9fafb);
-    --data-table-row-bg-hover:         var(--vds-color-surface-hover, #f3f4f6);
+    --data-table-row-bg-hover:
+      color-mix(
+        in oklch,
+        var(--vds-color-surface-hover, #f3f4f6),
+        transparent 30%
+      );
     --data-table-row-bg-selected:      var(--vds-color-primary-muted, #eef2ff);
     --data-table-row-bg-selected-hover:var(--vds-color-primary-muted, #eef2ff);
     --data-table-footer-bg:            var(--vds-color-surface-raised, #f9fafb);
@@ -37,9 +42,19 @@
 
     /* ── Borders ─────────────────────────────────────────────── */
     --data-table-border-width:         1px;
-    --data-table-border-color:         var(--vds-color-border-muted, #e5e7eb);
+    --data-table-border-color:
+      color-mix(
+        in oklch,
+        var(--vds-color-border-muted, #e5e7eb),
+        transparent 35%
+      );
     --data-table-border-color-strong:  var(--vds-color-border, #d1d5db);
-    --data-table-header-divider-color: var(--vds-color-border, #d1d5db);
+    --data-table-header-divider-color:
+      color-mix(
+        in oklch,
+        var(--vds-color-border-muted, #e5e7eb),
+        transparent 20%
+      );
 
     /* ── Typography ──────────────────────────────────────────── */
     --data-table-header-font-size:      var(--vds-text-xs, 0.75rem);
@@ -220,12 +235,12 @@
     --data-table-header-letter-spacing: 0;
   }
   .vds-data-table[data-size="md"] {
-    --data-table-row-height:        2.5rem;
-    --data-table-header-row-height: 2.25rem;
+    --data-table-row-height:        2.75rem;
+    --data-table-header-row-height: 2.75rem;
   }
   .vds-data-table[data-size="lg"] {
-    --data-table-row-height:          3rem;
-    --data-table-header-row-height:   2.75rem;
+    --data-table-row-height:          3.25rem;
+    --data-table-header-row-height:   3rem;
     --data-table-cell-padding-inline: var(--vds-space-4, 1rem);
     --data-table-cell-padding-block:  var(--vds-space-3, 0.75rem);
     --data-table-font-size:           var(--vds-text-base, 1rem);
@@ -604,11 +619,15 @@
     );
   }
 
-  /* Resize guideline overlay — full-height 1px line during drag. */
+  /* Resize guideline overlay — full-height 1px line during drag.
+     Uses physical `left` anchor because the offset from TanStack
+     (startOffset + deltaOffset) is a physical-pixel value paired with
+     physical translateX — in RTL we still want the guideline at the
+     dragged column's physical position. */
   .vds-data-table-resize-guideline {
     position: absolute;
     inset-block: 0;
-    inset-inline-start: 0;
+    left: 0;
     inline-size: var(--data-table-guideline-width);
     background-color: var(--data-table-guideline-color);
     pointer-events: none;
@@ -1300,26 +1319,82 @@
     opacity: 0.4;
     cursor: not-allowed;
   }
-  .vds-data-table-toolbar-button[data-intent="primary"] {
-    color: #fff;
-    background-color: var(--data-table-toolbar-button-color-primary);
+  /* Variant: outline — thin border, transparent fill. */
+  .vds-data-table-toolbar-button[data-variant="outline"] {
+    border: 1px solid var(--vds-color-border, #d1d5db);
+    background-color: transparent;
   }
-  .vds-data-table-toolbar-button[data-intent="primary"]:hover:not(:disabled) {
+  .vds-data-table-toolbar-button[data-variant="outline"]:hover:not(:disabled) {
+    background-color: var(--data-table-toolbar-button-bg-hover);
+  }
+  /* Variant: solid — filled with current intent color. */
+  .vds-data-table-toolbar-button[data-variant="solid"] {
+    background-color: var(--data-table-toolbar-button-color);
+    color: var(--vds-color-surface, #ffffff);
+  }
+  .vds-data-table-toolbar-button[data-variant="solid"][data-intent="primary"] {
+    background-color: var(--data-table-toolbar-button-color-primary);
+    color: #fff;
+  }
+  .vds-data-table-toolbar-button[data-variant="solid"][data-intent="primary"]:hover:not(:disabled) {
     background-color: color-mix(
       in oklch,
       var(--data-table-toolbar-button-color-primary),
-      black 8%
+      black 10%
     );
   }
-  .vds-data-table-toolbar-button[data-intent="danger"] {
+  .vds-data-table-toolbar-button[data-variant="solid"][data-intent="danger"] {
+    background-color: var(--data-table-toolbar-button-color-danger);
+    color: #fff;
+  }
+
+  /* Intent: primary on ghost/outline — colored text, no bg. */
+  .vds-data-table-toolbar-button[data-intent="primary"]:not([data-variant="solid"]) {
+    color: var(--data-table-toolbar-button-color-primary);
+  }
+  .vds-data-table-toolbar-button[data-intent="primary"][data-variant="ghost"] {
+    background-color: transparent;
+  }
+  .vds-data-table-toolbar-button[data-intent="primary"][data-variant="ghost"]:hover:not(:disabled) {
+    background-color: color-mix(
+      in oklch,
+      var(--data-table-toolbar-button-color-primary),
+      transparent 90%
+    );
+  }
+  .vds-data-table-toolbar-button[data-intent="primary"][data-variant="outline"] {
+    border-color: color-mix(
+      in oklch,
+      var(--data-table-toolbar-button-color-primary),
+      transparent 60%
+    );
+  }
+  .vds-data-table-toolbar-button[data-intent="danger"]:not([data-variant="solid"]) {
     color: var(--data-table-toolbar-button-color-danger);
   }
-  .vds-data-table-toolbar-button[data-intent="danger"]:hover:not(:disabled) {
+  .vds-data-table-toolbar-button[data-intent="danger"][data-variant="ghost"]:hover:not(:disabled) {
     background-color: color-mix(
       in oklch,
       var(--data-table-toolbar-button-color-danger),
       transparent 90%
     );
+  }
+
+  /* Size sm: tighter padding + smaller height. Used for inline row actions. */
+  .vds-data-table-toolbar-button[data-size="sm"] {
+    block-size: var(--vds-size-sm, 1.75rem);
+    padding-inline: var(--vds-space-2, 0.5rem);
+    font-size: var(--vds-text-xs, 0.75rem);
+  }
+
+  /* Icon-only: square — collapse label padding, aspect-square look. */
+  .vds-data-table-toolbar-button[data-icon-only] {
+    padding-inline: 0;
+    inline-size: var(--data-table-toolbar-button-height);
+    justify-content: center;
+  }
+  .vds-data-table-toolbar-button[data-icon-only][data-size="sm"] {
+    inline-size: var(--vds-size-sm, 1.75rem);
   }
   .vds-data-table-toolbar-button-icon {
     display: inline-flex;
@@ -1378,12 +1453,23 @@
     font-size: var(--vds-text-xs, 0.75rem);
     font-weight: var(--vds-font-weight-medium, 500);
     color: var(--vds-color-text, #111827);
+    white-space: nowrap;
+  }
+  .vds-data-table-status-cell[data-variant="pill"] {
+    padding: 3px 10px 3px 8px;
+    border-radius: 999px;
+    background-color: color-mix(
+      in oklch,
+      currentColor,
+      transparent 88%
+    );
   }
   .vds-data-table-status-cell-dot {
     inline-size: 6px;
     block-size: 6px;
     border-radius: 999px;
     background-color: currentColor;
+    flex-shrink: 0;
   }
   .vds-data-table-status-cell[data-tone="success"] {
     color: var(--vds-color-success-emphasis, #16a34a);

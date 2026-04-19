@@ -167,6 +167,19 @@
       transform-origin: right center;
       --vds-drawer-rest-transform: translate3d(100%, 0, 0);
     }
+
+    /* RTL: inset-inline-* already flips which physical edge the drawer docks
+       to; mirror transform-origin and the rest translation so the slide axis
+       matches the new dock edge. */
+    :dir(rtl) &[data-direction="left"] {
+      transform-origin: right center;
+      --vds-drawer-rest-transform: translate3d(100%, 0, 0);
+    }
+
+    :dir(rtl) &[data-direction="right"] {
+      transform-origin: left center;
+      --vds-drawer-rest-transform: translate3d(-100%, 0, 0);
+    }
   }
 
   .vds-drawer-header {
@@ -515,8 +528,7 @@
     overflow: visible;
   }
 
-  .vds-drawer-content[data-keyboard-open][data-direction="bottom"] .vds-drawer-footer,
-  .vds-drawer-content[data-keyboard-open][data-direction="top"] .vds-drawer-footer {
+  .vds-drawer-content[data-keyboard-open] .vds-drawer-footer {
     margin-block-start: 0;
   }
 

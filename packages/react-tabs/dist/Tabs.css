@@ -78,6 +78,27 @@
     --tabs-content-focus-ring-width: 2px;
     --tabs-content-focus-ring-offset: 2px;
     --tabs-content-focus-ring-radius: var(--vds-radius-element, 0.5rem);
+
+    /* Enter animation when a panel becomes active */
+    --tabs-content-enter-duration: var(--vds-duration-fast, 180ms);
+    --tabs-content-enter-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    --tabs-content-enter-translate: 0.5rem;
+  }
+
+  /* ── Root (Tabs) wrapper ── */
+  .vds-tabs {
+    --tabs-root-gap: var(--vds-space-4, 1rem);
+    --tabs-root-separator-color: var(--vds-color-border-muted, #e5e7eb);
+  }
+
+  /* ── Panels carousel ── */
+  .vds-tabs-panels {
+    --tabs-panels-transition-duration: 320ms;
+    --tabs-panels-transition-ease: var(
+      --vds-ease-out,
+      cubic-bezier(0.2, 0.9, 0.25, 1)
+    );
+    --tabs-panels-padding-block: var(--vds-space-4, 1rem);
   }
 
   /* ─────────────────────────────────────────────
@@ -118,8 +139,10 @@
   }
   .vds-tabs-list[data-variant="pills"] .vds-tabs-trigger {
     --tabs-trigger-radius: var(--vds-radius-badge, 9999px);
+    --tabs-trigger-bg-active: var(--vds-color-primary-emphasis, #6366f1);
     --tabs-trigger-color-active: var(--vds-color-on-primary, #ffffff);
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
+    --tabs-trigger-color-hover: var(--vds-color-text, #111827);
   }
 
   /* ── segmented ── */
@@ -135,21 +158,24 @@
   }
   .vds-tabs-list[data-variant="segmented"] .vds-tabs-trigger {
     --tabs-trigger-radius: calc(var(--vds-radius-element, 0.5rem) - 0.125rem);
+    --tabs-trigger-bg-active: var(--vds-color-surface, #ffffff);
     --tabs-trigger-color-active: var(--vds-color-text, #111827);
     --tabs-trigger-shadow-active: var(--vds-shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
   }
 
-  /* ── boxed (browser-tab) ── */
+  /* ── boxed (Chrome-style browser tabs with inverted curves) ── */
   .vds-tabs-list[data-variant="boxed"] {
-    --tabs-list-gap: var(--vds-space-0-5, 0.125rem);
+    --tabs-list-gap: 0;
     --tabs-list-border-width: 1px;
+    /* Curve radius — also used for top corners of each tab. */
+    --tabs-boxed-curve: 0.75rem;
+    --tabs-boxed-bg: var(--vds-color-surface, #ffffff);
+    --tabs-boxed-border: var(--vds-color-border, #d1d5db);
   }
   .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger {
-    --tabs-trigger-border-width: 1px;
-    --tabs-trigger-radius: min(var(--vds-radius-element, 0.5rem), 0.5rem);
+    --tabs-trigger-radius: var(--tabs-boxed-curve);
     --tabs-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
-    --tabs-trigger-bg-active: var(--vds-color-surface, #ffffff);
-    --tabs-trigger-border-color-active: var(--vds-color-border, #d1d5db);
+    --tabs-trigger-bg-active: var(--tabs-boxed-bg);
     --tabs-trigger-color-active: var(--vds-color-text, #111827);
   }
 
@@ -252,6 +278,27 @@
 
 @layer design-system.components {
   /* ─────────────────────────────────────────────
+   * Root (Tabs wrapper)
+   * ───────────────────────────────────────────── */
+  .vds-tabs {
+    display: block;
+  }
+
+  /* Vertical layout → list and content sit side-by-side */
+  .vds-tabs[data-orientation="vertical"] {
+    display: flex;
+    align-items: stretch;
+    gap: var(--tabs-root-gap);
+  }
+  .vds-tabs[data-orientation="vertical"] > .vds-tabs-content {
+    flex: 1 1 0;
+    min-inline-size: 0;
+    padding-block-start: 0;
+    padding-inline-start: var(--tabs-root-gap);
+    border-inline-start: 1px solid var(--tabs-root-separator-color);
+  }
+
+  /* ─────────────────────────────────────────────
    * List
    * ───────────────────────────────────────────── */
   .vds-tabs-list {
@@ -265,6 +312,29 @@
     border-radius: var(--tabs-list-radius);
     border: 0 solid var(--tabs-list-border-color);
     border-block-end-width: var(--tabs-list-border-width);
+    /* Responsive: cap at container width and scroll horizontally when
+       triggers would overflow. Vertical overflow stays visible so the
+       sliding indicator and boxed curve pseudo-elements aren't clipped.
+       Scrollbar is hidden to preserve the design — users scroll by
+       touch / trackpad / wheel. */
+    max-inline-size: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+  }
+  .vds-tabs-list::-webkit-scrollbar {
+    display: none;
+  }
+  .vds-tabs-list::-webkit-scrollbar {
+    block-size: 6px;
+  }
+  .vds-tabs-list > .vds-tabs-trigger {
+    flex: 0 0 auto;
+  }
+  .vds-tabs-list[data-orientation="vertical"] {
+    max-inline-size: none;
+    overflow-x: visible;
+    overflow-y: auto;
   }
 
   /* ─────────────────────────────────────────────
@@ -274,6 +344,7 @@
     position: relative;
     z-index: 1;
     display: inline-flex;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: center;
     gap: var(--tabs-trigger-gap);
@@ -311,7 +382,9 @@
         var(--tabs-trigger-transition-ease);
   }
 
-  .vds-tabs-trigger:hover:not(:disabled):not([data-disabled]) {
+  .vds-tabs-trigger:hover:not(:disabled):not([data-disabled]):not(
+      [data-state="active"]
+    ) {
     color: var(--tabs-trigger-color-hover);
     background-color: var(--tabs-trigger-bg-hover);
     border-color: var(--tabs-trigger-border-color-hover);
@@ -350,6 +423,99 @@
     border-radius: var(--tabs-content-focus-ring-radius);
   }
 
+  /* Panel enter animation on tab change */
+  .vds-tabs-content[data-state="active"] {
+    animation: vds-tabs-content-in var(--tabs-content-enter-duration)
+      var(--tabs-content-enter-ease);
+  }
+  @keyframes vds-tabs-content-in {
+    from {
+      opacity: 0;
+      transform: translateX(var(--tabs-content-enter-translate));
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .vds-tabs[data-orientation="vertical"]
+    .vds-tabs-content[data-state="active"] {
+    animation-name: vds-tabs-content-in-y;
+  }
+  @keyframes vds-tabs-content-in-y {
+    from {
+      opacity: 0;
+      transform: translateY(var(--tabs-content-enter-translate));
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Swipe state — inline transform wins over enter animation */
+  .vds-tabs-content[data-swiping="true"] {
+    animation: none !important;
+    transition: none !important;
+    will-change: transform;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Panels carousel (TabsPanels)
+   * All panels are force-mounted and laid out side-by-side in a track.
+   * The track is translated by -activeIndex * 100% via React state.
+   * Touch swipe temporarily overrides the transform, then clears it so
+   * the CSS transition animates to the next panel.
+   * ───────────────────────────────────────────── */
+  .vds-tabs-panels {
+    position: relative;
+    overflow: hidden;
+    padding-block-start: var(--tabs-panels-padding-block);
+  }
+  .vds-tabs-panels-track {
+    display: flex;
+    inline-size: 100%;
+    /* Baseline position: driven by --tabs-panels-tx which TabsPanels sets
+       from activeIndex. An inline `transform` (from the swipe hook) can
+       override this temporarily during a drag. When that inline transform
+       is cleared, the CSS transform below reasserts — so the track always
+       falls back to the correct baseline, not to translate(0). */
+    transform: translateX(var(--tabs-panels-tx, 0%));
+    transition: transform var(--tabs-panels-transition-duration)
+      var(--tabs-panels-transition-ease);
+  }
+  .vds-tabs-panels[data-swipeable="true"] .vds-tabs-panels-track {
+    touch-action: pan-y;
+  }
+  .vds-tabs-panels-slide {
+    flex: 0 0 100%;
+    min-inline-size: 0;
+  }
+  /* Force-mounted, non-active panels still carry `hidden` from Radix; show
+     them so they can participate in the carousel layout. */
+  .vds-tabs-panels-slide > .vds-tabs-content[hidden] {
+    display: block;
+  }
+  /* Inside the carousel the per-panel enter animation is replaced by the
+     track translation; disable the default fade/slide. */
+  .vds-tabs-panels .vds-tabs-content[data-state="active"],
+  .vds-tabs-panels .vds-tabs-content {
+    animation: none;
+    padding-block-start: 0;
+  }
+  /* Inactive panels inside the carousel shouldn't steal pointer events from
+     the visible one (e.g., links in an adjacent panel). They stay visible
+     so the neighbor can slide in during a swipe. */
+  .vds-tabs-panels-slide:not([data-active="true"]) {
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-tabs-panels-track {
+      transition: none;
+    }
+  }
+
   /* ─────────────────────────────────────────────
    * Sliding indicator (::after)
    * Driven by CSS vars set in useTabsIndicator.
@@ -380,16 +546,16 @@
     inset-block-end: calc(-1 * var(--tabs-list-border-width));
     inline-size: var(--tabs-indicator-w, 0);
     block-size: var(--tabs-indicator-thickness);
-    transform: translateX(var(--tabs-indicator-x, 0));
+    transform: translateX(var(--tabs-indicator-tx, 0));
   }
   .vds-tabs-list[data-variant="underline"][data-orientation="vertical"][data-animated="true"]::after {
     inset-block-start: 0;
-    inset-inline-end: calc(-1 * var(--tabs-list-border-width));
     inset-inline-start: auto;
+    inset-inline-end: calc(-1 * var(--tabs-list-border-width));
     inset-block-end: auto;
     inline-size: var(--tabs-indicator-thickness);
     block-size: var(--tabs-indicator-h, 0);
-    transform: translateY(var(--tabs-indicator-y, 0));
+    transform: translateY(var(--tabs-indicator-ty, 0));
   }
 
   /* line: top line (horizontal) / start line (vertical) */
@@ -398,7 +564,7 @@
     inset-block-start: calc(-1 * var(--tabs-list-border-width));
     inline-size: var(--tabs-indicator-w, 0);
     block-size: var(--tabs-indicator-thickness);
-    transform: translateX(var(--tabs-indicator-x, 0));
+    transform: translateX(var(--tabs-indicator-tx, 0));
   }
   .vds-tabs-list[data-variant="line"][data-orientation="vertical"][data-animated="true"]::after {
     inset-block-start: 0;
@@ -406,19 +572,21 @@
     inset-block-end: auto;
     inline-size: var(--tabs-indicator-thickness);
     block-size: var(--tabs-indicator-h, 0);
-    transform: translateY(var(--tabs-indicator-y, 0));
+    transform: translateY(var(--tabs-indicator-ty, 0));
   }
 
-  /* pills / segmented: full-bleed indicator behind active trigger */
+  /* pills / segmented: full-bleed indicator behind active trigger.
+     Anchored at the padding-box origin (inset 0) so translate(tx, ty) from
+     the hook places it on the active trigger directly. */
   .vds-tabs-list[data-variant="pills"][data-animated="true"]::after,
   .vds-tabs-list[data-variant="segmented"][data-animated="true"]::after {
-    inset-block-start: var(--tabs-list-padding-block);
-    inset-inline-start: var(--tabs-list-padding-inline);
+    inset-block-start: 0;
+    inset-inline-start: 0;
     inline-size: var(--tabs-indicator-w, 0);
     block-size: var(--tabs-indicator-h, 0);
     transform: translate(
-      calc(var(--tabs-indicator-x, 0) - var(--tabs-list-padding-inline)),
-      calc(var(--tabs-indicator-y, 0) - var(--tabs-list-padding-block))
+      var(--tabs-indicator-tx, 0),
+      var(--tabs-indicator-ty, 0)
     );
   }
   .vds-tabs-list[data-variant="segmented"][data-animated="true"]::after {
@@ -460,37 +628,110 @@
   }
 
   /* ─────────────────────────────────────────────
-   * Variant: boxed (browser tabs)
+   * Variant: boxed — Chrome-style with inverted curves.
+   * Active tab gets top+sides border matching the list's bottom border
+   * (the classic browser-tab look). Curves draw the join between the
+   * active tab's rounded corner and the list's horizontal border line.
    * ───────────────────────────────────────────── */
   .vds-tabs-list[data-variant="boxed"] {
     align-items: flex-end;
+    overflow: visible;
   }
   .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger {
+    border: 1px solid transparent;
+    border-block-end: 0;
+    border-start-start-radius: var(--tabs-boxed-curve);
+    border-start-end-radius: var(--tabs-boxed-curve);
     border-end-start-radius: 0;
     border-end-end-radius: 0;
     margin-block-end: calc(-1 * var(--tabs-list-border-width));
+    padding-block-end: var(--tabs-list-border-width);
   }
-  .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger[data-state="active"] {
-    border-block-end-color: var(--tabs-trigger-bg-active);
+  .vds-tabs-list[data-variant="boxed"]
+    .vds-tabs-trigger[data-state="active"] {
+    border-color: var(--tabs-boxed-border);
   }
 
-  /* Boxed vertical: round start-side corners, attach to inline-end border */
+  /* Inverted curves — visible only on active, with matching border line */
+  .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::before,
+  .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::after {
+    content: "";
+    position: absolute;
+    inline-size: var(--tabs-boxed-curve);
+    block-size: var(--tabs-boxed-curve);
+    inset-block-end: calc(-1 * var(--tabs-list-border-width));
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--tabs-trigger-transition-duration)
+      var(--tabs-trigger-transition-ease);
+  }
+  .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::before {
+    inset-inline-start: calc(-1 * var(--tabs-boxed-curve));
+    border-inline-end: 1px solid var(--tabs-boxed-border);
+    border-block-end: 1px solid var(--tabs-boxed-border);
+    border-end-end-radius: var(--tabs-boxed-curve);
+    box-shadow: calc(var(--tabs-boxed-curve) / 2)
+      calc(var(--tabs-boxed-curve) / 2) 0 0 var(--tabs-boxed-bg);
+  }
+  .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::after {
+    inset-inline-end: calc(-1 * var(--tabs-boxed-curve));
+    border-inline-start: 1px solid var(--tabs-boxed-border);
+    border-block-end: 1px solid var(--tabs-boxed-border);
+    border-end-start-radius: var(--tabs-boxed-curve);
+    box-shadow: calc(-1 * var(--tabs-boxed-curve) / 2)
+      calc(var(--tabs-boxed-curve) / 2) 0 0 var(--tabs-boxed-bg);
+  }
+  .vds-tabs-list[data-variant="boxed"]
+    .vds-tabs-trigger[data-state="active"]::before,
+  .vds-tabs-list[data-variant="boxed"]
+    .vds-tabs-trigger[data-state="active"]::after {
+    opacity: 1;
+  }
+  /* RTL: flip curve border sides so they trace the tab's outer corners. */
+  :dir(rtl) .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::before {
+    border-inline-end: 0;
+    border-inline-start: 1px solid var(--tabs-boxed-border);
+  }
+  :dir(rtl) .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::after {
+    border-inline-start: 0;
+    border-inline-end: 1px solid var(--tabs-boxed-border);
+  }
+
+  /* Boxed vertical — curves attach to inline-end side */
   .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"] {
     align-items: stretch;
   }
   .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"]
     .vds-tabs-trigger {
-    border-start-start-radius: var(--tabs-trigger-radius);
-    border-end-start-radius: var(--tabs-trigger-radius);
+    border-start-start-radius: var(--tabs-boxed-curve);
+    border-end-start-radius: var(--tabs-boxed-curve);
     border-start-end-radius: 0;
     border-end-end-radius: 0;
     margin-block-end: 0;
     margin-inline-end: calc(-1 * var(--tabs-list-border-width));
+    padding-block-end: 0;
+    padding-inline-end: var(--tabs-list-border-width);
   }
   .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"]
-    .vds-tabs-trigger[data-state="active"] {
-    border-block-end-color: var(--tabs-trigger-border-color-active);
-    border-inline-end-color: var(--tabs-trigger-bg-active);
+    .vds-tabs-trigger::before {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    inset-block-end: auto;
+    inset-block-start: calc(-1 * var(--tabs-boxed-curve));
+    border-end-end-radius: 0;
+    border-start-end-radius: var(--tabs-boxed-curve);
+    box-shadow: calc(var(--tabs-boxed-curve) / 2)
+      calc(-1 * var(--tabs-boxed-curve) / 2) 0 0 var(--tabs-boxed-bg);
+  }
+  .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"]
+    .vds-tabs-trigger::after {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    inset-block-end: calc(-1 * var(--tabs-boxed-curve));
+    border-end-start-radius: 0;
+    border-start-end-radius: var(--tabs-boxed-curve);
+    box-shadow: calc(var(--tabs-boxed-curve) / 2)
+      calc(var(--tabs-boxed-curve) / 2) 0 0 var(--tabs-boxed-bg);
   }
 
   /* ─────────────────────────────────────────────
@@ -504,6 +745,19 @@
   }
   .vds-tabs-list[data-orientation="vertical"] .vds-tabs-trigger {
     justify-content: flex-start;
+    /* In vertical mode, long labels wrap to the next line instead of
+       forcing a horizontal scroll. Height expands to fit content. */
+    white-space: normal;
+    text-align: start;
+    block-size: auto;
+    min-block-size: var(--tabs-trigger-height);
+    padding-block: var(--vds-space-2, 0.5rem);
+    inline-size: 100%;
+  }
+  .vds-tabs-list[data-orientation="vertical"] {
+    max-inline-size: none;
+    overflow-x: visible;
+    overflow-y: auto;
   }
   /* line variant in vertical: swap to inline-start border */
   .vds-tabs-list[data-variant="line"][data-orientation="vertical"] {
@@ -556,8 +810,13 @@
    * ───────────────────────────────────────────── */
   @media (prefers-reduced-motion: reduce) {
     .vds-tabs-list::after,
-    .vds-tabs-trigger {
+    .vds-tabs-trigger,
+    .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::before,
+    .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::after {
       transition: none;
+    }
+    .vds-tabs-content[data-state="active"] {
+      animation: none;
     }
   }
 }

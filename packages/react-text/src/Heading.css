@@ -1,0 +1,37 @@
+@import "./Heading.tokens.css";
+
+@layer design-system.components {
+  .vds-heading {
+    margin: 0;
+
+    font-family: var(--heading-font-family);
+    font-size: var(--heading-font-size);
+    line-height: var(--heading-line-height);
+    font-weight: var(--heading-font-weight);
+    letter-spacing: var(--heading-letter-spacing);
+    color: var(--heading-color);
+    text-align: var(--heading-align);
+
+    /* Persian/Arabic glyphs need slightly more headroom — RTL reset */
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Truncate */
+  .vds-heading[data-truncate="true"] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-inline-size: 0;
+  }
+
+  /* Wrap mode */
+  .vds-heading[data-wrap="balance"] { text-wrap: balance; }
+  .vds-heading[data-wrap="pretty"]  { text-wrap: pretty; }
+  .vds-heading[data-wrap="nowrap"]  { white-space: nowrap; }
+
+  /* RTL — Vazirmatn looks denser than Inter at large display sizes;
+     loosen tracking so it doesn't feel cramped. */
+  .vds-heading:dir(rtl) {
+    --heading-letter-spacing: var(--vds-tracking-normal, 0);
+  }
+}

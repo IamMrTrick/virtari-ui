@@ -1,13 +1,20 @@
 @layer design-system.components {
-  .vds-sidebar {
-    --sidebar-side-width: 16rem;
-    --sidebar-content-min: 60%;
-    --sidebar-gap: var(--vds-space-4, 1rem);
+  /*
+   * NOTE: class is `.vds-split`, not `.vds-sidebar`.
+   * The component is still exported as `Sidebar` for backwards compat,
+   * but the CSS class was renamed to avoid colliding with the app-chrome
+   * sidebar in `@virtari/react-sidebar`. That package owns the `.vds-sidebar`
+   * namespace — this utility lives under `.vds-split`.
+   */
+  .vds-split {
+    --split-side-width: 16rem;
+    --split-content-min: 60%;
+    --split-gap: var(--vds-space-4, 1rem);
   }
 
-  .vds-sidebar[data-gap="xs"] { --sidebar-gap: var(--vds-space-1, 0.25rem); }
-  .vds-sidebar[data-gap="sm"] { --sidebar-gap: var(--vds-space-2, 0.5rem); }
-  .vds-sidebar[data-gap="md"] { --sidebar-gap: var(--vds-space-4, 1rem); }
-  .vds-sidebar[data-gap="lg"] { --sidebar-gap: var(--vds-space-6, 1.5rem); }
-  .vds-sidebar[data-gap="xl"] { --sidebar-gap: var(--vds-space-8, 2rem); }
+  .vds-split[data-gap="xs"] { --split-gap: var(--vds-space-1, 0.25rem); }
+  .vds-split[data-gap="sm"] { --split-gap: var(--vds-space-2, 0.5rem); }
+  .vds-split[data-gap="md"] { --split-gap: var(--vds-space-4, 1rem); }
+  .vds-split[data-gap="lg"] { --split-gap: var(--vds-space-6, 1.5rem); }
+  .vds-split[data-gap="xl"] { --split-gap: var(--vds-space-8, 2rem); }
 }

@@ -27,15 +27,24 @@ export { ScrollAreaPage } from "./ScrollAreaPage";
 export { AccordionPage } from "./AccordionPage";
 export { CollapsiblePage } from "./CollapsiblePage";
 export { TextareaPage } from "./TextareaPage";
+export { BreadcrumbPage } from "./BreadcrumbPage";
 export { SkeletonPage } from "./SkeletonPage";
 export { SpinnerPage } from "./SpinnerPage";
 export { CardPage } from "./CardPage";
 export { KbdPage } from "./KbdPage";
+export { ChipPage } from "./ChipPage";
 export { CompositionPage } from "./CompositionPage";
 export { LayoutPage } from "./LayoutPage";
+export { HeaderPage } from "./HeaderPage";
+export { NavPage } from "./NavPage";
+export { SidebarPage } from "./SidebarPage";
 export { DatePickerPage } from "./DatePickerPage";
 export { DataTablePage } from "./DataTablePage";
 export { UtilitiesPage } from "./UtilitiesPage";
+export { RTLPage } from "./RTLPage";
+export { IconsPage } from "./IconsPage";
+export { HeadingPage } from "./HeadingPage";
+export { TextPage } from "./TextPage";
 
 export const PAGE_META: Record<string, { title: string; description: string }> = {
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },
@@ -74,6 +83,21 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   skeleton: { title: "Skeleton", description: "Loading placeholder." },
   spinner: { title: "Spinner", description: "Loading indicator." },
   kbd: { title: "Kbd", description: "Keyboard shortcut badge." },
+  chip: {
+    title: "Chip",
+    description:
+      "Compact pill for tags, filters, and metadata — 6 variants, 3 appearances, 3 sizes, with icon/avatar slot and removable action.",
+  },
+  heading: {
+    title: "Heading",
+    description:
+      "Semantic h1–h6 with decoupled visual size — 9-step display scale, weight, tone, and balance/truncate wrap.",
+  },
+  text: {
+    title: "Text",
+    description:
+      "Paragraph and inline copy — 9-step size scale, semantic tones, alignment, leading override, and truncate.",
+  },
   composition: {
     title: "Composition",
     description: "Layout primitives — Stack, Cluster, Grid, Sidebar, Center.",
@@ -83,10 +107,40 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     description:
       "Opt-in CSS utility classes for spacing, flex, grid, sizing, position, and z-index — all token-driven, logical-property-first, with sm/md/lg/xl/2xl responsive variants.",
   },
+  icons: {
+    title: "Icons",
+    description:
+      "Tabler Icons (MIT) — outline + filled, re-exported from @virtari/react-icons. Searchable, copyable, with live size and stroke controls.",
+  },
+  rtl: {
+    title: "RTL",
+    description:
+      "Right-to-left support and Vazirmatn typography — every component audited for logical properties and direction-aware animations.",
+  },
   layout: {
     title: "Page Layout",
     description:
       "Section → Row → Col — semantic page-structure primitives tied to the Layout token system.",
+  },
+  header: {
+    title: "Header",
+    description:
+      "Three-row header primitive — top / main / bottom. Per-row sticky modes (always / smart / collapse), transparent, center, and coordinated offset stacking.",
+  },
+  nav: {
+    title: "Navigation",
+    description:
+      "One Nav, many shapes — sidebar, menubar, mega menu. W3C disclosure pattern, inline or popover submenus via Floating UI, auto aria-current, four variants.",
+  },
+  sidebar: {
+    title: "Sidebar",
+    description:
+      "App-chrome sidebar — full-height or below-header modes, rail collapse, controlled / uncontrolled state, context-wired trigger, and full RTL via logical properties.",
+  },
+  breadcrumb: {
+    title: "Breadcrumb",
+    description:
+      "Semantic <nav> + <ol> with aria-current, schema.org JSON-LD, overflow collapse, four separator presets, and full RTL support.",
   },
   "date-picker": {
     title: "Date Picker",

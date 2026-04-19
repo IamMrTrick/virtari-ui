@@ -10,6 +10,9 @@ export type {
   SectionGap,
 } from "./Section";
 
+export { Main } from "./Main";
+export type { MainProps } from "./Main";
+
 export { Row } from "./Row";
 export type {
   RowProps,

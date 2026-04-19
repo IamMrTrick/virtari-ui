@@ -1,3 +1,4 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import { jsxs, jsx } from 'react/jsx-runtime';

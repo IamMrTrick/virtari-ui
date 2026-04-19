@@ -12,6 +12,15 @@ export default defineConfig({
       "@virtari/react-layout": fileURLToPath(
         new URL("../../packages/react-layout/dist/index.js", import.meta.url),
       ),
+      "@virtari/react-header": fileURLToPath(
+        new URL("../../packages/react-header/dist/index.js", import.meta.url),
+      ),
+      "@virtari/react-nav": fileURLToPath(
+        new URL("../../packages/react-nav/dist/index.js", import.meta.url),
+      ),
+      "@virtari/react-sidebar": fileURLToPath(
+        new URL("../../packages/react-sidebar/dist/index.js", import.meta.url),
+      ),
       "@virtari/utils": fileURLToPath(
         new URL("../../packages/utils/dist/index.js", import.meta.url),
       ),

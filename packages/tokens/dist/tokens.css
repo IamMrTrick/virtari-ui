@@ -1,3 +1,6 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap");
+/* Primary sans font: Vazirmatn (Persian/Arabic + Latin) with Inter fallback for Latin polish. */
 /*
  * Colors — four-tier architecture.
  *
@@ -1312,7 +1315,8 @@
     --vds-font-weight-bold: 700;
 
     /* ─── Font families ─── */
-    --vds-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --vds-font-sans: "Vazirmatn", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --vds-font-latin: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
     --vds-font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
 
     /* ─── Font sizes ─── */
@@ -1673,6 +1677,15 @@
     --vds-row-cols-6:  6;
     --vds-row-cols-8:  8;
     --vds-row-cols-12: 12;
+
+    /* Sidebar width ramp — expanded state. Aligned with common app chrome widths. */
+    --vds-sidebar-width-sm:   12rem;   /* 192px — compact, icon+short-label */
+    --vds-sidebar-width-md:   16rem;   /* 256px — default app chrome       */
+    --vds-sidebar-width-lg:   20rem;   /* 320px — comfortable, nested nav  */
+    --vds-sidebar-width-xl:   24rem;   /* 384px — wide, file-tree style    */
+
+    /* Sidebar rail (collapsed icon-only) — sized to fit a 1.75rem icon + comfortable hit target */
+    --vds-sidebar-rail-width: 3.5rem;  /* 56px */
   }
 }
 @layer tokens {
@@ -1700,6 +1713,19 @@
     --vds-row-row-gap:  var(--vds-row-gap-md);
     --vds-row-cols:     var(--vds-row-cols-12);
     --vds-row-min-col:  16rem;
+
+    /* Sidebar */
+    --vds-sidebar-width: var(--vds-sidebar-width-md);
+    --vds-sidebar-rail:  var(--vds-sidebar-rail-width);
+    --vds-sidebar-gap:   var(--vds-space-1);
+
+    /*
+     * App chrome row — shared height between a page's Header row and the
+     * Sidebar's header / footer. When both consume this token they stay
+     * visually aligned (sidebar brand sits level with the header bar).
+     * Override on a chrome-scoped wrapper (e.g. `.docs-app`) to coordinate.
+     */
+    --vds-app-chrome-row: var(--vds-size-lg);
   }
 }
 @layer tokens {
@@ -1727,5 +1753,10 @@
     --vds-row-row-gap-default: var(--vds-row-row-gap);
     --vds-row-cols-default:    var(--vds-row-cols);
     --vds-row-min-col-default: var(--vds-row-min-col);
+
+    /* Sidebar */
+    --vds-sidebar-width-default: var(--vds-sidebar-width);
+    --vds-sidebar-rail-default:  var(--vds-sidebar-rail);
+    --vds-sidebar-gap-default:   var(--vds-sidebar-gap);
   }
 }

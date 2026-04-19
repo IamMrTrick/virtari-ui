@@ -28,7 +28,7 @@ Wrap your app in `I18nProvider` once (from `@react-aria/i18n`) so locale and dir
 - `DatePicker` — single date, input + popover calendar.
 - `DateRangePicker` — start / end with hover-preview highlight.
 - `DateField` — segmented date-only input, no popover (form friendly).
-- `TimeField` — segmented time input (12h / 24h, optional seconds).
+- `TimeField` — segmented time input with a snapping wheel picker (12h / 24h, optional seconds and milliseconds).
 - `Calendar` / `RangeCalendar` — standalone panels.
 
 Every primitive supports: `size` (`2xs`–`2xl` — shared ramp with Button/Input/Select), `appearance` (`soft`|`outline`|`ghost`|`filled`), `invalid`, keyboard a11y, RTL, min/max, and disabled dates.

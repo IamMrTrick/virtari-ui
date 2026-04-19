@@ -127,9 +127,15 @@ interface TimeFieldProps {
     invalid?: boolean;
     locale?: string;
     className?: string;
+    /** Shows the native-like wheel picker when the field is clicked. */
+    showPicker?: boolean;
+    /** Adds a millisecond wheel. */
+    showMilliseconds?: boolean;
+    /** Millisecond wheel increment. Defaults to 10. */
+    millisecondStep?: number;
     ref?: Ref<HTMLDivElement>;
 }
-declare function TimeField({ size, appearance, invalid, locale, label, description, errorMessage, className, ref, ...props }: TimeFieldProps): react_jsx_runtime.JSX.Element;
+declare function TimeField({ size, appearance, invalid, locale, label, description, errorMessage, className, showPicker, showMilliseconds, millisecondStep, ref, ...props }: TimeFieldProps): react_jsx_runtime.JSX.Element;
 
 interface DatePickerProps {
     value?: DateValue | null;
@@ -147,6 +153,9 @@ interface DatePickerProps {
     hourCycle?: 12 | 24;
     hideTimeZone?: boolean;
     shouldCloseOnSelect?: boolean;
+    showTimePicker?: boolean;
+    showMilliseconds?: boolean;
+    millisecondStep?: number;
     autoFocus?: boolean;
     name?: string;
     label?: ReactNode;
@@ -183,6 +192,9 @@ interface DateRangePickerProps {
     hourCycle?: 12 | 24;
     hideTimeZone?: boolean;
     shouldCloseOnSelect?: boolean;
+    showTimePicker?: boolean;
+    showMilliseconds?: boolean;
+    millisecondStep?: number;
     allowsNonContiguousRanges?: boolean;
     autoFocus?: boolean;
     startName?: string;

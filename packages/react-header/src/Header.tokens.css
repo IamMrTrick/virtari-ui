@@ -1,0 +1,104 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Root tokens
+   *    The header root carries the sticky-stack state:
+   *    per-slot heights (updated by React via ResizeObserver)
+   *    and an external offset (user-provided).
+   * ───────────────────────────────────────────── */
+  .vds-header {
+    --header-background: transparent;
+    --header-text-color: inherit;
+
+    /* Sticky stacking */
+    --header-sticky-offset: 0px;
+    --header-top-sticky-height: 0px;
+    --header-main-sticky-height: 0px;
+    --header-bottom-sticky-height: 0px;
+
+    /* Z-index stack — top row sits above main, which sits above bottom.
+       Above typical content (10..20) but below modal / toast (40+). */
+    --header-z-top:    32;
+    --header-z-main:   31;
+    --header-z-bottom: 30;
+
+    /* Motion */
+    --header-transition-duration: var(--vds-duration-base, 200ms);
+    --header-transition-easing:   var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  /* ─────────────────────────────────────────────
+   * 2. Row — base tokens
+   * ───────────────────────────────────────────── */
+  .vds-header__row {
+    --row-block-size:      var(--vds-app-chrome-row, var(--vds-size-lg, 2.75rem));
+    --row-padding-inline:  var(--vds-section-gutter-md, 1.5rem);
+    --row-section-gap:     var(--vds-space-4, 1rem);
+    --row-container-width: var(--vds-container-width-default, 80rem);
+
+    --row-background:     var(--vds-color-surface, #ffffff);
+    --row-text-color:     var(--vds-color-text, #111827);
+    --row-border-color:   var(--vds-color-border-muted, #e5e7eb);
+    --row-border-block-end: 1px solid var(--row-border-color);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 3. Row height presets
+   * ───────────────────────────────────────────── */
+  .vds-header__row[data-height="sm"] { --row-block-size: 2.5rem;  }
+  .vds-header__row[data-height="md"] { --row-block-size: 3.5rem;  }
+  .vds-header__row[data-height="lg"] { --row-block-size: 4rem;    }
+  .vds-header__row[data-height="xl"] { --row-block-size: 5rem;    }
+
+  /* ─────────────────────────────────────────────
+   * 4. Row background presets
+   * ───────────────────────────────────────────── */
+  .vds-header__row[data-background="none"] {
+    --row-background: transparent;
+    --row-border-block-end: 0;
+  }
+  .vds-header__row[data-background="subtle"]   { --row-background: var(--vds-color-bg-subtle, #f9fafb); }
+  .vds-header__row[data-background="muted"]    { --row-background: var(--vds-color-bg-muted, #f3f4f6); }
+  .vds-header__row[data-background="emphasis"] {
+    --row-background: var(--vds-color-bg-emphasis, var(--vds-color-text, #111827));
+    --row-text-color: var(--vds-color-on-emphasis, var(--vds-color-surface, #ffffff));
+    --row-border-color: transparent;
+  }
+
+  /* Transparent mode — unconditionally clears background + border,
+     wins over data-background. */
+  .vds-header__row[data-transparent="true"] {
+    --row-background: transparent;
+    --row-border-block-end: 0;
+  }
+
+  /* ─────────────────────────────────────────────
+   * 5. Inline gutter presets
+   * ───────────────────────────────────────────── */
+  .vds-header__row[data-gutter="none"] { --row-padding-inline: 0; }
+  .vds-header__row[data-gutter="xs"]   { --row-padding-inline: var(--vds-section-gutter-xs, 0.75rem); }
+  .vds-header__row[data-gutter="sm"]   { --row-padding-inline: var(--vds-section-gutter-sm, 1rem); }
+  .vds-header__row[data-gutter="md"]   { --row-padding-inline: var(--vds-section-gutter-md, 1.5rem); }
+  .vds-header__row[data-gutter="lg"]   { --row-padding-inline: var(--vds-section-gutter-lg, 2rem); }
+  .vds-header__row[data-gutter="xl"]   { --row-padding-inline: var(--vds-section-gutter-xl, 3rem); }
+
+  /* ─────────────────────────────────────────────
+   * 6. Container width presets (max-inline-size of inner row)
+   * ───────────────────────────────────────────── */
+  .vds-header__row[data-width="xs"]   { --row-container-width: var(--vds-container-width-xs, 20rem); }
+  .vds-header__row[data-width="sm"]   { --row-container-width: var(--vds-container-width-sm, 40rem); }
+  .vds-header__row[data-width="md"]   { --row-container-width: var(--vds-container-width-md, 48rem); }
+  .vds-header__row[data-width="lg"]   { --row-container-width: var(--vds-container-width-lg, 64rem); }
+  .vds-header__row[data-width="xl"]   { --row-container-width: var(--vds-container-width-xl, 80rem); }
+  .vds-header__row[data-width="2xl"]  { --row-container-width: var(--vds-container-width-2xl, 96rem); }
+  .vds-header__row[data-width="full"] { --row-container-width: 100%; }
+
+  /* ─────────────────────────────────────────────
+   * 7. Section gap presets
+   * ───────────────────────────────────────────── */
+  .vds-header__row[data-gap="none"] { --row-section-gap: 0; }
+  .vds-header__row[data-gap="xs"]   { --row-section-gap: var(--vds-space-2, 0.5rem); }
+  .vds-header__row[data-gap="sm"]   { --row-section-gap: var(--vds-space-3, 0.75rem); }
+  .vds-header__row[data-gap="md"]   { --row-section-gap: var(--vds-space-4, 1rem); }
+  .vds-header__row[data-gap="lg"]   { --row-section-gap: var(--vds-space-6, 1.5rem); }
+  .vds-header__row[data-gap="xl"]   { --row-section-gap: var(--vds-space-8, 2rem); }
+}

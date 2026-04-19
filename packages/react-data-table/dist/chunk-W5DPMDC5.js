@@ -1,9 +1,11 @@
+"use client";
 import { createContext, forwardRef, useMemo, memo, useCallback, useState, useEffect, useContext, useRef, useId } from 'react';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { flexRender, useReactTable, getFacetedUniqueValues, getFacetedRowModel, getGroupedRowModel, getExpandedRowModel, getPaginationRowModel, getFilteredRowModel, getSortedRowModel, getCoreRowModel } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Checkbox } from '@virtari/react-checkbox';
 import { cn } from '@virtari/utils';
+import { IconArrowsSort, IconChevronUp, IconChevronRight } from '@virtari/react-icons';
 
 // src/DataTableContext.tsx
 var DataTableCtx = createContext(null);
@@ -1285,41 +1287,28 @@ var DataTableSortTrigger = forwardRef(function DataTableSortTrigger2({ header, c
   );
 });
 function DataTableSortIcon({ sort }) {
+  if (sort === void 0) {
+    return /* @__PURE__ */ jsx(
+      IconArrowsSort,
+      {
+        className: "vds-data-table-sort-icon",
+        "data-direction": "none",
+        size: 12,
+        stroke: 1.75,
+        "aria-hidden": true,
+        focusable: false
+      }
+    );
+  }
   return /* @__PURE__ */ jsx(
-    "svg",
+    IconChevronUp,
     {
       className: "vds-data-table-sort-icon",
-      "data-direction": sort ?? "none",
-      width: "12",
-      height: "12",
-      viewBox: "0 0 12 12",
-      fill: "none",
-      "aria-hidden": "true",
-      children: sort === void 0 ? /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            d: "M6 2.5L3 5.5h6L6 2.5Z",
-            fill: "currentColor",
-            opacity: "0.5"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            d: "M6 9.5L9 6.5H3L6 9.5Z",
-            fill: "currentColor",
-            opacity: "0.5"
-          }
-        )
-      ] }) : /* @__PURE__ */ jsx(
-        "path",
-        {
-          d: "M6 2.5L9 6H3L6 2.5Z",
-          fill: "currentColor",
-          transform: sort === "desc" ? "rotate(180 6 6)" : void 0
-        }
-      )
+      "data-direction": sort,
+      size: 12,
+      stroke: 2,
+      "aria-hidden": true,
+      focusable: false
     }
   );
 }
@@ -1503,24 +1492,13 @@ var DataTableRowExpandTrigger = forwardRef(function DataTableRowExpandTrigger2({
       },
       ...props,
       children: children ?? /* @__PURE__ */ jsx(
-        "svg",
+        IconChevronRight,
         {
-          width: "10",
-          height: "10",
-          viewBox: "0 0 10 10",
-          "aria-hidden": "true",
           className: "vds-data-table-row-expand-icon",
-          children: /* @__PURE__ */ jsx(
-            "path",
-            {
-              d: "M3 2L6 5L3 8",
-              stroke: "currentColor",
-              strokeWidth: "1.5",
-              fill: "none",
-              strokeLinecap: "round",
-              strokeLinejoin: "round"
-            }
-          )
+          size: 10,
+          stroke: 1.75,
+          "aria-hidden": true,
+          focusable: false
         }
       )
     }

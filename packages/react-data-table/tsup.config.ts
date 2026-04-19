@@ -1,4 +1,5 @@
 import { defineConfig } from "tsup";
+import prependUseClient from "../../scripts/prepend-use-client.mjs";
 
 export default defineConfig({
   entry: ["src/index.ts", "src/index.dnd.ts"],
@@ -14,4 +15,5 @@ export default defineConfig({
     "@dnd-kit/utilities",
   ],
   treeshake: true,
+  onSuccess: prependUseClient,
 });

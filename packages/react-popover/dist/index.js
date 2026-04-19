@@ -1,3 +1,4 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { jsx } from 'react/jsx-runtime';

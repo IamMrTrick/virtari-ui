@@ -1,3 +1,4 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import { jsxs, jsx } from 'react/jsx-runtime';

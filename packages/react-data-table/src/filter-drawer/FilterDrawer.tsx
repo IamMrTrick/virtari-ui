@@ -10,6 +10,7 @@ import {
 import { Input } from "@virtari/react-input";
 import { Switch } from "@virtari/react-switch";
 import { cn } from "@virtari/utils";
+import { IconChevronLeft } from "@virtari/react-icons";
 
 import { FilterConfigPanel } from "./FilterConfigPanel";
 import type {
@@ -151,9 +152,7 @@ export function DataTableFilterDrawer({
                 aria-label="Back"
                 className="vds-data-table-filter-drawer-back"
               >
-                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none">
-                  <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <IconChevronLeft size={14} stroke={1.75} aria-hidden focusable={false} />
               </button>
             )}
             <DrawerTitle>{configField ? configField.label : title}</DrawerTitle>

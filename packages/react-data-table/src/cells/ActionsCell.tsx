@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@virtari/react-dropdown-menu";
 import { cn } from "@virtari/utils";
+import { IconDots } from "@virtari/react-icons";
 
 export interface ActionItem {
   id: string;
@@ -37,11 +38,7 @@ export function ActionsCell({ items, trigger, className }: ActionsCellProps) {
           className={cn("vds-data-table-actions-cell-trigger", className)}
         >
           {trigger ?? (
-            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="currentColor">
-              <circle cx="3" cy="7" r="1.25" />
-              <circle cx="7" cy="7" r="1.25" />
-              <circle cx="11" cy="7" r="1.25" />
-            </svg>
+            <IconDots size={14} stroke={1.75} aria-hidden focusable={false} />
           )}
         </button>
       </DropdownMenuTrigger>

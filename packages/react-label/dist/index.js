@@ -1,3 +1,4 @@
+"use client";
 import { cn } from '@virtari/utils';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { jsx } from 'react/jsx-runtime';

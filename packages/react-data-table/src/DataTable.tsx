@@ -29,6 +29,11 @@ import type {
 import { flexRender } from "@tanstack/react-table";
 import { Checkbox } from "@virtari/react-checkbox";
 import { cn } from "@virtari/utils";
+import {
+  IconArrowsSort,
+  IconChevronRight,
+  IconChevronUp,
+} from "@virtari/react-icons";
 
 import {
   DataTableProvider,
@@ -1155,37 +1160,27 @@ interface DataTableSortIconProps {
 }
 
 function DataTableSortIcon({ sort }: DataTableSortIconProps) {
+  if (sort === undefined) {
+    return (
+      <IconArrowsSort
+        className="vds-data-table-sort-icon"
+        data-direction="none"
+        size={12}
+        stroke={1.75}
+        aria-hidden
+        focusable={false}
+      />
+    );
+  }
   return (
-    <svg
+    <IconChevronUp
       className="vds-data-table-sort-icon"
-      data-direction={sort ?? "none"}
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      fill="none"
-      aria-hidden="true"
-    >
-      {sort === undefined ? (
-        <>
-          <path
-            d="M6 2.5L3 5.5h6L6 2.5Z"
-            fill="currentColor"
-            opacity="0.5"
-          />
-          <path
-            d="M6 9.5L9 6.5H3L6 9.5Z"
-            fill="currentColor"
-            opacity="0.5"
-          />
-        </>
-      ) : (
-        <path
-          d="M6 2.5L9 6H3L6 2.5Z"
-          fill="currentColor"
-          transform={sort === "desc" ? "rotate(180 6 6)" : undefined}
-        />
-      )}
-    </svg>
+      data-direction={sort}
+      size={12}
+      stroke={2}
+      aria-hidden
+      focusable={false}
+    />
   );
 }
 
@@ -1492,22 +1487,13 @@ export const DataTableRowExpandTrigger = forwardRef<
       {...props}
     >
       {children ?? (
-        <svg
-          width="10"
-          height="10"
-          viewBox="0 0 10 10"
-          aria-hidden="true"
+        <IconChevronRight
           className="vds-data-table-row-expand-icon"
-        >
-          <path
-            d="M3 2L6 5L3 8"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+          size={10}
+          stroke={1.75}
+          aria-hidden
+          focusable={false}
+        />
       )}
     </button>
   );

@@ -6,6 +6,7 @@ import {
   PopoverTrigger,
 } from "@virtari/react-popover";
 import { cn } from "@virtari/utils";
+import { IconFilter, IconFilterFilled } from "@virtari/react-icons";
 
 import { useColumnFilter } from "../use-column-filter";
 
@@ -38,21 +39,11 @@ export function FilterPopover<TData, TValue>({
           className={cn("vds-data-table-filter-trigger", className)}
         >
           {trigger ?? (
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M1.5 2h9L7 6.5V10l-2 1V6.5L1.5 2Z"
-                stroke="currentColor"
-                strokeWidth="1.25"
-                strokeLinejoin="round"
-                fill={isActive ? "currentColor" : "none"}
-              />
-            </svg>
+            isActive ? (
+              <IconFilterFilled size={12} stroke={1.5} aria-hidden focusable={false} />
+            ) : (
+              <IconFilter size={12} stroke={1.5} aria-hidden focusable={false} />
+            )
           )}
         </button>
       </PopoverTrigger>

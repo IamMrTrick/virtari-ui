@@ -78,6 +78,27 @@
     --tabs-content-focus-ring-width: 2px;
     --tabs-content-focus-ring-offset: 2px;
     --tabs-content-focus-ring-radius: var(--vds-radius-element, 0.5rem);
+
+    /* Enter animation when a panel becomes active */
+    --tabs-content-enter-duration: var(--vds-duration-fast, 180ms);
+    --tabs-content-enter-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    --tabs-content-enter-translate: 0.5rem;
+  }
+
+  /* ── Root (Tabs) wrapper ── */
+  .vds-tabs {
+    --tabs-root-gap: var(--vds-space-4, 1rem);
+    --tabs-root-separator-color: var(--vds-color-border-muted, #e5e7eb);
+  }
+
+  /* ── Panels carousel ── */
+  .vds-tabs-panels {
+    --tabs-panels-transition-duration: 320ms;
+    --tabs-panels-transition-ease: var(
+      --vds-ease-out,
+      cubic-bezier(0.2, 0.9, 0.25, 1)
+    );
+    --tabs-panels-padding-block: var(--vds-space-4, 1rem);
   }
 
   /* ─────────────────────────────────────────────
@@ -118,8 +139,10 @@
   }
   .vds-tabs-list[data-variant="pills"] .vds-tabs-trigger {
     --tabs-trigger-radius: var(--vds-radius-badge, 9999px);
+    --tabs-trigger-bg-active: var(--vds-color-primary-emphasis, #6366f1);
     --tabs-trigger-color-active: var(--vds-color-on-primary, #ffffff);
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
+    --tabs-trigger-color-hover: var(--vds-color-text, #111827);
   }
 
   /* ── segmented ── */
@@ -135,21 +158,24 @@
   }
   .vds-tabs-list[data-variant="segmented"] .vds-tabs-trigger {
     --tabs-trigger-radius: calc(var(--vds-radius-element, 0.5rem) - 0.125rem);
+    --tabs-trigger-bg-active: var(--vds-color-surface, #ffffff);
     --tabs-trigger-color-active: var(--vds-color-text, #111827);
     --tabs-trigger-shadow-active: var(--vds-shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
   }
 
-  /* ── boxed (browser-tab) ── */
+  /* ── boxed (Chrome-style browser tabs with inverted curves) ── */
   .vds-tabs-list[data-variant="boxed"] {
-    --tabs-list-gap: var(--vds-space-0-5, 0.125rem);
+    --tabs-list-gap: 0;
     --tabs-list-border-width: 1px;
+    /* Curve radius — also used for top corners of each tab. */
+    --tabs-boxed-curve: 0.75rem;
+    --tabs-boxed-bg: var(--vds-color-surface, #ffffff);
+    --tabs-boxed-border: var(--vds-color-border, #d1d5db);
   }
   .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger {
-    --tabs-trigger-border-width: 1px;
-    --tabs-trigger-radius: min(var(--vds-radius-element, 0.5rem), 0.5rem);
+    --tabs-trigger-radius: var(--tabs-boxed-curve);
     --tabs-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
-    --tabs-trigger-bg-active: var(--vds-color-surface, #ffffff);
-    --tabs-trigger-border-color-active: var(--vds-color-border, #d1d5db);
+    --tabs-trigger-bg-active: var(--tabs-boxed-bg);
     --tabs-trigger-color-active: var(--vds-color-text, #111827);
   }
 

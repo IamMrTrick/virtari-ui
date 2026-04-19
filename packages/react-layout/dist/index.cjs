@@ -41,6 +41,29 @@ function Section({
     }
   );
 }
+function Main({
+  id = "main",
+  tabIndex = -1,
+  padding = "none",
+  gutter = "none",
+  contained = true,
+  className,
+  ...rest
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    Section,
+    {
+      as: "main",
+      id,
+      tabIndex,
+      padding,
+      gutter,
+      contained,
+      className: utils.cn("vds-main", className),
+      ...rest
+    }
+  );
+}
 function Row({
   as: Tag = "div",
   mode = "grid",
@@ -234,16 +257,16 @@ function Sidebar({
 }) {
   const mergedStyle = { ...style };
   if (sideWidth) {
-    mergedStyle["--sidebar-side-width"] = sideWidth;
+    mergedStyle["--split-side-width"] = sideWidth;
   }
   if (contentMin) {
-    mergedStyle["--sidebar-content-min"] = contentMin;
+    mergedStyle["--split-content-min"] = contentMin;
   }
   return /* @__PURE__ */ jsxRuntime.jsx(
     Tag,
     {
       ref,
-      className: utils.cn("vds-sidebar", className),
+      className: utils.cn("vds-split", className),
       "data-side": side,
       "data-gap": gap,
       style: mergedStyle,
@@ -282,6 +305,7 @@ exports.Cluster = Cluster;
 exports.Col = Col;
 exports.Container = Container;
 exports.Grid = Grid;
+exports.Main = Main;
 exports.Row = Row;
 exports.Section = Section;
 exports.Sidebar = Sidebar;

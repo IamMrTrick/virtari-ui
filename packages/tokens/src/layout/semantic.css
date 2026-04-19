@@ -23,5 +23,18 @@
     --vds-row-row-gap:  var(--vds-row-gap-md);
     --vds-row-cols:     var(--vds-row-cols-12);
     --vds-row-min-col:  16rem;
+
+    /* Sidebar */
+    --vds-sidebar-width: var(--vds-sidebar-width-md);
+    --vds-sidebar-rail:  var(--vds-sidebar-rail-width);
+    --vds-sidebar-gap:   var(--vds-space-1);
+
+    /*
+     * App chrome row — shared height between a page's Header row and the
+     * Sidebar's header / footer. When both consume this token they stay
+     * visually aligned (sidebar brand sits level with the header bar).
+     * Override on a chrome-scoped wrapper (e.g. `.docs-app`) to coordinate.
+     */
+    --vds-app-chrome-row: var(--vds-size-lg);
   }
 }

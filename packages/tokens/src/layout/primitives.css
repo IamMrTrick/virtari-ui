@@ -52,5 +52,14 @@
     --vds-row-cols-6:  6;
     --vds-row-cols-8:  8;
     --vds-row-cols-12: 12;
+
+    /* Sidebar width ramp — expanded state. Aligned with common app chrome widths. */
+    --vds-sidebar-width-sm:   12rem;   /* 192px — compact, icon+short-label */
+    --vds-sidebar-width-md:   16rem;   /* 256px — default app chrome       */
+    --vds-sidebar-width-lg:   20rem;   /* 320px — comfortable, nested nav  */
+    --vds-sidebar-width-xl:   24rem;   /* 384px — wide, file-tree style    */
+
+    /* Sidebar rail (collapsed icon-only) — sized to fit a 1.75rem icon + comfortable hit target */
+    --vds-sidebar-rail-width: 3.5rem;  /* 56px */
   }
 }

@@ -1,3 +1,4 @@
+"use client";
 'use strict';
 
 var core = require('@dnd-kit/core');
@@ -8,6 +9,7 @@ var utilities = require('@dnd-kit/utilities');
 var utils = require('@virtari/utils');
 var reactTable = require('@tanstack/react-table');
 require('@virtari/react-checkbox');
+var reactIcons = require('@virtari/react-icons');
 var reactVirtual = require('@tanstack/react-virtual');
 var reactDrawer = require('@virtari/react-drawer');
 var reactInput = require('@virtari/react-input');
@@ -1343,41 +1345,28 @@ var DataTableSortTrigger = react.forwardRef(function DataTableSortTrigger2({ hea
   );
 });
 function DataTableSortIcon({ sort }) {
+  if (sort === void 0) {
+    return /* @__PURE__ */ jsxRuntime.jsx(
+      reactIcons.IconArrowsSort,
+      {
+        className: "vds-data-table-sort-icon",
+        "data-direction": "none",
+        size: 12,
+        stroke: 1.75,
+        "aria-hidden": true,
+        focusable: false
+      }
+    );
+  }
   return /* @__PURE__ */ jsxRuntime.jsx(
-    "svg",
+    reactIcons.IconChevronUp,
     {
       className: "vds-data-table-sort-icon",
-      "data-direction": sort ?? "none",
-      width: "12",
-      height: "12",
-      viewBox: "0 0 12 12",
-      fill: "none",
-      "aria-hidden": "true",
-      children: sort === void 0 ? /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntime.jsx(
-          "path",
-          {
-            d: "M6 2.5L3 5.5h6L6 2.5Z",
-            fill: "currentColor",
-            opacity: "0.5"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntime.jsx(
-          "path",
-          {
-            d: "M6 9.5L9 6.5H3L6 9.5Z",
-            fill: "currentColor",
-            opacity: "0.5"
-          }
-        )
-      ] }) : /* @__PURE__ */ jsxRuntime.jsx(
-        "path",
-        {
-          d: "M6 2.5L9 6H3L6 2.5Z",
-          fill: "currentColor",
-          transform: sort === "desc" ? "rotate(180 6 6)" : void 0
-        }
-      )
+      "data-direction": sort,
+      size: 12,
+      stroke: 2,
+      "aria-hidden": true,
+      focusable: false
     }
   );
 }
@@ -1503,24 +1492,13 @@ var DataTableRowExpandTrigger = react.forwardRef(function DataTableRowExpandTrig
       },
       ...props,
       children: children ?? /* @__PURE__ */ jsxRuntime.jsx(
-        "svg",
+        reactIcons.IconChevronRight,
         {
-          width: "10",
-          height: "10",
-          viewBox: "0 0 10 10",
-          "aria-hidden": "true",
           className: "vds-data-table-row-expand-icon",
-          children: /* @__PURE__ */ jsxRuntime.jsx(
-            "path",
-            {
-              d: "M3 2L6 5L3 8",
-              stroke: "currentColor",
-              strokeWidth: "1.5",
-              fill: "none",
-              strokeLinecap: "round",
-              strokeLinejoin: "round"
-            }
-          )
+          size: 10,
+          stroke: 1.75,
+          "aria-hidden": true,
+          focusable: false
         }
       )
     }
@@ -1766,14 +1744,7 @@ function SortableColumnItem({ column, onToggle }) {
             ...listeners,
             "aria-label": "Drag to reorder",
             className: "vds-data-table-customize-item-drag",
-            children: /* @__PURE__ */ jsxRuntime.jsxs("svg", { width: "10", height: "14", viewBox: "0 0 10 14", "aria-hidden": "true", fill: "currentColor", children: [
-              /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "3", cy: "3", r: "1" }),
-              /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "7", cy: "3", r: "1" }),
-              /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "3", cy: "7", r: "1" }),
-              /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "7", cy: "7", r: "1" }),
-              /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "3", cy: "11", r: "1" }),
-              /* @__PURE__ */ jsxRuntime.jsx("circle", { cx: "7", cy: "11", r: "1" })
-            ] })
+            children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconGripVertical, { size: 14, stroke: 1.75, "aria-hidden": true, focusable: false })
           }
         ),
         column.icon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-customize-item-icon", children: column.icon }),

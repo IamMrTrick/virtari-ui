@@ -35,22 +35,88 @@ export function LayoutPage() {
     <>
       <Section
         title="Why these primitives?"
-        description="Section → Row → Col is the semantic hierarchy for a production page. Section owns vertical rhythm and content width. Row owns the horizontal slot. Col owns the cell. Together they replace ad-hoc div + inline flex/grid markup."
+        description="Main → Section → Row → Col is the semantic hierarchy for a production page. Main is the page's single landmark. Section owns vertical rhythm and content width. Row owns the horizontal slot. Col owns the cell. Together they replace ad-hoc div + inline flex/grid markup."
       >
-        <pre className="docs-code">{`import { Section, Row, Col, Container } from "@virtari/react-layout";
+        <pre className="docs-code">{`import { Main, Section, Row, Col, Container } from "@virtari/react-layout";
 
-<Section padding="lg" width="xl" gap="lg">
-  <h2>Dashboard</h2>
+<Main>
+  <Section padding="lg" width="xl" gap="lg">
+    <h2>Dashboard</h2>
 
-  <Row cols={12} gap="md">
-    <Col span={12} spanMd={8}><MainContent /></Col>
-    <Col span={12} spanMd={4}><Sidebar /></Col>
-  </Row>
+    <Row cols={12} gap="md">
+      <Col span={12} spanMd={8}><MainContent /></Col>
+      <Col span={12} spanMd={4}><Sidebar /></Col>
+    </Row>
 
-  <Row autoFit minColWidth="16rem" gap="md">
-    {cards.map(c => <Col key={c.id}><Card {...c} /></Col>)}
-  </Row>
-</Section>`}</pre>
+    <Row autoFit minColWidth="16rem" gap="md">
+      {cards.map(c => <Col key={c.id}><Card {...c} /></Col>)}
+    </Row>
+  </Section>
+</Main>`}</pre>
+      </Section>
+
+      <Section
+        title="Main — the page's single landmark"
+        description="The <main> element is the dominant content of the page — HTML spec says exactly one non-hidden <main> per document. Our <Main> renders it with the right defaults: id='main' so a skip-link can target it, tabIndex=-1 so JS can focus it, and padding/gutter set to 'none' because <Main> is typically a landmark wrapping self-padded <Section>s."
+      >
+        <pre className="docs-code">{`{/* Shell: header + sidebar + main */}
+<body>
+  <a href="#main" className="skip-link">Skip to main content</a>
+  <Header>…</Header>
+  <div style={{ display: "flex" }}>
+    <Sidebar>…</Sidebar>
+    <Main>
+      <Section padding="lg">Hero</Section>
+      <Section padding="md">Features</Section>
+    </Main>
+  </div>
+</body>
+
+{/* …or use Main as a self-padded single-Section */}
+<Main padding="lg" gutter="md" width="xl" gap="lg">
+  <h1>Dashboard</h1>
+  <Card>…</Card>
+</Main>`}</pre>
+
+        {/*
+         * This docs page itself renders inside the app shell's <main>, so we
+         * can't render a real <Main> here without creating a nested landmark.
+         * The preview uses <section> with the same visual props to mirror
+         * what <Main> would look like.
+         */}
+        <VSection
+          padding="md"
+          gutter="md"
+          width="lg"
+          background="subtle"
+          gap="sm"
+          style={sectionOutlineStyle}
+        >
+          <Box>&lt;Main&gt; renders &lt;main id=&quot;main&quot; tabIndex=&quot;-1&quot;&gt;</Box>
+          <Box>All Section props (padding, gutter, width, background, gap…) work identically</Box>
+        </VSection>
+
+        <ul className="docs-prose" style={{ paddingInlineStart: "1.25em", marginBlockStart: "var(--vds-space-3)" }}>
+          <li>
+            Render <strong>exactly one</strong> <code>&lt;Main&gt;</code> per
+            page (browsers and screen readers treat additional ones as an error).
+          </li>
+          <li>
+            The default <code>id=&quot;main&quot;</code> pairs with a skip-link:{" "}
+            <code>&lt;a href=&quot;#main&quot;&gt;Skip to content&lt;/a&gt;</code>.
+          </li>
+          <li>
+            <code>tabIndex=&quot;-1&quot;</code> lets JS focus the region
+            without adding it to the tab order — needed for single-page-app
+            route transitions that re-focus the main content.
+          </li>
+          <li>
+            Default padding / gutter are <code>&quot;none&quot;</code> because{" "}
+            <code>&lt;Main&gt;</code> is usually a thin landmark wrapping
+            self-padded <code>&lt;Section&gt;</code>s. Override when you want
+            Main to own the padding directly.
+          </li>
+        </ul>
       </Section>
 
       <Section

@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@virtari/utils";
+import { IconLayoutKanban, IconList, IconTable } from "@virtari/react-icons";
 
 import { useDataTableContext } from "../DataTableContext";
 import type { DataTableViewMode } from "../types";
@@ -24,25 +25,9 @@ const DEFAULT_LABELS: Record<DataTableViewMode, string> = {
 };
 
 const DEFAULT_ICONS: Record<DataTableViewMode, ReactNode> = {
-  table: (
-    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none">
-      <rect x="1.5" y="2" width="11" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.25" />
-      <path d="M1.5 5.5h11M5 2v10" stroke="currentColor" strokeWidth="1.25" />
-    </svg>
-  ),
-  board: (
-    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none">
-      <rect x="1.5" y="1.5" width="4.5" height="4.5" rx="1" stroke="currentColor" strokeWidth="1.25" />
-      <rect x="8" y="1.5" width="4.5" height="4.5" rx="1" stroke="currentColor" strokeWidth="1.25" />
-      <rect x="1.5" y="8" width="4.5" height="4.5" rx="1" stroke="currentColor" strokeWidth="1.25" />
-      <rect x="8" y="8" width="4.5" height="4.5" rx="1" stroke="currentColor" strokeWidth="1.25" />
-    </svg>
-  ),
-  list: (
-    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" fill="none">
-      <path d="M2 3.5h10M2 7h10M2 10.5h10" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
-    </svg>
-  ),
+  table: <IconTable size={14} stroke={1.5} aria-hidden focusable={false} />,
+  board: <IconLayoutKanban size={14} stroke={1.5} aria-hidden focusable={false} />,
+  list: <IconList size={14} stroke={1.5} aria-hidden focusable={false} />,
 };
 
 export const DataTableViewModeToggle = forwardRef<

@@ -93,6 +93,10 @@
   }
 }
 @layer base {
+  html {
+    font-family: var(--vds-font-sans);
+  }
+
   body {
     font-family: var(--vds-font-sans);
     font-size: var(--vds-text-base);
