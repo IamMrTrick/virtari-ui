@@ -1022,7 +1022,7 @@ function PickerActionBar({
       reactButton.Button,
       {
         type: "button",
-        color: "neutral",
+        color: "contrast",
         variant: "soft",
         size: buttonSize,
         onClick: onCancel,

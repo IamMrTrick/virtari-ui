@@ -84,7 +84,7 @@ export function PickerActionBar({
     <div className={cn("vds-picker-action-bar", className)}>
       <Button
         type="button"
-        color="neutral"
+        color="contrast"
         variant="soft"
         size={buttonSize}
         onClick={onCancel}

@@ -186,22 +186,6 @@
     --button-color-border:       var(--button-color-solid);
   }
 
-  /* Neutral — desaturated gray button distinct from `contrast`. Uses the
-   * high-contrast step (neutral-12) as bg so both modes get ≥ 9:1 contrast
-   * with the inverted on-solid text. Softer than `contrast` though: contrast
-   * uses pure black/white, neutral stays in the warm gray-270 family. */
-  .vds-button[data-color="neutral"] {
-    --button-color-solid:        var(--vds-color-neutral-12, #171717);
-    --button-color-solid-hover:  var(--vds-color-neutral-11, #262626);
-    --button-color-solid-active: oklch(from var(--button-color-solid) calc(l * 0.85) c h);
-    --button-color-on-solid:     var(--vds-color-neutral-1, #fafafa);
-    --button-color-bg:           var(--vds-color-neutral-3, var(--vds-color-neutral-2, #f5f5f5));
-    --button-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-neutral-3, #e5e5e5));
-    --button-color-bg-active:    var(--vds-color-neutral-5, var(--vds-color-neutral-6, #d4d4d4));
-    --button-color-text:         var(--vds-color-neutral-12, var(--vds-color-text, #171717));
-    --button-color-border:       var(--vds-color-neutral-8, #a3a3a3);
-  }
-
   /* High-contrast: nearly pure black on light, nearly pure white on dark.
    * Mode inversion is achieved via the mode-aware neutral scale — no
    * light-dark() wrapper needed (double-switches with mode-aware primitives). */
