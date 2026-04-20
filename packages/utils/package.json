@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/utils",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Small internal helpers shared across Virtari React packages.",
   "license": "UNLICENSED",
   "author": "Virtari",
