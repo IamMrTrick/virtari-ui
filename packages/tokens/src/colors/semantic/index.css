@@ -1,21 +1,14 @@
 /*
  * Semantic color barrel.
  *
- * Order matters:
- *   1. _legacy.css      original semantic tokens (ALL old names with old values)
- *   2. background.css   new bg/surface/scrim/shadow-tint/highlight-tint
- *   3. text.css         new text-link/placeholder/inverse/selection
- *   4. icon.css         new icon-* domain
- *   5. border.css       new border-strong/input/focus/divider + per-intent
- *   6. interactive.css  new adaptive hover/active overlays + selection-bg
- *   7. status.css       new {intent}-bg-hover/active + {intent}-text-muted
- *   8. data-viz.css     new chart-*-muted/strong
- *
- * Backwards compatibility: every token in the previous semantic.css is
- * preserved verbatim in _legacy.css. Components keep working without
- * any change. New work should prefer the expanded tokens.
+ *   1. background.css   bg, surface, scrim, shadow-tint, highlight-tint, color-scheme
+ *   2. text.css         text, muted/subtle/disabled, link, placeholder, inverse, selection, on-solid
+ *   3. icon.css         icon-*
+ *   4. border.css       border, muted/strong/subtle/input, focus, divider, per-intent
+ *   5. interactive.css  ring, skeleton, hover, active, pressed, selection-bg
+ *   6. status.css       on-{intent}, {intent}-solid/bg/text + hover/active variants
+ *   7. data-viz.css     chart-*-muted, chart-*-strong (brand-safe via color-mix)
  */
-@import "./_legacy.css";
 @import "./background.css";
 @import "./text.css";
 @import "./icon.css";

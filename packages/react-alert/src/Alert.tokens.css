@@ -59,46 +59,46 @@
    *    Muted intent background + muted-text color
    * ───────────────────────────────────────────── */
   .vds-alert[data-variant="info"] {
-    --alert-background: var(--vds-color-info-muted, #cffafe);
-    --alert-border-color: color-mix(in oklch, var(--vds-color-info-emphasis, #06b6d4) 30%, transparent);
-    --alert-text-color: var(--vds-color-info-muted-text, #155e75);
-    --alert-title-color: var(--vds-color-info-muted-text, #155e75);
-    --alert-description-color: var(--vds-color-info-muted-text, #155e75);
-    --alert-icon-color: var(--vds-color-info-emphasis, #06b6d4);
+    --alert-background: var(--vds-color-info-bg, #cffafe);
+    --alert-border-color: color-mix(in oklch, var(--vds-color-info-solid, #06b6d4) 30%, transparent);
+    --alert-text-color: var(--vds-color-info-text, #155e75);
+    --alert-title-color: var(--vds-color-info-text, #155e75);
+    --alert-description-color: var(--vds-color-info-text, #155e75);
+    --alert-icon-color: var(--vds-color-info-solid, #06b6d4);
   }
 
   .vds-alert[data-variant="success"] {
-    --alert-background: var(--vds-color-success-muted, #dcfce7);
-    --alert-border-color: color-mix(in oklch, var(--vds-color-success-emphasis, #22c55e) 30%, transparent);
-    --alert-text-color: var(--vds-color-success-muted-text, #166534);
-    --alert-title-color: var(--vds-color-success-muted-text, #166534);
-    --alert-description-color: var(--vds-color-success-muted-text, #166534);
-    --alert-icon-color: var(--vds-color-success-emphasis, #22c55e);
+    --alert-background: var(--vds-color-success-bg, #dcfce7);
+    --alert-border-color: color-mix(in oklch, var(--vds-color-success-solid, #22c55e) 30%, transparent);
+    --alert-text-color: var(--vds-color-success-text, #166534);
+    --alert-title-color: var(--vds-color-success-text, #166534);
+    --alert-description-color: var(--vds-color-success-text, #166534);
+    --alert-icon-color: var(--vds-color-success-solid, #22c55e);
   }
 
   .vds-alert[data-variant="warning"] {
-    --alert-background: var(--vds-color-warning-muted, #fef3c7);
-    --alert-border-color: color-mix(in oklch, var(--vds-color-warning-emphasis, #f59e0b) 30%, transparent);
-    --alert-text-color: var(--vds-color-warning-muted-text, #78350f);
-    --alert-title-color: var(--vds-color-warning-muted-text, #78350f);
-    --alert-description-color: var(--vds-color-warning-muted-text, #78350f);
-    --alert-icon-color: var(--vds-color-warning-emphasis, #f59e0b);
+    --alert-background: var(--vds-color-warning-bg, #fef3c7);
+    --alert-border-color: color-mix(in oklch, var(--vds-color-warning-solid, #f59e0b) 30%, transparent);
+    --alert-text-color: var(--vds-color-warning-text, #78350f);
+    --alert-title-color: var(--vds-color-warning-text, #78350f);
+    --alert-description-color: var(--vds-color-warning-text, #78350f);
+    --alert-icon-color: var(--vds-color-warning-solid, #f59e0b);
   }
 
   .vds-alert[data-variant="danger"] {
-    --alert-background: var(--vds-color-danger-muted, #fee2e2);
-    --alert-border-color: color-mix(in oklch, var(--vds-color-danger-emphasis, #ef4444) 30%, transparent);
-    --alert-text-color: var(--vds-color-danger-muted-text, #991b1b);
-    --alert-title-color: var(--vds-color-danger-muted-text, #991b1b);
-    --alert-description-color: var(--vds-color-danger-muted-text, #991b1b);
-    --alert-icon-color: var(--vds-color-danger-emphasis, #ef4444);
+    --alert-background: var(--vds-color-danger-bg, #fee2e2);
+    --alert-border-color: color-mix(in oklch, var(--vds-color-danger-solid, #ef4444) 30%, transparent);
+    --alert-text-color: var(--vds-color-danger-text, #991b1b);
+    --alert-title-color: var(--vds-color-danger-text, #991b1b);
+    --alert-description-color: var(--vds-color-danger-text, #991b1b);
+    --alert-icon-color: var(--vds-color-danger-solid, #ef4444);
   }
 
   /* ─────────────────────────────────────────────
    * 3. Solid appearance — emphasis bg + on-color text
    * ───────────────────────────────────────────── */
   .vds-alert[data-appearance="solid"][data-variant="info"] {
-    --alert-background: var(--vds-color-info-emphasis, #06b6d4);
+    --alert-background: var(--vds-color-info-solid, #06b6d4);
     --alert-border-color: transparent;
     --alert-text-color: var(--vds-color-on-info, #ffffff);
     --alert-title-color: var(--vds-color-on-info, #ffffff);
@@ -107,7 +107,7 @@
   }
 
   .vds-alert[data-appearance="solid"][data-variant="success"] {
-    --alert-background: var(--vds-color-success-emphasis, #22c55e);
+    --alert-background: var(--vds-color-success-solid, #22c55e);
     --alert-border-color: transparent;
     --alert-text-color: var(--vds-color-on-success, #ffffff);
     --alert-title-color: var(--vds-color-on-success, #ffffff);
@@ -116,7 +116,7 @@
   }
 
   .vds-alert[data-appearance="solid"][data-variant="warning"] {
-    --alert-background: var(--vds-color-warning-emphasis, #f59e0b);
+    --alert-background: var(--vds-color-warning-solid, #f59e0b);
     --alert-border-color: transparent;
     --alert-text-color: var(--vds-color-on-warning, #111827);
     --alert-title-color: var(--vds-color-on-warning, #111827);
@@ -125,7 +125,7 @@
   }
 
   .vds-alert[data-appearance="solid"][data-variant="danger"] {
-    --alert-background: var(--vds-color-danger-emphasis, #ef4444);
+    --alert-background: var(--vds-color-danger-solid, #ef4444);
     --alert-border-color: transparent;
     --alert-text-color: var(--vds-color-on-danger, #ffffff);
     --alert-title-color: var(--vds-color-on-danger, #ffffff);
@@ -140,16 +140,16 @@
     --alert-background: transparent;
   }
   .vds-alert[data-appearance="outline"][data-variant="info"] {
-    --alert-border-color: var(--vds-color-info-emphasis, #06b6d4);
+    --alert-border-color: var(--vds-color-info-solid, #06b6d4);
   }
   .vds-alert[data-appearance="outline"][data-variant="success"] {
-    --alert-border-color: var(--vds-color-success-emphasis, #22c55e);
+    --alert-border-color: var(--vds-color-success-solid, #22c55e);
   }
   .vds-alert[data-appearance="outline"][data-variant="warning"] {
-    --alert-border-color: var(--vds-color-warning-emphasis, #f59e0b);
+    --alert-border-color: var(--vds-color-warning-solid, #f59e0b);
   }
   .vds-alert[data-appearance="outline"][data-variant="danger"] {
-    --alert-border-color: var(--vds-color-danger-emphasis, #ef4444);
+    --alert-border-color: var(--vds-color-danger-solid, #ef4444);
   }
 
   /* ─────────────────────────────────────────────

@@ -2,7 +2,7 @@ import * as react from 'react';
 import { ReactNode } from 'react';
 
 /** Intent palette — orthogonal to variant. Picks the hue family. */
-type ButtonColor = "primary" | "success" | "warning" | "danger" | "info" | "accent" | "neutral" | "contrast";
+type ButtonColor = "primary" | "success" | "warning" | "danger" | "info" | "accent" | "contrast";
 /** Appearance — solid fill, bordered, text-only, tinted, or inline link. */
 type ButtonVariant = "solid" | "outline" | "ghost" | "soft" | "link"
 /** @deprecated Use `color="danger"` instead. Maps to solid + danger at runtime. */

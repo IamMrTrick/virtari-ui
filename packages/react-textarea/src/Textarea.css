@@ -29,7 +29,7 @@
     &:focus-visible {
       outline: 2px solid var(--vds-color-ring);
       outline-offset: -1px;
-      border-color: var(--vds-color-primary-500);
+      border-color: var(--vds-color-primary-9);
     }
 
     &:disabled {
@@ -38,10 +38,10 @@
     }
 
     &[aria-invalid="true"] {
-      border-color: var(--vds-color-danger-500);
+      border-color: var(--vds-color-danger-9);
 
       &:focus-visible {
-        outline-color: var(--vds-color-danger-500);
+        outline-color: var(--vds-color-danger-9);
       }
     }
 

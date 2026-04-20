@@ -29,13 +29,13 @@
     --date-field-placeholder-color: var(--vds-color-text-subtle, #9ca3af);
     --date-field-label-color: var(--vds-color-text-muted, #6b7280);
     --date-field-description-color: var(--vds-color-text-muted, #6b7280);
-    --date-field-error-color: var(--vds-color-danger-emphasis, #ef4444);
+    --date-field-error-color: var(--vds-color-danger-solid, #ef4444);
 
     --date-field-focus-ring-color: var(--vds-color-ring, #6366f1);
     --date-field-focus-ring-width: 2px;
-    --date-field-focus-border-color: var(--vds-color-primary-500, #6366f1);
+    --date-field-focus-border-color: var(--vds-color-primary-9, #6366f1);
 
-    --date-field-segment-focus-bg: var(--vds-color-primary-500, #6366f1);
+    --date-field-segment-focus-bg: var(--vds-color-primary-9, #6366f1);
     --date-field-segment-focus-text: var(--vds-color-primary-contrast, #ffffff);
     --date-field-segment-radius: var(--vds-radius-sm, 0.25rem);
     --date-field-segment-padding-inline: 2px;
@@ -62,11 +62,11 @@
     --time-picker-wheel-selected-text: var(--vds-color-text, #111827);
     --time-picker-wheel-header-color: var(--vds-color-text-muted, #6b7280);
     --time-picker-wheel-colon-color: color-mix(in oklab, var(--date-field-text-color) 55%, transparent);
-    --time-picker-wheel-selection-bg: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 18%, transparent);
-    --time-picker-wheel-selection-border: var(--vds-color-ring, var(--vds-color-primary-500, #6366f1));
-    --time-picker-wheel-selection-divider: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 70%, transparent);
-    --time-picker-wheel-selection-ring: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 28%, transparent);
-    --time-picker-wheel-selection-shadow: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 32%, transparent);
+    --time-picker-wheel-selection-bg: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-9, #6366f1)) 18%, transparent);
+    --time-picker-wheel-selection-border: var(--vds-color-ring, var(--vds-color-primary-9, #6366f1));
+    --time-picker-wheel-selection-divider: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-9, #6366f1)) 70%, transparent);
+    --time-picker-wheel-selection-ring: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-9, #6366f1)) 28%, transparent);
+    --time-picker-wheel-selection-shadow: color-mix(in oklab, var(--vds-color-ring, var(--vds-color-primary-9, #6366f1)) 32%, transparent);
   }
 
   /* ── Appearance variants ── */
@@ -159,10 +159,10 @@
   .vds-time-field[data-invalid="true"],
   .vds-date-picker[data-invalid="true"] .vds-date-picker-group,
   .vds-date-range-picker[data-invalid="true"] .vds-date-range-picker-group {
-    --date-field-border-color: var(--vds-color-danger-emphasis, #ef4444);
-    --date-field-border-color-hover: var(--vds-color-danger-hover, #dc2626);
-    --date-field-focus-ring-color: var(--vds-color-danger-emphasis, #ef4444);
-    --date-field-focus-border-color: var(--vds-color-danger-emphasis, #ef4444);
-    --date-field-segment-focus-bg: var(--vds-color-danger-emphasis, #ef4444);
+    --date-field-border-color: var(--vds-color-danger-solid, #ef4444);
+    --date-field-border-color-hover: var(--vds-color-danger-solid-hover, #dc2626);
+    --date-field-focus-ring-color: var(--vds-color-danger-solid, #ef4444);
+    --date-field-focus-border-color: var(--vds-color-danger-solid, #ef4444);
+    --date-field-segment-focus-bg: var(--vds-color-danger-solid, #ef4444);
   }
 }

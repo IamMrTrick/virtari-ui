@@ -1,45 +1,43 @@
 @layer tokens {
   /*
-   * ── Data visualization semantic layer (NEW, additive) ──
+   * ── Data visualization semantic layer ──
    *
-   * Adds:
-   *   • chart-{1..8}-muted    30%-alpha tint for area fills under lines
-   *   • chart-{1..8}-strong   high-contrast variant for emphasis points
-   *
-   * Legacy chart-1..8 stays in _legacy.css unchanged.
+   * Derives muted / strong variants from the canonical chart-{1..8}
+   * primitives via color-mix. Because chart-1..6 alias onto intent
+   * primitives, brand re-tinting automatically propagates to every
+   * variant. chart-4/7/8 are non-intent hues that remain literal.
    */
 
   :root {
-    /* ─── Muted variants (30% alpha — for area fills, gradient backgrounds) ─── */
-    --vds-color-chart-1-muted: oklch(0.55 0.20 265 / 0.30);
-    --vds-color-chart-2-muted: oklch(0.60 0.18 155 / 0.30);
-    --vds-color-chart-3-muted: oklch(0.65 0.16 45 / 0.30);
-    --vds-color-chart-4-muted: oklch(0.55 0.18 310 / 0.30);
-    --vds-color-chart-5-muted: oklch(0.60 0.15 195 / 0.30);
-    --vds-color-chart-6-muted: oklch(0.65 0.17 75 / 0.30);
-    --vds-color-chart-7-muted: oklch(0.55 0.19 350 / 0.30);
-    --vds-color-chart-8-muted: oklch(0.60 0.14 230 / 0.30);
+    /* ─── Muted variants (30% alpha — area fills) ─── */
+    --vds-color-chart-1-muted: color-mix(in oklch, var(--vds-color-chart-1) 30%, transparent);
+    --vds-color-chart-2-muted: color-mix(in oklch, var(--vds-color-chart-2) 30%, transparent);
+    --vds-color-chart-3-muted: color-mix(in oklch, var(--vds-color-chart-3) 30%, transparent);
+    --vds-color-chart-4-muted: color-mix(in oklch, var(--vds-color-chart-4) 30%, transparent);
+    --vds-color-chart-5-muted: color-mix(in oklch, var(--vds-color-chart-5) 30%, transparent);
+    --vds-color-chart-6-muted: color-mix(in oklch, var(--vds-color-chart-6) 30%, transparent);
+    --vds-color-chart-7-muted: color-mix(in oklch, var(--vds-color-chart-7) 30%, transparent);
+    --vds-color-chart-8-muted: color-mix(in oklch, var(--vds-color-chart-8) 30%, transparent);
 
-    /* ─── Strong variants (deeper L for emphasis on key data points) ─── */
-    --vds-color-chart-1-strong: oklch(0.45 0.22 265);
-    --vds-color-chart-2-strong: oklch(0.50 0.20 155);
-    --vds-color-chart-3-strong: oklch(0.55 0.18 45);
-    --vds-color-chart-4-strong: oklch(0.45 0.20 310);
-    --vds-color-chart-5-strong: oklch(0.50 0.17 195);
-    --vds-color-chart-6-strong: oklch(0.55 0.19 75);
-    --vds-color-chart-7-strong: oklch(0.45 0.21 350);
-    --vds-color-chart-8-strong: oklch(0.50 0.16 230);
+    /* ─── Strong variants (+15% black in light, +15% white in dark) ─── */
+    --vds-color-chart-1-strong: color-mix(in oklch, var(--vds-color-chart-1), black 15%);
+    --vds-color-chart-2-strong: color-mix(in oklch, var(--vds-color-chart-2), black 15%);
+    --vds-color-chart-3-strong: color-mix(in oklch, var(--vds-color-chart-3), black 15%);
+    --vds-color-chart-4-strong: color-mix(in oklch, var(--vds-color-chart-4), black 15%);
+    --vds-color-chart-5-strong: color-mix(in oklch, var(--vds-color-chart-5), black 15%);
+    --vds-color-chart-6-strong: color-mix(in oklch, var(--vds-color-chart-6), black 15%);
+    --vds-color-chart-7-strong: color-mix(in oklch, var(--vds-color-chart-7), black 15%);
+    --vds-color-chart-8-strong: color-mix(in oklch, var(--vds-color-chart-8), black 15%);
   }
 
   [data-theme="dark"] {
-    /* In dark mode, lift L slightly for vividness */
-    --vds-color-chart-1-strong: oklch(0.65 0.20 265);
-    --vds-color-chart-2-strong: oklch(0.70 0.18 155);
-    --vds-color-chart-3-strong: oklch(0.75 0.16 45);
-    --vds-color-chart-4-strong: oklch(0.65 0.18 310);
-    --vds-color-chart-5-strong: oklch(0.70 0.15 195);
-    --vds-color-chart-6-strong: oklch(0.75 0.17 75);
-    --vds-color-chart-7-strong: oklch(0.65 0.19 350);
-    --vds-color-chart-8-strong: oklch(0.70 0.14 230);
+    --vds-color-chart-1-strong: color-mix(in oklch, var(--vds-color-chart-1), white 15%);
+    --vds-color-chart-2-strong: color-mix(in oklch, var(--vds-color-chart-2), white 15%);
+    --vds-color-chart-3-strong: color-mix(in oklch, var(--vds-color-chart-3), white 15%);
+    --vds-color-chart-4-strong: color-mix(in oklch, var(--vds-color-chart-4), white 15%);
+    --vds-color-chart-5-strong: color-mix(in oklch, var(--vds-color-chart-5), white 15%);
+    --vds-color-chart-6-strong: color-mix(in oklch, var(--vds-color-chart-6), white 15%);
+    --vds-color-chart-7-strong: color-mix(in oklch, var(--vds-color-chart-7), white 15%);
+    --vds-color-chart-8-strong: color-mix(in oklch, var(--vds-color-chart-8), white 15%);
   }
 }

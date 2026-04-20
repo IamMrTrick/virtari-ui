@@ -10,7 +10,6 @@ export type ButtonColor =
   | "danger"
   | "info"
   | "accent"
-  | "neutral"
   | "contrast";
 
 /** Appearance — solid fill, bordered, text-only, tinted, or inline link. */

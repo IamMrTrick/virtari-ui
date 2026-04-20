@@ -76,11 +76,11 @@
   .vds-text[data-tone="default"] { --text-color: var(--vds-color-text, #111827); }
   .vds-text[data-tone="muted"]   { --text-color: var(--vds-color-text-muted, #6b7280); }
   .vds-text[data-tone="subtle"]  { --text-color: var(--vds-color-text-subtle, #9ca3af); }
-  .vds-text[data-tone="primary"] { --text-color: var(--vds-color-primary-emphasis, #6366f1); }
-  .vds-text[data-tone="success"] { --text-color: var(--vds-color-success-emphasis, #22c55e); }
-  .vds-text[data-tone="warning"] { --text-color: var(--vds-color-warning-emphasis, #f59e0b); }
-  .vds-text[data-tone="danger"]  { --text-color: var(--vds-color-danger-emphasis, #ef4444); }
-  .vds-text[data-tone="info"]    { --text-color: var(--vds-color-info-emphasis, #06b6d4); }
+  .vds-text[data-tone="primary"] { --text-color: var(--vds-color-primary-solid, #6366f1); }
+  .vds-text[data-tone="success"] { --text-color: var(--vds-color-success-solid, #22c55e); }
+  .vds-text[data-tone="warning"] { --text-color: var(--vds-color-warning-solid, #f59e0b); }
+  .vds-text[data-tone="danger"]  { --text-color: var(--vds-color-danger-solid, #ef4444); }
+  .vds-text[data-tone="info"]    { --text-color: var(--vds-color-info-solid, #06b6d4); }
   .vds-text[data-tone="inherit"] { --text-color: inherit; }
 
   /* ── Alignment ──────────────────────────────── */

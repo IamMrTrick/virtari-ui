@@ -259,7 +259,7 @@
     --time-picker-wheel-selected-text: var(--vds-color-text, #111827);
     --time-picker-wheel-selection-bg: color-mix(
       in oklab,
-      var(--vds-color-ring, var(--vds-color-primary-500, #6366f1)) 18%,
+      var(--vds-color-ring, var(--vds-color-primary-9, #6366f1)) 18%,
       transparent
     );
     --vds-year-wheel-height: var(--time-picker-wheel-height);
@@ -336,12 +336,12 @@
   }
 
   .vds-calendar-year-action--primary {
-    background: var(--vds-color-primary-600, #4f46e5);
+    background: var(--vds-color-primary-10, #4f46e5);
     color: var(--vds-color-primary-contrast, #ffffff);
   }
 
   .vds-calendar-year-action--primary:hover {
-    background: var(--vds-color-primary-700, #4338ca);
+    background: var(--vds-color-primary-11, #4338ca);
   }
 
   .vds-calendar-year-action:focus-visible {

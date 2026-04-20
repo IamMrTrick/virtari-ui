@@ -97,7 +97,7 @@
 
   /* Solid variant — current page reads as a primary pill */
   .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__page {
-    background-color: var(--vds-color-primary-emphasis, #6366f1);
+    background-color: var(--vds-color-primary-solid, #6366f1);
     border-radius: var(--breadcrumb-item-radius);
   }
 

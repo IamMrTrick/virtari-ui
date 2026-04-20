@@ -35,7 +35,7 @@
     --select-trigger-focus-ring-color: var(--vds-color-ring, #6366f1);
     --select-trigger-focus-ring-width: 2px;
     --select-trigger-focus-ring-offset: -1px;
-    --select-trigger-focus-border-color: var(--vds-color-primary-500, #6366f1);
+    --select-trigger-focus-border-color: var(--vds-color-primary-9, #6366f1);
 
     /* Motion */
     --select-trigger-transition-duration: var(--vds-duration-fast, 100ms);
@@ -69,7 +69,7 @@
     --select-item-bg: transparent;
     --select-item-bg-highlighted: var(--vds-color-bg-muted, #f3f4f6);
     --select-item-text-color: var(--vds-color-text, #111827);
-    --select-item-indicator-color: var(--vds-color-primary-500, #6366f1);
+    --select-item-indicator-color: var(--vds-color-primary-9, #6366f1);
 
     --select-item-transition-duration: var(--vds-duration-fastest, 50ms);
     --select-item-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
@@ -181,10 +181,10 @@
 
   /* Invalid (form error) */
   .vds-select-trigger[data-invalid="true"] {
-    --select-trigger-border-color: var(--vds-color-danger-emphasis, #ef4444);
-    --select-trigger-border-color-hover: var(--vds-color-danger-hover, #dc2626);
-    --select-trigger-focus-ring-color: var(--vds-color-danger-emphasis, #ef4444);
-    --select-trigger-focus-border-color: var(--vds-color-danger-emphasis, #ef4444);
+    --select-trigger-border-color: var(--vds-color-danger-solid, #ef4444);
+    --select-trigger-border-color-hover: var(--vds-color-danger-solid-hover, #dc2626);
+    --select-trigger-focus-ring-color: var(--vds-color-danger-solid, #ef4444);
+    --select-trigger-focus-border-color: var(--vds-color-danger-solid, #ef4444);
   }
 
   /* Loading — slightly dim chevron, trigger stays interactive enough to close */

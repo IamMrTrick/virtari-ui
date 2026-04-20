@@ -35,20 +35,20 @@
     --calendar-cell-text-disabled: var(--vds-color-text-disabled, #9ca3af);
     --calendar-cell-outside-color: var(--vds-color-text-subtle, #9ca3af);
 
-    --calendar-cell-selected-bg: var(--vds-color-primary-500, #6366f1);
-    --calendar-cell-selected-bg-hover: var(--vds-color-primary-600, #4f46e5);
+    --calendar-cell-selected-bg: var(--vds-color-primary-9, #6366f1);
+    --calendar-cell-selected-bg-hover: var(--vds-color-primary-10, #4f46e5);
     --calendar-cell-selected-text: var(--vds-color-primary-contrast, #ffffff);
 
-    --calendar-cell-today-ring-color: var(--vds-color-primary-500, #6366f1);
+    --calendar-cell-today-ring-color: var(--vds-color-primary-9, #6366f1);
     --calendar-cell-today-ring-width: 1.5px;
 
     --calendar-cell-unavailable-bg: transparent;
     --calendar-cell-unavailable-color: var(--vds-color-text-disabled, #9ca3af);
 
     /* Range */
-    --calendar-range-bg: color-mix(in oklab, var(--vds-color-primary-500, #6366f1) 15%, transparent);
+    --calendar-range-bg: color-mix(in oklab, var(--vds-color-primary-9, #6366f1) 15%, transparent);
     --calendar-range-text: var(--vds-color-text, #111827);
-    --calendar-range-endpoint-bg: var(--vds-color-primary-500, #6366f1);
+    --calendar-range-endpoint-bg: var(--vds-color-primary-9, #6366f1);
     --calendar-range-endpoint-text: var(--vds-color-primary-contrast, #ffffff);
 
     /* Focus */
@@ -110,11 +110,11 @@
 
   /* ── Invalid ── */
   .vds-calendar[data-invalid="true"] {
-    --calendar-cell-selected-bg: var(--vds-color-danger-emphasis, #ef4444);
-    --calendar-cell-selected-bg-hover: var(--vds-color-danger-hover, #dc2626);
-    --calendar-range-endpoint-bg: var(--vds-color-danger-emphasis, #ef4444);
-    --calendar-range-bg: color-mix(in oklab, var(--vds-color-danger-emphasis, #ef4444) 15%, transparent);
-    --calendar-cell-today-ring-color: var(--vds-color-danger-emphasis, #ef4444);
-    --calendar-cell-focus-ring-color: var(--vds-color-danger-emphasis, #ef4444);
+    --calendar-cell-selected-bg: var(--vds-color-danger-solid, #ef4444);
+    --calendar-cell-selected-bg-hover: var(--vds-color-danger-solid-hover, #dc2626);
+    --calendar-range-endpoint-bg: var(--vds-color-danger-solid, #ef4444);
+    --calendar-range-bg: color-mix(in oklab, var(--vds-color-danger-solid, #ef4444) 15%, transparent);
+    --calendar-cell-today-ring-color: var(--vds-color-danger-solid, #ef4444);
+    --calendar-cell-focus-ring-color: var(--vds-color-danger-solid, #ef4444);
   }
 }

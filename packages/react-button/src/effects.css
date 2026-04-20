@@ -5,9 +5,13 @@
    * highlight + subtle bottom shade + soft color-bleed outer glow. On hover
    * a wide soft-gradient sheen sweeps across (blurred for realism). The base
    * state alone gives the button a premium glossy look.
-   * Usage: <Button effect="shine">
+   *
+   * SCOPE: solid variant only — the inset highlights and surface sheen need
+   * a fully-filled button body. On outline/ghost/soft the insets would float
+   * with no surface behind them.
+   * Usage: <Button variant="solid" effect="shine">
    */
-  .vds-button[data-effect="shine"] {
+  .vds-button[data-variant="solid"][data-effect="shine"] {
     overflow: hidden;
     position: relative;
     box-shadow:
@@ -27,7 +31,7 @@
   }
 
   /* The sweeping specular highlight — wider, softer, blurred for realism */
-  .vds-button[data-effect="shine"]::before {
+  .vds-button[data-variant="solid"][data-effect="shine"]::before {
     content: "";
     position: absolute;
     inset-block: -2px;
@@ -50,7 +54,7 @@
   }
 
   /* Hover — boost the inner glow AND fire the sweep */
-  .vds-button[data-effect="shine"]:hover:not(:disabled):not([aria-disabled="true"]) {
+  .vds-button[data-variant="solid"][data-effect="shine"]:hover:not(:disabled):not([aria-disabled="true"]) {
     box-shadow:
       inset 0 1px 0 0 color-mix(in oklch, var(--vds-color-white, #fff), transparent 40%),
       inset 0 10px 16px -8px color-mix(in oklch, var(--vds-color-white, #fff), transparent 40%),
@@ -58,7 +62,7 @@
       0 4px 14px -2px color-mix(in oklch, var(--button-color-solid), transparent 55%);
   }
 
-  .vds-button[data-effect="shine"]:hover::before {
+  .vds-button[data-variant="solid"][data-effect="shine"]:hover::before {
     translate: 220% 0;
     transition: translate 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
@@ -67,9 +71,13 @@
    * Elevated with a NEUTRAL bottom shadow (no hue bleed from bg).
    * The depth color is --button-shadow-depth — defined in tokens,
    * resolves near-pure black in light and pure black in dark mode.
-   * Usage: <Button effect="raised">
+   *
+   * SCOPE: solid variant only — the 4px colored bar below needs a filled
+   * surface to extend from. On outline/ghost/soft it would read as a floating
+   * plate under an empty button.
+   * Usage: <Button variant="solid" effect="raised">
    */
-  .vds-button[data-effect="raised"] {
+  .vds-button[data-variant="solid"][data-effect="raised"] {
     box-shadow:
       0 4px 0 0 var(--button-shadow-depth),
       0 6px 12px -2px var(--button-shadow-ambient);
@@ -83,7 +91,7 @@
       scale            var(--button-transition-duration) var(--button-transition-easing);
   }
 
-  .vds-button[data-effect="raised"]:hover:not(:disabled):not([aria-disabled="true"]) {
+  .vds-button[data-variant="solid"][data-effect="raised"]:hover:not(:disabled):not([aria-disabled="true"]) {
     translate: 0 -3px;
     box-shadow:
       0 5px 0 0 var(--button-shadow-depth),
@@ -92,7 +100,7 @@
 
   /* Press: drop to flush, squish slightly (base --button-press-scale) applies,
    * tiny diffuse halo gives the "thump" feel. */
-  .vds-button[data-effect="raised"]:active:not(:disabled):not([aria-disabled="true"]) {
+  .vds-button[data-variant="solid"][data-effect="raised"]:active:not(:disabled):not([aria-disabled="true"]) {
     translate: 0 2px;
     box-shadow:
       0 0 0 0 transparent,
@@ -129,9 +137,13 @@
    * Glassmorphism: frosted translucent surface TINTED with the button's own
    * color. A danger glass = red-tinted frost, primary = blue-tinted, etc.
    * Best on dark/image bg so the blur reads.
-   * Usage: <Button effect="glass">
+   *
+   * SCOPE: solid variant only — this effect REPLACES the button's bg/text/
+   * border with its own glass system. Applying it on outline/soft/ghost
+   * would silently override their defining traits.
+   * Usage: <Button variant="solid" effect="glass">
    */
-  .vds-button[data-effect="glass"] {
+  .vds-button[data-variant="solid"][data-effect="glass"] {
     --button-bg:           color-mix(in oklch, var(--button-color-solid), transparent 82%);
     --button-bg-hover:     color-mix(in oklch, var(--button-color-solid), transparent 72%);
     --button-bg-active:    color-mix(in oklch, var(--button-color-solid), transparent 60%);
@@ -150,14 +162,14 @@
       0 2px 8px 0 color-mix(in oklch, var(--button-color-solid), transparent 80%);
   }
 
-  .vds-button[data-effect="glass"]:hover:not(:disabled):not([aria-disabled="true"]) {
+  .vds-button[data-variant="solid"][data-effect="glass"]:hover:not(:disabled):not([aria-disabled="true"]) {
     box-shadow:
       inset 0 1px 0 0 color-mix(in oklch, var(--vds-color-white, #fff), transparent 60%),
       inset 0 -1px 0 0 color-mix(in oklch, var(--vds-color-black, #000), transparent 60%),
       0 4px 16px 0 color-mix(in oklch, var(--button-color-solid), transparent 65%);
   }
 
-  .vds-button[data-effect="glass"]:active:not(:disabled):not([aria-disabled="true"]) {
+  .vds-button[data-variant="solid"][data-effect="glass"]:active:not(:disabled):not([aria-disabled="true"]) {
     box-shadow:
       inset 0 1px 3px 0 color-mix(in oklch, var(--vds-color-black, #000), transparent 80%),
       inset 0 -1px 0 0 color-mix(in oklch, var(--vds-color-black, #000), transparent 70%);
@@ -169,9 +181,12 @@
    * Pairs best with saturated colors. Hue follows --button-color-solid.
    * Insets are kept symmetric (1px top / 1px bottom) so text stays visually
    * centered; no text-shadow (prevents perceived baseline shift).
-   * Usage: <Button effect="candy">
+   *
+   * SCOPE: solid variant only — candy replaces bg with a color gradient and
+   * would flatten outline/ghost/soft into a filled button.
+   * Usage: <Button variant="solid" effect="candy">
    */
-  .vds-button[data-effect="candy"] {
+  .vds-button[data-variant="solid"][data-effect="candy"] {
     background: linear-gradient(
       180deg,
       oklch(from var(--button-color-solid) calc(l + 0.14) c h) 0%,
@@ -194,7 +209,7 @@
       translate         var(--button-transition-duration) var(--button-transition-easing);
   }
 
-  .vds-button[data-effect="candy"]:hover:not(:disabled):not([aria-disabled="true"]) {
+  .vds-button[data-variant="solid"][data-effect="candy"]:hover:not(:disabled):not([aria-disabled="true"]) {
     background: linear-gradient(
       180deg,
       oklch(from var(--button-color-solid) calc(l + 0.18) c h) 0%,
@@ -208,7 +223,7 @@
       0 8px 20px -4px color-mix(in oklch, var(--button-color-solid), transparent 72%);
   }
 
-  .vds-button[data-effect="candy"]:active:not(:disabled):not([aria-disabled="true"]) {
+  .vds-button[data-variant="solid"][data-effect="candy"]:active:not(:disabled):not([aria-disabled="true"]) {
     background: linear-gradient(
       180deg,
       oklch(from var(--button-color-solid) calc(l * 0.88) c h) 0%,
@@ -224,9 +239,13 @@
 
   /* ━━━ Effect: Outline Glow ━━━
    * Border lights up on hover with matching hue glow.
-   * Usage: <Button effect="outline-glow" variant="outline">
+   *
+   * SCOPE: outline variant only — the effect is all about the border + halo,
+   * there's no border on ghost/soft/link and on solid the border is absorbed
+   * by the filled bg.
+   * Usage: <Button variant="outline" effect="outline-glow">
    */
-  .vds-button[data-effect="outline-glow"] {
+  .vds-button[data-variant="outline"][data-effect="outline-glow"] {
     transition:
       background-color var(--button-transition-duration) var(--button-transition-easing),
       border-color     var(--button-transition-duration) var(--button-transition-easing),
@@ -234,7 +253,7 @@
       box-shadow       var(--vds-duration-normal, 200ms) var(--button-transition-easing);
   }
 
-  .vds-button[data-effect="outline-glow"]:hover:not(:disabled):not([aria-disabled="true"]) {
+  .vds-button[data-variant="outline"][data-effect="outline-glow"]:hover:not(:disabled):not([aria-disabled="true"]) {
     --button-border-hover: var(--button-color-solid-hover);
     box-shadow:
       0 0 8px 0 color-mix(in oklch, var(--button-color-solid), transparent 50%),

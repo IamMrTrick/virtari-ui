@@ -34,14 +34,14 @@
     /* =====================================================================
      * Intent palette — default: primary
      * ===================================================================== */
-    --badge-color-solid:        var(--vds-color-primary-solid, var(--vds-color-primary-emphasis, #4f46e5));
-    --badge-color-solid-hover:  var(--vds-color-primary-solid-hover, var(--vds-color-primary-hover, #4338ca));
+    --badge-color-solid:        var(--vds-color-primary-solid, #4f46e5);
+    --badge-color-solid-hover:  var(--vds-color-primary-solid-hover, #4338ca);
     --badge-color-on-solid:     var(--vds-color-on-primary, #fff);
 
-    --badge-color-bg:           var(--vds-color-primary-bg, var(--vds-color-primary-muted, #e0e7ff));
+    --badge-color-bg:           var(--vds-color-primary-bg, #e0e7ff);
     --badge-color-bg-hover:     var(--vds-color-primary-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
 
-    --badge-color-text:         var(--vds-color-primary-text, var(--vds-color-primary-muted-text, #3730a3));
+    --badge-color-text:         var(--vds-color-primary-text, #3730a3);
     --badge-color-border:       var(--badge-color-solid);
     --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
 
@@ -61,45 +61,45 @@
    * ========================================================================= */
 
   .vds-badge[data-color="success"] {
-    --badge-color-solid:        var(--vds-color-success-solid, var(--vds-color-success-emphasis, #16a34a));
-    --badge-color-solid-hover:  var(--vds-color-success-solid-hover, var(--vds-color-success-hover, #15803d));
+    --badge-color-solid:        var(--vds-color-success-solid, #16a34a);
+    --badge-color-solid-hover:  var(--vds-color-success-solid-hover, #15803d);
     --badge-color-on-solid:     var(--vds-color-on-success, #fff);
-    --badge-color-bg:           var(--vds-color-success-bg, var(--vds-color-success-muted, #dcfce7));
+    --badge-color-bg:           var(--vds-color-success-bg, #dcfce7);
     --badge-color-bg-hover:     var(--vds-color-success-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
-    --badge-color-text:         var(--vds-color-success-text, var(--vds-color-success-muted-text, #166534));
+    --badge-color-text:         var(--vds-color-success-text, #166534);
     --badge-color-border:       var(--badge-color-solid);
     --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
   }
 
   .vds-badge[data-color="warning"] {
-    --badge-color-solid:        var(--vds-color-warning-solid, var(--vds-color-warning-emphasis, #f59e0b));
-    --badge-color-solid-hover:  var(--vds-color-warning-solid-hover, var(--vds-color-warning-hover, #d97706));
+    --badge-color-solid:        var(--vds-color-warning-solid, #f59e0b);
+    --badge-color-solid-hover:  var(--vds-color-warning-solid-hover, #d97706);
     --badge-color-on-solid:     var(--vds-color-on-warning, #111);
-    --badge-color-bg:           var(--vds-color-warning-bg, var(--vds-color-warning-muted, #fef3c7));
+    --badge-color-bg:           var(--vds-color-warning-bg, #fef3c7);
     --badge-color-bg-hover:     var(--vds-color-warning-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
-    --badge-color-text:         var(--vds-color-warning-text, var(--vds-color-warning-muted-text, #78350f));
+    --badge-color-text:         var(--vds-color-warning-text, #78350f);
     --badge-color-border:       var(--badge-color-solid);
     --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
   }
 
   .vds-badge[data-color="danger"] {
-    --badge-color-solid:        var(--vds-color-danger-solid, var(--vds-color-danger-emphasis, #dc2626));
-    --badge-color-solid-hover:  var(--vds-color-danger-solid-hover, var(--vds-color-danger-hover, #b91c1c));
+    --badge-color-solid:        var(--vds-color-danger-solid, #dc2626);
+    --badge-color-solid-hover:  var(--vds-color-danger-solid-hover, #b91c1c);
     --badge-color-on-solid:     var(--vds-color-on-danger, #fff);
-    --badge-color-bg:           var(--vds-color-danger-bg, var(--vds-color-danger-muted, #fee2e2));
+    --badge-color-bg:           var(--vds-color-danger-bg, #fee2e2);
     --badge-color-bg-hover:     var(--vds-color-danger-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
-    --badge-color-text:         var(--vds-color-danger-text, var(--vds-color-danger-muted-text, #991b1b));
+    --badge-color-text:         var(--vds-color-danger-text, #991b1b);
     --badge-color-border:       var(--badge-color-solid);
     --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
   }
 
   .vds-badge[data-color="info"] {
-    --badge-color-solid:        var(--vds-color-info-solid, var(--vds-color-info-emphasis, #0891b2));
-    --badge-color-solid-hover:  var(--vds-color-info-solid-hover, var(--vds-color-info-hover, #0e7490));
+    --badge-color-solid:        var(--vds-color-info-solid, #0891b2);
+    --badge-color-solid-hover:  var(--vds-color-info-solid-hover, #0e7490);
     --badge-color-on-solid:     var(--vds-color-on-info, #fff);
-    --badge-color-bg:           var(--vds-color-info-bg, var(--vds-color-info-muted, #cffafe));
+    --badge-color-bg:           var(--vds-color-info-bg, #cffafe);
     --badge-color-bg-hover:     var(--vds-color-info-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
-    --badge-color-text:         var(--vds-color-info-text, var(--vds-color-info-muted-text, #155e75));
+    --badge-color-text:         var(--vds-color-info-text, #155e75);
     --badge-color-border:       var(--badge-color-solid);
     --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
   }
@@ -117,11 +117,11 @@
 
   /* Neutral — desaturated. Useful for "secondary" status chips. */
   .vds-badge[data-color="neutral"] {
-    --badge-color-solid:        var(--vds-color-neutral-12, var(--vds-color-gray-900, #171717));
-    --badge-color-solid-hover:  var(--vds-color-neutral-11, var(--vds-color-gray-800, #262626));
-    --badge-color-on-solid:     var(--vds-color-neutral-1, light-dark(var(--vds-color-white, #fff), var(--vds-color-gray-950, #0a0a0a)));
+    --badge-color-solid:        var(--vds-color-neutral-12, #171717);
+    --badge-color-solid-hover:  var(--vds-color-neutral-11, #262626);
+    --badge-color-on-solid:     var(--vds-color-neutral-1, #fafafa);
     --badge-color-bg:           var(--vds-color-neutral-3, var(--vds-color-bg-subtle, #f5f5f5));
-    --badge-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-gray-200, #e5e5e5));
+    --badge-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-neutral-3, #e5e5e5));
     --badge-color-text:         var(--vds-color-neutral-12, var(--vds-color-text, #171717));
     --badge-color-border:       var(--vds-color-neutral-8, var(--vds-color-border, #a3a3a3));
     --badge-color-border-soft:  var(--vds-color-neutral-6, color-mix(in oklch, var(--badge-color-solid) 20%, transparent));

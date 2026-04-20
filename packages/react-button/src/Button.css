@@ -14,7 +14,16 @@
     min-inline-size: var(--button-min-width);
     padding-inline: var(--button-padding-inline);
 
+    /* State overlay sits ON TOP of background-color via background-image.
+     * For solid variant on hover/active, `--button-overlay` resolves to a
+     * neutral alpha (black in light, white in dark) that darkens/lightens
+     * the button without ever touching the brand hue. Non-solid variants
+     * set the overlay to transparent so only the bg swap is visible. */
     background-color: var(--button-bg);
+    background-image: linear-gradient(
+      var(--button-overlay, transparent),
+      var(--button-overlay, transparent)
+    );
     color: var(--button-text);
     border: var(--button-border-width) solid var(--button-border);
     border-radius: var(--button-radius);
@@ -49,12 +58,14 @@
   /* ── Interaction states ── */
   .vds-button:hover:not(:disabled):not([aria-disabled="true"]) {
     background-color: var(--button-bg-hover);
+    --button-overlay: var(--button-overlay-hover);
     color: var(--button-text-hover);
     border-color: var(--button-border-hover);
   }
 
   .vds-button:active:not(:disabled):not([aria-disabled="true"]) {
     background-color: var(--button-bg-active);
+    --button-overlay: var(--button-overlay-active);
     color: var(--button-text-active);
     border-color: var(--button-border-active);
     scale: var(--button-press-scale);

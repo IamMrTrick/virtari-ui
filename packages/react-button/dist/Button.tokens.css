@@ -56,26 +56,44 @@
      * Intent palette — default: primary
      * Variants below read these meta-tokens to compute rendering tokens.
      * ===================================================================== */
-    --button-color-solid:        var(--vds-color-primary-solid, var(--vds-color-primary-emphasis, #4f46e5));
-    --button-color-solid-hover:  var(--vds-color-primary-solid-hover, var(--vds-color-primary-hover, #4338ca));
-    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-solid:        var(--vds-color-primary-solid, #4f46e5);
+    --button-color-solid-hover:  var(--vds-color-primary-solid-hover, #4338ca);
+    /* Step 11 (same hue, lower L). Fallback preserves C + H to avoid the
+       polar-space hue shift that happens when mixing a chromatic color
+       with black (hue drifts toward red, which on a 265° indigo reads
+       as purple). */
+    --button-color-solid-active: var(
+      --vds-color-primary-solid-active,
+      oklch(from var(--button-color-solid) calc(l * 0.85) c h)
+    );
     --button-color-on-solid:     var(--vds-color-on-primary, #fff);
 
-    --button-color-bg:           var(--vds-color-primary-bg, var(--vds-color-primary-muted, #e0e7ff));
+    --button-color-bg:           var(--vds-color-primary-bg, #e0e7ff);
     --button-color-bg-hover:     var(--vds-color-primary-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
     --button-color-bg-active:    var(--vds-color-primary-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
 
-    --button-color-text:         var(--vds-color-primary-text, var(--vds-color-primary-muted-text, #3730a3));
+    --button-color-text:         var(--vds-color-primary-text, #3730a3);
     --button-color-text-hover:   var(--button-color-solid-hover);
     --button-color-border:       var(--button-color-solid);
 
     /* =====================================================================
      * Rendering tokens (the ones Button.css actually paints with).
      * Defaults to solid variant — variants override these below.
+     *
+     * SOLID variant uses a NEUTRAL state overlay on hover/active instead
+     * of swapping the background between palette steps. Swapping steps
+     * (e.g. 9 → 10 → 11) can cause a perceptual hue shift for any highly
+     * chromatic brand color — at the sRGB gamut edge, a small chroma move
+     * reads as a hue move (indigo → purple, teal → blue, etc.). The
+     * overlay is neutral-a (black-alpha in light, white-alpha in dark),
+     * so it darkens/lightens the base uniformly WITHOUT touching hue —
+     * works for every primary color and brand theme.
      * ===================================================================== */
-    --button-bg:           var(--button-color-solid);
-    --button-bg-hover:     var(--button-color-solid-hover);
-    --button-bg-active:    var(--button-color-solid-active);
+    --button-bg:             var(--button-color-solid);
+    --button-bg-hover:       var(--button-color-solid);
+    --button-bg-active:      var(--button-color-solid);
+    --button-overlay-hover:  var(--vds-color-hover, transparent);
+    --button-overlay-active: var(--vds-color-pressed, transparent);
     --button-text:         var(--button-color-on-solid);
     --button-text-hover:   var(--button-color-on-solid);
     --button-text-active:  var(--button-color-on-solid);
@@ -90,57 +108,72 @@
    * ========================================================================= */
 
   .vds-button[data-color="success"] {
-    --button-color-solid:        var(--vds-color-success-solid, var(--vds-color-success-emphasis, #16a34a));
-    --button-color-solid-hover:  var(--vds-color-success-solid-hover, var(--vds-color-success-hover, #15803d));
-    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-solid:        var(--vds-color-success-solid, #16a34a);
+    --button-color-solid-hover:  var(--vds-color-success-solid-hover, #15803d);
+    --button-color-solid-active: var(
+      --vds-color-success-solid-active,
+      oklch(from var(--button-color-solid) calc(l * 0.85) c h)
+    );
     --button-color-on-solid:     var(--vds-color-on-success, #fff);
-    --button-color-bg:           var(--vds-color-success-bg, var(--vds-color-success-muted, #dcfce7));
+    --button-color-bg:           var(--vds-color-success-bg, #dcfce7);
     --button-color-bg-hover:     var(--vds-color-success-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
     --button-color-bg-active:    var(--vds-color-success-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
-    --button-color-text:         var(--vds-color-success-text, var(--vds-color-success-muted-text, #166534));
+    --button-color-text:         var(--vds-color-success-text, #166534);
     --button-color-border:       var(--button-color-solid);
   }
 
   .vds-button[data-color="warning"] {
-    --button-color-solid:        var(--vds-color-warning-solid, var(--vds-color-warning-emphasis, #f59e0b));
-    --button-color-solid-hover:  var(--vds-color-warning-solid-hover, var(--vds-color-warning-hover, #d97706));
-    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-solid:        var(--vds-color-warning-solid, #f59e0b);
+    --button-color-solid-hover:  var(--vds-color-warning-solid-hover, #d97706);
+    --button-color-solid-active: var(
+      --vds-color-warning-solid-active,
+      oklch(from var(--button-color-solid) calc(l * 0.85) c h)
+    );
     --button-color-on-solid:     var(--vds-color-on-warning, #111);
-    --button-color-bg:           var(--vds-color-warning-bg, var(--vds-color-warning-muted, #fef3c7));
+    --button-color-bg:           var(--vds-color-warning-bg, #fef3c7);
     --button-color-bg-hover:     var(--vds-color-warning-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
     --button-color-bg-active:    var(--vds-color-warning-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
-    --button-color-text:         var(--vds-color-warning-text, var(--vds-color-warning-muted-text, #78350f));
+    --button-color-text:         var(--vds-color-warning-text, #78350f);
     --button-color-border:       var(--button-color-solid);
   }
 
   .vds-button[data-color="danger"] {
-    --button-color-solid:        var(--vds-color-danger-solid, var(--vds-color-danger-emphasis, #dc2626));
-    --button-color-solid-hover:  var(--vds-color-danger-solid-hover, var(--vds-color-danger-hover, #b91c1c));
-    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-solid:        var(--vds-color-danger-solid, #dc2626);
+    --button-color-solid-hover:  var(--vds-color-danger-solid-hover, #b91c1c);
+    --button-color-solid-active: var(
+      --vds-color-danger-solid-active,
+      oklch(from var(--button-color-solid) calc(l * 0.85) c h)
+    );
     --button-color-on-solid:     var(--vds-color-on-danger, #fff);
-    --button-color-bg:           var(--vds-color-danger-bg, var(--vds-color-danger-muted, #fee2e2));
+    --button-color-bg:           var(--vds-color-danger-bg, #fee2e2);
     --button-color-bg-hover:     var(--vds-color-danger-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
     --button-color-bg-active:    var(--vds-color-danger-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
-    --button-color-text:         var(--vds-color-danger-text, var(--vds-color-danger-muted-text, #991b1b));
+    --button-color-text:         var(--vds-color-danger-text, #991b1b);
     --button-color-border:       var(--button-color-solid);
   }
 
   .vds-button[data-color="info"] {
-    --button-color-solid:        var(--vds-color-info-solid, var(--vds-color-info-emphasis, #0891b2));
-    --button-color-solid-hover:  var(--vds-color-info-solid-hover, var(--vds-color-info-hover, #0e7490));
-    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-solid:        var(--vds-color-info-solid, #0891b2);
+    --button-color-solid-hover:  var(--vds-color-info-solid-hover, #0e7490);
+    --button-color-solid-active: var(
+      --vds-color-info-solid-active,
+      oklch(from var(--button-color-solid) calc(l * 0.85) c h)
+    );
     --button-color-on-solid:     var(--vds-color-on-info, #fff);
-    --button-color-bg:           var(--vds-color-info-bg, var(--vds-color-info-muted, #cffafe));
+    --button-color-bg:           var(--vds-color-info-bg, #cffafe);
     --button-color-bg-hover:     var(--vds-color-info-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
     --button-color-bg-active:    var(--vds-color-info-bg-active, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 28%));
-    --button-color-text:         var(--vds-color-info-text, var(--vds-color-info-muted-text, #155e75));
+    --button-color-text:         var(--vds-color-info-text, #155e75);
     --button-color-border:       var(--button-color-solid);
   }
 
   .vds-button[data-color="accent"] {
     --button-color-solid:        var(--vds-color-accent-solid, var(--vds-color-accent-emphasis, #f97316));
     --button-color-solid-hover:  var(--vds-color-accent-solid-hover, #ea580c);
-    --button-color-solid-active: color-mix(in oklch, var(--button-color-solid), var(--vds-color-black, #000) 16%);
+    --button-color-solid-active: var(
+      --vds-color-accent-solid-active,
+      oklch(from var(--button-color-solid) calc(l * 0.85) c h)
+    );
     --button-color-on-solid:     var(--vds-color-on-accent, #fff);
     --button-color-bg:           var(--vds-color-accent-bg, #ffedd5);
     --button-color-bg-hover:     var(--vds-color-accent-bg-hover, color-mix(in oklch, var(--button-color-bg), var(--button-color-solid) 15%));
@@ -149,34 +182,19 @@
     --button-color-border:       var(--button-color-solid);
   }
 
-  /* Neutral — desaturated gray button distinct from `contrast`. Uses the
-   * high-contrast step (neutral-12) as bg so both modes get ≥ 9:1 contrast
-   * with the inverted on-solid text. Softer than `contrast` though: contrast
-   * uses pure black/white, neutral stays in the warm gray-270 family. */
-  .vds-button[data-color="neutral"] {
-    --button-color-solid:        var(--vds-color-neutral-12, var(--vds-color-gray-900, #171717));
-    --button-color-solid-hover:  var(--vds-color-neutral-11, var(--vds-color-gray-800, #262626));
-    --button-color-solid-active: oklch(from var(--button-color-solid) calc(l * 0.85) c h);
-    --button-color-on-solid:     var(--vds-color-neutral-1, light-dark(var(--vds-color-white, #fff), var(--vds-color-gray-950, #0a0a0a)));
-    --button-color-bg:           var(--vds-color-neutral-3, var(--vds-color-gray-100, #f5f5f5));
-    --button-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-gray-200, #e5e5e5));
-    --button-color-bg-active:    var(--vds-color-neutral-5, var(--vds-color-gray-300, #d4d4d4));
-    --button-color-text:         var(--vds-color-neutral-12, var(--vds-color-text, #171717));
-    --button-color-border:       var(--vds-color-neutral-8, var(--vds-color-gray-400, #a3a3a3));
-  }
-
   /* High-contrast: nearly pure black on light, nearly pure white on dark.
-   * Designed to pop against the page regardless of ambient theme. */
+   * Mode inversion is achieved via the mode-aware neutral scale — no
+   * light-dark() wrapper needed (double-switches with mode-aware primitives). */
   .vds-button[data-color="contrast"] {
-    --button-color-solid:        light-dark(var(--vds-color-gray-950, #0a0a0a), var(--vds-color-gray-50, #fafafa));
-    --button-color-solid-hover:  light-dark(var(--vds-color-gray-900, #171717), var(--vds-color-gray-100, #f5f5f5));
-    --button-color-solid-active: light-dark(var(--vds-color-black, #000), var(--vds-color-white, #fff));
-    --button-color-on-solid:     light-dark(var(--vds-color-white, #fff), var(--vds-color-gray-950, #0a0a0a));
-    --button-color-bg:           light-dark(var(--vds-color-gray-200, #e5e5e5), var(--vds-color-gray-800, #262626));
-    --button-color-bg-hover:     light-dark(var(--vds-color-gray-300, #d4d4d4), var(--vds-color-gray-700, #404040));
-    --button-color-bg-active:    light-dark(var(--vds-color-gray-400, #a3a3a3), var(--vds-color-gray-600, #525252));
-    --button-color-text:         light-dark(var(--vds-color-gray-950, #0a0a0a), var(--vds-color-gray-50, #fafafa));
-    --button-color-border:       light-dark(var(--vds-color-gray-950, #0a0a0a), var(--vds-color-gray-50, #fafafa));
+    --button-color-solid:        var(--vds-color-neutral-12, #0a0a0a);
+    --button-color-solid-hover:  var(--vds-color-neutral-11, #262626);
+    --button-color-solid-active: oklch(from var(--button-color-solid) calc(l * 0.85) c h);
+    --button-color-on-solid:     var(--vds-color-neutral-1, #fafafa);
+    --button-color-bg:           var(--vds-color-neutral-3, #e5e5e5);
+    --button-color-bg-hover:     var(--vds-color-neutral-4, #d4d4d4);
+    --button-color-bg-active:    var(--vds-color-neutral-5, #a3a3a3);
+    --button-color-text:         var(--vds-color-neutral-12, #0a0a0a);
+    --button-color-border:       var(--vds-color-neutral-12, #0a0a0a);
   }
 
   /* =========================================================================
@@ -185,10 +203,16 @@
    *    tokens only (not the palette), so changing [data-color] still works.
    * ========================================================================= */
 
+  /* Non-solid variants swap background between low-chroma tints where
+   * hue-shift risk is negligible, so the neutral overlay is disabled to
+   * avoid stacking with the bg swap and muddying the tinted look. */
+
   .vds-button[data-variant="outline"] {
     --button-bg:            transparent;
     --button-bg-hover:      var(--button-color-bg-hover);
     --button-bg-active:     var(--button-color-bg-active);
+    --button-overlay-hover:  transparent;
+    --button-overlay-active: transparent;
     --button-text:          var(--button-color-text);
     --button-text-hover:    var(--button-color-text);
     --button-text-active:   var(--button-color-text);
@@ -201,6 +225,8 @@
     --button-bg:            transparent;
     --button-bg-hover:      var(--button-color-bg-hover);
     --button-bg-active:     var(--button-color-bg-active);
+    --button-overlay-hover:  transparent;
+    --button-overlay-active: transparent;
     --button-text:          var(--button-color-text);
     --button-text-hover:    var(--button-color-text);
     --button-text-active:   var(--button-color-text);
@@ -213,6 +239,8 @@
     --button-bg:            var(--button-color-bg);
     --button-bg-hover:      var(--button-color-bg-hover);
     --button-bg-active:     var(--button-color-bg-active);
+    --button-overlay-hover:  transparent;
+    --button-overlay-active: transparent;
     --button-text:          var(--button-color-text);
     --button-text-hover:    var(--button-color-text);
     --button-text-active:   var(--button-color-text);
@@ -228,6 +256,8 @@
     --button-bg:            transparent;
     --button-bg-hover:      transparent;
     --button-bg-active:     transparent;
+    --button-overlay-hover:  transparent;
+    --button-overlay-active: transparent;
     --button-text:          var(--button-color-solid);
     --button-text-hover:    var(--button-color-solid-hover);
     --button-text-active:   var(--button-color-solid-active);

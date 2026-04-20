@@ -36,7 +36,7 @@
     --combobox-trigger-focus-ring-color: var(--vds-color-ring, #6366f1);
     --combobox-trigger-focus-ring-width: 2px;
     --combobox-trigger-focus-ring-offset: -1px;
-    --combobox-trigger-focus-border-color: var(--vds-color-primary-500, #6366f1);
+    --combobox-trigger-focus-border-color: var(--vds-color-primary-9, #6366f1);
 
     /* Motion */
     --combobox-trigger-transition-duration: var(--vds-duration-fast, 100ms);
@@ -81,9 +81,9 @@
 
     --combobox-item-bg: transparent;
     --combobox-item-bg-highlighted: var(--vds-color-bg-muted, #f3f4f6);
-    --combobox-item-bg-selected: color-mix(in oklch, var(--vds-color-primary-500, #6366f1) 10%, transparent);
+    --combobox-item-bg-selected: color-mix(in oklch, var(--vds-color-primary-9, #6366f1) 10%, transparent);
     --combobox-item-text-color: var(--vds-color-text, #111827);
-    --combobox-item-indicator-color: var(--vds-color-primary-500, #6366f1);
+    --combobox-item-indicator-color: var(--vds-color-primary-9, #6366f1);
 
     --combobox-item-transition-duration: var(--vds-duration-fastest, 50ms);
     --combobox-item-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
@@ -188,10 +188,10 @@
    * 4. States
    * ───────────────────────────────────────────── */
   .vds-combobox-trigger[data-invalid="true"] {
-    --combobox-trigger-border-color: var(--vds-color-danger-emphasis, #ef4444);
-    --combobox-trigger-border-color-hover: var(--vds-color-danger-hover, #dc2626);
-    --combobox-trigger-focus-ring-color: var(--vds-color-danger-emphasis, #ef4444);
-    --combobox-trigger-focus-border-color: var(--vds-color-danger-emphasis, #ef4444);
+    --combobox-trigger-border-color: var(--vds-color-danger-solid, #ef4444);
+    --combobox-trigger-border-color-hover: var(--vds-color-danger-solid-hover, #dc2626);
+    --combobox-trigger-focus-ring-color: var(--vds-color-danger-solid, #ef4444);
+    --combobox-trigger-focus-border-color: var(--vds-color-danger-solid, #ef4444);
   }
   .vds-combobox-trigger[data-loading="true"] {
     --combobox-trigger-icon-opacity: 0.6;

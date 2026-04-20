@@ -25,11 +25,11 @@
 
     inline-size: var(--_switch-width);
     block-size: var(--_switch-height);
-    background-color: var(--vds-color-gray-300);
+    background-color: var(--vds-color-neutral-6);
   }
 
     .vds-switch[data-state="checked"] {
-      background-color: var(--vds-color-primary-500);
+      background-color: var(--vds-color-primary-9);
     }
 
     .vds-switch:focus-visible {

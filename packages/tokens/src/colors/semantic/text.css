@@ -1,21 +1,30 @@
 @layer tokens {
   /*
-   * ── Text semantic layer (NEW, additive) ──
+   * ── Text semantic layer ──
    *
-   * Adds the missing text roles every enterprise design system has:
-   *   • text-placeholder    distinct from text-disabled
-   *   • text-link / hover / visited
-   *   • text-inverse        text on inverse bg
-   *   • text-selection      text inside ::selection
-   *   • text-on-{intent}-muted  renamed-style aliases that mirror the
-   *                             status.css *-text tokens for consistency
+   * Canonical home for every text token. Values consume mode-aware
+   * 12-step primitives directly (no `light-dark()` wrappers).
    *
-   * Legacy text/text-muted/text-subtle/text-disabled stay in _legacy.css.
+   *   text              = body copy             (neutral-12)
+   *   text-muted        = secondary copy        (neutral-11)
+   *   text-subtle       = low-contrast copy     (neutral-9)
+   *   text-disabled     = disabled copy         (neutral-8)
+   *   text-placeholder  = form placeholders     (neutral-9)
+   *   text-inverse      = text on bg-inverse    (neutral-1)
+   *   text-link / hover / visited               (primary-11/10/12)
+   *   text-selection    = default selection text
+   *   on-solid          = text on solid neutral bg (always white)
    */
 
   :root {
-    /* ─── Placeholder (form inputs) ─── */
-    --vds-color-text-placeholder: light-dark(var(--vds-color-neutral-9), var(--vds-color-neutral-9));
+    /* ─── Core scale ─── */
+    --vds-color-text:          var(--vds-color-neutral-12);
+    --vds-color-text-muted:    var(--vds-color-neutral-11);
+    --vds-color-text-subtle:   var(--vds-color-neutral-9);
+    --vds-color-text-disabled: var(--vds-color-neutral-8);
+
+    /* ─── Form placeholders ─── */
+    --vds-color-text-placeholder: var(--vds-color-neutral-9);
 
     /* ─── Hyperlinks ─── */
     --vds-color-text-link:         var(--vds-color-primary-11);
@@ -23,9 +32,12 @@
     --vds-color-text-link-visited: var(--vds-color-primary-12);
 
     /* ─── Inverse (text on bg-inverse / surface-inverse) ─── */
-    --vds-color-text-inverse: light-dark(var(--vds-color-neutral-1), var(--vds-color-neutral-1));
+    --vds-color-text-inverse: var(--vds-color-neutral-1);
 
     /* ─── Selection (CSS ::selection text color) ─── */
     --vds-color-text-selection: var(--vds-color-text);
+
+    /* ─── On-solid (text on solid neutral backgrounds) ─── */
+    --vds-color-on-solid: var(--vds-color-white);
   }
 }

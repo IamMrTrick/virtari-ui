@@ -445,7 +445,7 @@
     background-color: var(--data-table-pagination-button-bg-hover);
   }
   .vds-data-table-filter-trigger[data-active] {
-    color: var(--vds-color-primary-emphasis, #6366f1);
+    color: var(--vds-color-primary-solid, #6366f1);
   }
   .vds-data-table-filter-trigger:focus-visible {
     outline: var(--data-table-focus-ring-width) solid
@@ -488,7 +488,7 @@
   .vds-data-table-filter-clear {
     all: unset;
     align-self: flex-start;
-    color: var(--vds-color-danger-emphasis, #dc2626);
+    color: var(--vds-color-danger-solid, #dc2626);
     font-size: var(--vds-text-xs, 0.75rem);
     cursor: pointer;
   }
@@ -514,7 +514,7 @@
     background-color: var(--data-table-pagination-button-bg-hover);
   }
   .vds-data-table-pin-trigger[data-pinned] {
-    color: var(--vds-color-primary-emphasis, #6366f1);
+    color: var(--vds-color-primary-solid, #6366f1);
   }
   .vds-data-table-pin-trigger:focus-visible {
     outline: var(--data-table-focus-ring-width) solid
@@ -787,7 +787,7 @@
     background-color: var(--data-table-pagination-button-bg-hover);
   }
   .vds-data-table-row-pin-trigger[data-pinned] {
-    color: var(--vds-color-primary-emphasis, #6366f1);
+    color: var(--vds-color-primary-solid, #6366f1);
   }
 
   /* ───── SR-only utility ────────────────────────────────────── */
@@ -881,8 +881,8 @@
         var(--data-table-transition-easing);
   }
   .vds-data-table-board-card[data-selected] {
-    border-color: var(--vds-color-primary-emphasis, #6366f1);
-    background-color: var(--vds-color-primary-muted, #eef2ff);
+    border-color: var(--vds-color-primary-solid, #6366f1);
+    background-color: var(--vds-color-primary-bg, #eef2ff);
   }
   .vds-data-table-board-field {
     display: flex;
@@ -990,7 +990,7 @@
   }
   .vds-data-table-select-all-link {
     all: unset;
-    color: var(--vds-color-primary-emphasis, #6366f1);
+    color: var(--vds-color-primary-solid, #6366f1);
     cursor: pointer;
     font-weight: var(--vds-font-weight-medium, 500);
   }
@@ -1044,7 +1044,7 @@
   }
   .vds-data-table-toolbar-button[data-variant="solid"][data-intent="primary"] {
     background-color: var(--data-table-toolbar-button-color-primary);
-    color: #fff;
+    color: var(--vds-color-on-primary, #fff);
   }
   .vds-data-table-toolbar-button[data-variant="solid"][data-intent="primary"]:hover:not(:disabled) {
     background-color: color-mix(
@@ -1055,7 +1055,7 @@
   }
   .vds-data-table-toolbar-button[data-variant="solid"][data-intent="danger"] {
     background-color: var(--data-table-toolbar-button-color-danger);
-    color: #fff;
+    color: var(--vds-color-on-danger, #fff);
   }
 
   /* Intent: primary on ghost/outline — colored text, no bg. */
@@ -1123,7 +1123,7 @@
     padding-inline: var(--vds-space-1, 0.25rem);
     margin-inline-start: 2px;
     background-color: var(--data-table-toolbar-button-color-primary);
-    color: #fff;
+    color: var(--vds-color-on-primary, #fff);
     border-radius: 1rem;
     font-size: var(--vds-text-xs, 0.75rem);
     font-weight: var(--vds-font-weight-semibold, 600);
@@ -1182,16 +1182,16 @@
     flex-shrink: 0;
   }
   .vds-data-table-status-cell[data-tone="success"] {
-    color: var(--vds-color-success-emphasis, #16a34a);
+    color: var(--vds-color-success-solid, #16a34a);
   }
   .vds-data-table-status-cell[data-tone="warning"] {
-    color: var(--vds-color-warning-emphasis, #d97706);
+    color: var(--vds-color-warning-solid, #d97706);
   }
   .vds-data-table-status-cell[data-tone="danger"] {
-    color: var(--vds-color-danger-emphasis, #dc2626);
+    color: var(--vds-color-danger-solid, #dc2626);
   }
   .vds-data-table-status-cell[data-tone="info"] {
-    color: var(--vds-color-info-emphasis, #2563eb);
+    color: var(--vds-color-info-solid, #2563eb);
   }
   .vds-data-table-status-cell[data-tone="neutral"] {
     color: var(--vds-color-text-muted, #6b7280);
@@ -1229,7 +1229,7 @@
   }
 
   .vds-data-table-link-cell {
-    color: var(--vds-color-primary-emphasis, #6366f1);
+    color: var(--vds-color-primary-solid, #6366f1);
     text-decoration: none;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1267,7 +1267,7 @@
   }
   .vds-data-table-copyable-cell[data-copied] .vds-data-table-copyable-cell-button {
     opacity: 1;
-    color: var(--vds-color-success-emphasis, #16a34a);
+    color: var(--vds-color-success-solid, #16a34a);
   }
 
   .vds-data-table-actions-cell-trigger {
@@ -1319,8 +1319,8 @@
     min-inline-size: 1.25rem;
     block-size: 1.25rem;
     padding-inline: 4px;
-    background-color: var(--vds-color-primary-emphasis, #6366f1);
-    color: #fff;
+    background-color: var(--vds-color-primary-solid, #6366f1);
+    color: var(--vds-color-on-primary, #fff);
     border-radius: 999px;
     font-size: var(--vds-text-xs, 0.75rem);
     font-weight: var(--vds-font-weight-semibold, 600);
@@ -1348,7 +1348,7 @@
   .vds-data-table-filter-drawer-clear {
     all: unset;
     cursor: pointer;
-    color: var(--vds-color-danger-emphasis, #dc2626);
+    color: var(--vds-color-danger-solid, #dc2626);
     font-size: var(--vds-text-xs, 0.75rem);
   }
   .vds-data-table-filter-drawer-group {
@@ -1371,8 +1371,8 @@
     align-items: center;
     gap: 4px;
     padding: 2px var(--vds-space-2, 0.5rem);
-    background-color: var(--vds-color-primary-muted, #eef2ff);
-    color: var(--vds-color-primary-emphasis, #6366f1);
+    background-color: var(--vds-color-primary-bg, #eef2ff);
+    color: var(--vds-color-primary-solid, #6366f1);
     border-radius: 999px;
     font-size: var(--vds-text-xs, 0.75rem);
   }
@@ -1417,7 +1417,7 @@
     background-color: var(--vds-color-surface-hover, #f3f4f6);
   }
   .vds-data-table-filter-drawer-field[data-active] {
-    border-color: var(--vds-color-primary-emphasis, #6366f1);
+    border-color: var(--vds-color-primary-solid, #6366f1);
   }
   .vds-data-table-filter-drawer-field-left {
     display: inline-flex;

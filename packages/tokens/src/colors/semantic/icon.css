@@ -26,7 +26,7 @@
     --vds-color-icon-on-warning: var(--vds-color-on-warning);
     --vds-color-icon-on-danger:  var(--vds-color-on-danger);
     --vds-color-icon-on-info:    var(--vds-color-on-info);
-    --vds-color-icon-on-accent:  var(--vds-color-on-primary); /* defaults to primary on-color */
+    --vds-color-icon-on-accent:  var(--vds-color-on-accent);
 
     /* ─── Intent-colored icons (status indicators, alerts) ─── */
     --vds-color-icon-primary: var(--vds-color-primary-9);

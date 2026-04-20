@@ -27,6 +27,12 @@
    */
 
   :root {
+    /* ── Absolute anchors ──
+     * Used by alpha primitives, shadows, scrims, and any component
+     * that truly wants pure black or white regardless of theme. */
+    --vds-color-white: oklch(1 0 0);
+    --vds-color-black: oklch(0 0 0);
+
     /* ── Neutral solids (light, default) ── */
     --vds-color-neutral-1:  oklch(0.985 0.002 270);
     --vds-color-neutral-2:  oklch(0.975 0.003 270);

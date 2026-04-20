@@ -5,7 +5,7 @@
     position: fixed;
     inset: 0;
     z-index: var(--vds-z-overlay);
-    background-color: var(--vds-color-overlay);
+    background-color: var(--vds-color-scrim);
     opacity: var(--vds-drawer-overlay-opacity, 0);
     pointer-events: none;
     will-change: opacity;
@@ -27,7 +27,7 @@
     --vds-drawer-handle-width: 2.875rem;
     --vds-drawer-handle-thickness: 0.3125rem;
     --vds-drawer-handle-color: var(--vds-color-border);
-    --vds-drawer-handle-color-active: var(--vds-color-border-strong, var(--vds-color-gray-400));
+    --vds-drawer-handle-color-active: var(--vds-color-border-strong, var(--vds-color-neutral-8));
     --vds-drawer-available-size: 100dvh;
     --vds-drawer-fixed-size: var(--vds-drawer-available-size);
     --vds-drawer-adaptive-size: clamp(18rem, 32vw, 28rem);
@@ -185,13 +185,10 @@
     -moz-user-select: none;
          user-select: none;
     -webkit-user-select: none;
-    /* Plain (default): a single flat step of contrast vs the drawer body —
-       slightly darker in light theme, slightly lighter in dark theme, no
-       border. No gradient. */
-    background: light-dark(
-      color-mix(in oklch, var(--vds-color-surface), black 5%),
-      color-mix(in oklch, var(--vds-color-surface), white 5%)
-    );
+    /* Plain (default): a single flat step of contrast vs the drawer body.
+       surface-sunken inverts automatically (slightly darker in light,
+       slightly lighter in dark) because neutral-2 is mode-aware. */
+    background: var(--vds-color-surface-sunken);
   }
 
   .vds-drawer-header[data-variant="bordered"] {
@@ -413,7 +410,7 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background-color: var(--vds-color-primary-500, var(--vds-color-text));
+    background-color: var(--vds-color-primary-9, var(--vds-color-text));
     transform-origin: center;
     transform: scaleX(var(--vds-drawer-close-progress, 0));
     transition: transform var(--vds-duration-fast) var(--vds-ease-out);

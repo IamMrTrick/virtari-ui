@@ -522,7 +522,6 @@ export function DataTableUsersPage() {
             <div style={{ display: "inline-flex", gap: "var(--vds-space-1, 0.25rem)" }}>
               <Button
                 variant="ghost"
-                color="neutral"
                 size="xs"
                 leftSection={<IconPencil size={12} stroke={1.75} aria-hidden />}
                 onClick={() => setQuickEdit(u)}
@@ -584,7 +583,6 @@ export function DataTableUsersPage() {
 
           <Button
             variant="ghost"
-            color="neutral"
             size="sm"
             leftSection={<IconEyeOff size={14} stroke={1.75} aria-hidden />}
             onClick={() => setCustomizeOpen(true)}
@@ -594,7 +592,6 @@ export function DataTableUsersPage() {
 
           <Button
             variant="ghost"
-            color="neutral"
             size="sm"
             leftSection={<IconSettings size={14} stroke={1.75} aria-hidden />}
             onClick={() => setCustomizeOpen(true)}
@@ -604,7 +601,6 @@ export function DataTableUsersPage() {
 
           <Button
             variant="ghost"
-            color="neutral"
             size="sm"
             leftSection={
               <IconRefresh
@@ -626,7 +622,6 @@ export function DataTableUsersPage() {
 
           <Button
             variant="ghost"
-            color="neutral"
             size="sm"
             leftSection={
               <IconRotateClockwise2 size={14} stroke={1.75} aria-hidden />
@@ -670,7 +665,6 @@ export function DataTableUsersPage() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                color="neutral"
                 size="sm"
                 leftSection={<IconDownload size={14} stroke={1.75} aria-hidden />}
                 rightSection={
@@ -789,7 +783,6 @@ export function DataTableUsersPage() {
                 </Button>
                 <Button
                   variant="ghost"
-                  color="neutral"
                   size="sm"
                   leftSection={<IconX size={14} stroke={1.75} aria-hidden />}
                   onClick={clearSelection}
@@ -1125,7 +1118,6 @@ function CustomPagination() {
       >
         <Button
           variant="ghost"
-          color="neutral"
           size="sm"
           aria-label="First page"
           disabled={!table.getCanPreviousPage()}
@@ -1134,7 +1126,6 @@ function CustomPagination() {
         />
         <Button
           variant="ghost"
-          color="neutral"
           size="sm"
           aria-label="Previous page"
           disabled={!table.getCanPreviousPage()}
@@ -1169,7 +1160,6 @@ function CustomPagination() {
         )}
         <Button
           variant="ghost"
-          color="neutral"
           size="sm"
           aria-label="Next page"
           disabled={!table.getCanNextPage()}
@@ -1178,7 +1168,6 @@ function CustomPagination() {
         />
         <Button
           variant="ghost"
-          color="neutral"
           size="sm"
           aria-label="Last page"
           disabled={!table.getCanNextPage()}
@@ -1350,7 +1339,6 @@ function FilterDrawer({
               {twoFAValue !== undefined && (
                 <Button
                   variant="link"
-                  color="neutral"
                   size="xs"
                   onClick={() => onChange("twoFA", undefined)}
                   style={{ alignSelf: "flex-start", padding: 0 }}
@@ -1539,7 +1527,6 @@ function AddUserDrawer({
           <div style={drawerFooterStyle}>
             <Button
               variant="ghost"
-              color="neutral"
               size="md"
               onClick={() => onOpenChange(false)}
             >
@@ -1701,7 +1688,6 @@ function QuickEditDrawer({
           <div style={drawerFooterStyle}>
             <Button
               variant="ghost"
-              color="neutral"
               size="md"
               onClick={() => onOpenChange(false)}
             >
@@ -1890,7 +1876,6 @@ function CustomListView({
             >
               <Button
                 variant="ghost"
-                color="neutral"
                 size="xs"
                 leftSection={<IconPencil size={12} stroke={1.75} aria-hidden />}
                 onClick={() => onQuickEdit(u)}
@@ -1969,7 +1954,6 @@ function CustomBoardView({
               >
                 <Button
                   variant="ghost"
-                  color="neutral"
                   size="xs"
                   leftSection={
                     <IconPencil size={12} stroke={1.75} aria-hidden />

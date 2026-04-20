@@ -111,13 +111,13 @@
   }
 
   ::-moz-selection {
-    background-color: var(--vds-color-primary-500);
-    color: white;
+    background-color: var(--vds-color-selection-bg);
+    color: var(--vds-color-selection-text);
   }
 
   ::selection {
-    background-color: var(--vds-color-primary-500);
-    color: white;
+    background-color: var(--vds-color-selection-bg);
+    color: var(--vds-color-selection-text);
   }
 
   /* Scrollbar — themed, cross-browser

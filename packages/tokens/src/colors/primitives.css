@@ -1,11 +1,9 @@
 /*
- * Color primitives entry — re-exports the new split structure.
+ * Color primitives entry — re-exports the split structure.
  *
- * The actual scales now live in primitives/ as separate files:
- *   primitives/neutral.css   12-step neutral (mode-aware)
+ *   primitives/neutral.css   absolute anchors + 12-step neutral (mode-aware)
  *   primitives/intents.css   12-step intent scales (mode-aware)
  *   primitives/alphas.css    black-a, white-a, neutral-a, per-intent-a
- *   primitives/_legacy.css   gray-50..950 + legacy single-set alphas
  *
  * Brand themes (brands/*.css) override these via [data-brand="..."].
  */

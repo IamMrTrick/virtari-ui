@@ -105,7 +105,7 @@
     --breadcrumb-item-bg: var(--vds-color-bg-muted, #e5e7eb);
     --breadcrumb-item-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
     --breadcrumb-link-color: var(--vds-color-text, #111827);
-    --breadcrumb-link-color-hover: var(--vds-color-primary-emphasis, #6366f1);
+    --breadcrumb-link-color-hover: var(--vds-color-primary-solid, #6366f1);
   }
 
   /* Solid — current page reads as a strong pill, links stay text-only */

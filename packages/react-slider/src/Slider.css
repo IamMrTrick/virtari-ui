@@ -27,11 +27,11 @@
   .vds-slider-range {
     position: absolute;
     block-size: 100%;
-    background-color: var(--vds-color-primary-500);
+    background-color: var(--vds-color-primary-9);
     border-radius: inherit;
 
     .vds-slider[data-disabled] & {
-      background-color: var(--vds-color-gray-400, #9ca3af);
+      background-color: var(--vds-color-neutral-8, #9ca3af);
     }
   }
 
@@ -41,7 +41,7 @@
     block-size: var(--vds-space-5);
     border-radius: var(--vds-radius-full);
     background-color: var(--vds-color-white);
-    border: 2px solid var(--vds-color-primary-500);
+    border: 2px solid var(--vds-color-primary-9);
     box-shadow: var(--vds-shadow-sm);
     transition:
       box-shadow var(--vds-duration-fast) var(--vds-ease-out),
@@ -58,7 +58,7 @@
 
     .vds-slider[data-disabled] & {
       cursor: not-allowed;
-      border-color: var(--vds-color-gray-400, #9ca3af);
+      border-color: var(--vds-color-neutral-8, #9ca3af);
     }
 
     .vds-slider[data-disabled] &:hover {

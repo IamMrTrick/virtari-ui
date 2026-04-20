@@ -1,25 +1,45 @@
 @layer tokens {
   /*
-   * ── Status (intent) semantic layer (NEW, additive) ──
+   * ── Status (intent) semantic layer ──
    *
-   * Expands each intent (primary/success/warning/danger/info/accent) to
-   * the full 12-step semantic role coverage:
+   * Canonical home for every intent token. Each intent
+   * (primary/success/warning/danger/info/accent) is expanded to full
+   * 12-step role coverage:
    *
-   *   {intent}-bg-subtle    app-level intent tint (canvas accent)
-   *   {intent}-bg           component-level muted bg (badges, alerts)
-   *   {intent}-bg-hover     hover on muted bg                  (NEW)
-   *   {intent}-bg-active    active on muted bg                 (NEW)
-   *   {intent}-solid        emphasis bg (CTAs, indicators)
-   *   {intent}-solid-hover  solid hover
-   *   {intent}-solid-active solid active
-   *   {intent}-text         high-contrast text on muted bg
-   *   {intent}-text-muted   low-contrast text on muted bg      (NEW)
+   *   {intent}-bg-subtle    app-level intent tint   (intent-2)
+   *   {intent}-bg           component muted bg      (intent-3)
+   *   {intent}-bg-hover     hover on muted bg       (intent-4)
+   *   {intent}-bg-active    active on muted bg      (intent-5)
+   *   {intent}-solid        emphasis bg (CTAs)      (intent-9)
+   *   {intent}-solid-hover  solid hover             (intent-10)
+   *   {intent}-solid-active solid active            (intent-11)
+   *   {intent}-text         high-contrast text      (intent-11)
+   *   {intent}-text-muted   low-contrast text       (intent-10)
+   *   on-{intent}           text/icon on *-solid    (white or neutral-12)
    *
    * Legacy aliases (*-emphasis, *-muted, *-muted-text, *-hover, *-active)
-   * stay in _legacy.css. New components should prefer these names.
+   * live in _legacy.css and point at the canonical names here.
    */
 
   :root {
+    /* ─── On-colors (text/icon on solid intent backgrounds) ───
+     * Hand-picked defaults cover every brand tuning within our palette.
+     * The @supports block below upgrades to contrast-color() where the
+     * browser implements CSS Color Module 6 — automatically re-selects
+     * black/white when a brand sets an unexpectedly light/dark intent-9. */
+    /* Hand-picked per the brand palette — white on all saturated intents
+     * except warning (amber) which needs dark text for readability.
+     * We intentionally do NOT use contrast-color() here: early Chromium
+     * implementations use an OKLCH L=0.5 threshold, which picks black on
+     * brand colors that sit just above that midpoint (e.g. primary-9 at
+     * L=0.550), even though white has demonstrably higher WCAG contrast. */
+    --vds-color-on-primary: var(--vds-color-white);
+    --vds-color-on-success: var(--vds-color-white);
+    --vds-color-on-warning: var(--vds-color-neutral-12);
+    --vds-color-on-danger:  var(--vds-color-white);
+    --vds-color-on-info:    var(--vds-color-white);
+    --vds-color-on-accent:  var(--vds-color-white);
+
     /* ─── Primary ─── */
     --vds-color-primary-bg-subtle:    var(--vds-color-primary-2);
     --vds-color-primary-bg:           var(--vds-color-primary-3);
@@ -85,8 +105,6 @@
     --vds-color-accent-solid-active: var(--vds-color-accent-11);
     --vds-color-accent-text:         var(--vds-color-accent-11);
     --vds-color-accent-text-muted:   var(--vds-color-accent-10);
-
-    /* ─── Accent on-color (text/icon on solid accent) ─── */
-    --vds-color-on-accent: var(--vds-color-white);
   }
+
 }

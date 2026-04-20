@@ -16,7 +16,13 @@
    */
 
   :root {
-    /* ── Primary (indigo) — light ── */
+    /* ── Primary (indigo) — light ──
+     * Steps 9-11 follow the same monotonic-chroma rule as every other
+     * intent: chroma peaks at step 9 (base solid) and decreases toward
+     * step 12. Previously step 10 bumped chroma (0.200 → 0.205), which
+     * at hue 265° read as a perceptual hue shift to purple during hover
+     * since indigo-violet sits right on that hue boundary at high chroma.
+     */
     --vds-color-primary-1:  oklch(0.985 0.005 265);
     --vds-color-primary-2:  oklch(0.970 0.010 265);
     --vds-color-primary-3:  oklch(0.940 0.020 265);
@@ -26,8 +32,8 @@
     --vds-color-primary-7:  oklch(0.770 0.150 265);
     --vds-color-primary-8:  oklch(0.700 0.190 265);
     --vds-color-primary-9:  oklch(0.550 0.200 265);
-    --vds-color-primary-10: oklch(0.500 0.205 265);
-    --vds-color-primary-11: oklch(0.450 0.190 265);
+    --vds-color-primary-10: oklch(0.500 0.195 265);
+    --vds-color-primary-11: oklch(0.450 0.175 265);
     --vds-color-primary-12: oklch(0.260 0.140 265);
 
     /* ── Success (green) — light ── */
@@ -186,5 +192,19 @@
     --vds-color-accent-10: oklch(0.715 0.175 45);
     --vds-color-accent-11: oklch(0.795 0.155 45);
     --vds-color-accent-12: oklch(0.920 0.080 45);
+  }
+
+  /*
+   * OLED variant — drop step 1 of every intent to match pure-black canvas.
+   * Without this, intent step-1 (L≈0.19) on OLED neutral-1 (L=0) produces
+   * visible banding. Step 2+ keep the regular dark ladder.
+   */
+  [data-theme="dark-oled"] {
+    --vds-color-primary-1: oklch(0.080 0.015 265);
+    --vds-color-success-1: oklch(0.075 0.012 155);
+    --vds-color-warning-1: oklch(0.080 0.015 85);
+    --vds-color-danger-1:  oklch(0.080 0.015 25);
+    --vds-color-info-1:    oklch(0.075 0.012 210);
+    --vds-color-accent-1:  oklch(0.080 0.015 45);
   }
 }

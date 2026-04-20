@@ -20,7 +20,7 @@
     --tabs-list-border-width: 0;
 
     /* Sliding indicator */
-    --tabs-indicator-color: var(--vds-color-primary-emphasis, #6366f1);
+    --tabs-indicator-color: var(--vds-color-primary-solid, #6366f1);
     --tabs-indicator-thickness: 2px;
     --tabs-indicator-radius: 0;
     --tabs-indicator-inset: 0;
@@ -134,12 +134,12 @@
   .vds-tabs-list[data-variant="pills"] {
     --tabs-list-gap: var(--vds-space-1, 0.25rem);
     --tabs-indicator-display: block;
-    --tabs-indicator-color: var(--vds-color-primary-emphasis, #6366f1);
+    --tabs-indicator-color: var(--vds-color-primary-solid, #6366f1);
     --tabs-indicator-radius: var(--vds-radius-badge, 9999px);
   }
   .vds-tabs-list[data-variant="pills"] .vds-tabs-trigger {
     --tabs-trigger-radius: var(--vds-radius-badge, 9999px);
-    --tabs-trigger-bg-active: var(--vds-color-primary-emphasis, #6366f1);
+    --tabs-trigger-bg-active: var(--vds-color-primary-solid, #6366f1);
     --tabs-trigger-color-active: var(--vds-color-on-primary, #ffffff);
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
     --tabs-trigger-color-hover: var(--vds-color-text, #111827);
@@ -189,8 +189,8 @@
     --tabs-trigger-border-color: var(--vds-color-border, #d1d5db);
     --tabs-trigger-border-color-hover: var(--vds-color-border, #d1d5db);
     --tabs-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
-    --tabs-trigger-bg-active: var(--vds-color-primary-emphasis, #6366f1);
-    --tabs-trigger-border-color-active: var(--vds-color-primary-emphasis, #6366f1);
+    --tabs-trigger-bg-active: var(--vds-color-primary-solid, #6366f1);
+    --tabs-trigger-border-color-active: var(--vds-color-primary-solid, #6366f1);
     --tabs-trigger-color-active: var(--vds-color-on-primary, #ffffff);
   }
 
@@ -201,7 +201,7 @@
   .vds-tabs-list[data-variant="solid"] .vds-tabs-trigger {
     --tabs-trigger-radius: var(--vds-radius-element, 0.5rem);
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
-    --tabs-trigger-bg-active: var(--vds-color-primary-emphasis, #6366f1);
+    --tabs-trigger-bg-active: var(--vds-color-primary-solid, #6366f1);
     --tabs-trigger-color-active: var(--vds-color-on-primary, #ffffff);
   }
 
@@ -212,8 +212,8 @@
   .vds-tabs-list[data-variant="soft"] .vds-tabs-trigger {
     --tabs-trigger-radius: var(--vds-radius-element, 0.5rem);
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
-    --tabs-trigger-bg-active: var(--vds-color-primary-muted, #eef2ff);
-    --tabs-trigger-color-active: var(--vds-color-primary-muted-text, #3730a3);
+    --tabs-trigger-bg-active: var(--vds-color-primary-bg, #eef2ff);
+    --tabs-trigger-color-active: var(--vds-color-primary-text, #3730a3);
   }
 
   /* ── ghost ── */

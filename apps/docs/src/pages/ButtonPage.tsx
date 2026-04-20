@@ -182,7 +182,6 @@ const COLORS: ButtonColor[] = [
   "danger",
   "info",
   "accent",
-  "neutral",
   "contrast",
 ];
 const VARIANTS: ButtonVariant[] = ["solid", "outline", "ghost", "soft", "link"];
@@ -421,7 +420,6 @@ function ColorsSection() {
 <Button color="danger">Delete</Button>        // destructive
 <Button color="info">Preview</Button>
 <Button color="accent">Upgrade</Button>       // highlight / secondary CTA
-<Button color="neutral">Cancel</Button>       // gray, non-intent
 <Button color="contrast">Contact sales</Button> // black↔white per theme`}</pre>
     </Section>
   );
@@ -435,8 +433,8 @@ function colorHint(c: ButtonColor): string {
     case "danger":   return "Destructive / irreversible";
     case "info":     return "Informational / preview";
     case "accent":   return "Highlight / secondary CTA";
-    case "neutral":  return "Non-intent, gray";
     case "contrast": return "Black ↔ white per theme";
+    default: return "";
   }
 }
 
@@ -689,7 +687,7 @@ function FullWidthSection() {
       <LayoutStack gap="sm" style={{ maxInlineSize: "24rem" }}>
         <Button fullWidth size="xl">Sign in</Button>
         <Button fullWidth size="xl" variant="outline">Continue with Google</Button>
-        <Button fullWidth size="xl" variant="ghost" color="neutral">Use SSO</Button>
+        <Button fullWidth size="xl" variant="ghost">Use SSO</Button>
       </LayoutStack>
 
       <LayoutRow cols={2} gap="sm" style={{ maxInlineSize: "24rem" }}>
@@ -876,7 +874,7 @@ import "@virtari-packages/react-button/styles/animations";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?:       "primary" | "success" | "warning" | "danger"
-              | "info" | "accent" | "neutral" | "contrast";
+              | "info" | "accent" | "contrast";
   variant?:     "solid" | "outline" | "ghost" | "soft" | "link";
   size?:        "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
   asChild?:     boolean;                    // render as child (Slot)

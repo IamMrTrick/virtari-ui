@@ -53,15 +53,15 @@
     --table-row-bg:          transparent;
     --table-row-bg-alt:      var(--vds-color-neutral-2, color-mix(in oklch, var(--table-bg) 94%, var(--vds-color-neutral-12, #171717) 6%));
     --table-row-bg-hover:    var(--vds-color-neutral-3, color-mix(in oklch, var(--table-bg) 88%, var(--vds-color-neutral-12, #171717) 12%));
-    --table-row-bg-selected: var(--vds-color-primary-bg, var(--vds-color-primary-muted, #eef2ff));
+    --table-row-bg-selected: var(--vds-color-primary-bg, #eef2ff);
     --table-row-bg-selected-hover: color-mix(
       in oklch,
       var(--table-row-bg-selected) 80%,
-      var(--vds-color-primary-solid, var(--vds-color-primary-emphasis, #4f46e5)) 20%
+      var(--vds-color-primary-solid, #4f46e5) 20%
     );
 
     /* ── Accent (selection stripe + sort indicator) ── */
-    --table-accent-color: var(--vds-color-primary-solid, var(--vds-color-primary-emphasis, #4f46e5));
+    --table-accent-color: var(--vds-color-primary-solid, #4f46e5);
 
     /* ── Motion ── */
     --table-transition-duration: var(--vds-duration-fast, 120ms);

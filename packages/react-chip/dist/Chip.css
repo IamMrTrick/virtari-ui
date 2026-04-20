@@ -57,43 +57,43 @@
    *    Muted intent background + muted-text color
    * ───────────────────────────────────────────── */
   .vds-chip[data-variant="primary"] {
-    --chip-background: var(--vds-color-primary-muted, #e0e7ff);
-    --chip-background-hover: color-mix(in oklch, var(--vds-color-primary-muted, #e0e7ff), var(--vds-color-primary-emphasis, #6366f1) 10%);
-    --chip-background-active: color-mix(in oklch, var(--vds-color-primary-muted, #e0e7ff), var(--vds-color-primary-emphasis, #6366f1) 18%);
-    --chip-text-color: var(--vds-color-primary-muted-text, #3730a3);
-    --chip-icon-color: var(--vds-color-primary-emphasis, #6366f1);
+    --chip-background: var(--vds-color-primary-bg, #e0e7ff);
+    --chip-background-hover: color-mix(in oklch, var(--vds-color-primary-bg, #e0e7ff), var(--vds-color-primary-solid, #6366f1) 10%);
+    --chip-background-active: color-mix(in oklch, var(--vds-color-primary-bg, #e0e7ff), var(--vds-color-primary-solid, #6366f1) 18%);
+    --chip-text-color: var(--vds-color-primary-text, #3730a3);
+    --chip-icon-color: var(--vds-color-primary-solid, #6366f1);
   }
 
   .vds-chip[data-variant="success"] {
-    --chip-background: var(--vds-color-success-muted, #dcfce7);
-    --chip-background-hover: color-mix(in oklch, var(--vds-color-success-muted, #dcfce7), var(--vds-color-success-emphasis, #22c55e) 10%);
-    --chip-background-active: color-mix(in oklch, var(--vds-color-success-muted, #dcfce7), var(--vds-color-success-emphasis, #22c55e) 18%);
-    --chip-text-color: var(--vds-color-success-muted-text, #166534);
-    --chip-icon-color: var(--vds-color-success-emphasis, #22c55e);
+    --chip-background: var(--vds-color-success-bg, #dcfce7);
+    --chip-background-hover: color-mix(in oklch, var(--vds-color-success-bg, #dcfce7), var(--vds-color-success-solid, #22c55e) 10%);
+    --chip-background-active: color-mix(in oklch, var(--vds-color-success-bg, #dcfce7), var(--vds-color-success-solid, #22c55e) 18%);
+    --chip-text-color: var(--vds-color-success-text, #166534);
+    --chip-icon-color: var(--vds-color-success-solid, #22c55e);
   }
 
   .vds-chip[data-variant="warning"] {
-    --chip-background: var(--vds-color-warning-muted, #fef3c7);
-    --chip-background-hover: color-mix(in oklch, var(--vds-color-warning-muted, #fef3c7), var(--vds-color-warning-emphasis, #f59e0b) 10%);
-    --chip-background-active: color-mix(in oklch, var(--vds-color-warning-muted, #fef3c7), var(--vds-color-warning-emphasis, #f59e0b) 18%);
-    --chip-text-color: var(--vds-color-warning-muted-text, #78350f);
-    --chip-icon-color: var(--vds-color-warning-emphasis, #f59e0b);
+    --chip-background: var(--vds-color-warning-bg, #fef3c7);
+    --chip-background-hover: color-mix(in oklch, var(--vds-color-warning-bg, #fef3c7), var(--vds-color-warning-solid, #f59e0b) 10%);
+    --chip-background-active: color-mix(in oklch, var(--vds-color-warning-bg, #fef3c7), var(--vds-color-warning-solid, #f59e0b) 18%);
+    --chip-text-color: var(--vds-color-warning-text, #78350f);
+    --chip-icon-color: var(--vds-color-warning-solid, #f59e0b);
   }
 
   .vds-chip[data-variant="danger"] {
-    --chip-background: var(--vds-color-danger-muted, #fee2e2);
-    --chip-background-hover: color-mix(in oklch, var(--vds-color-danger-muted, #fee2e2), var(--vds-color-danger-emphasis, #ef4444) 10%);
-    --chip-background-active: color-mix(in oklch, var(--vds-color-danger-muted, #fee2e2), var(--vds-color-danger-emphasis, #ef4444) 18%);
-    --chip-text-color: var(--vds-color-danger-muted-text, #991b1b);
-    --chip-icon-color: var(--vds-color-danger-emphasis, #ef4444);
+    --chip-background: var(--vds-color-danger-bg, #fee2e2);
+    --chip-background-hover: color-mix(in oklch, var(--vds-color-danger-bg, #fee2e2), var(--vds-color-danger-solid, #ef4444) 10%);
+    --chip-background-active: color-mix(in oklch, var(--vds-color-danger-bg, #fee2e2), var(--vds-color-danger-solid, #ef4444) 18%);
+    --chip-text-color: var(--vds-color-danger-text, #991b1b);
+    --chip-icon-color: var(--vds-color-danger-solid, #ef4444);
   }
 
   .vds-chip[data-variant="info"] {
-    --chip-background: var(--vds-color-info-muted, #cffafe);
-    --chip-background-hover: color-mix(in oklch, var(--vds-color-info-muted, #cffafe), var(--vds-color-info-emphasis, #06b6d4) 10%);
-    --chip-background-active: color-mix(in oklch, var(--vds-color-info-muted, #cffafe), var(--vds-color-info-emphasis, #06b6d4) 18%);
-    --chip-text-color: var(--vds-color-info-muted-text, #155e75);
-    --chip-icon-color: var(--vds-color-info-emphasis, #06b6d4);
+    --chip-background: var(--vds-color-info-bg, #cffafe);
+    --chip-background-hover: color-mix(in oklch, var(--vds-color-info-bg, #cffafe), var(--vds-color-info-solid, #06b6d4) 10%);
+    --chip-background-active: color-mix(in oklch, var(--vds-color-info-bg, #cffafe), var(--vds-color-info-solid, #06b6d4) 18%);
+    --chip-text-color: var(--vds-color-info-text, #155e75);
+    --chip-icon-color: var(--vds-color-info-solid, #06b6d4);
   }
 
   /* ─────────────────────────────────────────────
@@ -109,41 +109,41 @@
   }
 
   .vds-chip[data-appearance="solid"][data-variant="primary"] {
-    --chip-background: var(--vds-color-primary-emphasis, #6366f1);
-    --chip-background-hover: var(--vds-color-primary-hover, #4f46e5);
-    --chip-background-active: var(--vds-color-primary-active, #4338ca);
+    --chip-background: var(--vds-color-primary-solid, #6366f1);
+    --chip-background-hover: var(--vds-color-primary-solid-hover, #4f46e5);
+    --chip-background-active: var(--vds-color-primary-solid-active, #4338ca);
     --chip-text-color: var(--vds-color-on-primary, #ffffff);
     --chip-icon-color: var(--vds-color-on-primary, #ffffff);
   }
 
   .vds-chip[data-appearance="solid"][data-variant="success"] {
-    --chip-background: var(--vds-color-success-emphasis, #22c55e);
-    --chip-background-hover: var(--vds-color-success-hover, #16a34a);
-    --chip-background-active: var(--vds-color-success-active, #15803d);
+    --chip-background: var(--vds-color-success-solid, #22c55e);
+    --chip-background-hover: var(--vds-color-success-solid-hover, #16a34a);
+    --chip-background-active: var(--vds-color-success-solid-active, #15803d);
     --chip-text-color: var(--vds-color-on-success, #ffffff);
     --chip-icon-color: var(--vds-color-on-success, #ffffff);
   }
 
   .vds-chip[data-appearance="solid"][data-variant="warning"] {
-    --chip-background: var(--vds-color-warning-emphasis, #f59e0b);
-    --chip-background-hover: var(--vds-color-warning-hover, #d97706);
-    --chip-background-active: var(--vds-color-warning-active, #b45309);
+    --chip-background: var(--vds-color-warning-solid, #f59e0b);
+    --chip-background-hover: var(--vds-color-warning-solid-hover, #d97706);
+    --chip-background-active: var(--vds-color-warning-solid-active, #b45309);
     --chip-text-color: var(--vds-color-on-warning, #111827);
     --chip-icon-color: var(--vds-color-on-warning, #111827);
   }
 
   .vds-chip[data-appearance="solid"][data-variant="danger"] {
-    --chip-background: var(--vds-color-danger-emphasis, #ef4444);
-    --chip-background-hover: var(--vds-color-danger-hover, #dc2626);
-    --chip-background-active: var(--vds-color-danger-active, #b91c1c);
+    --chip-background: var(--vds-color-danger-solid, #ef4444);
+    --chip-background-hover: var(--vds-color-danger-solid-hover, #dc2626);
+    --chip-background-active: var(--vds-color-danger-solid-active, #b91c1c);
     --chip-text-color: var(--vds-color-on-danger, #ffffff);
     --chip-icon-color: var(--vds-color-on-danger, #ffffff);
   }
 
   .vds-chip[data-appearance="solid"][data-variant="info"] {
-    --chip-background: var(--vds-color-info-emphasis, #06b6d4);
-    --chip-background-hover: var(--vds-color-info-hover, #0891b2);
-    --chip-background-active: var(--vds-color-info-active, #0e7490);
+    --chip-background: var(--vds-color-info-solid, #06b6d4);
+    --chip-background-hover: var(--vds-color-info-solid-hover, #0891b2);
+    --chip-background-active: var(--vds-color-info-solid-active, #0e7490);
     --chip-text-color: var(--vds-color-on-info, #ffffff);
     --chip-icon-color: var(--vds-color-on-info, #ffffff);
   }
@@ -158,29 +158,29 @@
     --chip-border-color: var(--vds-color-border, #d1d5db);
   }
   .vds-chip[data-appearance="outline"][data-variant="primary"] {
-    --chip-border-color: var(--vds-color-primary-emphasis, #6366f1);
-    --chip-text-color: var(--vds-color-primary-emphasis, #6366f1);
-    --chip-icon-color: var(--vds-color-primary-emphasis, #6366f1);
+    --chip-border-color: var(--vds-color-primary-solid, #6366f1);
+    --chip-text-color: var(--vds-color-primary-solid, #6366f1);
+    --chip-icon-color: var(--vds-color-primary-solid, #6366f1);
   }
   .vds-chip[data-appearance="outline"][data-variant="success"] {
-    --chip-border-color: var(--vds-color-success-emphasis, #22c55e);
-    --chip-text-color: var(--vds-color-success-emphasis, #22c55e);
-    --chip-icon-color: var(--vds-color-success-emphasis, #22c55e);
+    --chip-border-color: var(--vds-color-success-solid, #22c55e);
+    --chip-text-color: var(--vds-color-success-solid, #22c55e);
+    --chip-icon-color: var(--vds-color-success-solid, #22c55e);
   }
   .vds-chip[data-appearance="outline"][data-variant="warning"] {
-    --chip-border-color: var(--vds-color-warning-emphasis, #f59e0b);
-    --chip-text-color: var(--vds-color-warning-emphasis, #f59e0b);
-    --chip-icon-color: var(--vds-color-warning-emphasis, #f59e0b);
+    --chip-border-color: var(--vds-color-warning-solid, #f59e0b);
+    --chip-text-color: var(--vds-color-warning-solid, #f59e0b);
+    --chip-icon-color: var(--vds-color-warning-solid, #f59e0b);
   }
   .vds-chip[data-appearance="outline"][data-variant="danger"] {
-    --chip-border-color: var(--vds-color-danger-emphasis, #ef4444);
-    --chip-text-color: var(--vds-color-danger-emphasis, #ef4444);
-    --chip-icon-color: var(--vds-color-danger-emphasis, #ef4444);
+    --chip-border-color: var(--vds-color-danger-solid, #ef4444);
+    --chip-text-color: var(--vds-color-danger-solid, #ef4444);
+    --chip-icon-color: var(--vds-color-danger-solid, #ef4444);
   }
   .vds-chip[data-appearance="outline"][data-variant="info"] {
-    --chip-border-color: var(--vds-color-info-emphasis, #06b6d4);
-    --chip-text-color: var(--vds-color-info-emphasis, #06b6d4);
-    --chip-icon-color: var(--vds-color-info-emphasis, #06b6d4);
+    --chip-border-color: var(--vds-color-info-solid, #06b6d4);
+    --chip-text-color: var(--vds-color-info-solid, #06b6d4);
+    --chip-icon-color: var(--vds-color-info-solid, #06b6d4);
   }
 
   /* ─────────────────────────────────────────────

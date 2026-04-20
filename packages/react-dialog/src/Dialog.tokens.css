@@ -62,7 +62,7 @@
   }
 
   .vds-dialog-overlay {
-    --dialog-overlay-bg: var(--vds-color-overlay, rgb(0 0 0 / 0.6));
+    --dialog-overlay-bg: var(--vds-color-scrim, rgb(0 0 0 / 0.6));
     --dialog-overlay-blur: 0px;
     --dialog-overlay-enter-duration: var(--vds-duration-normal, 200ms);
     --dialog-overlay-exit-duration: var(--vds-duration-fast, 100ms);
@@ -172,22 +172,22 @@
    * 4. Backdrop variants — overlay appearance
    * ───────────────────────────────────────────── */
   .vds-dialog-overlay[data-backdrop="default"] {
-    --dialog-overlay-bg: var(--vds-color-overlay, rgb(0 0 0 / 0.6));
+    --dialog-overlay-bg: var(--vds-color-scrim, rgb(0 0 0 / 0.6));
     --dialog-overlay-blur: 0px;
   }
 
   .vds-dialog-overlay[data-backdrop="blur"] {
-    --dialog-overlay-bg: var(--vds-color-overlay-light, rgb(0 0 0 / 0.3));
+    --dialog-overlay-bg: var(--vds-color-scrim-light, rgb(0 0 0 / 0.3));
     --dialog-overlay-blur: 8px;
   }
 
   .vds-dialog-overlay[data-backdrop="blur-strong"] {
-    --dialog-overlay-bg: var(--vds-color-overlay-light, rgb(0 0 0 / 0.3));
+    --dialog-overlay-bg: var(--vds-color-scrim-light, rgb(0 0 0 / 0.3));
     --dialog-overlay-blur: 20px;
   }
 
   .vds-dialog-overlay[data-backdrop="light"] {
-    --dialog-overlay-bg: var(--vds-color-overlay-light, rgb(0 0 0 / 0.3));
+    --dialog-overlay-bg: var(--vds-color-scrim-light, rgb(0 0 0 / 0.3));
     --dialog-overlay-blur: 0px;
   }
 
@@ -200,22 +200,22 @@
    * 5. Intents — top accent strip
    * ───────────────────────────────────────────── */
   .vds-dialog-content[data-intent="destructive"] {
-    --dialog-intent-accent-color: var(--vds-color-danger-emphasis, #ef4444);
+    --dialog-intent-accent-color: var(--vds-color-danger-solid, #ef4444);
     --dialog-intent-accent-height: 3px;
   }
 
   .vds-dialog-content[data-intent="warning"] {
-    --dialog-intent-accent-color: var(--vds-color-warning-emphasis, #f59e0b);
+    --dialog-intent-accent-color: var(--vds-color-warning-solid, #f59e0b);
     --dialog-intent-accent-height: 3px;
   }
 
   .vds-dialog-content[data-intent="success"] {
-    --dialog-intent-accent-color: var(--vds-color-success-emphasis, #22c55e);
+    --dialog-intent-accent-color: var(--vds-color-success-solid, #22c55e);
     --dialog-intent-accent-height: 3px;
   }
 
   .vds-dialog-content[data-intent="info"] {
-    --dialog-intent-accent-color: var(--vds-color-info-emphasis, #06b6d4);
+    --dialog-intent-accent-color: var(--vds-color-info-solid, #06b6d4);
     --dialog-intent-accent-height: 3px;
   }
 

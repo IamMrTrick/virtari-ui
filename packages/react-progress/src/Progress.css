@@ -10,7 +10,7 @@
 
   .vds-progress-indicator {
     block-size: 100%;
-    background-color: var(--vds-color-primary-emphasis);
+    background-color: var(--vds-color-primary-solid);
     border-radius: inherit;
     transition: inline-size var(--vds-duration-slow) var(--vds-ease-out);
   }

@@ -64,7 +64,7 @@
     font-family: var(--vds-font-sans);
     font-size: var(--_avatar-font-size);
     font-weight: var(--vds-font-weight-medium);
-    background-color: var(--vds-color-primary-muted);
-    color: var(--vds-color-primary-muted-text);
+    background-color: var(--vds-color-primary-bg);
+    color: var(--vds-color-primary-text);
   }
 }

@@ -358,12 +358,12 @@
   }
 
   .vds-toast-action--primary {
-    background: var(--vds-color-primary-emphasis);
+    background: var(--vds-color-primary-solid);
     color: var(--vds-color-on-primary);
-    border-color: var(--vds-color-primary-emphasis);
+    border-color: var(--vds-color-primary-solid);
   }
   .vds-toast-action--primary:hover {
-    background: var(--vds-color-primary-hover, var(--vds-color-primary-emphasis));
+    background: var(--vds-color-primary-solid-hover, var(--vds-color-primary-solid));
   }
 
   .vds-toast-action--secondary {
@@ -385,21 +385,21 @@
   }
 
   .vds-toast-action--danger {
-    background: var(--vds-color-danger-emphasis);
+    background: var(--vds-color-danger-solid);
     color: var(--vds-color-on-danger);
-    border-color: var(--vds-color-danger-emphasis);
+    border-color: var(--vds-color-danger-solid);
   }
   .vds-toast-action--danger:hover {
-    background: var(--vds-color-danger-hover, var(--vds-color-danger-emphasis));
+    background: var(--vds-color-danger-solid-hover, var(--vds-color-danger-solid));
   }
 
   .vds-toast-action--success {
-    background: var(--vds-color-success-emphasis);
+    background: var(--vds-color-success-solid);
     color: var(--vds-color-on-success);
-    border-color: var(--vds-color-success-emphasis);
+    border-color: var(--vds-color-success-solid);
   }
   .vds-toast-action--success:hover {
-    background: var(--vds-color-success-hover, var(--vds-color-success-emphasis));
+    background: var(--vds-color-success-solid-hover, var(--vds-color-success-solid));
   }
 
   /* ------------------------------------------------------------------ */
@@ -407,38 +407,38 @@
   /* ------------------------------------------------------------------ */
 
   .vds-toast--success {
-    border-color: var(--vds-color-success-muted);
+    border-color: var(--vds-color-success-bg);
   }
   .vds-toast--success .vds-toast__icon {
-    color: var(--vds-color-success-emphasis);
+    color: var(--vds-color-success-solid);
   }
 
   .vds-toast--error {
-    border-color: var(--vds-color-danger-muted);
+    border-color: var(--vds-color-danger-bg);
   }
   .vds-toast--error .vds-toast__icon {
-    color: var(--vds-color-danger-emphasis);
+    color: var(--vds-color-danger-solid);
   }
 
   .vds-toast--warning {
-    border-color: var(--vds-color-warning-muted);
+    border-color: var(--vds-color-warning-bg);
   }
   .vds-toast--warning .vds-toast__icon {
-    color: var(--vds-color-warning-emphasis);
+    color: var(--vds-color-warning-solid);
   }
 
   .vds-toast--info {
-    border-color: var(--vds-color-info-muted);
+    border-color: var(--vds-color-info-bg);
   }
   .vds-toast--info .vds-toast__icon {
-    color: var(--vds-color-info-emphasis);
+    color: var(--vds-color-info-solid);
   }
 
   .vds-toast--loading {
-    border-color: var(--vds-color-primary-muted);
+    border-color: var(--vds-color-primary-bg);
   }
   .vds-toast--loading .vds-toast__icon {
-    color: var(--vds-color-primary-emphasis);
+    color: var(--vds-color-primary-solid);
   }
 
   .vds-toast--default .vds-toast__icon {
@@ -447,19 +447,19 @@
 
   /* Type-specific progress ring color matches icon */
   .vds-toast--success .vds-toast__progress-ring {
-    color: var(--vds-color-success-emphasis);
+    color: var(--vds-color-success-solid);
   }
   .vds-toast--error .vds-toast__progress-ring {
-    color: var(--vds-color-danger-emphasis);
+    color: var(--vds-color-danger-solid);
   }
   .vds-toast--warning .vds-toast__progress-ring {
-    color: var(--vds-color-warning-emphasis);
+    color: var(--vds-color-warning-solid);
   }
   .vds-toast--info .vds-toast__progress-ring {
-    color: var(--vds-color-info-emphasis);
+    color: var(--vds-color-info-solid);
   }
   .vds-toast--loading .vds-toast__progress-ring {
-    color: var(--vds-color-primary-emphasis);
+    color: var(--vds-color-primary-solid);
   }
 
   /* ------------------------------------------------------------------ */
