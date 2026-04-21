@@ -50,6 +50,7 @@ export { TextPage } from "./TextPage";
 export { FlagPage } from "./FlagPage";
 export { PhoneInputPage } from "./PhoneInputPage";
 export { LanguagePickerPage } from "./LanguagePickerPage";
+export { BottomNavPage } from "./BottomNavPage";
 
 export const PAGE_META: Record<string, { title: string; description: string }> = {
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },
@@ -189,5 +190,10 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     title: "Language Picker",
     description:
       "Locale selector with flag · native · English display. 240 languages with curated BCP-47 → flag mapping for accurate header switchers.",
+  },
+  "bottom-nav": {
+    title: "Bottom Navigation",
+    description:
+      "Mobile-first tab bar — material / iOS / floating / underline variants, centre FAB, badges, safe-area insets, auto-hide on scroll, and an animated sliding indicator. All CSS-variable driven with full RTL.",
   },
 };

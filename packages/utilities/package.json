@@ -19,7 +19,8 @@
     "react",
     "ui",
     "components",
-    "utilities"
+    "utilities",
+    "packages/utilities"
   ],
   "type": "module",
   "sideEffects": [

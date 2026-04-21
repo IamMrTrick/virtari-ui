@@ -2115,11 +2115,6 @@
     --radio-card-badge-font-weight: var(--vds-font-weight-medium, 500);
     --radio-card-badge-color: var(--vds-color-primary-text, oklch(0.45 0.17 265));
 
-    /* Focus ring (focus-within on outer card) */
-    --radio-card-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
-    --radio-card-focus-ring-width: 2px;
-    --radio-card-focus-ring-offset: 2px;
-
     /* Icon container (for icon-grid layout) */
     --radio-card-icon-size: 2.5rem;
     --radio-card-icon-radius: var(--vds-radius-md, 0.5rem);
@@ -2148,10 +2143,6 @@
     --radio-card-bg-checked: var(
       --vds-color-danger-bg-subtle,
       color-mix(in oklch, currentColor 8%, transparent)
-    );
-    --radio-card-focus-ring-color: var(
-      --vds-color-danger-solid,
-      oklch(0.555 0.2 25)
     );
     --radio-card-icon-bg: var(
       --vds-color-danger-bg-subtle,
@@ -2332,11 +2323,8 @@
     border-color: var(--radio-card-border-color-hover);
   }
 
-  /* ── Focus-within (inner radio owns keyboard focus) ── */
+  /* ── Focus-within (inner radio owns the focus ring) ── */
   .vds-radio-card:focus-within {
-    outline: var(--radio-card-focus-ring-width) solid
-      var(--radio-card-focus-ring-color);
-    outline-offset: var(--radio-card-focus-ring-offset);
     border-color: var(--radio-card-border-color-hover);
   }
 

@@ -26,11 +26,8 @@
     border-color: var(--radio-card-border-color-hover);
   }
 
-  /* ── Focus-within (inner radio owns keyboard focus) ── */
+  /* ── Focus-within (inner radio owns the focus ring) ── */
   .vds-radio-card:focus-within {
-    outline: var(--radio-card-focus-ring-width) solid
-      var(--radio-card-focus-ring-color);
-    outline-offset: var(--radio-card-focus-ring-offset);
     border-color: var(--radio-card-border-color-hover);
   }
 

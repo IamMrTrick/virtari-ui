@@ -50,6 +50,7 @@
 @import "@virtari-packages/react-flag/styles";
 @import "@virtari-packages/react-phone-input/styles";
 @import "@virtari-packages/react-language-picker/styles";
+@import "@virtari-packages/react-bottom-nav/styles";
 
 /* Docs app styles */
 @import "./docs.css";

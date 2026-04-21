@@ -4,6 +4,8 @@ import {
   CheckboxField,
   CheckboxGroup,
   CheckboxCard,
+  PillCheckbox,
+  PillCheckboxItem,
 } from "@virtari-packages/react-checkbox";
 import {
   IconBrandSlack,
@@ -73,6 +75,15 @@ const groupRowStyle: React.CSSProperties = {
   gap: "var(--vds-space-8)",
   alignItems: "flex-start",
   flexWrap: "wrap",
+};
+
+const cardFrame: React.CSSProperties = {
+  padding: "var(--vds-space-4)",
+  border: "1px solid var(--vds-color-border)",
+  borderRadius: "var(--vds-radius-card)",
+  background: "var(--vds-color-surface)",
+  flex: 1,
+  minWidth: "18rem",
 };
 
 type CheckboxStateRowProps = {
@@ -599,12 +610,99 @@ export function CheckboxPage() {
         </div>
       </Section>
 
+      <Section
+        title="Pill Checkbox"
+        description="Rounded pill-shaped toggles for tags, filters, and multi-select categorical choices."
+      >
+        <div style={groupRowStyle}>
+          <div style={cardFrame}>
+            <span style={rowLabelStyle}>Topic filters</span>
+            <PillCheckbox aria-label="Topics">
+              <PillCheckboxItem value="design" defaultChecked>
+                Design
+              </PillCheckboxItem>
+              <PillCheckboxItem value="development">Development</PillCheckboxItem>
+              <PillCheckboxItem value="marketing">Marketing</PillCheckboxItem>
+              <PillCheckboxItem value="sales" defaultChecked>
+                Sales
+              </PillCheckboxItem>
+              <PillCheckboxItem value="support">Support</PillCheckboxItem>
+            </PillCheckbox>
+          </div>
+
+          <div style={cardFrame}>
+            <span style={rowLabelStyle}>Sizes</span>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "var(--vds-space-4)",
+              }}
+            >
+              <PillCheckbox size="sm" aria-label="Small">
+                <PillCheckboxItem value="a" defaultChecked>
+                  Small
+                </PillCheckboxItem>
+                <PillCheckboxItem value="b">Pill</PillCheckboxItem>
+                <PillCheckboxItem value="c">Checkbox</PillCheckboxItem>
+              </PillCheckbox>
+              <PillCheckbox size="md" aria-label="Medium">
+                <PillCheckboxItem value="a" defaultChecked>
+                  Medium
+                </PillCheckboxItem>
+                <PillCheckboxItem value="b">Pill</PillCheckboxItem>
+                <PillCheckboxItem value="c">Checkbox</PillCheckboxItem>
+              </PillCheckbox>
+              <PillCheckbox size="lg" aria-label="Large">
+                <PillCheckboxItem value="a" defaultChecked>
+                  Large
+                </PillCheckboxItem>
+                <PillCheckboxItem value="b">Pill</PillCheckboxItem>
+                <PillCheckboxItem value="c">Checkbox</PillCheckboxItem>
+              </PillCheckbox>
+            </div>
+          </div>
+        </div>
+
+        <Row>
+          <div style={{ ...cardFrame, flex: "1 1 100%" }}>
+            <span style={rowLabelStyle}>States</span>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "var(--vds-space-3)",
+              }}
+            >
+              <PillCheckbox aria-label="Disabled">
+                <PillCheckboxItem value="a" disabled defaultChecked>
+                  Disabled checked
+                </PillCheckboxItem>
+                <PillCheckboxItem value="b" disabled>
+                  Disabled
+                </PillCheckboxItem>
+                <PillCheckboxItem value="c">Enabled</PillCheckboxItem>
+              </PillCheckbox>
+
+              <PillCheckbox error aria-label="Error">
+                <PillCheckboxItem value="a" defaultChecked>
+                  Error selected
+                </PillCheckboxItem>
+                <PillCheckboxItem value="b">Error unselected</PillCheckboxItem>
+              </PillCheckbox>
+            </div>
+          </div>
+        </Row>
+      </Section>
+
       <Section title="Usage">
         <pre className="docs-code">{`import {
   Checkbox,
   CheckboxField,
   CheckboxGroup,
   CheckboxCard,
+  PillCheckbox,
+  PillCheckboxItem,
 } from "@virtari-packages/react-checkbox";
 
 // Primitive — all states: error, disabled, indeterminate.
@@ -633,7 +731,14 @@ export function CheckboxPage() {
 />
 
 // Card — icon-grid layout for visual pickers.
-<CheckboxCard layout="icon-grid" icon={<IconBrandSlack />} label="Slack" description="Team messaging" />`}</pre>
+<CheckboxCard layout="icon-grid" icon={<IconBrandSlack />} label="Slack" description="Team messaging" />
+
+// Pill — chip-shaped multi-select toggles for tag/filter lists.
+<PillCheckbox aria-label="Topics">
+  <PillCheckboxItem value="design">Design</PillCheckboxItem>
+  <PillCheckboxItem value="development">Development</PillCheckboxItem>
+  <PillCheckboxItem value="marketing">Marketing</PillCheckboxItem>
+</PillCheckbox>`}</pre>
       </Section>
     </>
   );

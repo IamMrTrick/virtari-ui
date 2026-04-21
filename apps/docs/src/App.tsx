@@ -55,6 +55,7 @@ import {
   FlagPage,
   PhoneInputPage,
   LanguagePickerPage,
+  BottomNavPage,
 } from "./pages";
 
 const PAGES: Record<string, () => React.JSX.Element> = {
@@ -110,6 +111,7 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   flag: FlagPage,
   "phone-input": PhoneInputPage,
   "language-picker": LanguagePickerPage,
+  "bottom-nav": BottomNavPage,
 };
 
 function getHashPage(): string {

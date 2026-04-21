@@ -1317,6 +1317,9 @@
     /* Pill radio — always pill-shaped, mirroring badge/chip. */
     --vds-radius-pill-radio: var(--vds-radius-badge);
 
+    /* Pill checkbox — mirrors pill-radio. */
+    --vds-radius-pill-checkbox: var(--vds-radius-badge);
+
     /* Scrollbar thumb — cap via primitive so pill mode can't bloat the
      * thumb into a full circle. Thumbs are 8–10px thick; 9999px radius
      * makes them capsules/circles which reads as a UI glitch. The

@@ -2,6 +2,7 @@
 @import "./CheckboxField.css";
 @import "./CheckboxGroup.css";
 @import "./CheckboxCard.css";
+@import "./PillCheckbox.css";
 
 @layer components {
   .vds-checkbox {

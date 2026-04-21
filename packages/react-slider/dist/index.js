@@ -11,6 +11,7 @@ function Slider({
   defaultValue,
   min = 0,
   max = 100,
+  minStepsBetweenThumbs = 1,
   ...props
 }) {
   const thumbValues = Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max];
@@ -23,6 +24,7 @@ function Slider({
       defaultValue,
       min,
       max,
+      minStepsBetweenThumbs,
       ...props,
       children: [
         /* @__PURE__ */ jsx(SliderPrimitive.Track, { className: "vds-slider-track", children: /* @__PURE__ */ jsx(SliderPrimitive.Range, { className: "vds-slider-range" }) }),

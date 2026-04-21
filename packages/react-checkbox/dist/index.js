@@ -246,5 +246,57 @@ function CheckboxCard({
     }
   );
 }
+function PillCheckbox({
+  size = "md",
+  error = false,
+  disabled = false,
+  orientation = "horizontal",
+  name,
+  className,
+  children,
+  ref,
+  ...props
+}) {
+  const contextValue = useMemo(
+    () => ({ disabled, error, name }),
+    [disabled, error, name]
+  );
+  return /* @__PURE__ */ jsx(CheckboxGroupContext.Provider, { value: contextValue, children: /* @__PURE__ */ jsx(
+    "div",
+    {
+      ref,
+      role: "group",
+      "aria-invalid": error || void 0,
+      "aria-disabled": disabled || void 0,
+      "data-size": size,
+      "data-error": error ? "" : void 0,
+      "data-disabled": disabled ? "" : void 0,
+      "data-orientation": orientation,
+      className: cn("vds-pill-checkbox", className),
+      ...props,
+      children
+    }
+  ) });
+}
+function PillCheckboxItem({
+  className,
+  disabled,
+  ref,
+  children,
+  ...props
+}) {
+  const group = useCheckboxGroupContext();
+  const resolvedDisabled = disabled ?? group?.disabled ?? false;
+  return /* @__PURE__ */ jsx(
+    CheckboxPrimitive.Root,
+    {
+      ref,
+      disabled: resolvedDisabled,
+      className: cn("vds-pill-checkbox-item", className),
+      ...props,
+      children
+    }
+  );
+}
 
-export { Checkbox, CheckboxCard, CheckboxField, CheckboxGroup };
+export { Checkbox, CheckboxCard, CheckboxField, CheckboxGroup, PillCheckbox, PillCheckboxItem };

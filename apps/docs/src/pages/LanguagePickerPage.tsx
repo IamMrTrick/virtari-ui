@@ -1,11 +1,11 @@
 import { useState } from "react";
 import {
-  LanguagePicker,
   LanguageLabel,
+  LanguagePicker,
   localeToFlag,
   type LocaleTag,
 } from "@virtari-packages/react-language-picker";
-import { Section, Row, Stack } from "../components";
+import { Row, Section, Stack } from "../components";
 
 const CURATED: LocaleTag[] = [
   "en",
@@ -27,12 +27,13 @@ export function LanguagePickerPage() {
   const [full, setFull] = useState<LocaleTag>("fa");
   const [curated, setCurated] = useState<LocaleTag>("en-US");
   const [compact, setCompact] = useState<LocaleTag>("fa");
+  const [drawerLocale, setDrawerLocale] = useState<LocaleTag>("ar");
 
   return (
     <>
       <Section
         title="Overview"
-        description="Locale selector built on <Combobox>. Trigger shows flag + English name in one line; each option stacks English (primary) with the native script below as a muted subtitle. Collapses to one line when the two names match (e.g. English / English)."
+        description="Locale selector built on <Combobox>. Trigger and options both stack English (primary) with the native script below as a muted subtitle. Collapses to one line when the two names match (e.g. English / English)."
       >
         <div style={{ maxInlineSize: "22rem" }}>
           <LanguagePicker
@@ -44,8 +45,8 @@ export function LanguagePickerPage() {
       </Section>
 
       <Section
-        title="Curated subset"
-        description="Pass a locales=[…] prop to constrain the list — ship only what your product supports."
+        title="Curated Subset"
+        description="Pass a locales=[...] prop to constrain the list and ship only the languages your product supports."
       >
         <Stack>
           <div style={{ maxInlineSize: "22rem" }}>
@@ -62,7 +63,7 @@ export function LanguagePickerPage() {
       </Section>
 
       <Section
-        title="Single-line (native subtitle hidden)"
+        title="Single-Line"
         description="Hide the native line entirely with showNativeName={false}. Good for dense header switchers where vertical space is tight."
       >
         <div style={{ maxInlineSize: "18rem" }}>
@@ -76,18 +77,34 @@ export function LanguagePickerPage() {
       </Section>
 
       <Section
+        title="Drawer Mode"
+        description="Set overlay='drawer' to turn the list into an apply/cancel flow. Useful on mobile or when language changes should be reviewed before committing."
+      >
+        <div style={{ maxInlineSize: "22rem" }}>
+          <LanguagePicker
+            value={drawerLocale}
+            onChange={setDrawerLocale}
+            locales={CURATED}
+            overlay="drawer"
+            drawerTitle="Choose language"
+            drawerDescription="Pick one language, then confirm it from the footer."
+          />
+        </div>
+      </Section>
+
+      <Section
         title="Standalone LanguageLabel"
         description="The same layout without a picker. Default is single line (flag + English); pass showNative to add the native subtitle."
       >
         <Stack>
-          {["en-US", "en-GB", "fa", "ar-EG", "zh-Hant", "zh-Hans", "de", "cy"].map((l) => (
-            <Row key={l}>
+          {["en-US", "en-GB", "fa", "ar-EG", "zh-Hant", "zh-Hans", "de", "cy"].map((locale) => (
+            <Row key={locale}>
               <span className="docs-size-label" style={{ minInlineSize: "5rem" }}>
-                {l}
+                {locale}
               </span>
-              <LanguageLabel locale={l} />
+              <LanguageLabel locale={locale} />
               <span style={{ opacity: 0.4, margin: "0 0.5rem" }}>·</span>
-              <LanguageLabel locale={l} showNative />
+              <LanguageLabel locale={locale} showNative />
             </Row>
           ))}
         </Stack>
@@ -95,11 +112,15 @@ export function LanguagePickerPage() {
 
       <Section title="Sizes">
         <Stack>
-          {(["sm", "md", "lg"] as const).map((s) => (
-            <Row key={s}>
-              <span className="docs-size-label">{s}</span>
+          {(["sm", "md", "lg"] as const).map((pickerSize) => (
+            <Row key={pickerSize}>
+              <span className="docs-size-label">{pickerSize}</span>
               <div style={{ maxInlineSize: "18rem", inlineSize: "100%" }}>
-                <LanguagePicker defaultValue="fa" locales={CURATED} size={s} />
+                <LanguagePicker
+                  defaultValue="fa"
+                  locales={CURATED}
+                  size={pickerSize}
+                />
               </div>
             </Row>
           ))}
@@ -114,13 +135,21 @@ export function LanguagePickerPage() {
   onChange={setLocale}
   locales={["en", "fa", "ar", "de"]}
   preferredLocales={["en", "fa"]}
-  showNativeName      // default — muted subtitle in the native script
+  showNativeName
 />
 
 // Compact variant without the native line
 <LanguagePicker value={locale} showNativeName={false} />
 
-// Standalone label — single line by default, showNative = two-line
+// Drawer variant with staged selection + footer actions
+<LanguagePicker
+  value={locale}
+  onChange={setLocale}
+  overlay="drawer"
+  drawerTitle="Choose language"
+/>
+
+// Standalone label; single line by default, two lines with showNative
 <LanguageLabel locale="fa" showNative />`}</pre>
       </Section>
     </>

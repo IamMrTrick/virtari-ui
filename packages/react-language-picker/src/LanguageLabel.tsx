@@ -1,7 +1,12 @@
 import { cn } from "@virtari-packages/utils";
-import { Flag, type CountryCode } from "@virtari-packages/react-flag";
+import type { CountryCode } from "@virtari-packages/react-flag";
 import type { HTMLAttributes, Ref } from "react";
-import { languagesByLocale } from "./generated/languages";
+import {
+  labelFlagStyle,
+  languageLabelVars,
+  resolveLanguageEntry,
+} from "./internals";
+import { LanguageMark } from "./LanguageMark";
 
 export interface LanguageLabelProps extends HTMLAttributes<HTMLSpanElement> {
   /** BCP-47 locale tag — e.g. `"en"`, `"fa-IR"`, `"zh-Hant"`. */
@@ -14,8 +19,6 @@ export interface LanguageLabelProps extends HTMLAttributes<HTMLSpanElement> {
   showNative?: boolean;
   /** Hide the flag entirely. Default `false`. */
   hideFlag?: boolean;
-  /** Flag-size token (see `@virtari-packages/react-flag`). Default `"sm"`. */
-  flagSize?: "2xs" | "xs" | "sm" | "md" | "lg";
   ref?: Ref<HTMLSpanElement>;
 }
 
@@ -28,37 +31,52 @@ export function LanguageLabel({
   locale,
   showNative = false,
   hideFlag = false,
-  flagSize = "sm",
   className,
   ref,
+  style,
   ...rest
 }: LanguageLabelProps) {
-  const entry = languagesByLocale[locale] ?? languagesByLocale[locale.split("-")[0] ?? ""];
+  const entry = resolveLanguageEntry(locale);
+  const english = entry?.english || entry?.native || locale;
+  const native = entry?.native || locale;
+  const hasDistinctNative = Boolean(showNative && entry && native.trim() !== english.trim());
+  const mergedStyle = {
+    ...languageLabelVars(hasDistinctNative),
+    ...style,
+  };
+
   if (!entry) {
     return (
-      <span ref={ref} className={cn("vds-language-label", className)} {...rest}>
+      <span
+        ref={ref}
+        className={cn("vds-language-label", className)}
+        style={mergedStyle}
+        {...rest}
+      >
         <bdi lang={locale}>{locale}</bdi>
       </span>
     );
   }
 
-  const english = entry.english || entry.native;
-  const native = entry.native;
-  const hasDistinctNative = showNative && native && native.trim() !== english.trim();
-
   return (
-    <span ref={ref} className={cn("vds-language-label", className)} {...rest}>
-      {!hideFlag && entry.flag ? (
-        <Flag
-          code={entry.flag as CountryCode}
-          size={flagSize}
+    <span
+      ref={ref}
+      className={cn("vds-language-label", className)}
+      data-has-subtitle={hasDistinctNative ? "true" : undefined}
+      style={mergedStyle}
+      {...rest}
+    >
+      {!hideFlag ? (
+        <LanguageMark
+          flag={(entry.flag ?? null) as CountryCode | null}
           className="vds-language-label-flag"
+          style={labelFlagStyle}
         />
       ) : null}
       <span className="vds-language-label-stack">
-        <span className="vds-language-label-primary" lang="en">
+        <bdi className="vds-language-label-primary" lang="en">
           {english}
-        </span>
+        </bdi>
         {hasDistinctNative ? (
           <bdi className="vds-language-label-subtitle" lang={entry.locale}>
             {native}

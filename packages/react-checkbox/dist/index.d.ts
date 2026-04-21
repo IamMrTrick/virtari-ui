@@ -63,4 +63,21 @@ interface CheckboxCardProps extends Omit<CheckboxProps, "ref"> {
 }
 declare function CheckboxCard({ label, description, trailing, badge, icon, layout, labelProps, checkboxRef, ref, error, disabled, className, ...checkboxProps }: CheckboxCardProps): react_jsx_runtime.JSX.Element;
 
-export { Checkbox, CheckboxCard, type CheckboxCardLayout, type CheckboxCardProps, CheckboxField, type CheckboxFieldProps, CheckboxGroup, type CheckboxGroupProps, type CheckboxProps, type CheckboxSize };
+type PillCheckboxSize = "sm" | "md" | "lg";
+interface PillCheckboxProps extends Omit<ComponentPropsWithoutRef<"div">, "role"> {
+    size?: PillCheckboxSize;
+    error?: boolean;
+    disabled?: boolean;
+    orientation?: "horizontal" | "vertical";
+    /** Optional form field name; propagated through context for item inheritance. */
+    name?: string;
+    children: ReactNode;
+    ref?: Ref<HTMLDivElement>;
+}
+declare function PillCheckbox({ size, error, disabled, orientation, name, className, children, ref, ...props }: PillCheckboxProps): react_jsx_runtime.JSX.Element;
+interface PillCheckboxItemProps extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
+    ref?: Ref<ComponentRef<typeof CheckboxPrimitive.Root>>;
+}
+declare function PillCheckboxItem({ className, disabled, ref, children, ...props }: PillCheckboxItemProps): react_jsx_runtime.JSX.Element;
+
+export { Checkbox, CheckboxCard, type CheckboxCardLayout, type CheckboxCardProps, CheckboxField, type CheckboxFieldProps, CheckboxGroup, type CheckboxGroupProps, type CheckboxProps, type CheckboxSize, PillCheckbox, PillCheckboxItem, type PillCheckboxItemProps, type PillCheckboxProps, type PillCheckboxSize };

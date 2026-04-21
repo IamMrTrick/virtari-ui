@@ -19,7 +19,8 @@
     "react",
     "ui",
     "components",
-    "core"
+    "core",
+    "packages/core"
   ],
   "type": "module",
   "exports": {

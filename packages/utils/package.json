@@ -19,7 +19,8 @@
     "react",
     "ui",
     "components",
-    "utils"
+    "utils",
+    "packages/utils"
   ],
   "type": "module",
   "exports": {

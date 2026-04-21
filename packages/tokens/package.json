@@ -19,7 +19,8 @@
     "react",
     "ui",
     "components",
-    "tokens"
+    "tokens",
+    "packages/tokens"
   ],
   "type": "module",
   "exports": {

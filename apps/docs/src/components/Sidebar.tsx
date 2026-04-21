@@ -43,6 +43,7 @@ import {
   IconLayoutBoard,
   IconLayoutGrid,
   IconLayoutList,
+  IconLayoutBottombar,
   IconLayoutNavbar,
   IconLayoutSidebar,
   IconLayoutSidebarLeftCollapse,
@@ -99,6 +100,7 @@ const ICONS: Record<string, ReactNode> = {
   layout: <IconLayout {...navIconProps} />,
   header: <IconLayoutNavbar {...navIconProps} />,
   nav: <IconCompass {...navIconProps} />,
+  "bottom-nav": <IconLayoutBottombar {...navIconProps} />,
   sidebar: <IconLayoutSidebar {...navIconProps} />,
   utilities: <IconTool {...navIconProps} />,
   rtl: <IconLanguage {...navIconProps} />,
@@ -219,6 +221,7 @@ const NAV_ITEMS: NavGroupData[] = [
     items: [
       { label: "Header", path: "header" },
       { label: "Navigation", path: "nav" },
+      { label: "Bottom Nav", path: "bottom-nav" },
       { label: "Sidebar", path: "sidebar" },
       { label: "Breadcrumb", path: "breadcrumb" },
     ],

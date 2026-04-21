@@ -140,11 +140,6 @@
     --checkbox-card-badge-font-weight: var(--vds-font-weight-medium, 500);
     --checkbox-card-badge-color: var(--vds-color-primary-text, oklch(0.45 0.17 265));
 
-    /* Focus ring (focus-within on outer card) */
-    --checkbox-card-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
-    --checkbox-card-focus-ring-width: 2px;
-    --checkbox-card-focus-ring-offset: 2px;
-
     /* Icon container (for icon-grid layout) */
     --checkbox-card-icon-size: 2.5rem;
     --checkbox-card-icon-radius: var(--vds-radius-md, 0.5rem);
@@ -160,9 +155,55 @@
     --checkbox-card-bg-hover: var(--vds-color-danger-bg-subtle, color-mix(in oklch, currentColor 4%, transparent));
     --checkbox-card-border-color-checked: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
     --checkbox-card-bg-checked: var(--vds-color-danger-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
-    --checkbox-card-focus-ring-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
     --checkbox-card-icon-bg: var(--vds-color-danger-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
     --checkbox-card-icon-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  /* =========================================================================
+   * 7. Pill checkbox tokens — chip-shaped toggleable tags (multi-select).
+   * ========================================================================= */
+  .vds-pill-checkbox {
+    --pill-checkbox-gap: var(--vds-space-2, 0.5rem);
+
+    --pill-checkbox-item-height: var(--vds-size-sm, 2rem);
+    --pill-checkbox-item-padding-inline: var(--vds-space-3-5, 0.875rem);
+    --pill-checkbox-item-font-size: var(--vds-text-sm, 0.875rem);
+    --pill-checkbox-item-font-weight: var(--vds-font-weight-medium, 500);
+    --pill-checkbox-item-radius: var(--vds-radius-pill-checkbox, 9999px);
+    --pill-checkbox-item-border-width: 1.5px;
+
+    /* Default palette */
+    --pill-checkbox-item-bg: var(--vds-color-surface, #ffffff);
+    --pill-checkbox-item-border-color: var(--vds-color-border, #d1d5db);
+    --pill-checkbox-item-color: var(--vds-color-text, #111827);
+
+    /* Hover */
+    --pill-checkbox-item-bg-hover: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 4%, transparent));
+    --pill-checkbox-item-border-color-hover: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+
+    /* Checked */
+    --pill-checkbox-item-bg-checked: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
+    --pill-checkbox-item-border-color-checked: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+    --pill-checkbox-item-color-checked: var(--vds-color-primary-text, oklch(0.45 0.17 265));
+
+    --pill-checkbox-transition-duration: var(--vds-duration-fast, 120ms);
+    --pill-checkbox-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    --pill-checkbox-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
+    --pill-checkbox-focus-ring-width: 2px;
+    --pill-checkbox-focus-ring-offset: 2px;
+  }
+
+  .vds-pill-checkbox[data-size="sm"] {
+    --pill-checkbox-item-height: var(--vds-size-xs, 1.75rem);
+    --pill-checkbox-item-padding-inline: var(--vds-space-3, 0.75rem);
+    --pill-checkbox-item-font-size: var(--vds-text-xs, 0.75rem);
+  }
+
+  .vds-pill-checkbox[data-size="lg"] {
+    --pill-checkbox-item-height: var(--vds-size-md, 2.25rem);
+    --pill-checkbox-item-padding-inline: var(--vds-space-4, 1rem);
+    --pill-checkbox-item-font-size: var(--vds-text-sm, 0.875rem);
   }
 }
 @layer components {
@@ -297,10 +338,8 @@
     border-color: var(--checkbox-card-border-color-hover);
   }
 
-  /* ── Focus-within (the inner Checkbox owns keyboard focus) ── */
+  /* ── Focus-within (the inner Checkbox owns the focus ring) ── */
   .vds-checkbox-card:focus-within {
-    outline: var(--checkbox-card-focus-ring-width) solid var(--checkbox-card-focus-ring-color);
-    outline-offset: var(--checkbox-card-focus-ring-offset);
     border-color: var(--checkbox-card-border-color-hover);
   }
 
@@ -429,6 +468,84 @@
   .vds-checkbox-card[data-layout="icon-grid"] .vds-checkbox-card-icon svg {
     inline-size: var(--checkbox-card-icon-glyph-size);
     block-size: var(--checkbox-card-icon-glyph-size);
+  }
+}
+@layer components {
+  .vds-pill-checkbox {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--pill-checkbox-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-pill-checkbox[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vds-pill-checkbox-item {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-1-5, 0.375rem);
+    block-size: var(--pill-checkbox-item-height);
+    padding-inline: var(--pill-checkbox-item-padding-inline);
+    font-family: inherit;
+    font-size: var(--pill-checkbox-item-font-size);
+    font-weight: var(--pill-checkbox-item-font-weight);
+    color: var(--pill-checkbox-item-color);
+    background-color: var(--pill-checkbox-item-bg);
+    border: var(--pill-checkbox-item-border-width) solid
+      var(--pill-checkbox-item-border-color);
+    border-radius: var(--pill-checkbox-item-radius);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color var(--pill-checkbox-transition-duration)
+        var(--pill-checkbox-transition-easing),
+      border-color var(--pill-checkbox-transition-duration)
+        var(--pill-checkbox-transition-easing),
+      color var(--pill-checkbox-transition-duration)
+        var(--pill-checkbox-transition-easing);
+  }
+
+  /* ── Hover (unchecked) ── */
+  .vds-pill-checkbox-item:hover:not(:disabled):not([data-state="checked"]) {
+    background-color: var(--pill-checkbox-item-bg-hover);
+    border-color: var(--pill-checkbox-item-border-color-hover);
+  }
+
+  /* ── Checked ── */
+  .vds-pill-checkbox-item[data-state="checked"] {
+    background-color: var(--pill-checkbox-item-bg-checked);
+    border-color: var(--pill-checkbox-item-border-color-checked);
+    color: var(--pill-checkbox-item-color-checked);
+  }
+
+  /* ── Focus ring ── */
+  .vds-pill-checkbox-item:focus-visible {
+    outline: var(--pill-checkbox-focus-ring-width) solid
+      var(--pill-checkbox-focus-ring-color);
+    outline-offset: var(--pill-checkbox-focus-ring-offset);
+  }
+
+  /* ── Disabled ── */
+  .vds-pill-checkbox-item:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* ── Error ── */
+  .vds-pill-checkbox[data-error] .vds-pill-checkbox-item {
+    border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  .vds-pill-checkbox[data-error] .vds-pill-checkbox-item:focus-visible {
+    outline-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
   }
 }
 @layer components {

@@ -1,5 +1,16 @@
 import { cn } from "@virtari-packages/utils";
-import { Flag, type CountryCode } from "@virtari-packages/react-flag";
+import type { CountryCode } from "@virtari-packages/react-flag";
+import { Button } from "@virtari-packages/react-button";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  type Direction as DrawerDirection,
+} from "@virtari-packages/react-drawer";
 import {
   Combobox,
   ComboboxContent,
@@ -13,8 +24,23 @@ import {
   type ComboboxItemData,
   type ComboboxSize,
 } from "@virtari-packages/react-select";
-import { useCallback, useMemo, type Ref } from "react";
-import { languages as allLanguages, languagesByLocale, type LanguageEntry } from "./generated/languages";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type Ref,
+} from "react";
+import { languages as allLanguages, type LanguageEntry } from "./generated/languages";
+import {
+  languagePickerVars,
+  optionFlagStyle,
+  resolveLanguageEntry,
+  triggerFlagStyle,
+} from "./internals";
+import { LanguageMark } from "./LanguageMark";
 
 export type LocaleTag = string;
 
@@ -42,10 +68,19 @@ export interface LanguagePickerProps {
   showNativeName?: boolean;
   /** Language for the picker's *meta* copy (search placeholder, empty state). */
   uiLocale?: "en" | "fa" | "ar";
+  /** Presentation mode for the option list. */
+  overlay?: "popover" | "drawer";
   /** Popover alignment. Passed to ComboboxContent. */
   align?: "start" | "center" | "end";
+  /** Drawer edge when `overlay="drawer"`. Default `"bottom"`. */
+  drawerDirection?: DrawerDirection;
+  drawerTitle?: string;
+  drawerDescription?: string;
+  cancelLabel?: string;
+  applyLabel?: string;
   className?: string;
   id?: string;
+  style?: CSSProperties;
   ref?: Ref<HTMLDivElement>;
 }
 
@@ -66,7 +101,7 @@ function ordered(
 ): LanguageEntry[] {
   const source =
     subset && subset.length > 0
-      ? (subset.map((loc) => languagesByLocale[loc]).filter(Boolean) as LanguageEntry[])
+      ? (subset.map((loc) => resolveLanguageEntry(loc)).filter(Boolean) as LanguageEntry[])
       : all.slice();
   if (!preferred || preferred.length === 0) return source;
   const pref: LanguageEntry[] = [];
@@ -80,11 +115,102 @@ function ordered(
   return [...pref, ...rest];
 }
 
+function toItemData(entry: LanguageEntry): ComboboxItemData & { keywords: string[] } {
+  return {
+    value: entry.locale,
+    label: entry.english || entry.native,
+    keywords: [entry.native, entry.names.en, entry.names.fa, entry.names.ar, entry.locale],
+  };
+}
+
+function extractLocale(next: string | string[]): LocaleTag {
+  return Array.isArray(next) ? (next[0] ?? "") : next;
+}
+
+function chevronIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3 4.5L6 7.5L9 4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function checkIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10 3L4.5 8.5L2 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function LanguagePickerTriggerValue({
+  entry,
+  showNative = true,
+}: {
+  entry: LanguageEntry;
+  showNative?: boolean;
+}) {
+  const english = entry.english || entry.native;
+  const native = entry.native;
+  const hasDistinctNative = showNative && native && native.trim() !== english.trim();
+
+  return (
+    <span
+      className="vds-language-picker-trigger"
+      data-has-subtitle={hasDistinctNative ? "true" : undefined}
+    >
+      <LanguageMark
+        flag={(entry.flag ?? null) as CountryCode | null}
+        className="vds-language-picker-trigger-flag"
+        style={triggerFlagStyle}
+      />
+      <span className="vds-language-picker-trigger-stack">
+        <bdi className="vds-language-picker-trigger-primary" lang="en">
+          {english}
+        </bdi>
+        {hasDistinctNative ? (
+          <bdi
+            className="vds-language-picker-trigger-subtitle"
+            lang={entry.locale}
+          >
+            {native}
+          </bdi>
+        ) : null}
+      </span>
+    </span>
+  );
+}
+
 /**
  * Locale selector.
- * Trigger: `[flag] English` — single-line, ellipsises cleanly at any width.
- * Options: `[flag] English` on top (primary) with `native` below (muted xs).
- * The native line is suppressed when it equals the English name.
+ * Trigger: `[flag] English` on top with the native name below by default.
+ * Set `showNativeName={false}` for a compact single-line trigger.
+ * Options follow the same English-first stack and suppress the native line
+ * when it equals the English name.
  */
 export function LanguagePicker({
   value,
@@ -99,12 +225,35 @@ export function LanguagePicker({
   placeholder,
   showNativeName = true,
   uiLocale,
+  overlay = "popover",
   align = "start",
+  drawerDirection = "bottom",
+  drawerTitle,
+  drawerDescription,
+  cancelLabel,
+  applyLabel,
   className,
   id,
+  style,
   ref,
 }: LanguagePickerProps) {
   const ui = resolveUiLocale(uiLocale);
+  const [uncontrolledValue, setUncontrolledValue] = useState<LocaleTag>(() => defaultValue ?? "");
+  const selectedValue = value !== undefined ? value : uncontrolledValue;
+  const selectedEntry = useMemo(() => resolveLanguageEntry(selectedValue), [selectedValue]);
+  const pickerCssVars = useMemo(() => languagePickerVars(size), [size]);
+  const rootStyle = useMemo(
+    () => ({
+      ...pickerCssVars,
+      ...style,
+    }),
+    [pickerCssVars, style],
+  );
+  const drawerListId = useId();
+  const drawerSearchId = useId();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerDraftValue, setDrawerDraftValue] = useState<LocaleTag>(selectedValue);
+  const [drawerQuery, setDrawerQuery] = useState("");
 
   const source = useMemo(
     () => ordered(allLanguages, locales, preferredLocales),
@@ -115,21 +264,24 @@ export function LanguagePicker({
   // Everything else goes into `keywords` so the user can search by native script,
   // locale tag (e.g. "fa-IR"), or translated name.
   const items = useMemo(
-    () =>
-      source.map((entry) => ({
-        value: entry.locale,
-        label: entry.english || entry.native,
-        keywords: [entry.native, entry.names.en, entry.names.fa, entry.names.ar, entry.locale],
-      })),
+    () => source.map(toItemData),
     [source],
   );
 
-  const handleChange = useCallback(
-    (next: string | string[]) => {
-      const v = Array.isArray(next) ? next[0] : next;
-      if (v) onChange?.(v);
+  const commitValue = useCallback(
+    (next: LocaleTag) => {
+      if (!next) return;
+      if (value === undefined) setUncontrolledValue(next);
+      onChange?.(next);
     },
-    [onChange],
+    [onChange, value],
+  );
+
+  const handlePopoverChange = useCallback(
+    (next: string | string[]) => {
+      commitValue(extractLocale(next));
+    },
+    [commitValue],
   );
 
   const filter = useCallback(
@@ -145,35 +297,211 @@ export function LanguagePicker({
     [],
   );
 
-  const renderTriggerValue = useCallback(
-    (item: ComboboxItemData) => {
-      const entry = languagesByLocale[item.value];
-      if (!entry) return item.label;
-      return (
-        <span className="vds-language-picker-trigger">
-          {entry.flag ? (
-            <Flag
-              code={entry.flag as CountryCode}
-              size="sm"
-              className="vds-language-picker-trigger-flag"
-            />
-          ) : null}
-          <span className="vds-language-picker-trigger-name">
-            {entry.english || entry.native}
-          </span>
-        </span>
-      );
-    },
-    [],
+  const filteredDrawerItems = useMemo(
+    () => items.filter((item) => filter(item, drawerQuery)),
+    [drawerQuery, filter, items],
   );
 
+  useEffect(() => {
+    if (!drawerOpen) return;
+    setDrawerDraftValue(selectedValue);
+    setDrawerQuery("");
+  }, [drawerOpen, selectedValue]);
+
+  const handleDrawerOpenChange = useCallback(
+    (next: boolean) => {
+      setDrawerOpen(next);
+      if (!next) {
+        setDrawerDraftValue(selectedValue);
+        setDrawerQuery("");
+      }
+    },
+    [selectedValue],
+  );
+
+  const handleDrawerCancel = useCallback(() => {
+    setDrawerDraftValue(selectedValue);
+    setDrawerQuery("");
+    setDrawerOpen(false);
+  }, [selectedValue]);
+
+  const handleDrawerApply = useCallback(() => {
+    if (!drawerDraftValue) return;
+    commitValue(drawerDraftValue);
+    setDrawerOpen(false);
+  }, [commitValue, drawerDraftValue]);
+
+  const drawerDirectionIsVertical =
+    drawerDirection === "bottom" || drawerDirection === "top";
+
+  const renderTriggerValue = useCallback(
+    (item: ComboboxItemData) => {
+      const entry = resolveLanguageEntry(item.value);
+      if (!entry) return item.label;
+      return <LanguagePickerTriggerValue entry={entry} showNative={showNativeName} />;
+    },
+    [showNativeName],
+  );
+
+  if (overlay === "drawer") {
+    return (
+      <div
+        ref={ref}
+        id={id}
+        className={cn("vds-language-picker", className)}
+        data-overlay="drawer"
+        style={rootStyle}
+      >
+        <button
+          type="button"
+          className="vds-combobox-trigger vds-language-picker-drawer-trigger"
+          data-size={size}
+          data-appearance={appearance}
+          data-state={drawerOpen ? "open" : "closed"}
+          data-disabled={disabled ? "true" : undefined}
+          data-invalid={invalid ? "true" : undefined}
+          data-placeholder={!selectedEntry ? "" : undefined}
+          aria-haspopup="dialog"
+          aria-expanded={drawerOpen}
+          aria-controls={drawerOpen ? drawerListId : undefined}
+          disabled={disabled}
+          onClick={() => handleDrawerOpenChange(true)}
+        >
+          <span className="vds-combobox-trigger-value">
+            {selectedEntry ? (
+              <LanguagePickerTriggerValue entry={selectedEntry} showNative={showNativeName} />
+            ) : (
+              <span className="vds-combobox-trigger-placeholder">
+                {placeholder ?? placeholderFor(ui)}
+              </span>
+            )}
+          </span>
+          <span className="vds-combobox-trigger-actions">
+            <span className="vds-combobox-icon" aria-hidden="true">
+              {chevronIcon()}
+            </span>
+          </span>
+        </button>
+
+        <Drawer
+          direction={drawerDirection}
+          open={drawerOpen}
+          onOpenChange={handleDrawerOpenChange}
+          sizeMode="fixed"
+          size={
+            drawerDirectionIsVertical
+              ? "min(80vh, 32rem)"
+              : "min(22rem, 90vw)"
+          }
+          indicator={drawerDirectionIsVertical ? "inside" : "hidden"}
+        >
+          <DrawerContent
+            className="vds-language-picker-drawer-content"
+            style={pickerCssVars}
+          >
+            <DrawerHeader variant="bordered" className="vds-language-picker-drawer-header">
+              <DrawerTitle>{drawerTitle ?? "Select language"}</DrawerTitle>
+              {drawerDescription ? (
+                <DrawerDescription>{drawerDescription}</DrawerDescription>
+              ) : null}
+              <div className="vds-language-picker-drawer-search vds-combobox-input-wrap">
+                <span className="vds-combobox-input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none">
+                    <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
+                    <path
+                      d="M14 14L11 11"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+                <input
+                  id={drawerSearchId}
+                  type="text"
+                  autoComplete="off"
+                  spellCheck={false}
+                  className="vds-combobox-input"
+                  placeholder={searchPlaceholderFor(ui)}
+                  value={drawerQuery}
+                  onChange={(event) => setDrawerQuery(event.target.value)}
+                />
+              </div>
+            </DrawerHeader>
+            <DrawerBody className="vds-language-picker-drawer-body">
+              <div
+                id={drawerListId}
+                role="listbox"
+                aria-labelledby={drawerSearchId}
+                className="vds-language-picker-drawer-options"
+              >
+                {filteredDrawerItems.length > 0 ? (
+                  filteredDrawerItems.map((item) => {
+                    const entry = resolveLanguageEntry(item.value);
+                    if (!entry) return null;
+                    const selected = drawerDraftValue === item.value;
+
+                    return (
+                      <button
+                        key={item.value}
+                        type="button"
+                        role="option"
+                        aria-selected={selected}
+                        className="vds-language-picker-drawer-option"
+                        data-selected={selected ? "true" : undefined}
+                        onClick={() => setDrawerDraftValue(item.value)}
+                      >
+                        <LanguagePickerOption entry={entry} showNative={showNativeName} />
+                        {selected ? (
+                          <span className="vds-language-picker-drawer-option-indicator" aria-hidden="true">
+                            {checkIcon()}
+                          </span>
+                        ) : null}
+                      </button>
+                    );
+                  })
+                ) : (
+                  <div className="vds-language-picker-drawer-empty">{emptyMessageFor(ui)}</div>
+                )}
+              </div>
+            </DrawerBody>
+            <DrawerFooter className="vds-language-picker-drawer-footer">
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                color="contrast"
+                onClick={handleDrawerCancel}
+              >
+                {cancelLabel ?? "Cancel"}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                onClick={handleDrawerApply}
+                disabled={!drawerDraftValue}
+              >
+                {applyLabel ?? "Apply"}
+              </Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </div>
+    );
+  }
+
   return (
-    <div ref={ref} id={id} className={cn("vds-language-picker", className)}>
+    <div
+      ref={ref}
+      id={id}
+      className={cn("vds-language-picker", className)}
+      data-overlay="popover"
+      style={rootStyle}
+    >
       <Combobox
         items={items}
-        value={value}
-        defaultValue={defaultValue}
-        onValueChange={handleChange}
+        value={selectedValue}
+        onValueChange={handlePopoverChange}
         size={size}
         appearance={appearance}
         invalid={invalid}
@@ -185,12 +513,12 @@ export function LanguagePicker({
           placeholder={placeholder ?? placeholderFor(ui)}
           renderValue={renderTriggerValue}
         />
-        <ComboboxContent align={align} sideOffset={4}>
+        <ComboboxContent align={align} sideOffset={4} style={pickerCssVars}>
           <ComboboxInput placeholder={searchPlaceholderFor(ui)} />
           <ComboboxList>
-            <ComboboxOptions estimateSize={showNativeName ? 48 : 36}>
+            <ComboboxOptions estimateSize={showNativeName ? 44 : 34}>
               {(item) => {
-                const entry = languagesByLocale[item.value];
+                const entry = resolveLanguageEntry(item.value);
                 if (!entry) return null;
                 return (
                   <ComboboxItem key={item.value} value={item.value}>
@@ -225,17 +553,15 @@ export function LanguagePickerOption({ entry, showNative = true }: LanguagePicke
 
   return (
     <span className="vds-language-picker-option">
-      {entry.flag ? (
-        <Flag
-          code={entry.flag as CountryCode}
-          size="md"
-          className="vds-language-picker-option-flag"
-        />
-      ) : null}
+      <LanguageMark
+        flag={(entry.flag ?? null) as CountryCode | null}
+        className="vds-language-picker-option-flag"
+        style={optionFlagStyle}
+      />
       <span className="vds-language-picker-option-names">
-        <span className="vds-language-picker-option-primary" lang="en">
+        <bdi className="vds-language-picker-option-primary" lang="en">
           {english}
-        </span>
+        </bdi>
         {hasDistinctNative ? (
           <bdi
             className="vds-language-picker-option-subtitle"
@@ -267,6 +593,6 @@ function emptyMessageFor(ui: "en" | "fa" | "ar"): string {
 
 /** Helper: resolve flag code for a locale without mounting the picker. */
 export function localeToFlag(locale: string): CountryCode | null {
-  const entry = languagesByLocale[locale] ?? languagesByLocale[locale.split("-")[0] ?? ""];
+  const entry = resolveLanguageEntry(locale);
   return (entry?.flag ?? null) as CountryCode | null;
 }

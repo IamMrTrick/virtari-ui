@@ -1,0 +1,659 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Root tokens — layout, surface, motion, stacking.
+   *    All knobs live here so consumers can override any one
+   *    property without forking CSS:
+   *      .vds-bottom-nav { --bottom-nav-height: 4rem; }
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav {
+    /* Layout */
+    --bottom-nav-height: var(--vds-size-2xl, 3.25rem);
+    --bottom-nav-padding-inline: var(--vds-space-2, 0.5rem);
+    --bottom-nav-padding-block: var(--vds-space-1, 0.25rem);
+    --bottom-nav-gap: var(--vds-space-1, 0.25rem);
+    --bottom-nav-max-inline-size: 100%;
+    --bottom-nav-radius: 0;
+
+    /* Safe area — iOS home-bar */
+    --bottom-nav-safe-area: env(safe-area-inset-bottom, 0px);
+    --bottom-nav-offset-block-end: 0px;
+
+    /* Stacking */
+    --bottom-nav-z-index: var(--vds-z-banner, 1200);
+
+    /* Surface */
+    --bottom-nav-background: var(--vds-color-surface, #fff);
+    --bottom-nav-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --bottom-nav-border-block-start-width: 1px;
+    --bottom-nav-shadow: var(--vds-shadow-none, 0 0 0 0 transparent);
+
+    /* Typography */
+    --bottom-nav-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --bottom-nav-font-weight: var(--vds-font-weight-medium, 500);
+
+    /* Motion */
+    --bottom-nav-transition-duration: var(--vds-duration-normal, 200ms);
+    --bottom-nav-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    --bottom-nav-hide-translate: calc(100% + var(--bottom-nav-safe-area));
+
+    /* Sliding indicator (material / underline).
+     * Neutral alpha by default so the pill reads as a subtle tray behind
+     * the icon, not a branded fill. Underline variant swaps back to the
+     * intent colour via its own override below. */
+    --bottom-nav-indicator-color: var(--vds-color-neutral-a3, oklch(0 0 0 / 0.06));
+    --bottom-nav-indicator-height: 100%;
+    --bottom-nav-indicator-inline-size: 64%;
+    --bottom-nav-indicator-radius: var(--vds-radius-full, 9999px);
+    --bottom-nav-indicator-position: center;
+    --bottom-nav-indicator-duration: var(--vds-duration-normal, 200ms);
+    --bottom-nav-indicator-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  /* ─────────────────────────────────────────────
+   * 2. Item tokens — touch target, icon/label, states.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__item {
+    --item-min-touch: 44px;
+    --item-flex: 1;
+    /* Generous gap — the material pill sits behind the icon and needs room
+     * above the label, otherwise its bottom edge overlaps the text. */
+    --item-gap: var(--vds-space-1-5, 0.375rem);
+    --item-padding-inline: var(--vds-space-2, 0.5rem);
+    --item-padding-block: var(--vds-space-1, 0.25rem);
+    --item-radius: var(--vds-radius-md, 0.5rem);
+    --item-press-scale: 0.94;
+
+    --item-icon-size: 1.5rem;
+    --item-label-font-size: var(--vds-text-xs, 0.75rem);
+    --item-label-line-height: var(--vds-leading-tight, 1.25);
+    --item-label-display: inline-block;
+
+    --item-color: var(--vds-color-text-muted, #6b7280);
+    --item-color-active: var(--vds-color-primary-solid, #6366f1);
+    --item-color-disabled: var(--vds-color-text-disabled, #9ca3af);
+
+    --item-background: transparent;
+    --item-background-hover: var(--vds-color-hover, oklch(0 0 0 / 0.04));
+    --item-background-active: var(--vds-color-active, oklch(0 0 0 / 0.08));
+
+    --item-focus-ring-color: var(--vds-color-ring, var(--item-color-active));
+    --item-focus-ring-width: 2px;
+    --item-focus-ring-offset: 2px;
+
+    --item-transition-duration: var(--vds-duration-fast, 100ms);
+    --item-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  /* ─────────────────────────────────────────────
+   * 3. Variants — visual identity of the bar + item.
+   *    material (default), ios, floating, underline.
+   * ───────────────────────────────────────────── */
+
+  /* material — pill behind icon on active (default).
+   * Nothing to override at root; the pill pseudo is styled below
+   * and the color swap is the default state treatment. */
+
+  /* ios — flat tab bar, no pill, tighter gap, label always visible. */
+  .vds-bottom-nav[data-variant="ios"] .vds-bottom-nav__item {
+    --item-gap: 0.1875rem;
+  }
+
+  /* underline — tighter gap; no pill so the label can sit closer to the icon. */
+  .vds-bottom-nav[data-variant="underline"] .vds-bottom-nav__item {
+    --item-gap: 0.25rem;
+  }
+
+  /* floating — detached pill-bar with shadow and side margin. */
+  .vds-bottom-nav[data-variant="floating"] {
+    --bottom-nav-offset-block-end: var(--vds-space-3, 0.75rem);
+    --bottom-nav-max-inline-size: calc(100% - (var(--vds-space-6, 1.5rem) * 2));
+    --bottom-nav-radius: var(--vds-radius-xl, 1rem);
+    --bottom-nav-shadow: var(--vds-shadow-xl, 0 20px 25px -5px oklch(0 0 0 / 0.1));
+    --bottom-nav-border-block-start-width: 0;
+    --bottom-nav-padding-inline: var(--vds-space-2, 0.5rem);
+  }
+
+  /* underline — 3px top-bar indicator, no pill. */
+  .vds-bottom-nav[data-variant="underline"] {
+    --bottom-nav-indicator-height: 3px;
+    --bottom-nav-indicator-radius: var(--vds-radius-full, 9999px);
+    --bottom-nav-indicator-position: top;
+    --bottom-nav-indicator-inline-size: 48%;
+  }
+
+  /* ─────────────────────────────────────────────
+   * 4. Sizes — touch-friendly ramp.
+   *    sm (44px / AAA minimum), md (52px default), lg (64px roomy).
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav[data-size="sm"] {
+    --bottom-nav-height: var(--vds-size-xl, 2.75rem);
+  }
+  .vds-bottom-nav[data-size="sm"] .vds-bottom-nav__item {
+    --item-icon-size: 1.25rem;
+    --item-label-font-size: var(--vds-text-xs, 0.75rem);
+  }
+
+  .vds-bottom-nav[data-size="md"] {
+    --bottom-nav-height: var(--vds-size-2xl, 3.25rem);
+  }
+
+  .vds-bottom-nav[data-size="lg"] {
+    --bottom-nav-height: var(--vds-size-3xl, 4rem);
+  }
+  .vds-bottom-nav[data-size="lg"] .vds-bottom-nav__item {
+    --item-icon-size: 1.625rem;
+    --item-label-font-size: var(--vds-text-sm, 0.875rem);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 5. Modifiers — elevated / disabled / auto-hide.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav[data-elevated="true"] {
+    --bottom-nav-shadow: var(--vds-shadow-lg, 0 10px 15px -3px oklch(0 0 0 / 0.1));
+  }
+
+  .vds-bottom-nav__item[data-disabled="true"] {
+    --item-color: var(--item-color-disabled);
+    --item-color-active: var(--item-color-disabled);
+    --item-background-hover: transparent;
+    --item-background-active: transparent;
+  }
+
+  /* ─────────────────────────────────────────────
+   * 6. FAB tokens — center-escape action button.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__fab {
+    --fab-size: 3.5rem;
+    --fab-icon-size: 1.5rem;
+    --fab-radius: var(--vds-radius-full, 9999px);
+    --fab-translate-y: -40%;
+    --fab-background: var(--vds-color-primary-solid, #6366f1);
+    --fab-background-hover: var(--vds-color-primary-solid-hover, #4f46e5);
+    --fab-background-active: var(--vds-color-primary-solid-active, #4338ca);
+    --fab-color: var(--vds-color-on-primary, #fff);
+    --fab-shadow: var(--vds-shadow-lg, 0 10px 15px -3px oklch(0 0 0 / 0.1));
+    --fab-ring-color: var(--vds-color-ring, #6366f1);
+    --fab-ring-width: 2px;
+    --fab-ring-offset: 3px;
+    --fab-press-scale: 0.94;
+  }
+
+  .vds-bottom-nav__fab[data-color="accent"] {
+    --fab-background: var(--vds-color-accent-solid, #f97316);
+    --fab-background-hover: var(--vds-color-accent-solid-hover, #ea580c);
+    --fab-background-active: var(--vds-color-accent-solid-active, #c2410c);
+    --fab-color: var(--vds-color-on-accent, #fff);
+  }
+
+  .vds-bottom-nav__fab[data-color="success"] {
+    --fab-background: var(--vds-color-success-solid, #16a34a);
+    --fab-background-hover: var(--vds-color-success-solid-hover, #15803d);
+    --fab-background-active: var(--vds-color-success-solid-active, #166534);
+    --fab-color: var(--vds-color-on-success, #fff);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 7. Badge tokens — dot or count pill.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__badge {
+    --badge-size: 1rem;
+    --badge-min-inline-size: 1rem;
+    --badge-dot-size: 0.5rem;
+    --badge-padding-inline: 0.25rem;
+    --badge-font-size: 0.625rem;
+    --badge-font-weight: var(--vds-font-weight-semibold, 600);
+    --badge-radius: var(--vds-radius-full, 9999px);
+    --badge-background: var(--vds-color-danger-solid, #dc2626);
+    --badge-color: var(--vds-color-on-danger, #fff);
+    --badge-ring-color: var(--bottom-nav-background);
+    --badge-ring-width: 2px;
+    /* Nudge the badge outside the 24px icon box so it sits near the top-right
+     * corner of the item — pulls away from the item centre. */
+    --badge-offset-block: -0.25rem;
+    --badge-offset-inline: -0.375rem;
+    --badge-translate-x: 50%;
+    --badge-translate-y: -50%;
+    --badge-dot-translate-x: 50%;
+    --badge-dot-translate-y: -50%;
+  }
+}
+
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Root — flex row of items, positioned by data-position.
+   * All layout uses logical properties; dir=rtl flips for free.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    gap: var(--bottom-nav-gap);
+    inline-size: var(--bottom-nav-max-inline-size);
+    max-inline-size: 100%;
+    block-size: calc(var(--bottom-nav-height) + var(--bottom-nav-padding-block) * 2);
+    padding-inline: var(--bottom-nav-padding-inline);
+    padding-block-start: var(--bottom-nav-padding-block);
+    padding-block-end: calc(var(--bottom-nav-padding-block) + var(--bottom-nav-safe-area));
+
+    background-color: var(--bottom-nav-background);
+    border-block-start: var(--bottom-nav-border-block-start-width) solid var(--bottom-nav-border-color);
+    border-radius: var(--bottom-nav-radius);
+    box-shadow: var(--bottom-nav-shadow);
+
+    font-family: var(--bottom-nav-font-family);
+    font-weight: var(--bottom-nav-font-weight);
+
+    /* z-index is applied only to positioned modes below — static previews
+     * must not hoist above the page header. */
+    box-sizing: border-box;
+    isolation: isolate;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+      transform var(--bottom-nav-transition-duration) var(--bottom-nav-transition-easing),
+      box-shadow var(--bottom-nav-transition-duration) var(--bottom-nav-transition-easing);
+  }
+
+  /* Positioning modes — inline style; safe-area adds extra padding-block-end already. */
+  .vds-bottom-nav[data-position="fixed"] {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: var(--bottom-nav-offset-block-end);
+    margin-inline: auto;
+    z-index: var(--bottom-nav-z-index);
+  }
+
+  .vds-bottom-nav[data-position="sticky"] {
+    position: sticky;
+    inset-block-end: var(--bottom-nav-offset-block-end);
+    z-index: var(--bottom-nav-z-index);
+  }
+
+  .vds-bottom-nav[data-position="static"] {
+    position: relative;
+    /* Explicit `z-index: auto` so this never wins over page chrome. */
+    z-index: auto;
+  }
+
+  /* Floating centers horizontally on viewport */
+  .vds-bottom-nav[data-variant="floating"][data-position="fixed"] {
+    inset-inline: var(--vds-space-6, 1.5rem);
+    margin-inline: auto;
+  }
+
+  /* Auto-hide — translate below the bottom edge (incl. safe-area) */
+  .vds-bottom-nav[data-hidden="true"] {
+    transform: translateY(var(--bottom-nav-hide-translate));
+  }
+
+  /* ─────────────────────────────────────────────
+   * Item — button or anchor styled identically.
+   * Min-height enforced for touch.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__item {
+    position: relative;
+    display: inline-flex;
+    flex: var(--item-flex);
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 0;
+    min-block-size: var(--item-min-touch);
+    padding-inline: var(--item-padding-inline);
+    padding-block: var(--item-padding-block);
+    border: 0;
+    border-radius: var(--item-radius);
+    background: var(--item-background);
+    color: var(--item-color);
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+    transition:
+      color var(--item-transition-duration) var(--item-transition-easing),
+      background-color var(--item-transition-duration) var(--item-transition-easing),
+      transform var(--item-transition-duration) var(--item-transition-easing);
+  }
+
+  .vds-bottom-nav__item:hover:not([data-disabled="true"]) {
+    background-color: var(--item-background-hover);
+  }
+
+  .vds-bottom-nav__item:active:not([data-disabled="true"]) {
+    background-color: var(--item-background-active);
+    transform: scale(var(--item-press-scale));
+  }
+
+  /* Suppress the item's own background highlight while it carries the
+   * active pill / underline indicator — otherwise the pill sits inside
+   * a second hover rectangle and the whole tab visibly "lights up".
+   * iOS variant has no indicator so keeps normal hover feedback. */
+  .vds-bottom-nav[data-variant="material"] .vds-bottom-nav__item[data-active="true"],
+  .vds-bottom-nav[data-variant="underline"] .vds-bottom-nav__item[data-active="true"],
+  .vds-bottom-nav[data-variant="floating"] .vds-bottom-nav__item[data-active="true"] {
+    --item-background-hover: transparent;
+    --item-background-active: transparent;
+  }
+
+  .vds-bottom-nav__item:focus-visible {
+    outline: var(--item-focus-ring-width) solid var(--item-focus-ring-color);
+    outline-offset: var(--item-focus-ring-offset);
+  }
+
+  .vds-bottom-nav__item[data-active="true"] {
+    color: var(--item-color-active);
+  }
+
+  .vds-bottom-nav__item[data-disabled="true"] {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Inner wrapper — stacks icon over label, centers both.
+   * Stays above the sliding indicator via z-index.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__item-inner {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--item-gap);
+    inline-size: 100%;
+    pointer-events: none;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Icon wrapper — badges anchor absolutely inside this.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--item-icon-size);
+    block-size: var(--item-icon-size);
+    color: inherit;
+    transition: color var(--item-transition-duration) var(--item-transition-easing);
+  }
+
+  .vds-bottom-nav__icon > svg,
+  .vds-bottom-nav__icon > img {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Label — truncates, hidden for dense layouts via token.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__label {
+    display: var(--item-label-display);
+    max-inline-size: 100%;
+    font-size: var(--item-label-font-size);
+    line-height: var(--item-label-line-height);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Static (per-item) indicator for material / underline
+   * when animatedIndicator={false} or before the JS-driven
+   * sliding indicator has measured.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav[data-variant="material"]
+    .vds-bottom-nav__item[data-active="true"]
+    .vds-bottom-nav__icon::before {
+    content: "";
+    position: absolute;
+    inset-block: -0.25rem;
+    inset-inline: -1rem;
+    z-index: -1;
+    background-color: var(--bottom-nav-indicator-color);
+    border-radius: var(--bottom-nav-indicator-radius);
+    transition:
+      opacity var(--item-transition-duration) var(--item-transition-easing),
+      transform var(--item-transition-duration) var(--item-transition-easing);
+  }
+
+  .vds-bottom-nav[data-variant="underline"]
+    .vds-bottom-nav__item[data-active="true"]::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    inline-size: var(--bottom-nav-indicator-inline-size);
+    block-size: var(--bottom-nav-indicator-height);
+    background-color: var(--item-color-active);
+    border-radius: var(--bottom-nav-indicator-radius);
+  }
+
+  /* Hide the static indicator when the JS sliding indicator is enabled */
+  .vds-bottom-nav[data-animated-indicator="true"][data-variant="material"]
+    .vds-bottom-nav__item[data-active="true"]
+    .vds-bottom-nav__icon::before,
+  .vds-bottom-nav[data-animated-indicator="true"][data-variant="underline"]
+    .vds-bottom-nav__item[data-active="true"]::before {
+    display: none;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Sliding indicator — positioned absolutely by JS.
+   * Transitions transform + inline-size for smooth slide.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__sliding-indicator {
+    position: absolute;
+    z-index: 0;
+    background-color: var(--bottom-nav-indicator-color);
+    border-radius: var(--bottom-nav-indicator-radius);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .vds-bottom-nav__sliding-indicator[data-measured="true"] {
+    opacity: 1;
+  }
+
+  /* Underline — slides horizontally between tabs. The pill-between-tabs
+   * motion reads naturally for an underline (a line tracing across the
+   * row) but feels jittery for a material pill. */
+  .vds-bottom-nav[data-variant="underline"] .vds-bottom-nav__sliding-indicator {
+    transition:
+      inset-inline-start var(--bottom-nav-indicator-duration) var(--bottom-nav-indicator-easing),
+      inline-size var(--bottom-nav-indicator-duration) var(--bottom-nav-indicator-easing),
+      opacity var(--bottom-nav-indicator-duration) var(--bottom-nav-indicator-easing),
+      background-color var(--bottom-nav-indicator-duration) var(--bottom-nav-indicator-easing);
+  }
+
+  /* Material — no slide. Each activation the pill snaps to its new
+   * location and opens from the centre outward (scaleX 0.2 → 1). The
+   * remount is driven by a React `key` in BottomNav.tsx so the
+   * @keyframes animation fires fresh on every active change. */
+  .vds-bottom-nav[data-variant="material"] .vds-bottom-nav__sliding-indicator[data-measured="true"] {
+    transform-origin: center;
+    animation: vds-bottom-nav-pill-open var(--bottom-nav-indicator-duration) var(--bottom-nav-indicator-easing) both;
+  }
+
+  @keyframes vds-bottom-nav-pill-open {
+    from {
+      transform: scaleX(0.15);
+      opacity: 0;
+    }
+    to {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  .vds-bottom-nav__sliding-indicator[data-measured="true"] {
+    opacity: 1;
+  }
+
+  /* Variant-specific sliding indicator placement.
+   * For material, JS sets inset-block-start + block-size from the active
+   * icon's measured rect — the pill hugs the icon instead of the whole
+   * item (which would leak the label outside the pill). */
+  .vds-bottom-nav[data-variant="material"] .vds-bottom-nav__sliding-indicator {
+    inset-block-start: 0;
+  }
+
+  .vds-bottom-nav[data-variant="underline"] .vds-bottom-nav__sliding-indicator {
+    inset-block-start: 0;
+    block-size: var(--bottom-nav-indicator-height);
+    background-color: var(--item-color-active, var(--vds-color-primary-solid));
+  }
+
+  /* ─────────────────────────────────────────────
+   * FAB — center-escape circular action.
+   * Sits among items but floats upward via transform.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__fab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    inline-size: var(--fab-size);
+    block-size: var(--fab-size);
+    margin-inline: var(--vds-space-1, 0.25rem);
+    padding: 0;
+    border: 0;
+    border-radius: var(--fab-radius);
+    background-color: var(--fab-background);
+    color: var(--fab-color);
+    box-shadow: var(--fab-shadow);
+    cursor: pointer;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transform: translateY(var(--fab-translate-y));
+    align-self: center;
+
+    transition:
+      background-color var(--item-transition-duration) var(--item-transition-easing),
+      transform var(--item-transition-duration) var(--item-transition-easing),
+      box-shadow var(--item-transition-duration) var(--item-transition-easing);
+  }
+
+  .vds-bottom-nav__fab:hover {
+    background-color: var(--fab-background-hover);
+  }
+
+  .vds-bottom-nav__fab:active {
+    background-color: var(--fab-background-active);
+    transform: translateY(var(--fab-translate-y)) scale(var(--fab-press-scale));
+  }
+
+  .vds-bottom-nav__fab:focus-visible {
+    outline: var(--fab-ring-width) solid var(--fab-ring-color);
+    outline-offset: var(--fab-ring-offset);
+  }
+
+  .vds-bottom-nav__fab > svg {
+    inline-size: var(--fab-icon-size);
+    block-size: var(--fab-icon-size);
+  }
+
+  /* Notch — carve an arc out of the nav bar behind the FAB.
+   * mask-image composites a subtract to create a rounded cutout. */
+  .vds-bottom-nav[data-has-fab-notch="true"] {
+    --fab-notch-radius: calc(var(--fab-size) / 2 + 6px);
+    mask-image: radial-gradient(
+      circle var(--fab-notch-radius) at 50% 0,
+      transparent 98%,
+      #000 100%
+    );
+    -webkit-mask-image: radial-gradient(
+      circle var(--fab-notch-radius) at 50% 0,
+      transparent 98%,
+      #000 100%
+    );
+  }
+
+  /* ─────────────────────────────────────────────
+   * Badge — count or dot, anchored to icon top-inline-end.
+   * ───────────────────────────────────────────── */
+  .vds-bottom-nav__badge {
+    position: absolute;
+    inset-block-start: var(--badge-offset-block);
+    inset-inline-end: var(--badge-offset-inline);
+    transform: translate(var(--badge-translate-x), var(--badge-translate-y));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--badge-min-inline-size);
+    block-size: var(--badge-size);
+    padding-inline: var(--badge-padding-inline);
+    background-color: var(--badge-background);
+    color: var(--badge-color);
+    border-radius: var(--badge-radius);
+    box-shadow: 0 0 0 var(--badge-ring-width) var(--badge-ring-color);
+    font-size: var(--badge-font-size);
+    font-weight: var(--badge-font-weight);
+    line-height: 1;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* RTL — the translate-x sign has to flip so the badge still escapes outward.
+   * inset-inline-end already handles horizontal anchoring via logical props,
+   * but `transform: translate()` is physical — flip its X for RTL. */
+  .vds-bottom-nav:dir(rtl) .vds-bottom-nav__badge {
+    transform: translate(
+      calc(var(--badge-translate-x) * -1),
+      var(--badge-translate-y)
+    );
+  }
+
+  .vds-bottom-nav__badge[data-dot="true"] {
+    min-inline-size: var(--badge-dot-size);
+    inline-size: var(--badge-dot-size);
+    block-size: var(--badge-dot-size);
+    padding-inline: 0;
+    transform: translate(
+      var(--badge-dot-translate-x),
+      var(--badge-dot-translate-y)
+    );
+  }
+
+  .vds-bottom-nav:dir(rtl) .vds-bottom-nav__badge[data-dot="true"] {
+    transform: translate(
+      calc(var(--badge-dot-translate-x) * -1),
+      var(--badge-dot-translate-y)
+    );
+  }
+
+  /* ─────────────────────────────────────────────
+   * Reduced motion — disable all transitions/transforms.
+   * ───────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-bottom-nav,
+    .vds-bottom-nav__item,
+    .vds-bottom-nav__item:active,
+    .vds-bottom-nav__icon,
+    .vds-bottom-nav__fab,
+    .vds-bottom-nav__fab:active,
+    .vds-bottom-nav__sliding-indicator,
+    .vds-bottom-nav[data-variant="material"]
+      .vds-bottom-nav__item[data-active="true"]
+      .vds-bottom-nav__icon::before {
+      transition: none !important;
+    }
+  }
+}

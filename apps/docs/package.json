@@ -57,6 +57,7 @@
     "@virtari-packages/react-flag": "workspace:*",
     "@virtari-packages/react-phone-input": "workspace:*",
     "@virtari-packages/react-language-picker": "workspace:*",
+    "@virtari-packages/react-bottom-nav": "workspace:*",
     "@tabler/icons": "^3.0.0",
     "@tabler/icons-react": "^3.0.0",
     "@tanstack/react-virtual": "^3.10.0",

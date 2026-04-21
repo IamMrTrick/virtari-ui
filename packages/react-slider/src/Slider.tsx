@@ -15,6 +15,7 @@ export function Slider({
   defaultValue,
   min = 0,
   max = 100,
+  minStepsBetweenThumbs = 1,
   ...props
 }: SliderProps) {
   const thumbValues =
@@ -32,6 +33,7 @@ export function Slider({
       defaultValue={defaultValue}
       min={min}
       max={max}
+      minStepsBetweenThumbs={minStepsBetweenThumbs}
       {...props}
     >
       <SliderPrimitive.Track className="vds-slider-track">

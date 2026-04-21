@@ -23,10 +23,8 @@
     border-color: var(--checkbox-card-border-color-hover);
   }
 
-  /* ── Focus-within (the inner Checkbox owns keyboard focus) ── */
+  /* ── Focus-within (the inner Checkbox owns the focus ring) ── */
   .vds-checkbox-card:focus-within {
-    outline: var(--checkbox-card-focus-ring-width) solid var(--checkbox-card-focus-ring-color);
-    outline-offset: var(--checkbox-card-focus-ring-offset);
     border-color: var(--checkbox-card-border-color-hover);
   }
 

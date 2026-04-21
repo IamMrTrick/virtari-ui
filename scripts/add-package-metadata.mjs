@@ -33,7 +33,7 @@ const DESCRIPTIONS = {
 const KEYWORDS_BASE = ["virtari", "design-system", "react", "ui", "components"];
 
 function baseName(name) {
-  return name.replace(/^@virtari\//, "").replace(/^react-/, "");
+  return name.replace(/^@[^/]+\//, "").replace(/^react-/, "");
 }
 
 function describe(pkgName) {

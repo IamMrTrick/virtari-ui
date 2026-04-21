@@ -9,3 +9,10 @@ export type { CheckboxGroupProps } from "./CheckboxGroup";
 
 export { CheckboxCard } from "./CheckboxCard";
 export type { CheckboxCardProps, CheckboxCardLayout } from "./CheckboxCard";
+
+export { PillCheckbox, PillCheckboxItem } from "./PillCheckbox";
+export type {
+  PillCheckboxProps,
+  PillCheckboxItemProps,
+  PillCheckboxSize,
+} from "./PillCheckbox";
