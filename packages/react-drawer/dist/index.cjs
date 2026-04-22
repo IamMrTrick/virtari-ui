@@ -59,8 +59,11 @@ function getMainCoord(direction, x, y) {
 function getCrossCoord(direction, x, y) {
   return getAxis(direction) === "x" ? y : x;
 }
-function getOpenSign(direction) {
-  return direction === "top" || direction === "left" ? 1 : -1;
+function getOpenSign(direction, rtl = false) {
+  if (direction === "top") return 1;
+  if (direction === "bottom") return -1;
+  if (direction === "left") return rtl ? -1 : 1;
+  return rtl ? 1 : -1;
 }
 function getViewportRect() {
   if (typeof window === "undefined") return { width: 0, height: 0 };
@@ -102,17 +105,20 @@ function getElementSize(el, direction) {
     Number.isFinite(computedSize) ? computedSize : 0
   );
 }
-function getTranslate(direction, openPx, totalPx) {
+function getTranslate(direction, openPx, totalPx, rtl = false) {
   const offset = Math.max(totalPx - openPx, 0);
   switch (direction) {
     case "bottom":
       return `translate3d(0, ${offset}px, 0)`;
     case "top":
       return `translate3d(0, ${-offset}px, 0)`;
+    /* The x translate flips in RTL so the drawer slides back toward its
+       (flipped) dock edge, matching the CSS rest-transform defined in
+       Drawer.css under :dir(rtl). */
     case "right":
-      return `translate3d(${offset}px, 0, 0)`;
+      return `translate3d(${rtl ? -offset : offset}px, 0, 0)`;
     case "left":
-      return `translate3d(${-offset}px, 0, 0)`;
+      return `translate3d(${rtl ? offset : -offset}px, 0, 0)`;
   }
 }
 function getStretchScale(openPx, totalPx) {
@@ -123,7 +129,7 @@ function getStretchScale(openPx, totalPx) {
   return (totalPx + stretchPx) / totalPx;
 }
 function getVisualTransform(direction, openPx, totalPx, options) {
-  const translate = getTranslate(direction, openPx, totalPx);
+  const translate = getTranslate(direction, openPx, totalPx, options?.rtl);
   const stretchScale = options?.disableStretch ? 1 : getStretchScale(openPx, totalPx);
   if (getAxis(direction) === "x") {
     return `${translate} scale3d(${stretchScale}, 1, 1)`;
@@ -460,6 +466,10 @@ function getTouchById(list, touchId) {
   }
   return null;
 }
+function resolveRtl(contentEl) {
+  if (!contentEl) return false;
+  return getComputedStyle(contentEl).direction === "rtl";
+}
 function getDragSurface(target, contentEl, handleEl, headerEl, scrollableEl, dragHandleOnly, direction, inputType) {
   if (isInside(target, handleEl) && handleEl) {
     return { el: handleEl, source: "handle" };
@@ -544,7 +554,7 @@ function useDrawerDrag(config) {
     if (!state) return;
     const mainDelta = main - state.startMain;
     const crossDelta = cross - state.startCross;
-    const openSign = getOpenSign(resolvedConfig.direction);
+    const openSign = getOpenSign(resolvedConfig.direction, state.rtl);
     const sizeDelta = mainDelta * openSign;
     if (!state.axisLocked) {
       if (Math.abs(mainDelta) < AXIS_LOCK_THRESHOLD) return;
@@ -760,7 +770,8 @@ function useDrawerDrag(config) {
       fromMinimized: resolvedConfig.fromMinimized,
       axisLocked: false,
       dragging: false,
-      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }]
+      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
+      rtl: resolveRtl(resolvedConfig.getContentEl())
     });
     bindMouseListeners();
   }, [beginSession, bindMouseListeners]);
@@ -794,7 +805,8 @@ function useDrawerDrag(config) {
       fromMinimized: resolvedConfig.fromMinimized,
       axisLocked: false,
       dragging: false,
-      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }]
+      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
+      rtl: resolveRtl(resolvedConfig.getContentEl())
     });
     bindPointerListeners();
   }, [beginSession, bindPointerListeners]);
@@ -828,7 +840,8 @@ function useDrawerDrag(config) {
       fromMinimized: resolvedConfig.fromMinimized,
       axisLocked: false,
       dragging: false,
-      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }]
+      samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
+      rtl: resolveRtl(resolvedConfig.getContentEl())
     });
     bindTouchListeners();
   }, [beginSession, bindTouchListeners]);
@@ -1241,9 +1254,10 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     const wrapperEl = getWrapperEl();
     currentSizeRef.current = sizePx;
     if (layout.totalSize <= 0 || !contentEl) return;
+    const rtl = getComputedStyle(contentEl).direction === "rtl";
     contentEl.style.setProperty(
       "--vds-drawer-transform",
-      getVisualTransform(direction, sizePx, layout.totalSize, options)
+      getVisualTransform(direction, sizePx, layout.totalSize, { ...options, rtl })
     );
     const overlayProgress = getOverlayProgress(sizePx, layout.totalSize, layout.overlayStartSize);
     if (overlayEl) {
@@ -1261,7 +1275,6 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
         wrapperEl.style.borderRadius = "";
         wrapperEl.style.transformOrigin = "";
       } else {
-        const rtl = getComputedStyle(contentEl).direction === "rtl";
         const backgroundStyles = getBackgroundStyles(overlayProgress, direction, rtl);
         wrapperEl.style.transform = backgroundStyles.transform;
         wrapperEl.style.borderRadius = backgroundStyles.borderRadius;
@@ -1338,9 +1351,10 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     const contentEl = contentRef.current;
     if (shrinkResize && contentEl) {
       contentEl.style.setProperty(shrinkResize.property, `${shrinkResize.from}px`);
+      const rtl = getComputedStyle(contentEl).direction === "rtl";
       contentEl.style.setProperty(
         "--vds-drawer-transform",
-        getVisualTransform(direction, current, shrinkResize.from, { disableStretch: true })
+        getVisualTransform(direction, current, shrinkResize.from, { disableStretch: true, rtl })
       );
     } else {
       writeVisualSize(current, { disableStretch: Boolean(resizeAnimation) });
@@ -1360,9 +1374,10 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
         const pendingResize = pendingResizeSizeRef.current;
         if (pendingResize && contentEl && pendingResize.from > pendingResize.to) {
           resizeSizeAnimatingRef.current = true;
+          const rtl = getComputedStyle(contentEl).direction === "rtl";
           contentEl.style.setProperty(
             "--vds-drawer-transform",
-            getVisualTransform(direction, target, pendingResize.from, { disableStretch: true })
+            getVisualTransform(direction, target, pendingResize.from, { disableStretch: true, rtl })
           );
           window.clearTimeout(resizeCleanupTimerRef.current);
           const { ms } = readDrawerTiming(contentEl);
@@ -1422,7 +1437,11 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
     if (lockedResizeSize) contentEl.style.setProperty(resizeSizeProperty, lockedResizeSize);
     if (totalSize <= 0) return;
     if (currentSizeRef.current <= 0) {
-      contentEl.style.setProperty("--vds-drawer-transform", getVisualTransform(direction, 0, totalSize));
+      const rtl = getComputedStyle(contentEl).direction === "rtl";
+      contentEl.style.setProperty(
+        "--vds-drawer-transform",
+        getVisualTransform(direction, 0, totalSize, { rtl })
+      );
       if (overlayRef.current) {
         overlayRef.current.style.setProperty("--vds-drawer-overlay-opacity", "0");
       }
@@ -1443,10 +1462,12 @@ var DrawerContent = react.forwardRef(function DrawerContent2({
         };
         setTransition(contentEl, "none");
         contentEl.style.setProperty(resizeSizeProperty, `${previousLayout.totalSize}px`);
+        const rtl = getComputedStyle(contentEl).direction === "rtl";
         contentEl.style.setProperty(
           "--vds-drawer-transform",
           getVisualTransform(direction, visualSize, previousLayout.totalSize, {
-            disableStretch: true
+            disableStretch: true,
+            rtl
           })
         );
       } else {

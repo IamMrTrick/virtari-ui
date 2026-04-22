@@ -6,8 +6,10 @@ import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 type TooltipSize = "sm" | "md" | "lg";
 type TooltipVariant = "default" | "inverted" | "info" | "success" | "warning" | "danger";
 interface TooltipProviderProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider> {
+    /** Reading direction. Defaults to the document's active direction. */
+    dir?: "ltr" | "rtl";
 }
-declare function TooltipProvider({ delayDuration, skipDelayDuration, ...props }: TooltipProviderProps): react_jsx_runtime.JSX.Element;
+declare function TooltipProvider({ delayDuration, skipDelayDuration, dir, children, ...props }: TooltipProviderProps): react_jsx_runtime.JSX.Element;
 declare const Tooltip: react.FC<TooltipPrimitive.TooltipProps>;
 declare const TooltipTrigger: react.ForwardRefExoticComponent<TooltipPrimitive.TooltipTriggerProps & react.RefAttributes<HTMLButtonElement>>;
 interface TooltipContentProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {

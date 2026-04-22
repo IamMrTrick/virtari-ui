@@ -58,22 +58,13 @@ import {
   IconChevronsRight,
   IconChevronDown,
   IconDownload,
-  IconEyeOff,
   IconFileText,
-  IconFilter,
-  IconLayoutGrid,
-  IconLayoutList,
-  IconList,
   IconLock,
   IconMail,
   IconPencil,
   IconPlus,
   IconRefresh,
-  IconRotateClockwise2,
-  IconSearch,
-  IconSettings,
   IconShield,
-  IconTable,
   IconTrash,
   IconUser,
   IconUserCheck,
@@ -81,9 +72,9 @@ import {
   IconX,
 } from "@virtari-packages/react-icons";
 
-/* ════════════════════════════════════════════════════════════════ *
- * Types & mock data — 380 deterministic users
- * ════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Types & mock data â€” 380 deterministic users
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 type Role =
   | "Project Manager"
@@ -175,19 +166,6 @@ function initials(first: string, last: string) {
   return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase();
 }
 
-/** Seeded per-user hue so every avatar has a stable, distinct tint. */
-function avatarTint(seed: string): React.CSSProperties {
-  let h = 0;
-  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-  const hue = h % 360;
-  return {
-    background: `linear-gradient(135deg,
-      oklch(68% 0.16 ${hue}),
-      oklch(56% 0.19 ${(hue + 40) % 360}))`,
-    color: "#fff",
-  };
-}
-
 function formatJoined(iso: string) {
   const d = new Date(iso);
   const date = d.toLocaleDateString(undefined, {
@@ -205,9 +183,9 @@ function formatJoined(iso: string) {
   return `${date}, ${time}`;
 }
 
-/* ════════════════════════════════════════════════════════════════ *
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
  * Default column config (drives the Customize drawer)
- * ════════════════════════════════════════════════════════════════ */
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 const DEFAULT_COLUMN_CONFIG: ColumnConfig[] = [
   { id: "name", label: "Full name", icon: <IconUser size={14} stroke={1.75} aria-hidden />, visible: true },
@@ -219,10 +197,23 @@ const DEFAULT_COLUMN_CONFIG: ColumnConfig[] = [
 ];
 
 const STORAGE_KEY = "vds:demo:users-table-columns";
+const SHOW_REFRESH_ACTION = false;
 
-/* ════════════════════════════════════════════════════════════════ *
+function sameColumnConfig(a: ColumnConfig[], b: ColumnConfig[]) {
+  if (a.length !== b.length) return false;
+  return a.every((column, index) => {
+    const next = b[index];
+    return next?.id === column.id && next.visible === column.visible;
+  });
+}
+
+function sameColumnOrder(a: readonly string[], b: readonly string[]) {
+  return a.length === b.length && a.every((id, index) => id === b[index]);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
  * Page
- * ════════════════════════════════════════════════════════════════ */
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 const ch = createColumnHelper<User>();
 
@@ -231,7 +222,7 @@ export function DataTableUsersPage() {
   const [data, setData] = useState<User[]>(() => makeUsers(380));
   const [loading, setLoading] = useState(false);
 
-  /* Table state — controlled */
+  /* Table state â€” controlled */
   const [viewMode, setViewMode] = useState<DataTableViewMode>("table");
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [globalFilter, setGlobalFilter] = useState("");
@@ -290,6 +281,18 @@ export function DataTableUsersPage() {
     [columnConfig],
   );
   const columnOrder = columnOrderUser ?? columnOrderDefault;
+  const isLayoutCustomized = useMemo(
+    () =>
+      !sameColumnConfig(columnConfig, DEFAULT_COLUMN_CONFIG) ||
+      (columnOrderUser !== null &&
+        !sameColumnOrder(columnOrderUser, columnOrderDefault)),
+    [columnConfig, columnOrderDefault, columnOrderUser],
+  );
+
+  const handleColumnsChange = (next: ColumnConfig[]) => {
+    setColumnConfig(next);
+    setColumnOrderUser(null);
+  };
 
   /* Drawer states */
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
@@ -297,7 +300,7 @@ export function DataTableUsersPage() {
   const [addUserOpen, setAddUserOpen] = useState(false);
   const [quickEdit, setQuickEdit] = useState<User | null>(null);
 
-  /* ─────────────────────────── Mutations ─────────────────────────── */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Mutations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   const handleRefresh = () => {
     setLoading(true);
@@ -309,15 +312,7 @@ export function DataTableUsersPage() {
   };
 
   const handleExport = (format: "csv" | "excel" | "json" | "pdf") => {
-    toast.info(`Export — ${format.toUpperCase()}`, "Demo action — no file produced.");
-  };
-
-  const handleResetView = () => {
-    setColumnConfig(DEFAULT_COLUMN_CONFIG);
-    setSorting([]);
-    setColumnFilters([]);
-    setGlobalFilter("");
-    toast.info("View reset", "Columns, sort, and filters restored.");
+    toast.info(`Export â€” ${format.toUpperCase()}`, "Demo action â€” no file produced.");
   };
 
   const handleAddUser = (u: Omit<User, "id">) => {
@@ -355,7 +350,7 @@ export function DataTableUsersPage() {
     );
   };
 
-  /* ─────────────────────────── Filters wiring ────────────────────── */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Filters wiring â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   const setFilter = (id: string, value: unknown) => {
     setColumnFilters((prev) => {
@@ -368,7 +363,7 @@ export function DataTableUsersPage() {
   const filterValue = (id: string) =>
     columnFilters.find((c) => c.id === id)?.value;
 
-  /* ─────────────────────────── Columns ───────────────────────────── */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Columns â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   const columns = useMemo<ColumnDef<User, any>[]>(
     () => [
@@ -407,7 +402,8 @@ export function DataTableUsersPage() {
               <Avatar
                 fallback={initials(u.firstName, u.lastName)}
                 size="sm"
-                style={avatarTint(full)}
+                color="auto"
+                colorKey={full}
               />
               <span
                 style={{
@@ -544,10 +540,7 @@ export function DataTableUsersPage() {
     ],
     [],
   );
-
-  const filterCount = columnFilters.length;
-
-  /* ─────────────────────────── Render ────────────────────────────── */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   return (
     <div>
@@ -573,36 +566,37 @@ export function DataTableUsersPage() {
         defaultColumnPinning={{ left: ["__select"], right: ["__actions"] }}
         defaultPagination={{ pageIndex: 0, pageSize: 15 }}
       >
-        {/* ───── Toolbar (row 1) ───── */}
+        {/* â”€â”€â”€â”€â”€ Toolbar (row 1) â”€â”€â”€â”€â”€ */}
         <DataTable.Toolbar>
-          <ViewModeSegmented value={viewMode} onChange={setViewMode} />
+          <DataTable.ViewModeToggle />
 
           <div style={{ flex: 1 }} aria-hidden />
 
-          <SearchInput value={globalFilter} onChange={setGlobalFilter} />
+          <DataTable.SearchField
+            value={globalFilter}
+            onValueChange={setGlobalFilter}
+            inputSize="md"
+            placeholder="Search"
+            aria-label="Search users"
+          />
 
-          <Button
-            variant="ghost"
-            size="sm"
-            leftSection={<IconEyeOff size={14} stroke={1.75} aria-hidden />}
+          <DataTable.CustomizeButton
+            label={isLayoutCustomized ? "Customized" : "Customize"}
+            variant={isLayoutCustomized ? "soft" : "ghost"}
+            size="md"
+            intent="neutral"
             onClick={() => setCustomizeOpen(true)}
-          >
-            Hide
-          </Button>
+          />
 
-          <Button
-            variant="ghost"
-            size="sm"
-            leftSection={<IconSettings size={14} stroke={1.75} aria-hidden />}
-            onClick={() => setCustomizeOpen(true)}
-          >
-            Customize
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            leftSection={
+          {SHOW_REFRESH_ACTION && (
+            <Button
+              variant="ghost"
+              color="contrast"
+              size="md"
+              aria-label="Refresh"
+              onClick={handleRefresh}
+              disabled={loading}
+            >
               <IconRefresh
                 size={14}
                 stroke={1.75}
@@ -613,59 +607,15 @@ export function DataTableUsersPage() {
                     : undefined
                 }
               />
-            }
-            onClick={handleRefresh}
-            disabled={loading}
-          >
-            Refresh
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            leftSection={
-              <IconRotateClockwise2 size={14} stroke={1.75} aria-hidden />
-            }
-            onClick={handleResetView}
-          >
-            Reset
-          </Button>
-
-          <Button
-            variant={filterCount > 0 ? "outline" : "ghost"}
-            color={filterCount > 0 ? "primary" : "neutral"}
-            size="sm"
-            leftSection={<IconFilter size={14} stroke={1.75} aria-hidden />}
-            onClick={() => setFilterDrawerOpen(true)}
-          >
-            Filter
-            {filterCount > 0 && (
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  minInlineSize: "1.125rem",
-                  blockSize: "1.125rem",
-                  marginInlineStart: "0.375rem",
-                  paddingInline: "0.25rem",
-                  borderRadius: "999px",
-                  background: "var(--vds-color-primary-emphasis, #6366f1)",
-                  color: "#fff",
-                  fontSize: "0.6875rem",
-                  fontWeight: 600,
-                }}
-              >
-                {filterCount}
-              </span>
-            )}
-          </Button>
+            </Button>
+          )}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                variant="outline"
-                size="sm"
+                variant="soft"
+                color="contrast"
+                size="md"
                 leftSection={<IconDownload size={14} stroke={1.75} aria-hidden />}
                 rightSection={
                   <IconChevronDown size={12} stroke={1.75} aria-hidden />
@@ -699,7 +649,7 @@ export function DataTableUsersPage() {
           <Button
             variant="solid"
             color="primary"
-            size="sm"
+            size="md"
             leftSection={<IconPlus size={14} stroke={1.75} aria-hidden />}
             rightSection={
               <IconChevronDown size={12} stroke={1.75} aria-hidden />
@@ -710,18 +660,18 @@ export function DataTableUsersPage() {
           </Button>
         </DataTable.Toolbar>
 
-        {/* ───── Filter bar (row 2) — chips for active filters ───── */}
+        {/* â”€â”€â”€â”€â”€ Filter bar (row 2) â€” chips for active filters â”€â”€â”€â”€â”€ */}
         <ActiveFilterBar
           columnFilters={columnFilters}
           onRemove={(id) => setFilter(id, undefined)}
           onAdd={() => setFilterDrawerOpen(true)}
         />
 
-        {/* ───── Body — Views switches Table/Board/List based on viewMode ───── */}
+        {/* â”€â”€â”€â”€â”€ Body â€” Views switches Table/Board/List based on viewMode â”€â”€â”€â”€â”€ */}
         <DataTableDndProvider onColumnOrderChange={setColumnOrderUser}>
           <DataTable.Views
             /* Skip system columns (checkbox + row actions) from the default
-             * Board/List renderers — we re-mount them in custom layouts so the
+             * Board/List renderers â€” we re-mount them in custom layouts so the
              * checkbox sits on the leading edge and actions on the trailing. */
             skipColumns={["__select", "__actions"]}
             emptyMessage="No users match your filters."
@@ -753,8 +703,14 @@ export function DataTableUsersPage() {
           />
         </DataTableDndProvider>
 
-        {/* ───── Bulk actions ───── */}
-        <DataTable.BulkActions.Root sticky>
+        {/* â”€â”€â”€â”€â”€ Bulk actions â”€â”€â”€â”€â”€ */}
+        <DataTable.BulkActions.Root
+          sticky
+          style={{
+            "--data-table-bulk-sticky-offset":
+              "var(--data-table-pagination-sticky-offset)",
+          } as React.CSSProperties}
+        >
           {({ selectedRows, selectedCount, clearSelection }) => {
             const ids = selectedRows.map((r) => (r.original as User).id);
             return (
@@ -794,13 +750,13 @@ export function DataTableUsersPage() {
           }}
         </DataTable.BulkActions.Root>
 
-        {/* ───── Pagination — built with vds Select + Buttons ───── */}
+        {/* â”€â”€â”€â”€â”€ Pagination â€” built with vds Select + Buttons â”€â”€â”€â”€â”€ */}
         <CustomPagination />
 
-        {loading && <DataTable.LoadingOverlay open label="Refreshing…" />}
+        {loading && <DataTable.LoadingOverlay open label="Refreshing..." />}
       </DataTable.Root>
 
-      {/* ───── Filter drawer (custom — drives columnFilters directly) ───── */}
+      {/* â”€â”€â”€â”€â”€ Filter drawer (custom â€” drives columnFilters directly) â”€â”€â”€â”€â”€ */}
       <FilterDrawer
         open={filterDrawerOpen}
         onOpenChange={setFilterDrawerOpen}
@@ -811,23 +767,23 @@ export function DataTableUsersPage() {
         onClearAll={() => setColumnFilters([])}
       />
 
-      {/* ───── Customize drawer (column visibility + reorder via DnD) ───── */}
+      {/* â”€â”€â”€â”€â”€ Customize drawer (column visibility + reorder via DnD) â”€â”€â”€â”€â”€ */}
       <DataTableCustomizeDrawer
         open={customizeOpen}
         onOpenChange={setCustomizeOpen}
         columns={columnConfig}
-        onColumnsChange={setColumnConfig}
+        onColumnsChange={handleColumnsChange}
         defaultColumns={DEFAULT_COLUMN_CONFIG}
       />
 
-      {/* ───── Add User drawer ───── */}
+      {/* â”€â”€â”€â”€â”€ Add User drawer â”€â”€â”€â”€â”€ */}
       <AddUserDrawer
         open={addUserOpen}
         onOpenChange={setAddUserOpen}
         onSubmit={handleAddUser}
       />
 
-      {/* ───── Quick Edit drawer ───── */}
+      {/* â”€â”€â”€â”€â”€ Quick Edit drawer â”€â”€â”€â”€â”€ */}
       <QuickEditDrawer
         user={quickEdit}
         onOpenChange={(open) => !open && setQuickEdit(null)}
@@ -845,116 +801,24 @@ export function DataTableUsersPage() {
   );
 }
 
-/* ════════════════════════════════════════════════════════════════ *
- * View-mode segmented toggle (Table / Board / List) — vds Buttons
- * ════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Data table header cell composition.
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-function ViewModeSegmented({
-  value,
-  onChange,
-}: {
-  value: DataTableViewMode;
-  onChange: (v: DataTableViewMode) => void;
-}) {
-  const items: { id: DataTableViewMode; label: string; icon: ReactNode }[] = [
-    { id: "table", label: "Table", icon: <IconTable size={14} stroke={1.75} aria-hidden /> },
-    { id: "board", label: "Board", icon: <IconLayoutGrid size={14} stroke={1.75} aria-hidden /> },
-    { id: "list", label: "List", icon: <IconList size={14} stroke={1.75} aria-hidden /> },
-  ];
-  return (
-    <div
-      role="group"
-      aria-label="View mode"
-      style={{
-        display: "inline-flex",
-        gap: "2px",
-        padding: "2px",
-        background: "var(--vds-color-surface-raised, var(--vds-color-bg-subtle, rgba(255,255,255,0.04)))",
-        border: "1px solid var(--vds-color-border-muted, var(--vds-color-border, rgba(255,255,255,0.08)))",
-        borderRadius: "var(--vds-radius-button, 0.5rem)",
-      }}
-    >
-      {items.map((it) => (
-        <Button
-          key={it.id}
-          variant={value === it.id ? "solid" : "ghost"}
-          color={value === it.id ? "neutral" : "neutral"}
-          size="xs"
-          leftSection={it.icon}
-          aria-pressed={value === it.id}
-          onClick={() => onChange(it.id)}
-          style={
-            value === it.id
-              ? {
-                  background:
-                    "var(--vds-color-surface, var(--vds-color-bg-elevated, #1f2937))",
-                  color: "var(--vds-color-fg-default, var(--vds-color-text, #f9fafb))",
-                  boxShadow:
-                    "var(--vds-shadow-xs, 0 1px 2px rgba(0,0,0,0.06))",
-                }
-              : undefined
-          }
-        >
-          {it.label}
-        </Button>
-      ))}
-    </div>
-  );
-}
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Data table header cell composition.
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* ════════════════════════════════════════════════════════════════ *
- * Search input — vds Input with absolute IconSearch
- * ════════════════════════════════════════════════════════════════ */
-
-function SearchInput({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div style={{ position: "relative", inlineSize: "16rem" }}>
-      <IconSearch
-        size={14}
-        stroke={1.75}
-        aria-hidden
-        style={{
-          position: "absolute",
-          insetInlineStart: "0.625rem",
-          insetBlockStart: "50%",
-          transform: "translateY(-50%)",
-          color: "var(--vds-color-text-muted, #9ca3af)",
-          pointerEvents: "none",
-        }}
-      />
-      <Input
-        inputSize="sm"
-        type="search"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="Search"
-        aria-label="Search users"
-        style={{
-          paddingInlineStart: "1.875rem",
-          inlineSize: "100%",
-        }}
-      />
-    </div>
-  );
-}
-
-/* ════════════════════════════════════════════════════════════════ *
- * Sortable + Resizable header cell — wraps DataTable.HeaderCell
- * ════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Sortable + Resizable header cell â€” wraps DataTable.HeaderCell
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function SortableResizableHeader({ header }: { header: Header<any, unknown> }) {
   const canSort = header.column.getCanSort();
-  const canResize = header.column.getCanResize();
   const isPinned =
     header.column.id === "__select" || header.column.id === "__actions";
 
-  /* flexRender handles function headers — NEVER stringify a function. */
+  /* flexRender handles function headers â€” NEVER stringify a function. */
   const content = flexRender(
     header.column.columnDef.header,
     header.getContext(),
@@ -973,7 +837,6 @@ function SortableResizableHeader({ header }: { header: Header<any, unknown> }) {
     return (
       <DataTable.HeaderCell header={header}>
         {inner}
-        {canResize && <DataTable.ResizeHandle header={header} />}
       </DataTable.HeaderCell>
     );
   }
@@ -981,14 +844,13 @@ function SortableResizableHeader({ header }: { header: Header<any, unknown> }) {
   return (
     <DataTableDraggableHeaderCell header={header}>
       {inner}
-      {canResize && <DataTable.ResizeHandle header={header} />}
     </DataTableDraggableHeaderCell>
   );
 }
 
-/* ════════════════════════════════════════════════════════════════ *
- * Active filter bar — chips for current columnFilters
- * ════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Active filter bar â€” chips for current columnFilters
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function ActiveFilterBar({
   columnFilters,
@@ -1016,51 +878,40 @@ function ActiveFilterBar({
     if (id === "status") return v === "active" ? "Active" : "Inactive";
     return String(v);
   };
+  const iconFor = (id: string): ReactNode | undefined => {
+    switch (id) {
+      case "role":
+        return <IconUser size={12} stroke={1.75} />;
+      case "status":
+        return <IconShield size={12} stroke={1.75} />;
+      case "twoFA":
+        return <IconLock size={12} stroke={1.75} />;
+      default:
+        return undefined;
+    }
+  };
 
   return (
-    <div
-      className="vds-data-table-filter-bar"
-      role="toolbar"
-      aria-label="Active filters"
-    >
-      {columnFilters.map((f) => (
-        <button
-          key={f.id}
-          type="button"
-          className="vds-data-table-filter-chip"
-          onClick={onAdd}
-        >
-          <span className="vds-data-table-filter-chip-label">
-            {labelFor(f.id)}
-          </span>
-          <span className="vds-data-table-filter-chip-value">
-            {renderValue(f.id, f.value)}
-          </span>
-          <span
-            role="button"
-            tabIndex={-1}
-            className="vds-data-table-filter-chip-remove"
-            aria-label={`Remove ${labelFor(f.id)} filter`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onRemove(f.id);
-            }}
-          >
-            ×
-          </span>
-        </button>
-      ))}
-      <button type="button" className="vds-data-table-filter-add" onClick={onAdd}>
-        <IconPlus size={12} stroke={1.75} aria-hidden />
-        <span>Add filter</span>
-      </button>
-    </div>
+    <DataTable.FilterBar
+      sticky
+      stickyOffset="var(--data-table-toolbar-sticky-offset, 0)"
+      filters={columnFilters.map((f) => ({
+        id: f.id,
+        icon: iconFor(f.id),
+        label: labelFor(f.id),
+        value: renderValue(f.id, f.value),
+      }))}
+      onFilterClick={onAdd}
+      onRemoveFilter={onRemove}
+      onAddFilter={onAdd}
+    />
   );
+
 }
 
-/* ════════════════════════════════════════════════════════════════ *
- * Custom pagination — vds Select + Buttons
- * ════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Custom pagination â€” vds Select + Buttons
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function CustomPagination() {
   const { table } = useDataTableContext();
@@ -1078,6 +929,7 @@ function CustomPagination() {
       role="navigation"
       aria-label="Pagination"
       className="vds-data-table-pagination"
+      data-sticky=""
     >
       <div
         style={{
@@ -1086,14 +938,26 @@ function CustomPagination() {
           gap: "var(--vds-space-3, 0.75rem)",
           color: "var(--vds-color-text-muted, #9ca3af)",
           fontSize: "var(--vds-text-sm, 0.875rem)",
+          fontWeight: "var(--vds-font-weight-medium, 500)",
         }}
       >
         <span>Rows per page</span>
         <Select
           value={String(pageSize)}
-          onValueChange={(v) => table.setPageSize(Number(v))}
+          onValueChange={(v) => {
+            const nextPageSize = Number(v);
+            table.setPagination((prev) => ({
+              ...prev,
+              pageIndex: 0,
+              pageSize: nextPageSize,
+            }));
+          }}
         >
-          <SelectTrigger size="sm" style={{ minInlineSize: "5rem" }}>
+          <SelectTrigger
+            size="sm"
+            appearance="outline"
+            style={{ minInlineSize: "3.75rem", inlineSize: "3.75rem" }}
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -1118,6 +982,7 @@ function CustomPagination() {
       >
         <Button
           variant="ghost"
+          color="contrast"
           size="sm"
           aria-label="First page"
           disabled={!table.getCanPreviousPage()}
@@ -1126,6 +991,7 @@ function CustomPagination() {
         />
         <Button
           variant="ghost"
+          color="contrast"
           size="sm"
           aria-label="Previous page"
           disabled={!table.getCanPreviousPage()}
@@ -1136,8 +1002,8 @@ function CustomPagination() {
           typeof p === "number" ? (
             <Button
               key={`p-${p}`}
-              variant={p === pageIndex ? "solid" : "ghost"}
-              color={p === pageIndex ? "primary" : "neutral"}
+              variant={p === pageIndex ? "soft" : "ghost"}
+              color="contrast"
               size="sm"
               aria-label={`Page ${p + 1}`}
               aria-current={p === pageIndex ? "page" : undefined}
@@ -1154,12 +1020,13 @@ function CustomPagination() {
                 color: "var(--vds-color-text-muted, #9ca3af)",
               }}
             >
-              …
+              ...
             </span>
           ),
         )}
         <Button
           variant="ghost"
+          color="contrast"
           size="sm"
           aria-label="Next page"
           disabled={!table.getCanNextPage()}
@@ -1168,6 +1035,7 @@ function CustomPagination() {
         />
         <Button
           variant="ghost"
+          color="contrast"
           size="sm"
           aria-label="Last page"
           disabled={!table.getCanNextPage()}
@@ -1200,9 +1068,9 @@ function pageRange(
   return out;
 }
 
-/* ════════════════════════════════════════════════════════════════ *
- * Filter drawer — drives columnFilters directly via setFilter
- * ════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Filter drawer â€” drives columnFilters directly via setFilter
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function FilterDrawer({
   open,
@@ -1420,9 +1288,9 @@ function FilterField({
   );
 }
 
-/* ════════════════════════════════════════════════════════════════ *
- * Add User drawer — vds Drawer + Inputs + Select + Switch
- * ════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Add User drawer â€” vds Drawer + Inputs + Select + Switch
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function AddUserDrawer({
   open,
@@ -1558,9 +1426,9 @@ function AddUserDrawer({
   );
 }
 
-/* ════════════════════════════════════════════════════════════════ *
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
  * Quick edit drawer
- * ════════════════════════════════════════════════════════════════ */
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function QuickEditDrawer({
   user,
@@ -1612,7 +1480,8 @@ function QuickEditDrawer({
               <Avatar
                 fallback={initials(user.firstName, user.lastName)}
                 size="md"
-                style={avatarTint(`${user.firstName} ${user.lastName}`)}
+                color="auto"
+                colorKey={`${user.firstName} ${user.lastName}`}
               />
             )}
             <div>
@@ -1719,9 +1588,9 @@ function QuickEditDrawer({
   );
 }
 
-/* ════════════════════════════════════════════════════════════════ *
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
  * Helpers
- * ════════════════════════════════════════════════════════════════ */
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 const fieldStackStyle: React.CSSProperties = {
   display: "flex",
@@ -1793,9 +1662,9 @@ function ToggleRow({
   );
 }
 
-/* ════════════════════════════════════════════════════════════════ *
- * Custom List view — checkbox on the leading edge, actions on trailing
- * ════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Custom List view â€” checkbox on the leading edge, actions on trailing
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function CustomListView({
   onQuickEdit,
@@ -1828,6 +1697,7 @@ function CustomListView({
             className="vds-data-table-list-item"
             style={{
               display: "flex",
+              flexDirection: "row",
               alignItems: "center",
               gap: "var(--vds-space-3, 0.75rem)",
             }}
@@ -1840,13 +1710,21 @@ function CustomListView({
             <Avatar
               fallback={initials(u.firstName, u.lastName)}
               size="sm"
-              style={avatarTint(full)}
+              color="auto"
+              colorKey={full}
             />
             <div style={{ flex: 1, minInlineSize: 0 }}>
               <div className="vds-data-table-list-primary">{full}</div>
               <div
                 className="vds-data-table-list-secondary"
-                style={{ display: "flex", gap: "var(--vds-space-3, 0.75rem)" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "nowrap",
+                  gap: "var(--vds-space-3, 0.75rem)",
+                  minInlineSize: 0,
+                  overflow: "hidden",
+                }}
               >
                 <span>{u.email}</span>
                 <span>{u.role}</span>
@@ -1872,7 +1750,11 @@ function CustomListView({
               </div>
             </div>
             <div
-              style={{ display: "inline-flex", gap: "var(--vds-space-1, 0.25rem)" }}
+              style={{
+                display: "inline-flex",
+                flexShrink: 0,
+                gap: "var(--vds-space-1, 0.25rem)",
+              }}
             >
               <Button
                 variant="ghost"
@@ -1899,9 +1781,9 @@ function CustomListView({
   );
 }
 
-/* ════════════════════════════════════════════════════════════════ *
- * Custom Board view — card grid with checkbox top-left, actions top-right
- * ════════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
+ * Custom Board view â€” card grid with checkbox top-left, actions top-right
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function CustomBoardView({
   onQuickEdit,
@@ -1983,7 +1865,8 @@ function CustomBoardView({
               <Avatar
                 fallback={initials(u.firstName, u.lastName)}
                 size="md"
-                style={avatarTint(full)}
+                color="auto"
+                colorKey={full}
               />
               <div style={{ minInlineSize: 0 }}>
                 <div

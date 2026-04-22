@@ -1412,6 +1412,32 @@
     to { translate: 0 0; opacity: 1; }
   }
 
+  /* Logical (direction-aware) slide keyframes. The start offset flips via
+     --vds-slide-x-inline when the nearest ancestor resolves to RTL, so the
+     same animation name produces a mirrored motion in Persian/Arabic. */
+  :root { --vds-slide-x-inline: -0.5rem; }
+  :where([dir="rtl"]) { --vds-slide-x-inline: 0.5rem; }
+
+  @keyframes vds-slide-in-from-inline-start {
+    from { translate: var(--vds-slide-x-inline) 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-in-from-inline-end {
+    from { translate: calc(-1 * var(--vds-slide-x-inline)) 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-out-to-inline-start {
+    from { translate: 0 0; opacity: 1; }
+    to { translate: var(--vds-slide-x-inline) 0; opacity: 0; }
+  }
+
+  @keyframes vds-slide-out-to-inline-end {
+    from { translate: 0 0; opacity: 1; }
+    to { translate: calc(-1 * var(--vds-slide-x-inline)) 0; opacity: 0; }
+  }
+
   /* ─── Respect reduced motion ─── */
   @media (prefers-reduced-motion: reduce) {
     :root {
@@ -1426,17 +1452,27 @@
 }
 @layer tokens {
   :root {
+    /* Layering scale.
+     *
+     * Rule: transient floating popups (dropdown, select, combobox, menu,
+     * popover, date-picker) must render ABOVE modal/drawer overlays, because
+     * they are opened from within those layers and must remain visible and
+     * clickable. Toasts and tooltips stay on top of everything.
+     *
+     * Do not reorder casually — z-index inversions here silently break every
+     * Select/Combobox/Popover used inside a Drawer or Dialog.
+     */
     --vds-z-hide: -1;
     --vds-z-base: 0;
     --vds-z-docked: 10;
-    --vds-z-dropdown: 1000;
     --vds-z-sticky: 1100;
     --vds-z-banner: 1200;
     --vds-z-overlay: 1300;
     --vds-z-modal: 1400;
-    --vds-z-popover: 1500;
-    --vds-z-toast: 1600;
-    --vds-z-tooltip: 1700;
+    --vds-z-dropdown: 1500;
+    --vds-z-popover: 1600;
+    --vds-z-toast: 1700;
+    --vds-z-tooltip: 1800;
   }
 }
 /*

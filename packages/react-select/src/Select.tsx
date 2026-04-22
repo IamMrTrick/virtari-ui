@@ -1,10 +1,29 @@
-import { cn } from "@virtari-packages/utils";
+import { cn, useDirection } from "@virtari-packages/utils";
 import type { ComponentRef, MouseEvent, ReactNode, Ref } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
+import { DirectionProvider } from "@radix-ui/react-direction";
 import { IconCheck, IconChevronDown, IconLoader2, IconX } from "@virtari-packages/react-icons";
 
-/* ── Root ── */
-export const Select = SelectPrimitive.Root;
+/* ── Root ──
+ * Auto-threads the active text direction so Radix's keyboard navigation,
+ * type-ahead, and listbox popover placement flip under RTL. DirectionProvider
+ * is the designated channel; Root doesn't accept `dir` directly. Explicit
+ * `dir` still wins. */
+export interface SelectProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {
+  /** Reading direction. Defaults to the document's active direction. */
+  dir?: "ltr" | "rtl";
+}
+
+export function Select({ dir, ...props }: SelectProps) {
+  const autoDir = useDirection();
+  return (
+    <DirectionProvider dir={dir ?? autoDir}>
+      <SelectPrimitive.Root {...props} />
+    </DirectionProvider>
+  );
+}
+
 export const SelectGroup = SelectPrimitive.Group;
 export const SelectValue = SelectPrimitive.Value;
 

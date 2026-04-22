@@ -2,6 +2,7 @@
 'use strict';
 
 var utils = require('@virtari-packages/utils');
+var react = require('react');
 var AvatarPrimitive = require('@radix-ui/react-avatar');
 var jsxRuntime = require('react/jsx-runtime');
 
@@ -26,21 +27,37 @@ function _interopNamespace(e) {
 var AvatarPrimitive__namespace = /*#__PURE__*/_interopNamespace(AvatarPrimitive);
 
 // src/Avatar.tsx
+function hashToSlot(input, buckets = 8) {
+  let hash = 5381;
+  for (let i = 0; i < input.length; i++) {
+    hash = (hash << 5) + hash + input.charCodeAt(i) | 0;
+  }
+  return Math.abs(hash) % buckets + 1;
+}
 function Avatar({
   src,
   alt,
   fallback,
   size = "md",
+  color = "neutral",
+  colorKey,
   className,
   ref,
   ...props
 }) {
+  const resolvedColor = react.useMemo(() => {
+    if (color === "auto") {
+      return String(hashToSlot(colorKey ?? fallback ?? ""));
+    }
+    return color;
+  }, [color, colorKey, fallback]);
   return /* @__PURE__ */ jsxRuntime.jsxs(
     AvatarPrimitive__namespace.Root,
     {
       ref,
       className: utils.cn("vds-avatar", className),
       "data-size": size,
+      "data-color": resolvedColor,
       ...props,
       children: [
         /* @__PURE__ */ jsxRuntime.jsx(

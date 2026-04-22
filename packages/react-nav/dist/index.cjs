@@ -30,6 +30,10 @@ var NavSubmenuContext = react.createContext(
 function useNavSubmenuContext() {
   return react.useContext(NavSubmenuContext);
 }
+var NavPopoverCloserContext = react.createContext(null);
+function useNavPopoverCloser() {
+  return react.useContext(NavPopoverCloserContext);
+}
 function isActivePath(href, currentPath, strategy) {
   if (!href || !currentPath) return false;
   if (strategy === "exact") return href === currentPath;
@@ -213,9 +217,20 @@ function useSubmenu({
     escapeKey: true,
     outsidePress: true
   });
+  const hover = react$1.useHover(floatingState.context, {
+    enabled: mode === "popover",
+    delay: { open: 75, close: 200 },
+    move: false,
+    handleClose: react$1.safePolygon({ blockPointerEvents: false })
+  });
+  const focus = react$1.useFocus(floatingState.context, {
+    enabled: mode === "popover"
+  });
   const { getReferenceProps, getFloatingProps } = react$1.useInteractions([
     click,
-    dismiss
+    dismiss,
+    hover,
+    focus
   ]);
   const bridge = mode === "popover" ? {
     refs: {
@@ -296,6 +311,7 @@ function NavLink({
   ...rest
 }) {
   const { currentPath, matchStrategy } = useNavContext();
+  const closeAncestorPopover = useNavPopoverCloser();
   const Comp = asChild ? reactSlot.Slot : "a";
   const autoActive = active ?? isActivePath(href, currentPath, matchStrategy);
   const handleClick = react.useCallback(
@@ -305,8 +321,9 @@ function NavLink({
         return;
       }
       onClick?.(e);
+      if (!e.defaultPrevented) closeAncestorPopover?.();
     },
-    [disabled, onClick]
+    [disabled, onClick, closeAncestorPopover]
   );
   return /* @__PURE__ */ jsxRuntime.jsx(
     Comp,
@@ -436,7 +453,16 @@ function NavItem({
       ]
     }
   ) : children;
-  return /* @__PURE__ */ jsxRuntime.jsx(NavSubmenuContext.Provider, { value: submenuState, children: /* @__PURE__ */ jsxRuntime.jsx(
+  const outerCloser = useNavPopoverCloser();
+  const setSubmenuOpen = submenuState.setOpen;
+  const popoverCloser = react.useMemo(() => {
+    if (resolvedMode !== "popover") return outerCloser;
+    return () => {
+      setSubmenuOpen(false);
+      outerCloser?.();
+    };
+  }, [resolvedMode, outerCloser, setSubmenuOpen]);
+  const itemBody = /* @__PURE__ */ jsxRuntime.jsx(
     "li",
     {
       ref,
@@ -446,7 +472,8 @@ function NavItem({
       ...rest,
       children: itemContent
     }
-  ) });
+  );
+  return /* @__PURE__ */ jsxRuntime.jsx(NavSubmenuContext.Provider, { value: submenuState, children: /* @__PURE__ */ jsxRuntime.jsx(NavPopoverCloserContext.Provider, { value: popoverCloser, children: itemBody }) });
 }
 function NavSubmenu({
   className,

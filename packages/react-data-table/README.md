@@ -41,6 +41,50 @@ yarn add @virtari-packages/react-data-table
 import { /* … */ } from "@virtari-packages/react-data-table";
 ```
 
+### Product-style table shell
+
+```tsx
+import { DataTable, useDataTablePreferences } from "@virtari-packages/react-data-table";
+import {
+  DataTableDndProvider,
+  DataTableDraggableHeaderCell,
+} from "@virtari-packages/react-data-table/dnd";
+
+const prefs = useDataTablePreferences({
+  storageKey: "users-table",
+  defaultValue: { viewMode: "table", pagination: { pageIndex: 0, pageSize: 15 } },
+});
+
+<DataTable.Root
+  columns={columns}
+  data={users}
+  columnResizeMode="onChange"
+  {...prefs.statePairs}
+>
+  <DataTable.Toolbar>
+    <DataTable.ViewModeToggle />
+    <div style={{ flex: 1 }} />
+    <DataTable.SearchField placeholder="Search" />
+    <DataTable.CustomizeButton onClick={openCustomizeDrawer} />
+    <DataTable.ExportButton onClick={exportRows} />
+    <DataTable.AddButton label="Add User" withChevron onClick={openAddDrawer} />
+  </DataTable.Toolbar>
+
+  <DataTable.FilterBar
+    filters={activeFilters}
+    onFilterClick={openFilterDrawer}
+    onRemoveFilter={removeFilter}
+    onAddFilter={openFilterDrawer}
+  />
+
+  <DataTableDndProvider onColumnOrderChange={prefs.statePairs.onColumnOrderChange}>
+    <DataTable.Views table={<TableViewWithResizableHeaders />} />
+  </DataTableDndProvider>
+</DataTable.Root>
+```
+
+`useDataTablePreferences` is adapter-friendly: use `storageKey` for localStorage, or pass `value`/`onValueChange` for Zustand, React Query, or user preferences saved in a database.
+
 ### Import styles
 
 ```ts

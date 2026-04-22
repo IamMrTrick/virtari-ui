@@ -3,6 +3,7 @@
 
 var utils = require('@virtari-packages/utils');
 var TooltipPrimitive = require('@radix-ui/react-tooltip');
+var reactDirection = require('@radix-ui/react-direction');
 var jsxRuntime = require('react/jsx-runtime');
 
 function _interopNamespace(e) {
@@ -29,16 +30,20 @@ var TooltipPrimitive__namespace = /*#__PURE__*/_interopNamespace(TooltipPrimitiv
 function TooltipProvider({
   delayDuration = 300,
   skipDelayDuration = 200,
+  dir,
+  children,
   ...props
 }) {
-  return /* @__PURE__ */ jsxRuntime.jsx(
+  const autoDir = utils.useDirection();
+  return /* @__PURE__ */ jsxRuntime.jsx(reactDirection.DirectionProvider, { dir: dir ?? autoDir, children: /* @__PURE__ */ jsxRuntime.jsx(
     TooltipPrimitive__namespace.Provider,
     {
       delayDuration,
       skipDelayDuration,
-      ...props
+      ...props,
+      children
     }
-  );
+  ) });
 }
 var Tooltip = TooltipPrimitive__namespace.Root;
 var TooltipTrigger = TooltipPrimitive__namespace.Trigger;

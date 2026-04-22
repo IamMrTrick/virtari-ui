@@ -21,3 +21,5 @@ export type {
   ToolbarActionButtonSize,
   ToolbarActionButtonVariant,
 } from "./ActionButtons";
+export { DataTableSearchField } from "./SearchField";
+export type { DataTableSearchFieldProps } from "./SearchField";

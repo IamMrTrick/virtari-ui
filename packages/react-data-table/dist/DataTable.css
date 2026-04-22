@@ -10,19 +10,19 @@
     /* ── Font + layout ───────────────────────────────────────── */
     --data-table-font-family:
       var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
-    --data-table-font-size:            var(--vds-text-sm, 0.875rem);
-    --data-table-line-height:          var(--vds-leading-normal, 1.5);
-    --data-table-cell-padding-inline:  var(--vds-space-4, 1rem);
-    --data-table-cell-padding-block:   var(--vds-space-2-5, 0.625rem);
-    --data-table-row-height:           2.75rem;
-    --data-table-header-row-height:    2.75rem;
-    --data-table-footer-row-height:    2.75rem;
+    --data-table-font-size:            var(--vds-text-xs, 0.75rem);
+    --data-table-line-height:          var(--vds-leading-tight, 1.35);
+    --data-table-cell-padding-inline:  var(--vds-space-2, 0.5rem);
+    --data-table-cell-padding-block:   var(--vds-space-1, 0.25rem);
+    --data-table-row-height:           1.75rem;
+    --data-table-header-row-height:    1.875rem;
+    --data-table-footer-row-height:    2rem;
     --data-table-col-min-width:        4rem;
     --data-table-col-default-width:    10rem;
 
     /* ── Surfaces ────────────────────────────────────────────── */
     --data-table-bg:                   var(--vds-color-surface, #ffffff);
-    --data-table-header-bg:            var(--vds-color-surface-raised, #f9fafb);
+    --data-table-header-bg:            var(--vds-color-surface, #ffffff);
     --data-table-row-bg:               var(--vds-color-surface, #ffffff);
     --data-table-row-bg-alt:           var(--vds-color-surface-raised, #f9fafb);
     --data-table-row-bg-hover:
@@ -58,15 +58,17 @@
 
     /* ── Typography ──────────────────────────────────────────── */
     --data-table-header-font-size:      var(--vds-text-xs, 0.75rem);
-    --data-table-header-font-weight:    var(--vds-font-weight-semibold, 600);
+    --data-table-header-font-weight:    var(--vds-font-weight-medium, 500);
     --data-table-header-color:          var(--vds-color-text-muted, #6b7280);
-    --data-table-header-letter-spacing: var(--vds-tracking-wide, 0.025em);
-    --data-table-header-text-transform: uppercase;
+    --data-table-header-letter-spacing: 0;
+    --data-table-header-text-transform: none;
     --data-table-cell-color:            var(--vds-color-text, #111827);
     --data-table-footer-color:          var(--vds-color-text-muted, #6b7280);
 
     /* ── Radii ───────────────────────────────────────────────── */
     --data-table-radius: var(--vds-radius-data-table, 0.5rem);
+    --data-table-shadow:
+      var(--vds-shadow-xl, 0 24px 48px -18px rgba(0, 0, 0, 0.42));
 
     /* ── Motion ──────────────────────────────────────────────── */
     --data-table-transition-duration: var(--vds-duration-fast, 100ms);
@@ -98,8 +100,8 @@
       var(--vds-color-border, #d1d5db);
     --data-table-filter-radius:
       var(--vds-radius-element, 0.375rem);
-    --data-table-filter-height: var(--vds-size-md, 2.25rem);
-    --data-table-filter-padding-inline: var(--vds-space-3, 0.75rem);
+    --data-table-filter-height: var(--vds-size-sm, 2rem);
+    --data-table-filter-padding-inline: var(--vds-space-2-5, 0.625rem);
     --data-table-filter-font-size: var(--vds-text-sm, 0.875rem);
     --data-table-filter-placeholder-color:
       var(--vds-color-text-subtle, #9ca3af);
@@ -147,21 +149,21 @@
       var(--vds-color-surface, #ffffff);
 
     /* ── v2: Board view ──────────────────────────────────────── */
-    --data-table-board-gap: var(--vds-space-4, 1rem);
-    --data-table-board-card-min-width: 16rem;
-    --data-table-board-card-padding: var(--vds-space-4, 1rem);
+    --data-table-board-gap: var(--vds-space-3, 0.75rem);
+    --data-table-board-card-min-width: 15rem;
+    --data-table-board-card-padding: var(--vds-space-3, 0.75rem);
     --data-table-board-card-bg:
       var(--vds-color-surface, #ffffff);
     --data-table-board-card-border:
       var(--vds-color-border-muted, #e5e7eb);
     --data-table-board-card-radius:
-      var(--vds-radius-card, 0.75rem);
+      var(--vds-radius-card, 0.5rem);
     --data-table-board-card-shadow:
       var(--vds-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.04));
 
     /* ── v2: List view ───────────────────────────────────────── */
-    --data-table-list-item-padding-block: var(--vds-space-3, 0.75rem);
-    --data-table-list-item-padding-inline: var(--vds-space-4, 1rem);
+    --data-table-list-item-padding-block: var(--vds-space-2, 0.5rem);
+    --data-table-list-item-padding-inline: var(--vds-space-3, 0.75rem);
     --data-table-list-divider:
       var(--vds-color-border-muted, #e5e7eb);
 
@@ -200,8 +202,8 @@
       var(--vds-color-danger-solid, #dc2626);
     --data-table-toolbar-button-radius:
       var(--vds-radius-element, 0.375rem);
-    --data-table-toolbar-button-padding-inline: var(--vds-space-3, 0.75rem);
-    --data-table-toolbar-button-height: var(--vds-size-md, 2rem);
+    --data-table-toolbar-button-padding-inline: var(--vds-space-2-5, 0.625rem);
+    --data-table-toolbar-button-height: var(--vds-size-sm, 2rem);
     --data-table-toolbar-button-font-size: var(--vds-text-sm, 0.875rem);
     --data-table-toolbar-button-gap: var(--vds-space-1-5, 0.375rem);
 
@@ -212,6 +214,13 @@
     --data-table-pagination-padding-block:  var(--vds-space-2, 0.5rem);
     --data-table-pagination-gap: var(--vds-space-2, 0.5rem);
     --data-table-pagination-button-size: var(--vds-size-md, 2rem);
+    --data-table-pagination-sticky-offset:
+      calc(
+        var(--data-table-pagination-button-size) +
+        var(--data-table-pagination-padding-block) +
+        var(--data-table-pagination-padding-block) +
+        var(--data-table-border-width)
+      );
     --data-table-pagination-button-bg: transparent;
     --data-table-pagination-button-bg-hover:
       var(--vds-color-surface-hover, #f3f4f6);
@@ -227,23 +236,23 @@
 
   /* ── Density ─────────────────────────────────────────────── */
   .vds-data-table[data-size="sm"] {
-    --data-table-row-height:           2rem;
-    --data-table-header-row-height:    1.75rem;
+    --data-table-row-height:           1.5rem;
+    --data-table-header-row-height:    1.625rem;
     --data-table-cell-padding-inline:  var(--vds-space-2-5, 0.625rem);
-    --data-table-cell-padding-block:   var(--vds-space-1, 0.25rem);
+    --data-table-cell-padding-block:   0.125rem;
     --data-table-font-size:            var(--vds-text-xs, 0.75rem);
     --data-table-header-letter-spacing: 0;
   }
   .vds-data-table[data-size="md"] {
-    --data-table-row-height:        2.75rem;
-    --data-table-header-row-height: 2.75rem;
+    --data-table-row-height:        1.75rem;
+    --data-table-header-row-height: 1.875rem;
   }
   .vds-data-table[data-size="lg"] {
-    --data-table-row-height:          3.25rem;
-    --data-table-header-row-height:   3rem;
-    --data-table-cell-padding-inline: var(--vds-space-4, 1rem);
-    --data-table-cell-padding-block:  var(--vds-space-3, 0.75rem);
-    --data-table-font-size:           var(--vds-text-base, 1rem);
+    --data-table-row-height:          2.25rem;
+    --data-table-header-row-height:   2.125rem;
+    --data-table-cell-padding-inline: var(--vds-space-3, 0.75rem);
+    --data-table-cell-padding-block:  var(--vds-space-1-5, 0.375rem);
+    --data-table-font-size:           var(--vds-text-sm, 0.875rem);
   }
 
   /* ── Zebra opt-in ────────────────────────────────────────── */
@@ -306,6 +315,7 @@
     overflow: hidden;
     position: relative;
     contain: layout paint;
+    box-shadow: var(--data-table-shadow);
   }
 
   /* ───── Scroll area ────────────────────────────────────────── */
@@ -333,7 +343,7 @@
   /* ───── Table element ──────────────────────────────────────── */
   .vds-data-table-table {
     table-layout: fixed;
-    inline-size: 100%;
+    inline-size: max(100%, var(--data-table-total-width, 100%));
     border-collapse: separate;
     border-spacing: 0;
     font-size: inherit;
@@ -347,7 +357,12 @@
   .vds-data-table[data-sticky-header] .vds-data-table-header {
     position: sticky;
     inset-block-start: 0;
-    z-index: 1;
+    z-index: 6;
+  }
+  .vds-data-table[data-sticky-header] .vds-data-table-header-cell {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 6;
   }
 
   /* ───── Header row ─────────────────────────────────────────── */
@@ -373,9 +388,14 @@
     background-color: var(--data-table-header-bg);
     border-block-end: var(--data-table-border-width) solid
       var(--data-table-header-divider-color);
+    border-inline-end: var(--data-table-border-width) solid
+      var(--data-table-border-color);
     -webkit-user-select: none;
        -moz-user-select: none;
             user-select: none;
+  }
+  .vds-data-table-header-cell:last-child {
+    border-inline-end: 0;
   }
 
   /* ───── Body / row / cell ──────────────────────────────────── */
@@ -401,7 +421,12 @@
     background-color: inherit;
     border-block-end: var(--data-table-border-width) solid
       var(--data-table-border-color);
+    border-inline-end: var(--data-table-border-width) solid
+      var(--data-table-border-color);
     overflow: hidden;
+  }
+  .vds-data-table-row > .vds-data-table-cell:last-child {
+    border-inline-end: 0;
   }
 
   /* Last row — drop the trailing divider (outer container owns that edge). */
@@ -430,6 +455,17 @@
   .vds-data-table-footer {
     background-color: var(--data-table-footer-bg);
   }
+  .vds-data-table-footer[data-sticky] {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 4;
+  }
+  .vds-data-table-footer[data-sticky] .vds-data-table-footer-cell {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 4;
+    background-color: var(--data-table-footer-bg);
+  }
   .vds-data-table-footer-row {
     block-size: var(--data-table-footer-row-height);
   }
@@ -450,6 +486,7 @@
   .vds-data-table[data-bordered="none"] .vds-data-table-cell,
   .vds-data-table[data-bordered="none"] .vds-data-table-header-cell {
     border-block-end: 0;
+    border-inline-end: 0;
   }
   .vds-data-table[data-bordered="grid"] .vds-data-table-cell,
   .vds-data-table[data-bordered="grid"] .vds-data-table-header-cell,
@@ -505,19 +542,25 @@
   .vds-data-table-toolbar {
     display: flex;
     align-items: center;
-    gap: var(--vds-space-3, 0.75rem);
-    padding-inline: var(--data-table-cell-padding-inline);
-    padding-block: var(--data-table-cell-padding-block);
+    flex-wrap: wrap;
+    gap: var(--vds-space-1-5, 0.375rem);
+    padding-inline: var(--vds-space-3, 0.75rem);
+    padding-block: var(--vds-space-2, 0.5rem);
     border-block-end: var(--data-table-border-width) solid
       var(--data-table-border-color);
     background-color: var(--data-table-bg);
+  }
+  .vds-data-table-toolbar[data-sticky] {
+    position: sticky;
+    inset-block-start: var(--data-table-toolbar-sticky-offset, 0);
+    z-index: 8;
   }
 
   /* ───── Global filter (search input) ───────────────────────── */
   .vds-data-table-global-filter {
     block-size: var(--data-table-filter-height);
     padding-inline: var(--data-table-filter-padding-inline);
-    min-inline-size: 14rem;
+    min-inline-size: 10rem;
     font-family: inherit;
     font-size: var(--data-table-filter-font-size);
     color: var(--data-table-cell-color);
@@ -541,6 +584,46 @@
       var(--data-table-focus-ring-color),
       transparent 80%
     );
+  }
+
+  .vds-data-table-search-field {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-inline-size: 9rem;
+    max-inline-size: 16rem;
+  }
+  .vds-data-table-search-field-icon {
+    position: absolute;
+    inset-inline-start: var(--vds-space-2, 0.5rem);
+    display: inline-flex;
+    color: var(--vds-color-text-muted, #9ca3af);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .vds-data-table-search-field-input {
+    inline-size: 100%;
+    min-inline-size: 0;
+    padding-inline-start: 1.75rem !important;
+    padding-inline-end: 1.75rem !important;
+    font-size: var(--data-table-filter-font-size);
+  }
+  .vds-data-table-search-field-clear {
+    all: unset;
+    position: absolute;
+    inset-inline-end: var(--vds-space-1-5, 0.375rem);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+    color: var(--vds-color-text-muted, #9ca3af);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .vds-data-table-search-field-clear:hover {
+    color: var(--data-table-cell-color);
+    background-color: var(--data-table-toolbar-button-bg-hover);
   }
 
   /* ───── Header cell inner content (flex wrapper) ───────────── */
@@ -639,7 +722,8 @@
      dragged column's physical position. */
   .vds-data-table-resize-guideline {
     position: absolute;
-    inset-block: 0;
+    inset-block-start: var(--data-table-guideline-top, 0px);
+    block-size: var(--data-table-guideline-height, 100%);
     left: 0;
     inline-size: var(--data-table-guideline-width);
     background-color: var(--data-table-guideline-color);
@@ -670,6 +754,12 @@
   .vds-data-table-header-cell[data-pinned] {
     z-index: 3; /* above both body pinned cells and sticky header */
     background-color: var(--data-table-pin-header-bg);
+  }
+  .vds-data-table[data-sticky-header] .vds-data-table-header-cell[data-pinned] {
+    z-index: 7;
+  }
+  .vds-data-table-footer[data-sticky] .vds-data-table-footer-cell[data-pinned] {
+    z-index: 5;
   }
   .vds-data-table-cell[data-pinned] {
     background-color: var(--data-table-row-bg);
@@ -867,6 +957,11 @@
     border-block-start: var(--data-table-border-width) solid
       var(--data-table-border-color);
     font-size: var(--data-table-font-size);
+  }
+  .vds-data-table-pagination[data-sticky] {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 5;
   }
   .vds-data-table-pagination-info {
     color: var(--vds-color-text-muted, #6b7280);
@@ -1111,48 +1206,6 @@
    * ═════════════════════════════════════════════════════════════ */
 
   /* ───── View mode toggle (3-button pill segmented control) ───── */
-  .vds-data-table-view-toggle {
-    display: inline-flex;
-    padding: 2px;
-    background-color: var(--data-table-view-toggle-bg);
-    border: 1px solid var(--data-table-view-toggle-border);
-    border-radius: var(--data-table-view-toggle-radius);
-    gap: 2px;
-  }
-  .vds-data-table-view-toggle-button {
-    all: unset;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--vds-space-1-5, 0.375rem);
-    padding: var(--vds-space-1, 0.25rem) var(--vds-space-2-5, 0.625rem);
-    border-radius: calc(var(--data-table-view-toggle-radius) - 2px);
-    cursor: pointer;
-    color: var(--data-table-view-toggle-button-color);
-    font-size: var(--vds-text-sm, 0.875rem);
-    transition: background-color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
-  }
-  .vds-data-table-view-toggle-button:hover {
-    background-color: color-mix(
-      in oklch,
-      var(--data-table-view-toggle-button-bg-active),
-      transparent 50%
-    );
-  }
-  .vds-data-table-view-toggle-button[data-active] {
-    background-color: var(--data-table-view-toggle-button-bg-active);
-    color: var(--data-table-view-toggle-button-color-active);
-    box-shadow: var(--vds-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.04));
-  }
-  .vds-data-table-view-toggle-button:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
-  }
-  .vds-data-table-view-toggle-icon {
-    display: inline-flex;
-  }
-
   /* ───── Board view (card grid) ─────────────────────────────── */
   .vds-data-table-board {
     display: grid;
@@ -1208,6 +1261,7 @@
   .vds-data-table-list {
     display: flex;
     flex-direction: column;
+    overflow-x: auto;
   }
   .vds-data-table-list-empty {
     padding: var(--vds-space-8, 2rem);
@@ -1216,8 +1270,10 @@
   }
   .vds-data-table-list-item {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: var(--vds-space-3, 0.75rem);
     padding-block: var(--data-table-list-item-padding-block);
     padding-inline: var(--data-table-list-item-padding-inline);
     border-block-end: 1px solid var(--data-table-list-divider);
@@ -1231,12 +1287,21 @@
     background-color: var(--data-table-row-bg-selected);
   }
   .vds-data-table-list-primary {
+    flex: 0 1 14rem;
+    min-inline-size: 0;
     font-weight: var(--vds-font-weight-medium, 500);
     color: var(--data-table-cell-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .vds-data-table-list-secondary {
     display: flex;
-    flex-wrap: wrap;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    align-items: center;
+    min-inline-size: 0;
+    overflow: hidden;
     gap: var(--vds-space-3, 0.75rem);
     color: var(--vds-color-text-muted, #6b7280);
     font-size: var(--vds-text-xs, 0.75rem);
@@ -1245,6 +1310,12 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  @media (max-width: 640px) {
+    .vds-data-table-list-item {
+      min-inline-size: -moz-max-content;
+      min-inline-size: max-content;
+    }
   }
 
   /* ───── BulkActions bar ────────────────────────────────────── */
@@ -1260,7 +1331,7 @@
   }
   .vds-data-table-bulk-actions[data-sticky] {
     position: sticky;
-    inset-block-end: 0;
+    inset-block-end: var(--data-table-bulk-sticky-offset, 0);
     z-index: 5;
   }
   .vds-data-table-bulk-count {
@@ -1302,118 +1373,18 @@
   }
 
   /* ───── Toolbar buttons ────────────────────────────────────── */
-  .vds-data-table-toolbar-button {
-    all: unset;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--data-table-toolbar-button-gap);
-    block-size: var(--data-table-toolbar-button-height);
-    padding-inline: var(--data-table-toolbar-button-padding-inline);
-    color: var(--data-table-toolbar-button-color);
-    background-color: var(--data-table-toolbar-button-bg);
-    font-size: var(--data-table-toolbar-button-font-size);
-    border-radius: var(--data-table-toolbar-button-radius);
-    cursor: pointer;
-    transition:
-      background-color var(--data-table-transition-duration)
-        var(--data-table-transition-easing),
-      color var(--data-table-transition-duration)
-        var(--data-table-transition-easing);
-  }
-  .vds-data-table-toolbar-button:hover:not(:disabled) {
-    background-color: var(--data-table-toolbar-button-bg-hover);
-  }
-  .vds-data-table-toolbar-button:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
-  }
-  .vds-data-table-toolbar-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
   /* Variant: outline — thin border, transparent fill. */
-  .vds-data-table-toolbar-button[data-variant="outline"] {
-    border: 1px solid var(--vds-color-border, #d1d5db);
-    background-color: transparent;
-  }
-  .vds-data-table-toolbar-button[data-variant="outline"]:hover:not(:disabled) {
-    background-color: var(--data-table-toolbar-button-bg-hover);
-  }
   /* Variant: solid — filled with current intent color. */
-  .vds-data-table-toolbar-button[data-variant="solid"] {
-    background-color: var(--data-table-toolbar-button-color);
-    color: var(--vds-color-surface, #ffffff);
-  }
-  .vds-data-table-toolbar-button[data-variant="solid"][data-intent="primary"] {
-    background-color: var(--data-table-toolbar-button-color-primary);
-    color: var(--vds-color-on-primary, #fff);
-  }
-  .vds-data-table-toolbar-button[data-variant="solid"][data-intent="primary"]:hover:not(:disabled) {
-    background-color: color-mix(
-      in oklch,
-      var(--data-table-toolbar-button-color-primary),
-      black 10%
-    );
-  }
-  .vds-data-table-toolbar-button[data-variant="solid"][data-intent="danger"] {
-    background-color: var(--data-table-toolbar-button-color-danger);
-    color: var(--vds-color-on-danger, #fff);
-  }
 
   /* Intent: primary on ghost/outline — colored text, no bg. */
-  .vds-data-table-toolbar-button[data-intent="primary"]:not([data-variant="solid"]) {
-    color: var(--data-table-toolbar-button-color-primary);
-  }
-  .vds-data-table-toolbar-button[data-intent="primary"][data-variant="ghost"] {
-    background-color: transparent;
-  }
-  .vds-data-table-toolbar-button[data-intent="primary"][data-variant="ghost"]:hover:not(:disabled) {
-    background-color: color-mix(
-      in oklch,
-      var(--data-table-toolbar-button-color-primary),
-      transparent 90%
-    );
-  }
-  .vds-data-table-toolbar-button[data-intent="primary"][data-variant="outline"] {
-    border-color: color-mix(
-      in oklch,
-      var(--data-table-toolbar-button-color-primary),
-      transparent 60%
-    );
-  }
-  .vds-data-table-toolbar-button[data-intent="danger"]:not([data-variant="solid"]) {
-    color: var(--data-table-toolbar-button-color-danger);
-  }
-  .vds-data-table-toolbar-button[data-intent="danger"][data-variant="ghost"]:hover:not(:disabled) {
-    background-color: color-mix(
-      in oklch,
-      var(--data-table-toolbar-button-color-danger),
-      transparent 90%
-    );
-  }
 
-  /* Size sm: tighter padding + smaller height. Used for inline row actions. */
-  .vds-data-table-toolbar-button[data-size="sm"] {
-    block-size: var(--vds-size-sm, 1.75rem);
-    padding-inline: var(--vds-space-2, 0.5rem);
-    font-size: var(--vds-text-xs, 0.75rem);
-  }
+  /* Size sm: same shared ramp as Button/Input/Select. */
+
 
   /* Icon-only: square — collapse label padding, aspect-square look. */
-  .vds-data-table-toolbar-button[data-icon-only] {
-    padding-inline: 0;
-    inline-size: var(--data-table-toolbar-button-height);
-    justify-content: center;
-  }
-  .vds-data-table-toolbar-button[data-icon-only][data-size="sm"] {
-    inline-size: var(--vds-size-sm, 1.75rem);
-  }
-  .vds-data-table-toolbar-button-icon {
-    display: inline-flex;
-    align-items: center;
-    color: inherit;
-  }
+
+
+
   .vds-data-table-toolbar-button-label {
     white-space: nowrap;
   }
@@ -1421,8 +1392,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: 1.25rem;
-    block-size: 1.25rem;
+    min-inline-size: 1rem;
+    block-size: 1rem;
     padding-inline: var(--vds-space-1, 0.25rem);
     margin-inline-start: 2px;
     background-color: var(--data-table-toolbar-button-color-primary);
@@ -1639,7 +1610,8 @@
     gap: var(--vds-space-2, 0.5rem);
     padding: var(--vds-space-3, 0.75rem);
     background-color: var(--vds-color-surface-raised, #f9fafb);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    border-radius: var(--vds-radius-card, 0.5rem);
   }
   .vds-data-table-filter-drawer-active-header {
     display: flex;
@@ -1670,22 +1642,9 @@
     font-weight: var(--vds-font-weight-semibold, 600);
   }
   .vds-data-table-filter-drawer-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px var(--vds-space-2, 0.5rem);
-    background-color: var(--vds-color-primary-bg, #eef2ff);
-    color: var(--vds-color-primary-solid, #6366f1);
-    border-radius: 999px;
-    font-size: var(--vds-text-xs, 0.75rem);
-  }
-  .vds-data-table-filter-drawer-chip-remove {
-    all: unset;
-    cursor: pointer;
-    display: inline-flex;
-    padding: 0 2px;
-    font-size: 14px;
-    line-height: 1;
+    --chip-height: 1.5rem;
+    --chip-padding-inline: var(--vds-space-2, 0.5rem);
+    --chip-font-size: var(--vds-text-xs, 0.75rem);
   }
   .vds-data-table-filter-drawer-section {
     display: flex;
@@ -1834,39 +1793,39 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--vds-space-2, 0.5rem);
-    padding-inline: var(--data-table-cell-padding-inline);
+    gap: var(--vds-space-1-5, 0.375rem);
+    padding-inline: var(--vds-space-3, 0.75rem);
     padding-block: var(--vds-space-2, 0.5rem);
     background-color: var(--data-table-bg);
     border-block-end: var(--data-table-border-width) solid
       var(--data-table-border-color);
+  }
+  .vds-data-table-filter-bar[data-sticky] {
+    position: sticky;
+    inset-block-start: var(--data-table-filter-bar-sticky-offset, 0);
+    z-index: 7;
   }
   .vds-data-table-filter-bar:empty {
     display: none;
   }
 
   .vds-data-table-filter-chip {
-    all: unset;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--vds-space-1-5, 0.375rem);
-    padding: 4px var(--vds-space-2-5, 0.625rem);
-    background-color: var(--data-table-toolbar-button-bg-hover);
-    border: 1px solid var(--vds-color-border-muted, var(--vds-color-border, #d1d5db));
-    border-radius: 999px;
-    color: var(--data-table-cell-color);
-    font-size: var(--vds-text-xs, 0.75rem);
-    font-weight: var(--vds-font-weight-medium, 500);
-    cursor: pointer;
-    transition: background-color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
-  }
-  .vds-data-table-filter-chip:hover {
-    background-color: color-mix(
+    --chip-height: 1.5rem;
+    --chip-padding-inline: var(--vds-space-2, 0.5rem);
+    --chip-gap: var(--vds-space-1, 0.25rem);
+    --chip-font-size: var(--vds-text-xs, 0.75rem);
+    --chip-background: var(--data-table-toolbar-button-bg-hover);
+    --chip-background-hover: color-mix(
       in oklch,
       var(--data-table-toolbar-button-bg-hover),
       var(--data-table-cell-color) 6%
     );
+    --chip-border-color: var(--vds-color-border-muted, var(--vds-color-border, #d1d5db));
+    --chip-text-color: var(--data-table-cell-color);
+    cursor: pointer;
+  }
+  .vds-data-table-filter-chip:hover {
+    --chip-background: var(--chip-background-hover);
   }
   .vds-data-table-filter-chip:focus-visible {
     outline: var(--data-table-focus-ring-width) solid
@@ -1880,21 +1839,10 @@
     color: var(--data-table-cell-color);
     font-weight: var(--vds-font-weight-semibold, 600);
   }
-  .vds-data-table-filter-chip-remove {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    inline-size: 1rem;
-    block-size: 1rem;
-    margin-inline-start: 2px;
-    border-radius: 999px;
+  .vds-data-table-filter-chip .vds-chip-remove {
     color: var(--vds-color-text-muted, #9ca3af);
-    font-size: 14px;
-    line-height: 1;
-    transition: background-color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
   }
-  .vds-data-table-filter-chip-remove:hover {
+  .vds-data-table-filter-chip .vds-chip-remove:hover {
     background-color: color-mix(
       in oklch,
       var(--data-table-cell-color),

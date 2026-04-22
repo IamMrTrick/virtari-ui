@@ -13,8 +13,11 @@ var reactAvatar = require('@virtari-packages/react-avatar');
 var reactBadge = require('@virtari-packages/react-badge');
 var reactInput = require('@virtari-packages/react-input');
 var reactDrawer = require('@virtari-packages/react-drawer');
+var reactButton = require('@virtari-packages/react-button');
+var reactChip = require('@virtari-packages/react-chip');
 var reactSwitch = require('@virtari-packages/react-switch');
 var reactPopover = require('@virtari-packages/react-popover');
+var reactTabs = require('@virtari-packages/react-tabs');
 
 // src/DataTable.tsx
 var DataTableCtx = react.createContext(null);
@@ -25,6 +28,7 @@ function DataTableProvider({
 }) {
   const autoId = react.useId();
   const scrollRef = react.useRef(null);
+  const tableState = rest.table.getState();
   const value = react.useMemo(
     () => ({
       ...rest,
@@ -47,6 +51,19 @@ function DataTableProvider({
       rest.setViewMode,
       rest.onCellEdit,
       rest.onDataRequest,
+      tableState.sorting,
+      tableState.columnFilters,
+      tableState.globalFilter,
+      tableState.rowSelection,
+      tableState.columnSizing,
+      tableState.columnSizingInfo,
+      tableState.columnOrder,
+      tableState.columnPinning,
+      tableState.columnVisibility,
+      tableState.pagination,
+      tableState.grouping,
+      tableState.expanded,
+      tableState.rowPinning,
       id,
       autoId
     ]
@@ -81,6 +98,7 @@ function composeRefs(...refs) {
 function buildColumnSizeVars(table) {
   const headers = table.getFlatHeaders();
   const out = {};
+  out["--data-table-total-width"] = `${table.getTotalSize()}px`;
   for (const header of headers) {
     out[`--col-${header.column.id}`] = `${header.getSize()}px`;
   }
@@ -1000,15 +1018,28 @@ var DataTableRoot = react.forwardRef(function DataTableRoot2(props, ref) {
   );
 });
 var DataTableToolbar = react.forwardRef(
-  function DataTableToolbar2({ className, children, ...props }, ref) {
+  function DataTableToolbar2({
+    className,
+    children,
+    sticky = false,
+    stickyOffset,
+    style,
+    ...props
+  }, ref) {
     const { tableId } = useDataTableContext();
+    const stickyStyle = stickyOffset === void 0 ? style : {
+      ["--data-table-toolbar-sticky-offset"]: stickyOffset,
+      ...style
+    };
     return /* @__PURE__ */ jsxRuntime.jsx(
       "div",
       {
         ref,
         role: "toolbar",
         "aria-controls": tableId,
+        "data-sticky": sticky ? "" : void 0,
         className: utils.cn("vds-data-table-toolbar", className),
+        style: stickyStyle,
         ...props,
         children
       }
@@ -1036,7 +1067,9 @@ var DataTableTable = react.forwardRef(
       table,
       // Re-evaluate when any column size changes
       table.getState().columnSizing,
-      table.getState().columnSizingInfo
+      table.getState().columnSizingInfo,
+      table.getState().columnOrder,
+      table.getState().columnVisibility
     ]);
     return /* @__PURE__ */ jsxRuntime.jsx(
       "table",
@@ -1295,7 +1328,7 @@ var DataTableCell = react.forwardRef(function DataTableCell2({ cell, className, 
     }
   );
 });
-var DataTableFooter = react.forwardRef(function DataTableFooter2({ className, children, ...props }, ref) {
+var DataTableFooter = react.forwardRef(function DataTableFooter2({ className, children, sticky = false, ...props }, ref) {
   const { table } = useDataTableContext();
   const groups = table.getFooterGroups();
   const hasFooter = groups.some(
@@ -1307,6 +1340,7 @@ var DataTableFooter = react.forwardRef(function DataTableFooter2({ className, ch
     {
       ref,
       role: "rowgroup",
+      "data-sticky": sticky ? "" : void 0,
       className: utils.cn("vds-data-table-footer", className),
       ...props,
       children: children ?? groups.map((group) => /* @__PURE__ */ jsxRuntime.jsx(DataTableFooterRow, { footerGroup: group }, group.id))
@@ -1533,6 +1567,9 @@ var DataTableResizeHandle = react.forwardRef(function DataTableResizeHandle2({ h
       className: utils.cn("vds-data-table-resize-handle", className),
       onPointerDown: (e) => {
         e.stopPropagation();
+      },
+      onMouseDown: (e) => {
+        e.stopPropagation();
         header.getResizeHandler()(e);
       },
       onTouchStart: (e) => {
@@ -1544,7 +1581,6 @@ var DataTableResizeHandle = react.forwardRef(function DataTableResizeHandle2({ h
         fit();
       },
       onKeyDown: onKeyDownAdjust,
-      onMouseDown: (e) => e.stopPropagation(),
       onClick: (e) => e.stopPropagation(),
       ...props,
       children: /* @__PURE__ */ jsxRuntime.jsx(
@@ -1558,19 +1594,34 @@ var DataTableResizeHandle = react.forwardRef(function DataTableResizeHandle2({ h
   );
 });
 function DataTableColumnGuide() {
-  const { table } = useDataTableContext();
+  const { table, scrollRef } = useDataTableContext();
   const info = table.getState().columnSizingInfo;
   const resizingId = info.isResizingColumn;
   if (!resizingId) return null;
-  const offset = (info.startOffset ?? 0) + (info.deltaOffset ?? 0);
+  const resizeDirection = table.options.columnResizeDirection === "rtl" ? -1 : 1;
+  const pointerClientX = (info.startOffset ?? 0) + (info.deltaOffset ?? 0) * resizeDirection;
+  const scrollEl = scrollRef.current;
+  const rootEl = scrollEl?.closest(".vds-data-table");
+  let guideStyle = {
+    ["--data-table-guideline-offset"]: `${pointerClientX}px`
+  };
+  if (scrollEl && rootEl) {
+    const rootRect = rootEl.getBoundingClientRect();
+    const scrollRect = scrollEl.getBoundingClientRect();
+    const rootLeft = rootRect.left + rootEl.clientLeft;
+    const rootTop = rootRect.top + rootEl.clientTop;
+    guideStyle = {
+      ["--data-table-guideline-offset"]: `${pointerClientX - rootLeft}px`,
+      ["--data-table-guideline-top"]: `${scrollRect.top - rootTop}px`,
+      ["--data-table-guideline-height"]: `${scrollEl.clientHeight}px`
+    };
+  }
   return /* @__PURE__ */ jsxRuntime.jsx(
     "div",
     {
       className: "vds-data-table-resize-guideline",
       "aria-hidden": "true",
-      style: {
-        ["--data-table-guideline-offset"]: `${offset}px`
-      }
+      style: guideStyle
     }
   );
 }
@@ -1897,12 +1948,24 @@ function AvatarCell({
   alt,
   fallback,
   size = "sm",
+  color = "auto",
+  colorKey,
   primary,
   secondary,
   className
 }) {
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: utils.cn("vds-data-table-avatar-cell", className), children: [
-    /* @__PURE__ */ jsxRuntime.jsx(reactAvatar.Avatar, { src, alt: alt ?? fallback, fallback, size }),
+    /* @__PURE__ */ jsxRuntime.jsx(
+      reactAvatar.Avatar,
+      {
+        src,
+        alt: alt ?? fallback,
+        fallback,
+        size,
+        color,
+        colorKey: colorKey ?? (typeof primary === "string" ? primary : fallback)
+      }
+    ),
     (primary || secondary) && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-data-table-avatar-cell-text", children: [
       primary && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-avatar-cell-primary", children: primary }),
       secondary && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-avatar-cell-secondary", children: secondary })
@@ -2386,10 +2449,12 @@ function FilterConfigPanel({
     ] }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-data-table-filter-config-actions", children: [
       /* @__PURE__ */ jsxRuntime.jsx(
-        "button",
+        reactButton.Button,
         {
-          type: "button",
           onClick: onCancel,
+          variant: "ghost",
+          color: "contrast",
+          size: "sm",
           className: utils.cn(
             "vds-data-table-toolbar-button",
             "vds-data-table-filter-config-cancel"
@@ -2398,12 +2463,14 @@ function FilterConfigPanel({
         }
       ),
       /* @__PURE__ */ jsxRuntime.jsx(
-        "button",
+        reactButton.Button,
         {
-          type: "button",
           onClick: handleAdd,
           disabled: !canAdd,
           "data-intent": "primary",
+          variant: "solid",
+          color: "primary",
+          size: "sm",
           className: utils.cn("vds-data-table-toolbar-button"),
           children: "Add filter"
         }
@@ -2531,7 +2598,7 @@ function DataTableFilterDrawer({
                   type: "search",
                   value: searchQuery,
                   onChange: (e) => setSearchQuery(e.target.value),
-                  placeholder: "Search filters\u2026"
+                  placeholder: "Search filters..."
                 }
               ),
               activeCount > 0 && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-data-table-filter-drawer-active", children: [
@@ -2561,23 +2628,30 @@ function DataTableFilterDrawer({
                       children: group.operator
                     }
                   ),
-                  group.conditions.map((c) => /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-data-table-filter-drawer-chip", children: [
-                    /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
-                      c.fieldLabel,
-                      ": ",
-                      String(c.value)
-                    ] }),
-                    /* @__PURE__ */ jsxRuntime.jsx(
-                      "button",
-                      {
-                        type: "button",
-                        onClick: () => removeCondition(group.id, c.id),
-                        "aria-label": `Remove ${c.fieldLabel} filter`,
-                        className: "vds-data-table-filter-drawer-chip-remove",
-                        children: "\xD7"
-                      }
-                    )
-                  ] }, c.id))
+                  group.conditions.map((c) => /* @__PURE__ */ jsxRuntime.jsxs(
+                    reactChip.Chip,
+                    {
+                      size: "sm",
+                      appearance: "outline",
+                      variant: "primary",
+                      className: "vds-data-table-filter-drawer-chip",
+                      children: [
+                        /* @__PURE__ */ jsxRuntime.jsxs(reactChip.ChipLabel, { children: [
+                          c.fieldLabel,
+                          ": ",
+                          String(c.value)
+                        ] }),
+                        /* @__PURE__ */ jsxRuntime.jsx(
+                          reactChip.ChipRemove,
+                          {
+                            onClick: () => removeCondition(group.id, c.id),
+                            "aria-label": `Remove ${c.fieldLabel} filter`
+                          }
+                        )
+                      ]
+                    },
+                    c.id
+                  ))
                 ] }, group.id))
               ] }),
               shown.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
@@ -2608,21 +2682,25 @@ function DataTableFilterDrawer({
             ) }),
             !configField && /* @__PURE__ */ jsxRuntime.jsx(reactDrawer.DrawerFooter, { children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-data-table-filter-drawer-footer", children: [
               /* @__PURE__ */ jsxRuntime.jsx(
-                "button",
+                reactButton.Button,
                 {
-                  type: "button",
                   onClick: () => onOpenChange(false),
+                  variant: "ghost",
+                  color: "contrast",
+                  size: "sm",
                   className: "vds-data-table-toolbar-button",
                   children: "Cancel"
                 }
               ),
               /* @__PURE__ */ jsxRuntime.jsx(
-                "button",
+                reactButton.Button,
                 {
-                  type: "button",
                   onClick: handleApply,
                   disabled: activeCount === 0,
                   "data-intent": "primary",
+                  variant: "solid",
+                  color: "primary",
+                  size: "sm",
                   className: "vds-data-table-toolbar-button",
                   children: "Apply"
                 }
@@ -2926,13 +3004,14 @@ var Filters = {
   Popover: FilterPopover
 };
 var PaginationRoot = react.forwardRef(
-  function PaginationRoot2({ className, children, ...props }, ref) {
+  function PaginationRoot2({ className, children, sticky = false, ...props }, ref) {
     return /* @__PURE__ */ jsxRuntime.jsx(
       "nav",
       {
         ref,
         role: "navigation",
         "aria-label": "Pagination",
+        "data-sticky": sticky ? "" : void 0,
         className: utils.cn("vds-data-table-pagination", className),
         ...props,
         children
@@ -3015,7 +3094,14 @@ function PaginationPageSize({
       {
         className: "vds-data-table-pagination-page-size-select",
         value: pageSize,
-        onChange: (e) => table.setPageSize(Number(e.target.value)),
+        onChange: (e) => {
+          const nextPageSize = Number(e.target.value);
+          table.setPagination((prev) => ({
+            ...prev,
+            pageIndex: 0,
+            pageSize: nextPageSize
+          }));
+        },
         children: options.map((n) => /* @__PURE__ */ jsxRuntime.jsx("option", { value: n, children: n }, n))
       }
     )
@@ -3063,9 +3149,10 @@ function PaginationDefault({
   className,
   pageSizeOptions,
   hidePageSize = false,
-  hidePageNumbers = false
+  hidePageNumbers = false,
+  sticky = false
 }) {
-  return /* @__PURE__ */ jsxRuntime.jsxs(PaginationRoot, { className, children: [
+  return /* @__PURE__ */ jsxRuntime.jsxs(PaginationRoot, { className, sticky, children: [
     /* @__PURE__ */ jsxRuntime.jsx(PaginationInfo, {}),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-data-table-pagination-controls", children: [
       !hidePageSize && /* @__PURE__ */ jsxRuntime.jsx(PaginationPageSize, { options: pageSizeOptions }),
@@ -3086,9 +3173,6 @@ var Pagination = {
   Pages: PaginationPages,
   Default: PaginationDefault
 };
-function Glyph({ children }) {
-  return /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-toolbar-button-icon", children });
-}
 var ToolbarActionButton = react.forwardRef(function ToolbarActionButton2({
   icon,
   trailingIcon,
@@ -3103,22 +3187,41 @@ var ToolbarActionButton = react.forwardRef(function ToolbarActionButton2({
   ...props
 }, ref) {
   const showLabel = !iconOnly && (label !== void 0 || children !== void 0);
+  const color = intent === "danger" ? "danger" : intent === "primary" ? "primary" : "contrast";
+  const labelNode = showLabel ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-toolbar-button-label", children: children ?? label }) : null;
+  const countNode = count !== void 0 && count !== 0 ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-toolbar-button-count", children: count }) : null;
+  if (iconOnly && icon && !labelNode && !countNode && !trailingIcon) {
+    return /* @__PURE__ */ jsxRuntime.jsx(
+      reactButton.Button,
+      {
+        ref,
+        type: "button",
+        color,
+        variant,
+        size,
+        "data-intent": intent,
+        className,
+        ...props,
+        children: icon
+      }
+    );
+  }
   return /* @__PURE__ */ jsxRuntime.jsxs(
-    "button",
+    reactButton.Button,
     {
       ref,
       type: "button",
+      color,
+      variant,
+      size,
       "data-intent": intent,
-      "data-variant": variant,
-      "data-size": size,
-      "data-icon-only": iconOnly ? "" : void 0,
-      className: utils.cn("vds-data-table-toolbar-button", className),
+      className,
+      leftSection: icon,
+      rightSection: trailingIcon,
       ...props,
       children: [
-        icon && /* @__PURE__ */ jsxRuntime.jsx(Glyph, { children: icon }),
-        showLabel && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-toolbar-button-label", children: children ?? label }),
-        count !== void 0 && count !== 0 && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-toolbar-button-count", children: count }),
-        trailingIcon && /* @__PURE__ */ jsxRuntime.jsx(Glyph, { children: trailingIcon })
+        labelNode,
+        countNode
       ]
     }
   );
@@ -3156,13 +3259,14 @@ var DataTableRefreshButton = react.forwardRef(
   }
 );
 var DataTableExportButton = react.forwardRef(
-  function DataTableExportButton2({ label = "Export", variant = "outline", ...props }, ref) {
+  function DataTableExportButton2({ label = "Export", variant = "soft", intent = "neutral", ...props }, ref) {
     return /* @__PURE__ */ jsxRuntime.jsx(
       ToolbarActionButton,
       {
         ref,
         icon: DownloadIcon,
         label,
+        intent,
         variant,
         ...props
       }
@@ -3230,7 +3334,7 @@ var DataTableCloseButton = react.forwardRef(
     );
   }
 );
-react.forwardRef(
+var DataTableSearchButton = react.forwardRef(
   function DataTableSearchButton2({ label = "Search", ...props }, ref) {
     return /* @__PURE__ */ jsxRuntime.jsx(
       ToolbarActionButton,
@@ -3261,6 +3365,166 @@ react.forwardRef(function DataTableRowAction2({ size = "sm", variant = "ghost", 
   return /* @__PURE__ */ jsxRuntime.jsx(ToolbarActionButton, { ref, size, variant, ...props });
 });
 var DataTableSearchIcon = SearchIcon;
+function DataTableSearchField({
+  value,
+  defaultValue,
+  onValueChange,
+  debounceMs = 150,
+  clearable = true,
+  icon,
+  inputSize = "md",
+  className,
+  wrapperClassName,
+  placeholder = "Search",
+  "aria-label": ariaLabel = "Search table",
+  ...props
+}) {
+  const { table } = useDataTableContext();
+  const tableValue = String(table.getState().globalFilter ?? "");
+  const controlled = value !== void 0;
+  const [local, setLocal] = react.useState(value ?? defaultValue ?? tableValue);
+  react.useEffect(() => {
+    if (controlled) setLocal(value ?? "");
+  }, [controlled, value]);
+  react.useEffect(() => {
+    if (controlled) return;
+    setLocal(tableValue);
+  }, [tableValue]);
+  react.useEffect(() => {
+    const id = window.setTimeout(() => {
+      table.setGlobalFilter(local);
+      onValueChange?.(local);
+    }, debounceMs);
+    return () => window.clearTimeout(id);
+  }, [local, debounceMs]);
+  const clear = () => setLocal("");
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: utils.cn("vds-data-table-search-field", wrapperClassName), children: [
+    /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-search-field-icon", "aria-hidden": "true", children: icon ?? /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconSearch, { size: 14, stroke: 1.75, focusable: false }) }),
+    /* @__PURE__ */ jsxRuntime.jsx(
+      reactInput.Input,
+      {
+        inputSize,
+        type: "search",
+        value: local,
+        onChange: (event) => setLocal(event.target.value),
+        placeholder,
+        "aria-label": ariaLabel,
+        className: utils.cn("vds-data-table-search-field-input", className),
+        ...props
+      }
+    ),
+    clearable && local.length > 0 && /* @__PURE__ */ jsxRuntime.jsx(
+      "button",
+      {
+        type: "button",
+        className: "vds-data-table-search-field-clear",
+        "aria-label": "Clear search",
+        onClick: clear,
+        children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconX, { size: 12, stroke: 1.9, "aria-hidden": true, focusable: false })
+      }
+    )
+  ] });
+}
+var DataTableFilterBar = react.forwardRef(function DataTableFilterBar2({
+  filters,
+  onFilterClick,
+  onRemoveFilter,
+  onAddFilter,
+  addLabel = "Add filter",
+  sticky = false,
+  stickyOffset,
+  className,
+  children,
+  style,
+  ...props
+}, ref) {
+  const stickyStyle = stickyOffset === void 0 ? style : {
+    ["--data-table-filter-bar-sticky-offset"]: stickyOffset,
+    ...style
+  };
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    "div",
+    {
+      ref,
+      role: "toolbar",
+      "aria-label": "Active filters",
+      "data-sticky": sticky ? "" : void 0,
+      className: utils.cn("vds-data-table-filter-bar", className),
+      style: stickyStyle,
+      ...props,
+      children: [
+        children ?? filters?.map((filter) => /* @__PURE__ */ jsxRuntime.jsx(
+          DataTableFilterChipItem,
+          {
+            filter,
+            onClick: onFilterClick,
+            onRemove: onRemoveFilter
+          },
+          filter.id
+        )),
+        onAddFilter && /* @__PURE__ */ jsxRuntime.jsxs(
+          reactButton.Button,
+          {
+            type: "button",
+            variant: "ghost",
+            color: "contrast",
+            size: "xs",
+            className: "vds-data-table-filter-add",
+            onClick: onAddFilter,
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconPlus, { size: 12, stroke: 1.75, "aria-hidden": true, focusable: false }),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: addLabel })
+            ]
+          }
+        )
+      ]
+    }
+  );
+});
+function DataTableFilterChipItem({
+  filter,
+  onClick,
+  onRemove
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    reactChip.Chip,
+    {
+      size: "sm",
+      appearance: "outline",
+      variant: filter.variant ?? "default",
+      interactive: !filter.disabled,
+      disabled: filter.disabled,
+      role: "button",
+      tabIndex: filter.disabled ? void 0 : 0,
+      className: "vds-data-table-filter-chip",
+      onClick: () => {
+        if (!filter.disabled) onClick?.(filter);
+      },
+      onKeyDown: (event) => {
+        if (filter.disabled) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onClick?.(filter);
+        }
+      },
+      children: [
+        filter.icon && /* @__PURE__ */ jsxRuntime.jsx(reactChip.ChipIcon, { children: filter.icon }),
+        /* @__PURE__ */ jsxRuntime.jsx(reactChip.ChipLabel, { className: "vds-data-table-filter-chip-label", children: filter.label }),
+        filter.value !== void 0 && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-filter-chip-value", children: filter.value }),
+        onRemove && /* @__PURE__ */ jsxRuntime.jsx(
+          reactChip.ChipRemove,
+          {
+            "aria-label": filter.removeLabel ?? `Remove ${String(filter.label)} filter`,
+            onClick: (event) => {
+              event.stopPropagation();
+              onRemove(filter.id);
+            }
+          }
+        )
+      ]
+    }
+  );
+}
 var DataTableBoard = react.forwardRef(
   function DataTableBoard2({ className, renderCard, emptyMessage, skipColumns = [], ...props }, ref) {
     const { table } = useDataTableContext();
@@ -3396,41 +3660,44 @@ var DEFAULT_LABELS = {
   board: "Board",
   list: "List"
 };
-var DEFAULT_ICONS = {
-  table: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconTable, { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false }),
-  board: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconLayoutKanban, { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false }),
-  list: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconList, { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false })
-};
-var DataTableViewModeToggle = react.forwardRef(function DataTableViewModeToggle2({ modes = DEFAULT_MODES, labels, icons, className, ...props }, ref) {
+var DataTableViewModeToggle = react.forwardRef(function DataTableViewModeToggle2({
+  modes = DEFAULT_MODES,
+  labels,
+  icons,
+  variant = "segmented",
+  size = "md",
+  className,
+  ...props
+}, ref) {
   const { viewMode, setViewMode } = useDataTableContext();
   return /* @__PURE__ */ jsxRuntime.jsx(
-    "div",
+    reactTabs.Tabs,
     {
       ref,
-      role: "group",
-      "aria-label": "View mode",
+      value: viewMode,
+      onValueChange: (value) => setViewMode(value),
       className: utils.cn("vds-data-table-view-toggle", className),
       ...props,
-      children: modes.map((m) => {
-        const active = viewMode === m;
-        return /* @__PURE__ */ jsxRuntime.jsxs(
-          "button",
-          {
-            type: "button",
-            "aria-pressed": active,
-            "aria-label": `${DEFAULT_LABELS[m]} view`,
-            "data-active": active ? "" : void 0,
-            "data-mode": m,
-            className: "vds-data-table-view-toggle-button",
-            onClick: () => setViewMode(m),
-            children: [
-              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-view-toggle-icon", children: icons?.[m] ?? DEFAULT_ICONS[m] }),
-              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-view-toggle-label", children: labels?.[m] ?? DEFAULT_LABELS[m] })
-            ]
-          },
-          m
-        );
-      })
+      children: /* @__PURE__ */ jsxRuntime.jsx(
+        reactTabs.TabsList,
+        {
+          variant,
+          size,
+          "aria-label": "View mode",
+          children: modes.map((m) => /* @__PURE__ */ jsxRuntime.jsxs(
+            reactTabs.TabsTrigger,
+            {
+              value: m,
+              "aria-label": `${DEFAULT_LABELS[m]} view`,
+              children: [
+                icons?.[m] ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-data-table-view-toggle-icon", children: icons[m] }) : null,
+                labels?.[m] ?? DEFAULT_LABELS[m]
+              ]
+            },
+            m
+          ))
+        }
+      )
     }
   );
 });
@@ -3510,8 +3777,11 @@ var DataTable = {
   HideColumnsButton: DataTableHideColumnsButton,
   DeleteButton: DataTableDeleteButton,
   CloseButton: DataTableCloseButton,
+  SearchField: DataTableSearchField,
   /* Global filter input (simple) */
   GlobalFilter: DataTableGlobalFilter,
+  FilterBar: DataTableFilterBar,
+  FilterChip: DataTableFilterChipItem,
   /* Column visibility list (simple) */
   ColumnVisibility: DataTableColumnVisibility,
   /* Compounds */
@@ -3521,6 +3791,124 @@ var DataTable = {
   BulkActions,
   Cells
 };
+function readStorage(storageKey) {
+  if (!storageKey || typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(storageKey);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+function writeStorage(storageKey, state) {
+  if (!storageKey || typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(storageKey, JSON.stringify(state));
+  } catch {
+  }
+}
+function clearStorage(storageKey) {
+  if (!storageKey || typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(storageKey);
+  } catch {
+  }
+}
+function useDataTablePreferences({
+  value,
+  defaultValue = {},
+  onValueChange,
+  adapter,
+  storageKey,
+  autoSave = true,
+  debounceMs = 200
+} = {}) {
+  const controlled = value !== void 0;
+  const initialRef = react.useRef(defaultValue);
+  const [internal, setInternal] = react.useState(() => ({
+    ...defaultValue,
+    ...readStorage(storageKey) ?? {}
+  }));
+  const preferences = controlled ? value ?? {} : internal;
+  const commit = react.useCallback(
+    (next) => {
+      if (!controlled) setInternal(next);
+      onValueChange?.(next);
+    },
+    [controlled, onValueChange]
+  );
+  const updatePreferences = react.useCallback(
+    (patch) => {
+      commit({ ...preferences, ...patch });
+    },
+    [commit, preferences]
+  );
+  const resetPreferences = react.useCallback(() => {
+    const next = initialRef.current;
+    if (!controlled) setInternal(next);
+    onValueChange?.(next);
+    clearStorage(storageKey);
+    void adapter?.clear?.();
+  }, [adapter, controlled, onValueChange, storageKey]);
+  react.useEffect(() => {
+    let active = true;
+    const loaded = adapter?.load?.();
+    if (!loaded) return;
+    Promise.resolve(loaded).then((next) => {
+      if (!active || !next) return;
+      commit({ ...initialRef.current, ...next });
+    });
+    return () => {
+      active = false;
+    };
+  }, [adapter, commit]);
+  react.useEffect(() => {
+    if (!autoSave) return;
+    const id = window.setTimeout(() => {
+      writeStorage(storageKey, preferences);
+      void adapter?.save?.(preferences);
+    }, debounceMs);
+    return () => window.clearTimeout(id);
+  }, [adapter, autoSave, debounceMs, preferences, storageKey]);
+  const statePairs = react.useMemo(
+    () => ({
+      viewMode: preferences.viewMode,
+      onViewModeChange: (viewMode) => updatePreferences({ viewMode }),
+      sorting: preferences.sorting,
+      onSortingChange: (sorting) => updatePreferences({ sorting }),
+      columnFilters: preferences.columnFilters,
+      onColumnFiltersChange: (columnFilters) => updatePreferences({ columnFilters }),
+      globalFilter: preferences.globalFilter,
+      onGlobalFilterChange: (globalFilter) => updatePreferences({ globalFilter }),
+      rowSelection: preferences.rowSelection,
+      onRowSelectionChange: (rowSelection) => updatePreferences({ rowSelection }),
+      columnSizing: preferences.columnSizing,
+      onColumnSizingChange: (columnSizing) => updatePreferences({ columnSizing }),
+      columnOrder: preferences.columnOrder,
+      onColumnOrderChange: (columnOrder) => updatePreferences({ columnOrder }),
+      columnPinning: preferences.columnPinning,
+      onColumnPinningChange: (columnPinning) => updatePreferences({ columnPinning }),
+      columnVisibility: preferences.columnVisibility,
+      onColumnVisibilityChange: (columnVisibility) => updatePreferences({ columnVisibility }),
+      pagination: preferences.pagination,
+      onPaginationChange: (pagination) => updatePreferences({ pagination }),
+      grouping: preferences.grouping,
+      onGroupingChange: (grouping) => updatePreferences({ grouping }),
+      expanded: preferences.expanded,
+      onExpandedChange: (expanded) => updatePreferences({ expanded }),
+      rowPinning: preferences.rowPinning,
+      onRowPinningChange: (rowPinning) => updatePreferences({ rowPinning })
+    }),
+    [preferences, updatePreferences]
+  );
+  return {
+    preferences,
+    setPreferences: commit,
+    updatePreferences,
+    resetPreferences,
+    statePairs
+  };
+}
 
 Object.defineProperty(exports, "createColumnHelper", {
   enumerable: true,
@@ -3552,7 +3940,9 @@ exports.DataTableCustomizeButton = DataTableCustomizeButton;
 exports.DataTableDeleteButton = DataTableDeleteButton;
 exports.DataTableEmpty = DataTableEmpty;
 exports.DataTableExportButton = DataTableExportButton;
+exports.DataTableFilterBar = DataTableFilterBar;
 exports.DataTableFilterButton = DataTableFilterButton;
+exports.DataTableFilterChipItem = DataTableFilterChipItem;
 exports.DataTableFilterDrawer = DataTableFilterDrawer;
 exports.DataTableFooter = DataTableFooter;
 exports.DataTableFooterCell = DataTableFooterCell;
@@ -3575,6 +3965,8 @@ exports.DataTableRowExpandTrigger = DataTableRowExpandTrigger;
 exports.DataTableRowPinTrigger = DataTableRowPinTrigger;
 exports.DataTableRowSelectCheckbox = DataTableRowSelectCheckbox;
 exports.DataTableScrollArea = DataTableScrollArea;
+exports.DataTableSearchButton = DataTableSearchButton;
+exports.DataTableSearchField = DataTableSearchField;
 exports.DataTableSearchIcon = DataTableSearchIcon;
 exports.DataTableSelectAllAcrossPages = DataTableSelectAllAcrossPages;
 exports.DataTableSelectAllCheckbox = DataTableSelectAllCheckbox;
@@ -3616,4 +4008,5 @@ exports.useColumnResize = useColumnResize;
 exports.useControllableState = useControllableState;
 exports.useDataTable = useDataTable;
 exports.useDataTableContext = useDataTableContext;
+exports.useDataTablePreferences = useDataTablePreferences;
 exports.useDataTableVirtualizer = useDataTableVirtualizer;

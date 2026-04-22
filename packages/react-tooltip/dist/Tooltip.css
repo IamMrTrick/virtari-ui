@@ -14,7 +14,7 @@
 
     /* Surface */
     --tooltip-surface: var(--vds-color-neutral-12, #111827);
-    --tooltip-color: var(--vds-color-white, #ffffff);
+    --tooltip-color: var(--vds-color-text-inverse, #ffffff);
     --tooltip-shadow: var(--vds-shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1));
     --tooltip-border-color: transparent;
 
@@ -93,7 +93,7 @@
    * Content — floating label surface
    * ───────────────────────────────────────────── */
   .vds-tooltip-content {
-    z-index: var(--vds-z-tooltip, 1700);
+    z-index: var(--vds-z-tooltip, 1800);
 
     max-inline-size: var(--tooltip-max-width);
     padding-inline: var(--tooltip-padding-inline);
@@ -143,14 +143,18 @@
     animation-name: vds-tooltip-in-from-top;
   }
     .vds-tooltip-content[data-side="bottom"][data-state="closed"] { animation-name: vds-tooltip-out-to-top; }
+  /* Logical side animations — `data-side` is resolved physical (flipped by
+     Radix under dir="rtl"); the keyframes themselves flip their translate
+     direction under :dir(rtl) via --tooltip-x-inline, so the motion always
+     points from the trigger toward the content's resting position. */
   .vds-tooltip-content[data-side="left"] {
-    animation-name: vds-tooltip-in-from-right;
+    animation-name: vds-tooltip-in-from-inline-end;
   }
-    .vds-tooltip-content[data-side="left"][data-state="closed"] { animation-name: vds-tooltip-out-to-right; }
+    .vds-tooltip-content[data-side="left"][data-state="closed"] { animation-name: vds-tooltip-out-to-inline-end; }
   .vds-tooltip-content[data-side="right"] {
-    animation-name: vds-tooltip-in-from-left;
+    animation-name: vds-tooltip-in-from-inline-start;
   }
-    .vds-tooltip-content[data-side="right"][data-state="closed"] { animation-name: vds-tooltip-out-to-left; }
+    .vds-tooltip-content[data-side="right"][data-state="closed"] { animation-name: vds-tooltip-out-to-inline-start; }
 
   /* ─────────────────────────────────────────────
    * Arrow — the primitive renders an <svg> we color via fill
@@ -205,21 +209,30 @@
     to   { opacity: 0; transform: translateY(var(--tooltip-enter-translate)); }
   }
 
-  @keyframes vds-tooltip-in-from-left {
-    from { opacity: 0; transform: translateX(calc(var(--tooltip-enter-translate) * -1)); }
-    to   { opacity: 1; transform: translateX(0); }
+  /* Inline-axis keyframes use a CSS variable so the translate direction
+     mirrors automatically in RTL without duplicating the rules. */
+  .vds-tooltip-content {
+    --tooltip-x-inline: calc(var(--tooltip-enter-translate) * -1);
   }
-  @keyframes vds-tooltip-out-to-left {
-    from { opacity: 1; transform: translateX(0); }
-    to   { opacity: 0; transform: translateX(calc(var(--tooltip-enter-translate) * -1)); }
+  :where([dir="rtl"]) .vds-tooltip-content {
+    --tooltip-x-inline: var(--tooltip-enter-translate);
   }
 
-  @keyframes vds-tooltip-in-from-right {
-    from { opacity: 0; transform: translateX(var(--tooltip-enter-translate)); }
+  @keyframes vds-tooltip-in-from-inline-start {
+    from { opacity: 0; transform: translateX(var(--tooltip-x-inline)); }
     to   { opacity: 1; transform: translateX(0); }
   }
-  @keyframes vds-tooltip-out-to-right {
+  @keyframes vds-tooltip-out-to-inline-start {
     from { opacity: 1; transform: translateX(0); }
-    to   { opacity: 0; transform: translateX(var(--tooltip-enter-translate)); }
+    to   { opacity: 0; transform: translateX(var(--tooltip-x-inline)); }
+  }
+
+  @keyframes vds-tooltip-in-from-inline-end {
+    from { opacity: 0; transform: translateX(calc(var(--tooltip-x-inline) * -1)); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes vds-tooltip-out-to-inline-end {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(calc(var(--tooltip-x-inline) * -1)); }
   }
 }

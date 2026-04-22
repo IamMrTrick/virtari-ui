@@ -22,12 +22,17 @@
       animation: vds-slide-in-from-bottom var(--vds-duration-fast) var(--vds-ease-out);
     }
 
+    /* `data-side` is the resolved physical side from Radix (which flips
+       automatically when `dir="rtl"` is threaded into the Root). The popover
+       slides from the trigger's direction toward its resting position, so
+       side="left" slides from inline-end and side="right" from inline-start.
+       Using logical keyframes makes the motion mirror under :dir(rtl). */
     &[data-side="left"] {
-      animation: vds-slide-in-from-right var(--vds-duration-fast) var(--vds-ease-out);
+      animation: vds-slide-in-from-inline-end var(--vds-duration-fast) var(--vds-ease-out);
     }
 
     &[data-side="right"] {
-      animation: vds-slide-in-from-left var(--vds-duration-fast) var(--vds-ease-out);
+      animation: vds-slide-in-from-inline-start var(--vds-duration-fast) var(--vds-ease-out);
     }
 
     &:focus-visible {

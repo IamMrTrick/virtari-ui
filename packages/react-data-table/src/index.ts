@@ -99,10 +99,26 @@ export {
   DataTableHideColumnsButton,
   DataTableRefreshButton,
   DataTableResetLayoutButton,
+  DataTableSearchButton,
+  DataTableSearchField,
   DataTableSearchIcon,
   ToolbarActionButton,
 } from "./toolbar";
-export type { ToolbarActionButtonProps } from "./toolbar";
+export type {
+  DataTableSearchFieldProps,
+  ToolbarActionButtonProps,
+} from "./toolbar";
+
+/* Filter chips / active filter row */
+export {
+  DataTableFilterBar,
+  DataTableFilterChipItem,
+} from "./filter-bar";
+export type {
+  DataTableFilterBarProps,
+  DataTableFilterChip,
+  DataTableFilterChipItemProps,
+} from "./filter-bar";
 
 /* Cell primitives */
 export {
@@ -210,6 +226,14 @@ export {
   useControllableState,
   resolveUpdater,
 } from "./use-controllable-state";
+export { useDataTablePreferences } from "./preferences";
+export type {
+  DataTablePreferencesAdapter,
+  DataTablePreferencesOptions,
+  DataTablePreferenceState,
+  DataTablePreferenceStatePairs,
+  UseDataTablePreferencesResult,
+} from "./preferences";
 export { useColumnResize } from "./use-column-resize";
 export type { UseColumnResizeResult } from "./use-column-resize";
 export { useAutoFitColumn } from "./use-auto-fit-column";

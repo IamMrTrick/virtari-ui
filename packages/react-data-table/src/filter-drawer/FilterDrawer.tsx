@@ -7,6 +7,8 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@virtari-packages/react-drawer";
+import { Button } from "@virtari-packages/react-button";
+import { Chip, ChipLabel, ChipRemove } from "@virtari-packages/react-chip";
 import { Input } from "@virtari-packages/react-input";
 import { Switch } from "@virtari-packages/react-switch";
 import { cn } from "@virtari-packages/utils";
@@ -172,7 +174,7 @@ export function DataTableFilterDrawer({
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search filters…"
+                placeholder="Search filters..."
               />
 
               {activeCount > 0 && (
@@ -199,19 +201,21 @@ export function DataTableFilterDrawer({
                         </button>
                       )}
                       {group.conditions.map((c) => (
-                        <span key={c.id} className="vds-data-table-filter-drawer-chip">
-                          <span>
+                        <Chip
+                          key={c.id}
+                          size="sm"
+                          appearance="outline"
+                          variant="primary"
+                          className="vds-data-table-filter-drawer-chip"
+                        >
+                          <ChipLabel>
                             {c.fieldLabel}: {String(c.value)}
-                          </span>
-                          <button
-                            type="button"
+                          </ChipLabel>
+                          <ChipRemove
                             onClick={() => removeCondition(group.id, c.id)}
                             aria-label={`Remove ${c.fieldLabel} filter`}
-                            className="vds-data-table-filter-drawer-chip-remove"
-                          >
-                            ×
-                          </button>
-                        </span>
+                          />
+                        </Chip>
                       ))}
                     </div>
                   ))}
@@ -247,22 +251,26 @@ export function DataTableFilterDrawer({
         {!configField && (
           <DrawerFooter>
             <div className="vds-data-table-filter-drawer-footer">
-              <button
-                type="button"
+              <Button
                 onClick={() => onOpenChange(false)}
+                variant="ghost"
+                color="contrast"
+                size="sm"
                 className="vds-data-table-toolbar-button"
               >
                 Cancel
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
                 onClick={handleApply}
                 disabled={activeCount === 0}
                 data-intent="primary"
+                variant="solid"
+                color="primary"
+                size="sm"
                 className="vds-data-table-toolbar-button"
               >
                 Apply
-              </button>
+              </Button>
             </div>
           </DrawerFooter>
         )}

@@ -3,6 +3,7 @@
 
 var utils = require('@virtari-packages/utils');
 var SliderPrimitive = require('@radix-ui/react-slider');
+var reactDirection = require('@radix-ui/react-direction');
 var jsxRuntime = require('react/jsx-runtime');
 
 function _interopNamespace(e) {
@@ -34,10 +35,12 @@ function Slider({
   min = 0,
   max = 100,
   minStepsBetweenThumbs = 1,
+  dir,
   ...props
 }) {
   const thumbValues = Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max];
-  return /* @__PURE__ */ jsxRuntime.jsxs(
+  const autoDir = utils.useDirection();
+  return /* @__PURE__ */ jsxRuntime.jsx(reactDirection.DirectionProvider, { dir: dir ?? autoDir, children: /* @__PURE__ */ jsxRuntime.jsxs(
     SliderPrimitive__namespace.Root,
     {
       ref,
@@ -53,7 +56,7 @@ function Slider({
         thumbValues.map((_, i) => /* @__PURE__ */ jsxRuntime.jsx(SliderPrimitive__namespace.Thumb, { className: "vds-slider-thumb" }, i))
       ]
     }
-  );
+  ) });
 }
 
 exports.Slider = Slider;

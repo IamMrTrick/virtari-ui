@@ -3,6 +3,7 @@
 
 var utils = require('@virtari-packages/utils');
 var PopoverPrimitive = require('@radix-ui/react-popover');
+var reactDirection = require('@radix-ui/react-direction');
 var jsxRuntime = require('react/jsx-runtime');
 
 function _interopNamespace(e) {
@@ -26,7 +27,10 @@ function _interopNamespace(e) {
 var PopoverPrimitive__namespace = /*#__PURE__*/_interopNamespace(PopoverPrimitive);
 
 // src/Popover.tsx
-var Popover = PopoverPrimitive__namespace.Root;
+function Popover({ dir, ...props }) {
+  const autoDir = utils.useDirection();
+  return /* @__PURE__ */ jsxRuntime.jsx(reactDirection.DirectionProvider, { dir: dir ?? autoDir, children: /* @__PURE__ */ jsxRuntime.jsx(PopoverPrimitive__namespace.Root, { ...props }) });
+}
 var PopoverTrigger = PopoverPrimitive__namespace.Trigger;
 var PopoverClose = PopoverPrimitive__namespace.Close;
 function PopoverContent({

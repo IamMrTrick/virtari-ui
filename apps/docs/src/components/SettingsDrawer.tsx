@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Drawer,
   DrawerContent,
@@ -10,18 +11,26 @@ import {
 import { Switch } from "@virtari-packages/react-switch";
 import { IconSun, IconMoon } from "@virtari-packages/react-icons";
 import type { RadiusMode, Direction } from "../App";
+import { SUPPORTED_LOCALES, type Locale } from "../i18n";
 
-const RADIUS_MODES: { value: RadiusMode; label: string }[] = [
-  { value: "sharp", label: "Sharp" },
-  { value: "soft", label: "Soft" },
-  { value: "round", label: "Round" },
-  { value: "pill", label: "Pill" },
+const RADIUS_MODES: { value: RadiusMode; i18nKey: string }[] = [
+  { value: "sharp", i18nKey: "settings.radiusSharp" },
+  { value: "soft", i18nKey: "settings.radiusSoft" },
+  { value: "round", i18nKey: "settings.radiusRound" },
+  { value: "pill", i18nKey: "settings.radiusPill" },
 ];
 
-const DIRECTIONS: { value: Direction; label: string; hint: string }[] = [
-  { value: "ltr", label: "LTR", hint: "English / Latin" },
-  { value: "rtl", label: "RTL", hint: "فارسی / العربية" },
+const DIRECTIONS: { value: Direction; labelKey: string; hint: string }[] = [
+  { value: "ltr", labelKey: "settings.dirLtr", hint: "English / Latin" },
+  { value: "rtl", labelKey: "settings.dirRtl", hint: "\u0641\u0627\u0631\u0633\u06cc / \u0627\u0644\u0639\u0631\u0628\u06cc\u0629" },
 ];
+
+const LOCALES: { value: Locale; i18nKey: string }[] = SUPPORTED_LOCALES.map(
+  (value) => ({
+    value,
+    i18nKey: value === "fa" ? "settings.langPersian" : "settings.langEnglish",
+  }),
+);
 
 const srOnly: CSSProperties = {
   position: "absolute",
@@ -60,7 +69,7 @@ function Section({
 
 /* ──────────────────────────────────────────────
  * Settings drawer — right-anchored panel with
- * direction / radius / theme controls.
+ * language / direction / radius / theme controls.
  * ────────────────────────────────────────────── */
 export function SettingsDrawer({
   open,
@@ -71,6 +80,8 @@ export function SettingsDrawer({
   onRadiusChange,
   direction,
   onDirectionChange,
+  locale,
+  onLocaleChange,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -80,7 +91,11 @@ export function SettingsDrawer({
   onRadiusChange: (radius: RadiusMode) => void;
   direction: Direction;
   onDirectionChange: (direction: Direction) => void;
+  locale: Locale;
+  onLocaleChange: (locale: Locale) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <Drawer
       direction="right"
@@ -90,24 +105,54 @@ export function SettingsDrawer({
       size="min(22rem, 90vw)"
       scaleBackground
     >
-      <DrawerContent className="docs-settings-drawer" aria-label="Settings">
+      <DrawerContent
+        className="docs-settings-drawer"
+        aria-label={t("settings.title")}
+      >
         <DrawerHeader>
-          <DrawerTitle className="docs-settings-title">Settings</DrawerTitle>
+          <DrawerTitle className="docs-settings-title">
+            {t("settings.title")}
+          </DrawerTitle>
           <DrawerDescription style={srOnly}>
-            Configure direction, radius and theme.
+            {t("settings.description")}
           </DrawerDescription>
         </DrawerHeader>
 
         <DrawerBody className="docs-settings-body">
-          {/* ── Direction ── */}
-          <Section
-            label="Direction"
-            hint="Mirror the layout. Logical properties make every component adapt."
-          >
+          {/* ── Language ── */}
+          <Section label={t("settings.language")}>
             <div
               className="docs-settings-segmented"
               role="radiogroup"
-              aria-label="Text direction"
+              aria-label={t("settings.language")}
+            >
+              {LOCALES.map((l) => {
+                const active = locale === l.value;
+                return (
+                  <button
+                    key={l.value}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    data-active={active || undefined}
+                    className="docs-settings-segmented-option"
+                    onClick={() => onLocaleChange(l.value)}
+                  >
+                    <span className="docs-settings-segmented-label">
+                      {t(l.i18nKey)}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </Section>
+
+          {/* ── Direction ── */}
+          <Section label={t("settings.direction")}>
+            <div
+              className="docs-settings-segmented"
+              role="radiogroup"
+              aria-label={t("settings.direction")}
             >
               {DIRECTIONS.map((d) => {
                 const active = direction === d.value;
@@ -121,7 +166,9 @@ export function SettingsDrawer({
                     className="docs-settings-segmented-option"
                     onClick={() => onDirectionChange(d.value)}
                   >
-                    <span className="docs-settings-segmented-label">{d.label}</span>
+                    <span className="docs-settings-segmented-label">
+                      {t(d.labelKey)}
+                    </span>
                     <span className="docs-settings-segmented-hint">{d.hint}</span>
                   </button>
                 );
@@ -130,14 +177,11 @@ export function SettingsDrawer({
           </Section>
 
           {/* ── Radius ── */}
-          <Section
-            label="Radius"
-            hint="Corner roundness cascades through every component via the radii token tier."
-          >
+          <Section label={t("settings.radius")}>
             <div
               className="docs-settings-radius"
               role="radiogroup"
-              aria-label="Corner radius"
+              aria-label={t("settings.radius")}
             >
               {RADIUS_MODES.map((mode) => {
                 const active = radius === mode.value;
@@ -156,7 +200,9 @@ export function SettingsDrawer({
                       data-mode={mode.value}
                       aria-hidden="true"
                     />
-                    <span className="docs-settings-radius-label">{mode.label}</span>
+                    <span className="docs-settings-radius-label">
+                      {t(mode.i18nKey)}
+                    </span>
                   </button>
                 );
               })}
@@ -164,7 +210,7 @@ export function SettingsDrawer({
           </Section>
 
           {/* ── Theme ── */}
-          <Section label="Theme" hint="OKLCH palette — semantic tokens auto-invert.">
+          <Section label={t("settings.theme")}>
             <label className="docs-settings-theme-toggle">
               <span className="docs-settings-theme-icon" aria-hidden="true">
                 {dark ? (
@@ -175,16 +221,13 @@ export function SettingsDrawer({
               </span>
               <span className="docs-settings-theme-text">
                 <span className="docs-settings-theme-label">
-                  {dark ? "Dark mode" : "Light mode"}
-                </span>
-                <span className="docs-settings-theme-hint">
-                  Tap to switch to {dark ? "light" : "dark"}.
+                  {dark ? t("settings.themeDark") : t("settings.themeLight")}
                 </span>
               </span>
               <Switch
                 checked={dark}
                 onCheckedChange={onDarkChange}
-                aria-label="Dark mode"
+                aria-label={t("settings.themeDark")}
               />
             </label>
           </Section>

@@ -201,6 +201,70 @@ function activateNeighbor(root, direction) {
   triggers[nextIdx].focus({ preventScroll: true });
   return true;
 }
+function useTabsAutoScroll(listRef, enabled) {
+  react.useEffect(() => {
+    const list = listRef.current;
+    if (!list || !enabled) return;
+    let isFirst = true;
+    const scrollToActive = () => {
+      const el = listRef.current;
+      if (!el) return;
+      const active = el.querySelector(
+        '[role="tab"][data-state="active"]'
+      );
+      if (!active) return;
+      const vertical = el.getAttribute("data-orientation") === "vertical";
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      const behavior = isFirst || reduceMotion ? "auto" : "smooth";
+      if (vertical) {
+        if (el.scrollHeight <= el.clientHeight) return;
+        const start = active.offsetTop;
+        const end = start + active.offsetHeight;
+        const viewStart = el.scrollTop;
+        const viewEnd = viewStart + el.clientHeight;
+        if (start >= viewStart && end <= viewEnd) {
+          isFirst = false;
+          return;
+        }
+        const center = start + active.offsetHeight / 2 - el.clientHeight / 2;
+        const max = el.scrollHeight - el.clientHeight;
+        el.scrollTo({ top: Math.max(0, Math.min(center, max)), behavior });
+      } else {
+        if (el.scrollWidth <= el.clientWidth) return;
+        const start = active.offsetLeft;
+        const end = start + active.offsetWidth;
+        const viewStart = el.scrollLeft;
+        const viewEnd = viewStart + el.clientWidth;
+        if (start >= viewStart && end <= viewEnd) {
+          isFirst = false;
+          return;
+        }
+        const center = start + active.offsetWidth / 2 - el.clientWidth / 2;
+        const max = el.scrollWidth - el.clientWidth;
+        el.scrollTo({ left: Math.max(0, Math.min(center, max)), behavior });
+      }
+      isFirst = false;
+    };
+    let rafId = 0;
+    const schedule = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(scrollToActive);
+    };
+    const mo = new MutationObserver(schedule);
+    mo.observe(list, {
+      attributes: true,
+      attributeFilter: ["data-state", "data-orientation"],
+      subtree: true
+    });
+    schedule();
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      mo.disconnect();
+    };
+  }, [listRef, enabled]);
+}
 function useResponsiveOrientation(rootRef, requested, collapseAt) {
   const [effective, setEffective] = react.useState(requested);
   react.useLayoutEffect(() => {
@@ -267,11 +331,13 @@ function TabsList({
   size = "md",
   fullWidth,
   animatedIndicator = true,
+  autoScroll = true,
   ref,
   ...props
 }) {
   const innerRef = react.useRef(null);
   useTabsIndicator(innerRef, animatedIndicator);
+  useTabsAutoScroll(innerRef, autoScroll);
   return /* @__PURE__ */ jsxRuntime.jsx(
     TabsPrimitive__namespace.List,
     {
@@ -322,6 +388,7 @@ function useCarouselSwipe(containerRef, trackRef, {
     let axis = null;
     let pointerId = -1;
     const containerWidth = () => container.getBoundingClientRect().width;
+    const rtlSign = () => getComputedStyle(container).direction === "rtl" ? -1 : 1;
     const clearDragInstant = () => {
       track.style.transition = "";
       track.style.transform = "";
@@ -364,10 +431,12 @@ function useCarouselSwipe(containerRef, trackRef, {
       if (axis === "x") {
         if (e.cancelable) e.preventDefault();
         const w = containerWidth();
-        const baseline = -activeIndex * w;
+        const sign = rtlSign();
+        const baseline = -sign * activeIndex * w;
+        const logicalDx = sign * dx;
         let effective = dx;
-        const atStart = activeIndex === 0 && dx > 0;
-        const atEnd = activeIndex === slideCount - 1 && dx < 0;
+        const atStart = activeIndex === 0 && logicalDx > 0;
+        const atEnd = activeIndex === slideCount - 1 && logicalDx < 0;
         if (atStart || atEnd) effective = dx * 0.25;
         track.style.transform = `translateX(${baseline + effective}px)`;
       }
@@ -382,7 +451,8 @@ function useCarouselSwipe(containerRef, trackRef, {
       const dx = e.clientX - startX;
       dragging = false;
       if (axis === "x" && Math.abs(dx) > threshold) {
-        const dir = dx < 0 ? "next" : "prev";
+        const logicalDx = rtlSign() * dx;
+        const dir = logicalDx < 0 ? "next" : "prev";
         track.style.transition = "";
         axis = null;
         if (onCommit(dir)) return;

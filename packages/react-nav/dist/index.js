@@ -3,7 +3,7 @@ import { cn } from '@virtari-packages/utils';
 import { createContext, useMemo, useCallback, useContext, useId, useState, useRef } from 'react';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { Slot } from '@radix-ui/react-slot';
-import { FloatingPortal, FloatingFocusManager, useFloating, autoUpdate, offset, flip, shift, useClick, useDismiss, useInteractions } from '@floating-ui/react';
+import { FloatingPortal, FloatingFocusManager, useFloating, autoUpdate, offset, flip, shift, useClick, useDismiss, useHover, safePolygon, useFocus, useInteractions } from '@floating-ui/react';
 
 // src/Nav.tsx
 var NAV_DEFAULT = {
@@ -27,6 +27,10 @@ var NavSubmenuContext = createContext(
 );
 function useNavSubmenuContext() {
   return useContext(NavSubmenuContext);
+}
+var NavPopoverCloserContext = createContext(null);
+function useNavPopoverCloser() {
+  return useContext(NavPopoverCloserContext);
 }
 function isActivePath(href, currentPath, strategy) {
   if (!href || !currentPath) return false;
@@ -211,9 +215,20 @@ function useSubmenu({
     escapeKey: true,
     outsidePress: true
   });
+  const hover = useHover(floatingState.context, {
+    enabled: mode === "popover",
+    delay: { open: 75, close: 200 },
+    move: false,
+    handleClose: safePolygon({ blockPointerEvents: false })
+  });
+  const focus = useFocus(floatingState.context, {
+    enabled: mode === "popover"
+  });
   const { getReferenceProps, getFloatingProps } = useInteractions([
     click,
-    dismiss
+    dismiss,
+    hover,
+    focus
   ]);
   const bridge = mode === "popover" ? {
     refs: {
@@ -294,6 +309,7 @@ function NavLink({
   ...rest
 }) {
   const { currentPath, matchStrategy } = useNavContext();
+  const closeAncestorPopover = useNavPopoverCloser();
   const Comp = asChild ? Slot : "a";
   const autoActive = active ?? isActivePath(href, currentPath, matchStrategy);
   const handleClick = useCallback(
@@ -303,8 +319,9 @@ function NavLink({
         return;
       }
       onClick?.(e);
+      if (!e.defaultPrevented) closeAncestorPopover?.();
     },
-    [disabled, onClick]
+    [disabled, onClick, closeAncestorPopover]
   );
   return /* @__PURE__ */ jsx(
     Comp,
@@ -434,7 +451,16 @@ function NavItem({
       ]
     }
   ) : children;
-  return /* @__PURE__ */ jsx(NavSubmenuContext.Provider, { value: submenuState, children: /* @__PURE__ */ jsx(
+  const outerCloser = useNavPopoverCloser();
+  const setSubmenuOpen = submenuState.setOpen;
+  const popoverCloser = useMemo(() => {
+    if (resolvedMode !== "popover") return outerCloser;
+    return () => {
+      setSubmenuOpen(false);
+      outerCloser?.();
+    };
+  }, [resolvedMode, outerCloser, setSubmenuOpen]);
+  const itemBody = /* @__PURE__ */ jsx(
     "li",
     {
       ref,
@@ -444,7 +470,8 @@ function NavItem({
       ...rest,
       children: itemContent
     }
-  ) });
+  );
+  return /* @__PURE__ */ jsx(NavSubmenuContext.Provider, { value: submenuState, children: /* @__PURE__ */ jsx(NavPopoverCloserContext.Provider, { value: popoverCloser, children: itemBody }) });
 }
 function NavSubmenu({
   className,

@@ -1,6 +1,7 @@
-import { cn } from "@virtari-packages/utils";
+import { cn, useDirection } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { DirectionProvider } from "@radix-ui/react-direction";
 
 export type TooltipSize = "sm" | "md" | "lg";
 export type TooltipVariant =
@@ -16,19 +17,33 @@ export type TooltipVariant =
  * feel responsive in design-system contexts. Override per-instance
  * with `delayDuration={n}`. */
 export interface TooltipProviderProps
-  extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider> {}
+  extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider> {
+  /** Reading direction. Defaults to the document's active direction. */
+  dir?: "ltr" | "rtl";
+}
 
 export function TooltipProvider({
   delayDuration = 300,
   skipDelayDuration = 200,
+  dir,
+  children,
   ...props
 }: TooltipProviderProps) {
+  /* Auto-thread the active text direction so per-instance `side` resolution
+     flips under RTL. DirectionProvider is Radix's designated channel and
+     the Tooltip.Provider itself doesn't accept `dir`. Consumers can still
+     override with an explicit `dir`. */
+  const autoDir = useDirection();
   return (
-    <TooltipPrimitive.Provider
-      delayDuration={delayDuration}
-      skipDelayDuration={skipDelayDuration}
-      {...props}
-    />
+    <DirectionProvider dir={dir ?? autoDir}>
+      <TooltipPrimitive.Provider
+        delayDuration={delayDuration}
+        skipDelayDuration={skipDelayDuration}
+        {...props}
+      >
+        {children}
+      </TooltipPrimitive.Provider>
+    </DirectionProvider>
   );
 }
 

@@ -281,7 +281,7 @@
   }
 
   .vds-time-field-picker-content {
-    z-index: var(--vds-z-popover, 70);
+    z-index: var(--vds-z-popover, 1600);
     box-sizing: border-box;
     inline-size: min(22rem, calc(100vw - 1rem));
     max-inline-size: calc(100vw - 1rem);

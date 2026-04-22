@@ -1,9 +1,27 @@
-import { cn } from "@virtari-packages/utils";
+import { cn, useDirection } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import { DirectionProvider } from "@radix-ui/react-direction";
 
-/* ── Re-exports ── */
-export const DropdownMenu = DropdownMenuPrimitive.Root;
+/* ── Root ──
+ * Auto-threads the active text direction into Radix so submenu placement,
+ * focus traversal, and arrow-key navigation flip under RTL. Consumers can
+ * still override by passing `dir`. */
+export interface DropdownMenuProps
+  extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Root> {
+  /** Reading direction. Defaults to the document's active direction. */
+  dir?: "ltr" | "rtl";
+}
+
+export function DropdownMenu({ dir, ...props }: DropdownMenuProps) {
+  const autoDir = useDirection();
+  return (
+    <DirectionProvider dir={dir ?? autoDir}>
+      <DropdownMenuPrimitive.Root {...props} />
+    </DirectionProvider>
+  );
+}
+
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 

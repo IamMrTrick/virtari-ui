@@ -1,10 +1,14 @@
-import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as react from 'react';
 import { Ref, ComponentRef, ReactNode, Dispatch, SetStateAction, RefObject, KeyboardEvent } from 'react';
+import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 
-declare const Select: react.FC<SelectPrimitive.SelectProps>;
+interface SelectProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {
+    /** Reading direction. Defaults to the document's active direction. */
+    dir?: "ltr" | "rtl";
+}
+declare function Select({ dir, ...props }: SelectProps): react_jsx_runtime.JSX.Element;
 declare const SelectGroup: react.ForwardRefExoticComponent<SelectPrimitive.SelectGroupProps & react.RefAttributes<HTMLDivElement>>;
 declare const SelectValue: react.ForwardRefExoticComponent<SelectPrimitive.SelectValueProps & react.RefAttributes<HTMLSpanElement>>;
 type SelectSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";

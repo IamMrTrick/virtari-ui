@@ -1,15 +1,19 @@
 "use client";
-import { cn } from '@virtari-packages/utils';
+import { useDirection, cn } from '@virtari-packages/utils';
 import * as SelectPrimitive from '@radix-ui/react-select';
+import { DirectionProvider } from '@radix-ui/react-direction';
 import { IconX, IconLoader2, IconChevronDown, IconCheck } from '@virtari-packages/react-icons';
-import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
+import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { Chip, ChipLabel, ChipRemove } from '@virtari-packages/react-chip';
 import { createContext, useContext, useCallback, useRef, useEffect, useMemo, useState, useId, useLayoutEffect } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
 // src/Select.tsx
-var Select = SelectPrimitive.Root;
+function Select({ dir, ...props }) {
+  const autoDir = useDirection();
+  return /* @__PURE__ */ jsx(DirectionProvider, { dir: dir ?? autoDir, children: /* @__PURE__ */ jsx(SelectPrimitive.Root, { ...props }) });
+}
 var SelectGroup = SelectPrimitive.Group;
 var SelectValue = SelectPrimitive.Value;
 function SelectTrigger({

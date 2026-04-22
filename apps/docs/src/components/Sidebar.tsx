@@ -1,4 +1,5 @@
 import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Drawer,
   DrawerContent,
@@ -150,105 +151,94 @@ const ICONS: Record<string, ReactNode> = {
 const FALLBACK_ICON = <IconCircle {...navIconProps} />;
 
 /* ────────────────────────────────
- * Nav data
+ * Nav data — each group carries an i18n key for the header and a list of
+ * page paths. Item labels come from the `nav` translation namespace at
+ * render time so switching locale flips the whole tree.
  * ──────────────────────────────── */
-type NavGroupData = { group: string; items: { label: string; path: string }[] };
+type NavGroupData = { groupKey: string; items: string[] };
 
 const NAV_ITEMS: NavGroupData[] = [
-  { group: "Overview", items: [{ label: "Introduction", path: "introduction" }] },
+  { groupKey: "groups.overview", items: ["introduction"] },
   {
-    group: "Foundations",
+    groupKey: "groups.foundations",
     items: [
-      { label: "Sizing", path: "sizing" },
-      { label: "Colors", path: "colors" },
-      { label: "Typography", path: "typography" },
-      { label: "Icons", path: "icons" },
-      { label: "Composition", path: "composition" },
-      { label: "Page Layout", path: "layout" },
-      { label: "Utilities", path: "utilities" },
-      { label: "RTL", path: "rtl" },
+      "sizing",
+      "colors",
+      "typography",
+      "icons",
+      "composition",
+      "layout",
+      "utilities",
+      "rtl",
     ],
   },
   {
-    group: "Form Controls",
+    groupKey: "groups.formControls",
     items: [
-      { label: "Button", path: "button" },
-      { label: "Input", path: "input" },
-      { label: "Textarea", path: "textarea" },
-      { label: "Select", path: "select" },
-      { label: "Checkbox", path: "checkbox" },
-      { label: "Radio Group", path: "radio-group" },
-      { label: "Switch", path: "switch" },
-      { label: "Toggle", path: "toggle" },
-      { label: "Slider", path: "slider" },
-      { label: "Date Picker", path: "date-picker" },
-      { label: "Phone Input", path: "phone-input" },
-      { label: "Language Picker", path: "language-picker" },
-      { label: "Label", path: "label" },
+      "button",
+      "input",
+      "textarea",
+      "select",
+      "checkbox",
+      "radio-group",
+      "switch",
+      "toggle",
+      "slider",
+      "date-picker",
+      "phone-input",
+      "language-picker",
+      "label",
     ],
   },
   {
-    group: "Display",
+    groupKey: "groups.display",
     items: [
-      { label: "Avatar", path: "avatar" },
-      { label: "Badge", path: "badge" },
-      { label: "Chip", path: "chip" },
-      { label: "Flag", path: "flag" },
-      { label: "Card", path: "card" },
-      { label: "Heading", path: "heading" },
-      { label: "Text", path: "text" },
-      { label: "Separator", path: "separator" },
-      { label: "Kbd", path: "kbd" },
-      { label: "Progress", path: "progress" },
-      { label: "Skeleton", path: "skeleton" },
-      { label: "Spinner", path: "spinner" },
+      "avatar",
+      "badge",
+      "chip",
+      "flag",
+      "card",
+      "heading",
+      "text",
+      "separator",
+      "kbd",
+      "progress",
+      "skeleton",
+      "spinner",
     ],
   },
   {
-    group: "Overlays",
+    groupKey: "groups.overlays",
     items: [
-      { label: "Dialog", path: "dialog" },
-      { label: "Drawer", path: "drawer" },
-      { label: "Alert Dialog", path: "alert-dialog" },
-      { label: "Dropdown Menu", path: "dropdown-menu" },
-      { label: "Popover", path: "popover" },
-      { label: "Tooltip", path: "tooltip" },
-      { label: "Toast", path: "toast" },
+      "dialog",
+      "drawer",
+      "alert-dialog",
+      "dropdown-menu",
+      "popover",
+      "tooltip",
+      "toast",
     ],
   },
   {
-    group: "Navigation",
-    items: [
-      { label: "Header", path: "header" },
-      { label: "Navigation", path: "nav" },
-      { label: "Bottom Nav", path: "bottom-nav" },
-      { label: "Sidebar", path: "sidebar" },
-      { label: "Breadcrumb", path: "breadcrumb" },
-    ],
+    groupKey: "groups.navigation",
+    items: ["header", "nav", "bottom-nav", "sidebar", "breadcrumb"],
   },
   {
-    group: "Layout",
-    items: [
-      { label: "Tabs", path: "tabs" },
-      { label: "Accordion", path: "accordion" },
-      { label: "Collapsible", path: "collapsible" },
-      { label: "Scroll Area", path: "scroll-area" },
-    ],
+    groupKey: "groups.layout",
+    items: ["tabs", "accordion", "collapsible", "scroll-area"],
   },
   {
-    group: "Data",
-    items: [
-      { label: "Table", path: "table" },
-      { label: "Data Table", path: "data-table" },
-      { label: "Users showcase", path: "data-table-users" },
-    ],
+    groupKey: "groups.data",
+    items: ["table", "data-table", "data-table-users"],
   },
 ];
+
+type ResolvedGroup = { group: string; items: { label: string; path: string }[] };
 
 /* ────────────────────────────────
  * Filter helpers
  * ──────────────────────────────── */
-function filterGroups(groups: NavGroupData[], q: string): NavGroupData[] {
+function filterGroups(groups: ResolvedGroup[], q: string): ResolvedGroup[] {
   if (!q) return groups;
   const needle = q.toLowerCase();
   return groups
@@ -263,20 +253,21 @@ function filterGroups(groups: NavGroupData[], q: string): NavGroupData[] {
  * Brand — logo + wordmark. Wordmark becomes sr-only on rail so the link
  * keeps its accessible name while visually only the logo remains.
  * ──────────────────────────────── */
-function Brand() {
+function Brand({ homeHref }: { homeHref: string }) {
+  const { t } = useTranslation();
   const { collapsed } = useSidebar();
   return (
     <a
-      href="#/introduction"
+      href={homeHref}
       className="docs-sidebar-logo"
-      aria-label="Virtari Design System — home"
+      aria-label={t("brand.homeLabel")}
     >
       <span className="docs-sidebar-logo-mark" aria-hidden="true">V</span>
       <span
         className="docs-sidebar-logo-text"
         style={collapsed ? srOnly : undefined}
       >
-        Virtari DS
+        {t("brand.wordmark")}
       </span>
     </a>
   );
@@ -293,6 +284,7 @@ function NavSearch({
   value: string;
   onChange: (v: string) => void;
 }) {
+  const { t } = useTranslation();
   const { collapsed } = useSidebar();
   if (collapsed) return null;
 
@@ -315,7 +307,7 @@ function NavSearch({
         <button
           type="button"
           onClick={() => onChange("")}
-          aria-label="Clear search"
+          aria-label={t("sidebar.clearSearch")}
           style={{
             position: "absolute",
             insetInlineEnd: "var(--vds-space-1-5, 0.375rem)",
@@ -340,10 +332,10 @@ function NavSearch({
       <Input
         inputSize="sm"
         type="search"
-        placeholder="Filter…"
+        placeholder={t("sidebar.filterPlaceholder")}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        aria-label="Filter navigation"
+        aria-label={t("sidebar.filterAriaLabel")}
         style={{
           paddingInlineStart: "var(--vds-space-7, 1.75rem)",
           paddingInlineEnd: value
@@ -356,22 +348,43 @@ function NavSearch({
   );
 }
 
+/* Resolve raw nav structure to translated labels. Computed inside components
+   so switching locale via i18n triggers a re-render with new strings. */
+function useResolvedNav(): ResolvedGroup[] {
+  const { t } = useTranslation();
+  return useMemo(
+    () =>
+      NAV_ITEMS.map((g) => ({
+        group: t(g.groupKey),
+        items: g.items.map((path) => ({
+          label: t(`nav:${path}`, { defaultValue: path }),
+          path,
+        })),
+      })),
+    [t],
+  );
+}
+
+type HrefFor = (page: string) => string;
+
 /* ────────────────────────────────
  * NavContent — renders the filtered <Nav> tree.
- * Consumes Sidebar's collapsed state so Nav switches to rail rendering
- * (icon-only, labels sr-only) via its own `collapsed` prop.
  * ──────────────────────────────── */
 function NavContent({
   activePage,
+  hrefFor,
   onNavigate,
   query,
 }: {
   activePage: string;
+  hrefFor: HrefFor;
   onNavigate: (page: string) => void;
   query: string;
 }) {
+  const { t } = useTranslation();
   const { collapsed } = useSidebar();
-  const filtered = useMemo(() => filterGroups(NAV_ITEMS, query), [query]);
+  const resolved = useResolvedNav();
+  const filtered = useMemo(() => filterGroups(resolved, query), [resolved, query]);
 
   if (filtered.length === 0) {
     return (
@@ -384,7 +397,7 @@ function NavContent({
           fontSize: "var(--vds-text-xs)",
         }}
       >
-        No matches for &ldquo;{query}&rdquo;.
+        {t("sidebar.noMatches", { query })}
       </p>
     );
   }
@@ -395,8 +408,8 @@ function NavContent({
       orientation="vertical"
       variant="filled"
       size="sm"
-      currentPath={`#/${activePage}`}
-      aria-label="Documentation"
+      currentPath={hrefFor(activePage)}
+      aria-label={t("sidebar.ariaDocs")}
     >
       {filtered.map((group) => (
         <NavGroup key={group.group} label={group.group}>
@@ -404,7 +417,7 @@ function NavContent({
             {group.items.map((item) => (
               <NavItem
                 key={item.path}
-                href={`#/${item.path}`}
+                href={hrefFor(item.path)}
                 icon={ICONS[item.path] ?? FALLBACK_ICON}
                 label={item.label}
                 onClick={(e) => {
@@ -421,7 +434,8 @@ function NavContent({
 }
 
 /** Header row — brand on the left (expanded only), trigger on the right (always). */
-function HeaderRow() {
+function HeaderRow({ homeHref }: { homeHref: string }) {
+  const { t } = useTranslation();
   const { collapsed } = useSidebar();
   return (
     <div
@@ -432,11 +446,11 @@ function HeaderRow() {
         minInlineSize: 0,
       }}
     >
-      {!collapsed && <Brand />}
+      {!collapsed && <Brand homeHref={homeHref} />}
       <SidebarTrigger
         style={collapsed ? undefined : { marginInlineStart: "auto" }}
-        expandLabel="Expand navigation"
-        collapseLabel="Collapse navigation"
+        expandLabel={t("sidebar.expand")}
+        collapseLabel={t("sidebar.collapse")}
       >
         {collapsed ? (
           <IconLayoutSidebarLeftExpand size={20} stroke={1.5} aria-hidden />
@@ -456,10 +470,13 @@ function HeaderRow() {
 export function Sidebar({
   activePage,
   onNavigate,
+  hrefFor,
 }: {
   activePage: string;
   onNavigate: (page: string) => void;
+  hrefFor: HrefFor;
 }) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
 
   return (
@@ -467,15 +484,11 @@ export function Sidebar({
       mode="full-height"
       size="md"
       background="surface"
-      aria-label="Primary"
+      aria-label={t("sidebar.ariaPrimary")}
       onShortcutBlocked={() => {
-        // User pressed Ctrl/Cmd+B while editing an input — surface a friendly
-        // heads-up via the toast store rather than silently swallowing the
-        // keystroke. The sidebar itself does not ship a toast dependency;
-        // each app wires its own notification surface here.
         toast.warning(
-          "Can’t toggle while editing",
-          "Unfocus the input, then press Ctrl+B (or Cmd+B) again.",
+          t("sidebar.toggleBlockedTitle"),
+          t("sidebar.toggleBlockedBody"),
         );
       }}
     >
@@ -486,13 +499,14 @@ export function Sidebar({
           gap: "var(--vds-space-2)",
         }}
       >
-        <HeaderRow />
+        <HeaderRow homeHref={hrefFor("introduction")} />
         <NavSearch value={query} onChange={setQuery} />
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarBody>
         <NavContent
           activePage={activePage}
+          hrefFor={hrefFor}
           onNavigate={onNavigate}
           query={query}
         />
@@ -509,14 +523,18 @@ export function MobileSidebar({
   onOpenChange,
   activePage,
   onNavigate,
+  hrefFor,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   activePage: string;
   onNavigate: (page: string) => void;
+  hrefFor: HrefFor;
 }) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
-  const filtered = useMemo(() => filterGroups(NAV_ITEMS, query), [query]);
+  const resolved = useResolvedNav();
+  const filtered = useMemo(() => filterGroups(resolved, query), [resolved, query]);
 
   return (
     <Drawer
@@ -526,19 +544,22 @@ export function MobileSidebar({
       sizeMode="fixed"
       size="min(18rem, 85vw)"
     >
-      <DrawerContent className="docs-sidebar-drawer" aria-label="Navigation">
+      <DrawerContent
+        className="docs-sidebar-drawer"
+        aria-label={t("sidebar.mobileAriaLabel")}
+      >
         <DrawerHeader>
-          <DrawerTitle style={srOnly}>Navigation</DrawerTitle>
+          <DrawerTitle style={srOnly}>{t("sidebar.mobileAriaLabel")}</DrawerTitle>
           <DrawerDescription style={srOnly}>
-            Documentation navigation menu
+            {t("sidebar.mobileDescription")}
           </DrawerDescription>
           <a
-            href="#/introduction"
+            href={hrefFor("introduction")}
             className="docs-sidebar-logo docs-sidebar-logo--in-drawer"
-            aria-label="Virtari Design System — home"
+            aria-label={t("brand.homeLabel")}
           >
             <span className="docs-sidebar-logo-mark" aria-hidden="true">V</span>
-            <span className="docs-sidebar-logo-text">Virtari DS</span>
+            <span className="docs-sidebar-logo-text">{t("brand.wordmark")}</span>
           </a>
         </DrawerHeader>
         <DrawerBody>
@@ -556,15 +577,15 @@ export function MobileSidebar({
                 fontSize: "var(--vds-text-sm)",
               }}
             >
-              No matches for &ldquo;{query}&rdquo;.
+              {t("sidebar.noMatches", { query })}
             </p>
           ) : (
             <Nav
               orientation="vertical"
               variant="filled"
               size="sm"
-              currentPath={`#/${activePage}`}
-              aria-label="Documentation"
+              currentPath={hrefFor(activePage)}
+              aria-label={t("sidebar.ariaDocs")}
             >
               {filtered.map((group) => (
                 <NavGroup key={group.group} label={group.group}>
@@ -572,7 +593,7 @@ export function MobileSidebar({
                     {group.items.map((item) => (
                       <NavItem
                         key={item.path}
-                        href={`#/${item.path}`}
+                        href={hrefFor(item.path)}
                         icon={ICONS[item.path] ?? FALLBACK_ICON}
                         label={item.label}
                         onClick={(e) => {
@@ -588,10 +609,10 @@ export function MobileSidebar({
             </Nav>
           )}
 
-          {/* Hidden DrawerClose so Escape / overlay-click still close; per-item close handled in onClick above. */}
+          {/* Hidden DrawerClose so Escape / overlay-click still close. */}
           <DrawerClose asChild>
             <button type="button" style={srOnly} aria-hidden="true" tabIndex={-1}>
-              Close
+              {t("sidebar.close")}
             </button>
           </DrawerClose>
         </DrawerBody>
@@ -608,6 +629,7 @@ function MobileNavSearch({
   value: string;
   onChange: (v: string) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div style={{ position: "relative" }}>
       <IconSearch
@@ -626,10 +648,10 @@ function MobileNavSearch({
       <Input
         inputSize="sm"
         type="search"
-        placeholder="Filter…"
+        placeholder={t("sidebar.filterPlaceholder")}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        aria-label="Filter navigation"
+        aria-label={t("sidebar.filterAriaLabel")}
         style={{
           paddingInlineStart: "var(--vds-space-7, 1.75rem)",
           inlineSize: "100%",

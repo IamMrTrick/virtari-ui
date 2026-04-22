@@ -89,8 +89,16 @@ export function getCrossCoord(direction: Direction, x: number, y: number): numbe
   return getAxis(direction) === "x" ? y : x;
 }
 
-export function getOpenSign(direction: Direction): 1 | -1 {
-  return direction === "top" || direction === "left" ? 1 : -1;
+export function getOpenSign(direction: Direction, rtl = false): 1 | -1 {
+  if (direction === "top") return 1;
+  if (direction === "bottom") return -1;
+  /* In RTL the drawer docks on the opposite physical edge (inset-inline-*
+     flips), so the gesture that opens it is mirrored on the x-axis too.
+     data-direction="left" in RTL docks on the right edge, and pulling the
+     handle leftward (−x) now closes it, so open-sign flips for both x
+     directions. */
+  if (direction === "left") return rtl ? -1 : 1;
+  return rtl ? 1 : -1;
 }
 
 export function getViewportRect(): { width: number; height: number } {
@@ -141,13 +149,21 @@ export function getElementSize(el: HTMLElement | null, direction: Direction): nu
   );
 }
 
-export function getTranslate(direction: Direction, openPx: number, totalPx: number): string {
+export function getTranslate(
+  direction: Direction,
+  openPx: number,
+  totalPx: number,
+  rtl = false,
+): string {
   const offset = Math.max(totalPx - openPx, 0);
   switch (direction) {
     case "bottom": return `translate3d(0, ${offset}px, 0)`;
     case "top":    return `translate3d(0, ${-offset}px, 0)`;
-    case "right":  return `translate3d(${offset}px, 0, 0)`;
-    case "left":   return `translate3d(${-offset}px, 0, 0)`;
+    /* The x translate flips in RTL so the drawer slides back toward its
+       (flipped) dock edge, matching the CSS rest-transform defined in
+       Drawer.css under :dir(rtl). */
+    case "right":  return `translate3d(${rtl ? -offset : offset}px, 0, 0)`;
+    case "left":   return `translate3d(${rtl ? offset : -offset}px, 0, 0)`;
   }
 }
 
@@ -163,9 +179,9 @@ export function getVisualTransform(
   direction: Direction,
   openPx: number,
   totalPx: number,
-  options?: { disableStretch?: boolean },
+  options?: { disableStretch?: boolean; rtl?: boolean },
 ): string {
-  const translate = getTranslate(direction, openPx, totalPx);
+  const translate = getTranslate(direction, openPx, totalPx, options?.rtl);
   const stretchScale = options?.disableStretch ? 1 : getStretchScale(openPx, totalPx);
   if (getAxis(direction) === "x") {
     return `${translate} scale3d(${stretchScale}, 1, 1)`;

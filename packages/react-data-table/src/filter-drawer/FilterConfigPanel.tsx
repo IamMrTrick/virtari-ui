@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@virtari-packages/react-button";
 import { Input } from "@virtari-packages/react-input";
 import { cn } from "@virtari-packages/utils";
 
@@ -147,25 +148,29 @@ export function FilterConfigPanel({
       )}
 
       <div className="vds-data-table-filter-config-actions">
-        <button
-          type="button"
+        <Button
           onClick={onCancel}
+          variant="ghost"
+          color="contrast"
+          size="sm"
           className={cn(
             "vds-data-table-toolbar-button",
             "vds-data-table-filter-config-cancel",
           )}
         >
           Cancel
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
           onClick={handleAdd}
           disabled={!canAdd}
           data-intent="primary"
+          variant="solid"
+          color="primary"
+          size="sm"
           className={cn("vds-data-table-toolbar-button")}
         >
           Add filter
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
 
 var utils = require('@virtari-packages/utils');
 var SelectPrimitive = require('@radix-ui/react-select');
+var reactDirection = require('@radix-ui/react-direction');
 var reactIcons = require('@virtari-packages/react-icons');
 var jsxRuntime = require('react/jsx-runtime');
 var PopoverPrimitive = require('@radix-ui/react-popover');
@@ -32,7 +33,10 @@ var SelectPrimitive__namespace = /*#__PURE__*/_interopNamespace(SelectPrimitive)
 var PopoverPrimitive__namespace = /*#__PURE__*/_interopNamespace(PopoverPrimitive);
 
 // src/Select.tsx
-var Select = SelectPrimitive__namespace.Root;
+function Select({ dir, ...props }) {
+  const autoDir = utils.useDirection();
+  return /* @__PURE__ */ jsxRuntime.jsx(reactDirection.DirectionProvider, { dir: dir ?? autoDir, children: /* @__PURE__ */ jsxRuntime.jsx(SelectPrimitive__namespace.Root, { ...props }) });
+}
 var SelectGroup = SelectPrimitive__namespace.Group;
 var SelectValue = SelectPrimitive__namespace.Value;
 function SelectTrigger({

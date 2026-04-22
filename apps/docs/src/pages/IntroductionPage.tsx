@@ -1,21 +1,33 @@
+import { Trans, useTranslation } from "react-i18next";
 import { Badge } from "@virtari-packages/react-badge";
 import { Section } from "../components";
 
 export function IntroductionPage() {
+  const { t } = useTranslation("introduction");
+
   return (
     <>
-      <Section title="What is Virtari DS?">
+      <Section title={t("whatIs.title")}>
         <p className="docs-prose">
-          Virtari Design System is a package-based component library built on{" "}
-          <strong>React</strong>, <strong>Radix UI</strong>, and{" "}
-          <strong>pure vanilla CSS</strong> using 2026 standards. Every
-          component is its own publishable npm package under the{" "}
-          <code>@virtari</code> scope.
+          {/* `components` positional map — <1>/<2>/<3> = <strong>, <4> = <code>.
+              i18next renders translated chunks between these markers. */}
+          <Trans
+            ns="introduction"
+            i18nKey="whatIs.body"
+            components={[
+              <strong key="0" />,
+              <strong key="1" />,
+              <strong key="2" />,
+              <code key="3" />,
+            ]}
+          />
         </p>
       </Section>
 
-      <Section title="CSS Features">
+      <Section title={t("cssFeatures.title")}>
         <div className="docs-row" style={{ flexWrap: "wrap" }}>
+          {/* Tech-feature names are kept in English by convention even in
+              Persian — they\u2019re canonical CSS identifiers. */}
           <Badge>CSS Nesting</Badge>
           <Badge>@layer</Badge>
           <Badge>color-mix()</Badge>
@@ -28,24 +40,12 @@ export function IntroductionPage() {
         </div>
       </Section>
 
-      <Section title="Quick Start">
-        <pre className="docs-code">{`# Install foundation + a component
-pnpm add @virtari-packages/core @virtari-packages/tokens @virtari-packages/react-button
-
-# Import CSS once in your app root
-@import "@virtari-packages/core";
-@import "@virtari-packages/tokens";
-@import "@virtari-packages/react-button/styles";
-
-# Use it
-import { Button } from "@virtari-packages/react-button";
-<Button variant="outline">Click me</Button>`}</pre>
+      <Section title={t("quickStart.title")}>
+        <pre className="docs-code">{t("quickStart.snippet")}</pre>
       </Section>
 
-      <Section title="Architecture">
-        <pre className="docs-code">{`@virtari-packages/tokens       → Design tokens (CSS custom properties)
-@virtari-packages/core         → @layer order, reset, base styles
-@virtari-packages/react-*      → One package per component`}</pre>
+      <Section title={t("architecture.title")}>
+        <pre className="docs-code">{t("architecture.snippet")}</pre>
       </Section>
     </>
   );

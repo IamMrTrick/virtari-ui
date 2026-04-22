@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Header,
   HeaderMain,
@@ -8,6 +9,7 @@ import {
 import { IconMenu2, IconSettings } from "@virtari-packages/react-icons";
 import { SettingsDrawer } from "./SettingsDrawer";
 import type { RadiusMode, Direction } from "../App";
+import type { Locale } from "../i18n";
 
 export function Layout({
   dark,
@@ -16,6 +18,8 @@ export function Layout({
   onRadiusChange,
   direction,
   onDirectionChange,
+  locale,
+  onLocaleChange,
   title,
   description,
   children,
@@ -27,11 +31,14 @@ export function Layout({
   onRadiusChange: (v: RadiusMode) => void;
   direction: Direction;
   onDirectionChange: (v: Direction) => void;
+  locale: Locale;
+  onLocaleChange: (v: Locale) => void;
   title: string;
   description: string;
   children: React.ReactNode;
   onToggleSidebar: () => void;
 }) {
+  const { t } = useTranslation();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
@@ -50,7 +57,7 @@ export function Layout({
               type="button"
               className="docs-sidebar-toggle"
               onClick={onToggleSidebar}
-              aria-label="Toggle navigation sidebar"
+              aria-label={t("layout.toggleSidebar")}
             >
               <IconMenu2 size={20} stroke={1.5} aria-hidden focusable={false} />
             </button>
@@ -65,7 +72,7 @@ export function Layout({
               type="button"
               className="docs-settings-trigger"
               onClick={() => setSettingsOpen(true)}
-              aria-label="Open settings"
+              aria-label={t("settings.open")}
               aria-expanded={settingsOpen}
             >
               <IconSettings size={20} stroke={1.5} aria-hidden focusable={false} />
@@ -85,6 +92,8 @@ export function Layout({
         onRadiusChange={onRadiusChange}
         direction={direction}
         onDirectionChange={onDirectionChange}
+        locale={locale}
+        onLocaleChange={onLocaleChange}
       />
     </main>
   );

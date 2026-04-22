@@ -2,6 +2,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@virtari-packages/utils";
 import {
   useCallback,
+  useMemo,
   type ElementType,
   type HTMLAttributes,
   type ReactNode,
@@ -10,11 +11,14 @@ import {
   type ButtonHTMLAttributes,
 } from "react";
 import {
+  NavPopoverCloserContext,
   NavSubmenuContext,
   isActivePath,
   useNavContext,
   useNavLevel,
+  useNavPopoverCloser,
   useNavSubmenuContext,
+  type NavPopoverCloser,
   type NavSubmenuMode,
 } from "./context";
 import { useSubmenu } from "./useSubmenu";
@@ -123,6 +127,7 @@ export function NavLink({
   ...rest
 }: NavLinkProps) {
   const { currentPath, matchStrategy } = useNavContext();
+  const closeAncestorPopover = useNavPopoverCloser();
   const Comp = asChild ? Slot : "a";
 
   const autoActive =
@@ -135,8 +140,11 @@ export function NavLink({
         return;
       }
       onClick?.(e);
+      // Close any ancestor popover submenu so the user isn't left
+      // staring at a floating panel after clicking through.
+      if (!e.defaultPrevented) closeAncestorPopover?.();
     },
-    [disabled, onClick],
+    [disabled, onClick, closeAncestorPopover],
   );
 
   return (
@@ -353,17 +361,37 @@ export function NavItem({
     children
   );
 
+  // Expose a closer to descendants only when the submenu is in popover
+  // mode — an inline (accordion) submenu shouldn't auto-collapse on
+  // navigate since it isn't visually "in the way". The closer chains to
+  // an outer popover closer so nested rails fold up together.
+  const outerCloser = useNavPopoverCloser();
+  const setSubmenuOpen = submenuState.setOpen;
+  const popoverCloser = useMemo<NavPopoverCloser | null>(() => {
+    if (resolvedMode !== "popover") return outerCloser;
+    return () => {
+      setSubmenuOpen(false);
+      outerCloser?.();
+    };
+  }, [resolvedMode, outerCloser, setSubmenuOpen]);
+
+  const itemBody = (
+    <li
+      ref={ref}
+      className={cn("vds-nav__item", className)}
+      data-orientation={navCtx.orientation}
+      data-level={level}
+      {...rest}
+    >
+      {itemContent}
+    </li>
+  );
+
   return (
     <NavSubmenuContext.Provider value={submenuState}>
-      <li
-        ref={ref}
-        className={cn("vds-nav__item", className)}
-        data-orientation={navCtx.orientation}
-        data-level={level}
-        {...rest}
-      >
-        {itemContent}
-      </li>
+      <NavPopoverCloserContext.Provider value={popoverCloser}>
+        {itemBody}
+      </NavPopoverCloserContext.Provider>
     </NavSubmenuContext.Provider>
   );
 }

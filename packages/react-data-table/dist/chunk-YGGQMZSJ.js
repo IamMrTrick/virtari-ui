@@ -16,6 +16,7 @@ function DataTableProvider({
 }) {
   const autoId = useId();
   const scrollRef = useRef(null);
+  const tableState = rest.table.getState();
   const value = useMemo(
     () => ({
       ...rest,
@@ -38,6 +39,19 @@ function DataTableProvider({
       rest.setViewMode,
       rest.onCellEdit,
       rest.onDataRequest,
+      tableState.sorting,
+      tableState.columnFilters,
+      tableState.globalFilter,
+      tableState.rowSelection,
+      tableState.columnSizing,
+      tableState.columnSizingInfo,
+      tableState.columnOrder,
+      tableState.columnPinning,
+      tableState.columnVisibility,
+      tableState.pagination,
+      tableState.grouping,
+      tableState.expanded,
+      tableState.rowPinning,
       id,
       autoId
     ]
@@ -58,6 +72,7 @@ function useDataTableContext() {
 function buildColumnSizeVars(table) {
   const headers = table.getFlatHeaders();
   const out = {};
+  out["--data-table-total-width"] = `${table.getTotalSize()}px`;
   for (const header of headers) {
     out[`--col-${header.column.id}`] = `${header.getSize()}px`;
   }
@@ -989,15 +1004,28 @@ var DataTableRoot = forwardRef(function DataTableRoot2(props, ref) {
   );
 });
 var DataTableToolbar = forwardRef(
-  function DataTableToolbar2({ className, children, ...props }, ref) {
+  function DataTableToolbar2({
+    className,
+    children,
+    sticky = false,
+    stickyOffset,
+    style,
+    ...props
+  }, ref) {
     const { tableId } = useDataTableContext();
+    const stickyStyle = stickyOffset === void 0 ? style : {
+      ["--data-table-toolbar-sticky-offset"]: stickyOffset,
+      ...style
+    };
     return /* @__PURE__ */ jsx(
       "div",
       {
         ref,
         role: "toolbar",
         "aria-controls": tableId,
+        "data-sticky": sticky ? "" : void 0,
         className: cn("vds-data-table-toolbar", className),
+        style: stickyStyle,
         ...props,
         children
       }
@@ -1025,7 +1053,9 @@ var DataTableTable = forwardRef(
       table,
       // Re-evaluate when any column size changes
       table.getState().columnSizing,
-      table.getState().columnSizingInfo
+      table.getState().columnSizingInfo,
+      table.getState().columnOrder,
+      table.getState().columnVisibility
     ]);
     return /* @__PURE__ */ jsx(
       "table",
@@ -1284,7 +1314,7 @@ var DataTableCell = forwardRef(function DataTableCell2({ cell, className, style,
     }
   );
 });
-var DataTableFooter = forwardRef(function DataTableFooter2({ className, children, ...props }, ref) {
+var DataTableFooter = forwardRef(function DataTableFooter2({ className, children, sticky = false, ...props }, ref) {
   const { table } = useDataTableContext();
   const groups = table.getFooterGroups();
   const hasFooter = groups.some(
@@ -1296,6 +1326,7 @@ var DataTableFooter = forwardRef(function DataTableFooter2({ className, children
     {
       ref,
       role: "rowgroup",
+      "data-sticky": sticky ? "" : void 0,
       className: cn("vds-data-table-footer", className),
       ...props,
       children: children ?? groups.map((group) => /* @__PURE__ */ jsx(DataTableFooterRow, { footerGroup: group }, group.id))
@@ -1522,6 +1553,9 @@ var DataTableResizeHandle = forwardRef(function DataTableResizeHandle2({ header,
       className: cn("vds-data-table-resize-handle", className),
       onPointerDown: (e) => {
         e.stopPropagation();
+      },
+      onMouseDown: (e) => {
+        e.stopPropagation();
         header.getResizeHandler()(e);
       },
       onTouchStart: (e) => {
@@ -1533,7 +1567,6 @@ var DataTableResizeHandle = forwardRef(function DataTableResizeHandle2({ header,
         fit();
       },
       onKeyDown: onKeyDownAdjust,
-      onMouseDown: (e) => e.stopPropagation(),
       onClick: (e) => e.stopPropagation(),
       ...props,
       children: /* @__PURE__ */ jsx(
@@ -1547,19 +1580,34 @@ var DataTableResizeHandle = forwardRef(function DataTableResizeHandle2({ header,
   );
 });
 function DataTableColumnGuide() {
-  const { table } = useDataTableContext();
+  const { table, scrollRef } = useDataTableContext();
   const info = table.getState().columnSizingInfo;
   const resizingId = info.isResizingColumn;
   if (!resizingId) return null;
-  const offset = (info.startOffset ?? 0) + (info.deltaOffset ?? 0);
+  const resizeDirection = table.options.columnResizeDirection === "rtl" ? -1 : 1;
+  const pointerClientX = (info.startOffset ?? 0) + (info.deltaOffset ?? 0) * resizeDirection;
+  const scrollEl = scrollRef.current;
+  const rootEl = scrollEl?.closest(".vds-data-table");
+  let guideStyle = {
+    ["--data-table-guideline-offset"]: `${pointerClientX}px`
+  };
+  if (scrollEl && rootEl) {
+    const rootRect = rootEl.getBoundingClientRect();
+    const scrollRect = scrollEl.getBoundingClientRect();
+    const rootLeft = rootRect.left + rootEl.clientLeft;
+    const rootTop = rootRect.top + rootEl.clientTop;
+    guideStyle = {
+      ["--data-table-guideline-offset"]: `${pointerClientX - rootLeft}px`,
+      ["--data-table-guideline-top"]: `${scrollRect.top - rootTop}px`,
+      ["--data-table-guideline-height"]: `${scrollEl.clientHeight}px`
+    };
+  }
   return /* @__PURE__ */ jsx(
     "div",
     {
       className: "vds-data-table-resize-guideline",
       "aria-hidden": "true",
-      style: {
-        ["--data-table-guideline-offset"]: `${offset}px`
-      }
+      style: guideStyle
     }
   );
 }

@@ -143,7 +143,16 @@
     border-radius: var(--tabs-content-focus-ring-radius);
   }
 
-  /* Panel enter animation on tab change */
+  /* Panel enter animation on tab change. The inline axis uses
+     --tabs-content-enter-x, which is set from the physical `--tabs-content-
+     enter-translate` in LTR and flipped in RTL so the enter motion always
+     points inline-start-ward. */
+  .vds-tabs-content {
+    --tabs-content-enter-x: var(--tabs-content-enter-translate);
+  }
+  :where([dir="rtl"]) .vds-tabs-content {
+    --tabs-content-enter-x: calc(var(--tabs-content-enter-translate) * -1);
+  }
   .vds-tabs-content[data-state="active"] {
     animation: vds-tabs-content-in var(--tabs-content-enter-duration)
       var(--tabs-content-enter-ease);
@@ -151,7 +160,7 @@
   @keyframes vds-tabs-content-in {
     from {
       opacity: 0;
-      transform: translateX(var(--tabs-content-enter-translate));
+      transform: translateX(var(--tabs-content-enter-x));
     }
     to {
       opacity: 1;
@@ -199,10 +208,17 @@
        from activeIndex. An inline `transform` (from the swipe hook) can
        override this temporarily during a drag. When that inline transform
        is cleared, the CSS transform below reasserts — so the track always
-       falls back to the correct baseline, not to translate(0). */
-    transform: translateX(var(--tabs-panels-tx, 0%));
+       falls back to the correct baseline, not to translate(0).
+       --tabs-panels-tx-sign flips the sign in RTL because flex-row lays
+       slides out right-to-left and translateX is physical: to bring the
+       same logical slide into view the track must shift the opposite way. */
+    --tabs-panels-tx-sign: 1;
+    transform: translateX(calc(var(--tabs-panels-tx, 0%) * var(--tabs-panels-tx-sign)));
     transition: transform var(--tabs-panels-transition-duration)
       var(--tabs-panels-transition-ease);
+  }
+  :where([dir="rtl"]) .vds-tabs-panels-track {
+    --tabs-panels-tx-sign: -1;
   }
   .vds-tabs-panels[data-swipeable="true"] .vds-tabs-panels-track {
     touch-action: pan-y;

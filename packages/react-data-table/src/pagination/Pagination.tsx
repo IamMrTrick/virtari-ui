@@ -8,15 +8,18 @@ import { useDataTableContext } from "../DataTableContext";
  * Pagination.Root — <nav> wrapper
  * ──────────────────────────────────────────────────────────── */
 
-export interface PaginationRootProps extends HTMLAttributes<HTMLElement> {}
+export interface PaginationRootProps extends HTMLAttributes<HTMLElement> {
+  sticky?: boolean;
+}
 
 export const PaginationRoot = forwardRef<HTMLElement, PaginationRootProps>(
-  function PaginationRoot({ className, children, ...props }, ref) {
+  function PaginationRoot({ className, children, sticky = false, ...props }, ref) {
     return (
       <nav
         ref={ref}
         role="navigation"
         aria-label="Pagination"
+        data-sticky={sticky ? "" : undefined}
         className={cn("vds-data-table-pagination", className)}
         {...props}
       >
@@ -150,7 +153,14 @@ export function PaginationPageSize({
       <select
         className="vds-data-table-pagination-page-size-select"
         value={pageSize}
-        onChange={(e) => table.setPageSize(Number(e.target.value))}
+        onChange={(e) => {
+          const nextPageSize = Number(e.target.value);
+          table.setPagination((prev) => ({
+            ...prev,
+            pageIndex: 0,
+            pageSize: nextPageSize,
+          }));
+        }}
       >
         {options.map((n) => (
           <option key={n} value={n}>
@@ -236,6 +246,7 @@ export interface PaginationDefaultProps {
   pageSizeOptions?: number[];
   hidePageSize?: boolean;
   hidePageNumbers?: boolean;
+  sticky?: boolean;
 }
 
 export function PaginationDefault({
@@ -243,9 +254,10 @@ export function PaginationDefault({
   pageSizeOptions,
   hidePageSize = false,
   hidePageNumbers = false,
+  sticky = false,
 }: PaginationDefaultProps) {
   return (
-    <PaginationRoot className={className}>
+    <PaginationRoot className={className} sticky={sticky}>
       <PaginationInfo />
       <div className="vds-data-table-pagination-controls">
         {!hidePageSize && <PaginationPageSize options={pageSizeOptions} />}

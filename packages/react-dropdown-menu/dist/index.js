@@ -1,10 +1,14 @@
 "use client";
-import { cn } from '@virtari-packages/utils';
+import { useDirection, cn } from '@virtari-packages/utils';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import { DirectionProvider } from '@radix-ui/react-direction';
 import { jsx } from 'react/jsx-runtime';
 
 // src/DropdownMenu.tsx
-var DropdownMenu = DropdownMenuPrimitive.Root;
+function DropdownMenu({ dir, ...props }) {
+  const autoDir = useDirection();
+  return /* @__PURE__ */ jsx(DirectionProvider, { dir: dir ?? autoDir, children: /* @__PURE__ */ jsx(DropdownMenuPrimitive.Root, { ...props }) });
+}
 var DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 var DropdownMenuGroup = DropdownMenuPrimitive.Group;
 function DropdownMenuContent({

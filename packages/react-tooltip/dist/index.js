@@ -1,22 +1,27 @@
 "use client";
-import { cn } from '@virtari-packages/utils';
+import { useDirection, cn } from '@virtari-packages/utils';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import { DirectionProvider } from '@radix-ui/react-direction';
 import { jsx, jsxs } from 'react/jsx-runtime';
 
 // src/Tooltip.tsx
 function TooltipProvider({
   delayDuration = 300,
   skipDelayDuration = 200,
+  dir,
+  children,
   ...props
 }) {
-  return /* @__PURE__ */ jsx(
+  const autoDir = useDirection();
+  return /* @__PURE__ */ jsx(DirectionProvider, { dir: dir ?? autoDir, children: /* @__PURE__ */ jsx(
     TooltipPrimitive.Provider,
     {
       delayDuration,
       skipDelayDuration,
-      ...props
+      ...props,
+      children
     }
-  );
+  ) });
 }
 var Tooltip = TooltipPrimitive.Root;
 var TooltipTrigger = TooltipPrimitive.Trigger;

@@ -23,6 +23,17 @@
       animation: vds-slide-in-from-bottom var(--vds-duration-fast) var(--vds-ease-out);
     }
 
+    /* Logical side animations — Radix flips `data-side` under dir="rtl", and
+       the logical keyframes flip their motion axis, so both combine to a
+       correctly mirrored slide in Persian/Arabic. */
+    .vds-dropdown-menu-content[data-side="left"] {
+      animation: vds-slide-in-from-inline-end var(--vds-duration-fast) var(--vds-ease-out);
+    }
+
+    .vds-dropdown-menu-content[data-side="right"] {
+      animation: vds-slide-in-from-inline-start var(--vds-duration-fast) var(--vds-ease-out);
+    }
+
   .vds-dropdown-menu-item {
     display: flex;
     align-items: center;

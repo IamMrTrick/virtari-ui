@@ -1,12 +1,16 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as react from 'react';
-import { ReactNode, AnchorHTMLAttributes, HTMLAttributes, ButtonHTMLAttributes, TdHTMLAttributes, MutableRefObject, Dispatch, SetStateAction, KeyboardEvent, CSSProperties } from 'react';
-import { AvatarSize } from '@virtari-packages/react-avatar';
+import { ReactNode, AnchorHTMLAttributes, HTMLAttributes, ButtonHTMLAttributes, CSSProperties, InputHTMLAttributes, TdHTMLAttributes, MutableRefObject, Dispatch, SetStateAction, KeyboardEvent } from 'react';
+import { AvatarSize, AvatarColor } from '@virtari-packages/react-avatar';
 import { BadgeVariant } from '@virtari-packages/react-badge';
-import { Row, Column, Cell, Table, Header } from '@tanstack/react-table';
+import { Row, Column, Cell, Table, SortingState, ColumnFiltersState, RowSelectionState, ColumnSizingState, ColumnOrderState, ColumnPinningState, VisibilityState, PaginationState, GroupingState, ExpandedState, RowPinningState, Header } from '@tanstack/react-table';
 export { Cell, ColumnDef, ColumnFiltersState, ColumnOrderState, ColumnPinningState, ColumnSizingState, ExpandedState, GroupingState, Header, HeaderGroup, PaginationState, Row, RowPinningState, RowSelectionState, SortingState, Table, VisibilityState, createColumnHelper, flexRender } from '@tanstack/react-table';
-import { a as DataTableViewMode, b as DataTableRootProps, c as DataTableToolbarProps, d as DataTableScrollAreaProps, e as DataTableTableProps, f as DataTableHeaderProps, g as DataTableHeaderGroupProps, D as DataTableHeaderCellProps, h as DataTableSortTriggerProps, i as DataTableResizeHandleProps, j as DataTableColumnGuide, k as DataTablePinColumnTriggerProps, l as DataTableBodyProps, m as DataTableRowProps, n as DataTableCellProps, o as DataTableGroupHeaderRowProps, p as DataTableRowExpandTriggerProps, q as DataTableRowPinTriggerProps, r as DataTableFooterProps, s as DataTableFooterRowProps, t as DataTableFooterCellProps, u as DataTableSelectAllCheckbox, v as DataTableRowSelectCheckbox, w as DataTableEmptyProps, x as DataTableLoadingOverlayProps, y as DataTableGlobalFilterProps, z as DataTableColumnVisibility, A as DataTableOptions, B as DataTableSize, C as DataTableInteractionMode, E as DataTableBorderMode, F as DataTableMode, G as DataTableVirtualizationOptions, H as DataTableServerRequestState } from './DataTable-BO53g--v.cjs';
-export { I as ControlledPair, J as DataTableBaseOptions, K as DataTableBody, L as DataTableCell, M as DataTableColumnVisibilityProps, N as DataTableEmpty, O as DataTableFooter, P as DataTableFooterCell, Q as DataTableFooterRow, R as DataTableGlobalFilter, S as DataTableGroupHeaderRow, T as DataTableHeader, U as DataTableHeaderCell, V as DataTableHeaderGroup, W as DataTableInstance, X as DataTableLoadingOverlay, Y as DataTablePinColumnTrigger, Z as DataTableResizeHandle, _ as DataTableRoot, $ as DataTableRow, a0 as DataTableRowExpandTrigger, a1 as DataTableRowPinTrigger, a2 as DataTableRowSelectCheckboxProps, a3 as DataTableScrollArea, a4 as DataTableSelectAllCheckboxProps, a5 as DataTableSortTrigger, a6 as DataTableStatePairs, a7 as DataTableTable, a8 as DataTableToolbar } from './DataTable-BO53g--v.cjs';
+import { ChipVariant } from '@virtari-packages/react-chip';
+import { ButtonVariant, ButtonSize } from '@virtari-packages/react-button';
+import { InputSize } from '@virtari-packages/react-input';
+import { TabsProps, TabsVariant, TabsSize } from '@virtari-packages/react-tabs';
+import { a as DataTableViewMode, b as DataTableRootProps, c as DataTableToolbarProps, d as DataTableScrollAreaProps, e as DataTableTableProps, f as DataTableHeaderProps, g as DataTableHeaderGroupProps, D as DataTableHeaderCellProps, h as DataTableSortTriggerProps, i as DataTableResizeHandleProps, j as DataTableColumnGuide, k as DataTablePinColumnTriggerProps, l as DataTableBodyProps, m as DataTableRowProps, n as DataTableCellProps, o as DataTableGroupHeaderRowProps, p as DataTableRowExpandTriggerProps, q as DataTableRowPinTriggerProps, r as DataTableFooterProps, s as DataTableFooterRowProps, t as DataTableFooterCellProps, u as DataTableSelectAllCheckbox, v as DataTableRowSelectCheckbox, w as DataTableEmptyProps, x as DataTableLoadingOverlayProps, y as DataTableGlobalFilterProps, z as DataTableColumnVisibility, A as DataTableOptions, B as DataTableSize, C as DataTableInteractionMode, E as DataTableBorderMode, F as DataTableMode, G as DataTableVirtualizationOptions, H as DataTableServerRequestState } from './DataTable-BoPDiU8H.cjs';
+export { I as ControlledPair, J as DataTableBaseOptions, K as DataTableBody, L as DataTableCell, M as DataTableColumnVisibilityProps, N as DataTableEmpty, O as DataTableFooter, P as DataTableFooterCell, Q as DataTableFooterRow, R as DataTableGlobalFilter, S as DataTableGroupHeaderRow, T as DataTableHeader, U as DataTableHeaderCell, V as DataTableHeaderGroup, W as DataTableInstance, X as DataTableLoadingOverlay, Y as DataTablePinColumnTrigger, Z as DataTableResizeHandle, _ as DataTableRoot, $ as DataTableRow, a0 as DataTableRowExpandTrigger, a1 as DataTableRowPinTrigger, a2 as DataTableRowSelectCheckboxProps, a3 as DataTableScrollArea, a4 as DataTableSelectAllCheckboxProps, a5 as DataTableSortTrigger, a6 as DataTableStatePairs, a7 as DataTableTable, a8 as DataTableToolbar } from './DataTable-BoPDiU8H.cjs';
 import { Virtualizer } from '@tanstack/react-virtual';
 
 interface ActionItem {
@@ -33,12 +37,14 @@ interface AvatarCellProps {
     alt?: string;
     fallback: string;
     size?: AvatarSize;
+    color?: AvatarColor;
+    colorKey?: string;
     primary?: ReactNode;
     secondary?: ReactNode;
     className?: string;
 }
 /** Avatar + optional primary/secondary text; ideal for name columns. */
-declare function AvatarCell({ src, alt, fallback, size, primary, secondary, className, }: AvatarCellProps): react_jsx_runtime.JSX.Element;
+declare function AvatarCell({ src, alt, fallback, size, color, colorKey, primary, secondary, className, }: AvatarCellProps): react_jsx_runtime.JSX.Element;
 
 interface BadgeCellProps {
     variant?: BadgeVariant;
@@ -222,6 +228,7 @@ declare const Filters: {
 };
 
 interface PaginationRootProps extends HTMLAttributes<HTMLElement> {
+    sticky?: boolean;
 }
 declare const PaginationRoot: react.ForwardRefExoticComponent<PaginationRootProps & react.RefAttributes<HTMLElement>>;
 interface PaginationInfoProps extends HTMLAttributes<HTMLDivElement> {
@@ -253,8 +260,9 @@ interface PaginationDefaultProps {
     pageSizeOptions?: number[];
     hidePageSize?: boolean;
     hidePageNumbers?: boolean;
+    sticky?: boolean;
 }
-declare function PaginationDefault({ className, pageSizeOptions, hidePageSize, hidePageNumbers, }: PaginationDefaultProps): react_jsx_runtime.JSX.Element;
+declare function PaginationDefault({ className, pageSizeOptions, hidePageSize, hidePageNumbers, sticky, }: PaginationDefaultProps): react_jsx_runtime.JSX.Element;
 
 declare const Pagination: {
     readonly Root: react.ForwardRefExoticComponent<PaginationRootProps & react.RefAttributes<HTMLElement>>;
@@ -266,9 +274,36 @@ declare const Pagination: {
     readonly Default: typeof PaginationDefault;
 };
 
-type ToolbarActionButtonVariant = "ghost" | "outline" | "solid";
-type ToolbarActionButtonSize = "sm" | "md";
-interface ToolbarActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface DataTableFilterChip {
+    id: string;
+    label: ReactNode;
+    value?: ReactNode;
+    icon?: ReactNode;
+    variant?: ChipVariant;
+    disabled?: boolean;
+    removeLabel?: string;
+}
+interface DataTableFilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+    filters?: DataTableFilterChip[];
+    onFilterClick?: (filter: DataTableFilterChip) => void;
+    onRemoveFilter?: (filterId: string) => void;
+    onAddFilter?: () => void;
+    addLabel?: ReactNode;
+    sticky?: boolean;
+    stickyOffset?: CSSProperties["top"];
+    children?: ReactNode;
+}
+declare const DataTableFilterBar: react.ForwardRefExoticComponent<DataTableFilterBarProps & react.RefAttributes<HTMLDivElement>>;
+interface DataTableFilterChipItemProps {
+    filter: DataTableFilterChip;
+    onClick?: (filter: DataTableFilterChip) => void;
+    onRemove?: (filterId: string) => void;
+}
+declare function DataTableFilterChipItem({ filter, onClick, onRemove, }: DataTableFilterChipItemProps): react_jsx_runtime.JSX.Element;
+
+type ToolbarActionButtonVariant = Extract<ButtonVariant, "ghost" | "outline" | "solid" | "soft">;
+type ToolbarActionButtonSize = Extract<ButtonSize, "2xs" | "xs" | "sm" | "md" | "lg">;
+interface ToolbarActionButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
     icon?: ReactNode;
     /** Trailing glyph (e.g. chevron-down for split-style buttons). */
     trailingIcon?: ReactNode;
@@ -292,7 +327,7 @@ declare const DataTableFilterButton: react.ForwardRefExoticComponent<Omit<Toolba
 declare const DataTableRefreshButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
     label?: ReactNode;
 } & react.RefAttributes<HTMLButtonElement>>;
-/** Export — default `variant="outline"` (matches the reference dashboard). */
+/** Export: soft contrast by default. */
 declare const DataTableExportButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
     label?: ReactNode;
 } & react.RefAttributes<HTMLButtonElement>>;
@@ -317,7 +352,24 @@ declare const DataTableDeleteButton: react.ForwardRefExoticComponent<Omit<Toolba
 declare const DataTableCloseButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
     label?: ReactNode;
 } & react.RefAttributes<HTMLButtonElement>>;
+/** Icon-only search button (ghost). For a full search input, compose
+ *  `<DataTable.GlobalFilter>` alongside. */
+declare const DataTableSearchButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
+    label?: ReactNode;
+} & react.RefAttributes<HTMLButtonElement>>;
 declare const DataTableSearchIcon: react_jsx_runtime.JSX.Element;
+
+interface DataTableSearchFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "children" | "defaultValue" | "onChange" | "size" | "value"> {
+    value?: string;
+    defaultValue?: string;
+    onValueChange?: (value: string) => void;
+    debounceMs?: number;
+    clearable?: boolean;
+    icon?: ReactNode;
+    inputSize?: InputSize;
+    wrapperClassName?: string;
+}
+declare function DataTableSearchField({ value, defaultValue, onValueChange, debounceMs, clearable, icon, inputSize, className, wrapperClassName, placeholder, "aria-label": ariaLabel, ...props }: DataTableSearchFieldProps): react_jsx_runtime.JSX.Element;
 
 /** Card-grid view — each row renders as a card with label:value pairs. */
 interface DataTableBoardProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
@@ -338,15 +390,19 @@ interface DataTableListProps extends Omit<HTMLAttributes<HTMLDivElement>, "child
 }
 declare const DataTableListView: react.ForwardRefExoticComponent<DataTableListProps & react.RefAttributes<HTMLDivElement>>;
 
-interface DataTableViewModeToggleProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+interface DataTableViewModeToggleProps extends Omit<TabsProps, "children" | "defaultValue" | "onValueChange" | "value"> {
     /** Which modes to show — defaults to all three. */
     modes?: DataTableViewMode[];
     /** Custom labels per mode. */
     labels?: Partial<Record<DataTableViewMode, ReactNode>>;
     /** Custom icons per mode. */
     icons?: Partial<Record<DataTableViewMode, ReactNode>>;
+    /** Tabs visual style. Defaults to the design-system segmented control. */
+    variant?: TabsVariant;
+    /** Size preset shared with Button/Input/Select. */
+    size?: TabsSize;
 }
-declare const DataTableViewModeToggle: react.ForwardRefExoticComponent<DataTableViewModeToggleProps & react.RefAttributes<HTMLDivElement>>;
+declare const DataTableViewModeToggle: react.ForwardRefExoticComponent<Omit<DataTableViewModeToggleProps, "ref"> & react.RefAttributes<HTMLDivElement>>;
 
 interface DataTableViewsProps {
     /** Render-prop override. If omitted, auto-dispatches to default Table/Board/List. */
@@ -496,7 +552,7 @@ declare const DataTable: {
     readonly Views: typeof DataTableViews;
     readonly Board: react.ForwardRefExoticComponent<DataTableBoardProps & react.RefAttributes<HTMLDivElement>>;
     readonly List: react.ForwardRefExoticComponent<DataTableListProps & react.RefAttributes<HTMLDivElement>>;
-    readonly ViewModeToggle: react.ForwardRefExoticComponent<DataTableViewModeToggleProps & react.RefAttributes<HTMLDivElement>>;
+    readonly ViewModeToggle: react.ForwardRefExoticComponent<Omit<DataTableViewModeToggleProps, "ref"> & react.RefAttributes<HTMLDivElement>>;
     readonly ActionButton: react.ForwardRefExoticComponent<ToolbarActionButtonProps & react.RefAttributes<HTMLButtonElement>>;
     readonly FilterButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
         label?: react.ReactNode;
@@ -529,7 +585,10 @@ declare const DataTable: {
     readonly CloseButton: react.ForwardRefExoticComponent<Omit<ToolbarActionButtonProps, "label" | "icon"> & {
         label?: react.ReactNode;
     } & react.RefAttributes<HTMLButtonElement>>;
+    readonly SearchField: typeof DataTableSearchField;
     readonly GlobalFilter: react.ForwardRefExoticComponent<DataTableGlobalFilterProps & react.RefAttributes<HTMLInputElement>>;
+    readonly FilterBar: react.ForwardRefExoticComponent<DataTableFilterBarProps & react.RefAttributes<HTMLDivElement>>;
+    readonly FilterChip: typeof DataTableFilterChipItem;
     readonly ColumnVisibility: typeof DataTableColumnVisibility;
     readonly Pagination: {
         readonly Root: react.ForwardRefExoticComponent<PaginationRootProps & react.RefAttributes<HTMLElement>>;
@@ -598,6 +657,76 @@ interface UseControllableStateOptions<T> {
 declare function useControllableState<T>({ value, defaultValue, onChange, }: UseControllableStateOptions<T>): [T, Dispatch<SetStateAction<T>>];
 declare function resolveUpdater<T>(updater: Updater<T>, prev: T): T;
 
+interface DataTablePreferenceState {
+    viewMode?: DataTableViewMode;
+    sorting?: SortingState;
+    columnFilters?: ColumnFiltersState;
+    globalFilter?: string;
+    rowSelection?: RowSelectionState;
+    columnSizing?: ColumnSizingState;
+    columnOrder?: ColumnOrderState;
+    columnPinning?: ColumnPinningState;
+    columnVisibility?: VisibilityState;
+    pagination?: PaginationState;
+    grouping?: GroupingState;
+    expanded?: ExpandedState;
+    rowPinning?: RowPinningState;
+}
+interface DataTablePreferencesAdapter {
+    load?: () => DataTablePreferenceState | null | Promise<DataTablePreferenceState | null>;
+    save?: (state: DataTablePreferenceState) => void | Promise<void>;
+    clear?: () => void | Promise<void>;
+}
+interface DataTablePreferencesOptions {
+    value?: DataTablePreferenceState;
+    defaultValue?: DataTablePreferenceState;
+    onValueChange?: (state: DataTablePreferenceState) => void;
+    adapter?: DataTablePreferencesAdapter;
+    /**
+     * Convenience localStorage key. For Zustand, server actions, or a database,
+     * prefer `value`/`onValueChange` or `adapter`.
+     */
+    storageKey?: string;
+    autoSave?: boolean;
+    debounceMs?: number;
+}
+interface DataTablePreferenceStatePairs {
+    viewMode?: DataTableViewMode;
+    onViewModeChange: (viewMode: DataTableViewMode) => void;
+    sorting?: SortingState;
+    onSortingChange: (sorting: SortingState) => void;
+    columnFilters?: ColumnFiltersState;
+    onColumnFiltersChange: (filters: ColumnFiltersState) => void;
+    globalFilter?: string;
+    onGlobalFilterChange: (value: string) => void;
+    rowSelection?: RowSelectionState;
+    onRowSelectionChange: (selection: RowSelectionState) => void;
+    columnSizing?: ColumnSizingState;
+    onColumnSizingChange: (sizing: ColumnSizingState) => void;
+    columnOrder?: ColumnOrderState;
+    onColumnOrderChange: (order: ColumnOrderState) => void;
+    columnPinning?: ColumnPinningState;
+    onColumnPinningChange: (pinning: ColumnPinningState) => void;
+    columnVisibility?: VisibilityState;
+    onColumnVisibilityChange: (visibility: VisibilityState) => void;
+    pagination?: PaginationState;
+    onPaginationChange: (pagination: PaginationState) => void;
+    grouping?: GroupingState;
+    onGroupingChange: (grouping: GroupingState) => void;
+    expanded?: ExpandedState;
+    onExpandedChange: (expanded: ExpandedState) => void;
+    rowPinning?: RowPinningState;
+    onRowPinningChange: (pinning: RowPinningState) => void;
+}
+interface UseDataTablePreferencesResult {
+    preferences: DataTablePreferenceState;
+    setPreferences: (next: DataTablePreferenceState) => void;
+    updatePreferences: (patch: DataTablePreferenceState) => void;
+    resetPreferences: () => void;
+    statePairs: DataTablePreferenceStatePairs;
+}
+declare function useDataTablePreferences({ value, defaultValue, onValueChange, adapter, storageKey, autoSave, debounceMs, }?: DataTablePreferencesOptions): UseDataTablePreferencesResult;
+
 interface UseColumnResizeResult {
     isResizing: boolean;
     currentSize: number;
@@ -650,4 +779,4 @@ declare function useDataTableVirtualizer({ count, scrollRef, estimateSize, overs
 declare function buildColumnSizeVars<TData>(table: Table<TData>): CSSProperties;
 declare function columnVar(columnId: string): string;
 
-export { type ActionItem, ActionsCell, type ActionsCellProps, AvatarCell, type AvatarCellProps, BadgeCell, type BadgeCellProps, BulkActions, CellEditor, type CellEditorMode, type CellEditorProps, Cells, type ComparisonOperator, CopyableCell, type CopyableCellProps, DataTable, DataTableAddButton, DataTableBoard, type DataTableBoardProps, DataTableBodyProps, DataTableBorderMode, DataTableBulkActions, type DataTableBulkActionsProps, DataTableBulkClear, type DataTableBulkClearProps, DataTableBulkCount, type DataTableBulkCountProps, DataTableCellProps, DataTableCloseButton, DataTableColumnGuide, DataTableColumnVisibility, type DataTableContextValue, DataTableCustomizeButton, DataTableDeleteButton, DataTableEmptyProps, DataTableExportButton, DataTableFilterButton, DataTableFilterDrawer, type DataTableFilterDrawerProps, DataTableFooterCellProps, DataTableFooterProps, DataTableFooterRowProps, DataTableGlobalFilterProps, DataTableGroupHeaderRowProps, DataTableHeaderCellProps, DataTableHeaderGroupProps, DataTableHeaderProps, DataTableHideColumnsButton, DataTableInteractionMode, type DataTableListProps, DataTableListView, DataTableLoadingOverlayProps, DataTableMode, DataTableOptions, DataTablePinColumnTriggerProps, DataTableRefreshButton, DataTableResetLayoutButton, DataTableResizeHandleProps, DataTableRootProps, DataTableRowExpandTriggerProps, DataTableRowPinTriggerProps, DataTableRowProps, DataTableRowSelectCheckbox, DataTableScrollAreaProps, DataTableSearchIcon, DataTableSelectAllAcrossPages, type DataTableSelectAllAcrossPagesProps, DataTableSelectAllCheckbox, DataTableServerRequestState, DataTableSize, DataTableSortTriggerProps, DataTableTableProps, DataTableToolbarProps, DataTableViewMode, DataTableViewModeToggle, type DataTableViewModeToggleProps, DataTableViews, type DataTableViewsProps, DataTableVirtualizationOptions, DateCell, type DateCellProps, DateFilter, type DateFilterProps, type DateFormat, type DateRange, EditableCell, type EditableCellProps, type FilterCondition, FilterConfigPanel, type FilterConfigPanelProps, type FilterFieldDefinition, type FilterFieldType, type FilterGroup, type FilterLogicOperator, FilterPopover, type FilterPopoverProps, Filters, LinkCell, type LinkCellProps, NumberCell, type NumberCellProps, NumberFilter, type NumberFilterProps, type NumberFormat, type NumberRange, Pagination, type PaginationButtonProps, PaginationDefault, type PaginationDefaultProps, PaginationInfo, type PaginationInfoProps, PaginationNext, PaginationPageSize, type PaginationPageSizeProps, PaginationPages, type PaginationPagesProps, PaginationPrev, PaginationRoot, type PaginationRootProps, SelectFilter, type SelectFilterOption, type SelectFilterProps, StatusBadgeCell, type StatusBadgeCellProps, type StatusTone, TextCell, type TextCellProps, TextFilter, type TextFilterProps, ToolbarActionButton, type ToolbarActionButtonProps, type UseAutoFitColumnResult, type UseCellEditOptions, type UseCellEditResult, type UseColumnFilterResult, type UseColumnResizeResult, type UseDataTableVirtualizerOptions, buildColumnSizeVars, columnVar, countConditions, resolveUpdater, useAutoFitColumn, useCellEdit, useColumnFilter, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer };
+export { type ActionItem, ActionsCell, type ActionsCellProps, AvatarCell, type AvatarCellProps, BadgeCell, type BadgeCellProps, BulkActions, CellEditor, type CellEditorMode, type CellEditorProps, Cells, type ComparisonOperator, CopyableCell, type CopyableCellProps, DataTable, DataTableAddButton, DataTableBoard, type DataTableBoardProps, DataTableBodyProps, DataTableBorderMode, DataTableBulkActions, type DataTableBulkActionsProps, DataTableBulkClear, type DataTableBulkClearProps, DataTableBulkCount, type DataTableBulkCountProps, DataTableCellProps, DataTableCloseButton, DataTableColumnGuide, DataTableColumnVisibility, type DataTableContextValue, DataTableCustomizeButton, DataTableDeleteButton, DataTableEmptyProps, DataTableExportButton, DataTableFilterBar, type DataTableFilterBarProps, DataTableFilterButton, type DataTableFilterChip, DataTableFilterChipItem, type DataTableFilterChipItemProps, DataTableFilterDrawer, type DataTableFilterDrawerProps, DataTableFooterCellProps, DataTableFooterProps, DataTableFooterRowProps, DataTableGlobalFilterProps, DataTableGroupHeaderRowProps, DataTableHeaderCellProps, DataTableHeaderGroupProps, DataTableHeaderProps, DataTableHideColumnsButton, DataTableInteractionMode, type DataTableListProps, DataTableListView, DataTableLoadingOverlayProps, DataTableMode, DataTableOptions, DataTablePinColumnTriggerProps, type DataTablePreferenceState, type DataTablePreferenceStatePairs, type DataTablePreferencesAdapter, type DataTablePreferencesOptions, DataTableRefreshButton, DataTableResetLayoutButton, DataTableResizeHandleProps, DataTableRootProps, DataTableRowExpandTriggerProps, DataTableRowPinTriggerProps, DataTableRowProps, DataTableRowSelectCheckbox, DataTableScrollAreaProps, DataTableSearchButton, DataTableSearchField, type DataTableSearchFieldProps, DataTableSearchIcon, DataTableSelectAllAcrossPages, type DataTableSelectAllAcrossPagesProps, DataTableSelectAllCheckbox, DataTableServerRequestState, DataTableSize, DataTableSortTriggerProps, DataTableTableProps, DataTableToolbarProps, DataTableViewMode, DataTableViewModeToggle, type DataTableViewModeToggleProps, DataTableViews, type DataTableViewsProps, DataTableVirtualizationOptions, DateCell, type DateCellProps, DateFilter, type DateFilterProps, type DateFormat, type DateRange, EditableCell, type EditableCellProps, type FilterCondition, FilterConfigPanel, type FilterConfigPanelProps, type FilterFieldDefinition, type FilterFieldType, type FilterGroup, type FilterLogicOperator, FilterPopover, type FilterPopoverProps, Filters, LinkCell, type LinkCellProps, NumberCell, type NumberCellProps, NumberFilter, type NumberFilterProps, type NumberFormat, type NumberRange, Pagination, type PaginationButtonProps, PaginationDefault, type PaginationDefaultProps, PaginationInfo, type PaginationInfoProps, PaginationNext, PaginationPageSize, type PaginationPageSizeProps, PaginationPages, type PaginationPagesProps, PaginationPrev, PaginationRoot, type PaginationRootProps, SelectFilter, type SelectFilterOption, type SelectFilterProps, StatusBadgeCell, type StatusBadgeCellProps, type StatusTone, TextCell, type TextCellProps, TextFilter, type TextFilterProps, ToolbarActionButton, type ToolbarActionButtonProps, type UseAutoFitColumnResult, type UseCellEditOptions, type UseCellEditResult, type UseColumnFilterResult, type UseColumnResizeResult, type UseDataTablePreferencesResult, type UseDataTableVirtualizerOptions, buildColumnSizeVars, columnVar, countConditions, resolveUpdater, useAutoFitColumn, useCellEdit, useColumnFilter, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTablePreferences, useDataTableVirtualizer };

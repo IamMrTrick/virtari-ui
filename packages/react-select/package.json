@@ -68,6 +68,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-direction": "^1.1.1",
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-select": "^2.2.6",
     "@tanstack/react-virtual": "^3.10.0",
@@ -82,9 +83,9 @@
   },
   "devDependencies": {
     "@tabler/icons-react": "^3.0.0",
-    "react": "^19.2.5",
     "@types/react": "^19.2.14",
-    "typescript": "^5.5.0",
-    "tsup": "^8.0.0"
+    "react": "^19.2.5",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
   }
 }

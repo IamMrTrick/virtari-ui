@@ -42,8 +42,10 @@ import {
   DataTableHideColumnsButton,
   DataTableRefreshButton,
   DataTableResetLayoutButton,
+  DataTableSearchField,
   ToolbarActionButton,
 } from "./toolbar";
+import { DataTableFilterBar, DataTableFilterChipItem } from "./filter-bar";
 import {
   DataTableBoard,
   DataTableListView,
@@ -103,9 +105,12 @@ export const DataTable = {
   HideColumnsButton: DataTableHideColumnsButton,
   DeleteButton: DataTableDeleteButton,
   CloseButton: DataTableCloseButton,
+  SearchField: DataTableSearchField,
 
   /* Global filter input (simple) */
   GlobalFilter: DataTableGlobalFilter,
+  FilterBar: DataTableFilterBar,
+  FilterChip: DataTableFilterChipItem,
   /* Column visibility list (simple) */
   ColumnVisibility: DataTableColumnVisibility,
 

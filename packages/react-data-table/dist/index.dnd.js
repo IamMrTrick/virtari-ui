@@ -1,7 +1,7 @@
 "use client";
-import { DataTableHeaderCell, useDataTableContext } from './chunk-LRLNRHO3.js';
+import { DataTableHeaderCell, useDataTableContext } from './chunk-YGGQMZSJ.js';
 import { useSensors, useSensor, PointerSensor, KeyboardSensor, DndContext, closestCenter } from '@dnd-kit/core';
-import { useSortable, sortableKeyboardCoordinates, horizontalListSortingStrategy, SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { useSortable, sortableKeyboardCoordinates, arrayMove, horizontalListSortingStrategy, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { forwardRef, useMemo, useCallback, useState, useEffect } from 'react';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { CSS } from '@dnd-kit/utilities';
@@ -24,20 +24,26 @@ function useColumnDnd(options = {}) {
     () => table.getVisibleLeafColumns().map((c) => c.id),
     [table, table.getState().columnOrder, table.getState().columnVisibility]
   );
+  const completeOrder = useCallback(() => {
+    const allIds = table.getAllLeafColumns().map((c) => c.id);
+    const known = new Set(allIds);
+    const current = table.getState().columnOrder.filter((id) => known.has(id));
+    const missing = allIds.filter((id) => !current.includes(id));
+    return current.length > 0 ? [...current, ...missing] : allIds;
+  }, [table]);
   const handleDragEnd = useCallback(
     (event) => {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
-      const currentOrder = items.slice();
+      const currentOrder = completeOrder();
       const oldIndex = currentOrder.indexOf(active.id);
       const newIndex = currentOrder.indexOf(over.id);
       if (oldIndex < 0 || newIndex < 0) return;
-      currentOrder.splice(oldIndex, 1);
-      currentOrder.splice(newIndex, 0, active.id);
-      table.setColumnOrder(currentOrder);
-      onColumnOrderChange?.(currentOrder);
+      const next = arrayMove(currentOrder, oldIndex, newIndex);
+      table.setColumnOrder(next);
+      onColumnOrderChange?.(next);
     },
-    [items, table, onColumnOrderChange]
+    [completeOrder, table, onColumnOrderChange]
   );
   return { sensors, handleDragEnd, strategy: horizontalListSortingStrategy, items };
 }

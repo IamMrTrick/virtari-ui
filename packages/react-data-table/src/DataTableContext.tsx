@@ -50,6 +50,7 @@ export function DataTableProvider<TData>({
 }: DataTableProviderProps<TData>) {
   const autoId = useId();
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const tableState = rest.table.getState();
   const value = useMemo<DataTableContextValue<TData>>(
     () => ({
       ...rest,
@@ -72,6 +73,19 @@ export function DataTableProvider<TData>({
       rest.setViewMode,
       rest.onCellEdit,
       rest.onDataRequest,
+      tableState.sorting,
+      tableState.columnFilters,
+      tableState.globalFilter,
+      tableState.rowSelection,
+      tableState.columnSizing,
+      tableState.columnSizingInfo,
+      tableState.columnOrder,
+      tableState.columnPinning,
+      tableState.columnVisibility,
+      tableState.pagination,
+      tableState.grouping,
+      tableState.expanded,
+      tableState.rowPinning,
       id,
       autoId,
     ],

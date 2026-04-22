@@ -1,9 +1,13 @@
-import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as react from 'react';
 import { Ref, ComponentRef } from 'react';
+import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 
-declare const DropdownMenu: react.FC<DropdownMenuPrimitive.DropdownMenuProps>;
+interface DropdownMenuProps extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Root> {
+    /** Reading direction. Defaults to the document's active direction. */
+    dir?: "ltr" | "rtl";
+}
+declare function DropdownMenu({ dir, ...props }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
 declare const DropdownMenuTrigger: react.ForwardRefExoticComponent<DropdownMenuPrimitive.DropdownMenuTriggerProps & react.RefAttributes<HTMLButtonElement>>;
 declare const DropdownMenuGroup: react.ForwardRefExoticComponent<DropdownMenuPrimitive.DropdownMenuGroupProps & react.RefAttributes<HTMLDivElement>>;
 interface DropdownMenuContentProps extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> {

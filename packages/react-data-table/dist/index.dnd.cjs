@@ -24,6 +24,7 @@ function DataTableProvider({
 }) {
   const autoId = react.useId();
   const scrollRef = react.useRef(null);
+  const tableState = rest.table.getState();
   const value = react.useMemo(
     () => ({
       ...rest,
@@ -46,6 +47,19 @@ function DataTableProvider({
       rest.setViewMode,
       rest.onCellEdit,
       rest.onDataRequest,
+      tableState.sorting,
+      tableState.columnFilters,
+      tableState.globalFilter,
+      tableState.rowSelection,
+      tableState.columnSizing,
+      tableState.columnSizingInfo,
+      tableState.columnOrder,
+      tableState.columnPinning,
+      tableState.columnVisibility,
+      tableState.pagination,
+      tableState.grouping,
+      tableState.expanded,
+      tableState.rowPinning,
       id,
       autoId
     ]
@@ -76,20 +90,26 @@ function useColumnDnd(options = {}) {
     () => table.getVisibleLeafColumns().map((c) => c.id),
     [table, table.getState().columnOrder, table.getState().columnVisibility]
   );
+  const completeOrder = react.useCallback(() => {
+    const allIds = table.getAllLeafColumns().map((c) => c.id);
+    const known = new Set(allIds);
+    const current = table.getState().columnOrder.filter((id) => known.has(id));
+    const missing = allIds.filter((id) => !current.includes(id));
+    return current.length > 0 ? [...current, ...missing] : allIds;
+  }, [table]);
   const handleDragEnd = react.useCallback(
     (event) => {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
-      const currentOrder = items.slice();
+      const currentOrder = completeOrder();
       const oldIndex = currentOrder.indexOf(active.id);
       const newIndex = currentOrder.indexOf(over.id);
       if (oldIndex < 0 || newIndex < 0) return;
-      currentOrder.splice(oldIndex, 1);
-      currentOrder.splice(newIndex, 0, active.id);
-      table.setColumnOrder(currentOrder);
-      onColumnOrderChange?.(currentOrder);
+      const next = sortable.arrayMove(currentOrder, oldIndex, newIndex);
+      table.setColumnOrder(next);
+      onColumnOrderChange?.(next);
     },
-    [items, table, onColumnOrderChange]
+    [completeOrder, table, onColumnOrderChange]
   );
   return { sensors, handleDragEnd, strategy: sortable.horizontalListSortingStrategy, items };
 }
@@ -131,6 +151,7 @@ function composeRefs(...refs) {
 function buildColumnSizeVars(table) {
   const headers = table.getFlatHeaders();
   const out = {};
+  out["--data-table-total-width"] = `${table.getTotalSize()}px`;
   for (const header of headers) {
     out[`--col-${header.column.id}`] = `${header.getSize()}px`;
   }
@@ -1047,15 +1068,28 @@ react.forwardRef(function DataTableRoot2(props, ref) {
   );
 });
 react.forwardRef(
-  function DataTableToolbar2({ className, children, ...props }, ref) {
+  function DataTableToolbar2({
+    className,
+    children,
+    sticky = false,
+    stickyOffset,
+    style,
+    ...props
+  }, ref) {
     const { tableId } = useDataTableContext();
+    const stickyStyle = stickyOffset === void 0 ? style : {
+      ["--data-table-toolbar-sticky-offset"]: stickyOffset,
+      ...style
+    };
     return /* @__PURE__ */ jsxRuntime.jsx(
       "div",
       {
         ref,
         role: "toolbar",
         "aria-controls": tableId,
+        "data-sticky": sticky ? "" : void 0,
         className: utils.cn("vds-data-table-toolbar", className),
+        style: stickyStyle,
         ...props,
         children
       }
@@ -1083,7 +1117,9 @@ react.forwardRef(
       table,
       // Re-evaluate when any column size changes
       table.getState().columnSizing,
-      table.getState().columnSizingInfo
+      table.getState().columnSizingInfo,
+      table.getState().columnOrder,
+      table.getState().columnVisibility
     ]);
     return /* @__PURE__ */ jsxRuntime.jsx(
       "table",
@@ -1342,7 +1378,7 @@ var DataTableCell = react.forwardRef(function DataTableCell2({ cell, className, 
     }
   );
 });
-react.forwardRef(function DataTableFooter2({ className, children, ...props }, ref) {
+react.forwardRef(function DataTableFooter2({ className, children, sticky = false, ...props }, ref) {
   const { table } = useDataTableContext();
   const groups = table.getFooterGroups();
   const hasFooter = groups.some(
@@ -1354,6 +1390,7 @@ react.forwardRef(function DataTableFooter2({ className, children, ...props }, re
     {
       ref,
       role: "rowgroup",
+      "data-sticky": sticky ? "" : void 0,
       className: utils.cn("vds-data-table-footer", className),
       ...props,
       children: children ?? groups.map((group) => /* @__PURE__ */ jsxRuntime.jsx(DataTableFooterRow, { footerGroup: group }, group.id))
@@ -1539,6 +1576,9 @@ var DataTableResizeHandle = react.forwardRef(function DataTableResizeHandle2({ h
       className: utils.cn("vds-data-table-resize-handle", className),
       onPointerDown: (e) => {
         e.stopPropagation();
+      },
+      onMouseDown: (e) => {
+        e.stopPropagation();
         header.getResizeHandler()(e);
       },
       onTouchStart: (e) => {
@@ -1550,7 +1590,6 @@ var DataTableResizeHandle = react.forwardRef(function DataTableResizeHandle2({ h
         fit();
       },
       onKeyDown: onKeyDownAdjust,
-      onMouseDown: (e) => e.stopPropagation(),
       onClick: (e) => e.stopPropagation(),
       ...props,
       children: /* @__PURE__ */ jsxRuntime.jsx(

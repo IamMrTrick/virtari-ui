@@ -3,6 +3,7 @@
 
 var utils = require('@virtari-packages/utils');
 var DropdownMenuPrimitive = require('@radix-ui/react-dropdown-menu');
+var reactDirection = require('@radix-ui/react-direction');
 var jsxRuntime = require('react/jsx-runtime');
 
 function _interopNamespace(e) {
@@ -26,7 +27,10 @@ function _interopNamespace(e) {
 var DropdownMenuPrimitive__namespace = /*#__PURE__*/_interopNamespace(DropdownMenuPrimitive);
 
 // src/DropdownMenu.tsx
-var DropdownMenu = DropdownMenuPrimitive__namespace.Root;
+function DropdownMenu({ dir, ...props }) {
+  const autoDir = utils.useDirection();
+  return /* @__PURE__ */ jsxRuntime.jsx(reactDirection.DirectionProvider, { dir: dir ?? autoDir, children: /* @__PURE__ */ jsxRuntime.jsx(DropdownMenuPrimitive__namespace.Root, { ...props }) });
+}
 var DropdownMenuTrigger = DropdownMenuPrimitive__namespace.Trigger;
 var DropdownMenuGroup = DropdownMenuPrimitive__namespace.Group;
 function DropdownMenuContent({

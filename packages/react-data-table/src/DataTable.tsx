@@ -451,17 +451,39 @@ export const DataTableRoot = forwardRef(function DataTableRoot<
  * ──────────────────────────────────────────────────────────── */
 
 export interface DataTableToolbarProps
-  extends HTMLAttributes<HTMLDivElement> {}
+  extends HTMLAttributes<HTMLDivElement> {
+  sticky?: boolean;
+  stickyOffset?: CSSProperties["top"];
+}
 
 export const DataTableToolbar = forwardRef<HTMLDivElement, DataTableToolbarProps>(
-  function DataTableToolbar({ className, children, ...props }, ref) {
+  function DataTableToolbar(
+    {
+      className,
+      children,
+      sticky = false,
+      stickyOffset,
+      style,
+      ...props
+    },
+    ref,
+  ) {
     const { tableId } = useDataTableContext();
+    const stickyStyle =
+      stickyOffset === undefined
+        ? style
+        : ({
+            ["--data-table-toolbar-sticky-offset" as string]: stickyOffset,
+            ...style,
+          } as CSSProperties);
     return (
       <div
         ref={ref}
         role="toolbar"
         aria-controls={tableId}
+        data-sticky={sticky ? "" : undefined}
         className={cn("vds-data-table-toolbar", className)}
+        style={stickyStyle}
         {...props}
       >
         {children}
@@ -520,6 +542,8 @@ export const DataTableTable = forwardRef<HTMLTableElement, DataTableTableProps>(
       // Re-evaluate when any column size changes
       table.getState().columnSizing,
       table.getState().columnSizingInfo,
+      table.getState().columnOrder,
+      table.getState().columnVisibility,
     ]);
 
     return (
@@ -970,12 +994,14 @@ export const DataTableCell = forwardRef<
  * ──────────────────────────────────────────────────────────── */
 
 export interface DataTableFooterProps
-  extends HTMLAttributes<HTMLTableSectionElement> {}
+  extends HTMLAttributes<HTMLTableSectionElement> {
+  sticky?: boolean;
+}
 
 export const DataTableFooter = forwardRef<
   HTMLTableSectionElement,
   DataTableFooterProps
->(function DataTableFooter({ className, children, ...props }, ref) {
+>(function DataTableFooter({ className, children, sticky = false, ...props }, ref) {
   const { table } = useDataTableContext();
   const groups = table.getFooterGroups() as HeaderGroup<unknown>[];
   const hasFooter = groups.some((g) =>
@@ -986,6 +1012,7 @@ export const DataTableFooter = forwardRef<
     <tfoot
       ref={ref}
       role="rowgroup"
+      data-sticky={sticky ? "" : undefined}
       className={cn("vds-data-table-footer", className)}
       {...props}
     >
@@ -1381,7 +1408,9 @@ export const DataTableResizeHandle = forwardRef<
          * dnd-kit's column-reorder listeners on the cell would steal the
          * gesture. Resize must always win on the resize handle. */
         e.stopPropagation();
-        /* Let TanStack's internal resize state machine do the drag. */
+      }}
+      onMouseDown={(e) => {
+        e.stopPropagation();
         header.getResizeHandler()(e);
       }}
       onTouchStart={(e) => {
@@ -1393,8 +1422,6 @@ export const DataTableResizeHandle = forwardRef<
         fit();
       }}
       onKeyDown={onKeyDownAdjust}
-      /* A mousedown on the handle should not bubble into the sort-trigger. */
-      onMouseDown={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
       {...props}
     >
@@ -1412,18 +1439,45 @@ export const DataTableResizeHandle = forwardRef<
  * ──────────────────────────────────────────────────────────── */
 
 export function DataTableColumnGuide() {
-  const { table } = useDataTableContext();
+  const { table, scrollRef } = useDataTableContext();
   const info = table.getState().columnSizingInfo;
   const resizingId = info.isResizingColumn as string | false;
   if (!resizingId) return null;
-  const offset = (info.startOffset ?? 0) + (info.deltaOffset ?? 0);
+  const resizeDirection =
+    table.options.columnResizeDirection === "rtl" ? -1 : 1;
+  const pointerClientX =
+    (info.startOffset ?? 0) + (info.deltaOffset ?? 0) * resizeDirection;
+  const scrollEl = scrollRef.current;
+  const rootEl = scrollEl?.closest<HTMLElement>(".vds-data-table");
+
+  let guideStyle = {
+    ["--data-table-guideline-offset" as string]: `${pointerClientX}px`,
+  } as CSSProperties;
+
+  if (scrollEl && rootEl) {
+    const rootRect = rootEl.getBoundingClientRect();
+    const scrollRect = scrollEl.getBoundingClientRect();
+    const rootLeft = rootRect.left + rootEl.clientLeft;
+    const rootTop = rootRect.top + rootEl.clientTop;
+
+    guideStyle = {
+      ["--data-table-guideline-offset" as string]: `${
+        pointerClientX - rootLeft
+      }px`,
+      ["--data-table-guideline-top" as string]: `${
+        scrollRect.top - rootTop
+      }px`,
+      ["--data-table-guideline-height" as string]: `${
+        scrollEl.clientHeight
+      }px`,
+    } as CSSProperties;
+  }
+
   return (
     <div
       className="vds-data-table-resize-guideline"
       aria-hidden="true"
-      style={{
-        ["--data-table-guideline-offset" as string]: `${offset}px`,
-      }}
+      style={guideStyle}
     />
   );
 }

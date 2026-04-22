@@ -8,6 +8,7 @@ import {
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { useTabsIndicator } from "./use-tabs-indicator";
 import { useTabsSwipe } from "./use-tabs-swipe";
+import { useTabsAutoScroll } from "./use-tabs-auto-scroll";
 import {
   useResponsiveOrientation,
   type TabsOrientation,
@@ -97,6 +98,9 @@ export interface TabsListProps
   size?: TabsSize;
   fullWidth?: boolean;
   animatedIndicator?: boolean;
+  /** When the list overflows, auto-scroll the active trigger into view
+   *  (centered) so it's never clipped. Default `true`. */
+  autoScroll?: boolean;
   ref?: Ref<ComponentRef<typeof TabsPrimitive.List>>;
 }
 
@@ -106,11 +110,13 @@ export function TabsList({
   size = "md",
   fullWidth,
   animatedIndicator = true,
+  autoScroll = true,
   ref,
   ...props
 }: TabsListProps) {
   const innerRef = useRef<ComponentRef<typeof TabsPrimitive.List>>(null);
   useTabsIndicator(innerRef, animatedIndicator);
+  useTabsAutoScroll(innerRef, autoScroll);
 
   return (
     <TabsPrimitive.List

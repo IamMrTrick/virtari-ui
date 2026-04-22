@@ -1,19 +1,22 @@
 "use client";
-import { useDataTableContext, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-LRLNRHO3.js';
-export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-LRLNRHO3.js';
+import { useDataTableContext, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-YGGQMZSJ.js';
+export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-YGGQMZSJ.js';
 import { forwardRef, useRef, useEffect, useMemo, useState, useCallback } from 'react';
 import { cn } from '@virtari-packages/utils';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuItem } from '@virtari-packages/react-dropdown-menu';
-import { IconFilter, IconRefresh, IconDownload, IconChevronDown, IconPlus, IconSettings, IconRotateClockwise2, IconEyeOff, IconTrash, IconX, IconSearch, IconDotsVertical, IconList, IconLayoutKanban, IconTable, IconDots, IconCheck, IconCopy, IconChevronLeft, IconFilterFilled } from '@virtari-packages/react-icons';
+import { IconPlus, IconFilter, IconRefresh, IconDownload, IconChevronDown, IconSettings, IconRotateClockwise2, IconEyeOff, IconTrash, IconX, IconSearch, IconDotsVertical, IconDots, IconCheck, IconCopy, IconChevronLeft, IconFilterFilled } from '@virtari-packages/react-icons';
 import { Avatar } from '@virtari-packages/react-avatar';
 import { Badge } from '@virtari-packages/react-badge';
 import { Input } from '@virtari-packages/react-input';
 import { flexRender } from '@tanstack/react-table';
 export { createColumnHelper, flexRender } from '@tanstack/react-table';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerBody, DrawerFooter } from '@virtari-packages/react-drawer';
+import { Button } from '@virtari-packages/react-button';
+import { Chip, ChipIcon, ChipLabel, ChipRemove } from '@virtari-packages/react-chip';
 import { Switch } from '@virtari-packages/react-switch';
 import { Popover, PopoverTrigger, PopoverContent } from '@virtari-packages/react-popover';
+import { Tabs, TabsList, TabsTrigger } from '@virtari-packages/react-tabs';
 
 var DataTableBulkActions = forwardRef(function DataTableBulkActions2({
   children,
@@ -193,12 +196,24 @@ function AvatarCell({
   alt,
   fallback,
   size = "sm",
+  color = "auto",
+  colorKey,
   primary,
   secondary,
   className
 }) {
   return /* @__PURE__ */ jsxs("div", { className: cn("vds-data-table-avatar-cell", className), children: [
-    /* @__PURE__ */ jsx(Avatar, { src, alt: alt ?? fallback, fallback, size }),
+    /* @__PURE__ */ jsx(
+      Avatar,
+      {
+        src,
+        alt: alt ?? fallback,
+        fallback,
+        size,
+        color,
+        colorKey: colorKey ?? (typeof primary === "string" ? primary : fallback)
+      }
+    ),
     (primary || secondary) && /* @__PURE__ */ jsxs("div", { className: "vds-data-table-avatar-cell-text", children: [
       primary && /* @__PURE__ */ jsx("span", { className: "vds-data-table-avatar-cell-primary", children: primary }),
       secondary && /* @__PURE__ */ jsx("span", { className: "vds-data-table-avatar-cell-secondary", children: secondary })
@@ -682,10 +697,12 @@ function FilterConfigPanel({
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "vds-data-table-filter-config-actions", children: [
       /* @__PURE__ */ jsx(
-        "button",
+        Button,
         {
-          type: "button",
           onClick: onCancel,
+          variant: "ghost",
+          color: "contrast",
+          size: "sm",
           className: cn(
             "vds-data-table-toolbar-button",
             "vds-data-table-filter-config-cancel"
@@ -694,12 +711,14 @@ function FilterConfigPanel({
         }
       ),
       /* @__PURE__ */ jsx(
-        "button",
+        Button,
         {
-          type: "button",
           onClick: handleAdd,
           disabled: !canAdd,
           "data-intent": "primary",
+          variant: "solid",
+          color: "primary",
+          size: "sm",
           className: cn("vds-data-table-toolbar-button"),
           children: "Add filter"
         }
@@ -827,7 +846,7 @@ function DataTableFilterDrawer({
                   type: "search",
                   value: searchQuery,
                   onChange: (e) => setSearchQuery(e.target.value),
-                  placeholder: "Search filters\u2026"
+                  placeholder: "Search filters..."
                 }
               ),
               activeCount > 0 && /* @__PURE__ */ jsxs("div", { className: "vds-data-table-filter-drawer-active", children: [
@@ -857,23 +876,30 @@ function DataTableFilterDrawer({
                       children: group.operator
                     }
                   ),
-                  group.conditions.map((c) => /* @__PURE__ */ jsxs("span", { className: "vds-data-table-filter-drawer-chip", children: [
-                    /* @__PURE__ */ jsxs("span", { children: [
-                      c.fieldLabel,
-                      ": ",
-                      String(c.value)
-                    ] }),
-                    /* @__PURE__ */ jsx(
-                      "button",
-                      {
-                        type: "button",
-                        onClick: () => removeCondition(group.id, c.id),
-                        "aria-label": `Remove ${c.fieldLabel} filter`,
-                        className: "vds-data-table-filter-drawer-chip-remove",
-                        children: "\xD7"
-                      }
-                    )
-                  ] }, c.id))
+                  group.conditions.map((c) => /* @__PURE__ */ jsxs(
+                    Chip,
+                    {
+                      size: "sm",
+                      appearance: "outline",
+                      variant: "primary",
+                      className: "vds-data-table-filter-drawer-chip",
+                      children: [
+                        /* @__PURE__ */ jsxs(ChipLabel, { children: [
+                          c.fieldLabel,
+                          ": ",
+                          String(c.value)
+                        ] }),
+                        /* @__PURE__ */ jsx(
+                          ChipRemove,
+                          {
+                            onClick: () => removeCondition(group.id, c.id),
+                            "aria-label": `Remove ${c.fieldLabel} filter`
+                          }
+                        )
+                      ]
+                    },
+                    c.id
+                  ))
                 ] }, group.id))
               ] }),
               shown.length > 0 && /* @__PURE__ */ jsx(
@@ -904,21 +930,25 @@ function DataTableFilterDrawer({
             ) }),
             !configField && /* @__PURE__ */ jsx(DrawerFooter, { children: /* @__PURE__ */ jsxs("div", { className: "vds-data-table-filter-drawer-footer", children: [
               /* @__PURE__ */ jsx(
-                "button",
+                Button,
                 {
-                  type: "button",
                   onClick: () => onOpenChange(false),
+                  variant: "ghost",
+                  color: "contrast",
+                  size: "sm",
                   className: "vds-data-table-toolbar-button",
                   children: "Cancel"
                 }
               ),
               /* @__PURE__ */ jsx(
-                "button",
+                Button,
                 {
-                  type: "button",
                   onClick: handleApply,
                   disabled: activeCount === 0,
                   "data-intent": "primary",
+                  variant: "solid",
+                  color: "primary",
+                  size: "sm",
                   className: "vds-data-table-toolbar-button",
                   children: "Apply"
                 }
@@ -1222,13 +1252,14 @@ var Filters = {
   Popover: FilterPopover
 };
 var PaginationRoot = forwardRef(
-  function PaginationRoot2({ className, children, ...props }, ref) {
+  function PaginationRoot2({ className, children, sticky = false, ...props }, ref) {
     return /* @__PURE__ */ jsx(
       "nav",
       {
         ref,
         role: "navigation",
         "aria-label": "Pagination",
+        "data-sticky": sticky ? "" : void 0,
         className: cn("vds-data-table-pagination", className),
         ...props,
         children
@@ -1311,7 +1342,14 @@ function PaginationPageSize({
       {
         className: "vds-data-table-pagination-page-size-select",
         value: pageSize,
-        onChange: (e) => table.setPageSize(Number(e.target.value)),
+        onChange: (e) => {
+          const nextPageSize = Number(e.target.value);
+          table.setPagination((prev) => ({
+            ...prev,
+            pageIndex: 0,
+            pageSize: nextPageSize
+          }));
+        },
         children: options.map((n) => /* @__PURE__ */ jsx("option", { value: n, children: n }, n))
       }
     )
@@ -1359,9 +1397,10 @@ function PaginationDefault({
   className,
   pageSizeOptions,
   hidePageSize = false,
-  hidePageNumbers = false
+  hidePageNumbers = false,
+  sticky = false
 }) {
-  return /* @__PURE__ */ jsxs(PaginationRoot, { className, children: [
+  return /* @__PURE__ */ jsxs(PaginationRoot, { className, sticky, children: [
     /* @__PURE__ */ jsx(PaginationInfo, {}),
     /* @__PURE__ */ jsxs("div", { className: "vds-data-table-pagination-controls", children: [
       !hidePageSize && /* @__PURE__ */ jsx(PaginationPageSize, { options: pageSizeOptions }),
@@ -1382,9 +1421,6 @@ var Pagination = {
   Pages: PaginationPages,
   Default: PaginationDefault
 };
-function Glyph({ children }) {
-  return /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-icon", children });
-}
 var ToolbarActionButton = forwardRef(function ToolbarActionButton2({
   icon,
   trailingIcon,
@@ -1399,22 +1435,41 @@ var ToolbarActionButton = forwardRef(function ToolbarActionButton2({
   ...props
 }, ref) {
   const showLabel = !iconOnly && (label !== void 0 || children !== void 0);
+  const color = intent === "danger" ? "danger" : intent === "primary" ? "primary" : "contrast";
+  const labelNode = showLabel ? /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-label", children: children ?? label }) : null;
+  const countNode = count !== void 0 && count !== 0 ? /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-count", children: count }) : null;
+  if (iconOnly && icon && !labelNode && !countNode && !trailingIcon) {
+    return /* @__PURE__ */ jsx(
+      Button,
+      {
+        ref,
+        type: "button",
+        color,
+        variant,
+        size,
+        "data-intent": intent,
+        className,
+        ...props,
+        children: icon
+      }
+    );
+  }
   return /* @__PURE__ */ jsxs(
-    "button",
+    Button,
     {
       ref,
       type: "button",
+      color,
+      variant,
+      size,
       "data-intent": intent,
-      "data-variant": variant,
-      "data-size": size,
-      "data-icon-only": iconOnly ? "" : void 0,
-      className: cn("vds-data-table-toolbar-button", className),
+      className,
+      leftSection: icon,
+      rightSection: trailingIcon,
       ...props,
       children: [
-        icon && /* @__PURE__ */ jsx(Glyph, { children: icon }),
-        showLabel && /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-label", children: children ?? label }),
-        count !== void 0 && count !== 0 && /* @__PURE__ */ jsx("span", { className: "vds-data-table-toolbar-button-count", children: count }),
-        trailingIcon && /* @__PURE__ */ jsx(Glyph, { children: trailingIcon })
+        labelNode,
+        countNode
       ]
     }
   );
@@ -1452,13 +1507,14 @@ var DataTableRefreshButton = forwardRef(
   }
 );
 var DataTableExportButton = forwardRef(
-  function DataTableExportButton2({ label = "Export", variant = "outline", ...props }, ref) {
+  function DataTableExportButton2({ label = "Export", variant = "soft", intent = "neutral", ...props }, ref) {
     return /* @__PURE__ */ jsx(
       ToolbarActionButton,
       {
         ref,
         icon: DownloadIcon,
         label,
+        intent,
         variant,
         ...props
       }
@@ -1526,7 +1582,7 @@ var DataTableCloseButton = forwardRef(
     );
   }
 );
-forwardRef(
+var DataTableSearchButton = forwardRef(
   function DataTableSearchButton2({ label = "Search", ...props }, ref) {
     return /* @__PURE__ */ jsx(
       ToolbarActionButton,
@@ -1557,6 +1613,166 @@ forwardRef(function DataTableRowAction2({ size = "sm", variant = "ghost", ...pro
   return /* @__PURE__ */ jsx(ToolbarActionButton, { ref, size, variant, ...props });
 });
 var DataTableSearchIcon = SearchIcon;
+function DataTableSearchField({
+  value,
+  defaultValue,
+  onValueChange,
+  debounceMs = 150,
+  clearable = true,
+  icon,
+  inputSize = "md",
+  className,
+  wrapperClassName,
+  placeholder = "Search",
+  "aria-label": ariaLabel = "Search table",
+  ...props
+}) {
+  const { table } = useDataTableContext();
+  const tableValue = String(table.getState().globalFilter ?? "");
+  const controlled = value !== void 0;
+  const [local, setLocal] = useState(value ?? defaultValue ?? tableValue);
+  useEffect(() => {
+    if (controlled) setLocal(value ?? "");
+  }, [controlled, value]);
+  useEffect(() => {
+    if (controlled) return;
+    setLocal(tableValue);
+  }, [tableValue]);
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      table.setGlobalFilter(local);
+      onValueChange?.(local);
+    }, debounceMs);
+    return () => window.clearTimeout(id);
+  }, [local, debounceMs]);
+  const clear = () => setLocal("");
+  return /* @__PURE__ */ jsxs("div", { className: cn("vds-data-table-search-field", wrapperClassName), children: [
+    /* @__PURE__ */ jsx("span", { className: "vds-data-table-search-field-icon", "aria-hidden": "true", children: icon ?? /* @__PURE__ */ jsx(IconSearch, { size: 14, stroke: 1.75, focusable: false }) }),
+    /* @__PURE__ */ jsx(
+      Input,
+      {
+        inputSize,
+        type: "search",
+        value: local,
+        onChange: (event) => setLocal(event.target.value),
+        placeholder,
+        "aria-label": ariaLabel,
+        className: cn("vds-data-table-search-field-input", className),
+        ...props
+      }
+    ),
+    clearable && local.length > 0 && /* @__PURE__ */ jsx(
+      "button",
+      {
+        type: "button",
+        className: "vds-data-table-search-field-clear",
+        "aria-label": "Clear search",
+        onClick: clear,
+        children: /* @__PURE__ */ jsx(IconX, { size: 12, stroke: 1.9, "aria-hidden": true, focusable: false })
+      }
+    )
+  ] });
+}
+var DataTableFilterBar = forwardRef(function DataTableFilterBar2({
+  filters,
+  onFilterClick,
+  onRemoveFilter,
+  onAddFilter,
+  addLabel = "Add filter",
+  sticky = false,
+  stickyOffset,
+  className,
+  children,
+  style,
+  ...props
+}, ref) {
+  const stickyStyle = stickyOffset === void 0 ? style : {
+    ["--data-table-filter-bar-sticky-offset"]: stickyOffset,
+    ...style
+  };
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      ref,
+      role: "toolbar",
+      "aria-label": "Active filters",
+      "data-sticky": sticky ? "" : void 0,
+      className: cn("vds-data-table-filter-bar", className),
+      style: stickyStyle,
+      ...props,
+      children: [
+        children ?? filters?.map((filter) => /* @__PURE__ */ jsx(
+          DataTableFilterChipItem,
+          {
+            filter,
+            onClick: onFilterClick,
+            onRemove: onRemoveFilter
+          },
+          filter.id
+        )),
+        onAddFilter && /* @__PURE__ */ jsxs(
+          Button,
+          {
+            type: "button",
+            variant: "ghost",
+            color: "contrast",
+            size: "xs",
+            className: "vds-data-table-filter-add",
+            onClick: onAddFilter,
+            children: [
+              /* @__PURE__ */ jsx(IconPlus, { size: 12, stroke: 1.75, "aria-hidden": true, focusable: false }),
+              /* @__PURE__ */ jsx("span", { children: addLabel })
+            ]
+          }
+        )
+      ]
+    }
+  );
+});
+function DataTableFilterChipItem({
+  filter,
+  onClick,
+  onRemove
+}) {
+  return /* @__PURE__ */ jsxs(
+    Chip,
+    {
+      size: "sm",
+      appearance: "outline",
+      variant: filter.variant ?? "default",
+      interactive: !filter.disabled,
+      disabled: filter.disabled,
+      role: "button",
+      tabIndex: filter.disabled ? void 0 : 0,
+      className: "vds-data-table-filter-chip",
+      onClick: () => {
+        if (!filter.disabled) onClick?.(filter);
+      },
+      onKeyDown: (event) => {
+        if (filter.disabled) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onClick?.(filter);
+        }
+      },
+      children: [
+        filter.icon && /* @__PURE__ */ jsx(ChipIcon, { children: filter.icon }),
+        /* @__PURE__ */ jsx(ChipLabel, { className: "vds-data-table-filter-chip-label", children: filter.label }),
+        filter.value !== void 0 && /* @__PURE__ */ jsx("span", { className: "vds-data-table-filter-chip-value", children: filter.value }),
+        onRemove && /* @__PURE__ */ jsx(
+          ChipRemove,
+          {
+            "aria-label": filter.removeLabel ?? `Remove ${String(filter.label)} filter`,
+            onClick: (event) => {
+              event.stopPropagation();
+              onRemove(filter.id);
+            }
+          }
+        )
+      ]
+    }
+  );
+}
 var DataTableBoard = forwardRef(
   function DataTableBoard2({ className, renderCard, emptyMessage, skipColumns = [], ...props }, ref) {
     const { table } = useDataTableContext();
@@ -1692,41 +1908,44 @@ var DEFAULT_LABELS = {
   board: "Board",
   list: "List"
 };
-var DEFAULT_ICONS = {
-  table: /* @__PURE__ */ jsx(IconTable, { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false }),
-  board: /* @__PURE__ */ jsx(IconLayoutKanban, { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false }),
-  list: /* @__PURE__ */ jsx(IconList, { size: 14, stroke: 1.5, "aria-hidden": true, focusable: false })
-};
-var DataTableViewModeToggle = forwardRef(function DataTableViewModeToggle2({ modes = DEFAULT_MODES, labels, icons, className, ...props }, ref) {
+var DataTableViewModeToggle = forwardRef(function DataTableViewModeToggle2({
+  modes = DEFAULT_MODES,
+  labels,
+  icons,
+  variant = "segmented",
+  size = "md",
+  className,
+  ...props
+}, ref) {
   const { viewMode, setViewMode } = useDataTableContext();
   return /* @__PURE__ */ jsx(
-    "div",
+    Tabs,
     {
       ref,
-      role: "group",
-      "aria-label": "View mode",
+      value: viewMode,
+      onValueChange: (value) => setViewMode(value),
       className: cn("vds-data-table-view-toggle", className),
       ...props,
-      children: modes.map((m) => {
-        const active = viewMode === m;
-        return /* @__PURE__ */ jsxs(
-          "button",
-          {
-            type: "button",
-            "aria-pressed": active,
-            "aria-label": `${DEFAULT_LABELS[m]} view`,
-            "data-active": active ? "" : void 0,
-            "data-mode": m,
-            className: "vds-data-table-view-toggle-button",
-            onClick: () => setViewMode(m),
-            children: [
-              /* @__PURE__ */ jsx("span", { className: "vds-data-table-view-toggle-icon", children: icons?.[m] ?? DEFAULT_ICONS[m] }),
-              /* @__PURE__ */ jsx("span", { className: "vds-data-table-view-toggle-label", children: labels?.[m] ?? DEFAULT_LABELS[m] })
-            ]
-          },
-          m
-        );
-      })
+      children: /* @__PURE__ */ jsx(
+        TabsList,
+        {
+          variant,
+          size,
+          "aria-label": "View mode",
+          children: modes.map((m) => /* @__PURE__ */ jsxs(
+            TabsTrigger,
+            {
+              value: m,
+              "aria-label": `${DEFAULT_LABELS[m]} view`,
+              children: [
+                icons?.[m] ? /* @__PURE__ */ jsx("span", { className: "vds-data-table-view-toggle-icon", children: icons[m] }) : null,
+                labels?.[m] ?? DEFAULT_LABELS[m]
+              ]
+            },
+            m
+          ))
+        }
+      )
     }
   );
 });
@@ -1806,8 +2025,11 @@ var DataTable = {
   HideColumnsButton: DataTableHideColumnsButton,
   DeleteButton: DataTableDeleteButton,
   CloseButton: DataTableCloseButton,
+  SearchField: DataTableSearchField,
   /* Global filter input (simple) */
   GlobalFilter: DataTableGlobalFilter,
+  FilterBar: DataTableFilterBar,
+  FilterChip: DataTableFilterChipItem,
   /* Column visibility list (simple) */
   ColumnVisibility: DataTableColumnVisibility,
   /* Compounds */
@@ -1817,5 +2039,123 @@ var DataTable = {
   BulkActions,
   Cells
 };
+function readStorage(storageKey) {
+  if (!storageKey || typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(storageKey);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+function writeStorage(storageKey, state) {
+  if (!storageKey || typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(storageKey, JSON.stringify(state));
+  } catch {
+  }
+}
+function clearStorage(storageKey) {
+  if (!storageKey || typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(storageKey);
+  } catch {
+  }
+}
+function useDataTablePreferences({
+  value,
+  defaultValue = {},
+  onValueChange,
+  adapter,
+  storageKey,
+  autoSave = true,
+  debounceMs = 200
+} = {}) {
+  const controlled = value !== void 0;
+  const initialRef = useRef(defaultValue);
+  const [internal, setInternal] = useState(() => ({
+    ...defaultValue,
+    ...readStorage(storageKey) ?? {}
+  }));
+  const preferences = controlled ? value ?? {} : internal;
+  const commit = useCallback(
+    (next) => {
+      if (!controlled) setInternal(next);
+      onValueChange?.(next);
+    },
+    [controlled, onValueChange]
+  );
+  const updatePreferences = useCallback(
+    (patch) => {
+      commit({ ...preferences, ...patch });
+    },
+    [commit, preferences]
+  );
+  const resetPreferences = useCallback(() => {
+    const next = initialRef.current;
+    if (!controlled) setInternal(next);
+    onValueChange?.(next);
+    clearStorage(storageKey);
+    void adapter?.clear?.();
+  }, [adapter, controlled, onValueChange, storageKey]);
+  useEffect(() => {
+    let active = true;
+    const loaded = adapter?.load?.();
+    if (!loaded) return;
+    Promise.resolve(loaded).then((next) => {
+      if (!active || !next) return;
+      commit({ ...initialRef.current, ...next });
+    });
+    return () => {
+      active = false;
+    };
+  }, [adapter, commit]);
+  useEffect(() => {
+    if (!autoSave) return;
+    const id = window.setTimeout(() => {
+      writeStorage(storageKey, preferences);
+      void adapter?.save?.(preferences);
+    }, debounceMs);
+    return () => window.clearTimeout(id);
+  }, [adapter, autoSave, debounceMs, preferences, storageKey]);
+  const statePairs = useMemo(
+    () => ({
+      viewMode: preferences.viewMode,
+      onViewModeChange: (viewMode) => updatePreferences({ viewMode }),
+      sorting: preferences.sorting,
+      onSortingChange: (sorting) => updatePreferences({ sorting }),
+      columnFilters: preferences.columnFilters,
+      onColumnFiltersChange: (columnFilters) => updatePreferences({ columnFilters }),
+      globalFilter: preferences.globalFilter,
+      onGlobalFilterChange: (globalFilter) => updatePreferences({ globalFilter }),
+      rowSelection: preferences.rowSelection,
+      onRowSelectionChange: (rowSelection) => updatePreferences({ rowSelection }),
+      columnSizing: preferences.columnSizing,
+      onColumnSizingChange: (columnSizing) => updatePreferences({ columnSizing }),
+      columnOrder: preferences.columnOrder,
+      onColumnOrderChange: (columnOrder) => updatePreferences({ columnOrder }),
+      columnPinning: preferences.columnPinning,
+      onColumnPinningChange: (columnPinning) => updatePreferences({ columnPinning }),
+      columnVisibility: preferences.columnVisibility,
+      onColumnVisibilityChange: (columnVisibility) => updatePreferences({ columnVisibility }),
+      pagination: preferences.pagination,
+      onPaginationChange: (pagination) => updatePreferences({ pagination }),
+      grouping: preferences.grouping,
+      onGroupingChange: (grouping) => updatePreferences({ grouping }),
+      expanded: preferences.expanded,
+      onExpandedChange: (expanded) => updatePreferences({ expanded }),
+      rowPinning: preferences.rowPinning,
+      onRowPinningChange: (rowPinning) => updatePreferences({ rowPinning })
+    }),
+    [preferences, updatePreferences]
+  );
+  return {
+    preferences,
+    setPreferences: commit,
+    updatePreferences,
+    resetPreferences,
+    statePairs
+  };
+}
 
-export { ActionsCell, AvatarCell, BadgeCell, BulkActions, CellEditor, Cells, CopyableCell, DataTable, DataTableAddButton, DataTableBoard, DataTableBulkActions, DataTableBulkClear, DataTableBulkCount, DataTableCloseButton, DataTableCustomizeButton, DataTableDeleteButton, DataTableExportButton, DataTableFilterButton, DataTableFilterDrawer, DataTableHideColumnsButton, DataTableListView, DataTableRefreshButton, DataTableResetLayoutButton, DataTableSearchIcon, DataTableSelectAllAcrossPages, DataTableViewModeToggle, DataTableViews, DateCell, DateFilter, EditableCell, FilterConfigPanel, FilterPopover, Filters, LinkCell, NumberCell, NumberFilter, Pagination, PaginationDefault, PaginationInfo, PaginationNext, PaginationPageSize, PaginationPages, PaginationPrev, PaginationRoot, SelectFilter, StatusBadgeCell, TextCell, TextFilter, ToolbarActionButton, countConditions, useCellEdit, useColumnFilter };
+export { ActionsCell, AvatarCell, BadgeCell, BulkActions, CellEditor, Cells, CopyableCell, DataTable, DataTableAddButton, DataTableBoard, DataTableBulkActions, DataTableBulkClear, DataTableBulkCount, DataTableCloseButton, DataTableCustomizeButton, DataTableDeleteButton, DataTableExportButton, DataTableFilterBar, DataTableFilterButton, DataTableFilterChipItem, DataTableFilterDrawer, DataTableHideColumnsButton, DataTableListView, DataTableRefreshButton, DataTableResetLayoutButton, DataTableSearchButton, DataTableSearchField, DataTableSearchIcon, DataTableSelectAllAcrossPages, DataTableViewModeToggle, DataTableViews, DateCell, DateFilter, EditableCell, FilterConfigPanel, FilterPopover, Filters, LinkCell, NumberCell, NumberFilter, Pagination, PaginationDefault, PaginationInfo, PaginationNext, PaginationPageSize, PaginationPages, PaginationPrev, PaginationRoot, SelectFilter, StatusBadgeCell, TextCell, TextFilter, ToolbarActionButton, countConditions, useCellEdit, useColumnFilter, useDataTablePreferences };

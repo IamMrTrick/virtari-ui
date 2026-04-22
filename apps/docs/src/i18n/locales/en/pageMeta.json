@@ -1,0 +1,214 @@
+{
+  "introduction": {
+    "title": "Introduction",
+    "description": "Overview of the Virtari Design System."
+  },
+  "sizing": {
+    "title": "Sizing",
+    "description": "Unified size system, height ramp, WCAG compliance."
+  },
+  "colors": {
+    "title": "Colors",
+    "description": "OKLCH color palette and semantic token reference."
+  },
+  "typography": {
+    "title": "Typography",
+    "description": "Font scale, weights, and font family tokens."
+  },
+  "button": {
+    "title": "Button",
+    "description": "6 variants, 7 sizes, loading, icons, animations."
+  },
+  "badge": {
+    "title": "Badge",
+    "description": "7 colors \u00d7 5 variants \u00d7 4 sizes \u2014 pill or square, optional dot, icons, removable chip, and asChild routing."
+  },
+  "input": {
+    "title": "Input",
+    "description": "Text input \u2014 7 sizes aligned with Button."
+  },
+  "textarea": {
+    "title": "Textarea",
+    "description": "Multi-line text input with auto-resize."
+  },
+  "select": {
+    "title": "Select",
+    "description": "Dropdown selector with groups and search."
+  },
+  "checkbox": {
+    "title": "Checkbox",
+    "description": "Multi-select with indeterminate state."
+  },
+  "radio-group": {
+    "title": "Radio Group",
+    "description": "Single-choice primitive with 3 sizes, error state, cards (row + icon-grid), segmented button group, and pill filters."
+  },
+  "switch": {
+    "title": "Switch",
+    "description": "Toggle control for binary states."
+  },
+  "toggle": {
+    "title": "Toggle",
+    "description": "Pressable toggle button."
+  },
+  "slider": {
+    "title": "Slider",
+    "description": "Range input for numeric values."
+  },
+  "label": {
+    "title": "Label",
+    "description": "Accessible form label."
+  },
+  "separator": {
+    "title": "Separator",
+    "description": "Visual divider line."
+  },
+  "avatar": {
+    "title": "Avatar",
+    "description": "Profile image with fallback initials."
+  },
+  "tabs": {
+    "title": "Tabs",
+    "description": "Tabbed navigation panels."
+  },
+  "dialog": {
+    "title": "Dialog",
+    "description": "Modal dialog with overlay."
+  },
+  "drawer": {
+    "title": "Drawer",
+    "description": "Named stages, edge offsets, indicator placement, and touch-friendly drag behavior."
+  },
+  "alert-dialog": {
+    "title": "Alert Dialog",
+    "description": "Confirmation dialog for destructive actions."
+  },
+  "dropdown-menu": {
+    "title": "Dropdown Menu",
+    "description": "Action menu with items and groups."
+  },
+  "popover": {
+    "title": "Popover",
+    "description": "Positioned popup content."
+  },
+  "tooltip": {
+    "title": "Tooltip",
+    "description": "Info popup on hover or focus."
+  },
+  "toast": {
+    "title": "Toast",
+    "description": "Notification messages."
+  },
+  "progress": {
+    "title": "Progress",
+    "description": "Loading and progress bar."
+  },
+  "accordion": {
+    "title": "Accordion",
+    "description": "Collapsible content sections."
+  },
+  "collapsible": {
+    "title": "Collapsible",
+    "description": "Show/hide content toggle."
+  },
+  "scroll-area": {
+    "title": "Scroll Area",
+    "description": "Custom scrollbar container."
+  },
+  "card": {
+    "title": "Card",
+    "description": "Content container with header and footer."
+  },
+  "skeleton": {
+    "title": "Skeleton",
+    "description": "Loading placeholder."
+  },
+  "spinner": {
+    "title": "Spinner",
+    "description": "Loading indicator."
+  },
+  "kbd": {
+    "title": "Kbd",
+    "description": "Keyboard shortcut badge."
+  },
+  "chip": {
+    "title": "Chip",
+    "description": "Compact pill for tags, filters, and metadata \u2014 6 variants, 3 appearances, 3 sizes, with icon/avatar slot and removable action."
+  },
+  "heading": {
+    "title": "Heading",
+    "description": "Semantic h1\u2013h6 with decoupled visual size \u2014 9-step display scale, weight, tone, and balance/truncate wrap."
+  },
+  "text": {
+    "title": "Text",
+    "description": "Paragraph and inline copy \u2014 9-step size scale, semantic tones, alignment, leading override, and truncate."
+  },
+  "composition": {
+    "title": "Composition",
+    "description": "Layout primitives \u2014 Stack, Cluster, Grid, Sidebar, Center."
+  },
+  "utilities": {
+    "title": "Utilities",
+    "description": "Opt-in CSS utility classes for spacing, flex, grid, sizing, position, and z-index \u2014 all token-driven, logical-property-first, with sm/md/lg/xl/2xl responsive variants."
+  },
+  "icons": {
+    "title": "Icons",
+    "description": "Tabler Icons (MIT) \u2014 outline + filled, re-exported from @virtari-packages/react-icons. Searchable, copyable, with live size and stroke controls."
+  },
+  "rtl": {
+    "title": "RTL",
+    "description": "Right-to-left support and Vazirmatn typography \u2014 every component audited for logical properties and direction-aware animations."
+  },
+  "layout": {
+    "title": "Page Layout",
+    "description": "Section \u2192 Row \u2192 Col \u2014 semantic page-structure primitives tied to the Layout token system."
+  },
+  "header": {
+    "title": "Header",
+    "description": "Three-row header primitive \u2014 top / main / bottom. Per-row sticky modes (always / smart / collapse), transparent, center, and coordinated offset stacking."
+  },
+  "nav": {
+    "title": "Navigation",
+    "description": "One Nav, many shapes \u2014 sidebar, menubar, mega menu. W3C disclosure pattern, inline or popover submenus via Floating UI, auto aria-current, four variants."
+  },
+  "sidebar": {
+    "title": "Sidebar",
+    "description": "App-chrome sidebar \u2014 full-height or below-header modes, rail collapse, controlled / uncontrolled state, context-wired trigger, and full RTL via logical properties."
+  },
+  "breadcrumb": {
+    "title": "Breadcrumb",
+    "description": "Semantic <nav> + <ol> with aria-current, schema.org JSON-LD, overflow collapse, four separator presets, and full RTL support."
+  },
+  "date-picker": {
+    "title": "Date Picker",
+    "description": "Date, range, time, and calendar primitives \u2014 Persian, Islamic, Gregorian + full RTL."
+  },
+  "data-table": {
+    "title": "Data Table",
+    "description": "Excel-like resize, virtualization (10k+ rows), pinning, grouping, inline edit, server-side \u2014 built on TanStack."
+  },
+  "data-table-users": {
+    "title": "Users \u2014 Data Table showcase",
+    "description": "Production-grade users table \u2014 view switch, search, filter bar + drawer, customize columns, bulk actions, refresh, export, add \u2014 composed entirely from the design-system primitives."
+  },
+  "table": {
+    "title": "Table",
+    "description": "Semantic HTML table \u2014 4 variants, 3 row styles, 3 sizes, density, sortable headers, sticky header/columns, selection, and full RTL."
+  },
+  "flag": {
+    "title": "Flag",
+    "description": "271 country flags vendored from flag-icons (MIT) \u2014 tree-shakable named components plus a dynamic <Flag code>. Includes sub-regions like gb-eng and es-ct."
+  },
+  "phone-input": {
+    "title": "Phone Input",
+    "description": "Tel input with country picker, dial-code prefix, format-as-you-type, Persian/Arabic digit normalization, full ARIA, and autofill hints \u2014 composed on top of <Input> + <Combobox>."
+  },
+  "language-picker": {
+    "title": "Language Picker",
+    "description": "Locale selector with flag \u00b7 native \u00b7 English display. 240 languages with curated BCP-47 \u2192 flag mapping for accurate header switchers."
+  },
+  "bottom-nav": {
+    "title": "Bottom Navigation",
+    "description": "Mobile-first tab bar \u2014 material / iOS / floating / underline variants, centre FAB, badges, safe-area insets, auto-hide on scroll, and an animated sliding indicator. All CSS-variable driven with full RTL."
+  }
+}

@@ -13,6 +13,7 @@ export function buildColumnSizeVars<TData>(
 ): CSSProperties {
   const headers = table.getFlatHeaders();
   const out: Record<string, string> = {};
+  out["--data-table-total-width"] = `${table.getTotalSize()}px`;
   for (const header of headers) {
     out[`--col-${header.column.id}`] = `${header.getSize()}px`;
   }

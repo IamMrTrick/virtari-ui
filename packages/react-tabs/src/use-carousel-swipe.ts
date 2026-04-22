@@ -40,6 +40,8 @@ export function useCarouselSwipe(
     let pointerId = -1;
 
     const containerWidth = () => container.getBoundingClientRect().width;
+    const rtlSign = () =>
+      getComputedStyle(container).direction === "rtl" ? -1 : 1;
 
     const clearDragInstant = () => {
       track.style.transition = "";
@@ -90,13 +92,20 @@ export function useCarouselSwipe(
       if (axis === "x") {
         if (e.cancelable) e.preventDefault();
         const w = containerWidth();
-        const baseline = -activeIndex * w;
+        const sign = rtlSign();
+        /* In RTL the flex row lays slides out physically right-to-left, so
+           bringing the Nth slide into the viewport requires a positive
+           translateX instead of negative. The track CSS mirrors the same
+           logic for the resting transform. */
+        const baseline = -sign * activeIndex * w;
 
-        /* Rubber-band at the edges: drag past the first/last panel meets
-           resistance so users feel they've hit a boundary. */
+        /* Rubber-band at the edges. Semantics are logical: "before start"
+           means dragging back toward the inline-start of the list, which is
+           physically rightward in RTL. */
+        const logicalDx = sign * dx;
         let effective = dx;
-        const atStart = activeIndex === 0 && dx > 0;
-        const atEnd = activeIndex === slideCount - 1 && dx < 0;
+        const atStart = activeIndex === 0 && logicalDx > 0;
+        const atEnd = activeIndex === slideCount - 1 && logicalDx < 0;
         if (atStart || atEnd) effective = dx * 0.25;
 
         track.style.transform = `translateX(${baseline + effective}px)`;
@@ -114,7 +123,8 @@ export function useCarouselSwipe(
       dragging = false;
 
       if (axis === "x" && Math.abs(dx) > threshold) {
-        const dir = dx < 0 ? "next" : "prev";
+        const logicalDx = rtlSign() * dx;
+        const dir = logicalDx < 0 ? "next" : "prev";
         /* Commit path: leave the inline `transform` in place (at the drag
            position) and only restore the default transition. Once React
            re-renders with the new activeIndex, a useEffect in TabsPanels

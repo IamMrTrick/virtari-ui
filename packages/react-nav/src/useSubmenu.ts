@@ -2,10 +2,13 @@ import {
   autoUpdate,
   flip,
   offset,
+  safePolygon,
   shift,
   useClick,
   useDismiss,
   useFloating,
+  useFocus,
+  useHover,
   useInteractions,
 } from "@floating-ui/react";
 import { useCallback, useId, useRef, useState } from "react";
@@ -90,10 +93,29 @@ export function useSubmenu({
     escapeKey: true,
     outsidePress: true,
   });
+  // Hover-to-open for popover submenus — covers the collapsed-sidebar
+  // flyout case where users expect the menu to open on pointer-enter
+  // and stay open while they transit to the submenu. `safePolygon` draws
+  // a virtual triangle between trigger and submenu so crossing the gap
+  // doesn't count as a leave. Small open/close delays prevent jitter
+  // from accidental hovers and give the eye time to follow.
+  const hover = useHover(floatingState.context, {
+    enabled: mode === "popover",
+    delay: { open: 75, close: 200 },
+    move: false,
+    handleClose: safePolygon({ blockPointerEvents: false }),
+  });
+  // Focus-to-open mirrors the hover behaviour for keyboard users — Tab
+  // onto the trigger and the submenu opens without a click.
+  const focus = useFocus(floatingState.context, {
+    enabled: mode === "popover",
+  });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     click,
     dismiss,
+    hover,
+    focus,
   ]);
 
   const bridge: FloatingBridge | null =

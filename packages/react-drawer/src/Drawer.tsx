@@ -581,9 +581,10 @@ export const DrawerContent = forwardRef<
 
     if (layout.totalSize <= 0 || !contentEl) return;
 
+    const rtl = getComputedStyle(contentEl).direction === "rtl";
     contentEl.style.setProperty(
       "--vds-drawer-transform",
-      getVisualTransform(direction, sizePx, layout.totalSize, options),
+      getVisualTransform(direction, sizePx, layout.totalSize, { ...options, rtl }),
     );
 
     const overlayProgress = getOverlayProgress(sizePx, layout.totalSize, layout.overlayStartSize);
@@ -609,7 +610,6 @@ export const DrawerContent = forwardRef<
         wrapperEl.style.borderRadius = "";
         wrapperEl.style.transformOrigin = "";
       } else {
-        const rtl = getComputedStyle(contentEl).direction === "rtl";
         const backgroundStyles = getBackgroundStyles(overlayProgress, direction, rtl);
         wrapperEl.style.transform = backgroundStyles.transform;
         wrapperEl.style.borderRadius = backgroundStyles.borderRadius;
@@ -701,9 +701,10 @@ export const DrawerContent = forwardRef<
     const contentEl = contentRef.current;
     if (shrinkResize && contentEl) {
       contentEl.style.setProperty(shrinkResize.property, `${shrinkResize.from}px`);
+      const rtl = getComputedStyle(contentEl).direction === "rtl";
       contentEl.style.setProperty(
         "--vds-drawer-transform",
-        getVisualTransform(direction, current, shrinkResize.from, { disableStretch: true }),
+        getVisualTransform(direction, current, shrinkResize.from, { disableStretch: true, rtl }),
       );
     } else {
       writeVisualSize(current, { disableStretch: Boolean(resizeAnimation) });
@@ -724,9 +725,10 @@ export const DrawerContent = forwardRef<
         const pendingResize = pendingResizeSizeRef.current;
         if (pendingResize && contentEl && pendingResize.from > pendingResize.to) {
           resizeSizeAnimatingRef.current = true;
+          const rtl = getComputedStyle(contentEl).direction === "rtl";
           contentEl.style.setProperty(
             "--vds-drawer-transform",
-            getVisualTransform(direction, target, pendingResize.from, { disableStretch: true }),
+            getVisualTransform(direction, target, pendingResize.from, { disableStretch: true, rtl }),
           );
           window.clearTimeout(resizeCleanupTimerRef.current);
           const { ms } = readDrawerTiming(contentEl);
@@ -799,7 +801,11 @@ export const DrawerContent = forwardRef<
     if (totalSize <= 0) return;
 
     if (currentSizeRef.current <= 0) {
-      contentEl.style.setProperty("--vds-drawer-transform", getVisualTransform(direction, 0, totalSize));
+      const rtl = getComputedStyle(contentEl).direction === "rtl";
+      contentEl.style.setProperty(
+        "--vds-drawer-transform",
+        getVisualTransform(direction, 0, totalSize, { rtl }),
+      );
       if (overlayRef.current) {
         overlayRef.current.style.setProperty("--vds-drawer-overlay-opacity", "0");
       }
@@ -823,10 +829,12 @@ export const DrawerContent = forwardRef<
         };
         setTransition(contentEl, "none");
         contentEl.style.setProperty(resizeSizeProperty, `${previousLayout.totalSize}px`);
+        const rtl = getComputedStyle(contentEl).direction === "rtl";
         contentEl.style.setProperty(
           "--vds-drawer-transform",
           getVisualTransform(direction, visualSize, previousLayout.totalSize, {
             disableStretch: true,
+            rtl,
           }),
         );
       } else {

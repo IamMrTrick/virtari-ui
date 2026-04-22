@@ -116,6 +116,8 @@ declare const DataTableRoot: <TData, TValue = unknown>(props: DataTableRootProps
     ref?: React.Ref<HTMLDivElement>;
 }) => React.ReactElement;
 interface DataTableToolbarProps extends HTMLAttributes<HTMLDivElement> {
+    sticky?: boolean;
+    stickyOffset?: CSSProperties["top"];
 }
 declare const DataTableToolbar: react.ForwardRefExoticComponent<DataTableToolbarProps & react.RefAttributes<HTMLDivElement>>;
 interface DataTableScrollAreaProps extends HTMLAttributes<HTMLDivElement> {
@@ -160,6 +162,7 @@ interface DataTableCellProps<TData = unknown, TValue = unknown> extends Omit<TdH
 }
 declare const DataTableCell: react.ForwardRefExoticComponent<DataTableCellProps<unknown, unknown> & react.RefAttributes<HTMLTableCellElement>>;
 interface DataTableFooterProps extends HTMLAttributes<HTMLTableSectionElement> {
+    sticky?: boolean;
 }
 declare const DataTableFooter: react.ForwardRefExoticComponent<DataTableFooterProps & react.RefAttributes<HTMLTableSectionElement>>;
 interface DataTableFooterRowProps<TData = unknown> extends HTMLAttributes<HTMLTableRowElement> {

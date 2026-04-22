@@ -1,0 +1,54 @@
+{
+  "brand": {
+    "wordmark": "Virtari DS",
+    "homeLabel": "Virtari Design System — home"
+  },
+  "sidebar": {
+    "ariaPrimary": "Primary",
+    "ariaDocs": "Documentation",
+    "filterPlaceholder": "Filter…",
+    "filterAriaLabel": "Filter navigation",
+    "clearSearch": "Clear search",
+    "noMatches": "No matches for \u201c{{query}}\u201d.",
+    "expand": "Expand navigation",
+    "collapse": "Collapse navigation",
+    "toggleBlockedTitle": "Can\u2019t toggle while editing",
+    "toggleBlockedBody": "Unfocus the input, then press Ctrl+B (or Cmd+B) again.",
+    "mobileAriaLabel": "Navigation",
+    "mobileDescription": "Documentation navigation menu",
+    "close": "Close"
+  },
+  "groups": {
+    "overview": "Overview",
+    "foundations": "Foundations",
+    "formControls": "Form Controls",
+    "display": "Display",
+    "overlays": "Overlays",
+    "navigation": "Navigation",
+    "layout": "Layout",
+    "data": "Data"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Theme, radius, direction and language.",
+    "open": "Open settings",
+    "close": "Close settings",
+    "theme": "Theme",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "radius": "Radius",
+    "radiusSharp": "Sharp",
+    "radiusSoft": "Soft",
+    "radiusRound": "Round",
+    "radiusPill": "Pill",
+    "direction": "Direction",
+    "dirLtr": "LTR",
+    "dirRtl": "RTL",
+    "language": "Language",
+    "langEnglish": "English",
+    "langPersian": "\u0641\u0627\u0631\u0633\u06cc"
+  },
+  "layout": {
+    "toggleSidebar": "Toggle sidebar"
+  }
+}

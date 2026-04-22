@@ -23,9 +23,12 @@ interface TabsListProps extends React.ComponentPropsWithoutRef<typeof TabsPrimit
     size?: TabsSize;
     fullWidth?: boolean;
     animatedIndicator?: boolean;
+    /** When the list overflows, auto-scroll the active trigger into view
+     *  (centered) so it's never clipped. Default `true`. */
+    autoScroll?: boolean;
     ref?: Ref<ComponentRef<typeof TabsPrimitive.List>>;
 }
-declare function TabsList({ className, variant, size, fullWidth, animatedIndicator, ref, ...props }: TabsListProps): react_jsx_runtime.JSX.Element;
+declare function TabsList({ className, variant, size, fullWidth, animatedIndicator, autoScroll, ref, ...props }: TabsListProps): react_jsx_runtime.JSX.Element;
 interface TabsTriggerProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
     ref?: Ref<ComponentRef<typeof TabsPrimitive.Trigger>>;
 }

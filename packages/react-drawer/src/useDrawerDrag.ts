@@ -96,6 +96,10 @@ interface DragState {
   axisLocked: boolean;
   dragging: boolean;
   samples: VelocitySample[];
+  /* Direction captured at drag-start. Locked for the duration of the
+     gesture because flipping mid-drag would reverse the open/close sign
+     partway through the user's motion. */
+  rtl: boolean;
 }
 
 function isInside(target: HTMLElement | null, parent: HTMLElement | null): boolean {
@@ -139,6 +143,11 @@ function getTouchById(list: TouchList, touchId: number): Touch | null {
     if (touch?.identifier === touchId) return touch;
   }
   return null;
+}
+
+function resolveRtl(contentEl: HTMLElement | null): boolean {
+  if (!contentEl) return false;
+  return getComputedStyle(contentEl).direction === "rtl";
 }
 
 function getDragSurface(
@@ -262,7 +271,7 @@ export function useDrawerDrag(config: DragConfig) {
 
     const mainDelta = main - state.startMain;
     const crossDelta = cross - state.startCross;
-    const openSign = getOpenSign(resolvedConfig.direction);
+    const openSign = getOpenSign(resolvedConfig.direction, state.rtl);
     const sizeDelta = mainDelta * openSign;
 
     if (!state.axisLocked) {
@@ -520,6 +529,7 @@ export function useDrawerDrag(config: DragConfig) {
       axisLocked: false,
       dragging: false,
       samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
+      rtl: resolveRtl(resolvedConfig.getContentEl()),
     });
 
     bindMouseListeners();
@@ -559,6 +569,7 @@ export function useDrawerDrag(config: DragConfig) {
       axisLocked: false,
       dragging: false,
       samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
+      rtl: resolveRtl(resolvedConfig.getContentEl()),
     });
 
     bindPointerListeners();
@@ -598,6 +609,7 @@ export function useDrawerDrag(config: DragConfig) {
       axisLocked: false,
       dragging: false,
       samples: [{ size: resolvedConfig.getCurrentSize(), time: performance.now() }],
+      rtl: resolveRtl(resolvedConfig.getContentEl()),
     });
 
     bindTouchListeners();

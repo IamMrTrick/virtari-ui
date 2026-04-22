@@ -136,6 +136,24 @@ export function useNavSubmenuContext(): NavSubmenuContextValue | null {
 }
 
 /* ──────────────────────────────────────────────
+ * NavPopoverCloserContext — published by any
+ * ancestor NavItem whose submenu is rendering in
+ * popover mode. Descendant NavLinks read it and
+ * auto-close the popover on click so the user
+ * isn't left with a floating panel after
+ * navigating.
+ * ────────────────────────────────────────────── */
+
+export type NavPopoverCloser = () => void;
+
+export const NavPopoverCloserContext =
+  createContext<NavPopoverCloser | null>(null);
+
+export function useNavPopoverCloser(): NavPopoverCloser | null {
+  return useContext(NavPopoverCloserContext);
+}
+
+/* ──────────────────────────────────────────────
  * Helpers
  * ────────────────────────────────────────────── */
 

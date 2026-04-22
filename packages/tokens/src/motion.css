@@ -70,6 +70,32 @@
     to { translate: 0 0; opacity: 1; }
   }
 
+  /* Logical (direction-aware) slide keyframes. The start offset flips via
+     --vds-slide-x-inline when the nearest ancestor resolves to RTL, so the
+     same animation name produces a mirrored motion in Persian/Arabic. */
+  :root { --vds-slide-x-inline: -0.5rem; }
+  :where([dir="rtl"]) { --vds-slide-x-inline: 0.5rem; }
+
+  @keyframes vds-slide-in-from-inline-start {
+    from { translate: var(--vds-slide-x-inline) 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-in-from-inline-end {
+    from { translate: calc(-1 * var(--vds-slide-x-inline)) 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-out-to-inline-start {
+    from { translate: 0 0; opacity: 1; }
+    to { translate: var(--vds-slide-x-inline) 0; opacity: 0; }
+  }
+
+  @keyframes vds-slide-out-to-inline-end {
+    from { translate: 0 0; opacity: 1; }
+    to { translate: calc(-1 * var(--vds-slide-x-inline)) 0; opacity: 0; }
+  }
+
   /* ─── Respect reduced motion ─── */
   @media (prefers-reduced-motion: reduce) {
     :root {

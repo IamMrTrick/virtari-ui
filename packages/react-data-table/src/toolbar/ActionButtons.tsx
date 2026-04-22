@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
-import { cn } from "@virtari-packages/utils";
+import { Button } from "@virtari-packages/react-button";
+import type { ButtonColor, ButtonSize, ButtonVariant } from "@virtari-packages/react-button";
 import {
   IconChevronDown,
   IconDotsVertical,
@@ -19,17 +20,21 @@ import {
 /*
  * Toolbar action-button primitives.
  *
- * Thin <button>s with consistent styling hooks via `.vds-data-table-toolbar-button`.
- * Defaults to an inline SVG glyph + label. Consumers can pass an `icon` and
- * override everything. Wired to look and behave like ghost Button tokens
- * without taking a hard dependency on @virtari-packages/react-button.
+ * Thin wrappers over the shared Button component. Visual sizing and variants
+ * come from @virtari-packages/react-button.
  */
 
-export type ToolbarActionButtonVariant = "ghost" | "outline" | "solid";
-export type ToolbarActionButtonSize = "sm" | "md";
+export type ToolbarActionButtonVariant = Extract<
+  ButtonVariant,
+  "ghost" | "outline" | "solid" | "soft"
+>;
+export type ToolbarActionButtonSize = Extract<
+  ButtonSize,
+  "2xs" | "xs" | "sm" | "md" | "lg"
+>;
 
 export interface ToolbarActionButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
   icon?: ReactNode;
   /** Trailing glyph (e.g. chevron-down for split-style buttons). */
   trailingIcon?: ReactNode;
@@ -43,10 +48,6 @@ export interface ToolbarActionButtonProps
   size?: ToolbarActionButtonSize;
   /** Icon-only (skip the label slot even if provided). */
   iconOnly?: boolean;
-}
-
-function Glyph({ children }: { children: ReactNode }) {
-  return <span className="vds-data-table-toolbar-button-icon">{children}</span>;
 }
 
 export const ToolbarActionButton = forwardRef<
@@ -69,28 +70,51 @@ export const ToolbarActionButton = forwardRef<
   ref,
 ) {
   const showLabel = !iconOnly && (label !== undefined || children !== undefined);
+  const color: ButtonColor =
+    intent === "danger" ? "danger" : intent === "primary" ? "primary" : "contrast";
+  const labelNode = showLabel ? (
+    <span className="vds-data-table-toolbar-button-label">
+      {children ?? label}
+    </span>
+  ) : null;
+  const countNode =
+    count !== undefined && count !== 0 ? (
+      <span className="vds-data-table-toolbar-button-count">{count}</span>
+    ) : null;
+
+  if (iconOnly && icon && !labelNode && !countNode && !trailingIcon) {
+    return (
+      <Button
+        ref={ref}
+        type="button"
+        color={color}
+        variant={variant}
+        size={size}
+        data-intent={intent}
+        className={className}
+        {...props}
+      >
+        {icon}
+      </Button>
+    );
+  }
+
   return (
-    <button
+    <Button
       ref={ref}
       type="button"
+      color={color}
+      variant={variant}
+      size={size}
       data-intent={intent}
-      data-variant={variant}
-      data-size={size}
-      data-icon-only={iconOnly ? "" : undefined}
-      className={cn("vds-data-table-toolbar-button", className)}
+      className={className}
+      leftSection={icon}
+      rightSection={trailingIcon}
       {...props}
     >
-      {icon && <Glyph>{icon}</Glyph>}
-      {showLabel && (
-        <span className="vds-data-table-toolbar-button-label">
-          {children ?? label}
-        </span>
-      )}
-      {count !== undefined && count !== 0 && (
-        <span className="vds-data-table-toolbar-button-count">{count}</span>
-      )}
-      {trailingIcon && <Glyph>{trailingIcon}</Glyph>}
-    </button>
+      {labelNode}
+      {countNode}
+    </Button>
   );
 });
 
@@ -145,10 +169,10 @@ export const DataTableRefreshButton = forwardRef<HTMLButtonElement, BaseProps>(
   },
 );
 
-/** Export — default `variant="outline"` (matches the reference dashboard). */
+/** Export: soft contrast by default. */
 export const DataTableExportButton = forwardRef<HTMLButtonElement, BaseProps>(
   function DataTableExportButton(
-    { label = "Export", variant = "outline", ...props },
+    { label = "Export", variant = "soft", intent = "neutral", ...props },
     ref,
   ) {
     return (
@@ -156,6 +180,7 @@ export const DataTableExportButton = forwardRef<HTMLButtonElement, BaseProps>(
         ref={ref}
         icon={DownloadIcon}
         label={label}
+        intent={intent}
         variant={variant}
         {...props}
       />

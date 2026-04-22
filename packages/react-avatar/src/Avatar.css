@@ -63,7 +63,61 @@
     font-family: var(--vds-font-sans);
     font-size: var(--_avatar-font-size);
     font-weight: var(--vds-font-weight-medium);
-    background-color: var(--vds-color-primary-bg);
-    color: var(--vds-color-primary-text);
+    /* Two-var contract — slots override these (bg + text). Defaults resolve
+       to the primary tokens so the original "neutral" look is preserved when
+       `color` is unset. */
+    --_avatar-bg: var(--vds-color-primary-bg);
+    --_avatar-fg: var(--vds-color-primary-text);
+    background-color: var(--_avatar-bg);
+    color: var(--_avatar-fg);
+  }
+
+  /* ── Color slots ──
+   * 1\u20136 map onto the existing intent scales so they flip with
+   * [data-brand] and invert correctly in dark mode (step 3 is light in
+   * LTR\u2019s light mode and dark in dark mode; step 11 is the opposite). 7
+   * and 8 use inline oklch values for two extra hues (pink, purple) so the
+   * palette reaches 8 without depending on tokens that don\u2019t exist. */
+  .vds-avatar[data-color="1"] .vds-avatar-fallback {
+    --_avatar-bg: var(--vds-color-primary-3);
+    --_avatar-fg: var(--vds-color-primary-11);
+  }
+  .vds-avatar[data-color="2"] .vds-avatar-fallback {
+    --_avatar-bg: var(--vds-color-success-3);
+    --_avatar-fg: var(--vds-color-success-11);
+  }
+  .vds-avatar[data-color="3"] .vds-avatar-fallback {
+    --_avatar-bg: var(--vds-color-warning-3);
+    --_avatar-fg: var(--vds-color-warning-11);
+  }
+  .vds-avatar[data-color="4"] .vds-avatar-fallback {
+    --_avatar-bg: var(--vds-color-danger-3);
+    --_avatar-fg: var(--vds-color-danger-11);
+  }
+  .vds-avatar[data-color="5"] .vds-avatar-fallback {
+    --_avatar-bg: var(--vds-color-info-3);
+    --_avatar-fg: var(--vds-color-info-11);
+  }
+  .vds-avatar[data-color="6"] .vds-avatar-fallback {
+    --_avatar-bg: var(--vds-color-accent-3);
+    --_avatar-fg: var(--vds-color-accent-11);
+  }
+  /* Pink — hue 350 */
+  .vds-avatar[data-color="7"] .vds-avatar-fallback {
+    --_avatar-bg: oklch(0.945 0.025 350);
+    --_avatar-fg: oklch(0.450 0.170 350);
+  }
+  [data-theme="dark"] .vds-avatar[data-color="7"] .vds-avatar-fallback {
+    --_avatar-bg: oklch(0.260 0.070 350);
+    --_avatar-fg: oklch(0.830 0.130 350);
+  }
+  /* Purple — hue 300 */
+  .vds-avatar[data-color="8"] .vds-avatar-fallback {
+    --_avatar-bg: oklch(0.945 0.030 300);
+    --_avatar-fg: oklch(0.460 0.180 300);
+  }
+  [data-theme="dark"] .vds-avatar[data-color="8"] .vds-avatar-fallback {
+    --_avatar-bg: oklch(0.255 0.075 300);
+    --_avatar-fg: oklch(0.835 0.140 300);
   }
 }
