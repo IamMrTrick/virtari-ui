@@ -111,6 +111,7 @@ export function useSubmenu({
           getReferenceProps,
           getFloatingProps,
           isMounted: open,
+          isPositioned: floatingState.isPositioned,
         }
       : null;
 

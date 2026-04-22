@@ -117,6 +117,14 @@ export interface FloatingBridge {
     userProps?: React.HTMLProps<HTMLElement>,
   ) => Record<string, unknown>;
   isMounted: boolean;
+  /**
+   * `false` during the frame(s) between mount and Floating UI's first
+   * position computation. Submenus should be kept `visibility: hidden`
+   * while this is `false` — otherwise they paint briefly at the
+   * top-left of the viewport (the initial `translate(0, 0)`) and then
+   * jump to the anchor.
+   */
+  isPositioned: boolean;
 }
 
 export const NavSubmenuContext = createContext<NavSubmenuContextValue | null>(

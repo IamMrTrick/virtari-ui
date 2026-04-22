@@ -57,8 +57,13 @@ export function NavSubmenu({
   // Popover mode — portal + floating UI
   if (!open || !floating) return null;
 
+  // Keep the submenu invisible until Floating UI has computed its real
+  // position. Without this the panel paints one frame at the viewport's
+  // top-left corner (the initial `translate(0, 0)`) and then "jumps" to
+  // the anchor — a visible flash on every open.
   const mergedStyle: CSSProperties = {
     ...floating.floatingStyles,
+    visibility: floating.isPositioned ? undefined : "hidden",
     ...style,
   };
 
@@ -142,6 +147,10 @@ export function NavMega({
 
   const mergedStyle: CSSProperties = {
     ...floating.floatingStyles,
+    // Same flash-guard as <NavSubmenu>: keep the panel hidden until
+    // Floating UI computes its real position, otherwise it paints one
+    // frame at the viewport's top-left and then jumps to the anchor.
+    visibility: floating.isPositioned ? undefined : "hidden",
     ...style,
     // @ts-expect-error — custom property passed to CSS
     "--mega-cols": columns,

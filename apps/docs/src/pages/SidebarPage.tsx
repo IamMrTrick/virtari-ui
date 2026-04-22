@@ -6,7 +6,7 @@ import {
   SidebarFooter,
   SidebarSeparator,
   SidebarTrigger,
-  useSidebar,
+  useSidebarOptional,
   type SidebarSize,
   type SidebarSide,
   type SidebarBackground,
@@ -149,7 +149,7 @@ function LogoMark() {
 
 /** Brand wordmark — logo always visible; wordmark becomes sr-only on rail. */
 function Brand() {
-  const { collapsed } = useSidebar();
+  const { collapsed = false } = useSidebarOptional() ?? {};
   return (
     <span
       style={{
@@ -170,7 +170,7 @@ function Brand() {
 }
 
 function UserProfile({ flex = false }: { flex?: boolean }) {
-  const { collapsed } = useSidebar();
+  const { collapsed = false } = useSidebarOptional() ?? {};
   return (
     <span
       style={{
@@ -300,7 +300,7 @@ function NavSearch({
   value: string;
   onChange: (v: string) => void;
 }) {
-  const { collapsed } = useSidebar();
+  const { collapsed = false } = useSidebarOptional() ?? {};
   if (collapsed) return null;
   return (
     <div style={{ position: "relative", marginBlockEnd: "var(--vds-space-2)" }}>
@@ -389,7 +389,7 @@ function DemoNav({
   active: string;
   onSelect: (path: string) => void;
 }) {
-  const { collapsed } = useSidebar();
+  const { collapsed = false } = useSidebarOptional() ?? {};
   const [query, setQuery] = useState("");
 
   const primary   = filterNodes(PRIMARY,   query);
@@ -460,14 +460,14 @@ export function SidebarPage() {
         <pre className="docs-code">{`import {
   Sidebar, SidebarHeader, SidebarBody,
   SidebarFooter, SidebarSeparator, SidebarTrigger,
-  useSidebar,
+  useSidebarOptional,
 } from "@virtari-packages/react-sidebar";
 import { Nav, NavList, NavItem, NavLink, NavTrigger,
          NavSubmenu, NavIcon, NavLabel, NavBadge, NavChevron,
          NavGroup } from "@virtari-packages/react-nav";
 
 function NavTree() {
-  const { collapsed } = useSidebar();
+  const { collapsed = false } = useSidebarOptional() ?? {};
   return (
     <Nav collapsed={collapsed} currentPath={path} aria-label="Primary">
       <NavList>

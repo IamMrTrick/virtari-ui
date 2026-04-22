@@ -64,6 +64,14 @@ interface FloatingBridge {
     getReferenceProps: (userProps?: React.HTMLProps<Element>) => Record<string, unknown>;
     getFloatingProps: (userProps?: React.HTMLProps<HTMLElement>) => Record<string, unknown>;
     isMounted: boolean;
+    /**
+     * `false` during the frame(s) between mount and Floating UI's first
+     * position computation. Submenus should be kept `visibility: hidden`
+     * while this is `false` — otherwise they paint briefly at the
+     * top-left of the viewport (the initial `translate(0, 0)`) and then
+     * jump to the anchor.
+     */
+    isPositioned: boolean;
 }
 /**
  * Match helper used by NavLink to auto-flag `aria-current="page"`.

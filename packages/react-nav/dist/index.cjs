@@ -229,7 +229,8 @@ function useSubmenu({
     context: floatingState.context,
     getReferenceProps,
     getFloatingProps,
-    isMounted: open
+    isMounted: open,
+    isPositioned: floatingState.isPositioned
   } : null;
   return {
     id: `vds-nav-submenu-${id}`,
@@ -480,6 +481,7 @@ function NavSubmenu({
   if (!open || !floating) return null;
   const mergedStyle = {
     ...floating.floatingStyles,
+    visibility: floating.isPositioned ? void 0 : "hidden",
     ...style
   };
   const floatingProps = floating.getFloatingProps();
@@ -533,6 +535,10 @@ function NavMega({
   if (!open || !floating) return null;
   const mergedStyle = {
     ...floating.floatingStyles,
+    // Same flash-guard as <NavSubmenu>: keep the panel hidden until
+    // Floating UI computes its real position, otherwise it paints one
+    // frame at the viewport's top-left and then jumps to the anchor.
+    visibility: floating.isPositioned ? void 0 : "hidden",
     ...style,
     // @ts-expect-error — custom property passed to CSS
     "--mega-cols": columns,

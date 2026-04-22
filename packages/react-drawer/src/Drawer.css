@@ -540,6 +540,7 @@
       transform var(--vds-drawer-duration) var(--vds-drawer-ease),
       border-radius var(--vds-drawer-duration) var(--vds-drawer-ease);
     transform-origin: center top;
+    will-change: transform, border-radius;
     overflow: hidden;
   }
 }

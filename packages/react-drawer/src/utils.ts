@@ -331,18 +331,38 @@ export function applyRubberband(openPx: number, drawerSize: number): number {
   return openPx;
 }
 
-export function getBackgroundStyles(progress: number): { transform: string; borderRadius: string } {
+export function getBackgroundTransformOrigin(direction: Direction, rtl = false): string {
+  switch (direction) {
+    case "bottom":
+      return "center top";
+    case "top":
+      return "center bottom";
+    case "left":
+      return rtl ? "left center" : "right center";
+    case "right":
+      return rtl ? "right center" : "left center";
+  }
+}
+
+export function getBackgroundStyles(
+  progress: number,
+  direction: Direction,
+  rtl = false,
+): { transform: string; borderRadius: string; transformOrigin: string } {
   const p = clamp(progress, 0, 1);
-  // Peak-and-relax curve: the background scale (and its rounded corners)
-  // grow while the drawer transitions, peak near the top, then ease back to
-  // unity when the drawer is fully open. At the "full-full" state the
-  // background is mostly hidden, so a shrunken-with-rounded-corners backdrop
-  // just looks fragmented — we relax it to its natural state instead.
-  const PEAK = 0.9;
-  const strength = p <= PEAK ? p / PEAK : Math.max(0, 1 - (p - PEAK) / (1 - PEAK));
+  // Monotonic curve (iOS sheet behavior): the background scale and its
+  // rounded corners grow in lock-step with the drag progress and stay at
+  // their max while the drawer is fully open. Dragging back towards the
+  // closed position eases them back — so the effect is always tied to the
+  // drawer's actual position, in both directions.
+  //
+  // Drag stays linear; programmatic open/close still eases through the
+  // wrapper transition.
+  const strength = p;
   return {
     transform: `scale(${1 - strength * 0.06})`,
     borderRadius: `${strength * 24}px`,
+    transformOrigin: getBackgroundTransformOrigin(direction, rtl),
   };
 }
 

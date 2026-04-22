@@ -217,13 +217,25 @@ function applyRubberband(openPx, drawerSize) {
   }
   return openPx;
 }
-function getBackgroundStyles(progress) {
+function getBackgroundTransformOrigin(direction, rtl = false) {
+  switch (direction) {
+    case "bottom":
+      return "center top";
+    case "top":
+      return "center bottom";
+    case "left":
+      return rtl ? "left center" : "right center";
+    case "right":
+      return rtl ? "right center" : "left center";
+  }
+}
+function getBackgroundStyles(progress, direction, rtl = false) {
   const p = clamp(progress, 0, 1);
-  const PEAK = 0.9;
-  const strength = p <= PEAK ? p / PEAK : Math.max(0, 1 - (p - PEAK) / (1 - PEAK));
+  const strength = p;
   return {
     transform: `scale(${1 - strength * 0.06})`,
-    borderRadius: `${strength * 24}px`
+    borderRadius: `${strength * 24}px`,
+    transformOrigin: getBackgroundTransformOrigin(direction, rtl)
   };
 }
 function isAtScrollEdge(el, direction, closingDelta) {
@@ -1225,10 +1237,13 @@ var DrawerContent = forwardRef(function DrawerContent2({
       if (overlayProgress <= 1e-3) {
         wrapperEl.style.transform = "";
         wrapperEl.style.borderRadius = "";
+        wrapperEl.style.transformOrigin = "";
       } else {
-        const backgroundStyles = getBackgroundStyles(overlayProgress);
+        const rtl = getComputedStyle(contentEl).direction === "rtl";
+        const backgroundStyles = getBackgroundStyles(overlayProgress, direction, rtl);
         wrapperEl.style.transform = backgroundStyles.transform;
         wrapperEl.style.borderRadius = backgroundStyles.borderRadius;
+        wrapperEl.style.transformOrigin = backgroundStyles.transformOrigin;
       }
     }
   }, [
@@ -1689,6 +1704,7 @@ var DrawerContent = forwardRef(function DrawerContent2({
     wrapperEl.style.transition = "";
     wrapperEl.style.transform = "";
     wrapperEl.style.borderRadius = "";
+    wrapperEl.style.transformOrigin = "";
   }, [present]);
   const drag = useDrawerDrag({
     direction,

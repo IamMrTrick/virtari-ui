@@ -607,10 +607,13 @@ export const DrawerContent = forwardRef<
       if (overlayProgress <= 0.001) {
         wrapperEl.style.transform = "";
         wrapperEl.style.borderRadius = "";
+        wrapperEl.style.transformOrigin = "";
       } else {
-        const backgroundStyles = getBackgroundStyles(overlayProgress);
+        const rtl = getComputedStyle(contentEl).direction === "rtl";
+        const backgroundStyles = getBackgroundStyles(overlayProgress, direction, rtl);
         wrapperEl.style.transform = backgroundStyles.transform;
         wrapperEl.style.borderRadius = backgroundStyles.borderRadius;
+        wrapperEl.style.transformOrigin = backgroundStyles.transformOrigin;
       }
     }
   }, [
@@ -1187,6 +1190,7 @@ export const DrawerContent = forwardRef<
     wrapperEl.style.transition = "";
     wrapperEl.style.transform = "";
     wrapperEl.style.borderRadius = "";
+    wrapperEl.style.transformOrigin = "";
   }, [present]);
 
   const drag = useDrawerDrag({
