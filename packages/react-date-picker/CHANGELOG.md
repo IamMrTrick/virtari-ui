@@ -1,5 +1,12 @@
 # @virtari-packages/react-date-picker
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [1132161]
+  - @virtari-packages/react-drawer@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes
