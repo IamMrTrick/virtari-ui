@@ -1,5 +1,12 @@
 # @virtari-packages/react-nav
 
+## 0.3.0
+
+### Minor Changes
+
+- 1132161: - **react-drawer:** updates to core behavior, utility helpers, and styles.
+  - **react-nav:** updates to submenu context and the `useSubmenu` hook.
+
 ## 0.2.0
 
 ### Minor Changes
