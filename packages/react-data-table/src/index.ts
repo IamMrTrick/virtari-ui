@@ -262,6 +262,7 @@ export type {
 /* Utility re-exports */
 export { createColumnHelper, flexRender } from "./utils/columns";
 export { buildColumnSizeVars, columnVar } from "./utils/css-vars";
+export type { DataTableStickyMode } from "./utils/sticky";
 
 /* TanStack re-exports (so consumers don't need a second import) */
 export type {

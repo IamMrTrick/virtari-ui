@@ -1,9 +1,16 @@
 import { forwardRef } from "react";
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
+import type {
+  ButtonHTMLAttributes,
+  CSSProperties,
+  HTMLAttributes,
+  ReactNode,
+} from "react";
 import type { Row } from "@tanstack/react-table";
 import { cn } from "@virtari-packages/utils";
 
 import { useDataTableContext } from "../DataTableContext";
+import { stickyAttr } from "../utils/sticky";
+import type { DataTableStickyMode } from "../utils/sticky";
 
 /* ────────────────────────────────────────────────────────────
  * BulkActions — sticky bar shown while rows are selected.
@@ -24,7 +31,8 @@ export interface DataTableBulkActionsProps
   /** External flag — controls visibility when all-across-pages is selected. */
   isAllAcrossPagesSelected?: boolean;
   /** Stick to bottom of the table instead of inline. */
-  sticky?: boolean;
+  sticky?: DataTableStickyMode;
+  stickyOffset?: CSSProperties["bottom"];
 }
 
 export const DataTableBulkActions = forwardRef<
@@ -36,7 +44,9 @@ export const DataTableBulkActions = forwardRef<
     showWhenAllAcrossPagesSelected = true,
     isAllAcrossPagesSelected = false,
     sticky = true,
+    stickyOffset,
     className,
+    style,
     ...props
   },
   ref,
@@ -52,14 +62,23 @@ export const DataTableBulkActions = forwardRef<
   if (!shouldShow) return null;
 
   const clearSelection = () => table.resetRowSelection();
+  const stickyStyle =
+    stickyOffset === undefined
+      ? style
+      : ({
+          ["--vds-sticky-offset-bottom" as string]: stickyOffset,
+          ...style,
+        } as CSSProperties);
 
   return (
     <div
       ref={ref}
       role="region"
       aria-label={`Bulk actions, ${selectedCount} selected`}
-      data-sticky={sticky ? "" : undefined}
+      data-sticky={stickyAttr(sticky)}
+      data-sticky-axis="bottom"
       className={cn("vds-data-table-bulk-actions", className)}
+      style={stickyStyle}
       {...props}
     >
       {typeof children === "function"

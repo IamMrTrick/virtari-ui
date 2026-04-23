@@ -236,6 +236,51 @@ body {
   white-space: pre;
 }
 
+/* ── DataTable demo helpers ── */
+.docs-demo-hint {
+  font-size: var(--vds-text-xs);
+  color: var(--vds-color-text-muted);
+  margin-block-start: var(--vds-space-2);
+}
+
+.docs-virtualized-frame {
+  block-size: 26rem;
+}
+
+.docs-filter-header {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vds-space-1-5);
+}
+
+.docs-row-link {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vds-space-2);
+  min-inline-size: 0;
+
+  &:focus-visible {
+    outline: 2px solid var(--vds-color-border-focus);
+    outline-offset: 2px;
+    border-radius: var(--vds-radius-sm);
+  }
+}
+
+@keyframes vds-docs-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.docs-users-name-cell-text {
+  font-weight: var(--vds-font-weight-medium);
+  color: var(--vds-color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ── Colors Page ── */
 .docs-color-grid {
   display: flex;

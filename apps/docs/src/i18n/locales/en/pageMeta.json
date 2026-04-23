@@ -191,6 +191,14 @@
     "title": "Users \u2014 Data Table showcase",
     "description": "Production-grade users table \u2014 view switch, search, filter bar + drawer, customize columns, bulk actions, refresh, export, add \u2014 composed entirely from the design-system primitives."
   },
+  "data-table-products": {
+    "title": "Products \u2014 Data Table showcase",
+    "description": "Product catalog showcase \u2014 per-column filters, category grouping, bulk archive, customize columns, and table/board view modes."
+  },
+  "data-table-orders": {
+    "title": "Orders \u2014 Data Table showcase",
+    "description": "Server-side orders showcase \u2014 simulated latency, date-range filter drawer, grouping by status, bulk refund/cancel, and export."
+  },
   "table": {
     "title": "Table",
     "description": "Semantic HTML table \u2014 4 variants, 3 row styles, 3 sizes, density, sortable headers, sticky header/columns, selection, and full RTL."

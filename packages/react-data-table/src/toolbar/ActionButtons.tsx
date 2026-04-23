@@ -107,6 +107,7 @@ export const ToolbarActionButton = forwardRef<
       variant={variant}
       size={size}
       data-intent={intent}
+      data-mobile-icon-only={icon && showLabel ? "" : undefined}
       className={className}
       leftSection={icon}
       rightSection={trailingIcon}

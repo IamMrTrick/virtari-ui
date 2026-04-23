@@ -26,6 +26,7 @@ import {
   IconArrowsVertical,
   IconBell,
   IconBook2,
+  IconBuildingStore,
   IconCalendar,
   IconCards,
   IconChevronDown,
@@ -52,6 +53,7 @@ import {
   IconLetterT,
   IconLoader2,
   IconMenu,
+  IconPackage,
   IconMessage2,
   IconPalette,
   IconProgress,
@@ -145,6 +147,8 @@ const ICONS: Record<string, ReactNode> = {
   "scroll-area": <IconArrowsVertical {...navIconProps} />,
   "data-table": <IconTable {...navIconProps} />,
   "data-table-users": <IconUserCircle {...navIconProps} />,
+  "data-table-products": <IconPackage {...navIconProps} />,
+  "data-table-orders": <IconBuildingStore {...navIconProps} />,
   table: <IconTableRow {...navIconProps} />,
 };
 
@@ -229,7 +233,13 @@ const NAV_ITEMS: NavGroupData[] = [
   },
   {
     groupKey: "groups.data",
-    items: ["table", "data-table", "data-table-users"],
+    items: [
+      "table",
+      "data-table",
+      "data-table-users",
+      "data-table-products",
+      "data-table-orders",
+    ],
   },
 ];
 

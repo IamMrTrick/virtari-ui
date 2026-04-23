@@ -3,6 +3,8 @@ import * as react from 'react';
 import { ThHTMLAttributes, ReactNode, CSSProperties, HTMLAttributes, TableHTMLAttributes, ButtonHTMLAttributes, TdHTMLAttributes, InputHTMLAttributes } from 'react';
 import { SortingState, ColumnFiltersState, PaginationState, GroupingState, RowSelectionState, ColumnSizingState, ColumnOrderState, ColumnPinningState, VisibilityState, ExpandedState, RowPinningState, Row, Table, ColumnDef, Header, HeaderGroup, Column, Cell } from '@tanstack/react-table';
 
+type DataTableStickyMode = boolean | "always" | "smart";
+
 type DataTableSize = "sm" | "md" | "lg";
 type DataTableInteractionMode = "table" | "grid";
 type DataTableBorderMode = "none" | "rows" | "grid";
@@ -87,6 +89,13 @@ type DataTableRootOwnProps = {
     bordered?: DataTableBorderMode;
     striped?: boolean;
     stickyHeader?: boolean;
+    /** Base top offset for top sticky bands (toolbar, filter-bar, header).
+     * Useful when the page has an outer
+     * fixed/sticky chrome — e.g. an app header — that sticky bands must clear.
+     * Individual top bands can still override with their own `stickyOffset`. */
+    stickyOffset?: CSSProperties["top"];
+    /** Base bottom offset for bottom sticky bands (bulk actions, pagination, footer). */
+    stickyBottomOffset?: CSSProperties["bottom"];
     mode?: DataTableMode;
     virtualization?: false | DataTableVirtualizationOptions;
     columnResizeMode?: "onChange" | "onEnd";
@@ -116,7 +125,7 @@ declare const DataTableRoot: <TData, TValue = unknown>(props: DataTableRootProps
     ref?: React.Ref<HTMLDivElement>;
 }) => React.ReactElement;
 interface DataTableToolbarProps extends HTMLAttributes<HTMLDivElement> {
-    sticky?: boolean;
+    sticky?: DataTableStickyMode;
     stickyOffset?: CSSProperties["top"];
 }
 declare const DataTableToolbar: react.ForwardRefExoticComponent<DataTableToolbarProps & react.RefAttributes<HTMLDivElement>>;
@@ -133,6 +142,7 @@ interface DataTableTableProps extends TableHTMLAttributes<HTMLTableElement> {
 }
 declare const DataTableTable: react.ForwardRefExoticComponent<DataTableTableProps & react.RefAttributes<HTMLTableElement>>;
 interface DataTableHeaderProps extends Omit<HTMLAttributes<HTMLTableSectionElement>, "children"> {
+    stickyOffset?: CSSProperties["top"];
     children?: ReactNode | ((headerGroups: HeaderGroup<unknown>[]) => ReactNode);
 }
 declare const DataTableHeader: react.ForwardRefExoticComponent<DataTableHeaderProps & react.RefAttributes<HTMLTableSectionElement>>;
@@ -162,7 +172,8 @@ interface DataTableCellProps<TData = unknown, TValue = unknown> extends Omit<TdH
 }
 declare const DataTableCell: react.ForwardRefExoticComponent<DataTableCellProps<unknown, unknown> & react.RefAttributes<HTMLTableCellElement>>;
 interface DataTableFooterProps extends HTMLAttributes<HTMLTableSectionElement> {
-    sticky?: boolean;
+    sticky?: DataTableStickyMode;
+    stickyOffset?: CSSProperties["bottom"];
 }
 declare const DataTableFooter: react.ForwardRefExoticComponent<DataTableFooterProps & react.RefAttributes<HTMLTableSectionElement>>;
 interface DataTableFooterRowProps<TData = unknown> extends HTMLAttributes<HTMLTableRowElement> {
@@ -239,4 +250,4 @@ interface DataTableGroupHeaderRowProps<TData = unknown> extends Omit<HTMLAttribu
 }
 declare const DataTableGroupHeaderRow: react.ForwardRefExoticComponent<DataTableGroupHeaderRowProps<unknown> & react.RefAttributes<HTMLTableRowElement>>;
 
-export { DataTableRow as $, type DataTableOptions as A, type DataTableSize as B, type DataTableInteractionMode as C, type DataTableHeaderCellProps as D, type DataTableBorderMode as E, type DataTableMode as F, type DataTableVirtualizationOptions as G, type DataTableServerRequestState as H, type ControlledPair as I, type DataTableBaseOptions as J, DataTableBody as K, DataTableCell as L, type DataTableColumnVisibilityProps as M, DataTableEmpty as N, DataTableFooter as O, DataTableFooterCell as P, DataTableFooterRow as Q, DataTableGlobalFilter as R, DataTableGroupHeaderRow as S, DataTableHeader as T, DataTableHeaderCell as U, DataTableHeaderGroup as V, type DataTableInstance as W, DataTableLoadingOverlay as X, DataTablePinColumnTrigger as Y, DataTableResizeHandle as Z, DataTableRoot as _, type DataTableViewMode as a, DataTableRowExpandTrigger as a0, DataTableRowPinTrigger as a1, type DataTableRowSelectCheckboxProps as a2, DataTableScrollArea as a3, type DataTableSelectAllCheckboxProps as a4, DataTableSortTrigger as a5, type DataTableStatePairs as a6, DataTableTable as a7, DataTableToolbar as a8, type DataTableRootProps as b, type DataTableToolbarProps as c, type DataTableScrollAreaProps as d, type DataTableTableProps as e, type DataTableHeaderProps as f, type DataTableHeaderGroupProps as g, type DataTableSortTriggerProps as h, type DataTableResizeHandleProps as i, DataTableColumnGuide as j, type DataTablePinColumnTriggerProps as k, type DataTableBodyProps as l, type DataTableRowProps as m, type DataTableCellProps as n, type DataTableGroupHeaderRowProps as o, type DataTableRowExpandTriggerProps as p, type DataTableRowPinTriggerProps as q, type DataTableFooterProps as r, type DataTableFooterRowProps as s, type DataTableFooterCellProps as t, DataTableSelectAllCheckbox as u, DataTableRowSelectCheckbox as v, type DataTableEmptyProps as w, type DataTableLoadingOverlayProps as x, type DataTableGlobalFilterProps as y, DataTableColumnVisibility as z };
+export { DataTableRoot as $, DataTableColumnVisibility as A, type DataTableOptions as B, type DataTableSize as C, type DataTableHeaderCellProps as D, type DataTableInteractionMode as E, type DataTableBorderMode as F, type DataTableMode as G, type DataTableVirtualizationOptions as H, type DataTableServerRequestState as I, type ControlledPair as J, type DataTableBaseOptions as K, DataTableBody as L, DataTableCell as M, type DataTableColumnVisibilityProps as N, DataTableEmpty as O, DataTableFooter as P, DataTableFooterCell as Q, DataTableFooterRow as R, DataTableGlobalFilter as S, DataTableGroupHeaderRow as T, DataTableHeader as U, DataTableHeaderCell as V, DataTableHeaderGroup as W, type DataTableInstance as X, DataTableLoadingOverlay as Y, DataTablePinColumnTrigger as Z, DataTableResizeHandle as _, type DataTableStickyMode as a, DataTableRow as a0, DataTableRowExpandTrigger as a1, DataTableRowPinTrigger as a2, type DataTableRowSelectCheckboxProps as a3, DataTableScrollArea as a4, type DataTableSelectAllCheckboxProps as a5, DataTableSortTrigger as a6, type DataTableStatePairs as a7, DataTableTable as a8, DataTableToolbar as a9, type DataTableViewMode as b, type DataTableRootProps as c, type DataTableToolbarProps as d, type DataTableScrollAreaProps as e, type DataTableTableProps as f, type DataTableHeaderProps as g, type DataTableHeaderGroupProps as h, type DataTableSortTriggerProps as i, type DataTableResizeHandleProps as j, DataTableColumnGuide as k, type DataTablePinColumnTriggerProps as l, type DataTableBodyProps as m, type DataTableRowProps as n, type DataTableCellProps as o, type DataTableGroupHeaderRowProps as p, type DataTableRowExpandTriggerProps as q, type DataTableRowPinTriggerProps as r, type DataTableFooterProps as s, type DataTableFooterRowProps as t, type DataTableFooterCellProps as u, DataTableSelectAllCheckbox as v, DataTableRowSelectCheckbox as w, type DataTableEmptyProps as x, type DataTableLoadingOverlayProps as y, type DataTableGlobalFilterProps as z };

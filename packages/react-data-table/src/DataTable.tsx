@@ -48,6 +48,9 @@ import { useColumnResize } from "./use-column-resize";
 import { useAutoFitColumn } from "./use-auto-fit-column";
 import { useHorizontalScrollShadow } from "./utils/scroll-sync";
 import { useScrollDrag } from "./utils/use-scroll-drag";
+import { stickyAttr } from "./utils/sticky";
+import type { DataTableStickyMode } from "./utils/sticky";
+import { useDataTableStickyStack } from "./utils/use-sticky-stack";
 import { useDataTableVirtualizer } from "./virtualizer";
 import { useKeyboardGridNav } from "./use-keyboard-grid-nav";
 import { useSrAnnouncements } from "./utils/announce";
@@ -72,6 +75,13 @@ type DataTableRootOwnProps = {
   bordered?: DataTableBorderMode;
   striped?: boolean;
   stickyHeader?: boolean;
+  /** Base top offset for top sticky bands (toolbar, filter-bar, header).
+   * Useful when the page has an outer
+   * fixed/sticky chrome — e.g. an app header — that sticky bands must clear.
+   * Individual top bands can still override with their own `stickyOffset`. */
+  stickyOffset?: CSSProperties["top"];
+  /** Base bottom offset for bottom sticky bands (bulk actions, pagination, footer). */
+  stickyBottomOffset?: CSSProperties["bottom"];
   mode?: DataTableMode;
   virtualization?: false | DataTableVirtualizationOptions;
   columnResizeMode?: "onChange" | "onEnd";
@@ -114,6 +124,8 @@ function DataTableRootRender<TData>({
   bordered,
   striped,
   stickyHeader,
+  stickyOffset,
+  stickyBottomOffset,
   mode,
   virtualization,
   columnResizeMode,
@@ -135,6 +147,8 @@ function DataTableRootRender<TData>({
   bordered: DataTableBorderMode;
   striped: boolean;
   stickyHeader: boolean;
+  stickyOffset: CSSProperties["top"] | undefined;
+  stickyBottomOffset: CSSProperties["bottom"] | undefined;
   mode: DataTableMode;
   virtualization: false | DataTableVirtualizationOptions;
   columnResizeMode: "onChange" | "onEnd";
@@ -211,6 +225,8 @@ function DataTableRootRender<TData>({
         bordered={bordered}
         striped={striped}
         stickyHeader={stickyHeader}
+        stickyOffset={stickyOffset}
+        stickyBottomOffset={stickyBottomOffset}
         mode={mode}
         virtualization={virtualization}
         forwardedRef={forwardedRef}
@@ -242,6 +258,8 @@ function DataTableRootDiv({
   bordered,
   striped,
   stickyHeader,
+  stickyOffset,
+  stickyBottomOffset,
   mode,
   virtualization,
   className,
@@ -254,6 +272,8 @@ function DataTableRootDiv({
   bordered: DataTableBorderMode;
   striped: boolean;
   stickyHeader: boolean;
+  stickyOffset: CSSProperties["top"] | undefined;
+  stickyBottomOffset: CSSProperties["bottom"] | undefined;
   mode: DataTableMode;
   virtualization: false | DataTableVirtualizationOptions;
   className: string | undefined;
@@ -261,16 +281,30 @@ function DataTableRootDiv({
   children: ReactNode;
   forwardedRef: React.Ref<HTMLDivElement>;
 }) {
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const { table, scrollRef } = useDataTableContext();
   const resizingId = table.getState().columnSizingInfo.isResizingColumn as
     | string
     | false;
   const scrolledX = useHorizontalScrollShadow(scrollRef);
+  useDataTableStickyStack(rootRef);
   useKeyboardGridNav(interactionMode === "grid", scrollRef);
   const announcement = useSrAnnouncements(table);
+  const rootStyle =
+    stickyOffset === undefined && stickyBottomOffset === undefined
+      ? style
+      : ({
+          ...(stickyOffset !== undefined
+            ? { ["--vds-sticky-offset-top" as string]: stickyOffset }
+            : null),
+          ...(stickyBottomOffset !== undefined
+            ? { ["--vds-sticky-offset-bottom" as string]: stickyBottomOffset }
+            : null),
+          ...style,
+        } as CSSProperties);
   return (
     <div
-      ref={forwardedRef}
+      ref={composeRefs(rootRef, forwardedRef)}
       className={cn("vds-data-table", className)}
       data-size={size}
       data-interaction-mode={interactionMode}
@@ -281,7 +315,7 @@ function DataTableRootDiv({
       data-virtualized={boolAttr(virtualization !== false)}
       data-resizing={resizingId ? "" : undefined}
       data-scrolled-x={scrolledX}
-      style={style}
+      style={rootStyle}
     >
       {children}
       {/* Stage 15: screen-reader announcements for sort/filter/selection. */}
@@ -306,6 +340,8 @@ function DataTableSimpleRoot<TData, TValue>({
   bordered = "rows",
   striped = false,
   stickyHeader = true,
+  stickyOffset,
+  stickyBottomOffset,
   mode = "client",
   virtualization = false,
   columnResizeMode = "onChange",
@@ -341,6 +377,8 @@ function DataTableSimpleRoot<TData, TValue>({
       bordered={bordered}
       striped={striped}
       stickyHeader={stickyHeader}
+      stickyOffset={stickyOffset}
+      stickyBottomOffset={stickyBottomOffset}
       mode={mode}
       virtualization={virtualization}
       columnResizeMode={columnResizeMode}
@@ -372,6 +410,8 @@ function DataTableAdvancedRoot<TData>({
   bordered = "rows",
   striped = false,
   stickyHeader = true,
+  stickyOffset,
+  stickyBottomOffset,
   mode = "client",
   virtualization = false,
   columnResizeMode = "onChange",
@@ -396,6 +436,8 @@ function DataTableAdvancedRoot<TData>({
       bordered={bordered}
       striped={striped}
       stickyHeader={stickyHeader}
+      stickyOffset={stickyOffset}
+      stickyBottomOffset={stickyBottomOffset}
       mode={mode}
       virtualization={virtualization}
       columnResizeMode={columnResizeMode}
@@ -452,7 +494,7 @@ export const DataTableRoot = forwardRef(function DataTableRoot<
 
 export interface DataTableToolbarProps
   extends HTMLAttributes<HTMLDivElement> {
-  sticky?: boolean;
+  sticky?: DataTableStickyMode;
   stickyOffset?: CSSProperties["top"];
 }
 
@@ -473,7 +515,7 @@ export const DataTableToolbar = forwardRef<HTMLDivElement, DataTableToolbarProps
       stickyOffset === undefined
         ? style
         : ({
-            ["--data-table-toolbar-sticky-offset" as string]: stickyOffset,
+            ["--vds-sticky-offset-top" as string]: stickyOffset,
             ...style,
           } as CSSProperties);
     return (
@@ -481,7 +523,8 @@ export const DataTableToolbar = forwardRef<HTMLDivElement, DataTableToolbarProps
         ref={ref}
         role="toolbar"
         aria-controls={tableId}
-        data-sticky={sticky ? "" : undefined}
+        data-sticky={stickyAttr(sticky)}
+        data-sticky-axis="top"
         className={cn("vds-data-table-toolbar", className)}
         style={stickyStyle}
         {...props}
@@ -541,7 +584,6 @@ export const DataTableTable = forwardRef<HTMLTableElement, DataTableTableProps>(
       table,
       // Re-evaluate when any column size changes
       table.getState().columnSizing,
-      table.getState().columnSizingInfo,
       table.getState().columnOrder,
       table.getState().columnVisibility,
     ]);
@@ -567,6 +609,7 @@ export const DataTableTable = forwardRef<HTMLTableElement, DataTableTableProps>(
 
 export interface DataTableHeaderProps
   extends Omit<HTMLAttributes<HTMLTableSectionElement>, "children"> {
+  stickyOffset?: CSSProperties["top"];
   children?:
     | ReactNode
     | ((headerGroups: HeaderGroup<unknown>[]) => ReactNode);
@@ -575,9 +618,19 @@ export interface DataTableHeaderProps
 export const DataTableHeader = forwardRef<
   HTMLTableSectionElement,
   DataTableHeaderProps
->(function DataTableHeader({ className, children, ...props }, ref) {
+>(function DataTableHeader(
+  { className, children, stickyOffset, style, ...props },
+  ref,
+) {
   const { table, stickyHeader } = useDataTableContext();
   const groups = table.getHeaderGroups() as HeaderGroup<unknown>[];
+  const stickyStyle =
+    stickyOffset === undefined
+      ? style
+      : ({
+          ["--vds-sticky-offset-top" as string]: stickyOffset,
+          ...style,
+        } as CSSProperties);
 
   const content =
     typeof children === "function"
@@ -595,7 +648,9 @@ export const DataTableHeader = forwardRef<
       ref={ref}
       role="rowgroup"
       data-sticky={boolAttr(stickyHeader)}
+      data-sticky-axis="top"
       className={cn("vds-data-table-header", className)}
+      style={stickyStyle}
       {...props}
     >
       {content}
@@ -995,25 +1050,38 @@ export const DataTableCell = forwardRef<
 
 export interface DataTableFooterProps
   extends HTMLAttributes<HTMLTableSectionElement> {
-  sticky?: boolean;
+  sticky?: DataTableStickyMode;
+  stickyOffset?: CSSProperties["bottom"];
 }
 
 export const DataTableFooter = forwardRef<
   HTMLTableSectionElement,
   DataTableFooterProps
->(function DataTableFooter({ className, children, sticky = false, ...props }, ref) {
+>(function DataTableFooter(
+  { className, children, sticky = false, stickyOffset, style, ...props },
+  ref,
+) {
   const { table } = useDataTableContext();
   const groups = table.getFooterGroups() as HeaderGroup<unknown>[];
   const hasFooter = groups.some((g) =>
     g.headers.some((h) => h.column.columnDef.footer),
   );
   if (!hasFooter && !children) return null;
+  const stickyStyle =
+    stickyOffset === undefined
+      ? style
+      : ({
+          ["--vds-sticky-offset-bottom" as string]: stickyOffset,
+          ...style,
+        } as CSSProperties);
   return (
     <tfoot
       ref={ref}
       role="rowgroup"
-      data-sticky={sticky ? "" : undefined}
+      data-sticky={stickyAttr(sticky)}
+      data-sticky-axis="bottom"
       className={cn("vds-data-table-footer", className)}
+      style={stickyStyle}
       {...props}
     >
       {children ??
@@ -1440,9 +1508,21 @@ export const DataTableResizeHandle = forwardRef<
 
 export function DataTableColumnGuide() {
   const { table, scrollRef } = useDataTableContext();
+  const metricsRef = useRef<{
+    resizingId: string;
+    rootLeft: number;
+    rootTop: number;
+    scrollTop: number;
+    scrollHeight: number;
+    scrollEl: HTMLElement;
+    rootEl: HTMLElement;
+  } | null>(null);
   const info = table.getState().columnSizingInfo;
   const resizingId = info.isResizingColumn as string | false;
-  if (!resizingId) return null;
+  if (!resizingId) {
+    metricsRef.current = null;
+    return null;
+  }
   const resizeDirection =
     table.options.columnResizeDirection === "rtl" ? -1 : 1;
   const pointerClientX =
@@ -1455,20 +1535,36 @@ export function DataTableColumnGuide() {
   } as CSSProperties;
 
   if (scrollEl && rootEl) {
-    const rootRect = rootEl.getBoundingClientRect();
-    const scrollRect = scrollEl.getBoundingClientRect();
-    const rootLeft = rootRect.left + rootEl.clientLeft;
-    const rootTop = rootRect.top + rootEl.clientTop;
+    let metrics = metricsRef.current;
+    if (
+      !metrics ||
+      metrics.resizingId !== resizingId ||
+      metrics.scrollEl !== scrollEl ||
+      metrics.rootEl !== rootEl
+    ) {
+      const rootRect = rootEl.getBoundingClientRect();
+      const scrollRect = scrollEl.getBoundingClientRect();
+      metrics = {
+        resizingId,
+        rootLeft: rootRect.left + rootEl.clientLeft,
+        rootTop: rootRect.top + rootEl.clientTop,
+        scrollTop: scrollRect.top,
+        scrollHeight: scrollEl.clientHeight,
+        scrollEl,
+        rootEl,
+      };
+      metricsRef.current = metrics;
+    }
 
     guideStyle = {
       ["--data-table-guideline-offset" as string]: `${
-        pointerClientX - rootLeft
+        pointerClientX - metrics.rootLeft
       }px`,
       ["--data-table-guideline-top" as string]: `${
-        scrollRect.top - rootTop
+        metrics.scrollTop - metrics.rootTop
       }px`,
       ["--data-table-guideline-height" as string]: `${
-        scrollEl.clientHeight
+        metrics.scrollHeight
       }px`,
     } as CSSProperties;
   }

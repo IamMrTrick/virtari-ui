@@ -41,6 +41,8 @@ export { SidebarPage } from "./SidebarPage";
 export { DatePickerPage } from "./DatePickerPage";
 export { DataTablePage } from "./DataTablePage";
 export { DataTableUsersPage } from "./DataTableUsersPage";
+export { DataTableProductsPage } from "./DataTableProductsPage";
+export { DataTableOrdersPage } from "./DataTableOrdersPage";
 export { TablePage } from "./TablePage";
 export { UtilitiesPage } from "./UtilitiesPage";
 export { RTLPage } from "./RTLPage";
@@ -170,6 +172,16 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     title: "Users — Data Table showcase",
     description:
       "Production-grade users table — view switch, search, filter bar + drawer, customize columns, bulk actions, refresh, export, add — composed entirely from the design-system primitives.",
+  },
+  "data-table-products": {
+    title: "Products — Data Table showcase",
+    description:
+      "Product catalog showcase — per-column filters, category grouping, bulk archive, customize columns, and table/board view modes.",
+  },
+  "data-table-orders": {
+    title: "Orders — Data Table showcase",
+    description:
+      "Server-side orders showcase — simulated latency, date-range filter drawer, grouping by status, bulk refund/cancel, and export.",
   },
   table: {
     title: "Table",

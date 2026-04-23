@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   DataTable,
+  DataTableFilterDrawer,
   createColumnHelper,
   FilterPopover,
   TextFilter,
@@ -15,10 +16,8 @@ import {
   LinkCell,
   CopyableCell,
   ActionsCell,
-  DataTableFilterDrawer,
   type FilterFieldDefinition,
   type FilterGroup,
-  useDataTableContext,
   type ColumnDef,
   type DataTableServerRequestState,
 } from "@virtari-packages/react-data-table";
@@ -29,8 +28,17 @@ import {
   type ColumnConfig,
 } from "@virtari-packages/react-data-table/dnd";
 import "@virtari-packages/react-data-table/styles";
-import { Button } from "@virtari-packages/react-button";
+import { toast } from "@virtari-packages/react-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@virtari-packages/react-select";
+import { Switch } from "@virtari-packages/react-switch";
 import { Section, Row } from "../components";
+import { DemoHint } from "./_data-table-shared";
 
 /* ─────────────────────────────── Dataset ─────────────────────────────── */
 
@@ -68,12 +76,13 @@ function makePeople(n: number): Person[] {
 }
 
 const ch = createColumnHelper<Person>();
+type PersonCols = ColumnDef<Person, any>[];
 
 /* ─────────────────────────────── 1. Basic ─────────────────────────────── */
 
 function BasicExample() {
   const [data] = useState(() => makePeople(12));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("firstName", { header: "First name", size: 140 }),
       ch.accessor("lastName", { header: "Last name", size: 140 }),
@@ -101,7 +110,7 @@ function BasicExample() {
 
 function ResizableExample() {
   const [data] = useState(() => makePeople(20));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("firstName", {
         header: "First",
@@ -122,7 +131,7 @@ function ResizableExample() {
     [],
   );
   return (
-    <div style={{ position: "relative" }}>
+    <>
       <DataTable.Root columns={columns} data={data} columnResizeMode="onChange">
         <DataTable.ScrollArea>
           <DataTable.Table>
@@ -132,11 +141,11 @@ function ResizableExample() {
         </DataTable.ScrollArea>
         <DataTable.ColumnGuide />
       </DataTable.Root>
-      <p style={{ fontSize: 12, color: "var(--vds-color-text-muted)", marginTop: 8 }}>
+      <DemoHint>
         Drag a column edge · double-click the handle to auto-fit · Tab to the
         handle and press ← / → (Shift for ±32) to resize by keyboard.
-      </p>
-    </div>
+      </DemoHint>
+    </>
   );
 }
 
@@ -144,7 +153,7 @@ function ResizableExample() {
 
 function VirtualizedExample() {
   const [data] = useState(() => makePeople(10_000));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("id", { header: "#", size: 80 }),
       ch.accessor("firstName", { header: "First", size: 140 }),
@@ -160,7 +169,7 @@ function VirtualizedExample() {
     [],
   );
   return (
-    <div style={{ blockSize: 420 }}>
+    <div className="docs-virtualized-frame">
       <DataTable.Root
         columns={columns}
         data={data}
@@ -182,7 +191,7 @@ function VirtualizedExample() {
 
 function SelectionExample() {
   const [data] = useState(() => makePeople(10));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       {
         id: "__select",
@@ -215,7 +224,7 @@ function SelectionExample() {
 
 function PinnedExample() {
   const [data] = useState(() => makePeople(20));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("id", { header: "#", size: 60 }),
       ch.accessor("firstName", { header: "First", size: 140 }),
@@ -252,7 +261,7 @@ function PinnedExample() {
 
 function DndExample() {
   const [data] = useState(() => makePeople(10));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("firstName", { header: "First", size: 140 }),
       ch.accessor("lastName", { header: "Last", size: 140 }),
@@ -272,10 +281,7 @@ function DndExample() {
                   <DataTable.HeaderGroup key={g.id} headerGroup={g}>
                     {(headers) =>
                       headers.map((h) => (
-                        <DataTableDraggableHeaderCell
-                          key={h.id}
-                          header={h}
-                        />
+                        <DataTableDraggableHeaderCell key={h.id} header={h} />
                       ))
                     }
                   </DataTable.HeaderGroup>
@@ -296,12 +302,10 @@ function ServerSideExample() {
   const [data, setData] = useState<Person[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const [sorting, setSorting] = useState<
-    { id: string; desc: boolean }[]
-  >([]);
+  const [sorting, setSorting] = useState<{ id: string; desc: boolean }[]>([]);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
 
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("id", { header: "#", size: 60 }),
       ch.accessor("firstName", { header: "First", size: 140 }),
@@ -315,7 +319,6 @@ function ServerSideExample() {
     setLoading(true);
     window.setTimeout(() => {
       const all = makePeople(250);
-      /* Apply sort client-side to mimic a real server. */
       const sorted =
         state.sorting.length > 0
           ? [...all].sort((a, b) => {
@@ -336,28 +339,26 @@ function ServerSideExample() {
   };
 
   return (
-    <div style={{ position: "relative" }}>
-      <DataTable.Root
-        columns={columns}
-        data={data}
-        mode="server"
-        rowCount={rowCount}
-        sorting={sorting}
-        onSortingChange={setSorting}
-        pagination={pagination}
-        onPaginationChange={setPagination}
-        onDataRequest={fetch}
-      >
-        <DataTable.ScrollArea>
-          <DataTable.Table>
-            <DataTable.Header />
-            <DataTable.Body emptyMessage="Loading…" />
-          </DataTable.Table>
-        </DataTable.ScrollArea>
-        <DataTable.Pagination.Default pageSizeOptions={[5, 10, 25]} />
-        <DataTable.LoadingOverlay open={loading} />
-      </DataTable.Root>
-    </div>
+    <DataTable.Root
+      columns={columns}
+      data={data}
+      mode="server"
+      rowCount={rowCount}
+      sorting={sorting}
+      onSortingChange={setSorting}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+      onDataRequest={fetch}
+    >
+      <DataTable.ScrollArea>
+        <DataTable.Table>
+          <DataTable.Header />
+          <DataTable.Body emptyMessage="Loading…" />
+        </DataTable.Table>
+      </DataTable.ScrollArea>
+      <DataTable.Pagination.Default pageSizeOptions={[5, 10, 25]} />
+      <DataTable.LoadingOverlay open={loading} />
+    </DataTable.Root>
   );
 }
 
@@ -365,7 +366,7 @@ function ServerSideExample() {
 
 function GroupingExample() {
   const [data] = useState(() => makePeople(50));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("status", {
         header: "Status",
@@ -411,7 +412,7 @@ function GroupingExample() {
 
 function EditingExample() {
   const [data, setData] = useState(() => makePeople(8));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("firstName", { header: "First", size: 160 }),
       ch.accessor("lastName", { header: "Last", size: 160 }),
@@ -464,9 +465,7 @@ function EditingExample() {
           </DataTable.Body>
         </DataTable.Table>
       </DataTable.ScrollArea>
-      <p style={{ fontSize: 12, color: "var(--vds-color-text-muted)", padding: 8 }}>
-        Double-click any cell · Enter to commit · Esc to cancel.
-      </p>
+      <DemoHint>Double-click any cell · Enter to commit · Esc to cancel.</DemoHint>
     </DataTable.Root>
   );
 }
@@ -475,7 +474,7 @@ function EditingExample() {
 
 function FiltersExample() {
   const [data] = useState(() => makePeople(30));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("firstName", {
         header: "First",
@@ -518,7 +517,7 @@ function FiltersExample() {
                   {(headers) =>
                     headers.map((h) => (
                       <DataTable.HeaderCell key={h.id} header={h}>
-                        <span style={{ display: "inline-flex", gap: 6, alignItems: "center" }}>
+                        <span className="docs-filter-header">
                           {String(h.column.columnDef.header)}
                           <FilterPopover column={h.column}>
                             {h.column.id === "status" ? (
@@ -550,7 +549,7 @@ function FiltersExample() {
 
 function VariantsExample() {
   const [data] = useState(() => makePeople(6));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("firstName", { header: "First", size: 140 }),
       ch.accessor("email", { header: "Email", size: 240 }),
@@ -562,35 +561,40 @@ function VariantsExample() {
   const [bordered, setBordered] = useState<"none" | "rows" | "grid">("rows");
   const [striped, setStriped] = useState(false);
   return (
-    <div>
+    <>
       <Row>
-        <label>
-          Size:
-          <select value={size} onChange={(e) => setSize(e.target.value as "sm" | "md" | "lg")} style={{ marginInlineStart: 4 }}>
-            <option value="sm">sm</option>
-            <option value="md">md</option>
-            <option value="lg">lg</option>
-          </select>
+        <label className="docs-filter-header">
+          Size
+          <Select value={size} onValueChange={(v) => setSize(v as "sm" | "md" | "lg")}>
+            <SelectTrigger size="sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="sm">sm</SelectItem>
+              <SelectItem value="md">md</SelectItem>
+              <SelectItem value="lg">lg</SelectItem>
+            </SelectContent>
+          </Select>
         </label>
-        <label>
-          Bordered:
-          <select
+        <label className="docs-filter-header">
+          Bordered
+          <Select
             value={bordered}
-            onChange={(e) => setBordered(e.target.value as "none" | "rows" | "grid")}
-            style={{ marginInlineStart: 4 }}
+            onValueChange={(v) => setBordered(v as "none" | "rows" | "grid")}
           >
-            <option value="none">none</option>
-            <option value="rows">rows</option>
-            <option value="grid">grid</option>
-          </select>
+            <SelectTrigger size="sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">none</SelectItem>
+              <SelectItem value="rows">rows</SelectItem>
+              <SelectItem value="grid">grid</SelectItem>
+            </SelectContent>
+          </Select>
         </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={striped}
-            onChange={(e) => setStriped(e.target.checked)}
-          />{" "}
+        <label className="docs-filter-header">
           Striped
+          <Switch checked={striped} onCheckedChange={setStriped} size="sm" />
         </label>
       </Row>
       <DataTable.Root
@@ -607,7 +611,7 @@ function VariantsExample() {
           </DataTable.Table>
         </DataTable.ScrollArea>
       </DataTable.Root>
-    </div>
+    </>
   );
 }
 
@@ -615,7 +619,7 @@ function VariantsExample() {
 
 function GridModeExample() {
   const [data] = useState(() => makePeople(10));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("firstName", { header: "First" }),
       ch.accessor("lastName", { header: "Last" }),
@@ -625,7 +629,7 @@ function GridModeExample() {
     [],
   );
   return (
-    <div>
+    <>
       <DataTable.Root columns={columns} data={data} interactionMode="grid">
         <DataTable.ScrollArea>
           <DataTable.Table>
@@ -634,19 +638,19 @@ function GridModeExample() {
           </DataTable.Table>
         </DataTable.ScrollArea>
       </DataTable.Root>
-      <p style={{ fontSize: 12, color: "var(--vds-color-text-muted)", marginTop: 8 }}>
+      <DemoHint>
         Focus a cell, then use arrow keys · Home/End (Ctrl for whole grid) ·
         PageUp/PageDown by 10 rows.
-      </p>
-    </div>
+      </DemoHint>
+    </>
   );
 }
 
-/* ─────────────── v2: View modes (table / board / list) ─────────────── */
+/* ─────────────── View modes (table / board / list) ─────────────── */
 
 function ViewModesExample() {
   const [data] = useState(() => makePeople(12));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("firstName", { header: "First" }),
       ch.accessor("lastName", { header: "Last" }),
@@ -672,17 +676,19 @@ function ViewModesExample() {
             </DataTable.Table>
           </DataTable.ScrollArea>
         }
+        board={<DataTable.Board />}
+        list={<DataTable.List />}
       />
     </DataTable.Root>
   );
 }
 
-/* ─────────────── v2: Bulk actions + select-all-across-pages ─────────────── */
+/* ─────────────── Bulk actions + select-all-across-pages ─────────────── */
 
 function BulkActionsExample() {
-  const [data] = useState(() => makePeople(10));
+  const [data, setData] = useState(() => makePeople(10));
   const [allAcross, setAllAcross] = useState(false);
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       {
         id: "__select",
@@ -710,7 +716,7 @@ function BulkActionsExample() {
         {({ selectedRows, selectedCount, clearSelection }) => (
           <>
             <DataTable.BulkActions.SelectAllAcrossPages
-              totalCount={2500}
+              totalCount={data.length}
               isAllAcrossPagesSelected={allAcross}
               onSelectAll={() => setAllAcross(true)}
               onClear={() => {
@@ -719,14 +725,30 @@ function BulkActionsExample() {
               }}
             />
             <DataTable.BulkActions.Count
-              count={allAcross ? 2500 : selectedCount}
+              count={allAcross ? data.length : selectedCount}
             />
             <div style={{ flex: 1 }} />
             <DataTable.ExportButton
-              onClick={() => console.log("Export", selectedRows)}
+              onClick={() =>
+                toast.success(
+                  "Export started",
+                  `${allAcross ? data.length : selectedCount} row(s) queued.`,
+                )
+              }
             />
             <DataTable.DeleteButton
-              onClick={() => console.log("Delete", selectedRows)}
+              onClick={() => {
+                const ids = new Set(
+                  selectedRows.map((r) => (r.original as Person).id),
+                );
+                setData((prev) => prev.filter((p) => !ids.has(p.id)));
+                clearSelection();
+                setAllAcross(false);
+                toast.info(
+                  "Deleted",
+                  `${ids.size} row(s) removed from this demo.`,
+                );
+              }}
             />
             <DataTable.BulkActions.Clear />
           </>
@@ -736,11 +758,14 @@ function BulkActionsExample() {
   );
 }
 
-/* ─────────────── v2: Toolbar action buttons ─────────────── */
+/* ─────────────── Toolbar action buttons ─────────────── */
 
 function ToolbarExample() {
   const [data] = useState(() => makePeople(8));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [customizeOpen, setCustomizeOpen] = useState(false);
+  const [filterGroups, setFilterGroups] = useState<FilterGroup[]>([]);
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor("firstName", { header: "First" }),
       ch.accessor("email", { header: "Email", size: 240 }),
@@ -748,34 +773,82 @@ function ToolbarExample() {
     ],
     [],
   );
+  const [columnConfigs, setColumnConfigs] = useState<ColumnConfig[]>([
+    { id: "firstName", label: "First", visible: true },
+    { id: "email", label: "Email", visible: true },
+    { id: "status", label: "Status", visible: true },
+  ]);
+  const availableFilters: FilterFieldDefinition[] = [
+    {
+      id: "status",
+      label: "Status",
+      type: "select",
+      category: "shown",
+      options: [
+        { label: "Active", value: "active" },
+        { label: "Pending", value: "pending" },
+        { label: "Suspended", value: "suspended" },
+      ],
+    },
+    { id: "firstName", label: "First name", type: "text", category: "popular" },
+  ];
+  const activeCount = filterGroups.reduce((s, g) => s + g.conditions.length, 0);
   return (
-    <DataTable.Root columns={columns} data={data}>
-      <DataTable.Toolbar>
-        <DataTable.ViewModeToggle />
-        <div style={{ flex: 1 }} />
-        <DataTable.GlobalFilter placeholder="Search" />
-        <DataTable.FilterButton count={2} onClick={() => {}} />
-        <DataTable.HideColumnsButton onClick={() => {}} />
-        <DataTable.CustomizeButton onClick={() => {}} />
-        <DataTable.RefreshButton onClick={() => {}} />
-        <DataTable.ExportButton onClick={() => {}} />
-        <DataTable.AddButton onClick={() => {}} label="New user" />
-      </DataTable.Toolbar>
-      <DataTable.ScrollArea>
-        <DataTable.Table>
-          <DataTable.Header />
-          <DataTable.Body />
-        </DataTable.Table>
-      </DataTable.ScrollArea>
-    </DataTable.Root>
+    <>
+      <DataTable.Root columns={columns} data={data}>
+        <DataTable.Toolbar>
+          <DataTable.ViewModeToggle />
+          <div style={{ flex: 1 }} />
+          <DataTable.GlobalFilter placeholder="Search" />
+          <DataTable.FilterButton
+            count={activeCount}
+            onClick={() => setFilterOpen(true)}
+          />
+          <DataTable.HideColumnsButton
+            onClick={() => toast.info("Hide columns", "Opens column picker.")}
+          />
+          <DataTable.CustomizeButton onClick={() => setCustomizeOpen(true)} />
+          <DataTable.RefreshButton
+            onClick={() => toast.success("Refreshed", "Data reloaded.")}
+          />
+          <DataTable.ExportButton
+            onClick={() => toast.info("Export", "Demo action.")}
+          />
+          <DataTable.AddButton
+            onClick={() => toast.success("New user", "Opens create drawer.")}
+            label="New user"
+          />
+        </DataTable.Toolbar>
+        <DataTable.ScrollArea>
+          <DataTable.Table>
+            <DataTable.Header />
+            <DataTable.Body />
+          </DataTable.Table>
+        </DataTable.ScrollArea>
+      </DataTable.Root>
+      <DataTableFilterDrawer
+        open={filterOpen}
+        onOpenChange={setFilterOpen}
+        availableFilters={availableFilters}
+        filterGroups={filterGroups}
+        onApplyFilters={setFilterGroups}
+      />
+      <DataTableCustomizeDrawer
+        open={customizeOpen}
+        onOpenChange={setCustomizeOpen}
+        columns={columnConfigs}
+        defaultColumns={columnConfigs}
+        onColumnsChange={setColumnConfigs}
+      />
+    </>
   );
 }
 
-/* ─────────────── v2: Cell primitives ─────────────── */
+/* ─────────────── Cell primitives ─────────────── */
 
 function CellPrimitivesExample() {
   const [data] = useState(() => makePeople(6));
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columns = useMemo<PersonCols>(
     () => [
       ch.accessor((r) => r, {
         id: "person",
@@ -829,14 +902,23 @@ function CellPrimitivesExample() {
         cell: ({ row }) => (
           <ActionsCell
             items={[
-              { id: "view", label: "View", onSelect: () => console.log("view", row.original) },
-              { id: "edit", label: "Edit", onSelect: () => console.log("edit") },
+              {
+                id: "view",
+                label: "View",
+                onSelect: () =>
+                  toast.info("View", (row.original as Person).email),
+              },
+              {
+                id: "edit",
+                label: "Edit",
+                onSelect: () => toast.info("Edit", "Opens edit drawer."),
+              },
               {
                 id: "delete",
                 label: "Delete",
                 tone: "danger",
                 separatorBefore: true,
-                onSelect: () => console.log("delete"),
+                onSelect: () => toast.warning("Delete", "Demo action."),
               },
             ]}
           />
@@ -857,18 +939,40 @@ function CellPrimitivesExample() {
   );
 }
 
-/* ─────────────── v2: FilterDrawer ─────────────── */
+/* ─────────────── FilterDrawer (advanced) ─────────────── */
+
+function filterGroupsToColumnFilters(groups: FilterGroup[]) {
+  const out: { id: string; value: unknown }[] = [];
+  const seen = new Set<string>();
+  for (const g of groups) {
+    for (const c of g.conditions) {
+      if (seen.has(c.fieldId)) continue;
+      if (c.value === undefined || c.value === null || c.value === "") continue;
+      seen.add(c.fieldId);
+      out.push({ id: c.fieldId, value: c.value });
+    }
+  }
+  return out;
+}
 
 function FilterDrawerExample() {
   const [data] = useState(() => makePeople(20));
   const [open, setOpen] = useState(false);
   const [groups, setGroups] = useState<FilterGroup[]>([]);
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const columnFilters = useMemo(
+    () => filterGroupsToColumnFilters(groups),
+    [groups],
+  );
+  const columns = useMemo<PersonCols>(
     () => [
-      ch.accessor("firstName", { header: "First" }),
-      ch.accessor("email", { header: "Email", size: 240 }),
-      ch.accessor("status", { header: "Status" }),
-      ch.accessor("role", { header: "Role" }),
+      ch.accessor("firstName", { header: "First", filterFn: "includesString" }),
+      ch.accessor("email", {
+        header: "Email",
+        size: 240,
+        filterFn: "includesString",
+      }),
+      ch.accessor("status", { header: "Status", filterFn: "equalsString" }),
+      ch.accessor("role", { header: "Role", filterFn: "equalsString" }),
     ],
     [],
   );
@@ -884,21 +988,29 @@ function FilterDrawerExample() {
         { label: "Suspended", value: "suspended" },
       ],
     },
-    { id: "role", label: "Role", type: "select", category: "shown", options: [
-      { label: "Admin", value: "admin" },
-      { label: "Editor", value: "editor" },
-      { label: "Viewer", value: "viewer" },
-    ] },
+    {
+      id: "role",
+      label: "Role",
+      type: "select",
+      category: "shown",
+      options: [
+        { label: "Admin", value: "admin" },
+        { label: "Editor", value: "editor" },
+        { label: "Viewer", value: "viewer" },
+      ],
+    },
     { id: "firstName", label: "First name", type: "text", category: "popular" },
-    { id: "salary", label: "Salary", type: "number", category: "popular" },
-    { id: "joined", label: "Joined", type: "date", category: "popular" },
+    { id: "email", label: "Email", type: "text", category: "popular" },
   ];
   const activeCount = groups.reduce((s, g) => s + g.conditions.length, 0);
   return (
-    <DataTable.Root columns={columns} data={data}>
+    <DataTable.Root columns={columns} data={data} columnFilters={columnFilters}>
       <DataTable.Toolbar>
         <div style={{ flex: 1 }} />
-        <DataTable.FilterButton count={activeCount} onClick={() => setOpen(true)} />
+        <DataTable.FilterButton
+          count={activeCount}
+          onClick={() => setOpen(true)}
+        />
       </DataTable.Toolbar>
       <DataTable.ScrollArea>
         <DataTable.Table>
@@ -917,7 +1029,7 @@ function FilterDrawerExample() {
   );
 }
 
-/* ─────────────── v2: Customize view drawer ─────────────── */
+/* ─────────────── Customize view drawer ─────────────── */
 
 function CustomizeDrawerExample() {
   const [data] = useState(() => makePeople(8));
@@ -932,8 +1044,8 @@ function CustomizeDrawerExample() {
     { id: "joined", label: "Joined", visible: false },
   ];
   const [configs, setConfigs] = useState<ColumnConfig[]>(defaultColumns);
-  const columns = useMemo<ColumnDef<Person>[]>(() => {
-    const byId: Record<string, ColumnDef<Person>> = {
+  const columns = useMemo<PersonCols>(() => {
+    const byId: Record<string, ColumnDef<Person, any>> = {
       firstName: ch.accessor("firstName", { header: "First" }),
       lastName: ch.accessor("lastName", { header: "Last" }),
       email: ch.accessor("email", { header: "Email", size: 240 }),
@@ -971,7 +1083,7 @@ function CustomizeDrawerExample() {
 
 export function DataTablePage() {
   return (
-    <div>
+    <>
       <Section
         title="Basic"
         description="Core composition — sort, global filter, ellipsis truncation. Click any header to sort; Shift-click for multi-sort."
@@ -1044,22 +1156,21 @@ export function DataTablePage() {
       >
         <GridModeExample />
       </Section>
-
       <Section
         title="View modes — Table / Board / List"
-        description="Three pre-built layouts for the same dataset. Toggle via DataTable.ViewModeToggle."
+        description="Three pre-built layouts for the same dataset. Toggle via DataTable.ViewModeToggle — Board and List reuse the column renderers."
       >
         <ViewModesExample />
       </Section>
       <Section
         title="Bulk actions bar"
-        description="Sticky bar that appears when rows are selected. Supports 'select all across pages' banner + custom action slots."
+        description="Sticky bar that appears when rows are selected. Supports 'select all across pages' banner + custom action slots — hooked to live state."
       >
         <BulkActionsExample />
       </Section>
       <Section
         title="Toolbar action buttons"
-        description="Named buttons for Filter / Refresh / Export / Add / Customize / Hide / ResetLayout — all with matching icons and count badges."
+        description="Named buttons for Filter / Refresh / Export / Add / Customize / Hide / ResetLayout — wired to real drawers and toasts."
       >
         <ToolbarExample />
       </Section>
@@ -1071,7 +1182,7 @@ export function DataTablePage() {
       </Section>
       <Section
         title="Filter drawer (advanced)"
-        description="Drawer-based multi-condition filter UI with AND/OR groups, comparison operators, and per-field config panels."
+        description="Drawer-based multi-condition filter UI with AND/OR groups, comparison operators, and per-field config panels. Applied groups flow into the table's columnFilters."
       >
         <FilterDrawerExample />
       </Section>
@@ -1081,6 +1192,6 @@ export function DataTablePage() {
       >
         <CustomizeDrawerExample />
       </Section>
-    </div>
+    </>
   );
 }

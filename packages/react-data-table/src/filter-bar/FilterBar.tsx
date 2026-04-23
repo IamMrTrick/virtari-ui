@@ -10,6 +10,8 @@ import {
 import type { ChipVariant } from "@virtari-packages/react-chip";
 import { cn } from "@virtari-packages/utils";
 import { IconPlus } from "@virtari-packages/react-icons";
+import { stickyAttr } from "../utils/sticky";
+import type { DataTableStickyMode } from "../utils/sticky";
 
 export interface DataTableFilterChip {
   id: string;
@@ -28,7 +30,7 @@ export interface DataTableFilterBarProps
   onRemoveFilter?: (filterId: string) => void;
   onAddFilter?: () => void;
   addLabel?: ReactNode;
-  sticky?: boolean;
+  sticky?: DataTableStickyMode;
   stickyOffset?: CSSProperties["top"];
   children?: ReactNode;
 }
@@ -56,7 +58,7 @@ export const DataTableFilterBar = forwardRef<
     stickyOffset === undefined
       ? style
       : ({
-          ["--data-table-filter-bar-sticky-offset" as string]: stickyOffset,
+          ["--vds-sticky-offset-top" as string]: stickyOffset,
           ...style,
         } as CSSProperties);
   return (
@@ -64,7 +66,8 @@ export const DataTableFilterBar = forwardRef<
       ref={ref}
       role="toolbar"
       aria-label="Active filters"
-      data-sticky={sticky ? "" : undefined}
+      data-sticky={stickyAttr(sticky)}
+      data-sticky-axis="top"
       className={cn("vds-data-table-filter-bar", className)}
       style={stickyStyle}
       {...props}

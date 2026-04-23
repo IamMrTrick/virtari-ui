@@ -1,26 +1,54 @@
-import { forwardRef } from "react";
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
+import { forwardRef, useId } from "react";
+import type {
+  ButtonHTMLAttributes,
+  CSSProperties,
+  HTMLAttributes,
+  ReactNode,
+} from "react";
 import { cn } from "@virtari-packages/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@virtari-packages/react-select";
+import type { SelectSize } from "@virtari-packages/react-select";
 
 import { useDataTableContext } from "../DataTableContext";
+import { stickyAttr } from "../utils/sticky";
+import type { DataTableStickyMode } from "../utils/sticky";
 
 /* ────────────────────────────────────────────────────────────
  * Pagination.Root — <nav> wrapper
  * ──────────────────────────────────────────────────────────── */
 
 export interface PaginationRootProps extends HTMLAttributes<HTMLElement> {
-  sticky?: boolean;
+  sticky?: DataTableStickyMode;
+  stickyOffset?: CSSProperties["bottom"];
 }
 
 export const PaginationRoot = forwardRef<HTMLElement, PaginationRootProps>(
-  function PaginationRoot({ className, children, sticky = false, ...props }, ref) {
+  function PaginationRoot(
+    { className, children, sticky = false, stickyOffset, style, ...props },
+    ref,
+  ) {
+    const stickyStyle =
+      stickyOffset === undefined
+        ? style
+        : ({
+            ["--vds-sticky-offset-bottom" as string]: stickyOffset,
+            ...style,
+          } as CSSProperties);
     return (
       <nav
         ref={ref}
         role="navigation"
         aria-label="Pagination"
-        data-sticky={sticky ? "" : undefined}
+        data-sticky={stickyAttr(sticky)}
+        data-sticky-axis="bottom"
         className={cn("vds-data-table-pagination", className)}
+        style={stickyStyle}
         {...props}
       >
         {children}
@@ -138,23 +166,33 @@ export interface PaginationPageSizeProps {
   options?: number[];
   className?: string;
   label?: ReactNode;
+  /** Size forwarded to the underlying Select trigger. */
+  size?: SelectSize;
 }
 
 export function PaginationPageSize({
   options = [10, 25, 50, 100],
   className,
   label = "Rows per page",
+  size = "sm",
 }: PaginationPageSizeProps) {
   const { table } = useDataTableContext();
   const pageSize = table.getState().pagination.pageSize;
+  const labelId = useId();
+  const pageSizeValue = String(pageSize);
   return (
-    <label className={cn("vds-data-table-pagination-page-size", className)}>
-      <span className="vds-data-table-pagination-page-size-label">{label}</span>
-      <select
-        className="vds-data-table-pagination-page-size-select"
-        value={pageSize}
-        onChange={(e) => {
-          const nextPageSize = Number(e.target.value);
+    <div className={cn("vds-data-table-pagination-page-size", className)}>
+      <span
+        id={labelId}
+        className="vds-data-table-pagination-page-size-label"
+      >
+        {label}
+      </span>
+      <Select
+        value={pageSizeValue}
+        onValueChange={(v) => {
+          const nextPageSize = Number(v);
+          if (!Number.isFinite(nextPageSize)) return;
           table.setPagination((prev) => ({
             ...prev,
             pageIndex: 0,
@@ -162,13 +200,22 @@ export function PaginationPageSize({
           }));
         }}
       >
-        {options.map((n) => (
-          <option key={n} value={n}>
-            {n}
-          </option>
-        ))}
-      </select>
-    </label>
+        <SelectTrigger
+          size={size}
+          aria-labelledby={labelId}
+          className="vds-data-table-pagination-page-size-trigger"
+        >
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((n) => (
+            <SelectItem key={n} value={String(n)}>
+              {n}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 
@@ -246,7 +293,8 @@ export interface PaginationDefaultProps {
   pageSizeOptions?: number[];
   hidePageSize?: boolean;
   hidePageNumbers?: boolean;
-  sticky?: boolean;
+  sticky?: DataTableStickyMode;
+  stickyOffset?: CSSProperties["bottom"];
 }
 
 export function PaginationDefault({
@@ -255,12 +303,19 @@ export function PaginationDefault({
   hidePageSize = false,
   hidePageNumbers = false,
   sticky = false,
+  stickyOffset,
 }: PaginationDefaultProps) {
   return (
-    <PaginationRoot className={className} sticky={sticky}>
-      <PaginationInfo />
-      <div className="vds-data-table-pagination-controls">
+    <PaginationRoot
+      className={className}
+      sticky={sticky}
+      stickyOffset={stickyOffset}
+    >
+      <div className="vds-data-table-pagination-meta">
         {!hidePageSize && <PaginationPageSize options={pageSizeOptions} />}
+        <PaginationInfo />
+      </div>
+      <div className="vds-data-table-pagination-controls">
         <PaginationPrev />
         {!hidePageNumbers && <PaginationPages />}
         <PaginationNext />

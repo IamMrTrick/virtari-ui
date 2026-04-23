@@ -1,11 +1,11 @@
 "use client";
-import { useDataTableContext, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-YGGQMZSJ.js';
-export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-YGGQMZSJ.js';
-import { forwardRef, useRef, useEffect, useMemo, useState, useCallback } from 'react';
+import { useDataTableContext, stickyAttr, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-PNGY7DHE.js';
+export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-PNGY7DHE.js';
+import { forwardRef, useRef, useEffect, useMemo, useState, useCallback, useId } from 'react';
 import { cn } from '@virtari-packages/utils';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuItem } from '@virtari-packages/react-dropdown-menu';
-import { IconPlus, IconFilter, IconRefresh, IconDownload, IconChevronDown, IconSettings, IconRotateClockwise2, IconEyeOff, IconTrash, IconX, IconSearch, IconDotsVertical, IconDots, IconCheck, IconCopy, IconChevronLeft, IconFilterFilled } from '@virtari-packages/react-icons';
+import { IconPlus, IconFilter, IconRefresh, IconDownload, IconChevronDown, IconSettings, IconRotateClockwise2, IconEyeOff, IconTrash, IconX, IconSearch, IconDotsVertical, IconLayoutList, IconLayoutBoard, IconTable, IconDots, IconCheck, IconCopy, IconChevronLeft, IconFilterFilled } from '@virtari-packages/react-icons';
 import { Avatar } from '@virtari-packages/react-avatar';
 import { Badge } from '@virtari-packages/react-badge';
 import { Input } from '@virtari-packages/react-input';
@@ -16,6 +16,7 @@ import { Button } from '@virtari-packages/react-button';
 import { Chip, ChipIcon, ChipLabel, ChipRemove } from '@virtari-packages/react-chip';
 import { Switch } from '@virtari-packages/react-switch';
 import { Popover, PopoverTrigger, PopoverContent } from '@virtari-packages/react-popover';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@virtari-packages/react-select';
 import { Tabs, TabsList, TabsTrigger } from '@virtari-packages/react-tabs';
 
 var DataTableBulkActions = forwardRef(function DataTableBulkActions2({
@@ -23,7 +24,9 @@ var DataTableBulkActions = forwardRef(function DataTableBulkActions2({
   showWhenAllAcrossPagesSelected = true,
   isAllAcrossPagesSelected = false,
   sticky = true,
+  stickyOffset,
   className,
+  style,
   ...props
 }, ref) {
   const { table } = useDataTableContext();
@@ -32,14 +35,20 @@ var DataTableBulkActions = forwardRef(function DataTableBulkActions2({
   const shouldShow = selectedCount > 0 || showWhenAllAcrossPagesSelected && isAllAcrossPagesSelected;
   if (!shouldShow) return null;
   const clearSelection = () => table.resetRowSelection();
+  const stickyStyle = stickyOffset === void 0 ? style : {
+    ["--vds-sticky-offset-bottom"]: stickyOffset,
+    ...style
+  };
   return /* @__PURE__ */ jsx(
     "div",
     {
       ref,
       role: "region",
       "aria-label": `Bulk actions, ${selectedCount} selected`,
-      "data-sticky": sticky ? "" : void 0,
+      "data-sticky": stickyAttr(sticky),
+      "data-sticky-axis": "bottom",
       className: cn("vds-data-table-bulk-actions", className),
+      style: stickyStyle,
       ...props,
       children: typeof children === "function" ? children({ selectedRows, selectedCount, clearSelection }) : children ?? /* @__PURE__ */ jsx(
         DataTableBulkActionsDefault,
@@ -1252,15 +1261,21 @@ var Filters = {
   Popover: FilterPopover
 };
 var PaginationRoot = forwardRef(
-  function PaginationRoot2({ className, children, sticky = false, ...props }, ref) {
+  function PaginationRoot2({ className, children, sticky = false, stickyOffset, style, ...props }, ref) {
+    const stickyStyle = stickyOffset === void 0 ? style : {
+      ["--vds-sticky-offset-bottom"]: stickyOffset,
+      ...style
+    };
     return /* @__PURE__ */ jsx(
       "nav",
       {
         ref,
         role: "navigation",
         "aria-label": "Pagination",
-        "data-sticky": sticky ? "" : void 0,
+        "data-sticky": stickyAttr(sticky),
+        "data-sticky-axis": "bottom",
         className: cn("vds-data-table-pagination", className),
+        style: stickyStyle,
         ...props,
         children
       }
@@ -1331,26 +1346,47 @@ var PaginationNext = forwardRef(function PaginationNext2({ className, children =
 function PaginationPageSize({
   options = [10, 25, 50, 100],
   className,
-  label = "Rows per page"
+  label = "Rows per page",
+  size = "sm"
 }) {
   const { table } = useDataTableContext();
   const pageSize = table.getState().pagination.pageSize;
-  return /* @__PURE__ */ jsxs("label", { className: cn("vds-data-table-pagination-page-size", className), children: [
-    /* @__PURE__ */ jsx("span", { className: "vds-data-table-pagination-page-size-label", children: label }),
+  const labelId = useId();
+  const pageSizeValue = String(pageSize);
+  return /* @__PURE__ */ jsxs("div", { className: cn("vds-data-table-pagination-page-size", className), children: [
     /* @__PURE__ */ jsx(
-      "select",
+      "span",
       {
-        className: "vds-data-table-pagination-page-size-select",
-        value: pageSize,
-        onChange: (e) => {
-          const nextPageSize = Number(e.target.value);
+        id: labelId,
+        className: "vds-data-table-pagination-page-size-label",
+        children: label
+      }
+    ),
+    /* @__PURE__ */ jsxs(
+      Select,
+      {
+        value: pageSizeValue,
+        onValueChange: (v) => {
+          const nextPageSize = Number(v);
+          if (!Number.isFinite(nextPageSize)) return;
           table.setPagination((prev) => ({
             ...prev,
             pageIndex: 0,
             pageSize: nextPageSize
           }));
         },
-        children: options.map((n) => /* @__PURE__ */ jsx("option", { value: n, children: n }, n))
+        children: [
+          /* @__PURE__ */ jsx(
+            SelectTrigger,
+            {
+              size,
+              "aria-labelledby": labelId,
+              className: "vds-data-table-pagination-page-size-trigger",
+              children: /* @__PURE__ */ jsx(SelectValue, {})
+            }
+          ),
+          /* @__PURE__ */ jsx(SelectContent, { children: options.map((n) => /* @__PURE__ */ jsx(SelectItem, { value: String(n), children: n }, n)) })
+        ]
       }
     )
   ] });
@@ -1398,17 +1434,28 @@ function PaginationDefault({
   pageSizeOptions,
   hidePageSize = false,
   hidePageNumbers = false,
-  sticky = false
+  sticky = false,
+  stickyOffset
 }) {
-  return /* @__PURE__ */ jsxs(PaginationRoot, { className, sticky, children: [
-    /* @__PURE__ */ jsx(PaginationInfo, {}),
-    /* @__PURE__ */ jsxs("div", { className: "vds-data-table-pagination-controls", children: [
-      !hidePageSize && /* @__PURE__ */ jsx(PaginationPageSize, { options: pageSizeOptions }),
-      /* @__PURE__ */ jsx(PaginationPrev, {}),
-      !hidePageNumbers && /* @__PURE__ */ jsx(PaginationPages, {}),
-      /* @__PURE__ */ jsx(PaginationNext, {})
-    ] })
-  ] });
+  return /* @__PURE__ */ jsxs(
+    PaginationRoot,
+    {
+      className,
+      sticky,
+      stickyOffset,
+      children: [
+        /* @__PURE__ */ jsxs("div", { className: "vds-data-table-pagination-meta", children: [
+          !hidePageSize && /* @__PURE__ */ jsx(PaginationPageSize, { options: pageSizeOptions }),
+          /* @__PURE__ */ jsx(PaginationInfo, {})
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "vds-data-table-pagination-controls", children: [
+          /* @__PURE__ */ jsx(PaginationPrev, {}),
+          !hidePageNumbers && /* @__PURE__ */ jsx(PaginationPages, {}),
+          /* @__PURE__ */ jsx(PaginationNext, {})
+        ] })
+      ]
+    }
+  );
 }
 
 // src/pagination/index.ts
@@ -1463,6 +1510,7 @@ var ToolbarActionButton = forwardRef(function ToolbarActionButton2({
       variant,
       size,
       "data-intent": intent,
+      "data-mobile-icon-only": icon && showLabel ? "" : void 0,
       className,
       leftSection: icon,
       rightSection: trailingIcon,
@@ -1687,7 +1735,7 @@ var DataTableFilterBar = forwardRef(function DataTableFilterBar2({
   ...props
 }, ref) {
   const stickyStyle = stickyOffset === void 0 ? style : {
-    ["--data-table-filter-bar-sticky-offset"]: stickyOffset,
+    ["--vds-sticky-offset-top"]: stickyOffset,
     ...style
   };
   return /* @__PURE__ */ jsxs(
@@ -1696,7 +1744,8 @@ var DataTableFilterBar = forwardRef(function DataTableFilterBar2({
       ref,
       role: "toolbar",
       "aria-label": "Active filters",
-      "data-sticky": sticky ? "" : void 0,
+      "data-sticky": stickyAttr(sticky),
+      "data-sticky-axis": "top",
       className: cn("vds-data-table-filter-bar", className),
       style: stickyStyle,
       ...props,
@@ -1908,6 +1957,23 @@ var DEFAULT_LABELS = {
   board: "Board",
   list: "List"
 };
+var DEFAULT_ICON_PROPS = {
+  size: 14,
+  stroke: 1.75,
+  "aria-hidden": true,
+  focusable: false
+};
+var DEFAULT_ICONS = {
+  table: /* @__PURE__ */ jsx(IconTable, { ...DEFAULT_ICON_PROPS }),
+  board: /* @__PURE__ */ jsx(IconLayoutBoard, { ...DEFAULT_ICON_PROPS }),
+  list: /* @__PURE__ */ jsx(IconLayoutList, { ...DEFAULT_ICON_PROPS })
+};
+function iconForMode(icons, mode) {
+  if (icons && Object.prototype.hasOwnProperty.call(icons, mode)) {
+    return icons[mode];
+  }
+  return DEFAULT_ICONS[mode];
+}
 var DataTableViewModeToggle = forwardRef(function DataTableViewModeToggle2({
   modes = DEFAULT_MODES,
   labels,
@@ -1932,18 +1998,21 @@ var DataTableViewModeToggle = forwardRef(function DataTableViewModeToggle2({
           variant,
           size,
           "aria-label": "View mode",
-          children: modes.map((m) => /* @__PURE__ */ jsxs(
-            TabsTrigger,
-            {
-              value: m,
-              "aria-label": `${DEFAULT_LABELS[m]} view`,
-              children: [
-                icons?.[m] ? /* @__PURE__ */ jsx("span", { className: "vds-data-table-view-toggle-icon", children: icons[m] }) : null,
-                labels?.[m] ?? DEFAULT_LABELS[m]
-              ]
-            },
-            m
-          ))
+          children: modes.map((m) => {
+            const icon = iconForMode(icons, m);
+            return /* @__PURE__ */ jsxs(
+              TabsTrigger,
+              {
+                value: m,
+                "aria-label": `${DEFAULT_LABELS[m]} view`,
+                children: [
+                  icon ? /* @__PURE__ */ jsx("span", { className: "vds-data-table-view-toggle-icon", children: icon }) : null,
+                  labels?.[m] ?? DEFAULT_LABELS[m]
+                ]
+              },
+              m
+            );
+          })
         }
       )
     }

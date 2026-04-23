@@ -588,6 +588,9 @@ importers:
       '@virtari-packages/react-popover':
         specifier: workspace:*
         version: link:../react-popover
+      '@virtari-packages/react-select':
+        specifier: workspace:*
+        version: link:../react-select
       '@virtari-packages/react-switch':
         specifier: workspace:*
         version: link:../react-switch

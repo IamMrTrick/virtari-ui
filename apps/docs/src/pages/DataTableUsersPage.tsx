@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   DataTable,
+  DataTableFilterDrawer,
+  LinkCell,
   createColumnHelper,
   flexRender,
   useDataTableContext,
   type ColumnDef,
   type ColumnFiltersState,
   type ColumnOrderState,
+  type FilterFieldDefinition,
+  type FilterGroup,
   type Header,
   type RowSelectionState,
   type SortingState,
@@ -57,12 +61,10 @@ import {
   IconChevronsLeft,
   IconChevronsRight,
   IconChevronDown,
-  IconDownload,
   IconFileText,
   IconLock,
   IconMail,
   IconPencil,
-  IconPlus,
   IconRefresh,
   IconShield,
   IconTrash,
@@ -71,6 +73,7 @@ import {
   IconUserOff,
   IconX,
 } from "@virtari-packages/react-icons";
+import { ShowcaseShell, DOCS_STICKY_TOP_OFFSET } from "./_data-table-shared";
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
  * Types & mock data â€” 380 deterministic users
@@ -199,6 +202,52 @@ const DEFAULT_COLUMN_CONFIG: ColumnConfig[] = [
 const STORAGE_KEY = "vds:demo:users-table-columns";
 const SHOW_REFRESH_ACTION = false;
 
+const AVAILABLE_FILTERS: FilterFieldDefinition[] = [
+  {
+    id: "role",
+    label: "Role",
+    type: "select",
+    category: "shown",
+    options: ROLES.map((r) => ({ label: r, value: r })),
+  },
+  {
+    id: "status",
+    label: "Status",
+    type: "select",
+    category: "shown",
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Inactive", value: "inactive" },
+    ],
+  },
+  {
+    id: "twoFA",
+    label: "2F Auth",
+    type: "select",
+    category: "shown",
+    options: [
+      { label: "Enabled", value: true },
+      { label: "Disabled", value: false },
+    ],
+  },
+  { id: "joinedAt", label: "Joined date", type: "date", category: "popular" },
+  { id: "email", label: "Email", type: "text", category: "popular" },
+];
+
+function filterGroupsToColumnFilters(groups: FilterGroup[]): ColumnFiltersState {
+  const out: ColumnFiltersState = [];
+  const seen = new Set<string>();
+  for (const g of groups) {
+    for (const c of g.conditions) {
+      if (seen.has(c.fieldId)) continue;
+      if (c.value === undefined || c.value === null || c.value === "") continue;
+      seen.add(c.fieldId);
+      out.push({ id: c.fieldId, value: c.value });
+    }
+  }
+  return out;
+}
+
 function sameColumnConfig(a: ColumnConfig[], b: ColumnConfig[]) {
   if (a.length !== b.length) return false;
   return a.every((column, index) => {
@@ -300,6 +349,14 @@ export function DataTableUsersPage() {
   const [addUserOpen, setAddUserOpen] = useState(false);
   const [quickEdit, setQuickEdit] = useState<User | null>(null);
 
+  /* Filter drawer state — source of truth; columnFilters derives from it. */
+  const [filterGroups, setFilterGroups] = useState<FilterGroup[]>([]);
+
+  const handleApplyFilters = (groups: FilterGroup[]) => {
+    setFilterGroups(groups);
+    setColumnFilters(filterGroupsToColumnFilters(groups));
+  };
+
   /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Mutations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   const handleRefresh = () => {
@@ -358,10 +415,15 @@ export function DataTableUsersPage() {
       if (value === undefined || value === null || value === "") return others;
       return [...others, { id, value }];
     });
+    setFilterGroups((prev) =>
+      prev
+        .map((g) => ({
+          ...g,
+          conditions: g.conditions.filter((c) => c.fieldId !== id),
+        }))
+        .filter((g) => g.conditions.length > 0),
+    );
   };
-
-  const filterValue = (id: string) =>
-    columnFilters.find((c) => c.id === id)?.value;
 
   /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Columns â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
@@ -388,16 +450,8 @@ export function DataTableUsersPage() {
           return (
             <button
               type="button"
-              className="vds-data-table-row-link"
+              className="docs-row-link docs-users-name-cell"
               onClick={() => setQuickEdit(u)}
-              style={{
-                all: "unset",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "var(--vds-space-2, 0.5rem)",
-                minInlineSize: 0,
-              }}
             >
               <Avatar
                 fallback={initials(u.firstName, u.lastName)}
@@ -405,17 +459,7 @@ export function DataTableUsersPage() {
                 color="auto"
                 colorKey={full}
               />
-              <span
-                style={{
-                  fontWeight: "var(--vds-font-weight-medium, 500)",
-                  color: "var(--vds-color-fg-default, var(--vds-color-text, #111827))",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {full}
-              </span>
+              <span className="docs-users-name-cell-text">{full}</span>
             </button>
           );
         },
@@ -427,20 +471,7 @@ export function DataTableUsersPage() {
         enableSorting: true,
         cell: ({ getValue }) => {
           const v = getValue<string>();
-          return (
-            <a
-              href={`mailto:${v}`}
-              style={{
-                color: "var(--vds-color-primary-emphasis, #6366f1)",
-                textDecoration: "underline",
-                textDecorationColor:
-                  "color-mix(in oklch, currentColor, transparent 60%)",
-                textUnderlineOffset: "3px",
-              }}
-            >
-              {v}
-            </a>
-          );
+          return <LinkCell href={`mailto:${v}`}>{v}</LinkCell>;
         },
       }),
       ch.accessor("role", {
@@ -543,7 +574,10 @@ export function DataTableUsersPage() {
   /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   return (
-    <div>
+    <ShowcaseShell
+      title="Users management"
+      description="Production-grade showcase — composed entirely from DataTable primitives. Search, filter drawer, customize columns, bulk actions, three view modes, and persistent column layout."
+    >
       <DataTable.Root
         columns={columns}
         data={data}
@@ -567,7 +601,7 @@ export function DataTableUsersPage() {
         defaultPagination={{ pageIndex: 0, pageSize: 15 }}
       >
         {/* â”€â”€â”€â”€â”€ Toolbar (row 1) â”€â”€â”€â”€â”€ */}
-        <DataTable.Toolbar>
+        <DataTable.Toolbar sticky="smart" stickyOffset={DOCS_STICKY_TOP_OFFSET}>
           <DataTable.ViewModeToggle />
 
           <div style={{ flex: 1 }} aria-hidden />
@@ -603,7 +637,7 @@ export function DataTableUsersPage() {
                 aria-hidden
                 style={
                   loading
-                    ? { animation: "vds-spin 0.9s linear infinite" }
+                    ? { animation: "vds-docs-spin 0.9s linear infinite" }
                     : undefined
                 }
               />
@@ -612,17 +646,12 @@ export function DataTableUsersPage() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="soft"
-                color="contrast"
+              <DataTable.ExportButton
                 size="md"
-                leftSection={<IconDownload size={14} stroke={1.75} aria-hidden />}
-                rightSection={
+                trailingIcon={
                   <IconChevronDown size={12} stroke={1.75} aria-hidden />
                 }
-              >
-                Export
-              </Button>
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" sideOffset={6}>
               <DropdownMenuLabel>Export as</DropdownMenuLabel>
@@ -646,18 +675,11 @@ export function DataTableUsersPage() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button
-            variant="solid"
-            color="primary"
+          <DataTable.AddButton
+            label="Add User"
             size="md"
-            leftSection={<IconPlus size={14} stroke={1.75} aria-hidden />}
-            rightSection={
-              <IconChevronDown size={12} stroke={1.75} aria-hidden />
-            }
             onClick={() => setAddUserOpen(true)}
-          >
-            Add User
-          </Button>
+          />
         </DataTable.Toolbar>
 
         {/* â”€â”€â”€â”€â”€ Filter bar (row 2) â€” chips for active filters â”€â”€â”€â”€â”€ */}
@@ -679,7 +701,7 @@ export function DataTableUsersPage() {
               <>
                 <DataTable.ScrollArea>
                   <DataTable.Table>
-                    <DataTable.Header>
+                    <DataTable.Header stickyOffset={DOCS_STICKY_TOP_OFFSET}>
                       {(groups) =>
                         groups.map((g) => (
                           <DataTable.HeaderGroup key={g.id} headerGroup={g}>
@@ -706,10 +728,6 @@ export function DataTableUsersPage() {
         {/* â”€â”€â”€â”€â”€ Bulk actions â”€â”€â”€â”€â”€ */}
         <DataTable.BulkActions.Root
           sticky
-          style={{
-            "--data-table-bulk-sticky-offset":
-              "var(--data-table-pagination-sticky-offset)",
-          } as React.CSSProperties}
         >
           {({ selectedRows, selectedCount, clearSelection }) => {
             const ids = selectedRows.map((r) => (r.original as User).id);
@@ -750,24 +768,25 @@ export function DataTableUsersPage() {
           }}
         </DataTable.BulkActions.Root>
 
-        {/* â”€â”€â”€â”€â”€ Pagination â€” built with vds Select + Buttons â”€â”€â”€â”€â”€ */}
-        <CustomPagination />
+        {/* ───── Pagination ───── */}
+        <DataTable.Pagination.Default
+          pageSizeOptions={[10, 15, 25, 50, 100]}
+          sticky
+        />
 
         {loading && <DataTable.LoadingOverlay open label="Refreshing..." />}
       </DataTable.Root>
 
-      {/* â”€â”€â”€â”€â”€ Filter drawer (custom â€” drives columnFilters directly) â”€â”€â”€â”€â”€ */}
-      <FilterDrawer
+      {/* ───── Filter drawer ───── */}
+      <DataTableFilterDrawer
         open={filterDrawerOpen}
         onOpenChange={setFilterDrawerOpen}
-        roleValue={filterValue("role") as Role | undefined}
-        statusValue={filterValue("status") as Status | undefined}
-        twoFAValue={filterValue("twoFA") as boolean | undefined}
-        onChange={setFilter}
-        onClearAll={() => setColumnFilters([])}
+        availableFilters={AVAILABLE_FILTERS}
+        filterGroups={filterGroups}
+        onApplyFilters={handleApplyFilters}
       />
 
-      {/* â”€â”€â”€â”€â”€ Customize drawer (column visibility + reorder via DnD) â”€â”€â”€â”€â”€ */}
+      {/* ───── Customize drawer (column visibility + reorder via DnD) ───── */}
       <DataTableCustomizeDrawer
         open={customizeOpen}
         onOpenChange={setCustomizeOpen}
@@ -776,28 +795,20 @@ export function DataTableUsersPage() {
         defaultColumns={DEFAULT_COLUMN_CONFIG}
       />
 
-      {/* â”€â”€â”€â”€â”€ Add User drawer â”€â”€â”€â”€â”€ */}
+      {/* ───── Add User drawer ───── */}
       <AddUserDrawer
         open={addUserOpen}
         onOpenChange={setAddUserOpen}
         onSubmit={handleAddUser}
       />
 
-      {/* â”€â”€â”€â”€â”€ Quick Edit drawer â”€â”€â”€â”€â”€ */}
+      {/* ───── Quick Edit drawer ───── */}
       <QuickEditDrawer
         user={quickEdit}
         onOpenChange={(open) => !open && setQuickEdit(null)}
         onSave={handleSaveQuickEdit}
       />
-
-      {/* Spinner keyframes for the refresh icon. */}
-      <style>{`
-        @keyframes vds-spin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-      `}</style>
-    </div>
+    </ShowcaseShell>
   );
 }
 
@@ -893,8 +904,8 @@ function ActiveFilterBar({
 
   return (
     <DataTable.FilterBar
-      sticky
-      stickyOffset="var(--data-table-toolbar-sticky-offset, 0)"
+      sticky="smart"
+      stickyOffset={DOCS_STICKY_TOP_OFFSET}
       filters={columnFilters.map((f) => ({
         id: f.id,
         icon: iconFor(f.id),
@@ -907,385 +918,6 @@ function ActiveFilterBar({
     />
   );
 
-}
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
- * Custom pagination â€” vds Select + Buttons
- * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-function CustomPagination() {
-  const { table } = useDataTableContext();
-  const pageIndex = table.getState().pagination.pageIndex;
-  const pageSize = table.getState().pagination.pageSize;
-  const pageCount = table.getPageCount();
-  const total = table.getFilteredRowModel().rows.length;
-  const start = total === 0 ? 0 : pageIndex * pageSize + 1;
-  const end = Math.min(total, (pageIndex + 1) * pageSize);
-
-  const pages = pageRange(pageIndex, pageCount, 5);
-
-  return (
-    <nav
-      role="navigation"
-      aria-label="Pagination"
-      className="vds-data-table-pagination"
-      data-sticky=""
-    >
-      <div
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "var(--vds-space-3, 0.75rem)",
-          color: "var(--vds-color-text-muted, #9ca3af)",
-          fontSize: "var(--vds-text-sm, 0.875rem)",
-          fontWeight: "var(--vds-font-weight-medium, 500)",
-        }}
-      >
-        <span>Rows per page</span>
-        <Select
-          value={String(pageSize)}
-          onValueChange={(v) => {
-            const nextPageSize = Number(v);
-            table.setPagination((prev) => ({
-              ...prev,
-              pageIndex: 0,
-              pageSize: nextPageSize,
-            }));
-          }}
-        >
-          <SelectTrigger
-            size="sm"
-            appearance="outline"
-            style={{ minInlineSize: "3.75rem", inlineSize: "3.75rem" }}
-          >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {[10, 15, 25, 50, 100].map((n) => (
-              <SelectItem key={n} value={String(n)}>
-                {n}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <span>
-          {start}-{end} of {total} rows
-        </span>
-      </div>
-
-      <div
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "2px",
-        }}
-      >
-        <Button
-          variant="ghost"
-          color="contrast"
-          size="sm"
-          aria-label="First page"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.setPageIndex(0)}
-          leftSection={<IconChevronsLeft size={14} stroke={1.75} aria-hidden />}
-        />
-        <Button
-          variant="ghost"
-          color="contrast"
-          size="sm"
-          aria-label="Previous page"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-          leftSection={<IconChevronLeft size={14} stroke={1.75} aria-hidden />}
-        />
-        {pages.map((p, i) =>
-          typeof p === "number" ? (
-            <Button
-              key={`p-${p}`}
-              variant={p === pageIndex ? "soft" : "ghost"}
-              color="contrast"
-              size="sm"
-              aria-label={`Page ${p + 1}`}
-              aria-current={p === pageIndex ? "page" : undefined}
-              onClick={() => table.setPageIndex(p)}
-            >
-              {p + 1}
-            </Button>
-          ) : (
-            <span
-              key={`e-${i}`}
-              aria-hidden
-              style={{
-                paddingInline: "0.375rem",
-                color: "var(--vds-color-text-muted, #9ca3af)",
-              }}
-            >
-              ...
-            </span>
-          ),
-        )}
-        <Button
-          variant="ghost"
-          color="contrast"
-          size="sm"
-          aria-label="Next page"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-          leftSection={<IconChevronRight size={14} stroke={1.75} aria-hidden />}
-        />
-        <Button
-          variant="ghost"
-          color="contrast"
-          size="sm"
-          aria-label="Last page"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.setPageIndex(pageCount - 1)}
-          leftSection={<IconChevronsRight size={14} stroke={1.75} aria-hidden />}
-        />
-      </div>
-    </nav>
-  );
-}
-
-function pageRange(
-  current: number,
-  total: number,
-  siblingCount: number,
-): (number | "ellipsis-l" | "ellipsis-r")[] {
-  if (total <= 0) return [];
-  const out: (number | "ellipsis-l" | "ellipsis-r")[] = [];
-  if (total <= siblingCount + 4) {
-    for (let i = 0; i < total; i++) out.push(i);
-    return out;
-  }
-  const left = Math.max(current - Math.floor(siblingCount / 2), 1);
-  const right = Math.min(left + siblingCount - 1, total - 2);
-  out.push(0);
-  if (left > 1) out.push("ellipsis-l");
-  for (let i = left; i <= right; i++) out.push(i);
-  if (right < total - 2) out.push("ellipsis-r");
-  out.push(total - 1);
-  return out;
-}
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *
- * Filter drawer â€” drives columnFilters directly via setFilter
- * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-function FilterDrawer({
-  open,
-  onOpenChange,
-  roleValue,
-  statusValue,
-  twoFAValue,
-  onChange,
-  onClearAll,
-}: {
-  open: boolean;
-  onOpenChange: (o: boolean) => void;
-  roleValue?: Role;
-  statusValue?: Status;
-  twoFAValue?: boolean;
-  onChange: (id: string, value: unknown) => void;
-  onClearAll: () => void;
-}) {
-  const activeCount =
-    (roleValue ? 1 : 0) +
-    (statusValue ? 1 : 0) +
-    (twoFAValue !== undefined ? 1 : 0);
-
-  return (
-    <Drawer
-      direction="right"
-      open={open}
-      onOpenChange={onOpenChange}
-      sizeMode="fixed"
-      size="min(26rem, 95vw)"
-    >
-      <DrawerContent aria-label="Filters">
-        <DrawerHeader>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "var(--vds-space-2, 0.5rem)",
-            }}
-          >
-            <DrawerTitle>Filters</DrawerTitle>
-            {activeCount > 0 && (
-              <Badge color="primary" variant="soft" size="sm">
-                {activeCount}
-              </Badge>
-            )}
-          </div>
-        </DrawerHeader>
-
-        <DrawerBody>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--vds-space-4, 1rem)",
-            }}
-          >
-            <FilterField
-              label="Role"
-              icon={<IconShield size={14} stroke={1.75} aria-hidden />}
-            >
-              <Select
-                value={roleValue ?? ""}
-                onValueChange={(v) => onChange("role", v || undefined)}
-              >
-                <SelectTrigger
-                  size="md"
-                  clearable={!!roleValue}
-                  onClear={() => onChange("role", undefined)}
-                >
-                  <SelectValue placeholder="Any role" />
-                </SelectTrigger>
-                <SelectContent>
-                  {ROLES.map((r) => (
-                    <SelectItem key={r} value={r}>
-                      {r}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FilterField>
-
-            <FilterField
-              label="Status"
-              icon={<IconUserCheck size={14} stroke={1.75} aria-hidden />}
-            >
-              <Select
-                value={statusValue ?? ""}
-                onValueChange={(v) =>
-                  onChange("status", (v as Status) || undefined)
-                }
-              >
-                <SelectTrigger
-                  size="md"
-                  clearable={!!statusValue}
-                  onClear={() => onChange("status", undefined)}
-                >
-                  <SelectValue placeholder="Any status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
-            </FilterField>
-
-            <FilterField
-              label="2F Auth"
-              icon={<IconLock size={14} stroke={1.75} aria-hidden />}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "var(--vds-space-3, 0.75rem)",
-                }}
-              >
-                <span style={{ fontSize: "var(--vds-text-sm, 0.875rem)" }}>
-                  {twoFAValue === undefined
-                    ? "Any"
-                    : twoFAValue
-                      ? "Enabled only"
-                      : "Disabled only"}
-                </span>
-                <Switch
-                  checked={twoFAValue === true}
-                  onCheckedChange={(c) =>
-                    onChange("twoFA", c ? true : undefined)
-                  }
-                  aria-label="Filter 2F Auth enabled"
-                />
-              </div>
-              {twoFAValue !== undefined && (
-                <Button
-                  variant="link"
-                  size="xs"
-                  onClick={() => onChange("twoFA", undefined)}
-                  style={{ alignSelf: "flex-start", padding: 0 }}
-                >
-                  Clear
-                </Button>
-              )}
-            </FilterField>
-          </div>
-        </DrawerBody>
-
-        <DrawerFooter>
-          <div
-            style={{
-              display: "flex",
-              gap: "var(--vds-space-2, 0.5rem)",
-              justifyContent: "space-between",
-              inlineSize: "100%",
-            }}
-          >
-            <Button
-              variant="ghost"
-              color="danger"
-              size="sm"
-              onClick={onClearAll}
-              disabled={activeCount === 0}
-            >
-              Clear all
-            </Button>
-            <Button
-              variant="solid"
-              color="primary"
-              size="sm"
-              onClick={() => onOpenChange(false)}
-            >
-              Done
-            </Button>
-          </div>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-}
-
-function FilterField({
-  label,
-  icon,
-  children,
-}: {
-  label: string;
-  icon?: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--vds-space-1-5, 0.375rem)",
-      }}
-    >
-      <div
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "var(--vds-space-1-5, 0.375rem)",
-          fontSize: "var(--vds-text-xs, 0.75rem)",
-          fontWeight: "var(--vds-font-weight-medium, 500)",
-          color: "var(--vds-color-text-muted, #9ca3af)",
-          textTransform: "uppercase",
-          letterSpacing: "var(--vds-tracking-wide, 0.025em)",
-        }}
-      >
-        {icon}
-        <span>{label}</span>
-      </div>
-      {children}
-    </div>
-  );
 }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• *

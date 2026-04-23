@@ -2,6 +2,11 @@ import { forwardRef } from "react";
 import type { ReactNode } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@virtari-packages/react-tabs";
 import type { TabsProps, TabsSize, TabsVariant } from "@virtari-packages/react-tabs";
+import {
+  IconLayoutBoard,
+  IconLayoutList,
+  IconTable,
+} from "@virtari-packages/react-icons";
 import { cn } from "@virtari-packages/utils";
 
 import { useDataTableContext } from "../DataTableContext";
@@ -32,6 +37,29 @@ const DEFAULT_LABELS: Record<DataTableViewMode, string> = {
   list: "List",
 };
 
+const DEFAULT_ICON_PROPS = {
+  size: 14,
+  stroke: 1.75,
+  "aria-hidden": true as const,
+  focusable: false as const,
+};
+
+const DEFAULT_ICONS: Record<DataTableViewMode, ReactNode> = {
+  table: <IconTable {...DEFAULT_ICON_PROPS} />,
+  board: <IconLayoutBoard {...DEFAULT_ICON_PROPS} />,
+  list: <IconLayoutList {...DEFAULT_ICON_PROPS} />,
+};
+
+function iconForMode(
+  icons: Partial<Record<DataTableViewMode, ReactNode>> | undefined,
+  mode: DataTableViewMode,
+) {
+  if (icons && Object.prototype.hasOwnProperty.call(icons, mode)) {
+    return icons[mode];
+  }
+  return DEFAULT_ICONS[mode];
+}
+
 export const DataTableViewModeToggle = forwardRef<
   HTMLDivElement,
   DataTableViewModeToggleProps
@@ -61,20 +89,23 @@ export const DataTableViewModeToggle = forwardRef<
         size={size}
         aria-label="View mode"
       >
-        {modes.map((m) => (
-          <TabsTrigger
-            key={m}
-            value={m}
-            aria-label={`${DEFAULT_LABELS[m]} view`}
-          >
-            {icons?.[m] ? (
-              <span className="vds-data-table-view-toggle-icon">
-                {icons[m]}
-              </span>
-            ) : null}
-            {labels?.[m] ?? DEFAULT_LABELS[m]}
-          </TabsTrigger>
-        ))}
+        {modes.map((m) => {
+          const icon = iconForMode(icons, m);
+          return (
+            <TabsTrigger
+              key={m}
+              value={m}
+              aria-label={`${DEFAULT_LABELS[m]} view`}
+            >
+              {icon ? (
+                <span className="vds-data-table-view-toggle-icon">
+                  {icon}
+                </span>
+              ) : null}
+              {labels?.[m] ?? DEFAULT_LABELS[m]}
+            </TabsTrigger>
+          );
+        })}
       </TabsList>
     </Tabs>
   );

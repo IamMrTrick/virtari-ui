@@ -84,6 +84,7 @@
     "@virtari-packages/react-icons": "workspace:*",
     "@virtari-packages/react-input": "workspace:*",
     "@virtari-packages/react-popover": "workspace:*",
+    "@virtari-packages/react-select": "workspace:*",
     "@virtari-packages/react-switch": "workspace:*",
     "@virtari-packages/react-tabs": "workspace:*",
     "@virtari-packages/utils": "workspace:*"

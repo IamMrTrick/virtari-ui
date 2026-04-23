@@ -214,13 +214,8 @@
     --data-table-pagination-padding-block:  var(--vds-space-2, 0.5rem);
     --data-table-pagination-gap: var(--vds-space-2, 0.5rem);
     --data-table-pagination-button-size: var(--vds-size-md, 2rem);
-    --data-table-pagination-sticky-offset:
-      calc(
-        var(--data-table-pagination-button-size) +
-        var(--data-table-pagination-padding-block) +
-        var(--data-table-pagination-padding-block) +
-        var(--data-table-border-width)
-      );
+    --data-table-pagination-sticky-offset: 0px;
+    --data-table-bulk-sticky-offset: 0px;
     --data-table-pagination-button-bg: transparent;
     --data-table-pagination-button-bg-hover:
       var(--vds-color-surface-hover, #f3f4f6);
