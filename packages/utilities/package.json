@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/utilities",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Utility CSS classes (spacing, sizing, layout, z-index) driven by Virtari tokens.",
   "license": "UNLICENSED",
   "author": "Virtari",

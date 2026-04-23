@@ -1,5 +1,14 @@
 # @virtari-packages/react-accordion
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [9727c41]
+- Updated dependencies [39d97e8]
+  - @virtari-packages/utils@0.3.0
+  - @virtari-packages/react-icons@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

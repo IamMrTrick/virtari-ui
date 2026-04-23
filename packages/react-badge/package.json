@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-badge",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Virtari badge — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",
