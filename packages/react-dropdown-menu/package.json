@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-dropdown-menu",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Virtari dropdown menu — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",
