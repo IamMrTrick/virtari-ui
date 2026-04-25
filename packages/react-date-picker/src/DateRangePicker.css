@@ -5,8 +5,16 @@
   .vds-date-range-picker {
     display: inline-flex;
     flex-direction: column;
-    gap: var(--vds-space-1, 0.25rem);
+    gap: 0;
     font-family: var(--date-field-font-family);
+  }
+
+  .vds-date-range-picker > * {
+    min-inline-size: 0;
+  }
+
+  .vds-date-range-picker > * + * {
+    margin-block-start: var(--vds-space-1, 0.25rem);
   }
 
   .vds-date-range-picker[data-dir="rtl"] {
@@ -211,6 +219,36 @@
   .vds-date-range-picker-error {
     font-size: var(--vds-text-xs, 0.75rem);
     color: var(--date-field-error-color);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--vds-duration-normal, 200ms)
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-date-range-picker-error[data-empty] {
+    margin-block-start: 0;
+  }
+
+  .vds-date-range-picker-error[data-visible] {
+    grid-template-rows: 1fr;
+  }
+
+  .vds-date-range-picker-error-body {
+    min-block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(calc(var(--vds-space-1, 0.25rem) * -1));
+    transition:
+      opacity var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      transform var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-date-range-picker-error[data-visible]
+    .vds-date-range-picker-error-body {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   @media (max-width: 42rem) {

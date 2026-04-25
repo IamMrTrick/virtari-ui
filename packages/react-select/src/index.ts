@@ -20,6 +20,8 @@ export type {
   SelectSeparatorProps,
   SelectEmptyProps,
 } from "./Select";
+export { SelectField } from "./SelectField";
+export type { SelectFieldProps, SelectFieldRenderProps } from "./SelectField";
 
 /* ── Combobox (searchable, multi-select, async, virtualizable) ── */
 export {

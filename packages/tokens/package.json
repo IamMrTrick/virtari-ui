@@ -51,7 +51,11 @@
     "./layout": "./src/layout.css",
     "./layout/primitives": "./src/layout/primitives.css",
     "./layout/semantic": "./src/layout/semantic.css",
-    "./layout/components": "./src/layout/components.css"
+    "./layout/components": "./src/layout/components.css",
+    "./opacity": "./src/opacity.css",
+    "./transition": "./src/transition.css",
+    "./filter": "./src/filter.css",
+    "./gradient": "./src/gradient.css"
   },
   "files": [
     "dist",

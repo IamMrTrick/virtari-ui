@@ -1,3 +1,30 @@
+@import "../../react-fieldset/src/Fieldset.css";
+
+/* Scale bounce on each printable keystroke — intensity via --_ti (0–1) */
+@keyframes vds-typing-pulse {
+  0%   { scale: 1; }
+  30%  { scale: calc(1 + var(--_ti, 0.4) * 0.028); }
+  65%  { scale: calc(1 - var(--_ti, 0.4) * 0.008); }
+  100% { scale: 1; }
+}
+
+@keyframes vds-pw-reveal {
+  0%   { filter: blur(5px); opacity: 0.2; scale: 0.992; }
+  65%  { filter: blur(1px); opacity: 0.9; scale: 1.002; }
+  100% { filter: blur(0);   opacity: 1;   scale: 1; }
+}
+
+@keyframes vds-pw-hide {
+  0%   { filter: blur(0);   opacity: 1;   scale: 1; }
+  100% { filter: blur(5px); opacity: 0.2; scale: 0.992; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes vds-typing-pulse { 0%, 100% { scale: 1; } }
+  @keyframes vds-pw-reveal    { 0%, 100% { filter: none; opacity: 1; scale: 1; } }
+  @keyframes vds-pw-hide      { 0%, 100% { filter: none; opacity: 1; scale: 1; } }
+}
+
 @layer components {
   .vds-input {
     /*
@@ -7,7 +34,10 @@
      */
     --_input-height: var(--vds-size-md);
     --_input-px: var(--vds-space-3);
+    --_input-py: 0;
     --_input-font-size: var(--vds-text-sm);
+    --_input-line-height: var(--vds-control-line-height, 1);
+    --_input-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
     --_input-radius: var(--vds-radius-element);
 
     display: flex;
@@ -18,11 +48,15 @@
     color: var(--vds-color-text);
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
-      box-shadow var(--vds-duration-fast) var(--vds-ease-out);
+      box-shadow var(--vds-duration-fast) var(--vds-ease-out),
+      scale 200ms var(--vds-ease-spring);
 
     block-size: var(--_input-height);
     padding-inline: var(--_input-px);
+    padding-block-start: calc(var(--_input-py) + var(--_input-optical-offset));
+    padding-block-end: var(--_input-py);
     font-size: var(--_input-font-size);
+    line-height: var(--_input-line-height);
     border-radius: var(--_input-radius);
 
     &::placeholder {
@@ -33,6 +67,15 @@
       outline: 2px solid var(--vds-color-ring);
       outline-offset: -1px;
       border-color: var(--vds-color-primary-9);
+    }
+
+    &:active:not(:disabled) {
+      scale: 0.978;
+      transition: scale 35ms linear;
+    }
+
+    &.vds-input--pulse {
+      animation: vds-typing-pulse 200ms var(--vds-ease-out) forwards;
     }
 
     &:disabled {
@@ -131,4 +174,168 @@
       padding-inline-end: var(--vds-space-10);
     }
   }
+
+  /* ── InputGroup — merges input border with inline addons ── */
+  .vds-input-group {
+    display: flex;
+    align-items: stretch;
+    inline-size: 100%;
+
+    & > .vds-input {
+      flex: 1;
+      min-inline-size: 0;
+      border-radius: 0;
+    }
+
+    & > .vds-input:first-child {
+      border-start-start-radius: var(--vds-radius-element);
+      border-end-start-radius: var(--vds-radius-element);
+    }
+
+    & > .vds-input:last-child {
+      border-start-end-radius: var(--vds-radius-element);
+      border-end-end-radius: var(--vds-radius-element);
+    }
+
+    & > .vds-input-addon[data-side="start"] + .vds-input {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+    }
+
+    & > .vds-input:has(+ .vds-input-addon[data-side="end"]) {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+  }
+
+  /* ── InputAddon — the bordered text box that attaches to the input ── */
+  .vds-input-addon {
+    display: inline-flex;
+    align-items: center;
+    padding-inline: var(--vds-space-3);
+    font-size: var(--vds-text-sm);
+    color: var(--vds-color-text-muted);
+    background-color: var(--vds-color-surface-raised);
+    border: 1px solid var(--vds-color-border);
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &[data-side="start"] {
+      border-inline-end: none;
+      border-start-start-radius: var(--vds-radius-element);
+      border-end-start-radius: var(--vds-radius-element);
+    }
+
+    &[data-side="end"] {
+      border-inline-start: none;
+      border-start-end-radius: var(--vds-radius-element);
+      border-end-end-radius: var(--vds-radius-element);
+    }
+  }
+
+  .vds-input-field-control {
+    position: relative;
+    min-inline-size: 0;
+  }
+
+  .vds-input-field-control[data-pw-anim="reveal"] > .vds-input {
+    animation: vds-pw-reveal 280ms var(--vds-ease-out) both;
+  }
+
+  .vds-input-field-control[data-pw-anim="hide"] > .vds-input {
+    animation: vds-pw-hide 220ms var(--vds-ease-in) both;
+  }
+
+  /* nicer password dots — only when field has a value, not on placeholder */
+  .vds-input[type="password"]:not(:placeholder-shown) {
+    letter-spacing: 0.15em;
+  }
+
+  .vds-input-field-control[data-has-action] > .vds-input {
+    padding-inline-end: calc(var(--_input-px) + var(--vds-space-8));
+  }
+
+  .vds-input-field-action {
+    position: absolute;
+    inset-inline-end: var(--vds-space-1);
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--vds-space-8);
+    block-size: calc(100% - var(--vds-space-1));
+    padding: 0;
+    border: 0;
+    border-radius: max(
+      calc(var(--_input-radius) - var(--vds-space-1)),
+      var(--vds-radius-sm)
+    );
+    background: transparent;
+    color: var(--vds-color-text-muted);
+    cursor: pointer;
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-input-field-action:hover {
+    background-color: var(--vds-color-surface-hover);
+    color: var(--vds-color-text);
+  }
+
+  .vds-input-field-action:focus-visible {
+    outline: 2px solid var(--vds-color-ring);
+    outline-offset: 1px;
+  }
+
+  .vds-input-field-strength {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2);
+    min-inline-size: 0;
+  }
+
+  .vds-input-field-strength-bar {
+    display: block;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    block-size: 0.25rem;
+    border-radius: var(--vds-radius-full, 9999px);
+    background: var(--vds-color-surface-raised);
+    overflow: hidden;
+  }
+
+  .vds-input-field-strength-fill {
+    display: block;
+    block-size: 100%;
+    inline-size: calc(var(--vds-input-strength-score, 0) * 25%);
+    border-radius: inherit;
+    background: var(--vds-color-danger-8);
+    transition:
+      inline-size var(--vds-duration-fast) var(--vds-ease-out),
+      background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-input-field-strength[data-score="2"] .vds-input-field-strength-fill {
+    background: var(--vds-color-warning-8, #f59e0b);
+  }
+
+  .vds-input-field-strength[data-score="3"] .vds-input-field-strength-fill {
+    background: var(--vds-color-primary-8, #2563eb);
+  }
+
+  .vds-input-field-strength[data-score="4"] .vds-input-field-strength-fill {
+    background: var(--vds-color-success-8, #16a34a);
+  }
+
+  .vds-input-field-strength-label {
+    flex: none;
+    font-size: var(--vds-text-xs);
+    color: var(--vds-color-text-muted);
+    white-space: nowrap;
+  }
 }
+
+[data-vds-no-micro] .vds-input:active { scale: 1; transition: none; }
+[data-vds-no-micro] .vds-input--pulse { animation: none; }

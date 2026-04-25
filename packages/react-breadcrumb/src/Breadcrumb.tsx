@@ -1,8 +1,12 @@
 import {
+  Children,
+  cloneElement,
   createContext,
   Fragment,
+  isValidElement,
   useContext,
   useMemo,
+  type ReactElement,
   type ReactNode,
   type Ref,
 } from "react";
@@ -219,15 +223,34 @@ export function BreadcrumbLink({
   asChild = false,
   className,
   ref,
+  children,
   ...props
 }: BreadcrumbLinkProps) {
-  const Comp = asChild ? Slot : "a";
+  if (asChild && isValidElement(children)) {
+    const child = children as ReactElement<{ children?: ReactNode }>;
+    return (
+      <Slot
+        ref={ref}
+        className={cn("vds-breadcrumb__link", className)}
+        {...props}
+      >
+        {cloneElement(
+          child,
+          undefined,
+          renderBreadcrumbInlineContent(child.props.children),
+        )}
+      </Slot>
+    );
+  }
+
   return (
-    <Comp
+    <a
       ref={ref}
       className={cn("vds-breadcrumb__link", className)}
       {...props}
-    />
+    >
+      {renderBreadcrumbInlineContent(children)}
+    </a>
   );
 }
 
@@ -241,6 +264,7 @@ export interface BreadcrumbPageProps
 export function BreadcrumbPage({
   className,
   ref,
+  children,
   ...props
 }: BreadcrumbPageProps) {
   return (
@@ -251,7 +275,9 @@ export function BreadcrumbPage({
       aria-current="page"
       className={cn("vds-breadcrumb__page", className)}
       {...props}
-    />
+    >
+      {renderBreadcrumbInlineContent(children)}
+    </span>
   );
 }
 
@@ -388,6 +414,65 @@ export function BreadcrumbHome({
       {children}
     </BreadcrumbLink>
   );
+}
+
+function renderBreadcrumbInlineContent(children: ReactNode) {
+  const nodes = flattenBreadcrumbChildren(children);
+  const leadingIcon =
+    nodes.length > 0 && isBreadcrumbLeadingIcon(nodes[0]) ? nodes[0] : null;
+  const labelNodes = leadingIcon ? nodes.slice(1) : nodes;
+
+  return (
+    <span
+      className="vds-breadcrumb__content"
+      data-icon-only={leadingIcon && labelNodes.length === 0 ? "" : undefined}
+    >
+      {leadingIcon ? (
+        <span className="vds-breadcrumb__icon">{leadingIcon}</span>
+      ) : null}
+      {labelNodes.length ? (
+        <span className="vds-breadcrumb__label">{labelNodes}</span>
+      ) : null}
+    </span>
+  );
+}
+
+function flattenBreadcrumbChildren(children: ReactNode): ReactNode[] {
+  const nodes: ReactNode[] = [];
+
+  Children.forEach(children, (child) => {
+    if (child == null || typeof child === "boolean") return;
+
+    if (isValidElement(child) && child.type === Fragment) {
+      nodes.push(
+        ...flattenBreadcrumbChildren(
+          (child.props as { children?: ReactNode }).children,
+        ),
+      );
+      return;
+    }
+
+    nodes.push(child);
+  });
+
+  return nodes;
+}
+
+function isBreadcrumbLeadingIcon(node: ReactNode) {
+  if (!isValidElement(node)) return false;
+
+  const props = node.props as {
+    children?: ReactNode;
+    "aria-hidden"?: boolean;
+    focusable?: boolean | string;
+    "data-breadcrumb-icon"?: boolean;
+  };
+
+  if (props["data-breadcrumb-icon"]) return true;
+  if (props["aria-hidden"] === true) return true;
+  if (props.focusable === false || props.focusable === "false") return true;
+
+  return typeof node.type !== "string" && Children.count(props.children) === 0;
 }
 
 /* ─────────────────────────────────────────────

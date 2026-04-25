@@ -545,14 +545,40 @@
     animation: vds-nav-enter var(--submenu-open-duration) var(--submenu-open-easing);
   }
 
+  .vds-nav__popover-header {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+    padding-inline: var(--submenu-header-padding-inline);
+    padding-block-end: var(--submenu-header-padding-block-end);
+    margin-block-end: var(--submenu-header-margin-block-end);
+    border-block-end: 1px solid var(--submenu-header-border-color);
+  }
+
+  .vds-nav__popover-title {
+    display: block;
+    min-inline-size: 0;
+    color: var(--submenu-header-title-color);
+    font-size: var(--submenu-header-title-size);
+    font-weight: var(--submenu-header-title-weight);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   @keyframes vds-nav-enter {
     from {
       opacity: 0;
-      transform: translateY(-4px) scale(0.98);
+      transform:
+        var(--vds-nav-floating-transform, translate3d(0px, 0px, 0px))
+        translateY(-4px) scale(0.98);
     }
     to {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform:
+        var(--vds-nav-floating-transform, translate3d(0px, 0px, 0px))
+        translateY(0) scale(1);
     }
   }
 
@@ -567,7 +593,7 @@
   .vds-nav__submenu[data-mode="popover"] > .vds-nav__list {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--nav-gap);
+    gap: var(--nav-gap, var(--vds-space-1, 0.25rem));
     inline-size: 100%;
   }
 
@@ -580,6 +606,15 @@
   /* Items inside popover submenus reset their indent */
   .vds-nav__submenu[data-mode="popover"] .vds-nav__item {
     --item-indent: 0;
+  }
+
+  .vds-nav__submenu[data-mode="popover"][data-collapsed-root="true"] {
+    --submenu-padding: var(--vds-space-2-5, 0.625rem);
+  }
+
+  .vds-nav__submenu[data-mode="popover"][data-collapsed-root="true"] .vds-nav__item,
+  .vds-nav__mega[data-collapsed-root="true"] .vds-nav__item {
+    --item-padding-inline: var(--submenu-item-padding-inline);
   }
 
   /* ────────────────────────────────
@@ -603,6 +638,10 @@
     row-gap: var(--mega-row-gap);
   }
 
+  .vds-nav__mega > .vds-nav__popover-header {
+    grid-column: 1 / -1;
+  }
+
   .vds-nav__mega-section {
     display: flex;
     flex-direction: column;
@@ -616,7 +655,7 @@
   .vds-nav__mega .vds-nav__list {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--nav-gap);
+    gap: var(--nav-gap, var(--vds-space-1, 0.25rem));
     inline-size: 100%;
   }
 

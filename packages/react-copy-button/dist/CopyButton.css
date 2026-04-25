@@ -1,0 +1,117 @@
+@layer design-system.components {
+  .vds-copy-button {
+    --_copy-btn-padding:   var(--vds-space-1-5);
+    --_copy-btn-icon-size: 1rem;
+    --_copy-btn-font-size: var(--vds-text-sm);
+    --_copy-btn-radius:    var(--vds-radius-element);
+    --_copy-btn-gap:       var(--vds-space-1-5);
+  }
+
+    .vds-copy-button[data-size="2xs"] {
+      --_copy-btn-padding:   var(--vds-space-0-5);
+      --_copy-btn-icon-size: 0.75rem;
+      --_copy-btn-font-size: var(--vds-text-xs);
+    }
+
+    .vds-copy-button[data-size="xs"] {
+      --_copy-btn-padding:   var(--vds-space-1);
+      --_copy-btn-icon-size: 0.875rem;
+      --_copy-btn-font-size: var(--vds-text-xs);
+    }
+
+    .vds-copy-button[data-size="sm"] {
+      --_copy-btn-padding:   var(--vds-space-1-5);
+      --_copy-btn-icon-size: 1rem;
+      --_copy-btn-font-size: var(--vds-text-sm);
+    }
+
+    .vds-copy-button[data-size="md"] {
+      --_copy-btn-padding:   var(--vds-space-2);
+      --_copy-btn-icon-size: 1.125rem;
+      --_copy-btn-font-size: var(--vds-text-base);
+    }
+
+    .vds-copy-button[data-size="lg"] {
+      --_copy-btn-padding:   var(--vds-space-2-5);
+      --_copy-btn-icon-size: 1.25rem;
+      --_copy-btn-font-size: var(--vds-text-lg);
+    }
+}
+
+@layer design-system.components {
+  .vds-copy-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_copy-btn-gap);
+    padding: var(--_copy-btn-padding);
+    border-radius: var(--_copy-btn-radius);
+    border: none;
+    background: transparent;
+    color: var(--vds-color-text-muted);
+    font-size: var(--_copy-btn-font-size);
+    font-family: var(--vds-font-sans);
+    cursor: pointer;
+    transition:
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+    .vds-copy-button:focus-visible {
+      outline: 2px solid var(--vds-color-ring);
+      outline-offset: 1px;
+    }
+
+    .vds-copy-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ── Variants ── */
+      .vds-copy-button[data-variant="ghost"]:hover:not(:disabled) {
+        background-color: var(--vds-color-surface-hover);
+        color: var(--vds-color-text);
+      }
+      .vds-copy-button[data-variant="ghost"]:active:not(:disabled) {
+        background-color: var(--vds-color-surface-active);
+      }
+
+    .vds-copy-button[data-variant="outline"] {
+      border: 1px solid var(--vds-color-border);
+    }
+      .vds-copy-button[data-variant="outline"]:hover:not(:disabled) {
+        background-color: var(--vds-color-surface-hover);
+        color: var(--vds-color-text);
+      }
+
+    .vds-copy-button[data-variant="soft"] {
+      background-color: var(--vds-color-neutral-3);
+      color: var(--vds-color-text);
+    }
+      .vds-copy-button[data-variant="soft"]:hover:not(:disabled) {
+        background-color: var(--vds-color-neutral-4);
+      }
+
+    /* ── Copied state ── */
+
+    .vds-copy-button[data-copied] {
+      color: var(--vds-color-success-text);
+    }
+
+  .vds-copy-button__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_copy-btn-icon-size);
+    block-size: var(--_copy-btn-icon-size);
+    flex-shrink: 0;
+  }
+
+    .vds-copy-button__icon > svg {
+      inline-size: 100%;
+      block-size: 100%;
+    }
+
+  .vds-copy-button__label {
+    line-height: 1;
+  }
+}

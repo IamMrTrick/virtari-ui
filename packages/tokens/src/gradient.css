@@ -1,0 +1,35 @@
+@layer tokens {
+  :root {
+    /* ─── Surface gradients ───
+     * Subtle background gradients for elevated surfaces.
+     */
+    --vds-gradient-surface:        linear-gradient(180deg, var(--vds-color-neutral-1), var(--vds-color-neutral-2));
+    --vds-gradient-surface-raised: linear-gradient(180deg, var(--vds-color-neutral-2), var(--vds-color-neutral-3));
+
+    /* ─── Intent gradients ───
+     * Use for hero sections, banners, or primary CTAs.
+     */
+    --vds-gradient-primary: linear-gradient(135deg, var(--vds-color-primary-9),  var(--vds-color-primary-11));
+    --vds-gradient-success: linear-gradient(135deg, var(--vds-color-success-9),  var(--vds-color-success-11));
+    --vds-gradient-warning: linear-gradient(135deg, var(--vds-color-warning-9),  var(--vds-color-warning-11));
+    --vds-gradient-danger:  linear-gradient(135deg, var(--vds-color-danger-9),   var(--vds-color-danger-11));
+    --vds-gradient-info:    linear-gradient(135deg, var(--vds-color-info-9),     var(--vds-color-info-11));
+    --vds-gradient-accent:  linear-gradient(135deg, var(--vds-color-accent-9),   var(--vds-color-accent-11));
+
+    /* ─── Mask / fade-out overlays ───
+     * Use these to fade content into the background at scroll edges.
+     * Logical variants flip automatically in RTL.
+     */
+    --vds-gradient-fade-start:  linear-gradient(to right, var(--vds-color-bg), transparent);
+    --vds-gradient-fade-end:    linear-gradient(to left,  var(--vds-color-bg), transparent);
+    --vds-gradient-fade-top:    linear-gradient(to bottom, var(--vds-color-bg), transparent);
+    --vds-gradient-fade-bottom: linear-gradient(to top,   var(--vds-color-bg), transparent);
+  }
+
+  /* Logical (direction-aware) fade gradients — flip in RTL automatically */
+  :root { --vds-gradient-fade-inline-start: linear-gradient(to right, var(--vds-color-bg), transparent); }
+  :where([dir="rtl"]) { --vds-gradient-fade-inline-start: linear-gradient(to left, var(--vds-color-bg), transparent); }
+
+  :root { --vds-gradient-fade-inline-end: linear-gradient(to left, var(--vds-color-bg), transparent); }
+  :where([dir="rtl"]) { --vds-gradient-fade-inline-end: linear-gradient(to right, var(--vds-color-bg), transparent); }
+}

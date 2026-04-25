@@ -49,6 +49,10 @@ const DEFAULT_SPRING_EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
 const VIEWPORT_RATIO = 1;
 const DEFAULT_MINIMIZED_STATE_ID = "minimized";
 
+function getDefaultHeaderVariant(direction: Direction): DrawerHeaderVariant {
+  return direction === "left" || direction === "right" ? "bordered" : "plain";
+}
+
 function parseDurationMs(value: string, fallback: number): number {
   const trimmed = value.trim();
   if (!trimmed) return fallback;
@@ -230,7 +234,7 @@ export function Drawer({
   minimizedSize,
   minimizedState,
   indicator = "inside",
-  headerVariant = "plain",
+  headerVariant,
   snapBehavior = "staged",
   snapStepThreshold = 0.28,
   snapSkipThreshold = 0.86,
@@ -242,12 +246,14 @@ export function Drawer({
   dismissible = true,
   preventAutoFocus = true,
 }: DrawerProps) {
+  const resolvedHeaderVariant = headerVariant ?? getDefaultHeaderVariant(direction);
   const contentRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<HTMLDivElement>(null);
   const closeTimerRef = useRef<number>(0);
+  const [mountedIndicator, setMountedIndicator] = useState<DrawerIndicatorPlacement | null>(null);
 
   const resolvedOpenStates = useMemo(
     () => resolveOpenStates(openStates, snapPoints),
@@ -374,7 +380,8 @@ export function Drawer({
     size,
     offset,
     indicator,
-    headerVariant,
+    mountedIndicator,
+    headerVariant: resolvedHeaderVariant,
     snapPoints: resolvedSnaps,
     activeSnapPoint,
     minimizedSize: resolvedMinimizedSize,
@@ -388,6 +395,7 @@ export function Drawer({
     headerRef,
     bodyRef,
     handleRef,
+    setMountedIndicator,
     onOpenChange: handleOpenChange,
     onSnapPointChange: handleSnapChange,
     setDragging,
@@ -404,7 +412,8 @@ export function Drawer({
     size,
     offset,
     indicator,
-    headerVariant,
+    mountedIndicator,
+    resolvedHeaderVariant,
     resolvedSnaps,
     activeSnapPoint,
     resolvedMinimizedSize,
@@ -502,7 +511,7 @@ export const DrawerContent = forwardRef<
     sizeMode,
     size,
     offset,
-    indicator,
+    mountedIndicator,
     headerVariant,
     snapPoints,
     activeSnapPoint,
@@ -1280,7 +1289,7 @@ export const DrawerContent = forwardRef<
         data-open={open || undefined}
         data-dragging={dragging || undefined}
         data-keyboard-open={keyboardOpen || undefined}
-        data-indicator={indicator}
+        data-indicator={mountedIndicator ?? "hidden"}
         data-header-variant={headerVariant}
         data-size-mode={sizeMode}
         data-stage={activeStageKind}
@@ -1326,9 +1335,23 @@ export const DrawerHandle = forwardRef<HTMLDivElement, DrawerHandleProps>(functi
   { className, placement, ...props },
   forwardedRef,
 ) {
-  const { direction, handleRef, activeSnapPoint, minimizedSize, indicator } = useDrawerContext();
+  const {
+    direction,
+    handleRef,
+    activeSnapPoint,
+    minimizedSize,
+    indicator,
+    setMountedIndicator,
+  } = useDrawerContext();
   const minimized = minimizedSize !== undefined && activeSnapPoint === minimizedSize;
   const resolvedPlacement = placement ?? indicator;
+
+  useLayoutEffect(() => {
+    setMountedIndicator(resolvedPlacement);
+    return () => {
+      setMountedIndicator((current) => current === resolvedPlacement ? null : current);
+    };
+  }, [resolvedPlacement, setMountedIndicator]);
 
   if (resolvedPlacement === "hidden") return null;
 

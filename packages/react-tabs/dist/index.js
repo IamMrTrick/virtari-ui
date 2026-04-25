@@ -329,13 +329,19 @@ function TabsList({
     }
   );
 }
-function TabsTrigger({ className, ref, ...props }) {
+function TabsTrigger({
+  children,
+  className,
+  ref,
+  ...props
+}) {
   return /* @__PURE__ */ jsx(
     TabsPrimitive.Trigger,
     {
       ref,
       className: cn("vds-tabs-trigger", className),
-      ...props
+      ...props,
+      children: /* @__PURE__ */ jsx("span", { className: "vds-tabs-trigger-content", children })
     }
   );
 }
@@ -464,6 +470,7 @@ function TabsPanels({
   swipeable = true,
   swipeThreshold = 50,
   touchOnly = true,
+  mountStrategy = "all",
   ref
 }) {
   const containerRef = useRef(null);
@@ -473,10 +480,11 @@ function TabsPanels({
   const slides = [];
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
-    const cloned = cloneElement(
-      child,
-      { forceMount: true }
-    );
+    const idx = slides.length;
+    const shouldForceMount = mountStrategy === "all" || Math.abs(idx - activeIndex) <= 1;
+    const cloned = shouldForceMount ? cloneElement(child, {
+      forceMount: true
+    }) : child;
     slides.push(cloned);
   });
   const slideCount = slides.length;
@@ -496,33 +504,42 @@ function TabsPanels({
     const container = containerRef.current;
     if (!container) return;
     const update = () => {
-      const panels = container.querySelectorAll(
-        ':scope > .vds-tabs-panels-track > .vds-tabs-panels-slide > [role="tabpanel"]'
+      const activePanel = container.querySelector(
+        ':scope > .vds-tabs-panels-track > .vds-tabs-panels-slide > [role="tabpanel"][data-state="active"]'
       );
-      const idx = Array.from(panels).findIndex(
-        (p) => p.getAttribute("data-state") === "active"
-      );
-      if (idx >= 0) setActiveIndex(idx);
+      const slide = activePanel?.closest(".vds-tabs-panels-slide");
+      const idx = Number(slide?.dataset.index);
+      if (Number.isInteger(idx) && idx >= 0) {
+        setActiveIndex((prev) => {
+          if (idx === prev) return prev;
+          if (mountStrategy === "adjacent" && Math.abs(idx - prev) > 1) {
+            const track = trackRef.current;
+            if (track) track.style.transition = "none";
+          }
+          return idx;
+        });
+      }
     };
     update();
     const mo = new MutationObserver(update);
     mo.observe(container, {
       attributes: true,
       attributeFilter: ["data-state"],
+      childList: true,
       subtree: true
     });
     return () => mo.disconnect();
-  }, [slideCount]);
+  }, [slideCount, mountStrategy]);
   const activateByDirection = useCallback(
     (direction) => {
       const container = containerRef.current;
       if (!container) return false;
       const target = direction === "next" ? Math.min(activeIndex + 1, slideCount - 1) : Math.max(activeIndex - 1, 0);
       if (target === activeIndex) return false;
-      const panels = container.querySelectorAll(
-        ':scope > .vds-tabs-panels-track > .vds-tabs-panels-slide > [role="tabpanel"]'
+      const targetSlide = container.querySelector(
+        `:scope > .vds-tabs-panels-track > .vds-tabs-panels-slide[data-index="${target}"]`
       );
-      const panel = panels[target];
+      const panel = targetSlide?.querySelector('[role="tabpanel"]');
       if (!panel) return false;
       const root = container.closest(".vds-tabs") ?? document.body;
       let trigger = null;
@@ -592,6 +609,7 @@ function TabsPanels({
       ref: setRef,
       className: cn("vds-tabs-panels", className),
       "data-swipeable": swipeable && isTouch ? "true" : void 0,
+      "data-mount-strategy": mountStrategy,
       children: /* @__PURE__ */ jsx(
         "div",
         {
@@ -604,6 +622,7 @@ function TabsPanels({
             "div",
             {
               className: "vds-tabs-panels-slide",
+              "data-index": idx,
               "data-active": idx === activeIndex ? "true" : void 0,
               children: slide
             },

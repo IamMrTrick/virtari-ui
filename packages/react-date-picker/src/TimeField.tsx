@@ -291,11 +291,16 @@ export function TimeField({
           {description}
         </span>
       ) : null}
-      {isInvalid && errorMessage ? (
-        <span {...errorMessageProps} className="vds-time-field-error">
-          {errorMessage}
-        </span>
-      ) : null}
+      <span
+        {...errorMessageProps}
+        role={isInvalid && errorMessage ? "alert" : undefined}
+        aria-hidden={isInvalid && errorMessage ? undefined : true}
+        data-visible={isInvalid && errorMessage ? "" : undefined}
+        data-empty={isInvalid && errorMessage ? undefined : ""}
+        className="vds-time-field-error"
+      >
+        <span className="vds-time-field-error-body">{errorMessage}</span>
+      </span>
     </div>
   );
 }

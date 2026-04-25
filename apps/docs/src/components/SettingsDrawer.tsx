@@ -2,12 +2,15 @@ import type { CSSProperties, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
-  DrawerHeader,
   DrawerBody,
-  DrawerTitle,
   DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
 } from "@virtari-packages/react-drawer";
+import { Button } from "@virtari-packages/react-button";
 import { Switch } from "@virtari-packages/react-switch";
 import { IconSun, IconMoon } from "@virtari-packages/react-icons";
 import type { RadiusMode, Direction } from "../App";
@@ -82,6 +85,8 @@ export function SettingsDrawer({
   onDirectionChange,
   locale,
   onLocaleChange,
+  microInteractions,
+  onMicroInteractionsChange,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -93,6 +98,8 @@ export function SettingsDrawer({
   onDirectionChange: (direction: Direction) => void;
   locale: Locale;
   onLocaleChange: (locale: Locale) => void;
+  microInteractions: boolean;
+  onMicroInteractionsChange: (v: boolean) => void;
 }) {
   const { t } = useTranslation();
 
@@ -103,6 +110,8 @@ export function SettingsDrawer({
       onOpenChange={onOpenChange}
       sizeMode="fixed"
       size="min(22rem, 90vw)"
+      indicator="hidden"
+      headerVariant="bordered"
       scaleBackground
     >
       <DrawerContent
@@ -209,6 +218,22 @@ export function SettingsDrawer({
             </div>
           </Section>
 
+          {/* ── Micro-interactions ── */}
+          <Section label={t("settings.microInteractions")} hint={t("settings.microInteractionsHint")}>
+            <label className="docs-settings-theme-toggle">
+              <span className="docs-settings-theme-text">
+                <span className="docs-settings-theme-label">
+                  {microInteractions ? "Enabled" : "Disabled"}
+                </span>
+              </span>
+              <Switch
+                checked={microInteractions}
+                onCheckedChange={onMicroInteractionsChange}
+                aria-label={t("settings.microInteractions")}
+              />
+            </label>
+          </Section>
+
           {/* ── Theme ── */}
           <Section label={t("settings.theme")}>
             <label className="docs-settings-theme-toggle">
@@ -232,6 +257,11 @@ export function SettingsDrawer({
             </label>
           </Section>
         </DrawerBody>
+        <DrawerFooter className="docs-settings-footer">
+          <DrawerClose asChild>
+            <Button variant="outline">{t("sidebar.close")}</Button>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

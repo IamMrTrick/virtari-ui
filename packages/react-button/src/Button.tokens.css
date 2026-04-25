@@ -9,6 +9,8 @@
     /* ── Layout ── */
     --button-height: var(--vds-size-md, 2.25rem);
     --button-padding-inline: var(--vds-space-4, 1rem);
+    --button-padding-block: 0;
+    --button-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
     --button-gap: var(--vds-space-2, 0.5rem);
     --button-border-width: 1px;
     --button-radius: var(--vds-radius-element, 0.375rem);
@@ -23,7 +25,7 @@
     --button-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --button-font-size: var(--vds-text-sm, 0.875rem);
     --button-font-weight: var(--vds-font-weight-medium, 500);
-    --button-line-height: 1;
+    --button-line-height: var(--vds-control-line-height, 1);
     --button-letter-spacing: var(--vds-tracking-normal, 0);
 
     /* ── Motion ── */
@@ -252,6 +254,8 @@
   .vds-button[data-variant="link"] {
     --button-height:        auto;
     --button-padding-inline: 0;
+    --button-padding-block: 0;
+    --button-optical-offset: 0;
     --button-min-width:     0;
     --button-bg:            transparent;
     --button-bg-hover:      transparent;

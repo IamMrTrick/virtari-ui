@@ -44,6 +44,8 @@ interface NavSubmenuContextValue {
     open: boolean;
     setOpen: (open: boolean) => void;
     mode: NavSubmenuMode;
+    /** Optional heading rendered above popover content in collapsed rail mode. */
+    popoverHeading?: React.ReactNode;
     /** Ref to the trigger button — used to return focus on close in popover mode. */
     triggerRef: React.RefObject<HTMLElement | null>;
     /** Floating UI refs / props (only populated in popover mode). */
@@ -232,12 +234,17 @@ interface NavItemProps extends Omit<HTMLAttributes<HTMLLIElement>, "children"> {
     onOpenChange?: (open: boolean) => void;
     /** Floating placement (popover mode). */
     placement?: Parameters<typeof useSubmenu>[0]["placement"];
+    /**
+     * Optional heading shown at the top of popover submenus in collapsed rail
+     * mode. Defaults to `label` for declarative submenu items.
+     */
+    popoverHeading?: ReactNode;
     active?: boolean;
     disabled?: boolean;
     children?: ReactNode;
     ref?: Ref<HTMLLIElement>;
 }
-declare function NavItem({ href, label, icon, badge, kbd, submenu, submenuMode, open, onOpenChange, placement, active, disabled, className, children, ref, ...rest }: NavItemProps): react_jsx_runtime.JSX.Element;
+declare function NavItem({ href, label, icon, badge, kbd, submenu, submenuMode, open, onOpenChange, placement, popoverHeading, active, disabled, className, children, ref, ...rest }: NavItemProps): react_jsx_runtime.JSX.Element;
 
 interface NavSubmenuProps extends HTMLAttributes<HTMLDivElement> {
     ref?: Ref<HTMLDivElement>;

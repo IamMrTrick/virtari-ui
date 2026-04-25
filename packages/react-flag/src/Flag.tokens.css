@@ -3,7 +3,7 @@
     /* ── Layout ── */
     --flag-size: 1.25rem;          /* md default — inline-size; block-size follows 3:2 */
     --flag-aspect: 4 / 3;
-    --flag-border-radius: var(--vds-radius-xs, 0.25rem);
+    --flag-border-radius: var(--vds-radius-2, 0.25rem);
     --flag-outline-color: color-mix(in oklch, currentColor 12%, transparent);
     --flag-outline-width: 1px;
     --flag-shadow: none;

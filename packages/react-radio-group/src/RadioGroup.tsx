@@ -114,8 +114,15 @@ export function RadioGroup({
 
         <div className="vds-radio-group-items">{children}</div>
 
-        {hasError && (
-          <p id={errorId} role="alert" className="vds-radio-group-error">
+        <p
+          id={errorId}
+          role={hasError ? "alert" : undefined}
+          aria-hidden={hasError ? undefined : true}
+          data-visible={hasError ? "" : undefined}
+          data-empty={hasError ? undefined : ""}
+          className="vds-radio-group-error"
+        >
+          <span className="vds-radio-group-error-body">
             <IconAlertCircle
               size={14}
               stroke={2}
@@ -124,8 +131,8 @@ export function RadioGroup({
               className="vds-radio-group-error-icon"
             />
             <span>{error}</span>
-          </p>
-        )}
+          </span>
+        </p>
       </RadioGroupPrimitive.Root>
     </RadioGroupContext.Provider>
   );
@@ -166,7 +173,9 @@ export function RadioGroupItem({
       aria-invalid={resolvedError || undefined}
       {...props}
     >
-      <RadioGroupPrimitive.Indicator className="vds-radio-indicator" />
+      <RadioGroupPrimitive.Indicator className="vds-radio-indicator">
+        <span className="vds-radio-dot" />
+      </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   );
 }

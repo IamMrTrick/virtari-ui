@@ -20,7 +20,8 @@ import type { MutableRefObject } from "react";
 const TOP_BAND_SELECTOR = [
   ".vds-data-table-toolbar[data-sticky]",
   ".vds-data-table-filter-bar[data-sticky]",
-  ".vds-data-table-header[data-sticky]",
+  ".vds-data-table-sticky-header-rail[data-sticky]",
+  ".vds-data-table-header[data-sticky]:not([data-vds-detached-header])",
 ].join(",");
 
 const BOTTOM_BAND_SELECTOR = [
@@ -31,9 +32,6 @@ const BOTTOM_BAND_SELECTOR = [
 
 const SMART_THRESHOLD = 4;
 const FOOTER_SAFE_ZONE = 24;
-const HEADER_SELECTOR = ".vds-data-table-header[data-sticky]";
-const SCROLL_AREA_SELECTOR = ".vds-data-table-scroll-area";
-
 type ScrollTarget = HTMLElement | Window;
 
 function isWindow(target: ScrollTarget): target is Window {
@@ -104,6 +102,28 @@ function cssVarPx(el: HTMLElement, name: string): number {
   return cssLengthToPx(window.getComputedStyle(el).getPropertyValue(name), el);
 }
 
+function effectiveTopOffsetPx(
+  el: HTMLElement,
+  target: ScrollTarget,
+): number {
+  const raw = cssVarPx(el, "--vds-sticky-offset-top");
+  if (raw <= 0) return 0;
+  if (isWindow(target)) return raw;
+  return Math.max(0, raw - viewportBoundsOf(target).top);
+}
+
+function effectiveBottomOffsetPx(
+  el: HTMLElement,
+  target: ScrollTarget,
+): number {
+  const raw = cssVarPx(el, "--vds-sticky-offset-bottom");
+  if (raw <= 0) return 0;
+  if (isWindow(target)) return raw;
+  const viewport = viewportBoundsOf(target);
+  const distanceFromViewportBottom = Math.max(0, window.innerHeight - viewport.bottom);
+  return Math.max(0, raw - distanceFromViewportBottom);
+}
+
 export function useDataTableStickyStack(
   rootRef: MutableRefObject<HTMLElement | null>,
 ): void {
@@ -120,15 +140,6 @@ export function useDataTableStickyStack(
     let topBands: HTMLElement[] = [];
     let bottomBands: HTMLElement[] = [];
     let hasSmart = false;
-    let virtualHeader: HTMLElement | null = null;
-    let hasVirtualHeader = false;
-    let virtualHeaderY = 0;
-    let virtualHeaderLayout: {
-      naturalTop: number;
-      desiredTop: number;
-      maxY: number;
-      scrollTop: number;
-    } | null = null;
     let observedBands = new Set<HTMLElement>();
 
     let publishFrame = 0;
@@ -156,14 +167,8 @@ export function useDataTableStickyStack(
     function clearBandVars(el: HTMLElement) {
       el.style.removeProperty("--vds-sticky-top");
       el.style.removeProperty("--vds-sticky-bottom");
-    }
-
-    function clearVirtualHeader(el: HTMLElement) {
-      el.removeAttribute("data-vds-virtual-sticky-header");
-      el.removeAttribute("data-vds-virtual-stuck");
-      el.style.removeProperty("--vds-table-header-y");
-      virtualHeaderY = 0;
-      virtualHeaderLayout = null;
+      el.style.removeProperty("--vds-sticky-effective-offset-top");
+      el.style.removeProperty("--vds-sticky-effective-offset-bottom");
     }
 
     function refreshBands() {
@@ -174,18 +179,6 @@ export function useDataTableStickyStack(
         rootEl.querySelectorAll<HTMLElement>(BOTTOM_BAND_SELECTOR),
       );
       hasSmart = topBands.some(isSmart) || bottomBands.some(isSmart);
-
-      const nextVirtualHeader = rootEl.hasAttribute("data-virtualized")
-        ? null
-        : rootEl.querySelector<HTMLElement>(HEADER_SELECTOR);
-      if (virtualHeader && virtualHeader !== nextVirtualHeader) {
-        clearVirtualHeader(virtualHeader);
-      }
-      virtualHeader = nextVirtualHeader;
-      hasVirtualHeader = Boolean(virtualHeader);
-      if (virtualHeader) {
-        virtualHeader.setAttribute("data-vds-virtual-sticky-header", "");
-      }
 
       if (!resizeObserver) return;
       const next = new Set<HTMLElement>([...topBands, ...bottomBands]);
@@ -209,7 +202,6 @@ export function useDataTableStickyStack(
       const scrollingDown = rootEl.hasAttribute("data-scrolling-down");
       publishSide(topBands, "top", scrollingDown);
       publishSide([...bottomBands].reverse(), "bottom", scrollingDown);
-      measureVirtualHeader();
     }
 
     function publishSide(
@@ -219,11 +211,24 @@ export function useDataTableStickyStack(
     ) {
       const varName =
         axis === "top" ? "--vds-sticky-top" : "--vds-sticky-bottom";
+      const offsetVarName =
+        axis === "top"
+          ? "--vds-sticky-effective-offset-top"
+          : "--vds-sticky-effective-offset-bottom";
       let stack = 0;
       for (const el of bands) {
         if (!isVisible(el)) {
           clearBandVars(el);
           continue;
+        }
+        const effectiveOffset =
+          axis === "top"
+            ? effectiveTopOffsetPx(el, scrollTarget)
+            : effectiveBottomOffsetPx(el, scrollTarget);
+        if (effectiveOffset > 0) {
+          el.style.setProperty(offsetVarName, `${effectiveOffset}px`);
+        } else {
+          el.style.removeProperty(offsetVarName);
         }
         el.style.setProperty(varName, `${stack}px`);
         const hidden = scrollingDown && isSmart(el);
@@ -234,63 +239,14 @@ export function useDataTableStickyStack(
     }
 
     function onScroll() {
-      if (!hasSmart && !hasVirtualHeader) return;
+      if (!hasSmart) return;
       if (scrollFrame) return;
       scrollFrame = window.requestAnimationFrame(handleScrollFrame);
     }
 
     function handleScrollFrame() {
       scrollFrame = 0;
-      updateVirtualHeader();
-      if (hasSmart) detectDirection();
-    }
-
-    function measureVirtualHeader() {
-      const header = virtualHeader;
-      if (!header || !isVisible(header)) return;
-      const scrollArea = header.closest<HTMLElement>(SCROLL_AREA_SELECTOR);
-      if (!scrollArea) return;
-
-      const headerRect = header.getBoundingClientRect();
-      const scrollRect = scrollArea.getBoundingClientRect();
-      const naturalTop = headerRect.top - virtualHeaderY;
-      virtualHeaderLayout = {
-        naturalTop,
-        desiredTop:
-          cssVarPx(header, "--vds-sticky-top") +
-          cssVarPx(header, "--vds-sticky-offset-top"),
-        maxY: scrollRect.bottom - headerRect.height - naturalTop,
-        scrollTop: scrollTopOf(scrollTarget),
-      };
-      updateVirtualHeader();
-    }
-
-    function updateVirtualHeader() {
-      const header = virtualHeader;
-      if (!header || !isVisible(header)) return;
-      if (!virtualHeaderLayout) {
-        measureVirtualHeader();
-        return;
-      }
-
-      const scrollDelta = scrollTopOf(scrollTarget) - virtualHeaderLayout.scrollTop;
-      const naturalTop = virtualHeaderLayout.naturalTop - scrollDelta;
-      const nextY = Math.max(
-        0,
-        Math.min(
-          virtualHeaderLayout.desiredTop - naturalTop,
-          virtualHeaderLayout.maxY,
-        ),
-      );
-      if (Math.abs(nextY - virtualHeaderY) < 0.5) return;
-
-      virtualHeaderY = nextY;
-      header.style.setProperty("--vds-table-header-y", `${nextY}px`);
-      if (nextY > 0) {
-        header.setAttribute("data-vds-virtual-stuck", "");
-      } else {
-        header.removeAttribute("data-vds-virtual-stuck");
-      }
+      detectDirection();
     }
 
     function detectDirection() {
@@ -335,7 +291,6 @@ export function useDataTableStickyStack(
         "data-sticky",
         "data-sticky-axis",
         "data-resizing",
-        "data-virtualized",
         "class",
       ],
     });
@@ -353,7 +308,6 @@ export function useDataTableStickyStack(
       if (publishFrame) window.cancelAnimationFrame(publishFrame);
       if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
       for (const el of observedBands) clearBandVars(el);
-      if (virtualHeader) clearVirtualHeader(virtualHeader);
       rootEl.removeAttribute("data-scrolling-down");
     };
   }, [rootRef]);

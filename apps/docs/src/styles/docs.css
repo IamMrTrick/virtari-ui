@@ -220,7 +220,7 @@ body {
     font-size: 0.9em;
     background-color: var(--vds-color-bg-muted);
     padding-inline: var(--vds-space-1);
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-radius-2);
   }
 }
 
@@ -304,7 +304,7 @@ body {
 .docs-color-swatch-block--sm {
   inline-size: 2rem;
   block-size: 2rem;
-  border-radius: var(--vds-radius-md);
+  border-radius: var(--vds-radius-4);
 }
 
 .docs-color-swatch-label {
@@ -430,7 +430,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--vds-space-6);
-  padding: var(--vds-space-4) var(--vds-space-5);
+  padding: var(--vds-space-4) var(--vds-space-6);
+}
+
+.docs-settings-footer {
+  justify-content: flex-end;
 }
 
 .docs-settings-section {
@@ -475,7 +479,7 @@ body {
   gap: 2px;
   padding: var(--vds-space-2) var(--vds-space-3);
   border: 1px solid var(--vds-color-border-muted);
-  border-radius: var(--vds-radius-element);
+  border-radius: var(--vds-radius-nav-item);
   background-color: var(--vds-color-surface);
   color: var(--vds-color-text);
   cursor: pointer;
@@ -527,7 +531,7 @@ body {
   gap: var(--vds-space-1-5);
   padding: var(--vds-space-2-5) var(--vds-space-1);
   border: 1px solid var(--vds-color-border-muted);
-  border-radius: var(--vds-radius-element);
+  border-radius: var(--vds-radius-nav-item);
   background-color: var(--vds-color-surface);
   color: var(--vds-color-text);
   cursor: pointer;
@@ -576,7 +580,7 @@ body {
   gap: var(--vds-space-3);
   padding: var(--vds-space-3);
   border: 1px solid var(--vds-color-border-muted);
-  border-radius: var(--vds-radius-element);
+  border-radius: var(--vds-radius-surface);
   background-color: var(--vds-color-surface);
   cursor: pointer;
 }
@@ -587,7 +591,7 @@ body {
   justify-content: center;
   inline-size: 2rem;
   block-size: 2rem;
-  border-radius: var(--vds-radius-md);
+  border-radius: var(--vds-radius-4);
   background-color: var(--vds-color-bg-muted);
   color: var(--vds-color-text);
   flex: none;
@@ -691,7 +695,7 @@ body {
 .docs-icons-toggle {
   display: inline-flex;
   border: 1px solid var(--vds-color-border-muted);
-  border-radius: var(--vds-radius-md);
+  border-radius: var(--vds-radius-nav-item);
   overflow: hidden;
   background-color: var(--vds-color-surface);
 }
@@ -726,7 +730,7 @@ body {
   block-size: 32rem;
   overflow-y: auto;
   border: 1px solid var(--vds-color-border-muted);
-  border-radius: var(--vds-radius-md);
+  border-radius: var(--vds-radius-surface);
   padding: var(--vds-space-2);
   background-color: var(--vds-color-surface);
 }
@@ -740,7 +744,7 @@ body {
   gap: var(--vds-space-1);
   padding: var(--vds-space-2);
   border: 1px solid transparent;
-  border-radius: var(--vds-radius-md);
+  border-radius: var(--vds-radius-nav-item);
   background: transparent;
   color: var(--vds-color-text);
   cursor: pointer;

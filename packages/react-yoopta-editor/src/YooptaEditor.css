@@ -1,0 +1,654 @@
+@import "./YooptaEditor.tokens.css";
+
+@layer design-system.components {
+  /* ————————————————————————————————————————————————
+     Editor root
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor {
+    inline-size: 100%;
+    font-family: var(--vds-yoopta-font);
+    font-size: var(--vds-yoopta-text-body);
+    line-height: var(--vds-yoopta-leading-body);
+    color: var(--vds-yoopta-color-text);
+    background: var(--vds-yoopta-color-surface);
+    caret-color: var(--vds-yoopta-color-accent);
+    min-block-size: 16rem;
+  }
+
+  .vds-yoopta-editor > div,
+  .vds-yoopta-editor .yoopta-editor,
+  .vds-yoopta-editor .yoopta-slate {
+    inline-size: 100%;
+  }
+
+  .vds-yoopta-editor [contenteditable="true"] {
+    outline: none;
+  }
+
+  /* ————————————————————————————————————————————————
+     Block container
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor .yoopta-block,
+  .vds-yoopta-editor [data-yoopta-block] {
+    position: relative;
+    padding-block: var(--vds-space-1);
+    border-radius: var(--vds-yoopta-radius-block);
+    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+
+  .vds-yoopta-editor [data-block-selected="true"] {
+    background: var(--vds-color-surface-selected, var(--vds-color-primary-bg-subtle));
+  }
+
+  /* ————————————————————————————————————————————————
+     Typography
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor p {
+    margin: 0;
+    padding-block: var(--vds-space-1);
+  }
+  .vds-yoopta-editor h1,
+  .vds-yoopta-editor h2,
+  .vds-yoopta-editor h3,
+  .vds-yoopta-editor h4 {
+    margin: 0;
+    font-weight: var(--vds-font-weight-semibold);
+    line-height: var(--vds-leading-tight);
+    color: var(--vds-yoopta-color-text);
+    padding-block: var(--vds-space-3) var(--vds-space-1);
+  }
+  .vds-yoopta-editor h1 {
+    font-size: var(--vds-text-4xl);
+    letter-spacing: var(--vds-tracking-tight);
+  }
+  .vds-yoopta-editor h2 {
+    font-size: var(--vds-text-3xl);
+    letter-spacing: var(--vds-tracking-tight);
+  }
+  .vds-yoopta-editor h3 {
+    font-size: var(--vds-text-2xl);
+  }
+  .vds-yoopta-editor h4 {
+    font-size: var(--vds-text-xl);
+  }
+
+  .vds-yoopta-editor blockquote {
+    margin: 0;
+    border-inline-start: 3px solid var(--vds-yoopta-color-quote-border);
+    padding-inline-start: var(--vds-space-4);
+    padding-block: var(--vds-space-2);
+    color: var(--vds-yoopta-color-text-muted);
+    font-style: italic;
+  }
+
+  .vds-yoopta-editor hr {
+    border: none;
+    border-block-start: 1px solid var(--vds-yoopta-color-border);
+    margin-block: var(--vds-space-6);
+  }
+
+  /* ————————————————————————————————————————————————
+     Links — match Yoopta's <a> output, override default browser styles
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor a,
+  .vds-yoopta-editor a:visited {
+    color: var(--vds-color-text-link) !important;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklch, var(--vds-color-text-link) 50%, transparent);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
+      text-decoration-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .vds-yoopta-editor a:hover {
+    color: var(--vds-color-text-link-hover) !important;
+    text-decoration-color: var(--vds-color-text-link-hover);
+  }
+
+  /* ————————————————————————————————————————————————
+     Lists
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor ul,
+  .vds-yoopta-editor ol {
+    margin: 0;
+    padding-inline-start: var(--vds-space-6);
+  }
+  .vds-yoopta-editor ul {
+    list-style: disc;
+  }
+  .vds-yoopta-editor ol {
+    list-style: decimal;
+  }
+  .vds-yoopta-editor li {
+    padding-block: var(--vds-space-0-5);
+  }
+  .vds-yoopta-editor li::marker {
+    color: var(--vds-color-text-muted);
+  }
+
+  /* Todo list — Yoopta renders todo as a list with input checkbox */
+  .vds-yoopta-editor [data-element-type="TodoList"] ul,
+  .vds-yoopta-editor [data-element-type="TodoList"] ol {
+    list-style: none;
+    padding-inline-start: 0;
+  }
+  .vds-yoopta-editor [data-element-type="TodoList"] li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--vds-space-2);
+  }
+  .vds-yoopta-editor input[type="checkbox"] {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+    margin-block-start: var(--vds-space-1);
+    accent-color: var(--vds-color-primary-solid);
+    border-radius: var(--vds-radius-sm);
+    cursor: pointer;
+  }
+  .vds-yoopta-editor [data-checked="true"],
+  .vds-yoopta-editor li[data-checked="true"] > * {
+    color: var(--vds-color-text-muted);
+    text-decoration: line-through;
+  }
+
+  /* ————————————————————————————————————————————————
+     Code blocks
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor pre {
+    background: var(--vds-yoopta-color-code-bg);
+    color: var(--vds-yoopta-color-code-text);
+    font-family: var(--vds-yoopta-font-mono);
+    font-size: var(--vds-text-sm);
+    line-height: var(--vds-leading-relaxed);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    padding: var(--vds-space-4);
+    margin: 0;
+    overflow-x: auto;
+  }
+  .vds-yoopta-editor code {
+    font-family: var(--vds-yoopta-font-mono);
+    font-size: 0.92em;
+  }
+  .vds-yoopta-editor :not(pre) > code {
+    background: var(--vds-yoopta-color-code-inline-bg);
+    color: var(--vds-color-primary-text);
+    padding: 0.125em 0.375em;
+    border-radius: var(--vds-radius-sm);
+    border: 1px solid var(--vds-color-neutral-6);
+  }
+
+  /* Code block chrome (language selector, copy button) shipped by @yoopta/code */
+  .vds-yoopta-editor [data-element-type="Code"] {
+    border-radius: var(--vds-yoopta-radius-block);
+  }
+  .vds-yoopta-editor [data-element-type="Code"] select {
+    background: var(--vds-yoopta-color-surface-raised);
+    color: var(--vds-yoopta-color-text);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-radius-sm);
+    padding: var(--vds-space-1) var(--vds-space-2);
+    font-size: var(--vds-text-xs);
+    font-family: var(--vds-yoopta-font);
+  }
+
+  /* ————————————————————————————————————————————————
+     Callout tones (Yoopta sets data-theme on the block)
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-element-type="Callout"] > * {
+    display: flex;
+    gap: var(--vds-space-3);
+    align-items: flex-start;
+    padding: var(--vds-space-3) var(--vds-space-4);
+    border-radius: var(--vds-yoopta-radius-block);
+    border: 1px solid var(--vds-yoopta-color-callout-info-border);
+    background: var(--vds-yoopta-color-callout-info-bg);
+    color: var(--vds-yoopta-color-callout-info-text);
+  }
+  .vds-yoopta-editor [data-meta-theme="info"] [data-element-type="Callout"] > *,
+  .vds-yoopta-editor [data-element-type="Callout"][data-theme="info"] > * {
+    border-color: var(--vds-yoopta-color-callout-info-border);
+    background: var(--vds-yoopta-color-callout-info-bg);
+    color: var(--vds-yoopta-color-callout-info-text);
+  }
+  .vds-yoopta-editor [data-meta-theme="success"] [data-element-type="Callout"] > *,
+  .vds-yoopta-editor [data-element-type="Callout"][data-theme="success"] > * {
+    border-color: var(--vds-yoopta-color-callout-success-border);
+    background: var(--vds-yoopta-color-callout-success-bg);
+    color: var(--vds-yoopta-color-callout-success-text);
+  }
+  .vds-yoopta-editor [data-meta-theme="warning"] [data-element-type="Callout"] > *,
+  .vds-yoopta-editor [data-element-type="Callout"][data-theme="warning"] > * {
+    border-color: var(--vds-yoopta-color-callout-warning-border);
+    background: var(--vds-yoopta-color-callout-warning-bg);
+    color: var(--vds-yoopta-color-callout-warning-text);
+  }
+  .vds-yoopta-editor [data-meta-theme="danger"] [data-element-type="Callout"] > *,
+  .vds-yoopta-editor [data-element-type="Callout"][data-theme="danger"] > * {
+    border-color: var(--vds-yoopta-color-callout-danger-border);
+    background: var(--vds-yoopta-color-callout-danger-bg);
+    color: var(--vds-yoopta-color-callout-danger-text);
+  }
+
+  /* ————————————————————————————————————————————————
+     Images, video, embed, file
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor img,
+  .vds-yoopta-editor video,
+  .vds-yoopta-editor iframe {
+    max-inline-size: 100%;
+    border-radius: var(--vds-yoopta-radius-block);
+    border: 1px solid var(--vds-yoopta-color-border);
+  }
+
+  .vds-yoopta-editor__media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-block: var(--vds-space-2);
+  }
+  .vds-yoopta-editor__media img,
+  .vds-yoopta-editor__media video {
+    inline-size: auto;
+    max-inline-size: 100%;
+  }
+
+  .vds-yoopta-editor__upload {
+    margin-block: var(--vds-space-2);
+    padding: var(--vds-space-3);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    background: var(--vds-yoopta-color-surface-raised);
+  }
+
+  .vds-yoopta-editor__picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-3);
+  }
+  .vds-yoopta-editor__picker > [role="tabpanel"] {
+    margin-block-start: 0;
+  }
+
+  .vds-yoopta-editor__embed-row {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2);
+  }
+  .vds-yoopta-editor__embed-row > :first-child {
+    flex: 1;
+    min-inline-size: 0;
+  }
+  .vds-yoopta-editor__embed-hint {
+    margin-block-start: var(--vds-space-2);
+    margin: 0;
+    color: var(--vds-yoopta-color-text-muted);
+    font-size: var(--vds-text-xs);
+  }
+  .vds-yoopta-editor__embed-error {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    margin-block-start: var(--vds-space-2);
+    color: var(--vds-color-danger-text);
+    font-size: var(--vds-text-xs);
+  }
+  .vds-yoopta-editor__upload .vds-file-upload-root,
+  .vds-yoopta-editor__upload [class*="file-upload"] {
+    inline-size: 100%;
+  }
+  .vds-yoopta-editor__upload-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-2);
+    padding: var(--vds-space-6) var(--vds-space-4);
+    min-block-size: 6rem;
+    border: 1px dashed var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    background: var(--vds-yoopta-color-surface-raised);
+    color: var(--vds-yoopta-color-text-muted);
+    font-size: var(--vds-text-sm);
+    transition:
+      border-color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
+      background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
+      color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+    cursor: pointer;
+  }
+  .vds-yoopta-editor__upload-content:hover,
+  .vds-yoopta-editor__upload-content[data-active] {
+    border-color: var(--vds-color-primary-solid);
+    background: var(--vds-color-primary-bg-subtle);
+    color: var(--vds-color-primary-text);
+  }
+  .vds-yoopta-editor__upload-spinner {
+    animation: vds-yoopta-spin 0.9s linear infinite;
+  }
+  @keyframes vds-yoopta-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .vds-yoopta-editor__file-card {
+    margin-block: var(--vds-space-2);
+  }
+  .vds-yoopta-editor__file-card a {
+    display: flex !important;
+    align-items: center;
+    gap: var(--vds-space-3);
+    padding: var(--vds-space-3) var(--vds-space-4);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    background: var(--vds-yoopta-color-surface-raised);
+    color: var(--vds-yoopta-color-text) !important;
+    text-decoration: none !important;
+    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .vds-yoopta-editor__file-card a:hover {
+    background: var(--vds-color-surface-hover);
+  }
+  .vds-yoopta-editor__file-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-0-5);
+    min-inline-size: 0;
+  }
+  .vds-yoopta-editor__file-card-name {
+    font-weight: var(--vds-font-weight-medium);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vds-yoopta-editor__file-card-size {
+    font-size: var(--vds-text-xs);
+    color: var(--vds-yoopta-color-text-muted);
+  }
+
+  .vds-yoopta-editor [data-element-type="File"] > * {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-3);
+  }
+
+  /* ————————————————————————————————————————————————
+     Tables
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor table {
+    border-collapse: separate;
+    border-spacing: 0;
+    inline-size: 100%;
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    overflow: hidden;
+    margin-block: var(--vds-space-2);
+  }
+  .vds-yoopta-editor th,
+  .vds-yoopta-editor td {
+    border-block-start: 1px solid var(--vds-yoopta-color-border);
+    border-inline-start: 1px solid var(--vds-yoopta-color-border);
+    padding: var(--vds-space-2) var(--vds-space-3);
+    text-align: start;
+    vertical-align: top;
+  }
+  .vds-yoopta-editor tr:first-child > th,
+  .vds-yoopta-editor tr:first-child > td {
+    border-block-start: none;
+  }
+  .vds-yoopta-editor th:first-child,
+  .vds-yoopta-editor td:first-child {
+    border-inline-start: none;
+  }
+  .vds-yoopta-editor th {
+    background: var(--vds-yoopta-color-surface-raised);
+    font-weight: var(--vds-font-weight-semibold);
+    color: var(--vds-yoopta-color-text);
+  }
+
+  /* ————————————————————————————————————————————————
+     Accordion — Yoopta blocks rendered via Virtari Accordion compound,
+     so nothing extra needed beyond a small block-level margin.
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor__accordion {
+    margin-block: var(--vds-space-2);
+  }
+  .vds-yoopta-editor__accordion-heading {
+    flex: 1;
+    text-align: start;
+  }
+
+  /* ————————————————————————————————————————————————
+     Tabs
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-element-type="Tabs"] [role="tablist"] {
+    display: flex;
+    gap: var(--vds-space-1);
+    border-block-end: 1px solid var(--vds-yoopta-color-border);
+    margin-block-end: var(--vds-space-2);
+  }
+  .vds-yoopta-editor [data-element-type="Tabs"] [role="tab"] {
+    padding: var(--vds-space-2) var(--vds-space-3);
+    background: transparent;
+    border: none;
+    border-block-end: 2px solid transparent;
+    color: var(--vds-yoopta-color-text-muted);
+    font: inherit;
+    cursor: pointer;
+    transition: color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
+      border-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .vds-yoopta-editor [data-element-type="Tabs"] [role="tab"][aria-selected="true"] {
+    color: var(--vds-yoopta-color-text);
+    border-block-end-color: var(--vds-yoopta-color-accent);
+  }
+
+  /* ————————————————————————————————————————————————
+     Steps
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-element-type="Steps"] ol {
+    list-style: none;
+    padding: 0;
+  }
+  .vds-yoopta-editor [data-element-type="Steps"] li {
+    position: relative;
+    padding-inline-start: var(--vds-space-8);
+    padding-block: var(--vds-space-3);
+    counter-increment: step;
+  }
+  .vds-yoopta-editor [data-element-type="Steps"] li::before {
+    content: counter(step);
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: var(--vds-space-3);
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: var(--vds-radius-full);
+    background: var(--vds-yoopta-color-accent);
+    color: var(--vds-yoopta-color-accent-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--vds-text-xs);
+    font-weight: var(--vds-font-weight-semibold);
+  }
+
+  /* ————————————————————————————————————————————————
+     Mentions
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-element-type="mention"],
+  .vds-yoopta-editor [data-mention] {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    padding: 0.125em 0.375em;
+    border-radius: var(--vds-radius-sm);
+    background: var(--vds-color-primary-bg-subtle);
+    color: var(--vds-color-primary-text);
+    font-weight: var(--vds-font-weight-medium);
+  }
+
+  /* ————————————————————————————————————————————————
+     Mark formatting
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor strong { font-weight: var(--vds-font-weight-bold); }
+  .vds-yoopta-editor em { font-style: italic; }
+  .vds-yoopta-editor u { text-decoration: underline; text-underline-offset: 2px; }
+  .vds-yoopta-editor s { text-decoration: line-through; }
+  .vds-yoopta-editor mark {
+    background: var(--vds-color-warning-bg);
+    color: var(--vds-color-warning-text);
+    padding: 0.05em 0.15em;
+    border-radius: var(--vds-radius-sm);
+  }
+
+  /* ————————————————————————————————————————————————
+     Placeholder
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-placeholder]::before,
+  .vds-yoopta-editor .yoopta-placeholder::before {
+    content: attr(data-placeholder);
+    color: var(--vds-yoopta-color-text-placeholder);
+    pointer-events: none;
+    position: absolute;
+  }
+
+  /* ————————————————————————————————————————————————
+     Floating chrome
+     ———————————————————————————————————————————————— */
+  .yoopta-ui-floating-toolbar-content {
+    background: var(--vds-yoopta-color-surface-overlay) !important;
+    border: 1px solid var(--vds-yoopta-color-border) !important;
+    border-radius: var(--vds-yoopta-radius-popover) !important;
+    box-shadow: var(--vds-yoopta-shadow-toolbar) !important;
+    padding: var(--vds-space-1) !important;
+    color: var(--vds-yoopta-color-text) !important;
+  }
+  .yoopta-ui-floating-toolbar-content button {
+    background: transparent;
+    color: inherit;
+    border: none;
+    border-radius: var(--vds-radius-sm);
+    padding: var(--vds-space-1) var(--vds-space-2);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    min-block-size: 1.75rem;
+    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .yoopta-ui-floating-toolbar-content button:hover {
+    background: var(--vds-color-surface-hover);
+  }
+  .yoopta-ui-floating-toolbar-content button[data-active="true"] {
+    background: var(--vds-color-primary-bg);
+    color: var(--vds-color-primary-text);
+  }
+
+  /* Style only the visible content shells, not the positioned wrappers
+     (floating-ui sets inline position/top/left on outer elements; we don't
+     touch those — only paint background/border on the inner content boxes). */
+  .yoopta-ui-slash-command-content,
+  .yoopta-ui-action-menu-list-content {
+    background: var(--vds-yoopta-color-surface-overlay) !important;
+    border: 1px solid var(--vds-yoopta-color-border) !important;
+    border-radius: var(--vds-yoopta-radius-popover) !important;
+    box-shadow: var(--vds-yoopta-shadow-popover) !important;
+    color: var(--vds-yoopta-color-text) !important;
+  }
+  .yoopta-ui-slash-command-content button,
+  .yoopta-ui-action-menu-list-content button,
+  .yoopta-ui-slash-command-list button,
+  .yoopta-ui-slash-command-item {
+    inline-size: 100%;
+    background: transparent;
+    color: inherit;
+    border: none;
+    text-align: start;
+    padding: var(--vds-space-2) var(--vds-space-3);
+    border-radius: var(--vds-radius-sm);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2);
+    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .yoopta-ui-slash-command-item:hover,
+  .yoopta-ui-slash-command-item[data-selected="true"],
+  .yoopta-ui-action-menu-list-item:hover,
+  .yoopta-ui-action-menu-list-item[data-selected="true"] {
+    background: var(--vds-color-surface-hover);
+  }
+
+  .yoopta-ui-floating-block-actions-content button {
+    background: transparent;
+    border: none;
+    color: var(--vds-yoopta-color-text-muted);
+    border-radius: var(--vds-radius-sm);
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
+      color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .yoopta-ui-floating-block-actions-content button:hover {
+    background: var(--vds-color-surface-hover);
+    color: var(--vds-yoopta-color-text);
+  }
+
+  .yoopta-ui-block-options-content {
+    background: var(--vds-yoopta-color-surface-overlay) !important;
+    border: 1px solid var(--vds-yoopta-color-border) !important;
+    border-radius: var(--vds-yoopta-radius-popover) !important;
+    box-shadow: var(--vds-yoopta-shadow-popover) !important;
+    color: var(--vds-yoopta-color-text) !important;
+    padding: var(--vds-space-1) !important;
+  }
+  .yoopta-ui-block-options-content button,
+  .yoopta-ui-block-options-item {
+    inline-size: 100%;
+    background: transparent;
+    color: inherit;
+    border: none;
+    text-align: start;
+    padding: var(--vds-space-2) var(--vds-space-3);
+    border-radius: var(--vds-radius-sm);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+  }
+  .yoopta-ui-block-options-item:hover {
+    background: var(--vds-color-surface-hover);
+  }
+  .yoopta-ui-block-options-item[data-variant="destructive"] {
+    color: var(--vds-color-danger-text);
+  }
+  .yoopta-ui-block-options-item[data-variant="destructive"]:hover {
+    background: var(--vds-color-danger-bg);
+  }
+
+  /* Highlight color picker swatches */
+  [class*="yoopta-highlight-color-picker"] button {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    padding: 0;
+    border-radius: var(--vds-radius-sm);
+  }
+
+  /* Selection marquee */
+  [data-yoopta-selection-box] {
+    background: color-mix(in oklch, var(--vds-color-primary-solid) 15%, transparent);
+    border: 1px solid var(--vds-color-primary-solid);
+    border-radius: var(--vds-radius-sm);
+  }
+
+  .yoopta-floating-block-actions,
+  [class*="yoopta-floating-block-actions"] > * {
+    pointer-events: auto;
+  }
+}

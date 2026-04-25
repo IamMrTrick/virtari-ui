@@ -1,47 +1,102 @@
-@layer components {
+@import "./Card.tokens.css";
+
+@layer design-system.components {
   .vds-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    background-color: var(--vds-color-surface);
-    border: 1px solid var(--vds-color-border);
-    border-radius: var(--vds-radius-card);
-    box-shadow: var(--vds-shadow-sm);
-    color: var(--vds-color-text);
+    min-inline-size: 0;
+    color: var(--card-text-color);
+    background-color: var(--card-background);
+    border: var(--card-border-width) solid var(--card-border-color);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
     overflow: hidden;
+    transition:
+      background-color var(--card-transition-duration)
+        var(--card-transition-easing),
+      border-color var(--card-transition-duration) var(--card-transition-easing),
+      box-shadow var(--card-transition-duration) var(--card-transition-easing),
+      transform var(--card-transition-duration) var(--card-transition-easing);
+  }
+
+  .vds-card[data-interactive] {
+    cursor: pointer;
+  }
+
+  .vds-card[data-interactive]:hover {
+    background-color: var(--card-background-hover);
+    border-color: var(--card-border-color-hover);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(var(--card-hover-translate-y));
+  }
+
+  .vds-card[data-interactive]:focus-visible {
+    outline: var(--card-focus-ring-width) solid var(--card-focus-ring-color);
+    outline-offset: var(--card-focus-ring-offset);
+  }
+
+  .vds-card:not(:has(> .vds-card-header, > .vds-card-content, > .vds-card-footer)) {
+    padding-inline: var(--card-padding-inline);
+    padding-block: var(--card-padding-block);
+  }
+
+  .vds-card > :where(.vds-card-header, .vds-card-content, .vds-card-footer) {
+    min-inline-size: 0;
+    padding-inline: var(--card-padding-inline);
+    padding-block: 0;
+  }
+
+  .vds-card
+    > :where(.vds-card-header, .vds-card-content, .vds-card-footer):first-child {
+    padding-block-start: var(--card-padding-block);
+  }
+
+  .vds-card
+    > :where(.vds-card-header, .vds-card-content, .vds-card-footer):last-child {
+    padding-block-end: var(--card-padding-block);
+  }
+
+  .vds-card
+    > :where(.vds-card-header, .vds-card-content, .vds-card-footer)
+    + :where(.vds-card-header, .vds-card-content, .vds-card-footer) {
+    padding-block-start: var(--card-section-gap);
   }
 
   .vds-card-header {
     display: flex;
     flex-direction: column;
-    gap: var(--vds-space-1-5);
-    padding: var(--vds-space-6);
+    gap: var(--card-header-gap);
   }
 
   .vds-card-title {
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-lg);
-    font-weight: var(--vds-font-weight-semibold);
-    line-height: var(--vds-leading-tight);
     margin: 0;
+    font-family: var(
+      --card-title-font-family,
+      var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif)
+    );
+    font-size: var(--card-title-font-size);
+    font-weight: var(--card-title-font-weight);
+    line-height: var(--card-title-line-height);
+    color: inherit;
   }
 
   .vds-card-description {
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-sm);
-    color: var(--vds-color-text-muted);
-    line-height: var(--vds-leading-normal);
     margin: 0;
+    font-size: var(--card-description-font-size);
+    line-height: var(--card-description-line-height);
+    color: var(--card-muted-color);
   }
 
   .vds-card-content {
-    padding-inline: var(--vds-space-6);
-    padding-block-end: var(--vds-space-6);
+    min-inline-size: 0;
   }
 
   .vds-card-footer {
     display: flex;
     align-items: center;
-    padding: var(--vds-space-6);
-    padding-block-start: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: var(--card-footer-gap);
   }
 }

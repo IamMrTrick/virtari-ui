@@ -204,7 +204,7 @@
    * 5. Shape modifier — switch from pill to a rectangular tag radius.
    * ========================================================================= */
   .vds-badge[data-shape="square"] {
-    --badge-radius: var(--vds-radius-element, 0.375rem);
+    --badge-radius: var(--vds-radius-nav-item, 0.375rem);
   }
 
   /* =========================================================================

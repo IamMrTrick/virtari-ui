@@ -10,7 +10,10 @@
     inline-size: 100%;
     min-block-size: var(--combobox-trigger-min-block-size);
     padding-inline: var(--combobox-trigger-padding-inline);
-    padding-block: var(--combobox-trigger-padding-block);
+    padding-block-start: calc(
+      var(--combobox-trigger-padding-block) + var(--combobox-trigger-optical-offset)
+    );
+    padding-block-end: var(--combobox-trigger-padding-block);
 
     font-family: var(--combobox-trigger-font-family);
     font-size: var(--combobox-trigger-font-size);
@@ -29,7 +32,8 @@
       background-color var(--combobox-trigger-transition-duration) var(--combobox-trigger-transition-easing),
       border-color var(--combobox-trigger-transition-duration) var(--combobox-trigger-transition-easing),
       box-shadow var(--combobox-trigger-transition-duration) var(--combobox-trigger-transition-easing),
-      color var(--combobox-trigger-transition-duration) var(--combobox-trigger-transition-easing);
+      color var(--combobox-trigger-transition-duration) var(--combobox-trigger-transition-easing),
+      scale 200ms var(--vds-ease-spring);
   }
 
   .vds-combobox-trigger:hover:not([data-disabled="true"]) {
@@ -41,6 +45,11 @@
     outline: var(--combobox-trigger-focus-ring-width) solid var(--combobox-trigger-focus-ring-color);
     outline-offset: var(--combobox-trigger-focus-ring-offset);
     border-color: var(--combobox-trigger-focus-border-color);
+  }
+
+  .vds-combobox-trigger:active:not([data-disabled="true"]) {
+    scale: 0.978;
+    transition: scale 35ms linear;
   }
 
   .vds-combobox-trigger[data-disabled="true"] {
@@ -353,3 +362,5 @@
     background-color: var(--combobox-separator-color);
   }
 }
+
+[data-vds-no-micro] .vds-combobox-trigger:active { scale: 1; transition: none; }

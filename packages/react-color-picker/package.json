@@ -1,0 +1,76 @@
+{
+  "name": "@virtari-packages/react-color-picker",
+  "version": "0.1.0",
+  "description": "Virtari color picker - solid colors, CSS gradients, code mode, and full channel conversion.",
+  "license": "UNLICENSED",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-color-picker#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-color-picker"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "color-picker",
+    "gradient"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles": "./dist/ColorPicker.css",
+    "./tokens": "./dist/ColorPicker.tokens.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsup && postcss src/ColorPicker.tokens.css -o dist/ColorPicker.tokens.css && postcss src/ColorPicker.css -o dist/ColorPicker.css",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@virtari-packages/react-button": "workspace:*",
+    "@virtari-packages/react-icons": "workspace:*",
+    "@virtari-packages/react-input": "workspace:*",
+    "@virtari-packages/react-popover": "workspace:*",
+    "@virtari-packages/react-select": "workspace:*",
+    "@virtari-packages/react-textarea": "workspace:*",
+    "@virtari-packages/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "react": "^19.2.5",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  }
+}

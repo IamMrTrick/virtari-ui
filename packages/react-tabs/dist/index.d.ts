@@ -3,7 +3,7 @@ import { Ref, ComponentRef, ReactNode } from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 
 type TabsVariant = "underline" | "line" | "pills" | "segmented" | "boxed" | "bordered" | "solid" | "soft" | "ghost";
-type TabsSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+type TabsSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 interface TabsProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
     /** Collapse `orientation="vertical"` back to horizontal when the Tabs
      *  container is narrower than this (in px). Pass `undefined` to disable. */
@@ -32,7 +32,7 @@ declare function TabsList({ className, variant, size, fullWidth, animatedIndicat
 interface TabsTriggerProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
     ref?: Ref<ComponentRef<typeof TabsPrimitive.Trigger>>;
 }
-declare function TabsTrigger({ className, ref, ...props }: TabsTriggerProps): react_jsx_runtime.JSX.Element;
+declare function TabsTrigger({ children, className, ref, ...props }: TabsTriggerProps): react_jsx_runtime.JSX.Element;
 interface TabsContentProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> {
     ref?: Ref<ComponentRef<typeof TabsPrimitive.Content>>;
 }
@@ -48,13 +48,22 @@ interface TabsPanelsProps {
     /** Restrict swipe interaction to touch-only devices (pointer: coarse).
      *  Default true — desktop users still change tabs via the list. */
     touchOnly?: boolean;
+    /** Controls how many tab panels stay mounted.
+     *  - `all`: preserves the previous behavior by mounting every panel.
+     *  - `adjacent`: mounts only the active panel and its previous/next
+     *    neighbors, keeping swipe responsive without paying the cost for
+     *    distant heavy panels.
+     *
+     *  Default `all` to avoid changing existing behavior. */
+    mountStrategy?: TabsPanelsMountStrategy;
     ref?: Ref<HTMLDivElement>;
 }
+type TabsPanelsMountStrategy = "all" | "adjacent";
 /**
- * Carousel-style container for `TabsContent`. Mounts all panels at once
- * (via `forceMount`), lays them out in a horizontal track, and translates
- * the track based on the active tab. On touch devices, users can swipe/drag
- * between panels.
+ * Carousel-style container for `TabsContent`. By default it mounts all panels
+ * at once (via `forceMount`), lays them out in a horizontal track, and
+ * translates the track based on the active tab. Use
+ * `mountStrategy="adjacent"` for heavy tab content.
  *
  * ```tsx
  * <Tabs defaultValue="a">
@@ -66,6 +75,6 @@ interface TabsPanelsProps {
  * </Tabs>
  * ```
  */
-declare function TabsPanels({ children, className, swipeable, swipeThreshold, touchOnly, ref, }: TabsPanelsProps): react_jsx_runtime.JSX.Element;
+declare function TabsPanels({ children, className, swipeable, swipeThreshold, touchOnly, mountStrategy, ref, }: TabsPanelsProps): react_jsx_runtime.JSX.Element;
 
-export { Tabs, TabsContent, type TabsContentProps, TabsList, type TabsListProps, TabsPanels, type TabsPanelsProps, type TabsProps, type TabsSize, TabsTrigger, type TabsTriggerProps, type TabsVariant };
+export { Tabs, TabsContent, type TabsContentProps, TabsList, type TabsListProps, TabsPanels, type TabsPanelsMountStrategy, type TabsPanelsProps, type TabsProps, type TabsSize, TabsTrigger, type TabsTriggerProps, type TabsVariant };

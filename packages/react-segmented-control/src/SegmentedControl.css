@@ -1,0 +1,71 @@
+@layer design-system.components {
+  /* Outer RadioGroup wrapper — inline by default, block when full-width */
+  .vds-segmented-control {
+    display: inline-block;
+  }
+
+  .vds-segmented-control[data-full-width="true"] {
+    display: block;
+  }
+
+  /* Vertical layout: column-stack the items */
+  .vds-segmented-control .vds-tabs-list[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: stretch;
+    max-inline-size: none;
+    overflow-x: visible;
+    overflow-y: visible;
+  }
+
+  /* ── State bridge ──────────────────────────────────────────────────────────
+   * RadioGroup items carry data-state="checked" (not "active").
+   * Tabs CSS targets [data-state="active"] — we bridge that gap here.
+   * ─────────────────────────────────────────────────────────────────────── */
+
+  /* Map checked → active colors */
+  .vds-segmented-control .vds-tabs-trigger[data-state="checked"] {
+    color: var(--tabs-trigger-color-active);
+    border-color: var(--tabs-trigger-border-color-active);
+    background-color: var(--tabs-trigger-bg-active);
+    box-shadow: var(--tabs-trigger-shadow-active);
+  }
+
+  /* When the animated indicator paints the background, suppress the trigger's own */
+  .vds-segmented-control
+    .vds-tabs-list[data-animated="true"]
+    .vds-tabs-trigger[data-state="checked"] {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  /* Tabs hover rule selects :not([data-state="active"]) — that passes through
+   * to our checked items. Override so the indicator isn't painted over. */
+  .vds-segmented-control
+    .vds-tabs-trigger[data-state="checked"]:hover:not(:disabled):not(
+      [data-disabled]
+    ) {
+    background-color: transparent;
+    color: var(--tabs-trigger-color-active);
+  }
+
+  /* ── Disabled ─────────────────────────────────────────────────────────── */
+  /* Apply opacity at list level so the track bg dims too. Reset per-item
+   * opacity to 1 so it doesn't compound with Tabs' [data-disabled] rule. */
+  .vds-segmented-control[data-disabled] {
+    pointer-events: none;
+  }
+  .vds-segmented-control[data-disabled] .vds-tabs-list {
+    opacity: 0.6;
+  }
+  .vds-segmented-control[data-disabled] .vds-tabs-trigger {
+    opacity: 1;
+  }
+
+  /* ── Icon slot ────────────────────────────────────────────────────────── */
+  .vds-segmented-control-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    font-size: 1em;
+  }
+}

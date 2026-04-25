@@ -42,6 +42,13 @@ const cellStyle: React.CSSProperties = {
   alignItems: "center",
   gap: "var(--vds-space-2)",
   fontSize: "var(--vds-text-sm)",
+  lineHeight: 1,
+};
+
+const cellLabelStyle: React.CSSProperties = {
+  display: "inline-block",
+  lineHeight: 1,
+  transform: "translateY(calc(var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem))",
 };
 
 const columnStyle: React.CSSProperties = {
@@ -101,42 +108,49 @@ function StateRow({ heading, checked }: CheckboxStateRowProps) {
           <span style={columnHeaderStyle}>Default</span>
           <div style={cellStyle}>
             <Checkbox {...props} />
-            <span>Label</span>
+            <span style={cellLabelStyle}>Label</span>
           </div>
         </div>
         <div style={columnStyle}>
           <span style={columnHeaderStyle}>Hover</span>
           <div style={cellStyle}>
             <Checkbox {...props} className="cb-force-hover" />
-            <span>Label</span>
+            <span style={cellLabelStyle}>Label</span>
           </div>
         </div>
         <div style={columnStyle}>
           <span style={columnHeaderStyle}>Focus</span>
           <div style={cellStyle}>
             <Checkbox {...props} className="cb-force-focus" />
-            <span>Label</span>
+            <span style={cellLabelStyle}>Label</span>
           </div>
         </div>
         <div style={columnStyle}>
           <span style={columnHeaderStyle}>Disabled</span>
           <div style={cellStyle}>
             <Checkbox {...props} disabled />
-            <span style={{ color: "var(--vds-color-text-muted)" }}>Label</span>
+            <span
+              style={{
+                ...cellLabelStyle,
+                color: "var(--vds-color-text-muted)",
+              }}
+            >
+              Label
+            </span>
           </div>
         </div>
         <div style={columnStyle}>
           <span style={columnHeaderStyle}>Error</span>
           <div style={cellStyle}>
             <Checkbox {...props} error />
-            <span>Label</span>
+            <span style={cellLabelStyle}>Label</span>
           </div>
         </div>
         <div style={columnStyle}>
           <span style={columnHeaderStyle}>Error + Focus</span>
           <div style={cellStyle}>
             <Checkbox {...props} error className="cb-force-focus" />
-            <span>Label</span>
+            <span style={cellLabelStyle}>Label</span>
           </div>
         </div>
       </div>
@@ -341,19 +355,28 @@ export function CheckboxPage() {
         <Row>
           <div style={cellStyle}>
             <Checkbox size="sm" id="cb-sm" />
-            <label htmlFor="cb-sm" style={{ fontSize: "var(--vds-text-xs)" }}>
+            <label
+              htmlFor="cb-sm"
+              style={{ ...cellLabelStyle, fontSize: "var(--vds-text-xs)" }}
+            >
               Small
             </label>
           </div>
           <div style={cellStyle}>
             <Checkbox id="cb-md" />
-            <label htmlFor="cb-md" style={{ fontSize: "var(--vds-text-sm)" }}>
+            <label
+              htmlFor="cb-md"
+              style={{ ...cellLabelStyle, fontSize: "var(--vds-text-sm)" }}
+            >
               Medium (default)
             </label>
           </div>
           <div style={cellStyle}>
             <Checkbox size="lg" id="cb-lg" />
-            <label htmlFor="cb-lg" style={{ fontSize: "var(--vds-text-base)" }}>
+            <label
+              htmlFor="cb-lg"
+              style={{ ...cellLabelStyle, fontSize: "var(--vds-text-base)" }}
+            >
               Large
             </label>
           </div>

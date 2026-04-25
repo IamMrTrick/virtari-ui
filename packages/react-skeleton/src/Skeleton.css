@@ -12,7 +12,7 @@
   .vds-skeleton {
     display: block;
     background-color: var(--vds-color-skeleton);
-    border-radius: var(--vds-radius-element);
+    border-radius: var(--vds-radius-4);
     animation: vds-skeleton-pulse 2s ease-in-out infinite;
     inline-size: var(--_skeleton-w, 100%);
     block-size: var(--_skeleton-h, 1rem);

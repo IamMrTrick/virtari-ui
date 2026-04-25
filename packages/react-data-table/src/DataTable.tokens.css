@@ -34,6 +34,19 @@
     --data-table-row-bg-selected:      var(--vds-color-primary-bg, #eef2ff);
     --data-table-row-bg-selected-hover:var(--vds-color-primary-bg, #eef2ff);
     --data-table-footer-bg:            var(--vds-color-surface-raised, #f9fafb);
+    --data-table-sticky-bottom-bg:
+      color-mix(
+        in oklch,
+        var(--data-table-footer-bg),
+        var(--data-table-bg) 12%
+      );
+    --data-table-sticky-bottom-shadow:
+      0 -1px 0 var(--data-table-border-color),
+      0 -12px 24px -18px color-mix(
+        in oklch,
+        var(--data-table-cell-color),
+        transparent 88%
+      );
     --data-table-overlay-bg:           color-mix(
       in oklch,
       var(--vds-color-surface, #ffffff),
@@ -147,6 +160,7 @@
       var(--vds-color-text, #111827);
     --data-table-view-toggle-button-bg-active:
       var(--vds-color-surface, #ffffff);
+    --data-table-view-toggle-label-offset: 0px;
 
     /* ── v2: Board view ──────────────────────────────────────── */
     --data-table-board-gap: var(--vds-space-3, 0.75rem);
@@ -209,7 +223,7 @@
 
     /* ── Pagination ──────────────────────────────────────────── */
     --data-table-pagination-bg:
-      var(--vds-color-surface, #ffffff);
+      var(--data-table-footer-bg);
     --data-table-pagination-padding-inline: var(--vds-space-4, 1rem);
     --data-table-pagination-padding-block:  var(--vds-space-2, 0.5rem);
     --data-table-pagination-gap: var(--vds-space-2, 0.5rem);

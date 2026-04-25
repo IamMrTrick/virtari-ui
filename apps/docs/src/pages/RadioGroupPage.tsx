@@ -8,11 +8,18 @@ import {
   PillRadio,
   PillRadioItem,
 } from "@virtari-packages/react-radio-group";
+import {
+  SegmentedControl,
+  SegmentedControlItem,
+} from "@virtari-packages/react-segmented-control";
 import { Label } from "@virtari-packages/react-label";
 import {
   IconUser,
   IconUsers,
   IconBuilding,
+  IconList,
+  IconLayoutGrid,
+  IconTable,
 } from "@virtari-packages/react-icons";
 import { Section, Row } from "../components";
 
@@ -51,6 +58,13 @@ const cellStyle: React.CSSProperties = {
   alignItems: "center",
   gap: "var(--vds-space-2)",
   fontSize: "var(--vds-text-sm)",
+  lineHeight: 1,
+};
+
+const cellLabelStyle: React.CSSProperties = {
+  display: "inline-block",
+  lineHeight: 1,
+  transform: "translateY(calc(var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem))",
 };
 
 const columnStyle: React.CSSProperties = {
@@ -123,9 +137,13 @@ function SingleRadio({
       defaultValue={checked ? "on" : undefined}
       aria-label="demo"
       disabled={disabled}
-      error={error ? " " : undefined}
     >
-      <RadioGroupItem value="on" id={id} className={className} />
+      <RadioGroupItem
+        value="on"
+        id={id}
+        className={className}
+        error={error}
+      />
     </RadioGroup>
   );
 }
@@ -140,7 +158,9 @@ function StateRow({ heading, checked = false }: StateRowProps) {
           <span style={columnHeaderStyle}>Default</span>
           <div style={cellStyle}>
             <SingleRadio checked={checked} id={`r-${suffix}-d`} />
-            <label htmlFor={`r-${suffix}-d`}>Label</label>
+            <label htmlFor={`r-${suffix}-d`} style={cellLabelStyle}>
+              Label
+            </label>
           </div>
         </div>
         <div style={columnStyle}>
@@ -151,7 +171,9 @@ function StateRow({ heading, checked = false }: StateRowProps) {
               className="rb-force-hover"
               id={`r-${suffix}-h`}
             />
-            <label htmlFor={`r-${suffix}-h`}>Label</label>
+            <label htmlFor={`r-${suffix}-h`} style={cellLabelStyle}>
+              Label
+            </label>
           </div>
         </div>
         <div style={columnStyle}>
@@ -162,7 +184,9 @@ function StateRow({ heading, checked = false }: StateRowProps) {
               className="rb-force-focus"
               id={`r-${suffix}-f`}
             />
-            <label htmlFor={`r-${suffix}-f`}>Label</label>
+            <label htmlFor={`r-${suffix}-f`} style={cellLabelStyle}>
+              Label
+            </label>
           </div>
         </div>
         <div style={columnStyle}>
@@ -171,7 +195,10 @@ function StateRow({ heading, checked = false }: StateRowProps) {
             <SingleRadio checked={checked} disabled id={`r-${suffix}-dis`} />
             <label
               htmlFor={`r-${suffix}-dis`}
-              style={{ color: "var(--vds-color-text-muted)" }}
+              style={{
+                ...cellLabelStyle,
+                color: "var(--vds-color-text-muted)",
+              }}
             >
               Label
             </label>
@@ -181,7 +208,9 @@ function StateRow({ heading, checked = false }: StateRowProps) {
           <span style={columnHeaderStyle}>Error</span>
           <div style={cellStyle}>
             <SingleRadio checked={checked} error id={`r-${suffix}-e`} />
-            <label htmlFor={`r-${suffix}-e`}>Label</label>
+            <label htmlFor={`r-${suffix}-e`} style={cellLabelStyle}>
+              Label
+            </label>
           </div>
         </div>
         <div style={columnStyle}>
@@ -193,7 +222,9 @@ function StateRow({ heading, checked = false }: StateRowProps) {
               className="rb-force-focus"
               id={`r-${suffix}-ef`}
             />
-            <label htmlFor={`r-${suffix}-ef`}>Label</label>
+            <label htmlFor={`r-${suffix}-ef`} style={cellLabelStyle}>
+              Label
+            </label>
           </div>
         </div>
       </div>
@@ -700,6 +731,56 @@ export function RadioGroupPage() {
               </RadioCard>
             </div>
           </RadioGroup>
+        </div>
+      </Section>
+
+      <Section
+        title="Segmented Control"
+        description="Standalone segmented control built on Radix UI RadioGroup — three sizes, full-width, vertical orientation, icon support, and keyboard navigation."
+      >
+        <div style={groupRowStyle}>
+          <div style={cardFrame}>
+            <span style={rowLabelStyle}>Sizes</span>
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-4)" }}>
+              {(["sm", "md", "lg"] as const).map((size) => (
+                <div key={size} style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)" }}>
+                  <span style={columnHeaderStyle}>{size}</span>
+                  <SegmentedControl size={size} defaultValue="list" aria-label={`View — ${size}`}>
+                    <SegmentedControlItem value="list" icon={<IconList />}>List</SegmentedControlItem>
+                    <SegmentedControlItem value="grid" icon={<IconLayoutGrid />}>Grid</SegmentedControlItem>
+                    <SegmentedControlItem value="table" icon={<IconTable />}>Table</SegmentedControlItem>
+                  </SegmentedControl>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={cardFrame}>
+            <span style={rowLabelStyle}>Full width + Disabled</span>
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-4)" }}>
+              <SegmentedControl defaultValue="weekly" aria-label="Range — full width" fullWidth>
+                <SegmentedControlItem value="daily">Daily</SegmentedControlItem>
+                <SegmentedControlItem value="weekly">Weekly</SegmentedControlItem>
+                <SegmentedControlItem value="monthly">Monthly</SegmentedControlItem>
+                <SegmentedControlItem value="yearly">Yearly</SegmentedControlItem>
+              </SegmentedControl>
+              <SegmentedControl defaultValue="weekly" aria-label="Range — disabled" fullWidth disabled>
+                <SegmentedControlItem value="daily">Daily</SegmentedControlItem>
+                <SegmentedControlItem value="weekly">Weekly</SegmentedControlItem>
+                <SegmentedControlItem value="monthly">Monthly</SegmentedControlItem>
+                <SegmentedControlItem value="yearly">Yearly</SegmentedControlItem>
+              </SegmentedControl>
+            </div>
+          </div>
+
+          <div style={cardFrame}>
+            <span style={rowLabelStyle}>Vertical</span>
+            <SegmentedControl defaultValue="personal" orientation="vertical" aria-label="Account type">
+              <SegmentedControlItem value="personal" icon={<IconUser />}>Personal</SegmentedControlItem>
+              <SegmentedControlItem value="team" icon={<IconUsers />}>Team</SegmentedControlItem>
+              <SegmentedControlItem value="org" icon={<IconBuilding />}>Organization</SegmentedControlItem>
+            </SegmentedControl>
+          </div>
         </div>
       </Section>
 

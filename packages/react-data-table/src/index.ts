@@ -97,8 +97,10 @@ export {
   DataTableExportButton,
   DataTableFilterButton,
   DataTableHideColumnsButton,
+  DataTableMoreButton,
   DataTableRefreshButton,
   DataTableResetLayoutButton,
+  DataTableRowAction,
   DataTableSearchButton,
   DataTableSearchField,
   DataTableSearchIcon,
@@ -166,25 +168,13 @@ export type {
   FilterLogicOperator,
 } from "./filter-drawer";
 
-/* Pagination compound */
-export {
-  Pagination,
-  PaginationDefault,
-  PaginationInfo,
-  PaginationNext,
-  PaginationPageSize,
-  PaginationPages,
-  PaginationPrev,
-  PaginationRoot,
-} from "./pagination";
-export type {
-  PaginationButtonProps,
-  PaginationDefaultProps,
-  PaginationInfoProps,
-  PaginationPageSizeProps,
-  PaginationPagesProps,
-  PaginationRootProps,
-} from "./pagination";
+/* Pagination — extracted to @virtari-packages/react-pagination in 0.3.0.
+ * DataTablePagination is a thin adapter that reads DataTable state and renders
+ * the new package. For granular layouts, import from
+ * `@virtari-packages/react-pagination` directly and use useDataTableContext
+ * to read `table.getState().pagination`. See MIGRATION.md. */
+export { DataTablePagination } from "./pagination";
+export type { DataTablePaginationProps } from "./pagination";
 
 /* Filters compound (per-column, in header) */
 export {

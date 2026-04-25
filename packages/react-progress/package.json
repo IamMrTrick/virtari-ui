@@ -36,7 +36,8 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./styles": "./dist/Progress.css"
+    "./styles": "./dist/Progress.css",
+    "./tokens": "./dist/Progress.tokens.css"
   },
   "files": [
     "dist",
@@ -48,7 +49,7 @@
     "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
-    "build": "tsup && postcss src/Progress.css -o dist/Progress.css",
+    "build": "tsup && postcss src/Progress.tokens.css -o dist/Progress.tokens.css && postcss src/Progress.css -o dist/Progress.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

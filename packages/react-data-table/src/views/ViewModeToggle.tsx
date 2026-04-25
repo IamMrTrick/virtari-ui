@@ -102,7 +102,9 @@ export const DataTableViewModeToggle = forwardRef<
                   {icon}
                 </span>
               ) : null}
-              {labels?.[m] ?? DEFAULT_LABELS[m]}
+              <span className="vds-data-table-view-toggle-label">
+                {labels?.[m] ?? DEFAULT_LABELS[m]}
+              </span>
             </TabsTrigger>
           );
         })}

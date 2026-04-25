@@ -10,17 +10,18 @@
     --phone-input-country-bg-hover: var(--vds-color-surface-hover, #f9fafb);
     --phone-input-country-padding-inline: var(--vds-space-2-5, 0.625rem);
     --phone-input-country-gap: var(--vds-space-1-5, 0.375rem);
+    --phone-input-value-gap: var(--_input-px, var(--vds-space-3, 0.75rem));
   }
 
   /* Size-aware country-slot widths (kept narrow on small inputs, generous on large). */
   .vds-phone-input[data-size="2xs"],
   .vds-phone-input[data-size="xs"] {
-    --phone-input-country-width: 4.5rem;
+    --phone-input-country-width: 5.25rem;
     --phone-input-flag-size: 0.875rem;
     --phone-input-country-padding-inline: var(--vds-space-2, 0.5rem);
   }
   .vds-phone-input[data-size="sm"] {
-    --phone-input-country-width: 5rem;
+    --phone-input-country-width: 5.375rem;
     --phone-input-flag-size: 1rem;
   }
   .vds-phone-input[data-size="lg"] {

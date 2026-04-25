@@ -6,6 +6,10 @@
 @import "./radii.css";
 @import "./shadows.css";
 @import "./motion.css";
+@import "./transition.css";
 @import "./z-index.css";
 @import "./breakpoints.css";
 @import "./layout.css";
+@import "./opacity.css";
+@import "./filter.css";
+@import "./gradient.css";

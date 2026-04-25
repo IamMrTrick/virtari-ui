@@ -7,8 +7,11 @@
 @import "@virtari-packages/react-button/styles";
 @import "@virtari-packages/react-button/styles/effects";
 @import "@virtari-packages/react-button/styles/animations";
+@import "@virtari-packages/react-button-group/styles";
 @import "@virtari-packages/react-badge/styles";
 @import "@virtari-packages/react-input/styles";
+@import "@virtari-packages/react-number-input/styles";
+@import "@virtari-packages/react-otp-input/styles";
 @import "@virtari-packages/react-switch/styles";
 @import "@virtari-packages/react-checkbox/styles";
 @import "@virtari-packages/react-toggle/styles";
@@ -19,10 +22,13 @@
 @import "@virtari-packages/react-chip/styles";
 @import "@virtari-packages/react-breadcrumb/styles";
 @import "@virtari-packages/react-dialog/styles";
-@import "../../../../packages/react-drawer/dist/Drawer.css";
+@import "@virtari-packages/react-drawer/styles";
 @import "@virtari-packages/react-tooltip/styles";
 @import "@virtari-packages/react-popover/styles";
 @import "@virtari-packages/react-dropdown-menu/styles";
+@import "@virtari-packages/react-editor/styles";
+@import "@virtari-packages/react-yoopta-editor/tokens";
+@import "@virtari-packages/react-yoopta-editor/styles";
 @import "@virtari-packages/react-alert-dialog/styles";
 @import "@virtari-packages/react-toast/styles";
 @import "@virtari-packages/react-radio-group/styles";
@@ -42,15 +48,20 @@
 @import "@virtari-packages/react-text/styles";
 @import "@virtari-packages/react-text/heading/styles";
 @import "@virtari-packages/react-date-picker/styles";
-@import "../../../../packages/react-date-picker/dist/DateRangePicker.css";
-@import "../../../../packages/react-layout/dist/index.css";
-@import "../../../../packages/react-header/dist/Header.css";
-@import "../../../../packages/react-nav/dist/Nav.css";
-@import "../../../../packages/react-sidebar/dist/Sidebar.css";
+@import "@virtari-packages/react-date-picker/range-picker/styles";
+@import "@virtari-packages/react-layout/styles";
+@import "@virtari-packages/react-header/styles";
+@import "@virtari-packages/react-nav/styles";
+@import "@virtari-packages/react-sidebar/styles";
 @import "@virtari-packages/react-flag/styles";
 @import "@virtari-packages/react-phone-input/styles";
 @import "@virtari-packages/react-language-picker/styles";
 @import "@virtari-packages/react-bottom-nav/styles";
+@import "@virtari-packages/react-segmented-control/styles";
+@import "@virtari-packages/react-code/tokens";
+@import "@virtari-packages/react-code/styles";
+@import "@virtari-packages/react-carousel/tokens";
+@import "@virtari-packages/react-carousel/styles";
 
 /* Docs app styles */
 @import "./docs.css";

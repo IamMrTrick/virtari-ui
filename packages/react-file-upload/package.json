@@ -1,0 +1,73 @@
+{
+  "name": "@virtari-packages/react-file-upload",
+  "version": "0.1.0",
+  "description": "Virtari file upload — compound dropzone + file list with controlled/uncontrolled state, built on react-dropzone.",
+  "license": "UNLICENSED",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-file-upload#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-file-upload"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "file-upload",
+    "dropzone"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles": "./dist/FileUpload.css",
+    "./tokens": "./dist/FileUpload.tokens.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsup && postcss src/FileUpload.tokens.css -o dist/FileUpload.tokens.css && postcss src/FileUpload.css -o dist/FileUpload.css",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
+    "@virtari-packages/react-icons": "workspace:*",
+    "@virtari-packages/react-progress": "workspace:*",
+    "@virtari-packages/utils": "workspace:*",
+    "react-dropzone": "^14.2.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "react": "^19.2.5",
+    "@types/react": "^19.2.14",
+    "typescript": "^5.5.0",
+    "tsup": "^8.0.0"
+  }
+}

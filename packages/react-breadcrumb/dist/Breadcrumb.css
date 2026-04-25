@@ -1,16 +1,13 @@
 @layer design-system.components {
-  /* ─────────────────────────────────────────────
-   * 1. Base component tokens
-   *    Semantic → component mapping with fallbacks
-   *    so the package works standalone if dropped
-   *    into a project without @virtari-packages/tokens.
-   * ───────────────────────────────────────────── */
   .vds-breadcrumb {
     /* Layout */
-    --breadcrumb-gap: var(--vds-space-2, 0.5rem);
-    --breadcrumb-row-gap: var(--vds-space-1, 0.25rem);
-    --breadcrumb-item-padding-inline: var(--vds-space-2, 0.5rem);
-    --breadcrumb-item-padding-block: var(--vds-space-1, 0.25rem);
+    --breadcrumb-gap: var(--vds-space-1-5, 0.375rem);
+    --breadcrumb-row-gap: var(--vds-space-0-5, 0.125rem);
+    --breadcrumb-content-gap: 0.1875rem;
+    --breadcrumb-item-padding-inline: 0;
+    --breadcrumb-item-padding-block: 0;
+    --breadcrumb-pill-padding-inline: var(--vds-space-1-5, 0.375rem);
+    --breadcrumb-pill-padding-block: 0.1875rem;
     --breadcrumb-item-radius: var(--vds-radius-sm, 0.375rem);
     --breadcrumb-item-border-width: 1px;
     --breadcrumb-item-border-color: transparent;
@@ -22,16 +19,19 @@
     --breadcrumb-font-size: var(--vds-text-sm, 0.875rem);
     --breadcrumb-font-weight: var(--vds-font-weight-normal, 400);
     --breadcrumb-page-weight: var(--vds-font-weight-medium, 500);
-    --breadcrumb-line-height: var(--vds-leading-tight, 1.25);
+    --breadcrumb-line-height: var(--vds-control-line-height, 1);
+    --breadcrumb-label-offset: calc(var(--vds-control-optical-offset, 0.09375rem) * 0.7);
+    --breadcrumb-icon-offset: calc(var(--breadcrumb-label-offset) * 0.35);
+    --breadcrumb-separator-offset: calc(var(--breadcrumb-label-offset) * 0.5);
 
-    /* Truncation cap (per item) */
+    /* Truncation */
     --breadcrumb-item-max-inline-size: 16ch;
 
-    /* Icon slot (separator + leading icon) */
+    /* Icon slots */
     --breadcrumb-icon-size: 1em;
     --breadcrumb-leading-icon-size: 1em;
 
-    /* Colors — neutral default */
+    /* Colors */
     --breadcrumb-link-color: var(--vds-color-text-muted, #6b7280);
     --breadcrumb-link-color-hover: var(--vds-color-text, #111827);
     --breadcrumb-link-text-decoration: none;
@@ -49,74 +49,71 @@
     --breadcrumb-focus-ring-offset: 2px;
   }
 
-  /* ─────────────────────────────────────────────
-   * 2. Sizes (2xs..xl) — re-tune typography + paddings
-   * ───────────────────────────────────────────── */
   .vds-breadcrumb[data-size="2xs"] {
     --breadcrumb-gap: var(--vds-space-1, 0.25rem);
-    --breadcrumb-item-padding-inline: var(--vds-space-1, 0.25rem);
-    --breadcrumb-item-padding-block: var(--vds-space-0-5, 0.125rem);
-    --breadcrumb-font-size: 0.6875rem; /* 11px — below text-xs, scoped here */
+    --breadcrumb-content-gap: 0.125rem;
+    --breadcrumb-pill-padding-inline: var(--vds-space-1, 0.25rem);
+    --breadcrumb-pill-padding-block: var(--vds-space-0-5, 0.125rem);
+    --breadcrumb-font-size: 0.6875rem;
     --breadcrumb-line-height: var(--vds-leading-none, 1);
   }
+
   .vds-breadcrumb[data-size="xs"] {
     --breadcrumb-gap: var(--vds-space-1, 0.25rem);
-    --breadcrumb-item-padding-inline: var(--vds-space-1-5, 0.375rem);
-    --breadcrumb-item-padding-block: var(--vds-space-0-5, 0.125rem);
+    --breadcrumb-pill-padding-inline: var(--vds-space-1, 0.25rem);
+    --breadcrumb-pill-padding-block: var(--vds-space-0-5, 0.125rem);
     --breadcrumb-font-size: var(--vds-text-xs, 0.75rem);
   }
+
   .vds-breadcrumb[data-size="sm"] {
-    --breadcrumb-gap: var(--vds-space-1-5, 0.375rem);
-    --breadcrumb-item-padding-inline: var(--vds-space-2, 0.5rem);
-    --breadcrumb-item-padding-block: var(--vds-space-1, 0.25rem);
+    --breadcrumb-gap: 0.3125rem;
+    --breadcrumb-pill-padding-inline: var(--vds-space-1-5, 0.375rem);
+    --breadcrumb-pill-padding-block: 0.1875rem;
     --breadcrumb-font-size: var(--vds-text-xs, 0.75rem);
   }
-  /* md is the default — no override needed */
+
   .vds-breadcrumb[data-size="lg"] {
-    --breadcrumb-gap: var(--vds-space-2-5, 0.625rem);
-    --breadcrumb-item-padding-inline: var(--vds-space-3, 0.75rem);
-    --breadcrumb-item-padding-block: var(--vds-space-1-5, 0.375rem);
+    --breadcrumb-gap: var(--vds-space-2, 0.5rem);
+    --breadcrumb-pill-padding-inline: var(--vds-space-2, 0.5rem);
+    --breadcrumb-pill-padding-block: var(--vds-space-1, 0.25rem);
     --breadcrumb-font-size: var(--vds-text-base, 1rem);
   }
+
   .vds-breadcrumb[data-size="xl"] {
-    --breadcrumb-gap: var(--vds-space-3, 0.75rem);
-    --breadcrumb-item-padding-inline: var(--vds-space-3-5, 0.875rem);
-    --breadcrumb-item-padding-block: var(--vds-space-2, 0.5rem);
+    --breadcrumb-gap: var(--vds-space-2-5, 0.625rem);
+    --breadcrumb-pill-padding-inline: var(--vds-space-2-5, 0.625rem);
+    --breadcrumb-pill-padding-block: var(--vds-space-1-5, 0.375rem);
     --breadcrumb-font-size: var(--vds-text-lg, 1.125rem);
   }
 
-  /* ─────────────────────────────────────────────
-   * 3. Variants — visual treatment of items/links
-   *    (default = text-only with hover color shift)
-   * ───────────────────────────────────────────── */
-
-  /* Underline — hover shows underline on links */
   .vds-breadcrumb[data-variant="underline"] {
     --breadcrumb-link-text-decoration-hover: underline;
   }
 
-  /* Ghost — hover paints a subtle bg pill behind items */
   .vds-breadcrumb[data-variant="ghost"] {
+    --breadcrumb-item-padding-inline: var(--breadcrumb-pill-padding-inline);
+    --breadcrumb-item-padding-block: var(--breadcrumb-pill-padding-block);
     --breadcrumb-item-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
   }
 
-  /* Soft — items always have a muted bg pill */
   .vds-breadcrumb[data-variant="soft"] {
+    --breadcrumb-item-padding-inline: var(--breadcrumb-pill-padding-inline);
+    --breadcrumb-item-padding-block: var(--breadcrumb-pill-padding-block);
     --breadcrumb-item-bg: var(--vds-color-bg-muted, #e5e7eb);
     --breadcrumb-item-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
     --breadcrumb-link-color: var(--vds-color-text, #111827);
     --breadcrumb-link-color-hover: var(--vds-color-primary-solid, #6366f1);
   }
 
-  /* Solid — current page reads as a strong pill, links stay text-only */
   .vds-breadcrumb[data-variant="solid"] {
+    --breadcrumb-item-padding-inline: var(--breadcrumb-pill-padding-inline);
+    --breadcrumb-item-padding-block: var(--breadcrumb-pill-padding-block);
     --breadcrumb-item-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
     --breadcrumb-page-color: var(--vds-color-on-primary, #ffffff);
   }
 }
 
 @layer design-system.components {
-  /* ── Root <nav> ── */
   .vds-breadcrumb {
     display: block;
     color: var(--breadcrumb-link-color);
@@ -126,7 +123,6 @@
     line-height: var(--breadcrumb-line-height);
   }
 
-  /* ── List <ol> ── */
   .vds-breadcrumb__list {
     display: flex;
     flex-wrap: wrap;
@@ -137,26 +133,29 @@
     list-style: none;
   }
 
-  /* ── Item <li> ── */
   .vds-breadcrumb__item {
     display: inline-flex;
     align-items: center;
     min-inline-size: 0;
   }
 
-  /* ── Link <a> (or asChild) ── */
-  .vds-breadcrumb__link {
+  .vds-breadcrumb__link,
+  .vds-breadcrumb__page {
     display: inline-flex;
     align-items: center;
-    gap: calc(var(--breadcrumb-gap) / 2);
-
+    min-inline-size: 0;
+    max-inline-size: var(--breadcrumb-item-max-inline-size);
     padding-inline: var(--breadcrumb-item-padding-inline);
     padding-block: var(--breadcrumb-item-padding-block);
-
     background-color: var(--breadcrumb-item-bg);
     border: var(--breadcrumb-item-border-width) solid var(--breadcrumb-item-border-color);
-    border-radius: var(--breadcrumb-item-radius);
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
+  .vds-breadcrumb__link {
     color: var(--breadcrumb-link-color);
     -webkit-text-decoration: var(--breadcrumb-link-text-decoration);
             text-decoration: var(--breadcrumb-link-text-decoration);
@@ -164,12 +163,6 @@
     -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
-
-    max-inline-size: var(--breadcrumb-item-max-inline-size);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
     transition:
       color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing),
       background-color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing),
@@ -188,39 +181,63 @@
     outline-offset: var(--breadcrumb-focus-ring-offset);
   }
 
-  /* Leading icon inside a link (e.g. Home shortcut) */
-  .vds-breadcrumb__link > svg,
-  .vds-breadcrumb__page > svg {
+  .vds-breadcrumb__page {
+    color: var(--breadcrumb-page-color);
+    font-weight: var(--breadcrumb-page-weight);
+  }
+
+  .vds-breadcrumb__content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--breadcrumb-content-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-breadcrumb__content[data-icon-only] {
+    gap: 0;
+  }
+
+  .vds-breadcrumb__label {
+    display: inline-flex;
+    align-items: center;
+    min-inline-size: 0;
+    line-height: var(--breadcrumb-line-height);
+    transform: translateY(var(--breadcrumb-label-offset));
+    white-space: inherit;
+  }
+
+  .vds-breadcrumb__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    line-height: 1;
+    transform: translateY(var(--breadcrumb-icon-offset));
+  }
+
+  .vds-breadcrumb__icon > svg {
+    display: block;
     inline-size: var(--breadcrumb-leading-icon-size);
     block-size: var(--breadcrumb-leading-icon-size);
     flex: none;
   }
 
-  /* ── Current page <span aria-current="page"> ── */
-  .vds-breadcrumb__page {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(var(--breadcrumb-gap) / 2);
-
-    padding-inline: var(--breadcrumb-item-padding-inline);
-    padding-block: var(--breadcrumb-item-padding-block);
-
-    color: var(--breadcrumb-page-color);
-    font-weight: var(--breadcrumb-page-weight);
-
-    max-inline-size: var(--breadcrumb-item-max-inline-size);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* Solid variant — current page reads as a primary pill */
-  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__page {
-    background-color: var(--vds-color-primary-solid, #6366f1);
+  .vds-breadcrumb[data-variant="ghost"] .vds-breadcrumb__link,
+  .vds-breadcrumb[data-variant="ghost"] .vds-breadcrumb__page,
+  .vds-breadcrumb[data-variant="ghost"] .vds-breadcrumb__ellipsis-trigger,
+  .vds-breadcrumb[data-variant="soft"] .vds-breadcrumb__link,
+  .vds-breadcrumb[data-variant="soft"] .vds-breadcrumb__page,
+  .vds-breadcrumb[data-variant="soft"] .vds-breadcrumb__ellipsis-trigger,
+  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__link,
+  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__page,
+  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__ellipsis-trigger {
     border-radius: var(--breadcrumb-item-radius);
   }
 
-  /* ── Separator <li aria-hidden> ── */
+  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__page {
+    background-color: var(--vds-color-primary-solid, #6366f1);
+  }
+
   .vds-breadcrumb__separator {
     display: inline-flex;
     align-items: center;
@@ -229,28 +246,27 @@
        -moz-user-select: none;
             user-select: none;
     flex: none;
+    line-height: 1;
+    transform: translateY(var(--breadcrumb-separator-offset));
   }
 
   .vds-breadcrumb__separator > svg {
+    display: block;
     inline-size: var(--breadcrumb-icon-size);
     block-size: var(--breadcrumb-icon-size);
   }
 
-  /* The "/" character preset uses a literal glyph, not an SVG */
   .vds-breadcrumb__separator[data-preset="slash"]::before {
     content: "/";
     font-size: 1em;
     line-height: 1;
   }
 
-  /* RTL: directional separators (chevron / arrow) flip horizontally.
-     Slash and dot are direction-agnostic and stay as-is. */
   :dir(rtl) .vds-breadcrumb[data-separator="chevron"] .vds-breadcrumb__separator > svg,
-  :dir(rtl) .vds-breadcrumb[data-separator="arrow"]   .vds-breadcrumb__separator > svg {
+  :dir(rtl) .vds-breadcrumb[data-separator="arrow"] .vds-breadcrumb__separator > svg {
     transform: scaleX(-1);
   }
 
-  /* ── Ellipsis <li> with menu trigger ── */
   .vds-breadcrumb__ellipsis {
     display: inline-flex;
     align-items: center;
@@ -260,19 +276,17 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     padding-inline: var(--breadcrumb-item-padding-inline);
     padding-block: var(--breadcrumb-item-padding-block);
-
     background-color: transparent;
     border: 0;
-    border-radius: var(--breadcrumb-item-radius);
     color: var(--breadcrumb-link-color);
     cursor: pointer;
     -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
-
+    line-height: 1;
+    transform: translateY(var(--breadcrumb-separator-offset));
     transition:
       color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing),
       background-color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing);
@@ -289,11 +303,11 @@
   }
 
   .vds-breadcrumb__ellipsis-trigger > svg {
+    display: block;
     inline-size: var(--breadcrumb-icon-size);
     block-size: var(--breadcrumb-icon-size);
   }
 
-  /* ── Visually hidden helper (used by sr-only label inside ellipsis trigger) ── */
   .vds-breadcrumb__sr-only {
     position: absolute;
     inline-size: 1px;

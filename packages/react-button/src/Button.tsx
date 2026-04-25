@@ -1,6 +1,7 @@
 import { cn } from "@virtari-packages/utils";
-import { forwardRef, type ReactNode } from "react";
+import { forwardRef, useContext, type ReactNode } from "react";
 import { Slot, Slottable } from "@radix-ui/react-slot";
+import { ButtonGroupContext } from "./context";
 
 /** Intent palette — orthogonal to variant. Picks the hue family. */
 export type ButtonColor =
@@ -73,9 +74,9 @@ export interface ButtonProps
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button({
-  color = "primary",
-  variant = "solid",
-  size = "md",
+  color: colorProp,
+  variant: variantProp,
+  size: sizeProp,
   asChild = false,
   loading = false,
   loadingText = "Loading",
@@ -84,48 +85,92 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   fullWidth = false,
   effect,
   animation,
-  disabled,
+  disabled: disabledProp,
   className,
   children,
   ...props
 }, forwardedRef) {
-  const Comp = asChild ? Slot : "button";
+  // Inherit from ButtonGroup when props are omitted; own props still win.
+  const group = useContext(ButtonGroupContext);
+  const color = colorProp ?? group?.color ?? "primary";
+  const variant = variantProp ?? group?.variant ?? "solid";
+  const size = sizeProp ?? group?.size ?? "md";
+  const disabled = disabledProp ?? group?.disabled ?? false;
+
   const isDisabled = disabled || loading;
 
-  // Backward compat: variant="destructive" → color="danger" + variant="solid".
+  // Backward compat: variant="destructive" -> color="danger" + variant="solid".
   const resolvedColor = variant === "destructive" ? "danger" : color;
   const resolvedVariant = variant === "destructive" ? "solid" : variant;
 
+  const buttonContent = (
+    <>
+      {loading && <span className="vds-button-spinner" aria-hidden="true" />}
+      {leftSection && (
+        <span className="vds-button-section" data-position="start">
+          {leftSection}
+        </span>
+      )}
+      {children != null ? (
+        <span className="vds-button-label">{children}</span>
+      ) : null}
+      {rightSection && (
+        <span className="vds-button-section" data-position="end">
+          {rightSection}
+        </span>
+      )}
+    </>
+  );
+
   return (
     <>
-      <Comp
-        ref={forwardedRef}
-        className={cn("vds-button", className)}
-        data-color={resolvedColor}
-        data-variant={resolvedVariant}
-        data-size={size}
-        data-loading={loading || undefined}
-        data-full-width={fullWidth || undefined}
-        data-effect={effect || undefined}
-        data-animation={animation || undefined}
-        disabled={isDisabled}
-        aria-disabled={isDisabled || undefined}
-        aria-label={loading ? loadingText : undefined}
-        {...props}
-      >
-        {loading && <span className="vds-button-spinner" aria-hidden="true" />}
-        {leftSection && (
-          <span className="vds-button-section" data-position="start">
-            {leftSection}
-          </span>
-        )}
-        <Slottable>{children}</Slottable>
-        {rightSection && (
-          <span className="vds-button-section" data-position="end">
-            {rightSection}
-          </span>
-        )}
-      </Comp>
+      {asChild ? (
+        <Slot
+          ref={forwardedRef}
+          className={cn("vds-button", className)}
+          data-color={resolvedColor}
+          data-variant={resolvedVariant}
+          data-size={size}
+          data-loading={loading || undefined}
+          data-full-width={fullWidth || undefined}
+          data-effect={effect || undefined}
+          data-animation={animation || undefined}
+          aria-disabled={isDisabled || undefined}
+          aria-label={loading ? loadingText : undefined}
+          {...props}
+        >
+          {loading && <span className="vds-button-spinner" aria-hidden="true" />}
+          {leftSection && (
+            <span className="vds-button-section" data-position="start">
+              {leftSection}
+            </span>
+          )}
+          {children != null ? <Slottable>{children}</Slottable> : null}
+          {rightSection && (
+            <span className="vds-button-section" data-position="end">
+              {rightSection}
+            </span>
+          )}
+        </Slot>
+      ) : (
+        <button
+          ref={forwardedRef}
+          className={cn("vds-button", className)}
+          data-color={resolvedColor}
+          data-variant={resolvedVariant}
+          data-size={size}
+          data-loading={loading || undefined}
+          data-full-width={fullWidth || undefined}
+          data-effect={effect || undefined}
+          data-animation={animation || undefined}
+          disabled={isDisabled}
+          aria-disabled={isDisabled || undefined}
+          aria-label={loading ? loadingText : undefined}
+          {...props}
+        >
+          <span className="vds-button-content">{buttonContent}</span>
+        </button>
+      )}
       {loading && (
         <span className="vds-sr-only" role="status" aria-live="polite">
           {loadingText}

@@ -1140,6 +1140,10 @@
     --vds-leading-normal: 1.5;
     --vds-leading-relaxed: 1.625;
     --vds-leading-loose: 2;
+    --vds-control-line-height: 1;
+    --vds-control-line-height-rtl: 1;
+    --vds-control-optical-offset: 0.09375rem;
+    --vds-control-indicator-offset: 0.0625rem;
 
     /* ─── Letter spacing ─── */
     --vds-tracking-tighter: -0.05em;
@@ -1148,6 +1152,10 @@
     --vds-tracking-wide: 0.025em;
     --vds-tracking-wider: 0.05em;
     --vds-tracking-widest: 0.1em;
+  }
+
+  :where([dir="rtl"]) {
+    --vds-control-line-height: var(--vds-control-line-height-rtl, 1);
   }
 }
 /*
@@ -1264,8 +1272,10 @@
      * or the element/surface/badge aliases — intentional.
      */
 
-    /* Checkbox — cap at md (8px) so it never reads as a radio */
-    --vds-radius-checkbox: min(var(--vds-radius-element), var(--vds-radius-md));
+    /* Checkbox — cap at primitive-4 (8px) so it never reads as a radio.
+     * Must use a primitive, not --vds-radius-md: in pill mode md→9999px so
+     * min(9999px, 9999px) would be no cap at all. */
+    --vds-radius-checkbox: min(var(--vds-radius-element), var(--vds-radius-4));
 
     /* Checkbox card — follow card radius family (xl cap) so card-style
      * selections match sibling surfaces like Card / Alert / Toast. */
@@ -1274,9 +1284,9 @@
     /* Textarea — cap at lg (12px) so big multi-line corners stay readable */
     --vds-radius-textarea: min(var(--vds-radius-element), var(--vds-radius-lg));
 
-    /* Kbd (keyboard key cap) — cap at md (8px) so it keeps a key-like shape
+    /* Kbd (keyboard key cap) — cap at primitive-4 (8px) so it keeps a key-like shape
      * and works with the bottom-border-width trick used for depth */
-    --vds-radius-kbd: min(var(--vds-radius-element), var(--vds-radius-md));
+    --vds-radius-kbd: min(var(--vds-radius-element), var(--vds-radius-4));
 
     /* Chip — follow Badge: pill in every mode except sharp (slight corner).
      * Kept as a separate alias so future themes can diverge chip from badge. */
@@ -1288,7 +1298,7 @@
      * (Popover / DropdownMenu intentionally stay on --vds-radius-surface,
      * which tops out at 2xl=24px in pill — acceptable for those panels.) */
     --vds-radius-select-content: min(var(--vds-radius-element), var(--vds-radius-xl));
-    --vds-radius-tooltip:        min(var(--vds-radius-element), var(--vds-radius-md));
+    --vds-radius-tooltip:        min(var(--vds-radius-element), var(--vds-radius-4));
 
     /* Alert (banner-style container) — cap at xl (16px), matches card/toast */
     --vds-radius-alert: min(var(--vds-radius-md), var(--vds-radius-xl));
@@ -1300,19 +1310,24 @@
     --vds-radius-drawer:       min(var(--vds-radius-surface), var(--vds-radius-xl));
     --vds-radius-toast:        min(var(--vds-radius-surface), var(--vds-radius-xl));
 
-    /* Data table — cap at md (8px). The inner <table> cells can't round,
-     * so the outer container radius is purely decorative. Anything above md
+    /* Data table — cap at primitive-4 (8px). The inner <table> cells can't round,
+     * so the outer container radius is purely decorative. Anything above 8px
      * creates visible wedges where the sticky-header divider and scrollbar
-     * meet the rounded corners. */
-    --vds-radius-data-table: min(var(--vds-radius-surface), var(--vds-radius-md));
+     * meet the rounded corners. Must use primitive: --vds-radius-md→9999px in pill. */
+    --vds-radius-data-table: min(var(--vds-radius-surface), var(--vds-radius-4));
 
     /* Radio card — follow card radius family (xl cap) so card-style
      * selections match sibling surfaces and the checkbox card. */
     --vds-radius-radio-card: var(--vds-radius-card);
 
-    /* Segmented radio — cap at md (8px). Outer group keeps a clean corner
+    /* Segmented radio — cap at primitive-4 (8px). Outer group keeps a clean corner
      * but inner segment dividers would blur if pill-mode rounded them too much. */
-    --vds-radius-segmented: min(var(--vds-radius-element), var(--vds-radius-md));
+    --vds-radius-segmented: min(var(--vds-radius-element), var(--vds-radius-4));
+
+    /* Nav item — cap at primitive-5 (12px) so pill radius mode rounds items
+     * noticeably but never turns them into full capsules in the sidebar.
+     * data-variant="pill" on <Nav> still overrides to --vds-radius-full explicitly. */
+    --vds-radius-nav-item: min(var(--vds-radius-element), var(--vds-radius-5));
 
     /* Pill radio — always pill-shaped, mirroring badge/chip. */
     --vds-radius-pill-radio: var(--vds-radius-badge);
@@ -1448,6 +1463,25 @@
       --vds-duration-slower: 0ms;
       --vds-duration-slowest: 0ms;
     }
+  }
+}
+@layer tokens {
+  :root {
+    /* ─── Transition presets ───
+     *
+     * Ready-to-use duration + easing pairs.
+     * Usage: transition: color var(--vds-transition-base), background-color var(--vds-transition-base);
+     *
+     * These read from --vds-duration-* so prefers-reduced-motion collapses
+     * them to 0ms automatically (defined in motion.css).
+     */
+    --vds-transition-fastest: var(--vds-duration-fastest) var(--vds-ease-out);
+    --vds-transition-fast:    var(--vds-duration-fast)    var(--vds-ease-out);
+    --vds-transition-base:    var(--vds-duration-normal)  var(--vds-ease-out);
+    --vds-transition-slow:    var(--vds-duration-slow)    var(--vds-ease-out);
+    --vds-transition-spring:  var(--vds-duration-slow)    var(--vds-ease-spring);
+    --vds-transition-bounce:  var(--vds-duration-slow)    var(--vds-ease-bounce);
+    --vds-transition-ios:     var(--vds-duration-slow)    var(--vds-ease-ios);
   }
 }
 @layer tokens {
@@ -1623,4 +1657,85 @@
     --vds-sidebar-rail-default:  var(--vds-sidebar-rail);
     --vds-sidebar-gap-default:   var(--vds-sidebar-gap);
   }
+}
+@layer tokens {
+  :root {
+    --vds-opacity-0:   0;
+    --vds-opacity-5:   0.05;
+    --vds-opacity-10:  0.1;
+    --vds-opacity-20:  0.2;
+    --vds-opacity-25:  0.25;
+    --vds-opacity-30:  0.3;
+    --vds-opacity-40:  0.4;
+    --vds-opacity-50:  0.5;
+    --vds-opacity-60:  0.6;
+    --vds-opacity-70:  0.7;
+    --vds-opacity-75:  0.75;
+    --vds-opacity-80:  0.8;
+    --vds-opacity-90:  0.9;
+    --vds-opacity-95:  0.95;
+    --vds-opacity-100: 1;
+  }
+}
+@layer tokens {
+  :root {
+    /* ─── Blur scale ───
+     * Use as: filter: var(--vds-blur-md);
+     */
+    --vds-blur-none: blur(0px);
+    --vds-blur-xs:   blur(2px);
+    --vds-blur-sm:   blur(4px);
+    --vds-blur-md:   blur(8px);
+    --vds-blur-lg:   blur(12px);
+    --vds-blur-xl:   blur(16px);
+    --vds-blur-2xl:  blur(24px);
+    --vds-blur-3xl:  blur(40px);
+
+    /* ─── Backdrop-filter scale ───
+     * Use as: backdrop-filter: var(--vds-backdrop-md);
+     * Frosted-glass effect — pair with a semi-transparent background.
+     */
+    --vds-backdrop-none: blur(0px);
+    --vds-backdrop-xs:   blur(2px);
+    --vds-backdrop-sm:   blur(4px);
+    --vds-backdrop-md:   blur(8px);
+    --vds-backdrop-lg:   blur(12px);
+    --vds-backdrop-xl:   blur(20px);
+    --vds-backdrop-2xl:  blur(32px);
+  }
+}
+@layer tokens {
+  :root {
+    /* ─── Surface gradients ───
+     * Subtle background gradients for elevated surfaces.
+     */
+    --vds-gradient-surface:        linear-gradient(180deg, var(--vds-color-neutral-1), var(--vds-color-neutral-2));
+    --vds-gradient-surface-raised: linear-gradient(180deg, var(--vds-color-neutral-2), var(--vds-color-neutral-3));
+
+    /* ─── Intent gradients ───
+     * Use for hero sections, banners, or primary CTAs.
+     */
+    --vds-gradient-primary: linear-gradient(135deg, var(--vds-color-primary-9),  var(--vds-color-primary-11));
+    --vds-gradient-success: linear-gradient(135deg, var(--vds-color-success-9),  var(--vds-color-success-11));
+    --vds-gradient-warning: linear-gradient(135deg, var(--vds-color-warning-9),  var(--vds-color-warning-11));
+    --vds-gradient-danger:  linear-gradient(135deg, var(--vds-color-danger-9),   var(--vds-color-danger-11));
+    --vds-gradient-info:    linear-gradient(135deg, var(--vds-color-info-9),     var(--vds-color-info-11));
+    --vds-gradient-accent:  linear-gradient(135deg, var(--vds-color-accent-9),   var(--vds-color-accent-11));
+
+    /* ─── Mask / fade-out overlays ───
+     * Use these to fade content into the background at scroll edges.
+     * Logical variants flip automatically in RTL.
+     */
+    --vds-gradient-fade-start:  linear-gradient(to right, var(--vds-color-bg), transparent);
+    --vds-gradient-fade-end:    linear-gradient(to left,  var(--vds-color-bg), transparent);
+    --vds-gradient-fade-top:    linear-gradient(to bottom, var(--vds-color-bg), transparent);
+    --vds-gradient-fade-bottom: linear-gradient(to top,   var(--vds-color-bg), transparent);
+  }
+
+  /* Logical (direction-aware) fade gradients — flip in RTL automatically */
+  :root { --vds-gradient-fade-inline-start: linear-gradient(to right, var(--vds-color-bg), transparent); }
+  :where([dir="rtl"]) { --vds-gradient-fade-inline-start: linear-gradient(to left, var(--vds-color-bg), transparent); }
+
+  :root { --vds-gradient-fade-inline-end: linear-gradient(to left, var(--vds-color-bg), transparent); }
+  :where([dir="rtl"]) { --vds-gradient-fade-inline-end: linear-gradient(to right, var(--vds-color-bg), transparent); }
 }

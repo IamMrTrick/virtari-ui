@@ -92,6 +92,8 @@ export interface NavSubmenuContextValue {
   open: boolean;
   setOpen: (open: boolean) => void;
   mode: NavSubmenuMode;
+  /** Optional heading rendered above popover content in collapsed rail mode. */
+  popoverHeading?: React.ReactNode;
   /** Ref to the trigger button — used to return focus on close in popover mode. */
   triggerRef: React.RefObject<HTMLElement | null>;
   /** Floating UI refs / props (only populated in popover mode). */

@@ -1,7 +1,6 @@
 @import "./Breadcrumb.tokens.css";
 
 @layer design-system.components {
-  /* ── Root <nav> ── */
   .vds-breadcrumb {
     display: block;
     color: var(--breadcrumb-link-color);
@@ -11,7 +10,6 @@
     line-height: var(--breadcrumb-line-height);
   }
 
-  /* ── List <ol> ── */
   .vds-breadcrumb__list {
     display: flex;
     flex-wrap: wrap;
@@ -22,36 +20,33 @@
     list-style: none;
   }
 
-  /* ── Item <li> ── */
   .vds-breadcrumb__item {
     display: inline-flex;
     align-items: center;
     min-inline-size: 0;
   }
 
-  /* ── Link <a> (or asChild) ── */
-  .vds-breadcrumb__link {
+  .vds-breadcrumb__link,
+  .vds-breadcrumb__page {
     display: inline-flex;
     align-items: center;
-    gap: calc(var(--breadcrumb-gap) / 2);
-
+    min-inline-size: 0;
+    max-inline-size: var(--breadcrumb-item-max-inline-size);
     padding-inline: var(--breadcrumb-item-padding-inline);
     padding-block: var(--breadcrumb-item-padding-block);
-
     background-color: var(--breadcrumb-item-bg);
     border: var(--breadcrumb-item-border-width) solid var(--breadcrumb-item-border-color);
-    border-radius: var(--breadcrumb-item-radius);
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
+  .vds-breadcrumb__link {
     color: var(--breadcrumb-link-color);
     text-decoration: var(--breadcrumb-link-text-decoration);
     cursor: pointer;
     appearance: none;
-
-    max-inline-size: var(--breadcrumb-item-max-inline-size);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
     transition:
       color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing),
       background-color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing),
@@ -69,67 +64,90 @@
     outline-offset: var(--breadcrumb-focus-ring-offset);
   }
 
-  /* Leading icon inside a link (e.g. Home shortcut) */
-  .vds-breadcrumb__link > svg,
-  .vds-breadcrumb__page > svg {
+  .vds-breadcrumb__page {
+    color: var(--breadcrumb-page-color);
+    font-weight: var(--breadcrumb-page-weight);
+  }
+
+  .vds-breadcrumb__content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--breadcrumb-content-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-breadcrumb__content[data-icon-only] {
+    gap: 0;
+  }
+
+  .vds-breadcrumb__label {
+    display: inline-flex;
+    align-items: center;
+    min-inline-size: 0;
+    line-height: var(--breadcrumb-line-height);
+    transform: translateY(var(--breadcrumb-label-offset));
+    white-space: inherit;
+  }
+
+  .vds-breadcrumb__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    line-height: 1;
+    transform: translateY(var(--breadcrumb-icon-offset));
+  }
+
+  .vds-breadcrumb__icon > svg {
+    display: block;
     inline-size: var(--breadcrumb-leading-icon-size);
     block-size: var(--breadcrumb-leading-icon-size);
     flex: none;
   }
 
-  /* ── Current page <span aria-current="page"> ── */
-  .vds-breadcrumb__page {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(var(--breadcrumb-gap) / 2);
-
-    padding-inline: var(--breadcrumb-item-padding-inline);
-    padding-block: var(--breadcrumb-item-padding-block);
-
-    color: var(--breadcrumb-page-color);
-    font-weight: var(--breadcrumb-page-weight);
-
-    max-inline-size: var(--breadcrumb-item-max-inline-size);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* Solid variant — current page reads as a primary pill */
-  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__page {
-    background-color: var(--vds-color-primary-solid, #6366f1);
+  .vds-breadcrumb[data-variant="ghost"] .vds-breadcrumb__link,
+  .vds-breadcrumb[data-variant="ghost"] .vds-breadcrumb__page,
+  .vds-breadcrumb[data-variant="ghost"] .vds-breadcrumb__ellipsis-trigger,
+  .vds-breadcrumb[data-variant="soft"] .vds-breadcrumb__link,
+  .vds-breadcrumb[data-variant="soft"] .vds-breadcrumb__page,
+  .vds-breadcrumb[data-variant="soft"] .vds-breadcrumb__ellipsis-trigger,
+  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__link,
+  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__page,
+  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__ellipsis-trigger {
     border-radius: var(--breadcrumb-item-radius);
   }
 
-  /* ── Separator <li aria-hidden> ── */
+  .vds-breadcrumb[data-variant="solid"] .vds-breadcrumb__page {
+    background-color: var(--vds-color-primary-solid, #6366f1);
+  }
+
   .vds-breadcrumb__separator {
     display: inline-flex;
     align-items: center;
     color: var(--breadcrumb-separator-color);
     user-select: none;
     flex: none;
+    line-height: 1;
+    transform: translateY(var(--breadcrumb-separator-offset));
   }
 
   .vds-breadcrumb__separator > svg {
+    display: block;
     inline-size: var(--breadcrumb-icon-size);
     block-size: var(--breadcrumb-icon-size);
   }
 
-  /* The "/" character preset uses a literal glyph, not an SVG */
   .vds-breadcrumb__separator[data-preset="slash"]::before {
     content: "/";
     font-size: 1em;
     line-height: 1;
   }
 
-  /* RTL: directional separators (chevron / arrow) flip horizontally.
-     Slash and dot are direction-agnostic and stay as-is. */
   :dir(rtl) .vds-breadcrumb[data-separator="chevron"] .vds-breadcrumb__separator > svg,
-  :dir(rtl) .vds-breadcrumb[data-separator="arrow"]   .vds-breadcrumb__separator > svg {
+  :dir(rtl) .vds-breadcrumb[data-separator="arrow"] .vds-breadcrumb__separator > svg {
     transform: scaleX(-1);
   }
 
-  /* ── Ellipsis <li> with menu trigger ── */
   .vds-breadcrumb__ellipsis {
     display: inline-flex;
     align-items: center;
@@ -139,17 +157,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     padding-inline: var(--breadcrumb-item-padding-inline);
     padding-block: var(--breadcrumb-item-padding-block);
-
     background-color: transparent;
     border: 0;
-    border-radius: var(--breadcrumb-item-radius);
     color: var(--breadcrumb-link-color);
     cursor: pointer;
     appearance: none;
-
+    line-height: 1;
+    transform: translateY(var(--breadcrumb-separator-offset));
     transition:
       color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing),
       background-color var(--breadcrumb-transition-duration) var(--breadcrumb-transition-easing);
@@ -166,11 +182,11 @@
   }
 
   .vds-breadcrumb__ellipsis-trigger > svg {
+    display: block;
     inline-size: var(--breadcrumb-icon-size);
     block-size: var(--breadcrumb-icon-size);
   }
 
-  /* ── Visually hidden helper (used by sr-only label inside ellipsis trigger) ── */
   .vds-breadcrumb__sr-only {
     position: absolute;
     inline-size: 1px;

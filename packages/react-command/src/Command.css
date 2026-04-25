@@ -1,0 +1,139 @@
+@import "./Command.tokens.css";
+
+@layer design-system.components {
+  .vds-command {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--vds-command-bg);
+    border-radius: var(--vds-command-radius);
+    overflow: hidden;
+  }
+
+  /* Input */
+  .vds-command-input-wrapper {
+    display: flex;
+    align-items: center;
+    padding-inline: var(--vds-command-input-padding-inline);
+    border-block-end: var(--vds-command-input-border-block-end);
+  }
+  .vds-command-input {
+    all: unset;
+    flex: 1 1 auto;
+    padding-block: var(--vds-command-input-padding-block);
+    color: var(--vds-command-input-fg);
+    background-color: var(--vds-command-input-bg);
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-command-input::placeholder {
+    color: var(--vds-command-input-placeholder-fg);
+  }
+
+  /* List */
+  .vds-command-list {
+    max-block-size: var(--vds-command-list-max-block-size);
+    overflow-y: auto;
+    padding: var(--vds-command-list-padding);
+  }
+
+  /* Group */
+  .vds-command-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .vds-command-group [cmdk-group-heading] {
+    padding-inline: var(--vds-command-group-heading-padding-inline);
+    padding-block: var(--vds-command-group-heading-padding-block);
+    color: var(--vds-command-group-heading-fg);
+    font-size: var(--vds-command-group-heading-size);
+    font-weight: var(--vds-command-group-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Item */
+  .vds-command-item {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-command-item-gap);
+    padding-inline: var(--vds-command-item-padding-inline);
+    padding-block: var(--vds-command-item-padding-block);
+    border-radius: var(--vds-command-item-radius);
+    cursor: pointer;
+    user-select: none;
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-command-item[data-selected="true"] {
+    background-color: var(--vds-command-item-bg-selected);
+    color: var(--vds-command-item-fg-selected);
+  }
+  .vds-command-item:hover:not([data-disabled="true"]) {
+    background-color: var(--vds-command-item-bg-hover);
+  }
+  .vds-command-item[data-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .vds-command-item-left {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--vds-command-item-fg-muted);
+    flex-shrink: 0;
+  }
+  .vds-command-item-label {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vds-command-item-right {
+    color: var(--vds-command-item-fg-muted);
+    flex-shrink: 0;
+  }
+  .vds-command-item-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    margin-inline-start: auto;
+    flex-shrink: 0;
+  }
+
+  /* Empty / Loading / Separator */
+  .vds-command-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--vds-command-empty-padding-block);
+    color: var(--vds-command-item-fg-muted);
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-command-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--vds-command-empty-padding-block);
+    color: var(--vds-command-item-fg-muted);
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-command-separator {
+    block-size: 1px;
+    background-color: var(--vds-command-separator-color);
+    margin-inline: var(--vds-space-1, 0.25rem);
+    margin-block: var(--vds-space-1, 0.25rem);
+  }
+
+  /* Screen-reader-only utility (used by CommandDialog for visually-hidden title). */
+  .vds-sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

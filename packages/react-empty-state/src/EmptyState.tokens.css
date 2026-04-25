@@ -1,0 +1,37 @@
+.vds-empty-state {
+  /* ─── Layout ─── */
+  --empty-state-gap:        var(--vds-space-4, 1rem);
+  --empty-state-max-width:  28rem;
+  --empty-state-padding:    var(--vds-space-8, 2rem);
+  --empty-state-icon-size:  3rem;
+  --empty-state-actions-gap: var(--vds-space-3, 0.75rem);
+
+  /* ─── Typography ─── */
+  --empty-state-title-size:   var(--vds-text-lg, 1.125rem);
+  --empty-state-title-weight: var(--vds-font-semibold, 600);
+  --empty-state-title-color:  var(--vds-color-text, currentColor);
+  --empty-state-desc-size:    var(--vds-text-sm, 0.875rem);
+  --empty-state-desc-color:   var(--vds-color-text-muted, currentColor);
+
+  /* ─── Icon ─── */
+  --empty-state-icon-color:   var(--vds-color-text-subtle, currentColor);
+}
+
+/* ─── Size modifiers ─── */
+.vds-empty-state[data-size="sm"] {
+  --empty-state-gap:       var(--vds-space-3, 0.75rem);
+  --empty-state-max-width: 20rem;
+  --empty-state-padding:   var(--vds-space-6, 1.5rem);
+  --empty-state-icon-size: 2rem;
+  --empty-state-title-size: var(--vds-text-base, 1rem);
+  --empty-state-desc-size:  var(--vds-text-xs, 0.75rem);
+}
+
+.vds-empty-state[data-size="lg"] {
+  --empty-state-gap:       var(--vds-space-6, 1.5rem);
+  --empty-state-max-width: 36rem;
+  --empty-state-padding:   var(--vds-space-12, 3rem);
+  --empty-state-icon-size: 4rem;
+  --empty-state-title-size: var(--vds-text-xl, 1.25rem);
+  --empty-state-desc-size:  var(--vds-text-base, 1rem);
+}

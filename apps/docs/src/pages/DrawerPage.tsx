@@ -1368,6 +1368,12 @@ export function DrawerPage() {
           devices — keep it inside the header for the familiar bottom-sheet look,
           or set <code>indicator="outside"</code> for a floating pill.
         </p>
+        <p className="docs-prose">
+          <strong>Recommended shell:</strong> for desktop side-panels, prefer
+          <code>direction="left" | "right"</code> with
+          <code>indicator="hidden"</code>, and keep a separated header + footer so
+          the drawer reads like an app panel instead of a plain sheet.
+        </p>
       </Section>
 
       {/* ───────────────────────── Real-world patterns ───────────────────────── */}
@@ -1583,7 +1589,7 @@ export function DrawerPage() {
 
       <Section
         title="Indicator & header"
-        description="Place the handle inside the header, literally outside the drawer, as a progress fill, or hide it entirely. Pair with a plain or bordered header depending on how much separation you want between title and body."
+        description="Place the handle inside the header, literally outside the drawer, as a progress fill, or hide it entirely. Bottom/top drawers default to a plain header; left/right drawers default to a bordered header so side-panels read as structured app chrome."
       >
         <Row>
           <DemoDrawer
@@ -1747,7 +1753,7 @@ import {
 
   // Appearance
   indicator?:      "inside" | "outside" | "progress" | "hidden"  // default "inside"
-  headerVariant?:  "plain" | "bordered"                  // default "plain"
+  headerVariant?:  "plain" | "bordered"                  // default "plain" on top/bottom, "bordered" on left/right
   scaleBackground?: boolean                              // needs data-vds-drawer-wrapper
 
   // Behavior

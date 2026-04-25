@@ -1,4 +1,5 @@
 @import './DataTable.tokens.css';
+@import '../../react-pagination/src/Pagination.css';
 
 @layer design-system.components {
   /* ───── Root wrapper ───────────────────────────────────────── */
@@ -18,6 +19,34 @@
     box-shadow: var(--data-table-shadow);
   }
 
+  .vds-data-table-scroll-shell {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+  .vds-data-table-sticky-header-rail {
+    background-color: var(--data-table-header-bg);
+  }
+  .vds-data-table-sticky-header-rail[data-sticky] {
+    position: sticky;
+    inset-block-start: calc(
+      var(--vds-sticky-top, 0px) +
+        var(--vds-sticky-effective-offset-top, var(--vds-sticky-offset-top, 0px))
+    );
+    z-index: 7;
+  }
+  .vds-data-table-sticky-header-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .vds-data-table-sticky-header-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
   /* ───── Scroll area ────────────────────────────────────────── */
   /* Default: only horizontal scroll is contained here; vertical overflow
    * falls through to the page scroll so `position: sticky` on <thead>
@@ -30,10 +59,11 @@
     min-block-size: 0;
     overflow-x: auto;
     overflow-y: clip;
-    scrollbar-gutter: stable;
+    scrollbar-gutter: auto;
   }
   .vds-data-table[data-virtualized] .vds-data-table-scroll-area {
     overflow-y: auto;
+    scrollbar-gutter: stable;
   }
   /* Drag-to-pan cursor: `grab` when the feature is on, `grabbing` during drag.
    * Only applied when horizontal overflow exists (so we don't hint at drag
@@ -67,27 +97,17 @@
   .vds-data-table[data-sticky-header] .vds-data-table-header-cell {
     position: sticky;
     inset-block-start: calc(
-      var(--vds-sticky-top, 0px) + var(--vds-sticky-offset-top, 0px)
+      var(--vds-sticky-top, 0px) +
+        var(--vds-sticky-effective-offset-top, var(--vds-sticky-offset-top, 0px))
     );
     z-index: 6;
   }
 
-  /* ───── Smart-hide: transform off-screen on scroll-down ────── */
-  .vds-data-table[data-sticky-header]
-    .vds-data-table-header[data-vds-virtual-sticky-header] {
-    position: relative;
-    z-index: 6;
-    transform: translate3d(0, var(--vds-table-header-y, 0px), 0);
-    will-change: transform;
-  }
-  .vds-data-table[data-sticky-header]
-    .vds-data-table-header[data-vds-virtual-sticky-header]
-    .vds-data-table-header-cell {
+  .vds-data-table-sticky-header-rail .vds-data-table-header-cell {
     position: relative;
     inset-block-start: auto;
   }
-  .vds-data-table[data-sticky-header]
-    .vds-data-table-header[data-vds-virtual-sticky-header]
+  .vds-data-table-sticky-header-rail
     .vds-data-table-header-cell[data-pinned] {
     position: sticky;
     inset-block-start: auto;
@@ -102,7 +122,10 @@
     transform: translateY(
       calc(
         -100% - var(--vds-sticky-top, 0px) -
-          var(--vds-sticky-offset-top, 0px)
+          var(
+            --vds-sticky-effective-offset-top,
+            var(--vds-sticky-offset-top, 0px)
+          )
       )
     );
     will-change: transform;
@@ -113,7 +136,10 @@
     transform: translateY(
       calc(
         100% + var(--vds-sticky-bottom, 0px) +
-          var(--vds-sticky-offset-bottom, 0px)
+          var(
+            --vds-sticky-effective-offset-bottom,
+            var(--vds-sticky-offset-bottom, 0px)
+          )
       )
     );
     will-change: transform;
@@ -210,14 +236,21 @@
   }
   .vds-data-table-footer[data-sticky] {
     z-index: 4;
+    background-color: var(--data-table-sticky-bottom-bg);
+    box-shadow: var(--data-table-sticky-bottom-shadow);
+    isolation: isolate;
   }
   .vds-data-table-footer[data-sticky] .vds-data-table-footer-cell {
     position: sticky;
     inset-block-end: calc(
-      var(--vds-sticky-bottom, 0px) + var(--vds-sticky-offset-bottom, 0px)
+      var(--vds-sticky-bottom, 0px) +
+        var(
+          --vds-sticky-effective-offset-bottom,
+          var(--vds-sticky-offset-bottom, 0px)
+        )
     );
     z-index: 4;
-    background-color: var(--data-table-footer-bg);
+    background-color: var(--data-table-sticky-bottom-bg);
   }
   .vds-data-table-footer-row {
     block-size: var(--data-table-footer-row-height);
@@ -306,9 +339,23 @@
   .vds-data-table-toolbar[data-sticky] {
     position: sticky;
     inset-block-start: calc(
-      var(--vds-sticky-top, 0px) + var(--vds-sticky-offset-top, 0px)
+      var(--vds-sticky-top, 0px) +
+        var(--vds-sticky-effective-offset-top, var(--vds-sticky-offset-top, 0px))
     );
     z-index: 8;
+  }
+  .vds-data-table-view-toggle .vds-tabs-trigger {
+    gap: var(--vds-space-1-5, 0.375rem);
+  }
+  .vds-data-table-view-toggle-icon,
+  .vds-data-table-view-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+  .vds-data-table-view-toggle-label {
+    transform: translateY(var(--data-table-view-toggle-label-offset));
   }
   @media (max-width: 640px) {
     .vds-data-table-toolbar {
@@ -554,6 +601,42 @@
   .vds-data-table-footer[data-sticky] .vds-data-table-footer-cell[data-pinned] {
     z-index: 5;
   }
+  .vds-data-table-pagination .vds-pagination-info {
+    font-variant-numeric: tabular-nums;
+  }
+  .vds-data-table-pagination .vds-pagination-page-size {
+    gap: var(--vds-space-2, 0.5rem);
+    color: var(--data-table-footer-color);
+  }
+  .vds-data-table-pagination .vds-pagination-page-size-label {
+    font-size: var(--vds-text-sm, 0.875rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    color: var(--data-table-footer-color);
+  }
+  .vds-data-table-pagination .vds-pagination-page-size-trigger.vds-select-trigger {
+    inline-size: 4.5rem;
+    min-inline-size: 4.5rem;
+    max-inline-size: 4.5rem;
+    --select-trigger-height: calc(
+      var(--data-table-pagination-button-size) + 0.25rem
+    );
+    --select-trigger-padding-inline: var(--vds-space-2, 0.5rem);
+    --select-trigger-font-size: var(--vds-text-sm, 0.875rem);
+    --select-trigger-font-weight: var(--vds-font-weight-semibold, 600);
+    --select-trigger-bg: var(--vds-color-surface, #ffffff);
+    --select-trigger-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
+    --select-trigger-border-color: var(--data-table-border-color);
+    --select-trigger-border-color-hover:
+      var(--vds-color-border-strong, #9ca3af);
+    --select-trigger-text-color: var(--data-table-cell-color);
+    --select-trigger-icon-color: var(--data-table-footer-color);
+  }
+  .vds-data-table-pagination
+    .vds-pagination-page-size-trigger
+    .vds-select-trigger-value {
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
   .vds-data-table-cell[data-pinned] {
     background-color: var(--data-table-row-bg);
   }
@@ -724,6 +807,22 @@
     justify-content: center;
   }
 
+  .vds-data-table-header-cell[data-column-id="__actions"],
+  .vds-data-table-cell[data-column-id="__actions"],
+  .vds-data-table-footer-cell[data-column-id="__actions"] {
+    text-align: end;
+  }
+  .vds-data-table-header-cell[data-column-id="__actions"]
+    > .vds-data-table-header-cell-content,
+  .vds-data-table-cell[data-column-id="__actions"]
+    > .vds-data-table-cell-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
   /* ───── Virtualization spacer rows ─────────────────────────── */
   .vds-data-table-virtual-spacer {
     /* Spacer <tr>s push real rows to their virtualized offsets.
@@ -738,148 +837,41 @@
     background: transparent;
   }
 
-  /* ───── Pagination ─────────────────────────────────────────── */
+  /* ───── Pagination wrapper (sticky + border; visuals live in
+   *   @virtari-packages/react-pagination's own CSS) ─────────────── */
   .vds-data-table-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--data-table-pagination-gap);
-    padding-inline: var(--data-table-pagination-padding-inline);
-    padding-block: var(--data-table-pagination-padding-block);
-    background-color: var(--data-table-pagination-bg);
+    --vds-pagination-bg: var(--data-table-pagination-bg);
+    --vds-pagination-padding-inline: var(--data-table-pagination-padding-inline);
+    --vds-pagination-padding-block: var(--data-table-pagination-padding-block);
+    --vds-pagination-gap: var(--data-table-pagination-gap);
+    --vds-pagination-button-size: var(--data-table-pagination-button-size);
+    --vds-pagination-button-bg: var(--data-table-pagination-button-bg);
+    --vds-pagination-button-bg-hover: var(--data-table-pagination-button-bg-hover);
+    --vds-pagination-button-bg-active: var(--data-table-pagination-button-bg-active);
+    --vds-pagination-button-color: var(--data-table-pagination-button-color);
+    --vds-pagination-button-color-active:
+      var(--data-table-pagination-button-color-active);
+    --vds-pagination-button-radius:
+      var(--data-table-pagination-button-radius);
+    --vds-pagination-info-color: var(--data-table-footer-color);
     border-block-start: var(--data-table-border-width) solid
       var(--data-table-border-color);
-    font-size: var(--data-table-font-size);
+    background-color: var(--data-table-pagination-bg);
+    color: var(--data-table-cell-color);
   }
   .vds-data-table-pagination[data-sticky] {
     position: sticky;
     inset-block-end: calc(
-      var(--vds-sticky-bottom, 0px) + var(--vds-sticky-offset-bottom, 0px)
+      var(--vds-sticky-bottom, 0px) +
+        var(
+          --vds-sticky-effective-offset-bottom,
+          var(--vds-sticky-offset-bottom, 0px)
+        )
     );
     z-index: 5;
-  }
-  .vds-data-table-pagination-info {
-    color: var(--vds-color-text-muted, #6b7280);
-    white-space: nowrap;
-  }
-  .vds-data-table-pagination-meta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--vds-space-3, 0.75rem);
-    min-inline-size: 0;
-    flex: 1 1 auto;
-  }
-  .vds-data-table-pagination-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--data-table-pagination-gap);
-    margin-inline-start: auto;
-    flex: 0 1 auto;
-    min-inline-size: 0;
-  }
-
-  /* Prev / Next buttons */
-  .vds-data-table-pagination-button {
-    all: unset;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-inline-size: var(--data-table-pagination-button-size);
-    block-size: var(--data-table-pagination-button-size);
-    padding-inline: var(--vds-space-3, 0.75rem);
-    color: var(--data-table-pagination-button-color);
-    background-color: var(--data-table-pagination-button-bg);
-    border-radius: var(--data-table-pagination-button-radius);
-    cursor: pointer;
-    transition: background-color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
-  }
-  .vds-data-table-pagination-button:hover:not(:disabled) {
-    background-color: var(--data-table-pagination-button-bg-hover);
-  }
-  .vds-data-table-pagination-button:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
-  }
-  .vds-data-table-pagination-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-
-  /* Page size select — wrapper + label; Select ships its own trigger styles. */
-  .vds-data-table-pagination-page-size {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--vds-space-1-5, 0.375rem);
-    color: var(--vds-color-text-muted, #6b7280);
-    flex-shrink: 0;
-  }
-  .vds-data-table-pagination-page-size-label {
-    white-space: nowrap;
-    font-size: var(--vds-text-xs, 0.75rem);
-  }
-  .vds-data-table-pagination-page-size-trigger.vds-select-trigger {
-    inline-size: 3.25rem;
-    min-inline-size: 3.25rem;
-    max-inline-size: 3.25rem;
-    --select-trigger-padding-inline: var(--vds-space-1-5, 0.375rem);
-    flex-shrink: 0;
-  }
-
-  @media (max-width: 640px) {
-    .vds-data-table-pagination {
-      align-items: flex-start;
-    }
-    .vds-data-table-pagination-controls {
-      inline-size: 100%;
-      margin-inline-start: 0;
-      overflow-x: auto;
-      padding-block-end: 1px;
-    }
-  }
-
-  /* Numbered page buttons */
-  .vds-data-table-pagination-pages {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .vds-data-table-pagination-page-button {
-    all: unset;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-inline-size: var(--data-table-pagination-button-size);
-    block-size: var(--data-table-pagination-button-size);
-    padding-inline: var(--vds-space-2, 0.5rem);
-    color: var(--data-table-pagination-button-color);
-    border-radius: var(--data-table-pagination-button-radius);
-    cursor: pointer;
-    transition: background-color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
-  }
-  .vds-data-table-pagination-page-button:hover {
-    background-color: var(--data-table-pagination-button-bg-hover);
-  }
-  .vds-data-table-pagination-page-button[data-active] {
-    background-color: var(--data-table-pagination-button-bg-active);
-    color: var(--data-table-pagination-button-color-active);
-    font-weight: var(--vds-font-weight-semibold, 600);
-  }
-  .vds-data-table-pagination-page-button:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
-  }
-  .vds-data-table-pagination-ellipsis {
-    padding-inline: var(--vds-space-1-5, 0.375rem);
-    color: var(--vds-color-text-muted, #6b7280);
-    user-select: none;
+    background-color: var(--data-table-sticky-bottom-bg);
+    box-shadow: var(--data-table-sticky-bottom-shadow);
+    isolation: isolate;
   }
 
   /* ───── Row expand trigger ─────────────────────────────────── */
@@ -1144,9 +1136,15 @@
   .vds-data-table-bulk-actions[data-sticky] {
     position: sticky;
     inset-block-end: calc(
-      var(--vds-sticky-bottom, 0px) + var(--vds-sticky-offset-bottom, 0px)
+      var(--vds-sticky-bottom, 0px) +
+        var(
+          --vds-sticky-effective-offset-bottom,
+          var(--vds-sticky-offset-bottom, 0px)
+        )
     );
     z-index: 5;
+    box-shadow: var(--data-table-sticky-bottom-shadow);
+    isolation: isolate;
   }
   .vds-data-table-bulk-count {
     color: var(--data-table-bulk-count-color);
@@ -1356,6 +1354,16 @@
   .vds-data-table-copyable-cell[data-copied] .vds-data-table-copyable-cell-button {
     opacity: 1;
     color: var(--vds-color-success-solid, #16a34a);
+  }
+
+  .vds-data-table-row-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--vds-space-1, 0.25rem);
+    inline-size: 100%;
+    min-inline-size: 0;
+    white-space: nowrap;
   }
 
   .vds-data-table-actions-cell-trigger {
@@ -1617,7 +1625,8 @@
   .vds-data-table-filter-bar[data-sticky] {
     position: sticky;
     inset-block-start: calc(
-      var(--vds-sticky-top, 0px) + var(--vds-sticky-offset-top, 0px)
+      var(--vds-sticky-top, 0px) +
+        var(--vds-sticky-effective-offset-top, var(--vds-sticky-offset-top, 0px))
     );
     z-index: 7;
   }
@@ -1696,8 +1705,8 @@
     .vds-data-table [data-sticky="smart"],
     .vds-data-table-row,
     .vds-data-table-sort-icon,
-    .vds-data-table-pagination-button,
-    .vds-data-table-pagination-page-button {
+    .vds-pagination-button,
+    .vds-pagination-page-button {
       transition: none;
     }
   }

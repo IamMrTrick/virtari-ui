@@ -1,9 +1,15 @@
 @layer components {
   .vds-checkbox-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--checkbox-group-gap);
+    display: block;
     min-inline-size: 0;
+  }
+
+  .vds-checkbox-group > * {
+    min-inline-size: 0;
+  }
+
+  .vds-checkbox-group > * + * {
+    margin-block-start: var(--checkbox-group-gap);
   }
 
   .vds-checkbox-group-header {
@@ -19,7 +25,7 @@
     font-size: var(--checkbox-group-label-font-size);
     font-weight: var(--checkbox-group-label-font-weight);
     color: var(--checkbox-group-label-color);
-    line-height: 1.4;
+    line-height: 1;
   }
 
   .vds-checkbox-group-required {
@@ -30,7 +36,7 @@
   .vds-checkbox-group-description {
     font-size: var(--checkbox-group-description-font-size);
     color: var(--checkbox-group-description-color);
-    line-height: 1.5;
+    line-height: 1;
   }
 
   .vds-checkbox-group-items {
@@ -48,13 +54,42 @@
   }
 
   .vds-checkbox-group-error {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--checkbox-group-error-gap);
     margin: 0;
     font-size: var(--checkbox-group-error-font-size);
     color: var(--checkbox-group-error-color);
-    line-height: 1.4;
+    line-height: var(--vds-leading-snug, 1.375);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--vds-duration-normal, 200ms)
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-checkbox-group-error[data-empty] {
+    margin-block-start: 0;
+  }
+
+  .vds-checkbox-group-error[data-visible] {
+    grid-template-rows: 1fr;
+  }
+
+  .vds-checkbox-group-error-body {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--checkbox-group-error-gap);
+    min-block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(calc(var(--vds-space-1, 0.25rem) * -1));
+    transition:
+      opacity var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      transform var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-checkbox-group-error[data-visible] .vds-checkbox-group-error-body {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .vds-checkbox-group-error-icon {

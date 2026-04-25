@@ -6,7 +6,10 @@
      */
     --_toggle-height: var(--vds-size-md);
     --_toggle-px: var(--vds-space-3);
+    --_toggle-py: 0;
     --_toggle-font-size: var(--vds-text-sm);
+    --_toggle-line-height: var(--vds-control-line-height, 1);
+    --_toggle-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
     --_toggle-radius: var(--vds-radius-element);
     --_toggle-gap: var(--vds-space-2);
     --_toggle-icon-size: 1.125rem;
@@ -27,7 +30,12 @@
 
     block-size: var(--_toggle-height);
     padding-inline: var(--_toggle-px);
+    padding-block-start: calc(
+      var(--_toggle-py) + var(--_toggle-optical-offset)
+    );
+    padding-block-end: var(--_toggle-py);
     font-size: var(--_toggle-font-size);
+    line-height: var(--_toggle-line-height);
     background-color: transparent;
     color: var(--vds-color-text-muted);
 

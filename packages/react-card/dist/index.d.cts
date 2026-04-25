@@ -1,10 +1,15 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import { Ref } from 'react';
 
+type CardVariant = "surface" | "outline" | "soft" | "ghost";
+type CardSize = "sm" | "md" | "lg";
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+    variant?: CardVariant;
+    size?: CardSize;
+    interactive?: boolean;
     ref?: Ref<HTMLDivElement>;
 }
-declare function Card({ className, ref, ...props }: CardProps): react_jsx_runtime.JSX.Element;
+declare function Card({ variant, size, interactive, className, ref, ...props }: CardProps): react_jsx_runtime.JSX.Element;
 interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
     ref?: Ref<HTMLDivElement>;
 }
@@ -26,4 +31,4 @@ interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 declare function CardFooter({ className, ref, ...props }: CardFooterProps): react_jsx_runtime.JSX.Element;
 
-export { Card, CardContent, type CardContentProps, CardDescription, type CardDescriptionProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, type CardProps, CardTitle, type CardTitleProps };
+export { Card, CardContent, type CardContentProps, CardDescription, type CardDescriptionProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, type CardProps, type CardSize, CardTitle, type CardTitleProps, type CardVariant };

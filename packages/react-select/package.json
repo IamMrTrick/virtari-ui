@@ -73,6 +73,7 @@
     "@radix-ui/react-select": "^2.2.6",
     "@tanstack/react-virtual": "^3.10.0",
     "@virtari-packages/react-chip": "workspace:*",
+    "@virtari-packages/react-fieldset": "workspace:*",
     "@virtari-packages/react-icons": "workspace:*",
     "@virtari-packages/utils": "workspace:*"
   },

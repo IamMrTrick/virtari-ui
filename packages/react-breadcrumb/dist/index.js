@@ -1,10 +1,10 @@
 "use client";
-import { createContext, useMemo, Fragment as Fragment$1, useContext } from 'react';
+import { createContext, useMemo, isValidElement, cloneElement, Children, Fragment, useContext } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cn } from '@virtari-packages/utils';
 import { IconArrowRight, IconPointFilled, IconChevronRight, IconDots, IconHome } from '@virtari-packages/react-icons';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@virtari-packages/react-dropdown-menu';
-import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
+import { jsx, jsxs, Fragment as Fragment$1 } from 'react/jsx-runtime';
 
 // src/Breadcrumb.tsx
 var BreadcrumbContext = createContext(null);
@@ -103,21 +103,39 @@ function BreadcrumbLink({
   asChild = false,
   className,
   ref,
+  children,
   ...props
 }) {
-  const Comp = asChild ? Slot : "a";
+  if (asChild && isValidElement(children)) {
+    const child = children;
+    return /* @__PURE__ */ jsx(
+      Slot,
+      {
+        ref,
+        className: cn("vds-breadcrumb__link", className),
+        ...props,
+        children: cloneElement(
+          child,
+          void 0,
+          renderBreadcrumbInlineContent(child.props.children)
+        )
+      }
+    );
+  }
   return /* @__PURE__ */ jsx(
-    Comp,
+    "a",
     {
       ref,
       className: cn("vds-breadcrumb__link", className),
-      ...props
+      ...props,
+      children: renderBreadcrumbInlineContent(children)
     }
   );
 }
 function BreadcrumbPage({
   className,
   ref,
+  children,
   ...props
 }) {
   return /* @__PURE__ */ jsx(
@@ -128,7 +146,8 @@ function BreadcrumbPage({
       "aria-disabled": "true",
       "aria-current": "page",
       className: cn("vds-breadcrumb__page", className),
-      ...props
+      ...props,
+      children: renderBreadcrumbInlineContent(children)
     }
   );
 }
@@ -210,11 +229,51 @@ function BreadcrumbHome({
     children
   ] });
 }
+function renderBreadcrumbInlineContent(children) {
+  const nodes = flattenBreadcrumbChildren(children);
+  const leadingIcon = nodes.length > 0 && isBreadcrumbLeadingIcon(nodes[0]) ? nodes[0] : null;
+  const labelNodes = leadingIcon ? nodes.slice(1) : nodes;
+  return /* @__PURE__ */ jsxs(
+    "span",
+    {
+      className: "vds-breadcrumb__content",
+      "data-icon-only": leadingIcon && labelNodes.length === 0 ? "" : void 0,
+      children: [
+        leadingIcon ? /* @__PURE__ */ jsx("span", { className: "vds-breadcrumb__icon", children: leadingIcon }) : null,
+        labelNodes.length ? /* @__PURE__ */ jsx("span", { className: "vds-breadcrumb__label", children: labelNodes }) : null
+      ]
+    }
+  );
+}
+function flattenBreadcrumbChildren(children) {
+  const nodes = [];
+  Children.forEach(children, (child) => {
+    if (child == null || typeof child === "boolean") return;
+    if (isValidElement(child) && child.type === Fragment) {
+      nodes.push(
+        ...flattenBreadcrumbChildren(
+          child.props.children
+        )
+      );
+      return;
+    }
+    nodes.push(child);
+  });
+  return nodes;
+}
+function isBreadcrumbLeadingIcon(node) {
+  if (!isValidElement(node)) return false;
+  const props = node.props;
+  if (props["data-breadcrumb-icon"]) return true;
+  if (props["aria-hidden"] === true) return true;
+  if (props.focusable === false || props.focusable === "false") return true;
+  return typeof node.type !== "string" && Children.count(props.children) === 0;
+}
 function renderItemsArray(items, cfg) {
   const { maxItems, itemsBeforeCollapse, itemsAfterCollapse } = cfg;
   const shouldCollapse = typeof maxItems === "number" && items.length > maxItems && itemsBeforeCollapse + itemsAfterCollapse < items.length;
   if (!shouldCollapse) {
-    return /* @__PURE__ */ jsx(Fragment, { children: items.map((it, i) => /* @__PURE__ */ jsxs(Fragment$1, { children: [
+    return /* @__PURE__ */ jsx(Fragment$1, { children: items.map((it, i) => /* @__PURE__ */ jsxs(Fragment, { children: [
       renderItem(it, i === items.length - 1),
       i < items.length - 1 ? /* @__PURE__ */ jsx(BreadcrumbSeparator, {}) : null
     ] }, keyFor(it, i))) });
@@ -222,14 +281,14 @@ function renderItemsArray(items, cfg) {
   const head = items.slice(0, itemsBeforeCollapse);
   const tail = items.slice(items.length - itemsAfterCollapse);
   const hidden = items.slice(itemsBeforeCollapse, items.length - itemsAfterCollapse);
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    head.map((it, i) => /* @__PURE__ */ jsxs(Fragment$1, { children: [
+  return /* @__PURE__ */ jsxs(Fragment$1, { children: [
+    head.map((it, i) => /* @__PURE__ */ jsxs(Fragment, { children: [
       renderItem(it, false),
       /* @__PURE__ */ jsx(BreadcrumbSeparator, {})
     ] }, `h-${keyFor(it, i)}`)),
     /* @__PURE__ */ jsx(BreadcrumbEllipsis, { items: hidden }),
     /* @__PURE__ */ jsx(BreadcrumbSeparator, {}),
-    tail.map((it, i) => /* @__PURE__ */ jsxs(Fragment$1, { children: [
+    tail.map((it, i) => /* @__PURE__ */ jsxs(Fragment, { children: [
       renderItem(it, i === tail.length - 1),
       i < tail.length - 1 ? /* @__PURE__ */ jsx(BreadcrumbSeparator, {}) : null
     ] }, `t-${keyFor(it, i)}`))
@@ -237,7 +296,7 @@ function renderItemsArray(items, cfg) {
 }
 function renderItem(it, isLast) {
   const Icon = it.icon;
-  const content = /* @__PURE__ */ jsxs(Fragment, { children: [
+  const content = /* @__PURE__ */ jsxs(Fragment$1, { children: [
     Icon ? /* @__PURE__ */ jsx(Icon, { "aria-hidden": true, focusable: false }) : null,
     it.label
   ] });

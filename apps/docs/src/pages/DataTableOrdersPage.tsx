@@ -461,7 +461,7 @@ export function DataTableOrdersPage() {
           }}
         </DataTable.BulkActions.Root>
 
-        <DataTable.Pagination.Default
+        <DataTable.Pagination
           pageSizeOptions={[10, 20, 50, 100]}
           sticky
         />

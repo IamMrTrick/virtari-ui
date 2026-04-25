@@ -50,11 +50,11 @@ interface BreadcrumbLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorEleme
     asChild?: boolean;
     ref?: Ref<HTMLAnchorElement>;
 }
-declare function BreadcrumbLink({ asChild, className, ref, ...props }: BreadcrumbLinkProps): react_jsx_runtime.JSX.Element;
+declare function BreadcrumbLink({ asChild, className, ref, children, ...props }: BreadcrumbLinkProps): react_jsx_runtime.JSX.Element;
 interface BreadcrumbPageProps extends React.HTMLAttributes<HTMLSpanElement> {
     ref?: Ref<HTMLSpanElement>;
 }
-declare function BreadcrumbPage({ className, ref, ...props }: BreadcrumbPageProps): react_jsx_runtime.JSX.Element;
+declare function BreadcrumbPage({ className, ref, children, ...props }: BreadcrumbPageProps): react_jsx_runtime.JSX.Element;
 interface BreadcrumbSeparatorProps extends React.LiHTMLAttributes<HTMLLIElement> {
     /** Override the preset for this single separator (otherwise inherits from Root). */
     preset?: BreadcrumbSeparatorPreset;

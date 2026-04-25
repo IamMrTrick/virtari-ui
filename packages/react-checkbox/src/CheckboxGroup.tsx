@@ -97,12 +97,15 @@ export function CheckboxGroup({
 
         <div className="vds-checkbox-group-items">{children}</div>
 
-        {hasError && (
-          <p
-            id={errorId}
-            role="alert"
-            className="vds-checkbox-group-error"
-          >
+        <p
+          id={errorId}
+          role={hasError ? "alert" : undefined}
+          aria-hidden={hasError ? undefined : true}
+          data-visible={hasError ? "" : undefined}
+          data-empty={hasError ? undefined : ""}
+          className="vds-checkbox-group-error"
+        >
+          <span className="vds-checkbox-group-error-body">
             <IconAlertCircle
               size={14}
               stroke={2}
@@ -111,8 +114,8 @@ export function CheckboxGroup({
               className="vds-checkbox-group-error-icon"
             />
             <span>{error}</span>
-          </p>
-        )}
+          </span>
+        </p>
       </div>
     </CheckboxGroupContext.Provider>
   );

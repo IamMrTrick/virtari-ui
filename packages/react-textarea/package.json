@@ -53,6 +53,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@virtari-packages/react-fieldset": "workspace:*",
     "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {

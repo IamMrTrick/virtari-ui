@@ -2,6 +2,7 @@ import * as react from 'react';
 import { Ref, ComponentRef, ReactNode, Dispatch, SetStateAction, RefObject, KeyboardEvent } from 'react';
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as SelectPrimitive from '@radix-ui/react-select';
+import { FieldProps } from '@virtari-packages/react-fieldset';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 
 interface SelectProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {
@@ -52,6 +53,19 @@ interface SelectEmptyProps extends React.HTMLAttributes<HTMLDivElement> {
     ref?: Ref<HTMLDivElement>;
 }
 declare function SelectEmpty({ className, children, ref, ...props }: SelectEmptyProps): react_jsx_runtime.JSX.Element;
+
+interface SelectFieldRenderProps {
+    controlId: string;
+    describedBy?: string;
+    invalid: boolean;
+}
+interface SelectFieldProps extends Omit<FieldProps, "children" | "controlId" | "invalid" | "ref"> {
+    children: ReactNode | ((props: SelectFieldRenderProps) => ReactNode);
+    controlId?: string;
+    invalid?: boolean;
+    ref?: Ref<HTMLDivElement>;
+}
+declare function SelectField({ label, description, error, counter, metaLayout, descriptionAlign, errorAlign, counterAlign, labelProps, className, children, controlId, invalid, ref, ...props }: SelectFieldProps): react_jsx_runtime.JSX.Element;
 
 interface ComboboxItemData {
     value: string;
@@ -169,4 +183,4 @@ interface ComboboxLoadingProps extends React.HTMLAttributes<HTMLDivElement> {
 declare function ComboboxLoading({ className, children, ref, ...props }: ComboboxLoadingProps): react_jsx_runtime.JSX.Element | null;
 declare function ComboboxSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): react_jsx_runtime.JSX.Element;
 
-export { Combobox, type ComboboxAppearance, ComboboxContent, type ComboboxContentProps, type ComboboxContextValue, ComboboxEmpty, type ComboboxEmptyProps, type ComboboxFilter, ComboboxGroup, type ComboboxGroupProps, ComboboxInput, type ComboboxInputProps, ComboboxItem, type ComboboxItemData, type ComboboxItemProps, ComboboxList, type ComboboxListProps, ComboboxLoading, type ComboboxLoadingProps, ComboboxOptions, type ComboboxOptionsProps, type ComboboxProps, ComboboxSeparator, type ComboboxSize, ComboboxTrigger, type ComboboxTriggerProps, Select, type SelectAppearance, SelectContent, type SelectContentProps, SelectEmpty, type SelectEmptyProps, SelectGroup, SelectItem, type SelectItemProps, SelectLabel, type SelectLabelProps, SelectSeparator, type SelectSeparatorProps, type SelectSize, SelectTrigger, type SelectTriggerProps, SelectValue, type UseComboboxProps, useComboboxContext };
+export { Combobox, type ComboboxAppearance, ComboboxContent, type ComboboxContentProps, type ComboboxContextValue, ComboboxEmpty, type ComboboxEmptyProps, type ComboboxFilter, ComboboxGroup, type ComboboxGroupProps, ComboboxInput, type ComboboxInputProps, ComboboxItem, type ComboboxItemData, type ComboboxItemProps, ComboboxList, type ComboboxListProps, ComboboxLoading, type ComboboxLoadingProps, ComboboxOptions, type ComboboxOptionsProps, type ComboboxProps, ComboboxSeparator, type ComboboxSize, ComboboxTrigger, type ComboboxTriggerProps, Select, type SelectAppearance, SelectContent, type SelectContentProps, SelectEmpty, type SelectEmptyProps, SelectField, type SelectFieldProps, type SelectFieldRenderProps, SelectGroup, SelectItem, type SelectItemProps, SelectLabel, type SelectLabelProps, SelectSeparator, type SelectSeparatorProps, type SelectSize, SelectTrigger, type SelectTriggerProps, SelectValue, type UseComboboxProps, useComboboxContext };

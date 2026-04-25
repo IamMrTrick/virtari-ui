@@ -1,7 +1,7 @@
 @import "./Button.tokens.css";
 
 @layer design-system.components {
-  /* ── Root ── */
+  /* Root */
   .vds-button {
     display: inline-flex;
     align-items: center;
@@ -13,6 +13,8 @@
     block-size: var(--button-height);
     min-inline-size: var(--button-min-width);
     padding-inline: var(--button-padding-inline);
+    padding-block-start: var(--button-padding-block);
+    padding-block-end: var(--button-padding-block);
 
     /* State overlay sits ON TOP of background-color via background-image.
      * For solid variant on hover/active, `--button-overlay` resolves to a
@@ -34,13 +36,6 @@
     line-height: var(--button-line-height);
     letter-spacing: var(--button-letter-spacing);
 
-    /* Trim ascender space above cap-height and descender below baseline so
-     * flex centering lines up the visible glyph, not the full em-box. Newer
-     * syntax (Chrome 133+, Safari 18.2+); fallback is the raw line-height:1. */
-    text-box: trim-both cap alphabetic;
-    text-box-trim: trim-both;
-    text-box-edge: cap alphabetic;
-
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
@@ -55,7 +50,7 @@
       opacity          var(--button-transition-duration) var(--button-transition-easing);
   }
 
-  /* ── Interaction states ── */
+  /* Interaction states */
   .vds-button:hover:not(:disabled):not([aria-disabled="true"]) {
     background-color: var(--button-bg-hover);
     --button-overlay: var(--button-overlay-hover);
@@ -85,7 +80,7 @@
     text-decoration-thickness: 2px;
   }
 
-  /* ── Disabled ── */
+  /* Disabled */
   .vds-button:disabled,
   .vds-button[aria-disabled="true"] {
     opacity: var(--button-disabled-opacity);
@@ -93,11 +88,36 @@
     pointer-events: none;
   }
 
-  /* ── Modifiers ── */
+  /* Modifiers */
+  .vds-button-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--button-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-button-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 0;
+    line-height: 1;
+    transform: translateY(var(--button-optical-offset));
+    white-space: inherit;
+  }
+
+  .vds-button-label:has(> svg:only-child) {
+    transform: none;
+  }
 
   /* Icon-only: auto-detected via :has(), or when spinner is the only extra child in loading state */
+  .vds-button:has(> .vds-button-content > .vds-button-section:only-child),
+  .vds-button:has(> .vds-button-content > .vds-button-label:only-child > svg:only-child),
   .vds-button:has(> svg:only-child),
-  .vds-button:has(> .vds-button-spinner:first-child + svg:last-child) {
+  .vds-button:has(> .vds-button-spinner:first-child + svg:last-child),
+  .vds-button:has(> .vds-button-spinner:first-child + .vds-button-content > .vds-button-section:only-child),
+  .vds-button:has(> .vds-button-spinner:first-child + .vds-button-content > .vds-button-label:only-child > svg:only-child) {
     padding-inline: 0;
     aspect-ratio: 1;
     --button-min-width: var(--button-height);
@@ -117,7 +137,7 @@
     visibility: hidden;
   }
 
-  /* ── Spinner ── */
+  /* Spinner */
   .vds-button-spinner {
     position: absolute;
     display: flex;
@@ -139,19 +159,24 @@
     opacity: 1;
   }
 
-  /* ── Sections (left/right icon slots) ── */
+  /* Sections (left/right icon slots) */
   .vds-button-section {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    line-height: 1;
     flex-shrink: 0;
   }
 
+  .vds-button-label > svg,
   .vds-button-section > svg {
+    display: block;
     inline-size: var(--button-icon-size);
     block-size: var(--button-icon-size);
+    flex-shrink: 0;
   }
 
-  /* ── Keyframes ── */
+  /* Keyframes */
   @keyframes vds-button-spin {
     to {
       rotate: 360deg;

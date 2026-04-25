@@ -1,12 +1,25 @@
 @layer components {
   .vds-checkbox-field {
+    --checkbox-field-control-size: 1.125rem;
     display: inline-flex;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--checkbox-field-gap);
     cursor: pointer;
     color: var(--checkbox-field-label-color);
     font-family: inherit;
-    line-height: 1.4;
+    line-height: 1;
+  }
+
+  .vds-checkbox-field[data-size="sm"] {
+    --checkbox-field-control-size: 0.875rem;
+  }
+
+  .vds-checkbox-field[data-size="lg"] {
+    --checkbox-field-control-size: 1.375rem;
+  }
+
+  .vds-checkbox-field[data-has-description] {
+    align-items: flex-start;
   }
 
   .vds-checkbox-field[data-disabled] {
@@ -15,6 +28,10 @@
   }
 
   .vds-checkbox-field > .vds-checkbox {
+    margin-block-start: 0;
+  }
+
+  .vds-checkbox-field[data-has-description] > .vds-checkbox {
     margin-block-start: var(--checkbox-field-align-block-start);
   }
 
@@ -25,15 +42,39 @@
     min-inline-size: 0;
   }
 
+  .vds-checkbox-field-main {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--checkbox-field-control-size);
+  }
+
+  .vds-checkbox-field[data-has-description] .vds-checkbox-field-text {
+    min-block-size: auto;
+  }
+
+  .vds-checkbox-field[data-has-description] .vds-checkbox-field-main {
+    align-items: flex-start;
+    min-block-size: auto;
+  }
+
   .vds-checkbox-field-label {
+    display: inline-flex;
+    align-items: center;
     font-size: var(--checkbox-field-font-size);
     font-weight: var(--checkbox-field-label-font-weight);
     color: var(--checkbox-field-label-color);
+    line-height: 1;
+    transform: translateY(var(--checkbox-field-text-offset));
+  }
+
+  .vds-checkbox-field[data-has-description] .vds-checkbox-field-label {
+    transform: none;
   }
 
   .vds-checkbox-field-description {
     font-size: var(--checkbox-field-description-font-size);
     font-weight: var(--vds-font-weight-normal, 400);
     color: var(--checkbox-field-description-color);
+    line-height: 1;
   }
 }

@@ -9,6 +9,7 @@
     /* ── Geometry ── */
     --radio-size: 1.125rem;
     --radio-dot-size: 0.5rem;
+    --radio-indicator-offset: 0;
     --radio-border-width: 2px;
 
     /* ── Motion ── */
@@ -111,6 +112,9 @@
     --radio-field-description-font-size: var(--vds-text-xs, 0.75rem);
     --radio-field-label-font-weight: var(--vds-font-weight-medium, 500);
     --radio-field-align-block-start: 0.125rem;
+    --radio-field-text-offset: calc(
+      var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem
+    );
   }
 
   .vds-radio-field[data-error] {
@@ -332,11 +336,27 @@
 }
 @layer components {
   .vds-radio-field {
+    --radio-field-control-size: 1.125rem;
     display: inline-flex;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--radio-field-gap);
     cursor: pointer;
+    color: var(--radio-field-label-color);
+    font-family: inherit;
+    line-height: 1;
     min-inline-size: 0;
+  }
+
+  .vds-radio-field[data-size="sm"] {
+    --radio-field-control-size: 0.875rem;
+  }
+
+  .vds-radio-field[data-size="lg"] {
+    --radio-field-control-size: 1.375rem;
+  }
+
+  .vds-radio-field[data-has-description] {
+    align-items: flex-start;
   }
 
   .vds-radio-field[data-disabled] {
@@ -345,8 +365,12 @@
   }
 
   .vds-radio-field > .vds-radio-item {
-    margin-block-start: var(--radio-field-align-block-start);
+    margin-block-start: 0;
     flex-shrink: 0;
+  }
+
+  .vds-radio-field[data-has-description] > .vds-radio-item {
+    margin-block-start: var(--radio-field-align-block-start);
   }
 
   .vds-radio-field-text {
@@ -356,18 +380,40 @@
     min-inline-size: 0;
   }
 
+  .vds-radio-field-main {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--radio-field-control-size);
+  }
+
+  .vds-radio-field[data-has-description] .vds-radio-field-text {
+    min-block-size: auto;
+  }
+
+  .vds-radio-field[data-has-description] .vds-radio-field-main {
+    align-items: flex-start;
+    min-block-size: auto;
+  }
+
   .vds-radio-field-label {
+    display: inline-flex;
+    align-items: center;
     font-size: var(--radio-field-font-size);
     font-weight: var(--radio-field-label-font-weight);
     color: var(--radio-field-label-color);
-    line-height: 1.4;
+    line-height: 1;
+    transform: translateY(var(--radio-field-text-offset));
+  }
+
+  .vds-radio-field[data-has-description] .vds-radio-field-label {
+    transform: none;
   }
 
   .vds-radio-field-description {
     font-size: var(--radio-field-description-font-size);
     color: var(--radio-field-description-color);
     font-weight: var(--vds-font-weight-normal, 400);
-    line-height: 1.5;
+    line-height: 1;
   }
 }
 @layer components {
@@ -444,7 +490,7 @@
     font-size: var(--radio-card-label-font-size);
     font-weight: var(--radio-card-label-font-weight);
     color: var(--radio-card-label-color);
-    line-height: 1.4;
+    line-height: 1;
     min-inline-size: 0;
   }
 
@@ -452,7 +498,7 @@
     font-size: var(--radio-card-description-font-size);
     color: var(--radio-card-description-color);
     font-weight: var(--vds-font-weight-normal, 400);
-    line-height: 1.5;
+    line-height: 1;
   }
 
   .vds-radio-card-trailing {
@@ -557,9 +603,12 @@
     min-inline-size: 0;
     block-size: var(--segmented-item-height);
     padding-inline: var(--segmented-item-padding-inline);
+    padding-block-start: var(--vds-control-optical-offset, 0.09375rem);
+    padding-block-end: 0;
     font-family: inherit;
     font-size: var(--segmented-item-font-size);
     font-weight: var(--segmented-item-font-weight);
+    line-height: var(--vds-control-line-height, 1);
     color: var(--segmented-item-color);
     background-color: transparent;
     border: 0;
@@ -635,9 +684,12 @@
     gap: var(--vds-space-1-5, 0.375rem);
     block-size: var(--pill-radio-item-height);
     padding-inline: var(--pill-radio-item-padding-inline);
+    padding-block-start: var(--vds-control-optical-offset, 0.09375rem);
+    padding-block-end: 0;
     font-family: inherit;
     font-size: var(--pill-radio-item-font-size);
     font-weight: var(--pill-radio-item-font-weight);
+    line-height: var(--vds-control-line-height, 1);
     color: var(--pill-radio-item-color);
     background-color: var(--pill-radio-item-bg);
     border: var(--pill-radio-item-border-width) solid
@@ -689,6 +741,16 @@
     outline-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
   }
 }
+@keyframes vds-radio-dot-spring {
+  0%   { opacity: 0; scale: 0; }
+  46%  { opacity: 1; scale: 1.42; }
+  72%  { scale: 0.86; }
+  100% { scale: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes vds-control-pop        { 0%, 100% { scale: 1; } }
+  @keyframes vds-radio-dot-spring   { 0% { opacity: 0; scale: 0; } 100% { opacity: 1; scale: 1; } }
+}
 @layer components {
   /* =========================================================================
    * Atomic radio — circular selector with inner dot.
@@ -697,6 +759,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     flex-shrink: 0;
     inline-size: var(--radio-size);
     block-size: var(--radio-size);
@@ -724,6 +787,7 @@
   .vds-radio-item[data-state="checked"] {
     background-color: var(--radio-bg-checked);
     border-color: var(--radio-border-color-checked);
+    animation: vds-control-pop 300ms var(--vds-ease-spring);
   }
 
   .vds-radio-item[data-state="checked"]:hover:not(:disabled) {
@@ -748,19 +812,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     inline-size: 100%;
     block-size: 100%;
   }
 
-  .vds-radio-indicator::after {
-    content: "";
+  .vds-radio-dot {
     display: block;
+    flex-shrink: 0;
     inline-size: var(--radio-dot-size);
     block-size: var(--radio-dot-size);
     border-radius: var(--vds-radius-full, 9999px);
     background-color: var(--radio-dot-color);
-    animation: vds-scale-in var(--radio-transition-duration)
-      var(--radio-transition-easing);
+    animation: vds-radio-dot-spring 360ms var(--vds-ease-spring);
   }
 
   /* =========================================================================
@@ -769,10 +833,16 @@
    * as siblings next to the items, keeping keyboard roving tabindex intact.
    * ========================================================================= */
   .vds-radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--radio-group-gap);
+    display: block;
     min-inline-size: 0;
+  }
+
+  .vds-radio-group > * {
+    min-inline-size: 0;
+  }
+
+  .vds-radio-group > * + * {
+    margin-block-start: var(--radio-group-gap);
   }
 
   .vds-radio-group-header {
@@ -788,7 +858,7 @@
     font-size: var(--radio-group-label-font-size);
     font-weight: var(--radio-group-label-font-weight);
     color: var(--radio-group-label-color);
-    line-height: 1.4;
+    line-height: 1;
   }
 
   .vds-radio-group-required {
@@ -799,7 +869,7 @@
   .vds-radio-group-description {
     font-size: var(--radio-group-description-font-size);
     color: var(--radio-group-description-color);
-    line-height: 1.5;
+    line-height: 1;
   }
 
   .vds-radio-group-items {
@@ -817,13 +887,42 @@
   }
 
   .vds-radio-group-error {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--radio-group-error-gap);
     margin: 0;
     font-size: var(--radio-group-error-font-size);
     color: var(--radio-group-error-color);
-    line-height: 1.4;
+    line-height: var(--vds-leading-snug, 1.375);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--vds-duration-normal, 200ms)
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-radio-group-error[data-empty] {
+    margin-block-start: 0;
+  }
+
+  .vds-radio-group-error[data-visible] {
+    grid-template-rows: 1fr;
+  }
+
+  .vds-radio-group-error-body {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--radio-group-error-gap);
+    min-block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(calc(var(--vds-space-1, 0.25rem) * -1));
+    transition:
+      opacity var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      transform var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-radio-group-error[data-visible] .vds-radio-group-error-body {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .vds-radio-group-error-icon {
@@ -835,3 +934,5 @@
     opacity: 0.7;
   }
 }
+[data-vds-no-micro] .vds-radio-item[data-state="checked"] { animation: none; }
+[data-vds-no-micro] .vds-radio-dot                        { animation: none; }

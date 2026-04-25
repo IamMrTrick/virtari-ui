@@ -1,17 +1,132 @@
-@layer components {
+@import "./Progress.tokens.css";
+
+@layer design-system.components {
+
+  /* ── Track ── */
   .vds-progress {
     position: relative;
     inline-size: 100%;
-    block-size: var(--vds-space-2);
-    border-radius: var(--vds-radius-full);
-    background-color: var(--vds-color-bg-muted);
+    block-size: var(--progress-height);
+    border-radius: var(--progress-radius);
+    background-color: var(--progress-track-bg);
     overflow: hidden;
+    isolation: isolate;
   }
 
+  /* ── Indicator (solid — default) ── */
   .vds-progress-indicator {
     block-size: 100%;
-    background-color: var(--vds-color-primary-solid);
+    inline-size: 0%;
+    background-color: var(--progress-fill-color);
     border-radius: inherit;
-    transition: inline-size var(--vds-duration-slow) var(--vds-ease-out);
+    transition:
+      inline-size var(--progress-transition-duration) var(--progress-transition-easing),
+      background-color var(--vds-duration-normal, 200ms) var(--progress-transition-easing);
+    will-change: inline-size;
+  }
+
+  /* ── Variant: gradient ── */
+  .vds-progress[data-variant="gradient"] .vds-progress-indicator {
+    background-image: linear-gradient(
+      to right,
+      color-mix(in oklch, var(--progress-fill-color) 70%, transparent),
+      var(--progress-fill-color) 50%,
+      var(--progress-fill-color-end)
+    );
+    background-color: transparent;
+  }
+
+  /* ── Variant: striped ── */
+  .vds-progress[data-variant="striped"] .vds-progress-indicator {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent calc(var(--progress-stripe-size) * 0.5),
+      color-mix(in oklch, white 20%, transparent) calc(var(--progress-stripe-size) * 0.5),
+      color-mix(in oklch, white 20%, transparent) var(--progress-stripe-size)
+    );
+    background-size: var(--progress-stripe-size) var(--progress-stripe-size);
+    background-color: var(--progress-fill-color);
+    animation: vds-progress-stripes var(--progress-animation-duration) linear infinite;
+  }
+
+  /* ── Indeterminate (data-state driven by Radix) ── */
+  .vds-progress[data-state="indeterminate"] .vds-progress-indicator {
+    inline-size: 40% !important;
+    animation: vds-progress-indeterminate calc(var(--progress-animation-duration) * 1.1) var(--vds-ease-in-out, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
+    border-radius: var(--progress-radius);
+  }
+
+  /* ── Animation: pulse ── */
+  .vds-progress[data-animated="pulse"] .vds-progress-indicator {
+    animation: vds-progress-pulse calc(var(--progress-animation-duration) * 1.25) var(--vds-ease-in-out, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
+  }
+
+  .vds-progress[data-animated="pulse"][data-variant="striped"] .vds-progress-indicator {
+    animation:
+      vds-progress-stripes var(--progress-animation-duration) linear infinite,
+      vds-progress-pulse calc(var(--progress-animation-duration) * 1.25) var(--vds-ease-in-out) infinite;
+  }
+
+  .vds-progress[data-animated="pulse"][data-state="indeterminate"] .vds-progress-indicator {
+    animation: vds-progress-indeterminate calc(var(--progress-animation-duration) * 1.1) var(--vds-ease-in-out) infinite;
+  }
+
+  /* ── Animation: glow (on track so overflow:hidden doesn't clip it) ── */
+  .vds-progress[data-animated="glow"] {
+    animation: vds-progress-glow var(--progress-animation-duration) var(--vds-ease-in-out) infinite;
+  }
+
+  .vds-progress[data-animated="glow"][data-variant="striped"] .vds-progress-indicator {
+    animation: vds-progress-stripes var(--progress-animation-duration) linear infinite;
+  }
+
+  /* ── Label ── */
+  .vds-progress-label {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    translate: -50% -50%;
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--vds-color-on-solid, #fff);
+    letter-spacing: 0.03em;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .vds-progress[data-size="xs"] .vds-progress-label,
+  .vds-progress[data-size="sm"] .vds-progress-label,
+  .vds-progress[data-size="md"] .vds-progress-label {
+    display: none;
+  }
+
+}
+
+/* ── Keyframes ── */
+
+@keyframes vds-progress-stripes {
+  from { background-position: 0 0; }
+  to   { background-position: var(--progress-stripe-size) 0; }
+}
+
+@keyframes vds-progress-indeterminate {
+  0%   { margin-inline-start: -60%; }
+  60%  { margin-inline-start: 100%; }
+  100% { margin-inline-start: 100%; }
+}
+
+@keyframes vds-progress-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+@keyframes vds-progress-glow {
+  0%, 100% {
+    box-shadow: 0 0 var(--progress-glow-spread) 0 color-mix(in oklch, var(--progress-fill-color) 60%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 calc(var(--progress-glow-spread) * 2.5) 2px color-mix(in oklch, var(--progress-fill-color) 80%, transparent);
   }
 }

@@ -5,7 +5,7 @@ import {
 } from "@floating-ui/react";
 import { cn } from "@virtari-packages/utils";
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from "react";
-import { useNavSubmenuContext } from "./context";
+import { useNavContext, useNavSubmenuContext } from "./context";
 
 /* ──────────────────────────────────────────────
  * NavSubmenu
@@ -28,6 +28,7 @@ export function NavSubmenu({
   ref,
   ...rest
 }: NavSubmenuProps) {
+  const navCtx = useNavContext();
   const ctx = useNavSubmenuContext();
   if (!ctx) {
     throw new Error(
@@ -35,7 +36,7 @@ export function NavSubmenu({
     );
   }
 
-  const { id, open, mode, floating } = ctx;
+  const { id, open, mode, floating, popoverHeading } = ctx;
 
   if (mode === "inline") {
     return (
@@ -61,11 +62,22 @@ export function NavSubmenu({
   // position. Without this the panel paints one frame at the viewport's
   // top-left corner (the initial `translate(0, 0)`) and then "jumps" to
   // the anchor — a visible flash on every open.
+  const showPopoverHeading =
+    navCtx.collapsed && popoverHeading !== undefined && popoverHeading !== null;
+  const headingId = showPopoverHeading ? `${id}-heading` : undefined;
+  const animationBaseTransform =
+    typeof floating.floatingStyles.transform === "string"
+      ? floating.floatingStyles.transform
+      : "translate3d(0px, 0px, 0px)";
   const mergedStyle: CSSProperties = {
     ...floating.floatingStyles,
     visibility: floating.isPositioned ? undefined : "hidden",
+    // Keep the computed floating transform available to CSS animations.
+    // Animating `transform` on the positioned element without this causes
+    // the submenu to animate from the viewport origin instead of its anchor.
+    "--vds-nav-floating-transform": animationBaseTransform,
     ...style,
-  };
+  } as CSSProperties;
 
   const floatingProps = floating.getFloatingProps() as HTMLAttributes<HTMLDivElement>;
 
@@ -90,11 +102,22 @@ export function NavSubmenu({
           id={id}
           className={cn("vds-nav__submenu", className)}
           data-mode="popover"
+          data-collapsed-root={navCtx.collapsed ? "true" : undefined}
+          data-has-heading={showPopoverHeading ? "true" : undefined}
+          data-nav-size={navCtx.size}
           data-state="open"
+          aria-labelledby={headingId}
           style={mergedStyle}
           {...floatingProps}
           {...rest}
         >
+          {showPopoverHeading ? (
+            <div className="vds-nav__popover-header">
+              <span id={headingId} className="vds-nav__popover-title">
+                {popoverHeading}
+              </span>
+            </div>
+          ) : null}
           {children}
         </div>
       </FloatingFocusManager>
@@ -133,17 +156,28 @@ export function NavMega({
   ref,
   ...rest
 }: NavMegaProps) {
+  const navCtx = useNavContext();
   const ctx = useNavSubmenuContext();
   if (!ctx) {
     throw new Error(
       "vds-nav: <NavMega> must be rendered inside <NavItem>.",
     );
   }
-  const { id, open, floating } = ctx;
+  const { id, open, floating, popoverHeading } = ctx;
 
   // Mega is only ever shown in popover mode; force popover behavior even if
   // the parent NavItem is nominally in inline mode.
   if (!open || !floating) return null;
+
+  const showPopoverHeading =
+    navCtx.collapsed && popoverHeading !== undefined && popoverHeading !== null;
+  const headingId = showPopoverHeading ? `${id}-heading` : undefined;
+  const animationBaseTransform =
+    layout === "full-bleed"
+      ? "translate3d(0px, 0px, 0px)"
+      : typeof floating.floatingStyles.transform === "string"
+        ? floating.floatingStyles.transform
+        : "translate3d(0px, 0px, 0px)";
 
   const mergedStyle: CSSProperties = {
     ...floating.floatingStyles,
@@ -151,8 +185,8 @@ export function NavMega({
     // Floating UI computes its real position, otherwise it paints one
     // frame at the viewport's top-left and then jumps to the anchor.
     visibility: floating.isPositioned ? undefined : "hidden",
+    "--vds-nav-floating-transform": animationBaseTransform,
     ...style,
-    // @ts-expect-error — custom property passed to CSS
     "--mega-cols": columns,
     ...(layout === "full-bleed"
       ? {
@@ -164,7 +198,7 @@ export function NavMega({
           inlineSize: "100%",
         }
       : {}),
-  };
+  } as CSSProperties;
 
   const floatingProps = floating.getFloatingProps() as HTMLAttributes<HTMLDivElement>;
 
@@ -189,12 +223,23 @@ export function NavMega({
           id={id}
           className={cn("vds-nav__mega", className)}
           data-columns
+          data-collapsed-root={navCtx.collapsed ? "true" : undefined}
+          data-has-heading={showPopoverHeading ? "true" : undefined}
           data-layout={layout}
+          data-nav-size={navCtx.size}
           data-state="open"
+          aria-labelledby={headingId}
           style={mergedStyle}
           {...floatingProps}
           {...rest}
         >
+          {showPopoverHeading ? (
+            <div className="vds-nav__popover-header">
+              <span id={headingId} className="vds-nav__popover-title">
+                {popoverHeading}
+              </span>
+            </div>
+          ) : null}
           {children}
         </div>
       </FloatingFocusManager>

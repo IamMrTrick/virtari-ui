@@ -33,6 +33,7 @@ export function RadioField({
   const group = useRadioGroupContext();
   const resolvedError = error ?? group?.error ?? false;
   const resolvedDisabled = disabled ?? group?.disabled ?? false;
+  const resolvedSize = radioProps.size ?? group?.size ?? "md";
 
   const reactId = useId();
   const inputId = idProp ?? `vds-radio-field-${reactId}`;
@@ -44,6 +45,8 @@ export function RadioField({
       ref={ref}
       htmlFor={inputId}
       className={cn("vds-radio-field", labelClassName)}
+      data-size={resolvedSize}
+      data-has-description={description ? "" : undefined}
       data-error={resolvedError ? "" : undefined}
       data-disabled={resolvedDisabled ? "" : undefined}
       {...restLabelProps}
@@ -57,7 +60,9 @@ export function RadioField({
         {...radioProps}
       />
       <span className="vds-radio-field-text">
-        <span className="vds-radio-field-label">{label}</span>
+        <span className="vds-radio-field-main">
+          <span className="vds-radio-field-label">{label}</span>
+        </span>
         {description ? (
           <span className="vds-radio-field-description">{description}</span>
         ) : null}

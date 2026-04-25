@@ -539,6 +539,8 @@ export function DataTableUsersPage() {
       {
         id: "__actions",
         size: 160,
+        minSize: 160,
+        maxSize: 160,
         enableSorting: false,
         enableResizing: false,
         enableHiding: false,
@@ -546,24 +548,22 @@ export function DataTableUsersPage() {
         cell: ({ row }) => {
           const u = row.original;
           return (
-            <div style={{ display: "inline-flex", gap: "var(--vds-space-1, 0.25rem)" }}>
-              <Button
-                variant="ghost"
+            <div className="vds-data-table-row-actions">
+              <DataTable.RowAction
                 size="xs"
-                leftSection={<IconPencil size={12} stroke={1.75} aria-hidden />}
+                icon={<IconPencil size={12} stroke={1.75} aria-hidden />}
                 onClick={() => setQuickEdit(u)}
               >
                 Edit
-              </Button>
-              <Button
-                variant="ghost"
-                color="danger"
+              </DataTable.RowAction>
+              <DataTable.RowAction
                 size="xs"
-                leftSection={<IconTrash size={12} stroke={1.75} aria-hidden />}
+                intent="danger"
+                icon={<IconTrash size={12} stroke={1.75} aria-hidden />}
                 onClick={() => handleDelete([u.id])}
               >
                 Delete
-              </Button>
+              </DataTable.RowAction>
             </div>
           );
         },
@@ -769,7 +769,7 @@ export function DataTableUsersPage() {
         </DataTable.BulkActions.Root>
 
         {/* ───── Pagination ───── */}
-        <DataTable.Pagination.Default
+        <DataTable.Pagination
           pageSizeOptions={[10, 15, 25, 50, 100]}
           sticky
         />
@@ -1281,7 +1281,7 @@ function ToggleRow({
           "var(--vds-color-surface-raised, var(--vds-color-bg-subtle, rgba(255,255,255,0.04)))",
         border:
           "1px solid var(--vds-color-border-muted, var(--vds-color-border, rgba(255,255,255,0.08)))",
-        borderRadius: "var(--vds-radius-element, 0.375rem)",
+        borderRadius: "var(--vds-radius-nav-item, 0.375rem)",
       }}
     >
       <span style={{ fontSize: "var(--vds-text-sm, 0.875rem)" }}>{label}</span>
@@ -1382,29 +1382,24 @@ function CustomListView({
               </div>
             </div>
             <div
-              style={{
-                display: "inline-flex",
-                flexShrink: 0,
-                gap: "var(--vds-space-1, 0.25rem)",
-              }}
+              className="vds-data-table-row-actions"
+              style={{ flexShrink: 0 }}
             >
-              <Button
-                variant="ghost"
+              <DataTable.RowAction
                 size="xs"
-                leftSection={<IconPencil size={12} stroke={1.75} aria-hidden />}
+                icon={<IconPencil size={12} stroke={1.75} aria-hidden />}
                 onClick={() => onQuickEdit(u)}
               >
                 Edit
-              </Button>
-              <Button
-                variant="ghost"
-                color="danger"
+              </DataTable.RowAction>
+              <DataTable.RowAction
                 size="xs"
-                leftSection={<IconTrash size={12} stroke={1.75} aria-hidden />}
+                intent="danger"
+                icon={<IconTrash size={12} stroke={1.75} aria-hidden />}
                 onClick={() => onDelete([u.id])}
               >
                 Delete
-              </Button>
+              </DataTable.RowAction>
             </div>
           </div>
         );
@@ -1461,27 +1456,19 @@ function CustomBoardView({
                 aria-label={`Select ${full}`}
               />
               <div
-                style={{
-                  display: "inline-flex",
-                  gap: "var(--vds-space-1, 0.25rem)",
-                }}
+                className="vds-data-table-row-actions"
+                style={{ inlineSize: "auto" }}
               >
-                <Button
-                  variant="ghost"
+                <DataTable.RowAction
                   size="xs"
-                  leftSection={
-                    <IconPencil size={12} stroke={1.75} aria-hidden />
-                  }
+                  icon={<IconPencil size={12} stroke={1.75} aria-hidden />}
                   onClick={() => onQuickEdit(u)}
                   aria-label="Edit"
                 />
-                <Button
-                  variant="ghost"
-                  color="danger"
+                <DataTable.RowAction
                   size="xs"
-                  leftSection={
-                    <IconTrash size={12} stroke={1.75} aria-hidden />
-                  }
+                  intent="danger"
+                  icon={<IconTrash size={12} stroke={1.75} aria-hidden />}
                   onClick={() => onDelete([u.id])}
                   aria-label="Delete"
                 />

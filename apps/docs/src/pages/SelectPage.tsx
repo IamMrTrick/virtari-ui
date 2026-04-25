@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Select,
+  SelectField,
   SelectTrigger,
   SelectValue,
   SelectContent,
@@ -219,6 +220,45 @@ export function SelectPage() {
               </SelectItem>
             </SelectContent>
           </Select>
+        </div>
+      </Section>
+
+      <Section
+        title="Field API"
+        description="Use SelectField when the compound Select needs the same label, description, error, and counter controls as Input and Textarea."
+      >
+        <div style={{ maxInlineSize: "22rem" }}>
+          <SelectField
+            label="Billing plan"
+            description="Choose how your workspace is billed."
+            error={!plan ? "Select a plan to continue" : undefined}
+            counter="4 options"
+            invalid={!plan}
+            metaLayout="inline"
+            descriptionAlign="end"
+            errorAlign="start"
+            counterAlign="end"
+          >
+            {({ controlId, describedBy, invalid }) => (
+              <Select value={plan} onValueChange={setPlan}>
+                <SelectTrigger
+                  id={controlId}
+                  aria-describedby={describedBy}
+                  invalid={invalid}
+                >
+                  <SelectValue placeholder="Choose a planâ€¦" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="free">Free â€” 3 projects</SelectItem>
+                  <SelectItem value="pro">Pro â€” $19/mo</SelectItem>
+                  <SelectItem value="team">Team â€” $49/mo</SelectItem>
+                  <SelectItem value="enterprise">
+                    Enterprise â€” contact sales
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          </SelectField>
         </div>
       </Section>
 

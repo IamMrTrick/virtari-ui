@@ -4,9 +4,10 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 import { DirectionProvider } from '@radix-ui/react-direction';
 import { IconX, IconLoader2, IconChevronDown, IconCheck } from '@virtari-packages/react-icons';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
+import { composeFieldDescribedBy, Field } from '@virtari-packages/react-fieldset';
+import { createContext, useId, useContext, useCallback, useRef, useEffect, useMemo, useState, useLayoutEffect } from 'react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { Chip, ChipLabel, ChipRemove } from '@virtari-packages/react-chip';
-import { createContext, useContext, useCallback, useRef, useEffect, useMemo, useState, useId, useLayoutEffect } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
 // src/Select.tsx
@@ -127,6 +128,62 @@ function SelectEmpty({ className, children, ref, ...props }) {
       className: cn("vds-select-empty", className),
       ...props,
       children
+    }
+  );
+}
+function SelectField({
+  label,
+  description,
+  error,
+  counter,
+  metaLayout,
+  descriptionAlign,
+  errorAlign,
+  counterAlign,
+  labelProps,
+  className,
+  children,
+  controlId,
+  invalid = false,
+  ref,
+  ...props
+}) {
+  const generatedId = useId();
+  const resolvedControlId = controlId ?? `vds-select-field-${generatedId}`;
+  const descriptionId = description ? `${resolvedControlId}-description` : void 0;
+  const errorId = error ? `${resolvedControlId}-error` : void 0;
+  const counterId = counter ? `${resolvedControlId}-counter` : void 0;
+  const describedBy = composeFieldDescribedBy(
+    descriptionId,
+    errorId,
+    counterId
+  );
+  const renderedChildren = typeof children === "function" ? children({
+    controlId: resolvedControlId,
+    describedBy,
+    invalid
+  }) : children;
+  return /* @__PURE__ */ jsx(
+    Field,
+    {
+      ref,
+      className: cn("vds-select-field", className),
+      label,
+      labelProps,
+      description,
+      error,
+      counter,
+      invalid,
+      controlId: resolvedControlId,
+      descriptionId,
+      errorId,
+      counterId,
+      metaLayout,
+      descriptionAlign,
+      errorAlign,
+      counterAlign,
+      ...props,
+      children: renderedChildren
     }
   );
 }
@@ -992,4 +1049,4 @@ function ComboboxSeparator({
   );
 }
 
-export { Combobox, ComboboxContent, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList, ComboboxLoading, ComboboxOptions, ComboboxSeparator, ComboboxTrigger, Select, SelectContent, SelectEmpty, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, useComboboxContext };
+export { Combobox, ComboboxContent, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList, ComboboxLoading, ComboboxOptions, ComboboxSeparator, ComboboxTrigger, Select, SelectContent, SelectEmpty, SelectField, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, useComboboxContext };

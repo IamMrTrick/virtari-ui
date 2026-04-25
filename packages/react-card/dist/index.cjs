@@ -4,8 +4,25 @@ var utils = require('@virtari-packages/utils');
 var jsxRuntime = require('react/jsx-runtime');
 
 // src/Card.tsx
-function Card({ className, ref, ...props }) {
-  return /* @__PURE__ */ jsxRuntime.jsx("div", { ref, className: utils.cn("vds-card", className), ...props });
+function Card({
+  variant = "surface",
+  size = "md",
+  interactive = false,
+  className,
+  ref,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      ref,
+      className: utils.cn("vds-card", className),
+      "data-variant": variant !== "surface" ? variant : void 0,
+      "data-size": size !== "md" ? size : void 0,
+      "data-interactive": interactive || void 0,
+      ...props
+    }
+  );
 }
 function CardHeader({ className, ref, ...props }) {
   return /* @__PURE__ */ jsxRuntime.jsx(

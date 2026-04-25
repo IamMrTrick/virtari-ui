@@ -46,7 +46,9 @@
     "dirRtl": "RTL",
     "language": "Language",
     "langEnglish": "English",
-    "langPersian": "\u0641\u0627\u0631\u0633\u06cc"
+    "langPersian": "\u0641\u0627\u0631\u0633\u06cc",
+    "microInteractions": "Micro-interactions",
+    "microInteractionsHint": "Focus press, checkbox pop, radio spring"
   },
   "layout": {
     "toggleSidebar": "Toggle sidebar"

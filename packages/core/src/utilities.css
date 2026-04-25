@@ -1,5 +1,6 @@
 @layer utilities {
-  .vds-sr-only {
+  .vds-sr-only,
+  .vds-visually-hidden {
     position: absolute;
     inline-size: 1px;
     block-size: 1px;

@@ -54,4 +54,12 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 declare const Button: react.ForwardRefExoticComponent<ButtonProps & react.RefAttributes<HTMLButtonElement>>;
 
-export { Button, type ButtonAnimation, type ButtonColor, type ButtonEffect, type ButtonProps, type ButtonSize, type ButtonVariant };
+interface ButtonGroupContextValue {
+    color?: ButtonColor;
+    variant?: ButtonVariant;
+    size?: ButtonSize;
+    disabled?: boolean;
+}
+declare const ButtonGroupContext: react.Context<ButtonGroupContextValue | null>;
+
+export { Button, type ButtonAnimation, type ButtonColor, type ButtonEffect, ButtonGroupContext, type ButtonGroupContextValue, type ButtonProps, type ButtonSize, type ButtonVariant };

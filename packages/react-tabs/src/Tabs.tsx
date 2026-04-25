@@ -25,7 +25,7 @@ export type TabsVariant =
   | "soft"
   | "ghost";
 
-export type TabsSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+export type TabsSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 
 function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
   return (node: T | null) => {
@@ -37,9 +37,7 @@ function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
   };
 }
 
-/* ─────────────────────────────────────────────
- * Root
- * ───────────────────────────────────────────── */
+/* Root */
 export interface TabsProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
   /** Collapse `orientation="vertical"` back to horizontal when the Tabs
@@ -89,9 +87,7 @@ export function Tabs({
   );
 }
 
-/* ─────────────────────────────────────────────
- * List
- * ───────────────────────────────────────────── */
+/* List */
 export interface TabsListProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {
   variant?: TabsVariant;
@@ -131,27 +127,30 @@ export function TabsList({
   );
 }
 
-/* ─────────────────────────────────────────────
- * Trigger
- * ───────────────────────────────────────────── */
+/* Trigger */
 export interface TabsTriggerProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
   ref?: Ref<ComponentRef<typeof TabsPrimitive.Trigger>>;
 }
 
-export function TabsTrigger({ className, ref, ...props }: TabsTriggerProps) {
+export function TabsTrigger({
+  children,
+  className,
+  ref,
+  ...props
+}: TabsTriggerProps) {
   return (
     <TabsPrimitive.Trigger
       ref={ref}
       className={cn("vds-tabs-trigger", className)}
       {...props}
-    />
+    >
+      <span className="vds-tabs-trigger-content">{children}</span>
+    </TabsPrimitive.Trigger>
   );
 }
 
-/* ─────────────────────────────────────────────
- * Content
- * ───────────────────────────────────────────── */
+/* Content */
 export interface TabsContentProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> {
   ref?: Ref<ComponentRef<typeof TabsPrimitive.Content>>;

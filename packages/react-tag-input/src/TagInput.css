@@ -1,0 +1,57 @@
+@import "./TagInput.tokens.css";
+
+@layer design-system.components {
+  .vds-tag-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--tag-input-gap);
+    min-block-size: var(--tag-input-min-height);
+    padding: var(--tag-input-padding);
+    background-color: var(--tag-input-bg);
+    border: var(--tag-input-border-width) solid var(--tag-input-border-color);
+    border-radius: var(--tag-input-radius);
+    cursor: text;
+    transition:
+      border-color var(--tag-input-transition),
+      box-shadow var(--tag-input-transition);
+  }
+
+  .vds-tag-input:focus-within {
+    border-color: var(--tag-input-ring-color);
+    box-shadow: 0 0 0 var(--tag-input-ring-width) color-mix(in oklch, var(--tag-input-ring-color) 20%, transparent);
+    outline: none;
+  }
+
+  .vds-tag-input[data-invalid]:focus-within {
+    border-color: var(--vds-color-danger-9, #ef4444);
+    box-shadow: 0 0 0 var(--tag-input-ring-width) color-mix(in oklch, var(--vds-color-danger-9, #ef4444) 20%, transparent);
+  }
+
+  .vds-tag-input[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  /* ── Native input ── */
+  .vds-tag-input-field {
+    flex: 1;
+    min-inline-size: var(--tag-input-field-min-w);
+    border: 0;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: var(--tag-input-field-size);
+    color: var(--tag-input-field-color);
+    padding: 0;
+    line-height: var(--vds-leading-normal, 1.5);
+  }
+
+  .vds-tag-input-field::placeholder {
+    color: var(--tag-input-placeholder);
+  }
+
+  .vds-tag-input-field:disabled {
+    cursor: not-allowed;
+  }
+}

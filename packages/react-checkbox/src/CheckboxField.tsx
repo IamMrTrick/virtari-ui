@@ -27,6 +27,7 @@ export function CheckboxField({
   const group = useCheckboxGroupContext();
   const resolvedError = error ?? group?.error ?? false;
   const resolvedDisabled = disabled ?? group?.disabled ?? false;
+  const resolvedSize = checkboxProps.size ?? "md";
 
   const { className: labelClassName, ...restLabelProps } = labelProps ?? {};
 
@@ -34,6 +35,8 @@ export function CheckboxField({
     <label
       ref={ref}
       className={cn("vds-checkbox-field", labelClassName)}
+      data-size={resolvedSize}
+      data-has-description={description ? "" : undefined}
       data-error={resolvedError ? "" : undefined}
       data-disabled={resolvedDisabled ? "" : undefined}
       {...restLabelProps}
@@ -46,7 +49,9 @@ export function CheckboxField({
         {...checkboxProps}
       />
       <span className="vds-checkbox-field-text">
-        <span className="vds-checkbox-field-label">{label}</span>
+        <span className="vds-checkbox-field-main">
+          <span className="vds-checkbox-field-label">{label}</span>
+        </span>
         {description ? (
           <span className="vds-checkbox-field-description">{description}</span>
         ) : null}

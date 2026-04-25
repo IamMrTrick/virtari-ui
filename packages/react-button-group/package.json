@@ -1,0 +1,72 @@
+{
+  "name": "@virtari-packages/react-button-group",
+  "version": "0.1.0",
+  "description": "Virtari button group — segmented row of buttons that inherits size/variant/color from one place.",
+  "license": "UNLICENSED",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-button-group#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-button-group"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "components",
+    "button-group",
+    "segmented"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles": "./dist/ButtonGroup.css",
+    "./tokens": "./dist/ButtonGroup.tokens.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsup && postcss src/ButtonGroup.tokens.css -o dist/ButtonGroup.tokens.css && postcss src/ButtonGroup.css -o dist/ButtonGroup.css",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@virtari-packages/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "@virtari-packages/react-button": "workspace:*"
+  },
+  "devDependencies": {
+    "react": "^19.2.5",
+    "@types/react": "^19.2.14",
+    "@virtari-packages/react-button": "workspace:*",
+    "typescript": "^5.5.0",
+    "tsup": "^8.0.0"
+  }
+}

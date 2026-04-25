@@ -1,0 +1,19 @@
+@layer tokens {
+  :root {
+    --vds-opacity-0:   0;
+    --vds-opacity-5:   0.05;
+    --vds-opacity-10:  0.1;
+    --vds-opacity-20:  0.2;
+    --vds-opacity-25:  0.25;
+    --vds-opacity-30:  0.3;
+    --vds-opacity-40:  0.4;
+    --vds-opacity-50:  0.5;
+    --vds-opacity-60:  0.6;
+    --vds-opacity-70:  0.7;
+    --vds-opacity-75:  0.75;
+    --vds-opacity-80:  0.8;
+    --vds-opacity-90:  0.9;
+    --vds-opacity-95:  0.95;
+    --vds-opacity-100: 1;
+  }
+}

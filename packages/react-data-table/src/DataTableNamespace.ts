@@ -31,7 +31,7 @@ import { Cells } from "./cells";
 import { EditableCell } from "./editing";
 import { DataTableFilterDrawer } from "./filter-drawer";
 import { Filters } from "./filters";
-import { Pagination } from "./pagination";
+import { DataTablePagination } from "./pagination";
 import {
   DataTableAddButton,
   DataTableCloseButton,
@@ -40,8 +40,11 @@ import {
   DataTableExportButton,
   DataTableFilterButton,
   DataTableHideColumnsButton,
+  DataTableMoreButton,
   DataTableRefreshButton,
   DataTableResetLayoutButton,
+  DataTableRowAction,
+  DataTableSearchButton,
   DataTableSearchField,
   ToolbarActionButton,
 } from "./toolbar";
@@ -105,6 +108,9 @@ export const DataTable = {
   HideColumnsButton: DataTableHideColumnsButton,
   DeleteButton: DataTableDeleteButton,
   CloseButton: DataTableCloseButton,
+  SearchButton: DataTableSearchButton,
+  MoreButton: DataTableMoreButton,
+  RowAction: DataTableRowAction,
   SearchField: DataTableSearchField,
 
   /* Global filter input (simple) */
@@ -115,7 +121,7 @@ export const DataTable = {
   ColumnVisibility: DataTableColumnVisibility,
 
   /* Compounds */
-  Pagination,
+  Pagination: DataTablePagination,
   Filters,
   FilterDrawer: DataTableFilterDrawer,
   BulkActions,

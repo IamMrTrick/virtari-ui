@@ -1,0 +1,82 @@
+@import "./CopyButton.tokens.css";
+
+@layer design-system.components {
+  .vds-copy-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_copy-btn-gap);
+    padding: var(--_copy-btn-padding);
+    border-radius: var(--_copy-btn-radius);
+    border: none;
+    background: transparent;
+    color: var(--vds-color-text-muted);
+    font-size: var(--_copy-btn-font-size);
+    font-family: var(--vds-font-sans);
+    cursor: pointer;
+    transition:
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      background-color var(--vds-duration-fast) var(--vds-ease-out);
+
+    &:focus-visible {
+      outline: 2px solid var(--vds-color-ring);
+      outline-offset: 1px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ── Variants ── */
+
+    &[data-variant="ghost"] {
+      &:hover:not(:disabled) {
+        background-color: var(--vds-color-surface-hover);
+        color: var(--vds-color-text);
+      }
+      &:active:not(:disabled) {
+        background-color: var(--vds-color-surface-active);
+      }
+    }
+
+    &[data-variant="outline"] {
+      border: 1px solid var(--vds-color-border);
+      &:hover:not(:disabled) {
+        background-color: var(--vds-color-surface-hover);
+        color: var(--vds-color-text);
+      }
+    }
+
+    &[data-variant="soft"] {
+      background-color: var(--vds-color-neutral-3);
+      color: var(--vds-color-text);
+      &:hover:not(:disabled) {
+        background-color: var(--vds-color-neutral-4);
+      }
+    }
+
+    /* ── Copied state ── */
+
+    &[data-copied] {
+      color: var(--vds-color-success-text);
+    }
+  }
+
+  .vds-copy-button__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_copy-btn-icon-size);
+    block-size: var(--_copy-btn-icon-size);
+    flex-shrink: 0;
+
+    & > svg {
+      inline-size: 100%;
+      block-size: 100%;
+    }
+  }
+
+  .vds-copy-button__label {
+    line-height: 1;
+  }
+}

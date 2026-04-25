@@ -212,6 +212,46 @@ export function TabsPage() {
       </Section>
 
       <Section
+        title="Panel mounting"
+        description="TabsPanels defaults to mounting every panel for seamless carousel transitions. For heavy tab content, set mountStrategy to adjacent so only the active panel and its previous/next neighbors stay mounted."
+      >
+        <div className="docs-tabs-stack">
+          <div className="docs-stack-item">
+            <h3 className="docs-subtitle">adjacent mounting</h3>
+            <Tabs defaultValue="summary">
+              <TabsList variant="segmented" fullWidth>
+                <TabsTrigger value="summary">Summary</TabsTrigger>
+                <TabsTrigger value="traffic">Traffic</TabsTrigger>
+                <TabsTrigger value="revenue">Revenue</TabsTrigger>
+                <TabsTrigger value="exports">Exports</TabsTrigger>
+              </TabsList>
+              <TabsPanels mountStrategy="adjacent">
+                <TabsContent value="summary">
+                  <p>Summary panel - mounted with its immediate neighbors.</p>
+                </TabsContent>
+                <TabsContent value="traffic">
+                  <p>Traffic panel - charts or tables can initialize lazily.</p>
+                </TabsContent>
+                <TabsContent value="revenue">
+                  <p>Revenue panel - distant panels remain unmounted.</p>
+                </TabsContent>
+                <TabsContent value="exports">
+                  <p>Exports panel - mounted when selected or adjacent.</p>
+                </TabsContent>
+              </TabsPanels>
+            </Tabs>
+          </div>
+
+          <pre className="docs-code">{`<TabsPanels mountStrategy="adjacent">
+  <TabsContent value="summary">...</TabsContent>
+  <TabsContent value="traffic">...</TabsContent>
+  <TabsContent value="revenue">...</TabsContent>
+  <TabsContent value="exports">...</TabsContent>
+</TabsPanels>`}</pre>
+        </div>
+      </Section>
+
+      <Section
         title="Full-width"
         description="Triggers distribute equally across the list's inline size."
       >
@@ -285,6 +325,19 @@ export function TabsPage() {
   <TabsContent value="overview">...</TabsContent>
   <TabsContent value="analytics">...</TabsContent>
   <TabsContent value="settings">...</TabsContent>
+</Tabs>`}</pre>
+        <pre className="docs-code">{`// Carousel panels with lazy-adjacent mounting for heavy content
+<Tabs defaultValue="overview">
+  <TabsList variant="segmented" fullWidth>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="analytics">Analytics</TabsTrigger>
+    <TabsTrigger value="reports">Reports</TabsTrigger>
+  </TabsList>
+  <TabsPanels mountStrategy="adjacent">
+    <TabsContent value="overview">...</TabsContent>
+    <TabsContent value="analytics">...</TabsContent>
+    <TabsContent value="reports">...</TabsContent>
+  </TabsPanels>
 </Tabs>`}</pre>
       </Section>
     </>

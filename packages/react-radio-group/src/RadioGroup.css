@@ -4,6 +4,24 @@
 @import "./SegmentedRadio.css";
 @import "./PillRadio.css";
 
+@keyframes vds-control-pop {
+  0%   { scale: 0.86; }
+  62%  { scale: 1.12; }
+  100% { scale: 1; }
+}
+
+@keyframes vds-radio-dot-spring {
+  0%   { opacity: 0; scale: 0; }
+  46%  { opacity: 1; scale: 1.42; }
+  72%  { scale: 0.86; }
+  100% { scale: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes vds-control-pop        { 0% { scale: 0.86; } 100% { scale: 1; } }
+  @keyframes vds-radio-dot-spring   { 0% { opacity: 0; scale: 0; } 100% { opacity: 1; scale: 1; } }
+}
+
 @layer components {
   /* =========================================================================
    * Atomic radio — circular selector with inner dot.
@@ -12,6 +30,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     flex-shrink: 0;
     inline-size: var(--radio-size);
     block-size: var(--radio-size);
@@ -22,11 +41,16 @@
     color: var(--radio-dot-color);
     cursor: pointer;
     transition:
-      background-color var(--radio-transition-duration)
-        var(--radio-transition-easing),
-      border-color var(--radio-transition-duration)
-        var(--radio-transition-easing),
-      box-shadow var(--radio-transition-duration) var(--radio-transition-easing);
+      background-color var(--radio-transition-duration) var(--radio-transition-easing),
+      border-color var(--radio-transition-duration) var(--radio-transition-easing),
+      box-shadow var(--radio-transition-duration) var(--radio-transition-easing),
+      scale 180ms var(--vds-ease-spring);
+  }
+
+  /* ── Active press ── */
+  .vds-radio-item:active:not(:disabled) {
+    scale: 0.86;
+    transition: scale 30ms linear;
   }
 
   /* ── Hover (unchecked) ── */
@@ -39,6 +63,7 @@
   .vds-radio-item[data-state="checked"] {
     background-color: var(--radio-bg-checked);
     border-color: var(--radio-border-color-checked);
+    animation: vds-control-pop 300ms var(--vds-ease-spring);
   }
 
   .vds-radio-item[data-state="checked"]:hover:not(:disabled) {
@@ -63,19 +88,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     inline-size: 100%;
     block-size: 100%;
   }
 
-  .vds-radio-indicator::after {
-    content: "";
+  .vds-radio-dot {
     display: block;
+    flex-shrink: 0;
     inline-size: var(--radio-dot-size);
     block-size: var(--radio-dot-size);
     border-radius: var(--vds-radius-full, 9999px);
     background-color: var(--radio-dot-color);
-    animation: vds-scale-in var(--radio-transition-duration)
-      var(--radio-transition-easing);
+    animation: vds-radio-dot-spring 360ms var(--vds-ease-spring);
   }
 
   /* =========================================================================
@@ -84,10 +109,16 @@
    * as siblings next to the items, keeping keyboard roving tabindex intact.
    * ========================================================================= */
   .vds-radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--radio-group-gap);
+    display: block;
     min-inline-size: 0;
+  }
+
+  .vds-radio-group > * {
+    min-inline-size: 0;
+  }
+
+  .vds-radio-group > * + * {
+    margin-block-start: var(--radio-group-gap);
   }
 
   .vds-radio-group-header {
@@ -103,7 +134,7 @@
     font-size: var(--radio-group-label-font-size);
     font-weight: var(--radio-group-label-font-weight);
     color: var(--radio-group-label-color);
-    line-height: 1.4;
+    line-height: 1;
   }
 
   .vds-radio-group-required {
@@ -114,7 +145,7 @@
   .vds-radio-group-description {
     font-size: var(--radio-group-description-font-size);
     color: var(--radio-group-description-color);
-    line-height: 1.5;
+    line-height: 1;
   }
 
   .vds-radio-group-items {
@@ -132,13 +163,42 @@
   }
 
   .vds-radio-group-error {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--radio-group-error-gap);
     margin: 0;
     font-size: var(--radio-group-error-font-size);
     color: var(--radio-group-error-color);
-    line-height: 1.4;
+    line-height: var(--vds-leading-snug, 1.375);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--vds-duration-normal, 200ms)
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-radio-group-error[data-empty] {
+    margin-block-start: 0;
+  }
+
+  .vds-radio-group-error[data-visible] {
+    grid-template-rows: 1fr;
+  }
+
+  .vds-radio-group-error-body {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--radio-group-error-gap);
+    min-block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(calc(var(--vds-space-1, 0.25rem) * -1));
+    transition:
+      opacity var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      transform var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-radio-group-error[data-visible] .vds-radio-group-error-body {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .vds-radio-group-error-icon {
@@ -150,3 +210,7 @@
     opacity: 0.7;
   }
 }
+
+[data-vds-no-micro] .vds-radio-item:active             { scale: 1; transition: none; }
+[data-vds-no-micro] .vds-radio-item[data-state="checked"] { animation: none; }
+[data-vds-no-micro] .vds-radio-dot                        { animation: none; }

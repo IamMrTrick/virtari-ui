@@ -54,7 +54,7 @@ function Checkbox({
       "aria-invalid": resolvedError || void 0,
       ...props,
       children: /* @__PURE__ */ jsxRuntime.jsxs(CheckboxPrimitive__namespace.Indicator, { className: "vds-checkbox-indicator", children: [
-        /* @__PURE__ */ jsxRuntime.jsx(
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-checkbox-glyph vds-checkbox-glyph--checked", children: /* @__PURE__ */ jsxRuntime.jsx(
           reactIcons.IconCheck,
           {
             className: "vds-checkbox-check",
@@ -63,8 +63,8 @@ function Checkbox({
             "aria-hidden": true,
             focusable: false
           }
-        ),
-        /* @__PURE__ */ jsxRuntime.jsx(
+        ) }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-checkbox-glyph vds-checkbox-glyph--indeterminate", children: /* @__PURE__ */ jsxRuntime.jsx(
           reactIcons.IconMinus,
           {
             className: "vds-checkbox-indeterminate",
@@ -73,7 +73,7 @@ function Checkbox({
             "aria-hidden": true,
             focusable: false
           }
-        )
+        ) })
       ] })
     }
   );
@@ -92,12 +92,15 @@ function CheckboxField({
   const group = useCheckboxGroupContext();
   const resolvedError = error ?? group?.error ?? false;
   const resolvedDisabled = disabled ?? group?.disabled ?? false;
+  const resolvedSize = checkboxProps.size ?? "md";
   const { className: labelClassName, ...restLabelProps } = labelProps ?? {};
   return /* @__PURE__ */ jsxRuntime.jsxs(
     "label",
     {
       ref,
       className: utils.cn("vds-checkbox-field", labelClassName),
+      "data-size": resolvedSize,
+      "data-has-description": description ? "" : void 0,
       "data-error": resolvedError ? "" : void 0,
       "data-disabled": resolvedDisabled ? "" : void 0,
       ...restLabelProps,
@@ -113,7 +116,7 @@ function CheckboxField({
           }
         ),
         /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-checkbox-field-text", children: [
-          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-checkbox-field-label", children: label }),
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-checkbox-field-main", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-checkbox-field-label", children: label }) }),
           description ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-checkbox-field-description", children: description }) : null
         ] })
       ]
@@ -184,13 +187,16 @@ function CheckboxGroup({
           )
         ] }),
         /* @__PURE__ */ jsxRuntime.jsx("div", { className: "vds-checkbox-group-items", children }),
-        hasError && /* @__PURE__ */ jsxRuntime.jsxs(
+        /* @__PURE__ */ jsxRuntime.jsx(
           "p",
           {
             id: errorId,
-            role: "alert",
+            role: hasError ? "alert" : void 0,
+            "aria-hidden": hasError ? void 0 : true,
+            "data-visible": hasError ? "" : void 0,
+            "data-empty": hasError ? void 0 : "",
             className: "vds-checkbox-group-error",
-            children: [
+            children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-checkbox-group-error-body", children: [
               /* @__PURE__ */ jsxRuntime.jsx(
                 reactIcons.IconAlertCircle,
                 {
@@ -202,7 +208,7 @@ function CheckboxGroup({
                 }
               ),
               /* @__PURE__ */ jsxRuntime.jsx("span", { children: error })
-            ]
+            ] })
           }
         )
       ]

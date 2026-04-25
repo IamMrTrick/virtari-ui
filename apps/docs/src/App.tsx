@@ -7,9 +7,14 @@ import {
   PAGE_META,
   IntroductionPage,
   ButtonPage,
+  ButtonGroupPage,
   BadgePage,
   InputPage,
+  NumberInputPage,
+  OtpInputPage,
   TextareaPage,
+  EditorPage,
+  YooptaEditorPage,
   SwitchPage,
   CheckboxPage,
   TogglePage,
@@ -39,6 +44,8 @@ import {
   CardPage,
   KbdPage,
   ChipPage,
+  CodePage,
+  ColorPickerPage,
   CompositionPage,
   DatePickerPage,
   DataTablePage,
@@ -60,6 +67,16 @@ import {
   PhoneInputPage,
   LanguagePickerPage,
   BottomNavPage,
+  PaginationPage,
+  FormPage,
+  FileUploadPage,
+  CommandPage,
+  EmptyStatePage,
+  FieldsetPage,
+  StepperPage,
+  TimelinePage,
+  TagInputPage,
+  CarouselPage,
 } from "./pages";
 
 const PAGES: Record<string, () => React.JSX.Element> = {
@@ -68,9 +85,14 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   colors: ColorsPage,
   typography: TypographyPage,
   button: ButtonPage,
+  "button-group": ButtonGroupPage,
   badge: BadgePage,
   input: InputPage,
+  "number-input": NumberInputPage,
+  "otp-input": OtpInputPage,
   textarea: TextareaPage,
+  editor: EditorPage,
+  "yoopta-editor": YooptaEditorPage,
   select: SelectPage,
   checkbox: CheckboxPage,
   "radio-group": RadioGroupPage,
@@ -97,6 +119,8 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   spinner: SpinnerPage,
   kbd: KbdPage,
   chip: ChipPage,
+  code: CodePage,
+  "color-picker": ColorPickerPage,
   composition: CompositionPage,
   layout: LayoutPage,
   header: HeaderPage,
@@ -118,6 +142,16 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   "phone-input": PhoneInputPage,
   "language-picker": LanguagePickerPage,
   "bottom-nav": BottomNavPage,
+  pagination: PaginationPage,
+  form: FormPage,
+  "file-upload": FileUploadPage,
+  command: CommandPage,
+  "empty-state": EmptyStatePage,
+  fieldset: FieldsetPage,
+  stepper: StepperPage,
+  timeline: TimelinePage,
+  "tag-input": TagInputPage,
+  carousel: CarouselPage,
 };
 
 /* Hash format: #/[locale]/[page] — locale is optional; missing locale
@@ -174,6 +208,7 @@ type Settings = {
   radius: RadiusMode;
   direction: Direction;
   locale: Locale;
+  microInteractions: boolean;
 };
 
 const DEFAULT_SETTINGS: Settings = {
@@ -181,6 +216,7 @@ const DEFAULT_SETTINGS: Settings = {
   radius: "soft",
   direction: "ltr",
   locale: DEFAULT_LOCALE,
+  microInteractions: true,
 };
 
 function readSettings(): Settings {
@@ -201,6 +237,10 @@ function readSettings(): Settings {
         typeof parsed.locale === "string" && isLocale(parsed.locale)
           ? parsed.locale
           : DEFAULT_SETTINGS.locale,
+      microInteractions:
+        typeof parsed.microInteractions === "boolean"
+          ? parsed.microInteractions
+          : DEFAULT_SETTINGS.microInteractions,
     };
   } catch {
     return DEFAULT_SETTINGS;
@@ -209,10 +249,12 @@ function readSettings(): Settings {
 
 export default function App() {
   const { i18n, t } = useTranslation();
-  const [dark, setDark] = useState(() => readSettings().dark);
-  const [radius, setRadius] = useState<RadiusMode>(() => readSettings().radius);
-  const [direction, setDirection] = useState<Direction>(() => readSettings().direction);
-  const [locale, setLocaleState] = useState<Locale>(() => readSettings().locale);
+  const saved = readSettings();
+  const [dark, setDark] = useState(() => saved.dark);
+  const [radius, setRadius] = useState<RadiusMode>(() => saved.radius);
+  const [direction, setDirection] = useState<Direction>(() => saved.direction);
+  const [locale, setLocaleState] = useState<Locale>(() => saved.locale);
+  const [microInteractions, setMicroInteractions] = useState(() => saved.microInteractions);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const route = useHashRoute();
@@ -255,15 +297,17 @@ export default function App() {
     else root.removeAttribute("data-radius");
     root.setAttribute("dir", direction);
     root.setAttribute("lang", locale === "fa" ? "fa" : "en");
+    if (microInteractions) root.removeAttribute("data-vds-no-micro");
+    else root.setAttribute("data-vds-no-micro", "");
     try {
       window.localStorage.setItem(
         SETTINGS_KEY,
-        JSON.stringify({ dark, radius, direction, locale }),
+        JSON.stringify({ dark, radius, direction, locale, microInteractions }),
       );
     } catch {
       /* storage disabled — ignore */
     }
-  }, [dark, radius, direction, locale]);
+  }, [dark, radius, direction, locale, microInteractions]);
 
   function handleNavigate(page: string) {
     writeHash(locale, page);
@@ -308,6 +352,8 @@ export default function App() {
         onDirectionChange={setDirection}
         locale={locale}
         onLocaleChange={handleLocaleChange}
+        microInteractions={microInteractions}
+        onMicroInteractionsChange={setMicroInteractions}
         title={meta.title}
         description={meta.description}
         onToggleSidebar={() => setSidebarOpen((v) => !v)}

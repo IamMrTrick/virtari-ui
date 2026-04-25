@@ -20,6 +20,8 @@ export function Layout({
   onDirectionChange,
   locale,
   onLocaleChange,
+  microInteractions,
+  onMicroInteractionsChange,
   title,
   description,
   children,
@@ -33,6 +35,8 @@ export function Layout({
   onDirectionChange: (v: Direction) => void;
   locale: Locale;
   onLocaleChange: (v: Locale) => void;
+  microInteractions: boolean;
+  onMicroInteractionsChange: (v: boolean) => void;
   title: string;
   description: string;
   children: React.ReactNode;
@@ -94,6 +98,8 @@ export function Layout({
         onDirectionChange={onDirectionChange}
         locale={locale}
         onLocaleChange={onLocaleChange}
+        microInteractions={microInteractions}
+        onMicroInteractionsChange={onMicroInteractionsChange}
       />
     </main>
   );

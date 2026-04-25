@@ -220,13 +220,12 @@ function UserProfile({ flex = false }: { flex?: boolean }) {
 
 /* ─────────────────────────────── Nav data ─────────────────────────────── */
 
-type NavLeaf = { path: string; label: string };
 type NavNode = {
   path: string;
   label: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   badge?: string;
-  children?: NavLeaf[];
+  children?: NavNode[];
 };
 
 const iconProps = { size: 18, stroke: 1.75 } as const;
@@ -242,7 +241,16 @@ const PRIMARY: NavNode[] = [
       { path: "proj-alpha",   label: "Alpha launch" },
       { path: "proj-beta",    label: "Beta campaign" },
       { path: "proj-gamma",   label: "Gamma rollout" },
-      { path: "proj-archive", label: "Archive" },
+      {
+        path: "proj-archive",
+        label: "Archive",
+        icon: <IconFolder {...iconProps} />,
+        children: [
+          { path: "proj-archive-2025", label: "2025 snapshot" },
+          { path: "proj-archive-2024", label: "2024 snapshot" },
+          { path: "proj-cold-storage", label: "Cold storage" },
+        ],
+      },
     ],
   },
   { path: "team",      label: "Team",      icon: <IconUsers {...iconProps} /> },
@@ -275,10 +283,8 @@ function filterNodes(nodes: NavNode[], q: string): NavNode[] {
   if (!q) return nodes;
   return nodes.flatMap((node) => {
     const self = matchesQuery(node.label, q);
-    const filteredChildren = node.children?.filter((c) =>
-      matchesQuery(c.label, q),
-    );
-    const hasChildMatch = filteredChildren && filteredChildren.length > 0;
+    const filteredChildren = node.children ? filterNodes(node.children, q) : undefined;
+    const hasChildMatch = filteredChildren != null && filteredChildren.length > 0;
     if (!self && !hasChildMatch) return [];
     return [
       {
@@ -340,26 +346,14 @@ function renderNode(
     return (
       <NavItem key={node.path}>
         <NavTrigger>
-          <NavIcon>{node.icon}</NavIcon>
+          {node.icon != null && <NavIcon>{node.icon}</NavIcon>}
           <NavLabel>{node.label}</NavLabel>
           {node.badge != null && <NavBadge>{node.badge}</NavBadge>}
           <NavChevron />
         </NavTrigger>
         <NavSubmenu>
           <NavList>
-            {node.children.map((child) => (
-              <NavItem key={child.path}>
-                <NavLink
-                  href={`#demo-${child.path}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onSelect(child.path);
-                  }}
-                >
-                  <NavLabel>{child.label}</NavLabel>
-                </NavLink>
-              </NavItem>
-            ))}
+            {node.children.map((child) => renderNode(child, onSelect))}
           </NavList>
         </NavSubmenu>
       </NavItem>
@@ -374,7 +368,7 @@ function renderNode(
           onSelect(node.path);
         }}
       >
-        <NavIcon>{node.icon}</NavIcon>
+        {node.icon != null && <NavIcon>{node.icon}</NavIcon>}
         <NavLabel>{node.label}</NavLabel>
         {node.badge != null && <NavBadge>{node.badge}</NavBadge>}
       </NavLink>
@@ -554,8 +548,8 @@ function BasicDemo() {
           </h3>
           <p style={{ margin: 0 }}>
             Try typing &quot;proj&quot; in the search — the Projects submenu
-            narrows to matching entries. Click the chevron to expand/collapse
-            the submenu inline.
+            narrows to matching entries. Archive now has its own nested submenu,
+            so the collapsed rail also demonstrates a second flyout.
           </p>
         </ContentArea>
       </DemoShell>
@@ -597,7 +591,8 @@ function SubmenuDemo() {
           <p style={{ margin: 0 }}>
             Submenu items (Alpha launch / Beta campaign / Gamma rollout)
             update <code>active</code> on click via{" "}
-            <code>e.preventDefault()</code> + <code>onSelect</code>.
+            <code>e.preventDefault()</code> + <code>onSelect</code>. Archive is
+            a nested submenu example for the collapsed rail popover.
           </p>
         </ContentArea>
       </DemoShell>

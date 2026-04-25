@@ -25,14 +25,28 @@ export interface TabsPanelsProps {
   /** Restrict swipe interaction to touch-only devices (pointer: coarse).
    *  Default true — desktop users still change tabs via the list. */
   touchOnly?: boolean;
+  /** Controls how many tab panels stay mounted.
+   *  - `all`: preserves the previous behavior by mounting every panel.
+   *  - `adjacent`: mounts only the active panel and its previous/next
+   *    neighbors, keeping swipe responsive without paying the cost for
+   *    distant heavy panels.
+   *
+   *  Default `all` to avoid changing existing behavior. */
+  mountStrategy?: TabsPanelsMountStrategy;
   ref?: Ref<HTMLDivElement>;
 }
 
+export type TabsPanelsMountStrategy = "all" | "adjacent";
+
+type TabsPanelChildProps = {
+  forceMount?: true;
+};
+
 /**
- * Carousel-style container for `TabsContent`. Mounts all panels at once
- * (via `forceMount`), lays them out in a horizontal track, and translates
- * the track based on the active tab. On touch devices, users can swipe/drag
- * between panels.
+ * Carousel-style container for `TabsContent`. By default it mounts all panels
+ * at once (via `forceMount`), lays them out in a horizontal track, and
+ * translates the track based on the active tab. Use
+ * `mountStrategy="adjacent"` for heavy tab content.
  *
  * ```tsx
  * <Tabs defaultValue="a">
@@ -50,6 +64,7 @@ export function TabsPanels({
   swipeable = true,
   swipeThreshold = 50,
   touchOnly = true,
+  mountStrategy = "all",
   ref,
 }: TabsPanelsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -57,16 +72,19 @@ export function TabsPanels({
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTouch, setIsTouch] = useState(!touchOnly);
 
-  /* Clone children to add `forceMount` on any TabsContent, and wrap each in a
-     slide frame. Non-TabsContent children (whitespace, fragments) pass
-     through untouched. */
+  /* Clone children to add `forceMount` to the panels required by the selected
+     mounting strategy, and wrap each in a slide frame. */
   const slides: ReactElement[] = [];
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
-    const cloned = cloneElement(
-      child as ReactElement<{ forceMount?: true }>,
-      { forceMount: true },
-    );
+    const idx = slides.length;
+    const shouldForceMount =
+      mountStrategy === "all" || Math.abs(idx - activeIndex) <= 1;
+    const cloned = shouldForceMount
+      ? cloneElement(child as ReactElement<TabsPanelChildProps>, {
+          forceMount: true,
+        })
+      : (child as ReactElement);
     slides.push(cloned);
   });
   const slideCount = slides.length;
@@ -93,13 +111,21 @@ export function TabsPanels({
     if (!container) return;
 
     const update = () => {
-      const panels = container.querySelectorAll<HTMLElement>(
-        ':scope > .vds-tabs-panels-track > .vds-tabs-panels-slide > [role="tabpanel"]',
+      const activePanel = container.querySelector<HTMLElement>(
+        ':scope > .vds-tabs-panels-track > .vds-tabs-panels-slide > [role="tabpanel"][data-state="active"]',
       );
-      const idx = Array.from(panels).findIndex(
-        (p) => p.getAttribute("data-state") === "active",
-      );
-      if (idx >= 0) setActiveIndex(idx);
+      const slide = activePanel?.closest<HTMLElement>(".vds-tabs-panels-slide");
+      const idx = Number(slide?.dataset.index);
+      if (Number.isInteger(idx) && idx >= 0) {
+        setActiveIndex((prev) => {
+          if (idx === prev) return prev;
+          if (mountStrategy === "adjacent" && Math.abs(idx - prev) > 1) {
+            const track = trackRef.current;
+            if (track) track.style.transition = "none";
+          }
+          return idx;
+        });
+      }
     };
     update();
 
@@ -107,10 +133,11 @@ export function TabsPanels({
     mo.observe(container, {
       attributes: true,
       attributeFilter: ["data-state"],
+      childList: true,
       subtree: true,
     });
     return () => mo.disconnect();
-  }, [slideCount]);
+  }, [slideCount, mountStrategy]);
 
   const activateByDirection = useCallback(
     (direction: "next" | "prev") => {
@@ -122,10 +149,10 @@ export function TabsPanels({
           : Math.max(activeIndex - 1, 0);
       if (target === activeIndex) return false;
 
-      const panels = container.querySelectorAll<HTMLElement>(
-        ':scope > .vds-tabs-panels-track > .vds-tabs-panels-slide > [role="tabpanel"]',
+      const targetSlide = container.querySelector<HTMLElement>(
+        `:scope > .vds-tabs-panels-track > .vds-tabs-panels-slide[data-index="${target}"]`,
       );
-      const panel = panels[target];
+      const panel = targetSlide?.querySelector<HTMLElement>('[role="tabpanel"]');
       if (!panel) return false;
       const root = container.closest<HTMLElement>(".vds-tabs") ?? document.body;
 
@@ -216,6 +243,7 @@ export function TabsPanels({
       ref={setRef}
       className={cn("vds-tabs-panels", className)}
       data-swipeable={swipeable && isTouch ? "true" : undefined}
+      data-mount-strategy={mountStrategy}
     >
       <div
         ref={trackRef}
@@ -230,6 +258,7 @@ export function TabsPanels({
           <div
             key={(slide.key as string | number | null) ?? idx}
             className="vds-tabs-panels-slide"
+            data-index={idx}
             data-active={idx === activeIndex ? "true" : undefined}
           >
             {slide}

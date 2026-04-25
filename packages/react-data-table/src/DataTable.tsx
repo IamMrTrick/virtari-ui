@@ -1,5 +1,8 @@
 import {
+  Children,
+  cloneElement,
   forwardRef,
+  isValidElement,
   memo,
   useCallback,
   useEffect,
@@ -12,6 +15,7 @@ import type {
   CSSProperties,
   HTMLAttributes,
   InputHTMLAttributes,
+  ReactElement,
   ReactNode,
   TableHTMLAttributes,
   TdHTMLAttributes,
@@ -78,9 +82,13 @@ type DataTableRootOwnProps = {
   /** Base top offset for top sticky bands (toolbar, filter-bar, header).
    * Useful when the page has an outer
    * fixed/sticky chrome — e.g. an app header — that sticky bands must clear.
+   * In nested scroll containers the offset is normalized against the scrollport's
+   * actual viewport position so it does not create an initial gap if that
+   * scrollport already sits below the page chrome.
    * Individual top bands can still override with their own `stickyOffset`. */
   stickyOffset?: CSSProperties["top"];
-  /** Base bottom offset for bottom sticky bands (bulk actions, pagination, footer). */
+  /** Base bottom offset for bottom sticky bands (bulk actions, pagination, footer).
+   * Like `stickyOffset`, this is normalized inside nested scroll containers. */
   stickyBottomOffset?: CSSProperties["bottom"];
   mode?: DataTableMode;
   virtualization?: false | DataTableVirtualizationOptions;
@@ -549,6 +557,79 @@ export interface DataTableScrollAreaProps
   scrollDrag?: boolean;
 }
 
+type DataTableTableRenderMode = "full" | "header" | "body";
+
+function isDataTableTableElement(
+  node: ReactNode,
+): node is ReactElement<DataTableTableProps> {
+  return isValidElement(node) && node.type === DataTableTable;
+}
+
+function isDataTableHeaderElement(
+  node: ReactNode,
+): node is ReactElement<DataTableHeaderProps> {
+  return isValidElement(node) && node.type === DataTableHeader;
+}
+
+function splitTableForDetachedHeader(
+  node: ReactElement<DataTableTableProps>,
+): {
+  bodyTable: ReactElement<DataTableTableProps>;
+  headerTable: ReactElement<DataTableTableProps>;
+  railStyle?: CSSProperties;
+} | null {
+  const tableChildren = Children.toArray(node.props.children);
+  const headerIndex = tableChildren.findIndex(isDataTableHeaderElement);
+  if (headerIndex === -1) return null;
+
+  const headerNode = tableChildren[headerIndex] as ReactElement<DataTableHeaderProps>;
+  const bodyChildren = tableChildren.filter((_, index) => index !== headerIndex);
+
+  const railStyle =
+    headerNode.props.stickyOffset === undefined && headerNode.props.style === undefined
+      ? undefined
+      : ({
+          ...(headerNode.props.stickyOffset !== undefined
+            ? { ["--vds-sticky-offset-top" as string]: headerNode.props.stickyOffset }
+            : null),
+          ...headerNode.props.style,
+        } as CSSProperties);
+
+  return {
+    bodyTable: cloneElement(node, {
+      __vdsRenderMode: "body" satisfies DataTableTableRenderMode,
+    }, bodyChildren),
+    headerTable: cloneElement(
+      node,
+      {
+        __vdsRenderMode: "header" satisfies DataTableTableRenderMode,
+        className: cn(node.props.className, "vds-data-table-sticky-header-table"),
+      },
+      cloneElement(headerNode, {
+        __vdsDetachedHeader: true,
+      }),
+    ),
+    railStyle,
+  };
+}
+
+function DataTableColGroup() {
+  const { table } = useDataTableContext();
+  const leafColumns = table.getVisibleLeafColumns();
+
+  return (
+    <colgroup className="vds-data-table-colgroup">
+      {leafColumns.map((column) => (
+        <col
+          key={column.id}
+          data-column-id={column.id}
+          style={{ width: `var(--col-${column.id})` }}
+        />
+      ))}
+    </colgroup>
+  );
+}
+
 export const DataTableScrollArea = forwardRef<
   HTMLDivElement,
   DataTableScrollAreaProps
@@ -556,16 +637,117 @@ export const DataTableScrollArea = forwardRef<
   { className, children, scrollDrag = true, ...props },
   ref,
 ) {
-  const { scrollRef } = useDataTableContext();
+  const { scrollRef, stickyHeader } = useDataTableContext();
+  const headerScrollRef = useRef<HTMLDivElement | null>(null);
   useScrollDrag(scrollRef, scrollDrag);
+
+  const childArray = Children.toArray(children);
+  const tableIndex = childArray.findIndex(isDataTableTableElement);
+  const detached =
+    stickyHeader && tableIndex !== -1
+      ? splitTableForDetachedHeader(
+          childArray[tableIndex] as ReactElement<DataTableTableProps>,
+        )
+      : null;
+
+  const viewportChildren =
+    detached && tableIndex !== -1
+      ? childArray.map((child, index) =>
+          index === tableIndex ? detached.bodyTable : child,
+        )
+      : children;
+
+  useEffect(() => {
+    const viewport = scrollRef.current;
+    const header = headerScrollRef.current;
+    if (!detached || !viewport || !header) return;
+
+    let syncingFromViewport = false;
+    let syncingFromHeader = false;
+    let releaseFrame = 0;
+
+    const release = () => {
+      releaseFrame = 0;
+      syncingFromViewport = false;
+      syncingFromHeader = false;
+    };
+
+    const syncGeometry = () => {
+      if (viewport.clientWidth > 0) {
+        header.style.inlineSize = `${viewport.clientWidth}px`;
+      } else {
+        header.style.removeProperty("inline-size");
+      }
+    };
+
+    const syncHeader = () => {
+      if (syncingFromHeader) return;
+      syncingFromViewport = true;
+      header.scrollLeft = viewport.scrollLeft;
+      if (!releaseFrame) releaseFrame = window.requestAnimationFrame(release);
+    };
+
+    const syncViewport = () => {
+      if (syncingFromViewport) return;
+      syncingFromHeader = true;
+      viewport.scrollLeft = header.scrollLeft;
+      if (!releaseFrame) releaseFrame = window.requestAnimationFrame(release);
+    };
+
+    syncGeometry();
+    syncHeader();
+    viewport.addEventListener("scroll", syncHeader, { passive: true });
+    header.addEventListener("scroll", syncViewport, { passive: true });
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(() => {
+            syncGeometry();
+            syncHeader();
+          });
+    resizeObserver?.observe(viewport);
+    if (viewport.firstElementChild instanceof HTMLElement) {
+      resizeObserver?.observe(viewport.firstElementChild);
+    }
+    if (header.firstElementChild instanceof HTMLElement) {
+      resizeObserver?.observe(header.firstElementChild);
+    }
+
+    return () => {
+      viewport.removeEventListener("scroll", syncHeader);
+      header.removeEventListener("scroll", syncViewport);
+      resizeObserver?.disconnect();
+      if (releaseFrame) window.cancelAnimationFrame(releaseFrame);
+      header.style.removeProperty("inline-size");
+    };
+  }, [detached, scrollRef]);
+
   return (
-    <div
-      ref={composeRefs(scrollRef, ref)}
-      data-scroll-drag={scrollDrag ? "" : undefined}
-      className={cn("vds-data-table-scroll-area", className)}
-      {...props}
-    >
-      {children}
+    <div className="vds-data-table-scroll-shell">
+      {detached && (
+        <div
+          data-sticky={boolAttr(stickyHeader)}
+          data-sticky-axis="top"
+          className="vds-data-table-sticky-header-rail"
+          style={detached.railStyle}
+        >
+          <div
+            ref={headerScrollRef}
+            className="vds-data-table-sticky-header-scroll"
+          >
+            {detached.headerTable}
+          </div>
+        </div>
+      )}
+      <div
+        ref={composeRefs(scrollRef, ref)}
+        data-scroll-drag={scrollDrag ? "" : undefined}
+        className={cn("vds-data-table-scroll-area", className)}
+        {...props}
+      >
+        {viewportChildren}
+      </div>
     </div>
   );
 });
@@ -575,10 +757,16 @@ export const DataTableScrollArea = forwardRef<
  * ──────────────────────────────────────────────────────────── */
 
 export interface DataTableTableProps
-  extends TableHTMLAttributes<HTMLTableElement> {}
+  extends TableHTMLAttributes<HTMLTableElement> {
+  /** Internal render split used by ScrollArea when the header is detached. */
+  __vdsRenderMode?: DataTableTableRenderMode;
+}
 
 export const DataTableTable = forwardRef<HTMLTableElement, DataTableTableProps>(
-  function DataTableTable({ className, style, children, ...props }, ref) {
+  function DataTableTable(
+    { className, style, children, __vdsRenderMode = "full", ...props },
+    ref,
+  ) {
     const { table, interactionMode, tableId } = useDataTableContext();
     const sizeVars = useMemo(() => buildColumnSizeVars(table), [
       table,
@@ -591,12 +779,19 @@ export const DataTableTable = forwardRef<HTMLTableElement, DataTableTableProps>(
     return (
       <table
         ref={ref}
-        id={tableId}
-        role={interactionMode === "grid" ? "grid" : undefined}
+        id={__vdsRenderMode === "header" ? undefined : tableId}
+        role={
+          __vdsRenderMode === "header"
+            ? undefined
+            : interactionMode === "grid"
+              ? "grid"
+              : undefined
+        }
         className={cn("vds-data-table-table", className)}
         style={{ ...sizeVars, ...style }}
         {...props}
       >
+        <DataTableColGroup />
         {children}
       </table>
     );
@@ -610,6 +805,8 @@ export const DataTableTable = forwardRef<HTMLTableElement, DataTableTableProps>(
 export interface DataTableHeaderProps
   extends Omit<HTMLAttributes<HTMLTableSectionElement>, "children"> {
   stickyOffset?: CSSProperties["top"];
+  /** Internal flag used when ScrollArea renders the header in a detached rail. */
+  __vdsDetachedHeader?: boolean;
   children?:
     | ReactNode
     | ((headerGroups: HeaderGroup<unknown>[]) => ReactNode);
@@ -619,7 +816,14 @@ export const DataTableHeader = forwardRef<
   HTMLTableSectionElement,
   DataTableHeaderProps
 >(function DataTableHeader(
-  { className, children, stickyOffset, style, ...props },
+  {
+    className,
+    children,
+    stickyOffset,
+    style,
+    __vdsDetachedHeader = false,
+    ...props
+  },
   ref,
 ) {
   const { table, stickyHeader } = useDataTableContext();
@@ -649,6 +853,7 @@ export const DataTableHeader = forwardRef<
       role="rowgroup"
       data-sticky={boolAttr(stickyHeader)}
       data-sticky-axis="top"
+      data-vds-detached-header={boolAttr(__vdsDetachedHeader)}
       className={cn("vds-data-table-header", className)}
       style={stickyStyle}
       {...props}
@@ -719,6 +924,15 @@ export const DataTableHeaderCell = forwardRef<
   const pin = pinnedAttr(column);
   const canSort = column.getCanSort();
   const canResize = column.getCanResize();
+  const headerSizeStyle =
+    header.colSpan > 1
+      ? ({
+          inlineSize: `${header.getSize()}px`,
+          minInlineSize: `${header.getSize()}px`,
+        } as CSSProperties)
+      : ({
+          ["--col-size" as string]: `var(--col-${column.id})`,
+        } as CSSProperties);
   const ariaSort: ThHTMLAttributes<HTMLTableCellElement>["aria-sort"] =
     sort === "asc" ? "ascending" : sort === "desc" ? "descending" : canSort ? "none" : undefined;
 
@@ -743,7 +957,7 @@ export const DataTableHeaderCell = forwardRef<
       data-column-id={column.id}
       className={cn("vds-data-table-header-cell", className)}
       style={{
-        ["--col-size" as string]: `var(--col-${column.id})`,
+        ...headerSizeStyle,
         ...pinOffsetStyle(column as Column<unknown, unknown>),
         ...style,
       }}
@@ -1134,6 +1348,15 @@ export const DataTableFooterCell = forwardRef<
 ) {
   const column = header.column;
   const pin = pinnedAttr(column);
+  const footerSizeStyle =
+    header.colSpan > 1
+      ? ({
+          inlineSize: `${header.getSize()}px`,
+          minInlineSize: `${header.getSize()}px`,
+        } as CSSProperties)
+      : ({
+          ["--col-size" as string]: `var(--col-${column.id})`,
+        } as CSSProperties);
   return (
     <td
       ref={ref}
@@ -1148,7 +1371,7 @@ export const DataTableFooterCell = forwardRef<
       data-column-id={column.id}
       className={cn("vds-data-table-footer-cell", className)}
       style={{
-        ["--col-size" as string]: `var(--col-${column.id})`,
+        ...footerSizeStyle,
         ...pinOffsetStyle(column as Column<unknown, unknown>),
         ...style,
       }}

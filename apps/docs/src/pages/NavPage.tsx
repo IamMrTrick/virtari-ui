@@ -105,7 +105,7 @@ function SidebarFrame({
             inlineSize: width,
             padding: "var(--vds-space-3)",
             background: "var(--vds-color-bg-subtle)",
-            borderRadius: "var(--vds-radius-element)",
+            borderRadius: "var(--vds-radius-surface)",
             border: "1px solid var(--vds-color-border-muted)",
             overflowY: "auto",
             transition: "inline-size 200ms var(--vds-ease-out)",
@@ -449,7 +449,7 @@ function CollapsedSection() {
   return (
     <Section
       title="Collapsed rail — minimize the sidebar"
-      description="Flip `collapsed` to shrink the nav into an icon-only rail. Labels fade to sr-only (screen readers still hear the name), badges/chevrons hide, items become square, and every submenu auto-switches to popover mode so dropdowns anchor to the icon and float out to the side."
+      description="Flip `collapsed` to shrink the nav into an icon-only rail. Labels fade to sr-only (screen readers still hear the name), badges/chevrons hide, items become square, and every submenu auto-switches to popover mode so dropdowns anchor to the icon and float out to the side. Rail popovers can also show the parent item's heading at the top."
     >
       <div
         style={{
@@ -479,6 +479,7 @@ function CollapsedSection() {
               <li><code>title</code> attribute shows the label on mouse hover.</li>
               <li>Items with submenus switch from inline accordion to popover.</li>
               <li>Popover anchors to the icon and flips / shifts via Floating UI.</li>
+              <li>Collapsed-rail popovers show the parent label as an internal heading.</li>
             </ul>
           </>
         }
@@ -716,7 +717,7 @@ function MegaSection() {
                       style={{
                         display: "block",
                         padding: "var(--vds-space-3)",
-                        borderRadius: "var(--vds-radius-element)",
+                        borderRadius: "var(--vds-radius-card)",
                         border: "1px solid var(--vds-color-border-muted)",
                         textDecoration: "none",
                         color: "inherit",
@@ -1154,6 +1155,7 @@ interface NavItemProps extends HTMLAttributes<HTMLLIElement> {
   badge?: ReactNode;
   kbd?: ReactNode;
   submenu?: ReactNode;                          // <NavSubmenu> or <NavMega>
+  popoverHeading?: ReactNode;                   // optional title for collapsed-rail popovers
   submenuMode?: "inline" | "popover";           // per-item override
   open?: boolean;                               // controlled disclosure
   onOpenChange?: (open: boolean) => void;

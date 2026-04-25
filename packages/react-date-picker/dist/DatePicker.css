@@ -317,6 +317,8 @@
     /* ── Layout ── */
     --button-height: var(--vds-size-md, 2.25rem);
     --button-padding-inline: var(--vds-space-4, 1rem);
+    --button-padding-block: 0;
+    --button-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
     --button-gap: var(--vds-space-2, 0.5rem);
     --button-border-width: 1px;
     --button-radius: var(--vds-radius-element, 0.375rem);
@@ -331,7 +333,7 @@
     --button-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --button-font-size: var(--vds-text-sm, 0.875rem);
     --button-font-weight: var(--vds-font-weight-medium, 500);
-    --button-line-height: 1;
+    --button-line-height: var(--vds-control-line-height, 1);
     --button-letter-spacing: var(--vds-tracking-normal, 0);
 
     /* ── Motion ── */
@@ -560,6 +562,8 @@
   .vds-button[data-variant="link"] {
     --button-height:        auto;
     --button-padding-inline: 0;
+    --button-padding-block: 0;
+    --button-optical-offset: 0;
     --button-min-width:     0;
     --button-bg:            transparent;
     --button-bg-hover:      transparent;
@@ -656,7 +660,7 @@
   }
 }
 @layer design-system.components {
-  /* ── Root ── */
+  /* Root */
   .vds-button {
     display: inline-flex;
     align-items: center;
@@ -668,6 +672,8 @@
     block-size: var(--button-height);
     min-inline-size: var(--button-min-width);
     padding-inline: var(--button-padding-inline);
+    padding-block-start: var(--button-padding-block);
+    padding-block-end: var(--button-padding-block);
 
     /* State overlay sits ON TOP of background-color via background-image.
      * For solid variant on hover/active, `--button-overlay` resolves to a
@@ -689,13 +695,6 @@
     line-height: var(--button-line-height);
     letter-spacing: var(--button-letter-spacing);
 
-    /* Trim ascender space above cap-height and descender below baseline so
-     * flex centering lines up the visible glyph, not the full em-box. Newer
-     * syntax (Chrome 133+, Safari 18.2+); fallback is the raw line-height:1. */
-    text-box: trim-both cap alphabetic;
-    text-box-trim: trim-both;
-    text-box-edge: cap alphabetic;
-
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
@@ -712,7 +711,7 @@
       opacity          var(--button-transition-duration) var(--button-transition-easing);
   }
 
-  /* ── Interaction states ── */
+  /* Interaction states */
   .vds-button:hover:not(:disabled):not([aria-disabled="true"]) {
     background-color: var(--button-bg-hover);
     --button-overlay: var(--button-overlay-hover);
@@ -742,7 +741,7 @@
     text-decoration-thickness: 2px;
   }
 
-  /* ── Disabled ── */
+  /* Disabled */
   .vds-button:disabled,
   .vds-button[aria-disabled="true"] {
     opacity: var(--button-disabled-opacity);
@@ -750,11 +749,36 @@
     pointer-events: none;
   }
 
-  /* ── Modifiers ── */
+  /* Modifiers */
+  .vds-button-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--button-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-button-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 0;
+    line-height: 1;
+    transform: translateY(var(--button-optical-offset));
+    white-space: inherit;
+  }
+
+  .vds-button-label:has(> svg:only-child) {
+    transform: none;
+  }
 
   /* Icon-only: auto-detected via :has(), or when spinner is the only extra child in loading state */
+  .vds-button:has(> .vds-button-content > .vds-button-section:only-child),
+  .vds-button:has(> .vds-button-content > .vds-button-label:only-child > svg:only-child),
   .vds-button:has(> svg:only-child),
-  .vds-button:has(> .vds-button-spinner:first-child + svg:last-child) {
+  .vds-button:has(> .vds-button-spinner:first-child + svg:last-child),
+  .vds-button:has(> .vds-button-spinner:first-child + .vds-button-content > .vds-button-section:only-child),
+  .vds-button:has(> .vds-button-spinner:first-child + .vds-button-content > .vds-button-label:only-child > svg:only-child) {
     padding-inline: 0;
     aspect-ratio: 1;
     --button-min-width: var(--button-height);
@@ -774,7 +798,7 @@
     visibility: hidden;
   }
 
-  /* ── Spinner ── */
+  /* Spinner */
   .vds-button-spinner {
     position: absolute;
     display: flex;
@@ -796,19 +820,24 @@
     opacity: 1;
   }
 
-  /* ── Sections (left/right icon slots) ── */
+  /* Sections (left/right icon slots) */
   .vds-button-section {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    line-height: 1;
     flex-shrink: 0;
   }
 
+  .vds-button-label > svg,
   .vds-button-section > svg {
+    display: block;
     inline-size: var(--button-icon-size);
     block-size: var(--button-icon-size);
+    flex-shrink: 0;
   }
 
-  /* ── Keyframes ── */
+  /* Keyframes */
   @keyframes vds-button-spin {
     to {
       rotate: 360deg;
@@ -1513,6 +1542,7 @@
       inset-block: 0;
       max-inline-size: var(--vds-drawer-available-size);
       max-block-size: calc(100dvh - var(--vds-drawer-keyboard-inset, 0px));
+      scrollbar-gutter: auto;
       touch-action: pan-x;
     }
 
@@ -1935,6 +1965,7 @@
     /* ── Geometry ── */
     --radio-size: 1.125rem;
     --radio-dot-size: 0.5rem;
+    --radio-indicator-offset: var(--vds-control-indicator-offset, 0.0625rem);
     --radio-border-width: 2px;
 
     /* ── Motion ── */
@@ -2037,6 +2068,9 @@
     --radio-field-description-font-size: var(--vds-text-xs, 0.75rem);
     --radio-field-label-font-weight: var(--vds-font-weight-medium, 500);
     --radio-field-align-block-start: 0.125rem;
+    --radio-field-text-offset: calc(
+      var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem
+    );
   }
 
   .vds-radio-field[data-error] {
@@ -2258,11 +2292,27 @@
 }
 @layer components {
   .vds-radio-field {
+    --radio-field-control-size: 1.125rem;
     display: inline-flex;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--radio-field-gap);
     cursor: pointer;
+    color: var(--radio-field-label-color);
+    font-family: inherit;
+    line-height: 1;
     min-inline-size: 0;
+  }
+
+  .vds-radio-field[data-size="sm"] {
+    --radio-field-control-size: 0.875rem;
+  }
+
+  .vds-radio-field[data-size="lg"] {
+    --radio-field-control-size: 1.375rem;
+  }
+
+  .vds-radio-field[data-has-description] {
+    align-items: flex-start;
   }
 
   .vds-radio-field[data-disabled] {
@@ -2271,8 +2321,12 @@
   }
 
   .vds-radio-field > .vds-radio-item {
-    margin-block-start: var(--radio-field-align-block-start);
+    margin-block-start: 0;
     flex-shrink: 0;
+  }
+
+  .vds-radio-field[data-has-description] > .vds-radio-item {
+    margin-block-start: var(--radio-field-align-block-start);
   }
 
   .vds-radio-field-text {
@@ -2282,18 +2336,40 @@
     min-inline-size: 0;
   }
 
+  .vds-radio-field-main {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--radio-field-control-size);
+  }
+
+  .vds-radio-field[data-has-description] .vds-radio-field-text {
+    min-block-size: auto;
+  }
+
+  .vds-radio-field[data-has-description] .vds-radio-field-main {
+    align-items: flex-start;
+    min-block-size: auto;
+  }
+
   .vds-radio-field-label {
+    display: inline-flex;
+    align-items: center;
     font-size: var(--radio-field-font-size);
     font-weight: var(--radio-field-label-font-weight);
     color: var(--radio-field-label-color);
-    line-height: 1.4;
+    line-height: 1;
+    transform: translateY(var(--radio-field-text-offset));
+  }
+
+  .vds-radio-field[data-has-description] .vds-radio-field-label {
+    transform: none;
   }
 
   .vds-radio-field-description {
     font-size: var(--radio-field-description-font-size);
     color: var(--radio-field-description-color);
     font-weight: var(--vds-font-weight-normal, 400);
-    line-height: 1.5;
+    line-height: 1;
   }
 }
 @layer components {
@@ -2370,7 +2446,7 @@
     font-size: var(--radio-card-label-font-size);
     font-weight: var(--radio-card-label-font-weight);
     color: var(--radio-card-label-color);
-    line-height: 1.4;
+    line-height: 1;
     min-inline-size: 0;
   }
 
@@ -2378,7 +2454,7 @@
     font-size: var(--radio-card-description-font-size);
     color: var(--radio-card-description-color);
     font-weight: var(--vds-font-weight-normal, 400);
-    line-height: 1.5;
+    line-height: 1;
   }
 
   .vds-radio-card-trailing {
@@ -2483,9 +2559,12 @@
     min-inline-size: 0;
     block-size: var(--segmented-item-height);
     padding-inline: var(--segmented-item-padding-inline);
+    padding-block-start: var(--vds-control-optical-offset, 0.09375rem);
+    padding-block-end: 0;
     font-family: inherit;
     font-size: var(--segmented-item-font-size);
     font-weight: var(--segmented-item-font-weight);
+    line-height: var(--vds-control-line-height, 1);
     color: var(--segmented-item-color);
     background-color: transparent;
     border: 0;
@@ -2561,9 +2640,12 @@
     gap: var(--vds-space-1-5, 0.375rem);
     block-size: var(--pill-radio-item-height);
     padding-inline: var(--pill-radio-item-padding-inline);
+    padding-block-start: var(--vds-control-optical-offset, 0.09375rem);
+    padding-block-end: 0;
     font-family: inherit;
     font-size: var(--pill-radio-item-font-size);
     font-weight: var(--pill-radio-item-font-weight);
+    line-height: var(--vds-control-line-height, 1);
     color: var(--pill-radio-item-color);
     background-color: var(--pill-radio-item-bg);
     border: var(--pill-radio-item-border-width) solid
@@ -2623,6 +2705,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     flex-shrink: 0;
     inline-size: var(--radio-size);
     block-size: var(--radio-size);
@@ -2674,17 +2757,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     inline-size: 100%;
     block-size: 100%;
   }
 
-  .vds-radio-indicator::after {
-    content: "";
+  .vds-radio-dot {
     display: block;
+    flex-shrink: 0;
     inline-size: var(--radio-dot-size);
     block-size: var(--radio-dot-size);
     border-radius: var(--vds-radius-full, 9999px);
     background-color: var(--radio-dot-color);
+    transform: translateY(var(--radio-indicator-offset));
     animation: vds-scale-in var(--radio-transition-duration)
       var(--radio-transition-easing);
   }
@@ -2695,10 +2780,16 @@
    * as siblings next to the items, keeping keyboard roving tabindex intact.
    * ========================================================================= */
   .vds-radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--radio-group-gap);
+    display: block;
     min-inline-size: 0;
+  }
+
+  .vds-radio-group > * {
+    min-inline-size: 0;
+  }
+
+  .vds-radio-group > * + * {
+    margin-block-start: var(--radio-group-gap);
   }
 
   .vds-radio-group-header {
@@ -2714,7 +2805,7 @@
     font-size: var(--radio-group-label-font-size);
     font-weight: var(--radio-group-label-font-weight);
     color: var(--radio-group-label-color);
-    line-height: 1.4;
+    line-height: 1;
   }
 
   .vds-radio-group-required {
@@ -2725,7 +2816,7 @@
   .vds-radio-group-description {
     font-size: var(--radio-group-description-font-size);
     color: var(--radio-group-description-color);
-    line-height: 1.5;
+    line-height: 1;
   }
 
   .vds-radio-group-items {
@@ -2743,13 +2834,42 @@
   }
 
   .vds-radio-group-error {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--radio-group-error-gap);
     margin: 0;
     font-size: var(--radio-group-error-font-size);
     color: var(--radio-group-error-color);
-    line-height: 1.4;
+    line-height: var(--vds-leading-snug, 1.375);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--vds-duration-normal, 200ms)
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-radio-group-error[data-empty] {
+    margin-block-start: 0;
+  }
+
+  .vds-radio-group-error[data-visible] {
+    grid-template-rows: 1fr;
+  }
+
+  .vds-radio-group-error-body {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--radio-group-error-gap);
+    min-block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(calc(var(--vds-space-1, 0.25rem) * -1));
+    transition:
+      opacity var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      transform var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-radio-group-error[data-visible] .vds-radio-group-error-body {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .vds-radio-group-error-icon {
@@ -2766,8 +2886,18 @@
   .vds-time-field {
     display: inline-flex;
     flex-direction: column;
-    gap: var(--vds-space-1, 0.25rem);
+    gap: 0;
     font-family: var(--date-field-font-family);
+  }
+
+  .vds-date-field > *,
+  .vds-time-field > * {
+    min-inline-size: 0;
+  }
+
+  .vds-date-field > * + *,
+  .vds-time-field > * + * {
+    margin-block-start: var(--vds-space-1, 0.25rem);
   }
 
   .vds-date-field[data-dir="rtl"],
@@ -3277,6 +3407,39 @@
   .vds-time-field-error {
     font-size: var(--vds-text-xs, 0.75rem);
     color: var(--date-field-error-color);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--vds-duration-normal, 200ms)
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-date-field-error[data-empty],
+  .vds-time-field-error[data-empty] {
+    margin-block-start: 0;
+  }
+
+  .vds-date-field-error[data-visible],
+  .vds-time-field-error[data-visible] {
+    grid-template-rows: 1fr;
+  }
+
+  .vds-date-field-error-body,
+  .vds-time-field-error-body {
+    min-block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(calc(var(--vds-space-1, 0.25rem) * -1));
+    transition:
+      opacity var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      transform var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-date-field-error[data-visible] .vds-date-field-error-body,
+  .vds-time-field-error[data-visible] .vds-time-field-error-body {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   @media (max-width: 42rem) {
@@ -3874,8 +4037,16 @@
   .vds-date-picker {
     display: inline-flex;
     flex-direction: column;
-    gap: var(--vds-space-1, 0.25rem);
+    gap: 0;
     font-family: var(--date-field-font-family);
+  }
+
+  .vds-date-picker > * {
+    min-inline-size: 0;
+  }
+
+  .vds-date-picker > * + * {
+    margin-block-start: var(--vds-space-1, 0.25rem);
   }
 
   .vds-date-picker[data-dir="rtl"] {
@@ -4121,6 +4292,35 @@
   .vds-date-picker-error {
     font-size: var(--vds-text-xs, 0.75rem);
     color: var(--date-field-error-color);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--vds-duration-normal, 200ms)
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-date-picker-error[data-empty] {
+    margin-block-start: 0;
+  }
+
+  .vds-date-picker-error[data-visible] {
+    grid-template-rows: 1fr;
+  }
+
+  .vds-date-picker-error-body {
+    min-block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(calc(var(--vds-space-1, 0.25rem) * -1));
+    transition:
+      opacity var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      transform var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-date-picker-error[data-visible] .vds-date-picker-error-body {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   @keyframes vds-fade-in {

@@ -6,9 +6,10 @@ var SelectPrimitive = require('@radix-ui/react-select');
 var reactDirection = require('@radix-ui/react-direction');
 var reactIcons = require('@virtari-packages/react-icons');
 var jsxRuntime = require('react/jsx-runtime');
+var reactFieldset = require('@virtari-packages/react-fieldset');
+var react = require('react');
 var PopoverPrimitive = require('@radix-ui/react-popover');
 var reactChip = require('@virtari-packages/react-chip');
-var react = require('react');
 var reactVirtual = require('@tanstack/react-virtual');
 
 function _interopNamespace(e) {
@@ -150,6 +151,62 @@ function SelectEmpty({ className, children, ref, ...props }) {
       className: utils.cn("vds-select-empty", className),
       ...props,
       children
+    }
+  );
+}
+function SelectField({
+  label,
+  description,
+  error,
+  counter,
+  metaLayout,
+  descriptionAlign,
+  errorAlign,
+  counterAlign,
+  labelProps,
+  className,
+  children,
+  controlId,
+  invalid = false,
+  ref,
+  ...props
+}) {
+  const generatedId = react.useId();
+  const resolvedControlId = controlId ?? `vds-select-field-${generatedId}`;
+  const descriptionId = description ? `${resolvedControlId}-description` : void 0;
+  const errorId = error ? `${resolvedControlId}-error` : void 0;
+  const counterId = counter ? `${resolvedControlId}-counter` : void 0;
+  const describedBy = reactFieldset.composeFieldDescribedBy(
+    descriptionId,
+    errorId,
+    counterId
+  );
+  const renderedChildren = typeof children === "function" ? children({
+    controlId: resolvedControlId,
+    describedBy,
+    invalid
+  }) : children;
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    reactFieldset.Field,
+    {
+      ref,
+      className: utils.cn("vds-select-field", className),
+      label,
+      labelProps,
+      description,
+      error,
+      counter,
+      invalid,
+      controlId: resolvedControlId,
+      descriptionId,
+      errorId,
+      counterId,
+      metaLayout,
+      descriptionAlign,
+      errorAlign,
+      counterAlign,
+      ...props,
+      children: renderedChildren
     }
   );
 }
@@ -1029,6 +1086,7 @@ exports.ComboboxTrigger = ComboboxTrigger;
 exports.Select = Select;
 exports.SelectContent = SelectContent;
 exports.SelectEmpty = SelectEmpty;
+exports.SelectField = SelectField;
 exports.SelectGroup = SelectGroup;
 exports.SelectItem = SelectItem;
 exports.SelectLabel = SelectLabel;

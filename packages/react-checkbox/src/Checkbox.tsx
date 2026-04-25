@@ -38,20 +38,24 @@ export function Checkbox({
       {...props}
     >
       <CheckboxPrimitive.Indicator className="vds-checkbox-indicator">
-        <IconCheck
-          className="vds-checkbox-check"
-          size={12}
-          stroke={2.5}
-          aria-hidden
-          focusable={false}
-        />
-        <IconMinus
-          className="vds-checkbox-indeterminate"
-          size={12}
-          stroke={2.5}
-          aria-hidden
-          focusable={false}
-        />
+        <span className="vds-checkbox-glyph vds-checkbox-glyph--checked">
+          <IconCheck
+            className="vds-checkbox-check"
+            size={12}
+            stroke={2.5}
+            aria-hidden
+            focusable={false}
+          />
+        </span>
+        <span className="vds-checkbox-glyph vds-checkbox-glyph--indeterminate">
+          <IconMinus
+            className="vds-checkbox-indeterminate"
+            size={12}
+            stroke={2.5}
+            aria-hidden
+            focusable={false}
+          />
+        </span>
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );

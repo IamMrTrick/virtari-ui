@@ -12,6 +12,8 @@
     --select-trigger-height: var(--vds-size-md, 2.5rem);
     --select-trigger-gap: var(--vds-space-2, 0.5rem);
     --select-trigger-padding-inline: var(--vds-space-3, 0.75rem);
+    --select-trigger-padding-block: 0;
+    --select-trigger-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
     --select-trigger-radius: var(--vds-radius-element, 0.5rem);
     --select-trigger-border-width: 1px;
 
@@ -19,7 +21,7 @@
     --select-trigger-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --select-trigger-font-size: var(--vds-text-sm, 0.875rem);
     --select-trigger-font-weight: var(--vds-font-weight-normal, 400);
-    --select-trigger-line-height: var(--vds-leading-normal, 1.5);
+    --select-trigger-line-height: var(--vds-control-line-height, 1);
 
     /* Colors — soft appearance (default) */
     --select-trigger-bg: var(--vds-color-surface, #ffffff);

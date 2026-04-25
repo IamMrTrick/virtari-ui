@@ -1,0 +1,73 @@
+{
+  "name": "@virtari-packages/react-form",
+  "version": "0.1.0",
+  "description": "Virtari form — react-hook-form wrapper with Field/Label/Control/Description/Message primitives.",
+  "license": "UNLICENSED",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-form#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/react-form"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "ui",
+    "form",
+    "react-hook-form"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles": "./dist/Form.css",
+    "./tokens": "./dist/Form.tokens.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsup && postcss src/Form.tokens.css -o dist/Form.tokens.css && postcss src/Form.css -o dist/Form.css",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
+    "@virtari-packages/react-label": "workspace:*",
+    "@virtari-packages/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "react-hook-form": "^7.0.0"
+  },
+  "devDependencies": {
+    "react": "^19.2.5",
+    "@types/react": "^19.2.14",
+    "react-hook-form": "^7.54.0",
+    "typescript": "^5.5.0",
+    "tsup": "^8.0.0"
+  }
+}

@@ -11,7 +11,7 @@ const demoBoxStyle: React.CSSProperties = {
   padding: "var(--vds-space-3) var(--vds-space-4)",
   background: "var(--vds-color-surface-raised, var(--vds-color-surface))",
   border: "1px solid var(--vds-color-border-muted)",
-  borderRadius: "var(--vds-radius-element)",
+  borderRadius: "var(--vds-radius-surface)",
   color: "var(--vds-color-text)",
   fontSize: "var(--vds-text-sm)",
   textAlign: "center",

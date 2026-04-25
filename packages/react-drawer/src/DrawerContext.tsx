@@ -1,4 +1,10 @@
-import { createContext, useContext, type RefObject } from "react";
+import {
+  createContext,
+  useContext,
+  type Dispatch,
+  type RefObject,
+  type SetStateAction,
+} from "react";
 import type {
   Direction,
   DrawerDeclaredSize,
@@ -23,6 +29,7 @@ export interface DrawerContextValue {
   size?: DrawerDeclaredSize;
   offset?: DrawerOffset;
   indicator: DrawerIndicatorPlacement;
+  mountedIndicator: DrawerIndicatorPlacement | null;
   headerVariant: DrawerHeaderVariant;
   snapPoints: readonly SnapPoint[];
   activeSnapPoint: SnapPoint;
@@ -37,6 +44,7 @@ export interface DrawerContextValue {
   headerRef: RefObject<HTMLDivElement | null>;
   bodyRef: RefObject<HTMLDivElement | null>;
   handleRef: RefObject<HTMLDivElement | null>;
+  setMountedIndicator: Dispatch<SetStateAction<DrawerIndicatorPlacement | null>>;
   onOpenChange: (open: boolean) => void;
   onSnapPointChange: (value: SnapPoint) => void;
   setDragging: (value: boolean) => void;

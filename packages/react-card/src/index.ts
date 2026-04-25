@@ -7,6 +7,8 @@ export {
   CardFooter,
 } from "./Card";
 export type {
+  CardVariant,
+  CardSize,
   CardProps,
   CardHeaderProps,
   CardTitleProps,

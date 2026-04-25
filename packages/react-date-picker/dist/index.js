@@ -918,7 +918,18 @@ function DateField({
           }
         ),
         description ? /* @__PURE__ */ jsx("span", { ...descriptionProps, className: "vds-date-field-description", children: description }) : null,
-        isInvalid && errorMessage ? /* @__PURE__ */ jsx("span", { ...errorMessageProps, className: "vds-date-field-error", children: errorMessage }) : null
+        /* @__PURE__ */ jsx(
+          "span",
+          {
+            ...errorMessageProps,
+            role: isInvalid && errorMessage ? "alert" : void 0,
+            "aria-hidden": isInvalid && errorMessage ? void 0 : true,
+            "data-visible": isInvalid && errorMessage ? "" : void 0,
+            "data-empty": isInvalid && errorMessage ? void 0 : "",
+            className: "vds-date-field-error",
+            children: /* @__PURE__ */ jsx("span", { className: "vds-date-field-error-body", children: errorMessage })
+          }
+        )
       ]
     }
   );
@@ -1306,7 +1317,18 @@ function TimeField({
           }
         ) : null,
         description ? /* @__PURE__ */ jsx("span", { ...descriptionProps, className: "vds-time-field-description", children: description }) : null,
-        isInvalid && errorMessage ? /* @__PURE__ */ jsx("span", { ...errorMessageProps, className: "vds-time-field-error", children: errorMessage }) : null
+        /* @__PURE__ */ jsx(
+          "span",
+          {
+            ...errorMessageProps,
+            role: isInvalid && errorMessage ? "alert" : void 0,
+            "aria-hidden": isInvalid && errorMessage ? void 0 : true,
+            "data-visible": isInvalid && errorMessage ? "" : void 0,
+            "data-empty": isInvalid && errorMessage ? void 0 : "",
+            className: "vds-time-field-error",
+            children: /* @__PURE__ */ jsx("span", { className: "vds-time-field-error-body", children: errorMessage })
+          }
+        )
       ]
     }
   );
@@ -1904,7 +1926,18 @@ function DatePicker({
           }
         ) : null,
         description ? /* @__PURE__ */ jsx("span", { ...descriptionProps, className: "vds-date-picker-description", children: description }) : null,
-        isInvalid && errorMessage ? /* @__PURE__ */ jsx("span", { ...errorMessageProps, className: "vds-date-picker-error", children: errorMessage }) : null
+        /* @__PURE__ */ jsx(
+          "span",
+          {
+            ...errorMessageProps,
+            role: isInvalid && errorMessage ? "alert" : void 0,
+            "aria-hidden": isInvalid && errorMessage ? void 0 : true,
+            "data-visible": isInvalid && errorMessage ? "" : void 0,
+            "data-empty": isInvalid && errorMessage ? void 0 : "",
+            className: "vds-date-picker-error",
+            children: /* @__PURE__ */ jsx("span", { className: "vds-date-picker-error-body", children: errorMessage })
+          }
+        )
       ]
     }
   );
@@ -2412,7 +2445,18 @@ function DateRangePicker({
           }
         ) : null,
         description ? /* @__PURE__ */ jsx("span", { ...descriptionProps, className: "vds-date-range-picker-description", children: description }) : null,
-        isInvalid && errorMessage ? /* @__PURE__ */ jsx("span", { ...errorMessageProps, className: "vds-date-range-picker-error", children: errorMessage }) : null
+        /* @__PURE__ */ jsx(
+          "span",
+          {
+            ...errorMessageProps,
+            role: isInvalid && errorMessage ? "alert" : void 0,
+            "aria-hidden": isInvalid && errorMessage ? void 0 : true,
+            "data-visible": isInvalid && errorMessage ? "" : void 0,
+            "data-empty": isInvalid && errorMessage ? void 0 : "",
+            className: "vds-date-range-picker-error",
+            children: /* @__PURE__ */ jsx("span", { className: "vds-date-range-picker-error-body", children: errorMessage })
+          }
+        )
       ]
     }
   );

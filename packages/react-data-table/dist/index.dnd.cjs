@@ -651,7 +651,8 @@ function stickyAttr(sticky) {
 var TOP_BAND_SELECTOR = [
   ".vds-data-table-toolbar[data-sticky]",
   ".vds-data-table-filter-bar[data-sticky]",
-  ".vds-data-table-header[data-sticky]"
+  ".vds-data-table-sticky-header-rail[data-sticky]",
+  ".vds-data-table-header[data-sticky]:not([data-vds-detached-header])"
 ].join(",");
 var BOTTOM_BAND_SELECTOR = [
   ".vds-data-table-footer[data-sticky]",
@@ -660,8 +661,6 @@ var BOTTOM_BAND_SELECTOR = [
 ].join(",");
 var SMART_THRESHOLD = 4;
 var FOOTER_SAFE_ZONE = 24;
-var HEADER_SELECTOR = ".vds-data-table-header[data-sticky]";
-var SCROLL_AREA_SELECTOR = ".vds-data-table-scroll-area";
 function isWindow(target) {
   return target === window;
 }
@@ -715,6 +714,20 @@ function cssLengthToPx(value, el) {
 function cssVarPx(el, name) {
   return cssLengthToPx(window.getComputedStyle(el).getPropertyValue(name), el);
 }
+function effectiveTopOffsetPx(el, target) {
+  const raw = cssVarPx(el, "--vds-sticky-offset-top");
+  if (raw <= 0) return 0;
+  if (isWindow(target)) return raw;
+  return Math.max(0, raw - viewportBoundsOf(target).top);
+}
+function effectiveBottomOffsetPx(el, target) {
+  const raw = cssVarPx(el, "--vds-sticky-offset-bottom");
+  if (raw <= 0) return 0;
+  if (isWindow(target)) return raw;
+  const viewport = viewportBoundsOf(target);
+  const distanceFromViewportBottom = Math.max(0, window.innerHeight - viewport.bottom);
+  return Math.max(0, raw - distanceFromViewportBottom);
+}
 function useDataTableStickyStack(rootRef) {
   react.useEffect(() => {
     const root = rootRef.current;
@@ -725,10 +738,6 @@ function useDataTableStickyStack(rootRef) {
     let topBands = [];
     let bottomBands = [];
     let hasSmart = false;
-    let virtualHeader = null;
-    let hasVirtualHeader = false;
-    let virtualHeaderY = 0;
-    let virtualHeaderLayout = null;
     let observedBands = /* @__PURE__ */ new Set();
     let publishFrame = 0;
     let scrollFrame = 0;
@@ -746,13 +755,8 @@ function useDataTableStickyStack(rootRef) {
     function clearBandVars(el) {
       el.style.removeProperty("--vds-sticky-top");
       el.style.removeProperty("--vds-sticky-bottom");
-    }
-    function clearVirtualHeader(el) {
-      el.removeAttribute("data-vds-virtual-sticky-header");
-      el.removeAttribute("data-vds-virtual-stuck");
-      el.style.removeProperty("--vds-table-header-y");
-      virtualHeaderY = 0;
-      virtualHeaderLayout = null;
+      el.style.removeProperty("--vds-sticky-effective-offset-top");
+      el.style.removeProperty("--vds-sticky-effective-offset-bottom");
     }
     function refreshBands() {
       topBands = Array.from(
@@ -762,15 +766,6 @@ function useDataTableStickyStack(rootRef) {
         rootEl.querySelectorAll(BOTTOM_BAND_SELECTOR)
       );
       hasSmart = topBands.some(isSmart) || bottomBands.some(isSmart);
-      const nextVirtualHeader = rootEl.hasAttribute("data-virtualized") ? null : rootEl.querySelector(HEADER_SELECTOR);
-      if (virtualHeader && virtualHeader !== nextVirtualHeader) {
-        clearVirtualHeader(virtualHeader);
-      }
-      virtualHeader = nextVirtualHeader;
-      hasVirtualHeader = Boolean(virtualHeader);
-      if (virtualHeader) {
-        virtualHeader.setAttribute("data-vds-virtual-sticky-header", "");
-      }
       if (!resizeObserver) return;
       const next = /* @__PURE__ */ new Set([...topBands, ...bottomBands]);
       for (const el of observedBands) {
@@ -792,15 +787,21 @@ function useDataTableStickyStack(rootRef) {
       const scrollingDown = rootEl.hasAttribute("data-scrolling-down");
       publishSide(topBands, "top", scrollingDown);
       publishSide([...bottomBands].reverse(), "bottom", scrollingDown);
-      measureVirtualHeader();
     }
     function publishSide(bands, axis, scrollingDown) {
       const varName = axis === "top" ? "--vds-sticky-top" : "--vds-sticky-bottom";
+      const offsetVarName = axis === "top" ? "--vds-sticky-effective-offset-top" : "--vds-sticky-effective-offset-bottom";
       let stack = 0;
       for (const el of bands) {
         if (!isVisible(el)) {
           clearBandVars(el);
           continue;
+        }
+        const effectiveOffset = axis === "top" ? effectiveTopOffsetPx(el, scrollTarget) : effectiveBottomOffsetPx(el, scrollTarget);
+        if (effectiveOffset > 0) {
+          el.style.setProperty(offsetVarName, `${effectiveOffset}px`);
+        } else {
+          el.style.removeProperty(offsetVarName);
         }
         el.style.setProperty(varName, `${stack}px`);
         const hidden = scrollingDown && isSmart(el);
@@ -810,55 +811,13 @@ function useDataTableStickyStack(rootRef) {
       }
     }
     function onScroll() {
-      if (!hasSmart && !hasVirtualHeader) return;
+      if (!hasSmart) return;
       if (scrollFrame) return;
       scrollFrame = window.requestAnimationFrame(handleScrollFrame);
     }
     function handleScrollFrame() {
       scrollFrame = 0;
-      updateVirtualHeader();
-      if (hasSmart) detectDirection();
-    }
-    function measureVirtualHeader() {
-      const header = virtualHeader;
-      if (!header || !isVisible(header)) return;
-      const scrollArea = header.closest(SCROLL_AREA_SELECTOR);
-      if (!scrollArea) return;
-      const headerRect = header.getBoundingClientRect();
-      const scrollRect = scrollArea.getBoundingClientRect();
-      const naturalTop = headerRect.top - virtualHeaderY;
-      virtualHeaderLayout = {
-        naturalTop,
-        desiredTop: cssVarPx(header, "--vds-sticky-top") + cssVarPx(header, "--vds-sticky-offset-top"),
-        maxY: scrollRect.bottom - headerRect.height - naturalTop,
-        scrollTop: scrollTopOf(scrollTarget)
-      };
-      updateVirtualHeader();
-    }
-    function updateVirtualHeader() {
-      const header = virtualHeader;
-      if (!header || !isVisible(header)) return;
-      if (!virtualHeaderLayout) {
-        measureVirtualHeader();
-        return;
-      }
-      const scrollDelta = scrollTopOf(scrollTarget) - virtualHeaderLayout.scrollTop;
-      const naturalTop = virtualHeaderLayout.naturalTop - scrollDelta;
-      const nextY = Math.max(
-        0,
-        Math.min(
-          virtualHeaderLayout.desiredTop - naturalTop,
-          virtualHeaderLayout.maxY
-        )
-      );
-      if (Math.abs(nextY - virtualHeaderY) < 0.5) return;
-      virtualHeaderY = nextY;
-      header.style.setProperty("--vds-table-header-y", `${nextY}px`);
-      if (nextY > 0) {
-        header.setAttribute("data-vds-virtual-stuck", "");
-      } else {
-        header.removeAttribute("data-vds-virtual-stuck");
-      }
+      detectDirection();
     }
     function detectDirection() {
       const st = scrollTopOf(scrollTarget);
@@ -899,7 +858,6 @@ function useDataTableStickyStack(rootRef) {
         "data-sticky",
         "data-sticky-axis",
         "data-resizing",
-        "data-virtualized",
         "class"
       ]
     });
@@ -915,7 +873,6 @@ function useDataTableStickyStack(rootRef) {
       if (publishFrame) window.cancelAnimationFrame(publishFrame);
       if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
       for (const el of observedBands) clearBandVars(el);
-      if (virtualHeader) clearVirtualHeader(virtualHeader);
       rootEl.removeAttribute("data-scrolling-down");
     };
   }, [rootRef]);
@@ -1396,22 +1353,149 @@ react.forwardRef(
     );
   }
 );
-react.forwardRef(function DataTableScrollArea2({ className, children, scrollDrag = true, ...props }, ref) {
-  const { scrollRef } = useDataTableContext();
-  useScrollDrag(scrollRef, scrollDrag);
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    "div",
+function isDataTableTableElement(node) {
+  return react.isValidElement(node) && node.type === DataTableTable;
+}
+function isDataTableHeaderElement(node) {
+  return react.isValidElement(node) && node.type === DataTableHeader;
+}
+function splitTableForDetachedHeader(node) {
+  const tableChildren = react.Children.toArray(node.props.children);
+  const headerIndex = tableChildren.findIndex(isDataTableHeaderElement);
+  if (headerIndex === -1) return null;
+  const headerNode = tableChildren[headerIndex];
+  const bodyChildren = tableChildren.filter((_, index) => index !== headerIndex);
+  const railStyle = headerNode.props.stickyOffset === void 0 && headerNode.props.style === void 0 ? void 0 : {
+    ...headerNode.props.stickyOffset !== void 0 ? { ["--vds-sticky-offset-top"]: headerNode.props.stickyOffset } : null,
+    ...headerNode.props.style
+  };
+  return {
+    bodyTable: react.cloneElement(node, {
+      __vdsRenderMode: "body"
+    }, bodyChildren),
+    headerTable: react.cloneElement(
+      node,
+      {
+        __vdsRenderMode: "header",
+        className: utils.cn(node.props.className, "vds-data-table-sticky-header-table")
+      },
+      react.cloneElement(headerNode, {
+        __vdsDetachedHeader: true
+      })
+    ),
+    railStyle
+  };
+}
+function DataTableColGroup() {
+  const { table } = useDataTableContext();
+  const leafColumns = table.getVisibleLeafColumns();
+  return /* @__PURE__ */ jsxRuntime.jsx("colgroup", { className: "vds-data-table-colgroup", children: leafColumns.map((column) => /* @__PURE__ */ jsxRuntime.jsx(
+    "col",
     {
-      ref: composeRefs(scrollRef, ref),
-      "data-scroll-drag": scrollDrag ? "" : void 0,
-      className: utils.cn("vds-data-table-scroll-area", className),
-      ...props,
-      children
+      "data-column-id": column.id,
+      style: { width: `var(--col-${column.id})` }
+    },
+    column.id
+  )) });
+}
+react.forwardRef(function DataTableScrollArea2({ className, children, scrollDrag = true, ...props }, ref) {
+  const { scrollRef, stickyHeader } = useDataTableContext();
+  const headerScrollRef = react.useRef(null);
+  useScrollDrag(scrollRef, scrollDrag);
+  const childArray = react.Children.toArray(children);
+  const tableIndex = childArray.findIndex(isDataTableTableElement);
+  const detached = stickyHeader && tableIndex !== -1 ? splitTableForDetachedHeader(
+    childArray[tableIndex]
+  ) : null;
+  const viewportChildren = detached && tableIndex !== -1 ? childArray.map(
+    (child, index) => index === tableIndex ? detached.bodyTable : child
+  ) : children;
+  react.useEffect(() => {
+    const viewport = scrollRef.current;
+    const header = headerScrollRef.current;
+    if (!detached || !viewport || !header) return;
+    let syncingFromViewport = false;
+    let syncingFromHeader = false;
+    let releaseFrame = 0;
+    const release = () => {
+      releaseFrame = 0;
+      syncingFromViewport = false;
+      syncingFromHeader = false;
+    };
+    const syncGeometry = () => {
+      if (viewport.clientWidth > 0) {
+        header.style.inlineSize = `${viewport.clientWidth}px`;
+      } else {
+        header.style.removeProperty("inline-size");
+      }
+    };
+    const syncHeader = () => {
+      if (syncingFromHeader) return;
+      syncingFromViewport = true;
+      header.scrollLeft = viewport.scrollLeft;
+      if (!releaseFrame) releaseFrame = window.requestAnimationFrame(release);
+    };
+    const syncViewport = () => {
+      if (syncingFromViewport) return;
+      syncingFromHeader = true;
+      viewport.scrollLeft = header.scrollLeft;
+      if (!releaseFrame) releaseFrame = window.requestAnimationFrame(release);
+    };
+    syncGeometry();
+    syncHeader();
+    viewport.addEventListener("scroll", syncHeader, { passive: true });
+    header.addEventListener("scroll", syncViewport, { passive: true });
+    const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(() => {
+      syncGeometry();
+      syncHeader();
+    });
+    resizeObserver?.observe(viewport);
+    if (viewport.firstElementChild instanceof HTMLElement) {
+      resizeObserver?.observe(viewport.firstElementChild);
     }
-  );
+    if (header.firstElementChild instanceof HTMLElement) {
+      resizeObserver?.observe(header.firstElementChild);
+    }
+    return () => {
+      viewport.removeEventListener("scroll", syncHeader);
+      header.removeEventListener("scroll", syncViewport);
+      resizeObserver?.disconnect();
+      if (releaseFrame) window.cancelAnimationFrame(releaseFrame);
+      header.style.removeProperty("inline-size");
+    };
+  }, [detached, scrollRef]);
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-data-table-scroll-shell", children: [
+    detached && /* @__PURE__ */ jsxRuntime.jsx(
+      "div",
+      {
+        "data-sticky": boolAttr(stickyHeader),
+        "data-sticky-axis": "top",
+        className: "vds-data-table-sticky-header-rail",
+        style: detached.railStyle,
+        children: /* @__PURE__ */ jsxRuntime.jsx(
+          "div",
+          {
+            ref: headerScrollRef,
+            className: "vds-data-table-sticky-header-scroll",
+            children: detached.headerTable
+          }
+        )
+      }
+    ),
+    /* @__PURE__ */ jsxRuntime.jsx(
+      "div",
+      {
+        ref: composeRefs(scrollRef, ref),
+        "data-scroll-drag": scrollDrag ? "" : void 0,
+        className: utils.cn("vds-data-table-scroll-area", className),
+        ...props,
+        children: viewportChildren
+      }
+    )
+  ] });
 });
-react.forwardRef(
-  function DataTableTable2({ className, style, children, ...props }, ref) {
+var DataTableTable = react.forwardRef(
+  function DataTableTable2({ className, style, children, __vdsRenderMode = "full", ...props }, ref) {
     const { table, interactionMode, tableId } = useDataTableContext();
     const sizeVars = react.useMemo(() => buildColumnSizeVars(table), [
       table,
@@ -1420,21 +1504,31 @@ react.forwardRef(
       table.getState().columnOrder,
       table.getState().columnVisibility
     ]);
-    return /* @__PURE__ */ jsxRuntime.jsx(
+    return /* @__PURE__ */ jsxRuntime.jsxs(
       "table",
       {
         ref,
-        id: tableId,
-        role: interactionMode === "grid" ? "grid" : void 0,
+        id: __vdsRenderMode === "header" ? void 0 : tableId,
+        role: __vdsRenderMode === "header" ? void 0 : interactionMode === "grid" ? "grid" : void 0,
         className: utils.cn("vds-data-table-table", className),
         style: { ...sizeVars, ...style },
         ...props,
-        children
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsx(DataTableColGroup, {}),
+          children
+        ]
       }
     );
   }
 );
-react.forwardRef(function DataTableHeader2({ className, children, stickyOffset, style, ...props }, ref) {
+var DataTableHeader = react.forwardRef(function DataTableHeader2({
+  className,
+  children,
+  stickyOffset,
+  style,
+  __vdsDetachedHeader = false,
+  ...props
+}, ref) {
   const { table, stickyHeader } = useDataTableContext();
   const groups = table.getHeaderGroups();
   const stickyStyle = stickyOffset === void 0 ? style : {
@@ -1455,6 +1549,7 @@ react.forwardRef(function DataTableHeader2({ className, children, stickyOffset, 
       role: "rowgroup",
       "data-sticky": boolAttr(stickyHeader),
       "data-sticky-axis": "top",
+      "data-vds-detached-header": boolAttr(__vdsDetachedHeader),
       className: utils.cn("vds-data-table-header", className),
       style: stickyStyle,
       ...props,
@@ -1482,6 +1577,12 @@ var DataTableHeaderCell = react.forwardRef(function DataTableHeaderCell2({ heade
   const pin = pinnedAttr(column);
   const canSort = column.getCanSort();
   const canResize = column.getCanResize();
+  const headerSizeStyle = header.colSpan > 1 ? {
+    inlineSize: `${header.getSize()}px`,
+    minInlineSize: `${header.getSize()}px`
+  } : {
+    ["--col-size"]: `var(--col-${column.id})`
+  };
   const ariaSort = sort === "asc" ? "ascending" : sort === "desc" ? "descending" : canSort ? "none" : void 0;
   return /* @__PURE__ */ jsxRuntime.jsx(
     "th",
@@ -1501,7 +1602,7 @@ var DataTableHeaderCell = react.forwardRef(function DataTableHeaderCell2({ heade
       "data-column-id": column.id,
       className: utils.cn("vds-data-table-header-cell", className),
       style: {
-        ["--col-size"]: `var(--col-${column.id})`,
+        ...headerSizeStyle,
         ...pinOffsetStyle(column),
         ...style
       },
@@ -1723,6 +1824,12 @@ var DataTableFooterRow = react.forwardRef(function DataTableFooterRow2({ footerG
 var DataTableFooterCell = react.forwardRef(function DataTableFooterCell2({ header, className, style, children, ...props }, ref) {
   const column = header.column;
   const pin = pinnedAttr(column);
+  const footerSizeStyle = header.colSpan > 1 ? {
+    inlineSize: `${header.getSize()}px`,
+    minInlineSize: `${header.getSize()}px`
+  } : {
+    ["--col-size"]: `var(--col-${column.id})`
+  };
   return /* @__PURE__ */ jsxRuntime.jsx(
     "td",
     {
@@ -1734,7 +1841,7 @@ var DataTableFooterCell = react.forwardRef(function DataTableFooterCell2({ heade
       "data-column-id": column.id,
       className: utils.cn("vds-data-table-footer-cell", className),
       style: {
-        ["--col-size"]: `var(--col-${column.id})`,
+        ...footerSizeStyle,
         ...pinOffsetStyle(column),
         ...style
       },

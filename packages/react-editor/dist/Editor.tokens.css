@@ -1,0 +1,191 @@
+@layer design-system.components {
+  .vds-editor {
+    --vds-editor-radius: var(--vds-radius-card, 1rem);
+    --vds-editor-toolbar-radius: min(
+      calc(var(--vds-editor-radius) - 0.25rem),
+      var(--vds-radius-lg, 0.75rem)
+    );
+    --vds-editor-border: var(--vds-color-border, #d4d4d8);
+    --vds-editor-border-strong: var(--vds-color-border-strong, #a1a1aa);
+    --vds-editor-border-focus: var(--vds-color-border-focus, #2563eb);
+    --vds-editor-bg: var(--vds-color-surface, #ffffff);
+    --vds-editor-bg-muted: var(--vds-color-surface-raised, #f5f7fb);
+    --vds-editor-bg-hover: var(--vds-color-surface-hover, #eef2ff);
+    --vds-editor-text: var(--vds-color-text, #111827);
+    --vds-editor-text-muted: var(--vds-color-text-muted, #475569);
+    --vds-editor-text-subtle: var(--vds-color-text-subtle, #64748b);
+    --vds-editor-link: var(--vds-color-text-link, #1d4ed8);
+    --vds-editor-toolbar-bg: color-mix(
+      in oklch,
+      var(--vds-editor-bg-muted) 78%,
+      var(--vds-editor-bg)
+    );
+    --vds-editor-toolbar-button-bg: transparent;
+    --vds-editor-toolbar-button-bg-hover: var(--vds-editor-bg-hover);
+    --vds-editor-toolbar-button-bg-active: color-mix(
+      in oklch,
+      var(--vds-color-primary-9, #2563eb) 14%,
+      transparent
+    );
+    --vds-editor-toolbar-button-fg: var(--vds-editor-text-muted);
+    --vds-editor-toolbar-button-fg-active: var(--vds-color-primary-11, #1d4ed8);
+    --vds-editor-toolbar-button-border: color-mix(
+      in oklch,
+      var(--vds-editor-border) 75%,
+      transparent
+    );
+    --vds-editor-toolbar-gap: var(--vds-space-2, 0.5rem);
+    --vds-editor-content-padding: var(--vds-space-4, 1rem);
+    --vds-editor-content-padding-block-start: var(--vds-space-3, 0.75rem);
+    --vds-editor-content-padding-inline-start: 4.25rem;
+    --vds-editor-content-padding-inline-start-edge: 2.75rem;
+    --vds-editor-content-padding-inline-end: 2rem;
+    --vds-editor-content-padding-inline: var(
+      --vds-editor-content-padding-inline-start
+    );
+    --vds-editor-content-padding-block-end: var(--vds-space-10, 2.5rem);
+    --vds-editor-block-tools-size: 1.5rem;
+    --vds-editor-block-tools-gap: 0.125rem;
+    --vds-editor-block-tools-edge-outset: -1.625rem;
+    --vds-editor-block-tools-bg-hover: color-mix(
+      in oklch,
+      var(--vds-color-primary-5, #bfdbfe) 72%,
+      var(--vds-editor-bg) 28%
+    );
+    --vds-editor-block-tools-color: var(--vds-color-primary-10, #2563eb);
+    --vds-editor-block-tools-color-hover: var(--vds-color-primary-12, #172554);
+    --vds-editor-block-tools-border-hover: color-mix(
+      in oklch,
+      var(--vds-color-primary-8, #60a5fa) 56%,
+      transparent
+    );
+    --vds-editor-block-tools-shadow-hover: 0 0.5rem 1.5rem
+      color-mix(in oklch, var(--vds-color-primary-9, #2563eb) 14%, transparent);
+    --vds-editor-insert-accent-bg: color-mix(
+      in oklch,
+      var(--vds-color-primary-9, #2563eb) 30%,
+      var(--vds-editor-bg)
+    );
+    --vds-editor-insert-accent-bg-hover: color-mix(
+      in oklch,
+      var(--vds-color-primary-9, #2563eb) 44%,
+      var(--vds-editor-bg)
+    );
+    --vds-editor-insert-accent-fg: var(--vds-color-primary-12, #172554);
+    --vds-editor-insert-accent-border: color-mix(
+      in oklch,
+      var(--vds-color-primary-8, #60a5fa) 62%,
+      transparent
+    );
+    --vds-editor-drop-line-color: var(--vds-color-primary-9, #2563eb);
+    --vds-editor-drop-line-shadow:
+      0 0 0 1px color-mix(in oklch, var(--vds-editor-bg) 86%, transparent),
+      0 0.5rem 1.25rem color-mix(in oklch, var(--vds-color-primary-9, #2563eb) 24%, transparent);
+    --vds-editor-drag-placeholder-size: 2.35rem;
+    --vds-editor-drag-placeholder-bg: color-mix(
+      in oklch,
+      var(--vds-color-primary-9, #2563eb) 14%,
+      var(--vds-editor-bg)
+    );
+    --vds-editor-drag-placeholder-border: color-mix(
+      in oklch,
+      var(--vds-color-primary-8, #60a5fa) 62%,
+      transparent
+    );
+    --vds-editor-popover-z-index: 90;
+    --vds-editor-panel-bg: color-mix(
+      in oklch,
+      var(--vds-editor-bg) 98%,
+      var(--vds-editor-bg-muted)
+    );
+    --vds-editor-status-bg: color-mix(
+      in oklch,
+      var(--vds-editor-bg-muted) 70%,
+      var(--vds-editor-bg)
+    );
+    --vds-editor-code-bg: color-mix(
+      in oklch,
+      var(--vds-color-neutral-2, #f8fafc) 78%,
+      var(--vds-editor-bg) 22%
+    );
+    --vds-editor-code-fg: var(--vds-color-neutral-12, #111827);
+    --vds-editor-code-border: color-mix(
+      in oklch,
+      var(--vds-editor-border) 82%,
+      var(--vds-color-primary-7, #93c5fd) 18%
+    );
+    --vds-editor-code-shadow: inset 0 1px 0
+      color-mix(
+        in oklch,
+        var(--vds-color-neutral-1, #ffffff) 72%,
+        transparent
+      );
+    --vds-editor-code-gutter-bg: color-mix(
+      in oklch,
+      var(--vds-color-primary-3, #dbeafe) 36%,
+      transparent
+    );
+    --vds-editor-inline-code-bg: color-mix(
+      in oklch,
+      var(--vds-color-neutral-12, #111827) 8%,
+      transparent
+    );
+    --vds-editor-quote-bg: color-mix(
+      in oklch,
+      var(--vds-color-primary-9, #2563eb) 6%,
+      transparent
+    );
+    --vds-editor-quote-border: color-mix(
+      in oklch,
+      var(--vds-color-primary-9, #2563eb) 30%,
+      transparent
+    );
+    --vds-editor-list-marker-color: var(--vds-color-primary-10, #2563eb);
+    --vds-editor-table-header-bg: color-mix(
+      in oklch,
+      var(--vds-editor-bg-muted) 82%,
+      var(--vds-editor-bg)
+    );
+    --vds-editor-comment-bg: color-mix(
+      in oklch,
+      var(--vds-color-warning-4, #fef3c7) 56%,
+      transparent
+    );
+    --vds-editor-comment-bg-strong: color-mix(
+      in oklch,
+      var(--vds-color-warning-5, #fde68a) 74%,
+      transparent
+    );
+    --vds-editor-comment-border: color-mix(
+      in oklch,
+      var(--vds-color-warning-9, #d97706) 28%,
+      transparent
+    );
+    --vds-editor-source-bg: color-mix(
+      in oklch,
+      var(--vds-editor-bg-muted) 80%,
+      var(--vds-editor-bg)
+    );
+    --vds-editor-code-token-attr: var(--vds-color-primary-11, #1d4ed8);
+    --vds-editor-code-token-comment: var(--vds-color-neutral-9, #64748b);
+    --vds-editor-code-token-deleted: var(--vds-color-danger-11, #b91c1c);
+    --vds-editor-code-token-function: var(--vds-color-warning-11, #a16207);
+    --vds-editor-code-token-inserted: var(--vds-color-success-11, #15803d);
+    --vds-editor-code-token-operator: var(--vds-color-neutral-11, #334155);
+    --vds-editor-code-token-property: var(--vds-color-sky-11, #0369a1);
+    --vds-editor-code-token-punctuation: var(--vds-color-neutral-10, #475569);
+    --vds-editor-code-token-selector: var(--vds-color-emerald-11, #047857);
+    --vds-editor-code-token-unchanged: var(--vds-editor-text);
+    --vds-editor-code-token-variable: var(--vds-color-violet-11, #7c3aed);
+    --vds-editor-divider-color: color-mix(
+      in oklch,
+      var(--vds-editor-border) 88%,
+      transparent
+    );
+    --vds-editor-danger-soft: color-mix(
+      in oklch,
+      var(--vds-color-danger-9, #dc2626) 16%,
+      transparent
+    );
+  }
+}

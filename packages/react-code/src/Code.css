@@ -1,0 +1,180 @@
+@import "./Code.tokens.css";
+
+@layer design-system.components {
+  /* =========================================================================
+   * Root container — wraps the CM6 editor and chrome (header/caption).
+   * Uses high enough specificity to win against generic resets, but stays
+   * within the design-system.components layer.
+   * ========================================================================= */
+  .vds-code {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--vds-code-bg);
+    color: var(--vds-code-text);
+    border: var(--vds-code-border-width) solid var(--vds-code-border);
+    border-radius: var(--vds-code-radius);
+    font-family: var(--vds-code-font-family);
+    font-size: var(--vds-code-font-size);
+    line-height: var(--vds-code-line-height);
+    letter-spacing: var(--vds-code-letter-spacing);
+    overflow: hidden;
+    transition:
+      background-color var(--vds-code-transition-duration) var(--vds-code-transition-easing),
+      border-color var(--vds-code-transition-duration) var(--vds-code-transition-easing);
+  }
+
+  /* =========================================================================
+   * Header — filename / language label + actions (copy)
+   * ========================================================================= */
+  .vds-code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vds-space-2, 0.5rem);
+    padding-block: var(--vds-code-header-padding-block);
+    padding-inline: var(--vds-code-header-padding-inline);
+    background-color: var(--vds-code-header-bg);
+    color: var(--vds-code-header-text);
+    border-block-end: var(--vds-code-border-width) solid var(--vds-code-header-border);
+    font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    line-height: 1.4;
+    user-select: none;
+  }
+
+  .vds-code-header-info {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    min-inline-size: 0;
+  }
+
+  .vds-code-header-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    color: var(--vds-color-text-subtle, currentColor);
+  }
+
+  .vds-code-header-icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .vds-code-header-filename {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--vds-code-header-text);
+  }
+
+  .vds-code-header-language {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.6875rem;
+    color: var(--vds-color-text-subtle, var(--vds-code-header-text));
+  }
+
+  .vds-code-header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    flex-shrink: 0;
+  }
+
+  /* =========================================================================
+   * Body — the CodeMirror surface lives here. CM6 manages its own internal
+   * scrolling; the body itself only enforces an outer max-height when given.
+   * ========================================================================= */
+  .vds-code-body {
+    position: relative;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    background-color: var(--vds-code-bg);
+  }
+
+  /* =========================================================================
+   * Caption — figcaption-like description below body
+   * ========================================================================= */
+  .vds-code-caption {
+    padding-block: var(--vds-space-2, 0.5rem);
+    padding-inline: var(--vds-code-padding-inline);
+    background-color: var(--vds-code-header-bg);
+    color: var(--vds-code-caption-color);
+    border-block-start: var(--vds-code-border-width) solid var(--vds-code-header-border);
+    font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    font-size: var(--vds-code-caption-font-size);
+    line-height: 1.5;
+  }
+
+  /* =========================================================================
+   * Inline code — pure HTML <code> usage in prose
+   * ========================================================================= */
+  .vds-code-inline {
+    display: inline;
+    padding-block: var(--vds-code-inline-padding-block);
+    padding-inline: var(--vds-code-inline-padding-inline);
+    background-color: var(--vds-code-inline-bg);
+    color: var(--vds-code-inline-text);
+    border: var(--vds-code-inline-border-width) solid var(--vds-code-inline-border);
+    border-radius: var(--vds-code-inline-radius);
+    font-family: var(--vds-code-inline-font-family);
+    font-size: var(--vds-code-inline-font-size);
+    line-height: 1.4;
+    white-space: nowrap;
+    word-break: keep-all;
+  }
+}
+
+/* =========================================================================
+ * CodeMirror surface tweaks — kept OUTSIDE @layer because CM6 injects its
+ * own theme rules unlayered, which always beat layered rules. We only keep
+ * here what theme.ts cannot reach cleanly: pseudo-element scrollbar styling
+ * and the focus ring around the wrapper. All other CM6 surface properties
+ * are set in theme.ts via EditorView.theme().
+ * ========================================================================= */
+
+.vds-code .cm-editor.cm-focused {
+  outline: var(--vds-code-focus-ring-width) solid var(--vds-code-focus-ring-color);
+  outline-offset: calc(-1 * var(--vds-code-focus-ring-width));
+  border-radius: inherit;
+}
+
+.vds-code .cm-scroller::-webkit-scrollbar {
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+}
+.vds-code .cm-scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+.vds-code .cm-scroller::-webkit-scrollbar-thumb {
+  background-color: var(--vds-code-scrollbar-thumb);
+  border-radius: var(--vds-radius-full, 9999px);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.vds-code .cm-scroller::-webkit-scrollbar-thumb:hover {
+  background-color: var(--vds-code-scrollbar-thumb-hover);
+}
+
+.vds-code .cm-scroller {
+  scrollbar-color: var(--vds-code-scrollbar-thumb) transparent;
+  scrollbar-width: thin;
+}
+
+/* RTL: diff marker accent */
+[dir="rtl"] .vds-code .cm-line-diff-add,
+[dir="rtl"] .vds-code .cm-line-diff-remove {
+  box-shadow: inset -3px 0 0 0 var(--vds-code-diff-add-marker);
+}
+[dir="rtl"] .vds-code .cm-line-diff-remove {
+  box-shadow: inset -3px 0 0 0 var(--vds-code-diff-remove-marker);
+}
+.vds-code .cm-line-diff-add {
+  box-shadow: inset 3px 0 0 0 var(--vds-code-diff-add-marker);
+}
+.vds-code .cm-line-diff-remove {
+  box-shadow: inset 3px 0 0 0 var(--vds-code-diff-remove-marker);
+}

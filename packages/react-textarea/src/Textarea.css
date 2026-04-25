@@ -1,3 +1,16 @@
+@import "../../react-fieldset/src/Fieldset.css";
+
+@keyframes vds-typing-pulse {
+  0%   { scale: 1; }
+  30%  { scale: calc(1 + var(--_ti, 0.4) * 0.028); }
+  65%  { scale: calc(1 - var(--_ti, 0.4) * 0.008); }
+  100% { scale: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes vds-typing-pulse { 0%, 100% { scale: 1; } }
+}
+
 @layer components {
   .vds-textarea {
     --_textarea-px: var(--vds-space-3);
@@ -15,7 +28,8 @@
     color: var(--vds-color-text);
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
-      box-shadow var(--vds-duration-fast) var(--vds-ease-out);
+      box-shadow var(--vds-duration-fast) var(--vds-ease-out),
+      scale 200ms var(--vds-ease-spring);
 
     padding-inline: var(--_textarea-px);
     padding-block: var(--_textarea-py);
@@ -30,6 +44,15 @@
       outline: 2px solid var(--vds-color-ring);
       outline-offset: -1px;
       border-color: var(--vds-color-primary-9);
+    }
+
+    &:active:not(:disabled) {
+      scale: 0.978;
+      transition: scale 35ms linear;
+    }
+
+    &.vds-textarea--pulse {
+      animation: vds-typing-pulse 200ms var(--vds-ease-out) forwards;
     }
 
     &:disabled {
@@ -86,3 +109,6 @@
     }
   }
 }
+
+[data-vds-no-micro] .vds-textarea:active { scale: 1; transition: none; }
+[data-vds-no-micro] .vds-textarea--pulse { animation: none; }

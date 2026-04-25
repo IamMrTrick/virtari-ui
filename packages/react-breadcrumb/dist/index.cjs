@@ -105,21 +105,39 @@ function BreadcrumbLink({
   asChild = false,
   className,
   ref,
+  children,
   ...props
 }) {
-  const Comp = asChild ? reactSlot.Slot : "a";
+  if (asChild && react.isValidElement(children)) {
+    const child = children;
+    return /* @__PURE__ */ jsxRuntime.jsx(
+      reactSlot.Slot,
+      {
+        ref,
+        className: utils.cn("vds-breadcrumb__link", className),
+        ...props,
+        children: react.cloneElement(
+          child,
+          void 0,
+          renderBreadcrumbInlineContent(child.props.children)
+        )
+      }
+    );
+  }
   return /* @__PURE__ */ jsxRuntime.jsx(
-    Comp,
+    "a",
     {
       ref,
       className: utils.cn("vds-breadcrumb__link", className),
-      ...props
+      ...props,
+      children: renderBreadcrumbInlineContent(children)
     }
   );
 }
 function BreadcrumbPage({
   className,
   ref,
+  children,
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntime.jsx(
@@ -130,7 +148,8 @@ function BreadcrumbPage({
       "aria-disabled": "true",
       "aria-current": "page",
       className: utils.cn("vds-breadcrumb__page", className),
-      ...props
+      ...props,
+      children: renderBreadcrumbInlineContent(children)
     }
   );
 }
@@ -211,6 +230,46 @@ function BreadcrumbHome({
     /* @__PURE__ */ jsxRuntime.jsx(reactIcons.IconHome, { stroke: 1.75, "aria-hidden": true, focusable: false }),
     children
   ] });
+}
+function renderBreadcrumbInlineContent(children) {
+  const nodes = flattenBreadcrumbChildren(children);
+  const leadingIcon = nodes.length > 0 && isBreadcrumbLeadingIcon(nodes[0]) ? nodes[0] : null;
+  const labelNodes = leadingIcon ? nodes.slice(1) : nodes;
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    "span",
+    {
+      className: "vds-breadcrumb__content",
+      "data-icon-only": leadingIcon && labelNodes.length === 0 ? "" : void 0,
+      children: [
+        leadingIcon ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-breadcrumb__icon", children: leadingIcon }) : null,
+        labelNodes.length ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-breadcrumb__label", children: labelNodes }) : null
+      ]
+    }
+  );
+}
+function flattenBreadcrumbChildren(children) {
+  const nodes = [];
+  react.Children.forEach(children, (child) => {
+    if (child == null || typeof child === "boolean") return;
+    if (react.isValidElement(child) && child.type === react.Fragment) {
+      nodes.push(
+        ...flattenBreadcrumbChildren(
+          child.props.children
+        )
+      );
+      return;
+    }
+    nodes.push(child);
+  });
+  return nodes;
+}
+function isBreadcrumbLeadingIcon(node) {
+  if (!react.isValidElement(node)) return false;
+  const props = node.props;
+  if (props["data-breadcrumb-icon"]) return true;
+  if (props["aria-hidden"] === true) return true;
+  if (props.focusable === false || props.focusable === "false") return true;
+  return typeof node.type !== "string" && react.Children.count(props.children) === 0;
 }
 function renderItemsArray(items, cfg) {
   const { maxItems, itemsBeforeCollapse, itemsAfterCollapse } = cfg;

@@ -1,1 +1,22 @@
 node_modules
+
+# Build output
+apps/docs/dist
+
+# Logs
+*.log
+.tmp-*
+.codex-*
+tmp-*.txt
+vite-out.txt
+vite-err.txt
+
+# Browser/debug profiles
+.chrome-*
+.chrome-headless-check
+.chrome-stepper-*
+.chrome-timeline-*
+
+# Local config
+.npmrc
+.claude/scheduled_tasks.lock

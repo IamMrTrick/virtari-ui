@@ -8,4 +8,4 @@ export type {
   TabsSize,
 } from "./Tabs";
 export { TabsPanels } from "./TabsPanels";
-export type { TabsPanelsProps } from "./TabsPanels";
+export type { TabsPanelsMountStrategy, TabsPanelsProps } from "./TabsPanels";

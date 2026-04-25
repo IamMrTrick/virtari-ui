@@ -36,7 +36,8 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./styles": "./dist/Spinner.css"
+    "./styles": "./dist/Spinner.css",
+    "./tokens": "./dist/Spinner.tokens.css"
   },
   "files": [
     "dist",
@@ -48,7 +49,7 @@
     "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
-    "build": "tsup && postcss src/Spinner.css -o dist/Spinner.css",
+    "build": "tsup && postcss src/Spinner.tokens.css -o dist/Spinner.tokens.css && postcss src/Spinner.css -o dist/Spinner.css",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit"
   },

@@ -406,6 +406,7 @@ function NavItem({
   open,
   onOpenChange,
   placement,
+  popoverHeading,
   active,
   disabled,
   className,
@@ -455,6 +456,7 @@ function NavItem({
   ) : children;
   const outerCloser = useNavPopoverCloser();
   const setSubmenuOpen = submenuState.setOpen;
+  const resolvedPopoverHeading = popoverHeading ?? (submenu != null ? label : void 0);
   const popoverCloser = react.useMemo(() => {
     if (resolvedMode !== "popover") return outerCloser;
     return () => {
@@ -473,7 +475,16 @@ function NavItem({
       children: itemContent
     }
   );
-  return /* @__PURE__ */ jsxRuntime.jsx(NavSubmenuContext.Provider, { value: submenuState, children: /* @__PURE__ */ jsxRuntime.jsx(NavPopoverCloserContext.Provider, { value: popoverCloser, children: itemBody }) });
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    NavSubmenuContext.Provider,
+    {
+      value: {
+        ...submenuState,
+        popoverHeading: resolvedPopoverHeading
+      },
+      children: /* @__PURE__ */ jsxRuntime.jsx(NavPopoverCloserContext.Provider, { value: popoverCloser, children: itemBody })
+    }
+  );
 }
 function NavSubmenu({
   className,
@@ -482,13 +493,14 @@ function NavSubmenu({
   ref,
   ...rest
 }) {
+  const navCtx = useNavContext();
   const ctx = useNavSubmenuContext();
   if (!ctx) {
     throw new Error(
       "vds-nav: <NavSubmenu> must be rendered inside <NavItem>."
     );
   }
-  const { id, open, mode, floating } = ctx;
+  const { id, open, mode, floating, popoverHeading } = ctx;
   if (mode === "inline") {
     return /* @__PURE__ */ jsxRuntime.jsx(
       "div",
@@ -506,9 +518,16 @@ function NavSubmenu({
     );
   }
   if (!open || !floating) return null;
+  const showPopoverHeading = navCtx.collapsed && popoverHeading !== void 0 && popoverHeading !== null;
+  const headingId = showPopoverHeading ? `${id}-heading` : void 0;
+  const animationBaseTransform = typeof floating.floatingStyles.transform === "string" ? floating.floatingStyles.transform : "translate3d(0px, 0px, 0px)";
   const mergedStyle = {
     ...floating.floatingStyles,
     visibility: floating.isPositioned ? void 0 : "hidden",
+    // Keep the computed floating transform available to CSS animations.
+    // Animating `transform` on the positioned element without this causes
+    // the submenu to animate from the viewport origin instead of its anchor.
+    "--vds-nav-floating-transform": animationBaseTransform,
     ...style
   };
   const floatingProps = floating.getFloatingProps();
@@ -526,18 +545,25 @@ function NavSubmenu({
       modal: false,
       returnFocus: true,
       initialFocus: -1,
-      children: /* @__PURE__ */ jsxRuntime.jsx(
+      children: /* @__PURE__ */ jsxRuntime.jsxs(
         "div",
         {
           ref: setFloatingRef,
           id,
           className: utils.cn("vds-nav__submenu", className),
           "data-mode": "popover",
+          "data-collapsed-root": navCtx.collapsed ? "true" : void 0,
+          "data-has-heading": showPopoverHeading ? "true" : void 0,
+          "data-nav-size": navCtx.size,
           "data-state": "open",
+          "aria-labelledby": headingId,
           style: mergedStyle,
           ...floatingProps,
           ...rest,
-          children
+          children: [
+            showPopoverHeading ? /* @__PURE__ */ jsxRuntime.jsx("div", { className: "vds-nav__popover-header", children: /* @__PURE__ */ jsxRuntime.jsx("span", { id: headingId, className: "vds-nav__popover-title", children: popoverHeading }) }) : null,
+            children
+          ]
         }
       )
     }
@@ -552,22 +578,26 @@ function NavMega({
   ref,
   ...rest
 }) {
+  const navCtx = useNavContext();
   const ctx = useNavSubmenuContext();
   if (!ctx) {
     throw new Error(
       "vds-nav: <NavMega> must be rendered inside <NavItem>."
     );
   }
-  const { id, open, floating } = ctx;
+  const { id, open, floating, popoverHeading } = ctx;
   if (!open || !floating) return null;
+  const showPopoverHeading = navCtx.collapsed && popoverHeading !== void 0 && popoverHeading !== null;
+  const headingId = showPopoverHeading ? `${id}-heading` : void 0;
+  const animationBaseTransform = layout === "full-bleed" ? "translate3d(0px, 0px, 0px)" : typeof floating.floatingStyles.transform === "string" ? floating.floatingStyles.transform : "translate3d(0px, 0px, 0px)";
   const mergedStyle = {
     ...floating.floatingStyles,
     // Same flash-guard as <NavSubmenu>: keep the panel hidden until
     // Floating UI computes its real position, otherwise it paints one
     // frame at the viewport's top-left and then jumps to the anchor.
     visibility: floating.isPositioned ? void 0 : "hidden",
+    "--vds-nav-floating-transform": animationBaseTransform,
     ...style,
-    // @ts-expect-error — custom property passed to CSS
     "--mega-cols": columns,
     ...layout === "full-bleed" ? {
       position: "fixed",
@@ -593,19 +623,26 @@ function NavMega({
       modal: false,
       returnFocus: true,
       initialFocus: -1,
-      children: /* @__PURE__ */ jsxRuntime.jsx(
+      children: /* @__PURE__ */ jsxRuntime.jsxs(
         "div",
         {
           ref: setFloatingRef,
           id,
           className: utils.cn("vds-nav__mega", className),
           "data-columns": true,
+          "data-collapsed-root": navCtx.collapsed ? "true" : void 0,
+          "data-has-heading": showPopoverHeading ? "true" : void 0,
           "data-layout": layout,
+          "data-nav-size": navCtx.size,
           "data-state": "open",
+          "aria-labelledby": headingId,
           style: mergedStyle,
           ...floatingProps,
           ...rest,
-          children
+          children: [
+            showPopoverHeading ? /* @__PURE__ */ jsxRuntime.jsx("div", { className: "vds-nav__popover-header", children: /* @__PURE__ */ jsxRuntime.jsx("span", { id: headingId, className: "vds-nav__popover-title", children: popoverHeading }) }) : null,
+            children
+          ]
         }
       )
     }

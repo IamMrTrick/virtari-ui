@@ -99,19 +99,30 @@ function RadioGroup({
           )
         ] }),
         /* @__PURE__ */ jsxRuntime.jsx("div", { className: "vds-radio-group-items", children }),
-        hasError && /* @__PURE__ */ jsxRuntime.jsxs("p", { id: errorId, role: "alert", className: "vds-radio-group-error", children: [
-          /* @__PURE__ */ jsxRuntime.jsx(
-            reactIcons.IconAlertCircle,
-            {
-              size: 14,
-              stroke: 2,
-              "aria-hidden": true,
-              focusable: false,
-              className: "vds-radio-group-error-icon"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntime.jsx("span", { children: error })
-        ] })
+        /* @__PURE__ */ jsxRuntime.jsx(
+          "p",
+          {
+            id: errorId,
+            role: hasError ? "alert" : void 0,
+            "aria-hidden": hasError ? void 0 : true,
+            "data-visible": hasError ? "" : void 0,
+            "data-empty": hasError ? void 0 : "",
+            className: "vds-radio-group-error",
+            children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-radio-group-error-body", children: [
+              /* @__PURE__ */ jsxRuntime.jsx(
+                reactIcons.IconAlertCircle,
+                {
+                  size: 14,
+                  stroke: 2,
+                  "aria-hidden": true,
+                  focusable: false,
+                  className: "vds-radio-group-error-icon"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: error })
+            ] })
+          }
+        )
       ]
     }
   ) });
@@ -138,7 +149,7 @@ function RadioGroupItem({
       disabled: resolvedDisabled,
       "aria-invalid": resolvedError || void 0,
       ...props,
-      children: /* @__PURE__ */ jsxRuntime.jsx(RadioGroupPrimitive__namespace.Indicator, { className: "vds-radio-indicator" })
+      children: /* @__PURE__ */ jsxRuntime.jsx(RadioGroupPrimitive__namespace.Indicator, { className: "vds-radio-indicator", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-radio-dot" }) })
     }
   );
 }
@@ -157,6 +168,7 @@ function RadioField({
   const group = useRadioGroupContext();
   const resolvedError = error ?? group?.error ?? false;
   const resolvedDisabled = disabled ?? group?.disabled ?? false;
+  const resolvedSize = radioProps.size ?? group?.size ?? "md";
   const reactId = react.useId();
   const inputId = idProp ?? `vds-radio-field-${reactId}`;
   const { className: labelClassName, ...restLabelProps } = labelProps ?? {};
@@ -166,6 +178,8 @@ function RadioField({
       ref,
       htmlFor: inputId,
       className: utils.cn("vds-radio-field", labelClassName),
+      "data-size": resolvedSize,
+      "data-has-description": description ? "" : void 0,
       "data-error": resolvedError ? "" : void 0,
       "data-disabled": resolvedDisabled ? "" : void 0,
       ...restLabelProps,
@@ -182,7 +196,7 @@ function RadioField({
           }
         ),
         /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-radio-field-text", children: [
-          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-radio-field-label", children: label }),
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-radio-field-main", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-radio-field-label", children: label }) }),
           description ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-radio-field-description", children: description }) : null
         ] })
       ]

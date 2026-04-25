@@ -1,0 +1,39 @@
+@layer design-system.components {
+  .vds-copy-button {
+    --_copy-btn-padding:   var(--vds-space-1-5);
+    --_copy-btn-icon-size: 1rem;
+    --_copy-btn-font-size: var(--vds-text-sm);
+    --_copy-btn-radius:    var(--vds-radius-element);
+    --_copy-btn-gap:       var(--vds-space-1-5);
+  }
+
+    .vds-copy-button[data-size="2xs"] {
+      --_copy-btn-padding:   var(--vds-space-0-5);
+      --_copy-btn-icon-size: 0.75rem;
+      --_copy-btn-font-size: var(--vds-text-xs);
+    }
+
+    .vds-copy-button[data-size="xs"] {
+      --_copy-btn-padding:   var(--vds-space-1);
+      --_copy-btn-icon-size: 0.875rem;
+      --_copy-btn-font-size: var(--vds-text-xs);
+    }
+
+    .vds-copy-button[data-size="sm"] {
+      --_copy-btn-padding:   var(--vds-space-1-5);
+      --_copy-btn-icon-size: 1rem;
+      --_copy-btn-font-size: var(--vds-text-sm);
+    }
+
+    .vds-copy-button[data-size="md"] {
+      --_copy-btn-padding:   var(--vds-space-2);
+      --_copy-btn-icon-size: 1.125rem;
+      --_copy-btn-font-size: var(--vds-text-base);
+    }
+
+    .vds-copy-button[data-size="lg"] {
+      --_copy-btn-padding:   var(--vds-space-2-5);
+      --_copy-btn-icon-size: 1.25rem;
+      --_copy-btn-font-size: var(--vds-text-lg);
+    }
+}

@@ -41,6 +41,19 @@ yarn add @virtari-packages/react-tabs
 import { /* … */ } from "@virtari-packages/react-tabs";
 ```
 
+For heavy carousel panels, keep only the active panel and its direct
+neighbors mounted:
+
+```tsx
+<TabsPanels mountStrategy="adjacent">
+  <TabsContent value="overview">...</TabsContent>
+  <TabsContent value="analytics">...</TabsContent>
+  <TabsContent value="activity">...</TabsContent>
+</TabsPanels>
+```
+
+The default is `mountStrategy="all"` to preserve the previous behavior.
+
 ### Import styles
 
 ```ts

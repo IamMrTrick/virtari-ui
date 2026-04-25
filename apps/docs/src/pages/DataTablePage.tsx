@@ -215,7 +215,7 @@ function SelectionExample() {
           <DataTable.Body />
         </DataTable.Table>
       </DataTable.ScrollArea>
-      <DataTable.Pagination.Default pageSizeOptions={[5, 10, 25]} />
+      <DataTable.Pagination pageSizeOptions={[5, 10, 25]} />
     </DataTable.Root>
   );
 }
@@ -356,7 +356,7 @@ function ServerSideExample() {
           <DataTable.Body emptyMessage="Loading…" />
         </DataTable.Table>
       </DataTable.ScrollArea>
-      <DataTable.Pagination.Default pageSizeOptions={[5, 10, 25]} />
+      <DataTable.Pagination pageSizeOptions={[5, 10, 25]} />
       <DataTable.LoadingOverlay open={loading} />
     </DataTable.Root>
   );

@@ -425,7 +425,7 @@ export function DataTableProductsPage() {
           }}
         </DataTable.BulkActions.Root>
 
-        <DataTable.Pagination.Default
+        <DataTable.Pagination
           pageSizeOptions={[10, 15, 25, 50]}
           sticky
         />

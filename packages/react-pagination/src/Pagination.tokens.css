@@ -1,0 +1,42 @@
+@layer design-system.components {
+  .vds-pagination {
+    --vds-pagination-gap: var(--vds-space-2, 0.5rem);
+    --vds-pagination-padding-inline: var(--vds-space-4, 1rem);
+    --vds-pagination-padding-block: var(--vds-space-2, 0.5rem);
+    --vds-pagination-bg: transparent;
+    --vds-pagination-font-size: var(--vds-text-sm, 0.875rem);
+
+    --vds-pagination-button-size: var(--vds-size-md, 2rem);
+    --vds-pagination-button-padding-inline: var(--vds-space-3, 0.75rem);
+    --vds-pagination-button-radius: var(--vds-radius-element, 0.375rem);
+    --vds-pagination-button-bg: transparent;
+    --vds-pagination-button-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
+    --vds-pagination-button-bg-active: var(--vds-color-primary-bg, #eef2ff);
+    --vds-pagination-button-color: var(--vds-color-text, #111827);
+    --vds-pagination-button-color-active:
+      var(--vds-color-primary-solid, #6366f1);
+
+    --vds-pagination-page-button-padding-inline: var(--vds-space-2, 0.5rem);
+    --vds-pagination-ellipsis-padding-inline: var(--vds-space-1-5, 0.375rem);
+    --vds-pagination-info-color: var(--vds-color-text-muted, #6b7280);
+    --vds-pagination-transition-duration: 150ms;
+    --vds-pagination-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --vds-pagination-focus-ring-width: 2px;
+    --vds-pagination-focus-ring-color: var(--vds-color-primary-solid, #6366f1);
+  }
+
+  .vds-pagination[data-size="sm"] {
+    --vds-pagination-button-size: var(--vds-size-sm, 1.75rem);
+    --vds-pagination-font-size: var(--vds-text-xs, 0.75rem);
+  }
+
+  .vds-pagination[data-size="md"] {
+    --vds-pagination-button-size: var(--vds-size-md, 2rem);
+    --vds-pagination-font-size: var(--vds-text-sm, 0.875rem);
+  }
+
+  .vds-pagination[data-size="lg"] {
+    --vds-pagination-button-size: var(--vds-size-lg, 2.5rem);
+    --vds-pagination-font-size: var(--vds-text-base, 1rem);
+  }
+}

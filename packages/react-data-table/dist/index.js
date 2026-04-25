@@ -1,7 +1,7 @@
 "use client";
-import { useDataTableContext, stickyAttr, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-PNGY7DHE.js';
-export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-PNGY7DHE.js';
-import { forwardRef, useRef, useEffect, useMemo, useState, useCallback, useId } from 'react';
+import { useDataTableContext, stickyAttr, pinnedAttr, boolAttr, DataTableColumnVisibility, DataTableGlobalFilter, DataTableLoadingOverlay, DataTableEmpty, DataTableRowSelectCheckbox, DataTableSelectAllCheckbox, DataTableFooterCell, DataTableFooterRow, DataTableFooter, DataTableRowPinTrigger, DataTableRowExpandTrigger, DataTableGroupHeaderRow, DataTableCell, DataTableRow, DataTableBody, DataTablePinColumnTrigger, DataTableColumnGuide, DataTableResizeHandle, DataTableSortTrigger, DataTableHeaderCell, DataTableHeaderGroup, DataTableHeader, DataTableTable, DataTableScrollArea, DataTableToolbar, DataTableRoot } from './chunk-7S7TTIIN.js';
+export { DataTableBody, DataTableCell, DataTableColumnGuide, DataTableColumnVisibility, DataTableEmpty, DataTableFooter, DataTableFooterCell, DataTableFooterRow, DataTableGlobalFilter, DataTableGroupHeaderRow, DataTableHeader, DataTableHeaderCell, DataTableHeaderGroup, DataTableLoadingOverlay, DataTablePinColumnTrigger, DataTableResizeHandle, DataTableRoot, DataTableRow, DataTableRowExpandTrigger, DataTableRowPinTrigger, DataTableRowSelectCheckbox, DataTableScrollArea, DataTableSelectAllCheckbox, DataTableSortTrigger, DataTableTable, DataTableToolbar, buildColumnSizeVars, columnVar, resolveUpdater, useAutoFitColumn, useColumnResize, useControllableState, useDataTable, useDataTableContext, useDataTableVirtualizer } from './chunk-7S7TTIIN.js';
+import { forwardRef, useRef, useEffect, useMemo, useState, useCallback } from 'react';
 import { cn } from '@virtari-packages/utils';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuItem } from '@virtari-packages/react-dropdown-menu';
@@ -16,7 +16,7 @@ import { Button } from '@virtari-packages/react-button';
 import { Chip, ChipIcon, ChipLabel, ChipRemove } from '@virtari-packages/react-chip';
 import { Switch } from '@virtari-packages/react-switch';
 import { Popover, PopoverTrigger, PopoverContent } from '@virtari-packages/react-popover';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@virtari-packages/react-select';
+import { Pagination } from '@virtari-packages/react-pagination';
 import { Tabs, TabsList, TabsTrigger } from '@virtari-packages/react-tabs';
 
 var DataTableBulkActions = forwardRef(function DataTableBulkActions2({
@@ -1260,214 +1260,51 @@ var Filters = {
   Date: DateFilter,
   Popover: FilterPopover
 };
-var PaginationRoot = forwardRef(
-  function PaginationRoot2({ className, children, sticky = false, stickyOffset, style, ...props }, ref) {
-    const stickyStyle = stickyOffset === void 0 ? style : {
-      ["--vds-sticky-offset-bottom"]: stickyOffset,
-      ...style
-    };
-    return /* @__PURE__ */ jsx(
-      "nav",
-      {
-        ref,
-        role: "navigation",
-        "aria-label": "Pagination",
-        "data-sticky": stickyAttr(sticky),
-        "data-sticky-axis": "bottom",
-        className: cn("vds-data-table-pagination", className),
-        style: stickyStyle,
-        ...props,
-        children
-      }
-    );
-  }
-);
-var PaginationInfo = forwardRef(
-  function PaginationInfo2({ className, renderLabel, ...props }, ref) {
-    const { table, rowCount, mode } = useDataTableContext();
-    const pagination = table.getState().pagination;
-    const total = mode === "server" ? rowCount ?? 0 : table.getFilteredRowModel().rows.length;
-    const start = total === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1;
-    const end = Math.min(
-      total,
-      (pagination.pageIndex + 1) * pagination.pageSize
-    );
-    return /* @__PURE__ */ jsx(
-      "div",
-      {
-        ref,
-        className: cn("vds-data-table-pagination-info", className),
-        ...props,
-        children: renderLabel ? renderLabel({ start, end, total }) : `${start}\u2013${end} of ${total}`
-      }
-    );
-  }
-);
-var PaginationPrev = forwardRef(function PaginationPrev2({ className, children = "Previous", onClick, ...props }, ref) {
-  const { table } = useDataTableContext();
-  const canPrev = table.getCanPreviousPage();
-  return /* @__PURE__ */ jsx(
-    "button",
-    {
-      ref,
-      type: "button",
-      "aria-label": "Previous page",
-      disabled: !canPrev,
-      className: cn("vds-data-table-pagination-button", className),
-      onClick: (e) => {
-        onClick?.(e);
-        if (!e.defaultPrevented) table.previousPage();
-      },
-      ...props,
-      children
-    }
-  );
-});
-var PaginationNext = forwardRef(function PaginationNext2({ className, children = "Next", onClick, ...props }, ref) {
-  const { table } = useDataTableContext();
-  const canNext = table.getCanNextPage();
-  return /* @__PURE__ */ jsx(
-    "button",
-    {
-      ref,
-      type: "button",
-      "aria-label": "Next page",
-      disabled: !canNext,
-      className: cn("vds-data-table-pagination-button", className),
-      onClick: (e) => {
-        onClick?.(e);
-        if (!e.defaultPrevented) table.nextPage();
-      },
-      ...props,
-      children
-    }
-  );
-});
-function PaginationPageSize({
-  options = [10, 25, 50, 100],
+function DataTablePagination({
   className,
-  label = "Rows per page",
-  size = "sm"
-}) {
-  const { table } = useDataTableContext();
-  const pageSize = table.getState().pagination.pageSize;
-  const labelId = useId();
-  const pageSizeValue = String(pageSize);
-  return /* @__PURE__ */ jsxs("div", { className: cn("vds-data-table-pagination-page-size", className), children: [
-    /* @__PURE__ */ jsx(
-      "span",
-      {
-        id: labelId,
-        className: "vds-data-table-pagination-page-size-label",
-        children: label
-      }
-    ),
-    /* @__PURE__ */ jsxs(
-      Select,
-      {
-        value: pageSizeValue,
-        onValueChange: (v) => {
-          const nextPageSize = Number(v);
-          if (!Number.isFinite(nextPageSize)) return;
-          table.setPagination((prev) => ({
-            ...prev,
-            pageIndex: 0,
-            pageSize: nextPageSize
-          }));
-        },
-        children: [
-          /* @__PURE__ */ jsx(
-            SelectTrigger,
-            {
-              size,
-              "aria-labelledby": labelId,
-              className: "vds-data-table-pagination-page-size-trigger",
-              children: /* @__PURE__ */ jsx(SelectValue, {})
-            }
-          ),
-          /* @__PURE__ */ jsx(SelectContent, { children: options.map((n) => /* @__PURE__ */ jsx(SelectItem, { value: String(n), children: n }, n)) })
-        ]
-      }
-    )
-  ] });
-}
-function pageRange(current, total, siblingCount) {
-  const pages = [];
-  if (total <= siblingCount + 4) {
-    for (let i = 0; i < total; i++) pages.push(i);
-    return pages;
-  }
-  const left = Math.max(current - Math.floor(siblingCount / 2), 1);
-  const right = Math.min(left + siblingCount - 1, total - 2);
-  pages.push(0);
-  if (left > 1) pages.push("ellipsis-l");
-  for (let i = left; i <= right; i++) pages.push(i);
-  if (right < total - 2) pages.push("ellipsis-r");
-  pages.push(total - 1);
-  return pages;
-}
-function PaginationPages({
-  className,
-  siblingCount = 5
-}) {
-  const { table } = useDataTableContext();
-  const current = table.getState().pagination.pageIndex;
-  const total = table.getPageCount();
-  const items = pageRange(current, total, siblingCount);
-  return /* @__PURE__ */ jsx("ul", { className: cn("vds-data-table-pagination-pages", className), children: items.map(
-    (it, i) => typeof it === "number" ? /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(
-      "button",
-      {
-        type: "button",
-        "aria-label": `Page ${it + 1}`,
-        "aria-current": it === current ? "page" : void 0,
-        "data-active": it === current ? "" : void 0,
-        className: "vds-data-table-pagination-page-button",
-        onClick: () => table.setPageIndex(it),
-        children: it + 1
-      }
-    ) }, `p-${it}`) : /* @__PURE__ */ jsx("li", { "aria-hidden": "true", children: /* @__PURE__ */ jsx("span", { className: "vds-data-table-pagination-ellipsis", children: "\u2026" }) }, `e-${i}`)
-  ) });
-}
-function PaginationDefault({
-  className,
-  pageSizeOptions,
-  hidePageSize = false,
-  hidePageNumbers = false,
   sticky = false,
-  stickyOffset
+  stickyOffset,
+  pageSizeOptions,
+  siblingCount,
+  size,
+  hidePageSize,
+  hidePageNumbers,
+  hideInfo,
+  children
 }) {
-  return /* @__PURE__ */ jsxs(
-    PaginationRoot,
+  const { table, rowCount, mode, size: tableSize } = useDataTableContext();
+  const { pageIndex, pageSize } = table.getState().pagination;
+  const total = mode === "server" ? rowCount ?? 0 : table.getFilteredRowModel().rows.length;
+  const resolvedSize = size ?? tableSize;
+  const style = stickyOffset === void 0 ? void 0 : {
+    ["--vds-sticky-offset-bottom"]: stickyOffset
+  };
+  return /* @__PURE__ */ jsx(
+    Pagination.Default,
     {
-      className,
-      sticky,
-      stickyOffset,
-      children: [
-        /* @__PURE__ */ jsxs("div", { className: "vds-data-table-pagination-meta", children: [
-          !hidePageSize && /* @__PURE__ */ jsx(PaginationPageSize, { options: pageSizeOptions }),
-          /* @__PURE__ */ jsx(PaginationInfo, {})
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "vds-data-table-pagination-controls", children: [
-          /* @__PURE__ */ jsx(PaginationPrev, {}),
-          !hidePageNumbers && /* @__PURE__ */ jsx(PaginationPages, {}),
-          /* @__PURE__ */ jsx(PaginationNext, {})
-        ] })
-      ]
+      page: pageIndex,
+      pageSize,
+      total,
+      siblingCount,
+      pageSizeOptions,
+      size: resolvedSize,
+      onPageChange: (p) => table.setPageIndex(p),
+      onPageSizeChange: (s) => table.setPagination((prev) => ({
+        ...prev,
+        pageIndex: 0,
+        pageSize: s
+      })),
+      hidePageSize,
+      hidePageNumbers,
+      hideInfo,
+      className: cn("vds-data-table-pagination", className),
+      "data-sticky": stickyAttr(sticky),
+      "data-sticky-axis": "bottom",
+      style,
+      children
     }
   );
 }
-
-// src/pagination/index.ts
-var Pagination = {
-  Root: PaginationRoot,
-  Prev: PaginationPrev,
-  Next: PaginationNext,
-  PageSize: PaginationPageSize,
-  Info: PaginationInfo,
-  Pages: PaginationPages,
-  Default: PaginationDefault
-};
 var ToolbarActionButton = forwardRef(function ToolbarActionButton2({
   icon,
   trailingIcon,
@@ -1643,7 +1480,7 @@ var DataTableSearchButton = forwardRef(
     );
   }
 );
-forwardRef(
+var DataTableMoreButton = forwardRef(
   function DataTableMoreButton2({ ...props }, ref) {
     return /* @__PURE__ */ jsx(
       ToolbarActionButton,
@@ -1657,7 +1494,7 @@ forwardRef(
     );
   }
 );
-forwardRef(function DataTableRowAction2({ size = "sm", variant = "ghost", ...props }, ref) {
+var DataTableRowAction = forwardRef(function DataTableRowAction2({ size = "sm", variant = "ghost", ...props }, ref) {
   return /* @__PURE__ */ jsx(ToolbarActionButton, { ref, size, variant, ...props });
 });
 var DataTableSearchIcon = SearchIcon;
@@ -2007,7 +1844,7 @@ var DataTableViewModeToggle = forwardRef(function DataTableViewModeToggle2({
                 "aria-label": `${DEFAULT_LABELS[m]} view`,
                 children: [
                   icon ? /* @__PURE__ */ jsx("span", { className: "vds-data-table-view-toggle-icon", children: icon }) : null,
-                  labels?.[m] ?? DEFAULT_LABELS[m]
+                  /* @__PURE__ */ jsx("span", { className: "vds-data-table-view-toggle-label", children: labels?.[m] ?? DEFAULT_LABELS[m] })
                 ]
               },
               m
@@ -2094,6 +1931,9 @@ var DataTable = {
   HideColumnsButton: DataTableHideColumnsButton,
   DeleteButton: DataTableDeleteButton,
   CloseButton: DataTableCloseButton,
+  SearchButton: DataTableSearchButton,
+  MoreButton: DataTableMoreButton,
+  RowAction: DataTableRowAction,
   SearchField: DataTableSearchField,
   /* Global filter input (simple) */
   GlobalFilter: DataTableGlobalFilter,
@@ -2102,7 +1942,7 @@ var DataTable = {
   /* Column visibility list (simple) */
   ColumnVisibility: DataTableColumnVisibility,
   /* Compounds */
-  Pagination,
+  Pagination: DataTablePagination,
   Filters,
   FilterDrawer: DataTableFilterDrawer,
   BulkActions,
@@ -2227,4 +2067,4 @@ function useDataTablePreferences({
   };
 }
 
-export { ActionsCell, AvatarCell, BadgeCell, BulkActions, CellEditor, Cells, CopyableCell, DataTable, DataTableAddButton, DataTableBoard, DataTableBulkActions, DataTableBulkClear, DataTableBulkCount, DataTableCloseButton, DataTableCustomizeButton, DataTableDeleteButton, DataTableExportButton, DataTableFilterBar, DataTableFilterButton, DataTableFilterChipItem, DataTableFilterDrawer, DataTableHideColumnsButton, DataTableListView, DataTableRefreshButton, DataTableResetLayoutButton, DataTableSearchButton, DataTableSearchField, DataTableSearchIcon, DataTableSelectAllAcrossPages, DataTableViewModeToggle, DataTableViews, DateCell, DateFilter, EditableCell, FilterConfigPanel, FilterPopover, Filters, LinkCell, NumberCell, NumberFilter, Pagination, PaginationDefault, PaginationInfo, PaginationNext, PaginationPageSize, PaginationPages, PaginationPrev, PaginationRoot, SelectFilter, StatusBadgeCell, TextCell, TextFilter, ToolbarActionButton, countConditions, useCellEdit, useColumnFilter, useDataTablePreferences };
+export { ActionsCell, AvatarCell, BadgeCell, BulkActions, CellEditor, Cells, CopyableCell, DataTable, DataTableAddButton, DataTableBoard, DataTableBulkActions, DataTableBulkClear, DataTableBulkCount, DataTableCloseButton, DataTableCustomizeButton, DataTableDeleteButton, DataTableExportButton, DataTableFilterBar, DataTableFilterButton, DataTableFilterChipItem, DataTableFilterDrawer, DataTableHideColumnsButton, DataTableListView, DataTableMoreButton, DataTablePagination, DataTableRefreshButton, DataTableResetLayoutButton, DataTableRowAction, DataTableSearchButton, DataTableSearchField, DataTableSearchIcon, DataTableSelectAllAcrossPages, DataTableViewModeToggle, DataTableViews, DateCell, DateFilter, EditableCell, FilterConfigPanel, FilterPopover, Filters, LinkCell, NumberCell, NumberFilter, SelectFilter, StatusBadgeCell, TextCell, TextFilter, ToolbarActionButton, countConditions, useCellEdit, useColumnFilter, useDataTablePreferences };

@@ -1,30 +1,155 @@
-@layer components {
-  @keyframes vds-spin {
-    to {
-      transform: rotate(360deg);
+@import "./Spinner.tokens.css";
+
+@layer design-system.components {
+  /* ── Keyframes — defined once, reused across variants ── */
+  @keyframes vds-sp-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes vds-sp-dot {
+    0%, 80%, 100% { transform: scale(0.5); opacity: 0.35; }
+    40%           { transform: scale(1);   opacity: 1;    }
+  }
+
+  @keyframes vds-sp-bar {
+    0%, 40%, 100% { transform: scaleY(0.4); }
+    20%           { transform: scaleY(1);   }
+  }
+
+  @keyframes vds-sp-ripple {
+    0%   { transform: scale(0); opacity: 0.75; }
+    100% { transform: scale(1); opacity: 0;    }
+  }
+
+  /* ── Base ── */
+  .vds-spinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--spinner-size);
+    block-size: var(--spinner-size);
+    flex-shrink: 0;
+  }
+
+  /* ── ring — classic single-arc ── */
+  .vds-spinner[data-variant="ring"] {
+    border-radius: 50%;
+    border: var(--spinner-track-width) solid var(--spinner-track-color);
+    border-block-start-color: var(--spinner-color);
+    animation: vds-sp-spin var(--spinner-ring-dur) linear infinite;
+  }
+
+  /* ── segments — conic-gradient with gradient tail (iOS-style) ── */
+  .vds-spinner[data-variant="segments"] {
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      var(--spinner-color) 270deg,
+      transparent 360deg
+    );
+    -webkit-mask:
+      radial-gradient(
+        farthest-side,
+        transparent calc(100% - var(--spinner-track-width) - 1px),
+        #000 calc(100% - var(--spinner-track-width))
+      );
+    mask:
+      radial-gradient(
+        farthest-side,
+        transparent calc(100% - var(--spinner-track-width) - 1px),
+        #000 calc(100% - var(--spinner-track-width))
+      );
+    animation: vds-sp-spin var(--spinner-ring-dur) linear infinite;
+  }
+
+  /* ── dots — three staggered bouncing dots ── */
+  .vds-spinner[data-variant="dots"] {
+    inline-size: auto;
+    gap: calc(var(--spinner-dot-size) * 0.6);
+
+    .vds-spinner__dot {
+      display: block;
+      inline-size: var(--spinner-dot-size);
+      block-size: var(--spinner-dot-size);
+      border-radius: 50%;
+      background: var(--spinner-color);
+      flex-shrink: 0;
+      animation: vds-sp-dot var(--spinner-dots-dur) ease-in-out infinite;
+
+      &:nth-child(2) { animation-delay: 0.16s; }
+      &:nth-child(3) { animation-delay: 0.32s; }
     }
   }
 
-  .vds-spinner {
-    --_spinner-size: var(--vds-space-5);
-    --_spinner-border: 2px;
+  /* ── bars — four staggered audio-style bars ── */
+  .vds-spinner[data-variant="bars"] {
+    inline-size: auto;
+    align-items: flex-end;
+    gap: calc(var(--spinner-bar-width) * 0.85);
 
-    display: inline-block;
-    inline-size: var(--_spinner-size);
-    block-size: var(--_spinner-size);
-    border: var(--_spinner-border) solid var(--vds-color-primary-9);
-    border-inline-end-color: transparent;
-    border-radius: var(--vds-radius-full);
-    animation: vds-spin 0.6s linear infinite;
+    .vds-spinner__bar {
+      display: block;
+      inline-size: var(--spinner-bar-width);
+      block-size: var(--spinner-size);
+      border-radius: var(--spinner-bar-width);
+      background: var(--spinner-color);
+      flex-shrink: 0;
+      transform-origin: bottom center;
+      animation: vds-sp-bar var(--spinner-bars-dur) ease-in-out infinite;
 
-    &[data-size="sm"] {
-      --_spinner-size: var(--vds-space-3-5);
-      --_spinner-border: 1.5px;
+      &:nth-child(2) { animation-delay: 0.1s;  }
+      &:nth-child(3) { animation-delay: 0.2s;  }
+      &:nth-child(4) { animation-delay: 0.3s;  }
+    }
+  }
+
+  /* ── ripple — two expanding concentric rings ── */
+  .vds-spinner[data-variant="ripple"] {
+    position: relative;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: var(--spinner-track-width) solid var(--spinner-color);
+      animation: vds-sp-ripple var(--spinner-ripple-dur) cubic-bezier(0, 0.2, 0.8, 1) infinite;
     }
 
-    &[data-size="lg"] {
-      --_spinner-size: var(--vds-space-8);
-      --_spinner-border: 3px;
+    &::after {
+      animation-delay: calc(var(--spinner-ripple-dur) * -0.5);
+    }
+  }
+
+  /* ── orbit — dot orbiting on a ring ── */
+  .vds-spinner[data-variant="orbit"] {
+    position: relative;
+    border-radius: 50%;
+    border: var(--spinner-track-width) solid var(--spinner-track-color);
+    animation: vds-sp-spin var(--spinner-ring-dur) linear infinite;
+
+    &::before {
+      content: "";
+      position: absolute;
+      /* center the dot on the top edge of the ring border */
+      inset-block-start: calc(var(--spinner-track-width) * -1);
+      inset-inline-start: 50%;
+      transform: translateX(-50%);
+      inline-size: calc(var(--spinner-track-width) * 3);
+      block-size: calc(var(--spinner-track-width) * 3);
+      border-radius: 50%;
+      background: var(--spinner-color);
+    }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-spinner,
+    .vds-spinner * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
     }
   }
 }

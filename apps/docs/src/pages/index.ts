@@ -1,7 +1,10 @@
 export { IntroductionPage } from "./IntroductionPage";
 export { ButtonPage } from "./ButtonPage";
+export { ButtonGroupPage } from "./ButtonGroupPage";
 export { BadgePage } from "./BadgePage";
 export { InputPage } from "./InputPage";
+export { NumberInputPage } from "./NumberInputPage";
+export { OtpInputPage } from "./OtpInputPage";
 export { SwitchPage } from "./SwitchPage";
 export { CheckboxPage } from "./CheckboxPage";
 export { TogglePage } from "./TogglePage";
@@ -27,12 +30,15 @@ export { ScrollAreaPage } from "./ScrollAreaPage";
 export { AccordionPage } from "./AccordionPage";
 export { CollapsiblePage } from "./CollapsiblePage";
 export { TextareaPage } from "./TextareaPage";
+export { EditorPage } from "./EditorPage";
+export { YooptaEditorPage } from "./YooptaEditorPage";
 export { BreadcrumbPage } from "./BreadcrumbPage";
 export { SkeletonPage } from "./SkeletonPage";
 export { SpinnerPage } from "./SpinnerPage";
 export { CardPage } from "./CardPage";
 export { KbdPage } from "./KbdPage";
 export { ChipPage } from "./ChipPage";
+export { ColorPickerPage } from "./ColorPickerPage";
 export { CompositionPage } from "./CompositionPage";
 export { LayoutPage } from "./LayoutPage";
 export { HeaderPage } from "./HeaderPage";
@@ -53,6 +59,17 @@ export { FlagPage } from "./FlagPage";
 export { PhoneInputPage } from "./PhoneInputPage";
 export { LanguagePickerPage } from "./LanguagePickerPage";
 export { BottomNavPage } from "./BottomNavPage";
+export { PaginationPage } from "./PaginationPage";
+export { FormPage } from "./FormPage";
+export { FileUploadPage } from "./FileUploadPage";
+export { CommandPage } from "./CommandPage";
+export { EmptyStatePage } from "./EmptyStatePage";
+export { FieldsetPage } from "./FieldsetPage";
+export { StepperPage } from "./StepperPage";
+export { TimelinePage } from "./TimelinePage";
+export { TagInputPage } from "./TagInputPage";
+export { CodePage } from "./CodePage";
+export { CarouselPage } from "./CarouselPage";
 
 export const PAGE_META: Record<string, { title: string; description: string }> = {
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },
@@ -60,13 +77,37 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   colors: { title: "Colors", description: "OKLCH color palette and semantic token reference." },
   typography: { title: "Typography", description: "Font scale, weights, and font family tokens." },
   button: { title: "Button", description: "6 variants, 7 sizes, loading, icons, animations." },
+  "button-group": {
+    title: "Button Group",
+    description:
+      "Segmented row of buttons sharing one color × variant × size via context. Attached or spaced, horizontal or vertical, with RTL-correct collapsed radii.",
+  },
   badge: {
     title: "Badge",
     description:
       "7 colors × 5 variants × 4 sizes — pill or square, optional dot, icons, removable chip, and asChild routing.",
   },
   input: { title: "Input", description: "Text input — 7 sizes aligned with Button." },
+  "number-input": {
+    title: "Number Input",
+    description: "Numeric stepper with min/max/step support and field metadata.",
+  },
+  "otp-input": {
+    title: "OTP Input",
+    description:
+      "One-time code input with SMS autofill hints, paste distribution, digit normalization, and keyboard navigation.",
+  },
   textarea: { title: "Textarea", description: "Multi-line text input with auto-resize." },
+  editor: {
+    title: "Rich Text Editor",
+    description:
+      "Lexical-powered editor with a lean core preset, optional productivity layers, slash commands, tables, markdown/html output, and token-driven styling.",
+  },
+  "yoopta-editor": {
+    title: "Block Editor (Yoopta)",
+    description:
+      "Notion-style block editor — Yoopta-Editor wrapped with Virtari tokens. Slash menu, floating toolbar, drag-and-drop blocks, 20 plugins (paragraph, headings, lists, callout, code, table, image, video, embed, math, mention, emoji, accordion, tabs, steps, carousel, TOC).",
+  },
   select: { title: "Select", description: "Dropdown selector with groups and search." },
   checkbox: { title: "Checkbox", description: "Multi-select with indeterminate state." },
   "radio-group": {
@@ -103,6 +144,11 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     title: "Chip",
     description:
       "Compact pill for tags, filters, and metadata — 6 variants, 3 appearances, 3 sizes, with icon/avatar slot and removable action.",
+  },
+  "color-picker": {
+    title: "Color Picker",
+    description:
+      "Professional solid and gradient picker â€” CSS code mode, stop editing, alpha, eyedropper support, and full HEX/RGB/HSL/HSB conversion.",
   },
   heading: {
     title: "Heading",
@@ -207,5 +253,65 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     title: "Bottom Navigation",
     description:
       "Mobile-first tab bar — material / iOS / floating / underline variants, centre FAB, badges, safe-area insets, auto-hide on scroll, and an animated sliding indicator. All CSS-variable driven with full RTL.",
+  },
+  pagination: {
+    title: "Pagination",
+    description:
+      "Headless, controlled pagination — compound parts (Root / Info / PageSize / Prev / Pages / Next) with ellipsis windowing, three sizes, RTL-aware chevrons, and a drop-in adapter for DataTable.",
+  },
+  form: {
+    title: "Form",
+    description:
+      "react-hook-form + zod wrapper — Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage. Auto-wires id + aria-describedby + aria-invalid across any input in the system.",
+  },
+  "file-upload": {
+    title: "File Upload",
+    description:
+      "Compound dropzone + file list built on react-dropzone — drag/drop, click-to-browse, image previews with URL cleanup, per-item progress, validation (MIME / size / count), and Controller-friendly for react-form.",
+  },
+  command: {
+    title: "Command Palette",
+    description:
+      "cmdk wrapper — inline palette or Cmd+K dialog, grouped results, keyboard shortcuts rendered via Kbd, async search, and full RTL. Bundles the useHotkey hook from @virtari-packages/utils.",
+  },
+  "empty-state": {
+    title: "Empty State",
+    description:
+      "Zero-data messaging pattern — icon, title, description, and actions slots. Two orientations, three sizes, fully composable.",
+  },
+  fieldset: {
+    title: "Fieldset",
+    description:
+      "Semantic form section grouping — native <fieldset> + <legend> with token-driven border, invalid and disabled cascade states.",
+  },
+  stepper: {
+    title: "Stepper",
+    description:
+      "Multi-step progress indicator with variants, semantic tones, connector styles, and motion presets.",
+  },
+  timeline: {
+    title: "Timeline",
+    description:
+      "Sequential event display — compound indicator, connector, content, and time slots. Grid-based layout with status colors and RTL support.",
+  },
+  "segmented-control": {
+    title: "Segmented Control",
+    description:
+      "Standalone toggle button group — radio semantics via Radix UI, three sizes, full-width option, icon support, and keyboard navigation.",
+  },
+  "tag-input": {
+    title: "Tag Input",
+    description:
+      "Multi-value text input — Enter or comma to add, Backspace to remove, paste splitting, max-tags limit, custom validation, and chip rendering.",
+  },
+  code: {
+    title: "Code",
+    description:
+      "CodeMirror 6 wrapped with Virtari tokens — read-only viewer, live editor, and inline snippet. 15 preloaded languages, line numbers, line highlight, diff view, copy button, autocomplete, multi-cursor, and search.",
+  },
+  carousel: {
+    title: "Carousel",
+    description:
+      "Swiper.js wrapped with Virtari tokens — 7 colors, 5 nav variants, 4 sizes, navigation, pagination (bullets / bars / fraction / progressbar), autoplay, scrollbar, lazy, zoom, parallax, thumbs, virtual, grid, effects (fade / cube / coverflow / flip / cards / creative), full RTL, and reduced-motion safe.",
   },
 };

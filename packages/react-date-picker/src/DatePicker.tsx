@@ -479,11 +479,16 @@ export function DatePicker({
           {description}
         </span>
       ) : null}
-      {isInvalid && errorMessage ? (
-        <span {...errorMessageProps} className="vds-date-picker-error">
-          {errorMessage}
-        </span>
-      ) : null}
+      <span
+        {...errorMessageProps}
+        role={isInvalid && errorMessage ? "alert" : undefined}
+        aria-hidden={isInvalid && errorMessage ? undefined : true}
+        data-visible={isInvalid && errorMessage ? "" : undefined}
+        data-empty={isInvalid && errorMessage ? undefined : ""}
+        className="vds-date-picker-error"
+      >
+        <span className="vds-date-picker-error-body">{errorMessage}</span>
+      </span>
     </div>
   );
 }

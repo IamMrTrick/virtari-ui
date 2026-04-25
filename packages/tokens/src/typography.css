@@ -30,6 +30,10 @@
     --vds-leading-normal: 1.5;
     --vds-leading-relaxed: 1.625;
     --vds-leading-loose: 2;
+    --vds-control-line-height: 1;
+    --vds-control-line-height-rtl: 1;
+    --vds-control-optical-offset: 0.09375rem;
+    --vds-control-indicator-offset: 0.0625rem;
 
     /* ─── Letter spacing ─── */
     --vds-tracking-tighter: -0.05em;
@@ -38,5 +42,9 @@
     --vds-tracking-wide: 0.025em;
     --vds-tracking-wider: 0.05em;
     --vds-tracking-widest: 0.1em;
+  }
+
+  :where([dir="rtl"]) {
+    --vds-control-line-height: var(--vds-control-line-height-rtl, 1);
   }
 }

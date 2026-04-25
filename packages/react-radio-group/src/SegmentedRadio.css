@@ -24,9 +24,12 @@
     min-inline-size: 0;
     block-size: var(--segmented-item-height);
     padding-inline: var(--segmented-item-padding-inline);
+    padding-block-start: var(--vds-control-optical-offset, 0.09375rem);
+    padding-block-end: 0;
     font-family: inherit;
     font-size: var(--segmented-item-font-size);
     font-weight: var(--segmented-item-font-weight);
+    line-height: var(--vds-control-line-height, 1);
     color: var(--segmented-item-color);
     background-color: transparent;
     border: 0;

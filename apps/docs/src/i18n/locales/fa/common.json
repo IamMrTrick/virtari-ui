@@ -46,7 +46,9 @@
     "dirRtl": "\u0631\u0627\u0633\u062a\u200c\u0628\u0647\u200c\u0686\u067e",
     "language": "\u0632\u0628\u0627\u0646",
     "langEnglish": "English",
-    "langPersian": "\u0641\u0627\u0631\u0633\u06cc"
+    "langPersian": "\u0641\u0627\u0631\u0633\u06cc",
+    "microInteractions": "ریزتعاملات",
+    "microInteractionsHint": "پرس فوکوس، پاپ چک‌باکس، اسپرینگ رادیو"
   },
   "layout": {
     "toggleSidebar": "\u062a\u063a\u06cc\u06cc\u0631 \u0648\u0636\u0639\u06cc\u062a \u0645\u0646\u0648"

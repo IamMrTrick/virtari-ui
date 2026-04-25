@@ -127,6 +127,7 @@
       inset-block: 0;
       max-inline-size: var(--vds-drawer-available-size);
       max-block-size: calc(100dvh - var(--vds-drawer-keyboard-inset, 0px));
+      scrollbar-gutter: auto;
       touch-action: pan-x;
     }
 

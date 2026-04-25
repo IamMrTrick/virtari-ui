@@ -19,6 +19,10 @@
     "title": "Button",
     "description": "6 variants, 7 sizes, loading, icons, animations."
   },
+  "button-group": {
+    "title": "Button Group",
+    "description": "Segmented row of buttons sharing one color \u00d7 variant \u00d7 size via context. Attached or spaced, horizontal or vertical, with RTL-correct collapsed radii."
+  },
   "badge": {
     "title": "Badge",
     "description": "7 colors \u00d7 5 variants \u00d7 4 sizes \u2014 pill or square, optional dot, icons, removable chip, and asChild routing."
@@ -27,9 +31,29 @@
     "title": "Input",
     "description": "Text input \u2014 7 sizes aligned with Button."
   },
+  "number-input": {
+    "title": "Number Input",
+    "description": "Numeric stepper with min/max/step support and field metadata."
+  },
+  "otp-input": {
+    "title": "OTP Input",
+    "description": "One-time code input with SMS autofill hints, paste distribution, digit normalization, and keyboard navigation."
+  },
   "textarea": {
     "title": "Textarea",
     "description": "Multi-line text input with auto-resize."
+  },
+  "editor": {
+    "title": "Rich Text Editor",
+    "description": "Lexical-powered editor with core/pro presets, optional productivity layers, slash commands, tables, markdown/html output, and token-driven styling."
+  },
+  "yoopta-editor": {
+    "title": "Block Editor (Yoopta)",
+    "description": "Notion-style block editor wrapped with Virtari tokens \u2014 slash menu, floating toolbar, drag-and-drop blocks, 20 plugins (paragraph, headings, lists, callout, code, table, image, video, embed, math, mention, emoji, accordion, tabs, steps, carousel, TOC)."
+  },
+  "code": {
+    "title": "Code",
+    "description": "CodeMirror 6 wrapped with Virtari tokens \u2014 read-only viewer, live editor, and inline snippet. 15 preloaded languages, line numbers, line highlight, diff view, copy button, autocomplete, multi-cursor, and search."
   },
   "select": {
     "title": "Select",
@@ -54,6 +78,10 @@
   "slider": {
     "title": "Slider",
     "description": "Range input for numeric values."
+  },
+  "color-picker": {
+    "title": "Color Picker",
+    "description": "Professional solid and gradient picker with CSS code mode, stop editing, alpha, and HEX/RGB/HSL/HSB conversion."
   },
   "label": {
     "title": "Label",
@@ -114,6 +142,10 @@
   "scroll-area": {
     "title": "Scroll Area",
     "description": "Custom scrollbar container."
+  },
+  "carousel": {
+    "title": "Carousel",
+    "description": "Swiper.js wrapped with Virtari tokens \u2014 7 colors, 5 nav variants, 4 sizes, navigation, pagination (bullets / bars / fraction / progressbar), autoplay, scrollbar, lazy, zoom, parallax, thumbs, virtual, grid, effects (fade / cube / coverflow / flip / cards / creative), full RTL, and reduced-motion safe."
   },
   "card": {
     "title": "Card",
@@ -218,5 +250,41 @@
   "bottom-nav": {
     "title": "Bottom Navigation",
     "description": "Mobile-first tab bar \u2014 material / iOS / floating / underline variants, centre FAB, badges, safe-area insets, auto-hide on scroll, and an animated sliding indicator. All CSS-variable driven with full RTL."
+  },
+  "pagination": {
+    "title": "Pagination",
+    "description": "Headless, controlled pagination \u2014 compound parts (Root / Info / PageSize / Prev / Pages / Next) with ellipsis windowing, three sizes, RTL-aware chevrons, and a drop-in adapter for DataTable."
+  },
+  "form": {
+    "title": "Form",
+    "description": "react-hook-form + zod wrapper \u2014 Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage. Auto-wires id + aria-describedby + aria-invalid across any input in the system."
+  },
+  "file-upload": {
+    "title": "File Upload",
+    "description": "Compound dropzone + file list built on react-dropzone \u2014 drag/drop, click-to-browse, image previews with URL cleanup, per-item progress, validation (MIME / size / count), and Controller-friendly for react-form."
+  },
+  "command": {
+    "title": "Command Palette",
+    "description": "cmdk wrapper \u2014 inline palette or Cmd+K dialog, grouped results, keyboard shortcuts rendered via Kbd, async search, and full RTL. Bundles the useHotkey hook from @virtari-packages/utils."
+  },
+  "empty-state": {
+    "title": "Empty State",
+    "description": "Zero-data messaging pattern \u2014 icon, title, description, and actions slots. Two orientations, three sizes, fully composable."
+  },
+  "fieldset": {
+    "title": "Fieldset",
+    "description": "Semantic form section grouping \u2014 native fieldset + legend with token-driven border, invalid and disabled cascade states."
+  },
+  "stepper": {
+    "title": "Stepper",
+    "description": "Multi-step progress indicator with variants, semantic tones, connector styles, and motion presets."
+  },
+  "timeline": {
+    "title": "Timeline",
+    "description": "Sequential event display \u2014 compound indicator, connector, content, and time slots. Grid-based layout with RTL support."
+  },
+  "tag-input": {
+    "title": "Tag Input",
+    "description": "Multi-value text input \u2014 Enter or comma to add, Backspace to remove, max-tags limit, custom validation, and chip rendering."
   }
 }

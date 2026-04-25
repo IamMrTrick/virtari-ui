@@ -1,47 +1,247 @@
-@layer components {
+@layer design-system.components {
   .vds-card {
+    --card-radius: var(--vds-radius-card, 0.75rem);
+    --card-border-width: 1px;
+
+    --card-background: var(--vds-color-surface, #ffffff);
+    --card-background-hover: color-mix(
+      in oklch,
+      var(--card-background) 94%,
+      var(--vds-color-bg-subtle, #f9fafb) 6%
+    );
+    --card-border-color: var(
+      --vds-color-border-muted,
+      var(--vds-color-border, #e5e7eb)
+    );
+    --card-border-color-hover: var(--vds-color-border, #d1d5db);
+    --card-shadow: var(
+      --vds-shadow-sm,
+      0 1px 3px 0 rgb(0 0 0 / 0.1),
+      0 1px 2px -1px rgb(0 0 0 / 0.1)
+    );
+    --card-shadow-hover: var(
+      --vds-shadow-md,
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1)
+    );
+
+    --card-text-color: var(--vds-color-text, #111827);
+    --card-muted-color: var(--vds-color-text-muted, #6b7280);
+
+    --card-padding-inline: clamp(
+      var(--vds-space-4, 1rem),
+      2.5vw,
+      var(--vds-space-6, 1.5rem)
+    );
+    --card-padding-block: clamp(
+      var(--vds-space-4, 1rem),
+      2vw,
+      var(--vds-space-5, 1.25rem)
+    );
+    --card-section-gap: clamp(
+      var(--vds-space-3, 0.75rem),
+      1.5vw,
+      var(--vds-space-4, 1rem)
+    );
+    --card-header-gap: var(--vds-space-1-5, 0.375rem);
+    --card-footer-gap: var(--vds-space-3, 0.75rem);
+
+    --card-title-font-family: var(
+      --vds-font-sans,
+      ui-sans-serif,
+      system-ui,
+      sans-serif
+    );
+    --card-title-font-size: var(--vds-text-lg, 1.125rem);
+    --card-title-font-weight: var(--vds-font-weight-semibold, 600);
+    --card-title-line-height: var(--vds-leading-tight, 1.25);
+    --card-description-font-size: var(--vds-text-sm, 0.875rem);
+    --card-description-line-height: var(--vds-leading-normal, 1.5);
+
+    --card-transition-duration: var(--vds-duration-fast, 120ms);
+    --card-transition-easing: var(
+      --vds-ease-out,
+      cubic-bezier(0, 0, 0.2, 1)
+    );
+    --card-hover-translate-y: -1px;
+
+    --card-focus-ring-color: var(--vds-color-ring, #6366f1);
+    --card-focus-ring-width: 2px;
+    --card-focus-ring-offset: 2px;
+  }
+
+  .vds-card[data-variant="outline"] {
+    --card-shadow: none;
+    --card-shadow-hover: none;
+  }
+
+  .vds-card[data-variant="soft"] {
+    --card-background: var(--vds-color-surface-raised, #f9fafb);
+    --card-background-hover: color-mix(
+      in oklch,
+      var(--card-background) 88%,
+      var(--vds-color-surface, #ffffff) 12%
+    );
+    --card-border-color: color-mix(
+      in oklch,
+      var(--vds-color-border-muted, #e5e7eb) 55%,
+      transparent
+    );
+    --card-border-color-hover: var(--vds-color-border-muted, #e5e7eb);
+    --card-shadow: none;
+    --card-shadow-hover: var(
+      --vds-shadow-sm,
+      0 1px 3px 0 rgb(0 0 0 / 0.1),
+      0 1px 2px -1px rgb(0 0 0 / 0.1)
+    );
+  }
+
+  .vds-card[data-variant="ghost"] {
+    --card-background: transparent;
+    --card-background-hover: var(--vds-color-bg-subtle, #f9fafb);
+    --card-border-color: transparent;
+    --card-border-color-hover: transparent;
+    --card-shadow: none;
+    --card-shadow-hover: none;
+  }
+
+  .vds-card[data-size="sm"] {
+    --card-padding-inline: clamp(
+      var(--vds-space-3, 0.75rem),
+      2vw,
+      var(--vds-space-4, 1rem)
+    );
+    --card-padding-block: clamp(
+      var(--vds-space-3, 0.75rem),
+      1.5vw,
+      var(--vds-space-4, 1rem)
+    );
+    --card-section-gap: var(--vds-space-2-5, 0.625rem);
+    --card-footer-gap: var(--vds-space-2, 0.5rem);
+    --card-title-font-size: var(--vds-text-base, 1rem);
+    --card-description-font-size: var(--vds-text-xs, 0.75rem);
+  }
+
+  .vds-card[data-size="lg"] {
+    --card-padding-inline: clamp(
+      var(--vds-space-5, 1.25rem),
+      3vw,
+      var(--vds-space-8, 2rem)
+    );
+    --card-padding-block: clamp(
+      var(--vds-space-5, 1.25rem),
+      2.25vw,
+      var(--vds-space-6, 1.5rem)
+    );
+    --card-section-gap: clamp(
+      var(--vds-space-4, 1rem),
+      1.8vw,
+      var(--vds-space-5, 1.25rem)
+    );
+    --card-header-gap: var(--vds-space-2, 0.5rem);
+    --card-footer-gap: var(--vds-space-4, 1rem);
+    --card-title-font-size: var(--vds-text-xl, 1.25rem);
+    --card-description-font-size: var(--vds-text-base, 1rem);
+  }
+}
+
+@layer design-system.components {
+  .vds-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    background-color: var(--vds-color-surface);
-    border: 1px solid var(--vds-color-border);
-    border-radius: var(--vds-radius-card);
-    box-shadow: var(--vds-shadow-sm);
-    color: var(--vds-color-text);
+    min-inline-size: 0;
+    color: var(--card-text-color);
+    background-color: var(--card-background);
+    border: var(--card-border-width) solid var(--card-border-color);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
     overflow: hidden;
+    transition:
+      background-color var(--card-transition-duration)
+        var(--card-transition-easing),
+      border-color var(--card-transition-duration) var(--card-transition-easing),
+      box-shadow var(--card-transition-duration) var(--card-transition-easing),
+      transform var(--card-transition-duration) var(--card-transition-easing);
+  }
+
+  .vds-card[data-interactive] {
+    cursor: pointer;
+  }
+
+  .vds-card[data-interactive]:hover {
+    background-color: var(--card-background-hover);
+    border-color: var(--card-border-color-hover);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(var(--card-hover-translate-y));
+  }
+
+  .vds-card[data-interactive]:focus-visible {
+    outline: var(--card-focus-ring-width) solid var(--card-focus-ring-color);
+    outline-offset: var(--card-focus-ring-offset);
+  }
+
+  .vds-card:not(:has(> .vds-card-header, > .vds-card-content, > .vds-card-footer)) {
+    padding-inline: var(--card-padding-inline);
+    padding-block: var(--card-padding-block);
+  }
+
+  .vds-card > :where(.vds-card-header, .vds-card-content, .vds-card-footer) {
+    min-inline-size: 0;
+    padding-inline: var(--card-padding-inline);
+    padding-block: 0;
+  }
+
+  .vds-card
+    > :where(.vds-card-header, .vds-card-content, .vds-card-footer):first-child {
+    padding-block-start: var(--card-padding-block);
+  }
+
+  .vds-card
+    > :where(.vds-card-header, .vds-card-content, .vds-card-footer):last-child {
+    padding-block-end: var(--card-padding-block);
+  }
+
+  .vds-card
+    > :where(.vds-card-header, .vds-card-content, .vds-card-footer)
+    + :where(.vds-card-header, .vds-card-content, .vds-card-footer) {
+    padding-block-start: var(--card-section-gap);
   }
 
   .vds-card-header {
     display: flex;
     flex-direction: column;
-    gap: var(--vds-space-1-5);
-    padding: var(--vds-space-6);
+    gap: var(--card-header-gap);
   }
 
   .vds-card-title {
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-lg);
-    font-weight: var(--vds-font-weight-semibold);
-    line-height: var(--vds-leading-tight);
     margin: 0;
+    font-family: var(
+      --card-title-font-family,
+      var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif)
+    );
+    font-size: var(--card-title-font-size);
+    font-weight: var(--card-title-font-weight);
+    line-height: var(--card-title-line-height);
+    color: inherit;
   }
 
   .vds-card-description {
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-sm);
-    color: var(--vds-color-text-muted);
-    line-height: var(--vds-leading-normal);
     margin: 0;
+    font-size: var(--card-description-font-size);
+    line-height: var(--card-description-line-height);
+    color: var(--card-muted-color);
   }
 
   .vds-card-content {
-    padding-inline: var(--vds-space-6);
-    padding-block-end: var(--vds-space-6);
+    min-inline-size: 0;
   }
 
   .vds-card-footer {
     display: flex;
     align-items: center;
-    padding: var(--vds-space-6);
-    padding-block-start: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: var(--card-footer-gap);
   }
 }

@@ -268,6 +268,11 @@ export interface NavItemProps
   onOpenChange?: (open: boolean) => void;
   /** Floating placement (popover mode). */
   placement?: Parameters<typeof useSubmenu>[0]["placement"];
+  /**
+   * Optional heading shown at the top of popover submenus in collapsed rail
+   * mode. Defaults to `label` for declarative submenu items.
+   */
+  popoverHeading?: ReactNode;
   active?: boolean;
   disabled?: boolean;
 
@@ -288,6 +293,7 @@ export function NavItem({
   open,
   onOpenChange,
   placement,
+  popoverHeading,
   active,
   disabled,
   className,
@@ -367,6 +373,8 @@ export function NavItem({
   // an outer popover closer so nested rails fold up together.
   const outerCloser = useNavPopoverCloser();
   const setSubmenuOpen = submenuState.setOpen;
+  const resolvedPopoverHeading =
+    popoverHeading ?? (submenu != null ? label : undefined);
   const popoverCloser = useMemo<NavPopoverCloser | null>(() => {
     if (resolvedMode !== "popover") return outerCloser;
     return () => {
@@ -388,7 +396,12 @@ export function NavItem({
   );
 
   return (
-    <NavSubmenuContext.Provider value={submenuState}>
+    <NavSubmenuContext.Provider
+      value={{
+        ...submenuState,
+        popoverHeading: resolvedPopoverHeading,
+      }}
+    >
       <NavPopoverCloserContext.Provider value={popoverCloser}>
         {itemBody}
       </NavPopoverCloserContext.Provider>
