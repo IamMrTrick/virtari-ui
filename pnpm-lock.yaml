@@ -960,6 +960,9 @@ importers:
       '@virtari-packages/react-input':
         specifier: workspace:*
         version: link:../react-input
+      '@virtari-packages/react-pagination':
+        specifier: workspace:*
+        version: link:../react-pagination
       '@virtari-packages/react-popover':
         specifier: workspace:*
         version: link:../react-popover
@@ -1441,6 +1444,12 @@ importers:
 
   packages/react-input:
     dependencies:
+      '@virtari-packages/react-fieldset':
+        specifier: workspace:*
+        version: link:../react-fieldset
+      '@virtari-packages/react-icons':
+        specifier: workspace:*
+        version: link:../react-icons
       '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
@@ -1870,6 +1879,9 @@ importers:
       '@virtari-packages/react-chip':
         specifier: workspace:*
         version: link:../react-chip
+      '@virtari-packages/react-fieldset':
+        specifier: workspace:*
+        version: link:../react-fieldset
       '@virtari-packages/react-icons':
         specifier: workspace:*
         version: link:../react-icons
@@ -2167,6 +2179,9 @@ importers:
 
   packages/react-textarea:
     dependencies:
+      '@virtari-packages/react-fieldset':
+        specifier: workspace:*
+        version: link:../react-fieldset
       '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils
