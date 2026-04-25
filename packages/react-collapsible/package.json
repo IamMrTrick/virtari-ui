@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-collapsible",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Virtari collapsible — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",

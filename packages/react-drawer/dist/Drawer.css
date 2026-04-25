@@ -1,0 +1,538 @@
+@layer components {
+  .vds-drawer-overlay {
+    --vds-drawer-duration: var(--vds-duration-slower);
+    --vds-drawer-ease: var(--vds-ease-ios);
+    position: fixed;
+    inset: 0;
+    z-index: var(--vds-z-overlay);
+    background-color: var(--vds-color-scrim);
+    opacity: var(--vds-drawer-overlay-opacity, 0);
+    pointer-events: none;
+    will-change: opacity;
+    transition: opacity var(--vds-drawer-duration) var(--vds-drawer-ease);
+  }
+
+  .vds-drawer-overlay[data-open] {
+    pointer-events: auto;
+  }
+
+  .vds-drawer-content {
+    --vds-drawer-radius: var(--vds-radius-drawer);
+    --vds-drawer-duration: var(--vds-duration-slower);
+    --vds-drawer-ease: var(--vds-ease-ios);
+    --vds-drawer-shadow: var(--vds-shadow-xl);
+    --vds-drawer-shadow-minimized:
+      0 0 0 1px color-mix(in oklch, var(--vds-color-border-muted), transparent 40%),
+      var(--vds-shadow-lg);
+    --vds-drawer-handle-width: 2.875rem;
+    --vds-drawer-handle-thickness: 0.3125rem;
+    --vds-drawer-handle-color: var(--vds-color-border);
+    --vds-drawer-handle-color-active: var(--vds-color-border-strong, var(--vds-color-neutral-8));
+    --vds-drawer-available-size: 100dvh;
+    --vds-drawer-fixed-size: var(--vds-drawer-available-size);
+    --vds-drawer-adaptive-size: clamp(18rem, 32vw, 28rem);
+    --vds-drawer-edge-offset: 0px;
+    --vds-drawer-keyboard-inset: 0px;
+    position: fixed;
+    z-index: var(--vds-z-modal);
+    display: flex;
+    min-block-size: 0;
+    min-inline-size: 0;
+    flex-direction: column;
+    box-sizing: border-box;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklch, var(--vds-color-surface), white 4%),
+        var(--vds-color-surface)
+      );
+    outline: none;
+    overflow: hidden;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable both-edges;
+    backface-visibility: hidden;
+    will-change: transform;
+    transform-style: preserve-3d;
+    transition: transform var(--vds-drawer-duration) var(--vds-drawer-ease);
+    transform: var(--vds-drawer-transform, var(--vds-drawer-rest-transform));
+    -moz-user-select: none;
+         user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    container-type: inline-size;
+    contain: layout paint style;
+  }
+
+    .vds-drawer-content[data-indicator="outside"] {
+      overflow: visible;
+      contain: layout style;
+    }
+
+    .vds-drawer-content:not([data-open]) {
+      pointer-events: none;
+    }
+
+    .vds-drawer-content[data-dragging] {
+      transition: none;
+    }
+
+    .vds-drawer-content[data-stage="minimized"] {
+      box-shadow: var(--vds-drawer-shadow-minimized);
+    }
+
+    .vds-drawer-content[data-direction="bottom"],.vds-drawer-content[data-direction="top"] {
+      inset-inline: 0;
+      max-block-size: calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px));
+      max-inline-size: 100vw;
+      touch-action: pan-y;
+    }
+
+    .vds-drawer-content[data-direction="bottom"][data-size-mode="adaptive"],.vds-drawer-content[data-direction="top"][data-size-mode="adaptive"] {
+      block-size: auto;
+    }
+
+    .vds-drawer-content[data-direction="bottom"][data-size-mode="full"],.vds-drawer-content[data-direction="top"][data-size-mode="full"] {
+      block-size: calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px));
+    }
+
+    .vds-drawer-content[data-direction="bottom"][data-size-mode="fixed"],.vds-drawer-content[data-direction="top"][data-size-mode="fixed"] {
+      block-size: min(
+        var(--vds-drawer-fixed-size),
+        calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px))
+      );
+    }
+
+    .vds-drawer-content[data-direction="bottom"] {
+      inset-block-end: calc(var(--vds-drawer-edge-offset) + var(--vds-drawer-keyboard-inset, 0px));
+      border-start-start-radius: var(--vds-drawer-radius);
+      border-start-end-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: center bottom;
+      --vds-drawer-rest-transform: translate3d(0, 100%, 0);
+    }
+
+    .vds-drawer-content[data-direction="top"] {
+      inset-block-start: var(--vds-drawer-edge-offset);
+      border-end-start-radius: var(--vds-drawer-radius);
+      border-end-end-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: center top;
+      --vds-drawer-rest-transform: translate3d(0, -100%, 0);
+    }
+
+    .vds-drawer-content[data-direction="left"],.vds-drawer-content[data-direction="right"] {
+      inset-block: 0;
+      max-inline-size: var(--vds-drawer-available-size);
+      max-block-size: calc(100dvh - var(--vds-drawer-keyboard-inset, 0px));
+      scrollbar-gutter: auto;
+      touch-action: pan-x;
+    }
+
+    .vds-drawer-content[data-direction="left"][data-size-mode="adaptive"],.vds-drawer-content[data-direction="right"][data-size-mode="adaptive"] {
+      inline-size: min(var(--vds-drawer-adaptive-size), var(--vds-drawer-available-size));
+    }
+
+    .vds-drawer-content[data-direction="left"][data-size-mode="full"],.vds-drawer-content[data-direction="right"][data-size-mode="full"] {
+      inline-size: var(--vds-drawer-available-size);
+    }
+
+    .vds-drawer-content[data-direction="left"][data-size-mode="fixed"],.vds-drawer-content[data-direction="right"][data-size-mode="fixed"] {
+      inline-size: min(var(--vds-drawer-fixed-size), var(--vds-drawer-available-size));
+    }
+
+    .vds-drawer-content[data-direction="left"] {
+      inset-inline-start: var(--vds-drawer-edge-offset);
+      border-start-end-radius: var(--vds-drawer-radius);
+      border-end-end-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: left center;
+      --vds-drawer-rest-transform: translate3d(-100%, 0, 0);
+    }
+
+    .vds-drawer-content[data-direction="right"] {
+      /* Compensate for the scroll-lock margin-right that react-remove-scroll
+         applies to body when a modal is open. The variable is set to the
+         real scrollbar width while locked and is absent otherwise. */
+      inset-inline-end: calc(
+        var(--vds-drawer-edge-offset) - var(--removed-body-scroll-bar-size, 0px)
+      );
+      border-start-start-radius: var(--vds-drawer-radius);
+      border-end-start-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: right center;
+      --vds-drawer-rest-transform: translate3d(100%, 0, 0);
+    }
+
+    /* RTL: inset-inline-* already flips which physical edge the drawer docks
+       to; mirror transform-origin and the rest translation so the slide axis
+       matches the new dock edge. */
+    :dir(rtl) .vds-drawer-content[data-direction="left"] {
+      transform-origin: right center;
+      --vds-drawer-rest-transform: translate3d(100%, 0, 0);
+    }
+
+    :dir(rtl) .vds-drawer-content[data-direction="right"] {
+      transform-origin: left center;
+      --vds-drawer-rest-transform: translate3d(-100%, 0, 0);
+    }
+
+  .vds-drawer-header {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: var(--vds-space-2);
+    padding: var(--vds-space-4) var(--vds-space-6);
+    touch-action: none;
+    -moz-user-select: none;
+         user-select: none;
+    -webkit-user-select: none;
+    /* Plain (default): a single flat step of contrast vs the drawer body.
+       surface-sunken inverts automatically (slightly darker in light,
+       slightly lighter in dark) because neutral-2 is mode-aware. */
+    background: var(--vds-color-surface-sunken);
+  }
+
+  .vds-drawer-header[data-variant="bordered"] {
+    /* Bordered: uniform with the drawer body, differentiated only by a
+       bottom rule. */
+    background: transparent;
+    border-block-end: 1px solid var(--vds-color-border-muted);
+  }
+
+  .vds-drawer-content[data-direction="top"] .vds-drawer-header,
+  .vds-drawer-content[data-direction="left"] .vds-drawer-header,
+  .vds-drawer-content[data-direction="right"] .vds-drawer-header {
+    padding-block-start: max(var(--vds-space-4), env(safe-area-inset-top));
+  }
+
+  .vds-drawer-header > .vds-drawer-title,
+  .vds-drawer-header > .vds-drawer-description {
+    padding-inline: 0;
+  }
+
+  .vds-drawer-header > .vds-drawer-description {
+    margin-block-start: 0;
+  }
+
+  .vds-drawer-content[data-direction="bottom"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="inside"],
+  .vds-drawer-content[data-direction="bottom"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="progress"] {
+    margin-block: calc(var(--vds-space-2) * -1) var(--vds-space-3);
+  }
+
+  .vds-drawer-content[data-direction="top"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="inside"],
+  .vds-drawer-content[data-direction="top"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="progress"] {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    justify-content: center;
+    padding-block: var(--vds-space-3);
+    margin: 0;
+  }
+
+  .vds-drawer-content[data-direction="top"][data-indicator="inside"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="top"][data-indicator="progress"]
+    .vds-drawer-body {
+    padding-block-end: calc(
+      var(--vds-drawer-handle-thickness) + var(--vds-space-5)
+    );
+  }
+
+  .vds-drawer-content[data-direction="left"][data-indicator="inside"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="left"][data-indicator="inside"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="left"][data-indicator="inside"]
+    .vds-drawer-footer,
+  .vds-drawer-content[data-direction="left"][data-indicator="progress"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="left"][data-indicator="progress"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="left"][data-indicator="progress"]
+    .vds-drawer-footer {
+    padding-inline-end: calc(
+      var(--vds-drawer-handle-thickness) + var(--vds-space-5)
+    );
+  }
+
+  .vds-drawer-content[data-direction="right"][data-indicator="inside"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="right"][data-indicator="inside"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="right"][data-indicator="inside"]
+    .vds-drawer-footer,
+  .vds-drawer-content[data-direction="right"][data-indicator="progress"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="right"][data-indicator="progress"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="right"][data-indicator="progress"]
+    .vds-drawer-footer {
+    padding-inline-start: calc(
+      var(--vds-drawer-handle-thickness) + var(--vds-space-5)
+    );
+  }
+
+  .vds-drawer-body {
+    flex: 1;
+    min-block-size: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    -moz-user-select: auto;
+         user-select: auto;
+    -webkit-user-select: auto;
+    padding-inline: var(--vds-space-6);
+    padding-block: var(--vds-space-4);
+    touch-action: auto;
+  }
+
+  .vds-drawer-header + .vds-drawer-body {
+    padding-block-start: 0;
+  }
+
+  .vds-drawer-handle {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--vds-space-3);
+    -moz-user-select: none;
+         user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    cursor: grab;
+  }
+
+    .vds-drawer-handle:active {
+      cursor: grabbing;
+    }
+      :is(.vds-drawer-handle[data-direction="bottom"],.vds-drawer-handle[data-direction="top"]) .vds-drawer-handle-bar {
+        inline-size: var(--vds-drawer-handle-width);
+        block-size: var(--vds-drawer-handle-thickness);
+      }
+
+    .vds-drawer-handle[data-direction="left"],.vds-drawer-handle[data-direction="right"] {
+      position: absolute;
+      inset-block: 0;
+      padding-inline: var(--vds-space-3);
+      padding-block: 0;
+      block-size: 100%;
+    }
+
+      :is(.vds-drawer-handle[data-direction="left"],.vds-drawer-handle[data-direction="right"]) .vds-drawer-handle-bar {
+        inline-size: var(--vds-drawer-handle-thickness);
+        block-size: var(--vds-drawer-handle-width);
+      }
+
+    .vds-drawer-handle[data-direction="left"] {
+      inset-inline-end: 0;
+    }
+
+    .vds-drawer-handle[data-direction="right"] {
+      inset-inline-start: 0;
+    }
+
+    .vds-drawer-handle[data-stage="minimized"] .vds-drawer-handle-bar {
+      background-color: var(--vds-drawer-handle-color-active);
+    }
+
+  /* Outside: the handle floats beyond the drawer's opening edge as a bare bar,
+     with no chip/pill background. Sits exactly at the boundary plus a small
+     visual gap. */
+  .vds-drawer-handle[data-placement="outside"] {
+    position: absolute;
+    z-index: 2;
+    margin: 0;
+    padding: var(--vds-space-2);
+    background: none;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="bottom"],
+  .vds-drawer-handle[data-placement="outside"][data-direction="top"] {
+    inset-inline-start: 50%;
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="bottom"] {
+    inset-block-start: 0;
+    transform: translate(-50%, calc(-100% - var(--vds-space-2)));
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="top"] {
+    inset-block-end: 0;
+    transform: translate(-50%, calc(100% + var(--vds-space-2)));
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="left"],
+  .vds-drawer-handle[data-placement="outside"][data-direction="right"] {
+    inset-block: auto;
+    inset-block-start: 50%;
+    block-size: auto;
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="left"] {
+    inset-inline-end: 0;
+    transform: translate(calc(100% + var(--vds-space-2)), -50%);
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="right"] {
+    inset-inline-start: 0;
+    transform: translate(calc(-100% - var(--vds-space-2)), -50%);
+  }
+
+  .vds-drawer-handle-bar {
+    position: relative;
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-drawer-handle-color);
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+    .vds-drawer-handle:hover .vds-drawer-handle-bar {
+      background-color: var(--vds-drawer-handle-color-active);
+    }
+
+  /* Progress indicator: the bar fills from its center outward as the user drags
+     the drawer toward the close threshold. Reaches full fill right as the
+     drawer is about to dismiss on release. */
+  .vds-drawer-handle[data-placement="progress"] .vds-drawer-handle-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--vds-color-primary-9, var(--vds-color-text));
+    transform-origin: center;
+    transform: scaleX(var(--vds-drawer-close-progress, 0));
+    transition: transform var(--vds-duration-fast) var(--vds-ease-out);
+    pointer-events: none;
+  }
+
+  /* Left/right drawers have a vertical bar — scale on Y instead. */
+  .vds-drawer-content[data-direction="left"]
+    .vds-drawer-handle[data-placement="progress"]
+    .vds-drawer-handle-bar::after,
+  .vds-drawer-content[data-direction="right"]
+    .vds-drawer-handle[data-placement="progress"]
+    .vds-drawer-handle-bar::after {
+    transform: scaleY(var(--vds-drawer-close-progress, 0));
+  }
+
+  /* While actively dragging, snap the fill updates to the drag frame (no
+     lagging transition). */
+  .vds-drawer-content[data-dragging]
+    .vds-drawer-handle[data-placement="progress"]
+    .vds-drawer-handle-bar::after {
+    transition: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .vds-drawer-header {
+      cursor: grab;
+    }
+
+    .vds-drawer-header:active {
+      cursor: grabbing;
+    }
+
+    .vds-drawer-handle[data-direction="bottom"],
+    .vds-drawer-handle[data-direction="top"] {
+      cursor: ns-resize;
+    }
+
+    .vds-drawer-handle[data-direction="left"],
+    .vds-drawer-handle[data-direction="right"] {
+      cursor: ew-resize;
+    }
+  }
+
+  .vds-drawer-title {
+    padding-inline: var(--vds-space-6);
+    font-family: var(--vds-font-sans);
+    font-size: var(--vds-text-lg);
+    font-weight: var(--vds-font-weight-semibold);
+    line-height: var(--vds-leading-tight);
+    color: var(--vds-color-text);
+  }
+
+  .vds-drawer-description {
+    margin-block-start: var(--vds-space-1);
+    padding-inline: var(--vds-space-6);
+    font-size: var(--vds-text-sm);
+    line-height: var(--vds-leading-normal);
+    color: var(--vds-color-text-muted);
+  }
+
+  .vds-drawer-footer {
+    display: flex;
+    gap: var(--vds-space-3);
+    flex-shrink: 0;
+    padding: var(--vds-space-4) var(--vds-space-6);
+    padding-block-end: max(var(--vds-space-4), env(safe-area-inset-bottom));
+    margin-block-start: auto;
+    border-block-start: 1px solid var(--vds-color-border-muted);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklch, var(--vds-color-surface), transparent 8%),
+        color-mix(in oklch, var(--vds-color-surface), black 2%)
+      );
+  }
+
+  @container (inline-size < 26rem) {
+    .vds-drawer-footer {
+      flex-direction: column-reverse;
+    }
+
+      .vds-drawer-footer > * {
+        inline-size: 100%;
+      }
+  }
+
+  /* Keyboard-focus mode — while a virtual keyboard is visible inside a
+     bottom/top drawer, we unstick the header and footer so they scroll
+     together with the body. This maximizes the vertical real estate
+     available for the form inside the clamped visible area. The drag hook
+     is informed via keyboardOpenRef so it treats the drawer content as
+     the active scroll container. */
+  .vds-drawer-content[data-keyboard-open][data-direction="bottom"],
+  .vds-drawer-content[data-keyboard-open][data-direction="top"] {
+    overflow-y: auto;
+    /* Force full-viewport height while a form is being filled — overrides
+       adaptive/fixed size-modes so the user gets maximum space regardless of
+       how short the resting content is. */
+    block-size: calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px));
+  }
+
+  .vds-drawer-content[data-keyboard-open][data-direction="bottom"] .vds-drawer-body,
+  .vds-drawer-content[data-keyboard-open][data-direction="top"] .vds-drawer-body {
+    flex: 0 0 auto;
+    min-block-size: auto;
+    overflow: visible;
+  }
+
+  .vds-drawer-content[data-keyboard-open] .vds-drawer-footer {
+    margin-block-start: 0;
+  }
+
+  [data-vds-drawer-wrapper] {
+    --vds-drawer-duration: var(--vds-duration-slower);
+    --vds-drawer-ease: var(--vds-ease-ios);
+    transition:
+      transform var(--vds-drawer-duration) var(--vds-drawer-ease),
+      border-radius var(--vds-drawer-duration) var(--vds-drawer-ease);
+    transform-origin: center top;
+    will-change: transform, border-radius;
+    overflow: hidden;
+  }
+}

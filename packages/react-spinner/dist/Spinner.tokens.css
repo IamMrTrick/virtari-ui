@@ -1,0 +1,93 @@
+@layer design-system.components {
+  /* =========================================================================
+   * Spinner tokens
+   * Defaults: variant=ring, size=md, color=primary, speed=normal
+   * ========================================================================= */
+  .vds-spinner {
+    /* ── Geometry ── */
+    --spinner-size:        1.25rem;   /* 20px — md */
+    --spinner-track-width: 2px;
+    --spinner-dot-size:    0.375rem;  /* 6px */
+    --spinner-bar-width:   0.1875rem; /* 3px */
+
+    /* ── Color — default: primary ── */
+    --spinner-color:       var(--vds-color-primary-solid, #4f46e5);
+    --spinner-track-color: var(--vds-color-primary-bg, #e0e7ff);
+
+    /* ── Durations ── */
+    --spinner-ring-dur:    0.75s;
+    --spinner-dots-dur:    1.4s;
+    --spinner-bars-dur:    1.2s;
+    --spinner-ripple-dur:  1.6s;
+
+    /* ── Sizes ── */
+  }
+    .vds-spinner[data-size="xs"] {
+      --spinner-size:        0.75rem;
+      --spinner-track-width: 1.5px;
+      --spinner-dot-size:    0.25rem;
+      --spinner-bar-width:   0.125rem;
+    }
+    .vds-spinner[data-size="sm"] {
+      --spinner-size:        1rem;
+      --spinner-track-width: 1.5px;
+      --spinner-dot-size:    0.3125rem;
+      --spinner-bar-width:   0.1875rem;
+    }
+    .vds-spinner[data-size="lg"] {
+      --spinner-size:        2rem;
+      --spinner-track-width: 2.5px;
+      --spinner-dot-size:    0.5rem;
+      --spinner-bar-width:   0.25rem;
+    }
+    .vds-spinner[data-size="xl"] {
+      --spinner-size:        3rem;
+      --spinner-track-width: 3px;
+      --spinner-dot-size:    0.625rem;
+      --spinner-bar-width:   0.3125rem;
+    }
+
+    /* ── Colors ── */
+    .vds-spinner[data-color="success"] {
+      --spinner-color:       var(--vds-color-success-solid, #16a34a);
+      --spinner-track-color: var(--vds-color-success-bg,    #dcfce7);
+    }
+    .vds-spinner[data-color="warning"] {
+      --spinner-color:       var(--vds-color-warning-solid, #d97706);
+      --spinner-track-color: var(--vds-color-warning-bg,    #fef9c3);
+    }
+    .vds-spinner[data-color="danger"] {
+      --spinner-color:       var(--vds-color-danger-solid,  #dc2626);
+      --spinner-track-color: var(--vds-color-danger-bg,     #fee2e2);
+    }
+    .vds-spinner[data-color="info"] {
+      --spinner-color:       var(--vds-color-info-solid,    #0ea5e9);
+      --spinner-track-color: var(--vds-color-info-bg,       #e0f2fe);
+    }
+    .vds-spinner[data-color="accent"] {
+      --spinner-color:       var(--vds-color-accent-solid,  #7c3aed);
+      --spinner-track-color: var(--vds-color-accent-bg,     #ede9fe);
+    }
+    .vds-spinner[data-color="neutral"] {
+      --spinner-color:       var(--vds-color-neutral-solid, #4b5563);
+      --spinner-track-color: var(--vds-color-neutral-bg,    #f3f4f6);
+    }
+    .vds-spinner[data-color="current"] {
+      --spinner-color:       currentColor;
+      --spinner-track-color: color-mix(in oklch, currentColor 18%, transparent);
+    }
+
+    /* ── Speed ── */
+    .vds-spinner[data-speed="slow"] {
+      --spinner-ring-dur:   1.4s;
+      --spinner-dots-dur:   2s;
+      --spinner-bars-dur:   1.8s;
+      --spinner-ripple-dur: 2.6s;
+    }
+    .vds-spinner[data-speed="fast"] {
+      --spinner-ring-dur:   0.45s;
+      --spinner-dots-dur:   0.9s;
+      --spinner-bars-dur:   0.75s;
+      --spinner-ripple-dur: 1s;
+    }
+}
