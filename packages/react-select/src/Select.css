@@ -33,7 +33,7 @@
       border-color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
       box-shadow var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
       color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
-      scale 200ms var(--vds-ease-spring);
+      scale 140ms var(--select-trigger-transition-easing);
   }
 
   .vds-select-trigger:hover:not(:disabled) {
@@ -48,8 +48,8 @@
   }
 
   .vds-select-trigger:active:not(:disabled):not([data-disabled]) {
-    scale: 0.978;
-    transition: scale 35ms linear;
+    scale: 0.992;
+    transition: scale 60ms var(--select-trigger-transition-easing);
   }
 }
 

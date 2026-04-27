@@ -77,6 +77,7 @@ import {
   TimelinePage,
   TagInputPage,
   CarouselPage,
+  FlowPage,
 } from "./pages";
 
 const PAGES: Record<string, () => React.JSX.Element> = {
@@ -152,6 +153,7 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   timeline: TimelinePage,
   "tag-input": TagInputPage,
   carousel: CarouselPage,
+  flow: FlowPage,
 };
 
 /* Hash format: #/[locale]/[page] — locale is optional; missing locale

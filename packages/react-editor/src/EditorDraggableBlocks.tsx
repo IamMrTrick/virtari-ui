@@ -7,7 +7,7 @@ import {
   IconGripVertical,
 } from "@virtari-packages/react-icons";
 import { cn } from "@virtari-packages/utils";
-import { useEditorContext } from "./context";
+import { useEditorConfig } from "./context";
 import { EditorInsertMenu } from "./EditorInsertMenu";
 import type { EditorBlockToolsPlacement } from "./types";
 
@@ -181,7 +181,7 @@ export function EditorDraggableBlocks({
   className,
   placement = "inside",
 }: EditorDraggableBlocksProps) {
-  const { readOnly } = useEditorContext();
+  const { readOnly } = useEditorConfig();
   const menuRef = useRef<HTMLDivElement | null>(null);
   const targetLineRef = useRef<HTMLDivElement | null>(null);
   const targetBlockElementRef = useRef<HTMLElement | null>(null);
@@ -197,7 +197,7 @@ export function EditorDraggableBlocks({
   }, [targetBlockElement]);
 
   function handleTargetElementChanged(nextTargetBlockElement: HTMLElement | null) {
-    if (insertMenuOpenRef.current && !nextTargetBlockElement) {
+    if (insertMenuOpenRef.current) {
       return;
     }
 

@@ -33,7 +33,7 @@
       border-color var(--combobox-trigger-transition-duration) var(--combobox-trigger-transition-easing),
       box-shadow var(--combobox-trigger-transition-duration) var(--combobox-trigger-transition-easing),
       color var(--combobox-trigger-transition-duration) var(--combobox-trigger-transition-easing),
-      scale 200ms var(--vds-ease-spring);
+      scale 140ms var(--combobox-trigger-transition-easing);
   }
 
   .vds-combobox-trigger:hover:not([data-disabled="true"]) {
@@ -48,8 +48,8 @@
   }
 
   .vds-combobox-trigger:active:not([data-disabled="true"]) {
-    scale: 0.978;
-    transition: scale 35ms linear;
+    scale: 0.992;
+    transition: scale 60ms var(--combobox-trigger-transition-easing);
   }
 
   .vds-combobox-trigger[data-disabled="true"] {

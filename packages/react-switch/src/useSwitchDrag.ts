@@ -17,9 +17,10 @@ interface DragSession {
   startX: number;
   startTime: number;
   startChecked: boolean;
-  range: number;
+  minTranslate: number;
+  maxTranslate: number;
   startTranslate: number;
-  rtlSign: 1 | -1;
+  isRtl: boolean;
   dragging: boolean;
   samples: VelocitySample[];
 }
@@ -42,19 +43,69 @@ export interface SwitchDragBinding {
   };
 }
 
-function measureRange(root: HTMLButtonElement, thumb: HTMLSpanElement): number {
+interface DragMetrics {
+  minTranslate: number;
+  maxTranslate: number;
+}
+
+function readCssPx(styles: CSSStyleDeclaration, property: string): number {
+  const value = parseFloat(styles.getPropertyValue(property));
+  return Number.isFinite(value) ? value : 0;
+}
+
+function measureRange(
+  root: HTMLButtonElement,
+  thumb: HTMLSpanElement,
+): DragMetrics {
   const rootWidth = root.clientWidth;
   const thumbWidth = thumb.offsetWidth;
   const styles = getComputedStyle(root);
   const padding =
     parseFloat(styles.paddingInlineStart || styles.paddingLeft || "0") +
     parseFloat(styles.paddingInlineEnd || styles.paddingRight || "0");
-  return Math.max(rootWidth - thumbWidth - padding, 0);
+  const offset = readCssPx(styles, "--_switch-thumb-offset");
+  const minTranslate = offset;
+  const maxTranslate = Math.max(
+    rootWidth - thumbWidth - padding - offset,
+    minTranslate,
+  );
+
+  return { minTranslate, maxTranslate };
 }
 
 function readTranslateX(thumb: HTMLSpanElement): number {
-  const matrix = new DOMMatrixReadOnly(getComputedStyle(thumb).transform);
+  const styles = getComputedStyle(thumb);
+  const [translateX] = styles.translate.split(/\s+/);
+  const parsedTranslate = parseFloat(translateX);
+
+  if (Number.isFinite(parsedTranslate)) {
+    return parsedTranslate;
+  }
+
+  if (!styles.transform || styles.transform === "none") return 0;
+
+  const matrix = new DOMMatrixReadOnly(styles.transform);
   return matrix.m41;
+}
+
+function translateForState(
+  checked: boolean,
+  isRtl: boolean,
+  metrics: DragMetrics,
+): number {
+  return checked === isRtl ? metrics.minTranslate : metrics.maxTranslate;
+}
+
+function resolveCheckedFromVelocity(velocity: number, isRtl: boolean): boolean {
+  return isRtl ? velocity < 0 : velocity > 0;
+}
+
+function resolveCheckedFromPosition(
+  translate: number,
+  midpoint: number,
+  isRtl: boolean,
+): boolean {
+  return isRtl ? translate <= midpoint : translate >= midpoint;
 }
 
 function computeVelocity(samples: VelocitySample[]): number {
@@ -131,24 +182,24 @@ export function useSwitchDrag(config: SwitchDragConfig): SwitchDragBinding {
       const thumb = thumbElRef.current;
       if (!root || !thumb) return;
 
-      const range = measureRange(root, thumb);
-      if (range <= 0) return;
+      const metrics = measureRange(root, thumb);
+      if (metrics.maxTranslate <= metrics.minTranslate) return;
 
       // Reset any stale click-suppression from a prior interaction.
       suppressClickUntilRef.current = 0;
 
       const isRtl = getComputedStyle(root).direction === "rtl";
       const checked = getChecked();
-      const startTranslate = checked ? range : 0;
+      const startTranslate = translateForState(checked, isRtl, metrics);
 
       sessionRef.current = {
         pointerId: event.pointerId,
         startX: event.clientX,
         startTime: event.timeStamp,
         startChecked: checked,
-        range,
+        ...metrics,
         startTranslate,
-        rtlSign: isRtl ? -1 : 1,
+        isRtl,
         dragging: false,
         samples: [{ x: event.clientX, t: event.timeStamp }],
       };
@@ -164,7 +215,7 @@ export function useSwitchDrag(config: SwitchDragConfig): SwitchDragBinding {
       const session = sessionRef.current;
       if (!session || session.pointerId !== event.pointerId) return;
 
-      const deltaX = (event.clientX - session.startX) * session.rtlSign;
+      const deltaX = event.clientX - session.startX;
 
       if (session.samples.length >= SAMPLE_CAPACITY) session.samples.shift();
       session.samples.push({ x: event.clientX, t: event.timeStamp });
@@ -175,9 +226,12 @@ export function useSwitchDrag(config: SwitchDragConfig): SwitchDragBinding {
         rootElRef.current?.setAttribute("data-dragging", "");
       }
 
-      const next = Math.min(Math.max(session.startTranslate + deltaX, 0), session.range);
+      const next = Math.min(
+        Math.max(session.startTranslate + deltaX, session.minTranslate),
+        session.maxTranslate,
+      );
       const thumb = thumbElRef.current;
-      if (thumb) thumb.style.translate = `${next}px 0`;
+      if (thumb) thumb.style.translate = `${next}px -50%`;
     };
 
     const releaseCapture = (session: DragSession) => {
@@ -220,14 +274,14 @@ export function useSwitchDrag(config: SwitchDragConfig): SwitchDragBinding {
         return;
       }
 
-      const velocity = computeVelocity(session.samples) * session.rtlSign;
+      const velocity = computeVelocity(session.samples);
       const thumb = thumbElRef.current;
       const currentTranslate = thumb ? readTranslateX(thumb) : session.startTranslate;
-      const midpoint = session.range / 2;
+      const midpoint = (session.minTranslate + session.maxTranslate) / 2;
 
       const desired = Math.abs(velocity) >= VELOCITY_THRESHOLD_PX_PER_MS
-        ? velocity > 0
-        : currentTranslate >= midpoint;
+        ? resolveCheckedFromVelocity(velocity, session.isRtl)
+        : resolveCheckedFromPosition(currentTranslate, midpoint, session.isRtl);
 
       if (desired !== session.startChecked) {
         flushSync(() => {

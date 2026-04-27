@@ -31,6 +31,7 @@
 "@virtari-packages/react-fieldset": minor
 "@virtari-packages/react-file-upload": minor
 "@virtari-packages/react-flag": minor
+"@virtari-packages/react-flow": minor
 "@virtari-packages/react-form": minor
 "@virtari-packages/react-header": minor
 "@virtari-packages/react-icons": minor

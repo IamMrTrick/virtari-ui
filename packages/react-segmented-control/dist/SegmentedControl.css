@@ -1,149 +1,71 @@
-.vds-segmented-control {
-  /* ─── Track ─── */
-  --segmented-track-bg:           var(--vds-color-bg-muted, oklch(0.96 0 0));
-  --segmented-track-border-color: var(--vds-color-border, #d1d5db);
-  --segmented-track-border-width: 1px;
-  --segmented-padding:            0.125rem;
-  --segmented-radius:             var(--vds-radius-md, 0.5rem);
-
-  /* ─── Item ─── */
-  --segmented-item-height:         var(--vds-size-md, 2.25rem);
-  --segmented-item-padding-inline: var(--vds-space-3, 0.75rem);
-  --segmented-item-padding-block:  0;
-  --segmented-item-font-size:      var(--vds-text-sm, 0.875rem);
-  --segmented-item-font-weight:    var(--vds-font-medium, 500);
-  --segmented-item-line-height:    var(--vds-control-line-height, 1);
-  --segmented-item-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
-  --segmented-item-radius:         calc(var(--segmented-radius) - var(--segmented-padding));
-  --segmented-item-color:          var(--vds-color-text-muted, #6b7280);
-  --segmented-item-color-hover:    var(--vds-color-text, #111827);
-  --segmented-icon-size:           1em;
-
-  /* ─── Checked state ─── */
-  --segmented-checked-bg:          var(--vds-color-surface, #ffffff);
-  --segmented-checked-color:       var(--vds-color-text, #111827);
-  --segmented-checked-shadow:
-    0 1px 3px 0 oklch(0 0 0 / 0.1),
-    0 1px 2px -1px oklch(0 0 0 / 0.1);
-
-  /* ─── Focus ring ─── */
-  --segmented-focus-ring-color:  var(--vds-color-ring, oklch(0.55 0.2 265));
-  --segmented-focus-ring-width:  2px;
-  --segmented-focus-ring-offset: 2px;
-
-  /* ─── Motion ─── */
-  --segmented-transition: var(--vds-transition-fast, 100ms ease-out);
-}
-
-/* ─── Size modifiers ─── */
-
-.vds-segmented-control[data-size="sm"] {
-  --segmented-item-height:         var(--vds-size-sm, 2rem);
-  --segmented-item-padding-inline: var(--vds-space-2-5, 0.625rem);
-  --segmented-item-font-size:      var(--vds-text-xs, 0.75rem);
-}
-
-.vds-segmented-control[data-size="lg"] {
-  --segmented-item-height:         var(--vds-size-lg, 2.5rem);
-  --segmented-item-padding-inline: var(--vds-space-4, 1rem);
-  --segmented-item-font-size:      var(--vds-text-base, 1rem);
-}
-
 @layer design-system.components {
-  /* ── Track ── */
+  /* Outer RadioGroup wrapper — inline by default, block when full-width */
   .vds-segmented-control {
-    display: inline-flex;
-    align-items: stretch;
-    padding: var(--segmented-padding);
-    background-color: var(--segmented-track-bg);
-    border: var(--segmented-track-border-width) solid var(--segmented-track-border-color);
-    border-radius: var(--segmented-radius);
-    min-inline-size: 0;
+    display: inline-block;
   }
 
-  .vds-segmented-control[data-full-width] {
-    display: flex;
+  .vds-segmented-control[data-full-width="true"] {
+    display: block;
   }
 
-  .vds-segmented-control[data-orientation="vertical"] {
+  /* Vertical layout: column-stack the items */
+  .vds-segmented-control .vds-tabs-list[data-orientation="vertical"] {
     flex-direction: column;
     align-items: stretch;
-    display: flex;
+    max-inline-size: none;
+    overflow-x: visible;
+    overflow-y: visible;
   }
 
-  /* ── Item ── */
-  .vds-segmented-control-item {
-    -webkit-appearance: none;
-       -moz-appearance: none;
-            appearance: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--vds-space-1-5, 0.375rem);
-    flex: 1;
-    min-inline-size: 0;
-    block-size: var(--segmented-item-height);
-    padding-inline: var(--segmented-item-padding-inline);
-    padding-block-start: calc(
-      var(--segmented-item-padding-block) + var(--segmented-item-optical-offset)
-    );
-    padding-block-end: var(--segmented-item-padding-block);
-    font-family: inherit;
-    font-size: var(--segmented-item-font-size);
-    font-weight: var(--segmented-item-font-weight);
-    line-height: var(--segmented-item-line-height);
-    color: var(--segmented-item-color);
+  /* ── State bridge ──────────────────────────────────────────────────────────
+   * RadioGroup items carry data-state="checked" (not "active").
+   * Tabs CSS targets [data-state="active"] — we bridge that gap here.
+   * ─────────────────────────────────────────────────────────────────────── */
+
+  /* Map checked → active colors */
+  .vds-segmented-control .vds-tabs-trigger[data-state="checked"] {
+    color: var(--tabs-trigger-color-active);
+    border-color: var(--tabs-trigger-border-color-active);
+    background-color: var(--tabs-trigger-bg-active);
+    box-shadow: var(--tabs-trigger-shadow-active);
+  }
+
+  /* When the animated indicator paints the background, suppress the trigger's own */
+  .vds-segmented-control
+    .vds-tabs-list[data-animated="true"]
+    .vds-tabs-trigger[data-state="checked"] {
     background-color: transparent;
-    border: 0;
-    border-radius: var(--segmented-item-radius);
-    cursor: pointer;
-    white-space: nowrap;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-            user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    transition:
-      background-color var(--segmented-transition),
-      color var(--segmented-transition),
-      box-shadow var(--segmented-transition);
+    box-shadow: none;
   }
 
-  /* ── Icon ── */
+  /* Tabs hover rule selects :not([data-state="active"]) — that passes through
+   * to our checked items. Override so the indicator isn't painted over. */
+  .vds-segmented-control
+    .vds-tabs-trigger[data-state="checked"]:hover:not(:disabled):not(
+      [data-disabled]
+    ) {
+    background-color: transparent;
+    color: var(--tabs-trigger-color-active);
+  }
+
+  /* ── Disabled ─────────────────────────────────────────────────────────── */
+  /* Apply opacity at list level so the track bg dims too. Reset per-item
+   * opacity to 1 so it doesn't compound with Tabs' [data-disabled] rule. */
+  .vds-segmented-control[data-disabled] {
+    pointer-events: none;
+  }
+  .vds-segmented-control[data-disabled] .vds-tabs-list {
+    opacity: 0.6;
+  }
+  .vds-segmented-control[data-disabled] .vds-tabs-trigger {
+    opacity: 1;
+  }
+
+  /* ── Icon slot ────────────────────────────────────────────────────────── */
   .vds-segmented-control-icon {
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
-    font-size: var(--segmented-icon-size);
-  }
-
-  /* ── Hover ── */
-  .vds-segmented-control-item:hover:not(:disabled):not([data-state="checked"]) {
-    color: var(--segmented-item-color-hover);
-  }
-
-  /* ── Checked ── */
-  .vds-segmented-control-item[data-state="checked"] {
-    background-color: var(--segmented-checked-bg);
-    color: var(--segmented-checked-color);
-    box-shadow: var(--segmented-checked-shadow);
-  }
-
-  /* ── Focus ring ── */
-  .vds-segmented-control-item:focus-visible {
-    outline: var(--segmented-focus-ring-width) solid var(--segmented-focus-ring-color);
-    outline-offset: var(--segmented-focus-ring-offset);
-    z-index: 1;
-  }
-
-  /* ── Disabled ── */
-  .vds-segmented-control-item:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  .vds-segmented-control[data-disabled] {
-    opacity: 0.6;
-    cursor: not-allowed;
+    font-size: 1em;
   }
 }

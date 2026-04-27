@@ -11,16 +11,42 @@ var VELOCITY_WINDOW_MS = 80;
 var VELOCITY_THRESHOLD_PX_PER_MS = 0.3;
 var SAMPLE_CAPACITY = 4;
 var CLICK_SUPPRESSION_TTL_MS = 500;
+function readCssPx(styles, property) {
+  const value = parseFloat(styles.getPropertyValue(property));
+  return Number.isFinite(value) ? value : 0;
+}
 function measureRange(root, thumb) {
   const rootWidth = root.clientWidth;
   const thumbWidth = thumb.offsetWidth;
   const styles = getComputedStyle(root);
   const padding = parseFloat(styles.paddingInlineStart || styles.paddingLeft || "0") + parseFloat(styles.paddingInlineEnd || styles.paddingRight || "0");
-  return Math.max(rootWidth - thumbWidth - padding, 0);
+  const offset = readCssPx(styles, "--_switch-thumb-offset");
+  const minTranslate = offset;
+  const maxTranslate = Math.max(
+    rootWidth - thumbWidth - padding - offset,
+    minTranslate
+  );
+  return { minTranslate, maxTranslate };
 }
 function readTranslateX(thumb) {
-  const matrix = new DOMMatrixReadOnly(getComputedStyle(thumb).transform);
+  const styles = getComputedStyle(thumb);
+  const [translateX] = styles.translate.split(/\s+/);
+  const parsedTranslate = parseFloat(translateX);
+  if (Number.isFinite(parsedTranslate)) {
+    return parsedTranslate;
+  }
+  if (!styles.transform || styles.transform === "none") return 0;
+  const matrix = new DOMMatrixReadOnly(styles.transform);
   return matrix.m41;
+}
+function translateForState(checked, isRtl, metrics) {
+  return checked === isRtl ? metrics.minTranslate : metrics.maxTranslate;
+}
+function resolveCheckedFromVelocity(velocity, isRtl) {
+  return isRtl ? velocity < 0 : velocity > 0;
+}
+function resolveCheckedFromPosition(translate, midpoint, isRtl) {
+  return isRtl ? translate <= midpoint : translate >= midpoint;
 }
 function computeVelocity(samples) {
   if (samples.length < 2) return 0;
@@ -87,20 +113,20 @@ function useSwitchDrag(config) {
       const root = rootElRef.current;
       const thumb = thumbElRef.current;
       if (!root || !thumb) return;
-      const range = measureRange(root, thumb);
-      if (range <= 0) return;
+      const metrics = measureRange(root, thumb);
+      if (metrics.maxTranslate <= metrics.minTranslate) return;
       suppressClickUntilRef.current = 0;
       const isRtl = getComputedStyle(root).direction === "rtl";
       const checked = getChecked();
-      const startTranslate = checked ? range : 0;
+      const startTranslate = translateForState(checked, isRtl, metrics);
       sessionRef.current = {
         pointerId: event.pointerId,
         startX: event.clientX,
         startTime: event.timeStamp,
         startChecked: checked,
-        range,
+        ...metrics,
         startTranslate,
-        rtlSign: isRtl ? -1 : 1,
+        isRtl,
         dragging: false,
         samples: [{ x: event.clientX, t: event.timeStamp }]
       };
@@ -112,7 +138,7 @@ function useSwitchDrag(config) {
     const onPointerMove = (event) => {
       const session = sessionRef.current;
       if (!session || session.pointerId !== event.pointerId) return;
-      const deltaX = (event.clientX - session.startX) * session.rtlSign;
+      const deltaX = event.clientX - session.startX;
       if (session.samples.length >= SAMPLE_CAPACITY) session.samples.shift();
       session.samples.push({ x: event.clientX, t: event.timeStamp });
       if (!session.dragging) {
@@ -120,9 +146,12 @@ function useSwitchDrag(config) {
         session.dragging = true;
         rootElRef.current?.setAttribute("data-dragging", "");
       }
-      const next = Math.min(Math.max(session.startTranslate + deltaX, 0), session.range);
+      const next = Math.min(
+        Math.max(session.startTranslate + deltaX, session.minTranslate),
+        session.maxTranslate
+      );
       const thumb = thumbElRef.current;
-      if (thumb) thumb.style.translate = `${next}px 0`;
+      if (thumb) thumb.style.translate = `${next}px -50%`;
     };
     const releaseCapture = (session) => {
       const root = rootElRef.current;
@@ -148,11 +177,11 @@ function useSwitchDrag(config) {
         cleanupVisuals();
         return;
       }
-      const velocity = computeVelocity(session.samples) * session.rtlSign;
+      const velocity = computeVelocity(session.samples);
       const thumb = thumbElRef.current;
       const currentTranslate = thumb ? readTranslateX(thumb) : session.startTranslate;
-      const midpoint = session.range / 2;
-      const desired = Math.abs(velocity) >= VELOCITY_THRESHOLD_PX_PER_MS ? velocity > 0 : currentTranslate >= midpoint;
+      const midpoint = (session.minTranslate + session.maxTranslate) / 2;
+      const desired = Math.abs(velocity) >= VELOCITY_THRESHOLD_PX_PER_MS ? resolveCheckedFromVelocity(velocity, session.isRtl) : resolveCheckedFromPosition(currentTranslate, midpoint, session.isRtl);
       if (desired !== session.startChecked) {
         flushSync(() => {
           configRef.current.onCommit(desired);

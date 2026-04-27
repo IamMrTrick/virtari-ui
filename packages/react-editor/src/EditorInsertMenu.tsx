@@ -11,6 +11,7 @@ import {
   IconH1,
   IconH2,
   IconH3,
+  IconMinus,
   IconList,
   IconListCheck,
   IconListNumbers,
@@ -24,9 +25,17 @@ import {
   IconWorld,
 } from "@virtari-packages/react-icons";
 import { cn } from "@virtari-packages/utils";
-import { useEditorContext } from "./context";
-import { EditorDropdown, EditorDropdownItem } from "./EditorDropdown";
-import { insertBlock, type EditorInsertBlockKind } from "./editor-utils";
+import { useEditorConfig } from "./context";
+import {
+  EditorDropdown,
+  EditorDropdownItem,
+  useEditorDropdown,
+} from "./EditorDropdown";
+import {
+  insertBlock,
+  insertTable,
+  type EditorInsertBlockKind,
+} from "./editor-utils";
 import { EditorMediaDialog } from "./EditorMediaDialog";
 import type { EditorMediaKind } from "./EditorMediaNode";
 import type {
@@ -35,6 +44,8 @@ import type {
 } from "./types";
 
 const DEFAULT_LABEL = "Insert";
+const MIN_TABLE_DIMENSION = 2;
+const MAX_TABLE_DIMENSION = 8;
 
 type ResolvedInsertMenuItem = EditorInsertMenuItem & {
   kind?: EditorInsertBlockKind;
@@ -47,7 +58,7 @@ function isMediaInsertKind(
 }
 
 function createDefaultItems(
-  features: ReturnType<typeof useEditorContext>["features"],
+  features: ReturnType<typeof useEditorConfig>["features"],
   compact: boolean,
 ) {
   const items: ResolvedInsertMenuItem[] = [];
@@ -201,12 +212,127 @@ function createDefaultItems(
       description: "Insert a 3 x 3 table with headers.",
       icon: IconTable,
       kind: "table",
-      run: (editor, targetBlockElement) =>
-        insertBlock(editor, "table", targetBlockElement),
+        run: (editor, targetBlockElement) =>
+          insertTable(editor, 3, 3, targetBlockElement),
     });
   }
 
   return items;
+}
+
+function clampTableDimension(value: number) {
+  return Math.min(MAX_TABLE_DIMENSION, Math.max(MIN_TABLE_DIMENSION, value));
+}
+
+function TableDimensionStepper({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <div className="vds-editor-table-builder-stepper">
+      <span className="vds-editor-table-builder-stepper-label">{label}</span>
+      <div className="vds-editor-table-builder-stepper-controls">
+        <Button
+          type="button"
+          variant="ghost"
+          color="contrast"
+          size="xs"
+          className="vds-editor-table-builder-stepper-button"
+          disabled={value <= MIN_TABLE_DIMENSION}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => onChange(clampTableDimension(value - 1))}
+        >
+          <Icon icon={IconMinus} size="sm" />
+        </Button>
+        <span className="vds-editor-table-builder-stepper-value">{value}</span>
+        <Button
+          type="button"
+          variant="ghost"
+          color="contrast"
+          size="xs"
+          className="vds-editor-table-builder-stepper-button"
+          disabled={value >= MAX_TABLE_DIMENSION}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => onChange(clampTableDimension(value + 1))}
+        >
+          <Icon icon={IconPlus} size="sm" />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function TableBuilderPanel({
+  onBack,
+  onInsert,
+}: {
+  onBack: () => void;
+  onInsert: (rows: number, columns: number) => void;
+}) {
+  const { close } = useEditorDropdown();
+  const [rows, setRows] = useState(3);
+  const [columns, setColumns] = useState(3);
+
+  return (
+    <div className="vds-editor-table-builder">
+      <div className="vds-editor-table-builder-header">
+        <span className="vds-editor-table-builder-title">Build Table</span>
+        <span className="vds-editor-table-builder-summary">
+          {rows} x {columns} with header row
+        </span>
+      </div>
+
+      <div className="vds-editor-table-builder-body">
+        <TableDimensionStepper label="Rows" value={rows} onChange={setRows} />
+        <TableDimensionStepper
+          label="Columns"
+          value={columns}
+          onChange={setColumns}
+        />
+      </div>
+
+      <div className="vds-editor-table-builder-actions">
+        <Button
+          type="button"
+          variant="ghost"
+          color="contrast"
+          size="xs"
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={onBack}
+        >
+          Back
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          color="contrast"
+          size="xs"
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => close()}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="button"
+          variant="soft"
+          color="primary"
+          size="xs"
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => {
+            onInsert(rows, columns);
+            close();
+          }}
+        >
+          Insert
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 export function EditorInsertMenu({
@@ -218,11 +344,12 @@ export function EditorInsertMenu({
   targetBlockElement,
 }: EditorInsertMenuProps) {
   const [editor] = useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   const [mediaDialog, setMediaDialog] = useState<{
     kind: EditorMediaKind;
     targetBlockElement?: HTMLElement | null;
   } | null>(null);
+  const [tableBuilderOpen, setTableBuilderOpen] = useState(false);
 
   const resolvedItems = useMemo<ResolvedInsertMenuItem[]>(
     () => items ?? createDefaultItems(features, compact),
@@ -236,10 +363,17 @@ export function EditorInsertMenu({
         className={cn(
           "vds-editor-dropdown vds-editor-menu vds-editor-insert-menu",
           compact ? "vds-editor-insert-menu-compact" : null,
+          tableBuilderOpen ? "vds-editor-insert-menu-table-builder" : null,
         )}
-        closeOnTriggerMove={!compact}
+        closeOnTriggerMove={false}
         disabled={readOnly}
-        onOpenChange={onOpenChange}
+        onOpenChange={(open) => {
+          if (!open) {
+            setTableBuilderOpen(false);
+          }
+          onOpenChange?.(open);
+        }}
+        stopCloseOnClickSelf={tableBuilderOpen}
         trigger={({ buttonRef, controlsId, open, toggle }) => (
           <Button
             ref={buttonRef}
@@ -266,6 +400,9 @@ export function EditorInsertMenu({
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
+              if (!open) {
+                setTableBuilderOpen(false);
+              }
               toggle();
             }}
           >
@@ -273,46 +410,65 @@ export function EditorInsertMenu({
           </Button>
         )}
       >
-        {resolvedItems.map((item) => (
-          <EditorDropdownItem
-            key={item.key}
-            className="vds-editor-menu-item vds-editor-menu-item-rich"
-            onSelect={() => {
-              if (isMediaInsertKind(item.kind)) {
-                setMediaDialog({
-                  kind: item.kind,
-                  targetBlockElement,
-                });
-                return;
-              }
+        {tableBuilderOpen ? (
+          <TableBuilderPanel
+            onBack={() => setTableBuilderOpen(false)}
+            onInsert={(rows, columns) =>
+              insertTable(editor, rows, columns, targetBlockElement)
+            }
+          />
+        ) : (
+          resolvedItems.map((item) => {
+            const opensTableBuilder = item.kind === "table" && !compact;
 
-              item.run(editor, targetBlockElement);
-            }}
-          >
-            {item.icon ? (
-              <span className="vds-editor-menu-item-icon">
-                <Icon icon={item.icon} size="sm" />
-              </span>
-            ) : null}
+            return (
+              <EditorDropdownItem
+                key={item.key}
+                className="vds-editor-menu-item vds-editor-menu-item-rich"
+                closeOnSelect={!opensTableBuilder}
+                onSelect={() => {
+                  if (opensTableBuilder) {
+                    setTableBuilderOpen(true);
+                    return;
+                  }
 
-            <span className="vds-editor-menu-item-copy">
-              <span className="vds-editor-menu-item-label">
-                {item.title}
-              </span>
-              {item.description ? (
-                <span className="vds-editor-menu-item-description">
-                  {item.description}
+                  if (isMediaInsertKind(item.kind)) {
+                    setMediaDialog({
+                      kind: item.kind,
+                      targetBlockElement,
+                    });
+                    return;
+                  }
+
+                  item.run(editor, targetBlockElement);
+                }}
+              >
+                {item.icon ? (
+                  <span className="vds-editor-menu-item-icon">
+                    <Icon icon={item.icon} size="sm" />
+                  </span>
+                ) : null}
+
+                <span className="vds-editor-menu-item-copy">
+                  <span className="vds-editor-menu-item-label">
+                    {item.title}
+                  </span>
+                  {item.description ? (
+                    <span className="vds-editor-menu-item-description">
+                      {item.description}
+                    </span>
+                  ) : null}
                 </span>
-              ) : null}
-            </span>
 
-            {item.shortcut ? (
-              <Kbd className="vds-editor-menu-item-shortcut">
-                {item.shortcut}
-              </Kbd>
-            ) : null}
-          </EditorDropdownItem>
-        ))}
+                {item.shortcut ? (
+                  <Kbd className="vds-editor-menu-item-shortcut">
+                    {item.shortcut}
+                  </Kbd>
+                ) : null}
+              </EditorDropdownItem>
+            );
+          })
+        )}
       </EditorDropdown>
       <EditorMediaDialog
         editor={editor}

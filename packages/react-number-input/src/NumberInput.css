@@ -4,8 +4,8 @@
 
 @keyframes vds-typing-pulse {
   0%   { scale: 1; }
-  30%  { scale: calc(1 + var(--_ti, 0.4) * 0.028); }
-  65%  { scale: calc(1 - var(--_ti, 0.4) * 0.008); }
+  30%  { scale: calc(1 + var(--_ti, 0.4) * 0.01); }
+  65%  { scale: calc(1 - var(--_ti, 0.4) * 0.003); }
   100% { scale: 1; }
 }
 
@@ -26,7 +26,7 @@
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
       box-shadow var(--vds-duration-fast) var(--vds-ease-out),
-      scale 200ms var(--vds-ease-spring);
+      scale 140ms var(--vds-ease-out);
 
     &:focus-within {
       outline: 2px solid var(--vds-color-ring);
@@ -35,8 +35,8 @@
     }
 
     &:active:not([data-disabled]) {
-      scale: 0.978;
-      transition: scale 35ms linear;
+      scale: 0.992;
+      transition: scale 60ms var(--vds-ease-out);
     }
 
     &[data-invalid] {
@@ -83,7 +83,7 @@
 /* Typing pulse on the inner input */
 @layer design-system.components {
   .vds-number-input__field.vds-field--pulse {
-    animation: vds-typing-pulse 200ms var(--vds-ease-out) forwards;
+    animation: vds-typing-pulse 140ms var(--vds-ease-out) forwards;
   }
 }
 
@@ -125,15 +125,15 @@
 
   @keyframes ni-step-up-press {
     0%   { transform: translateY(0) scale(1); }
-    35%  { transform: translateY(-3px) scale(0.72); }
-    70%  { transform: translateY(1px) scale(1.08); }
+    35%  { transform: translateY(-1px) scale(0.94); }
+    70%  { transform: translateY(0.5px) scale(1.015); }
     100% { transform: translateY(0) scale(1); }
   }
 
   @keyframes ni-step-down-press {
     0%   { transform: translateY(0) scale(1); }
-    35%  { transform: translateY(3px) scale(0.72); }
-    70%  { transform: translateY(-1px) scale(1.08); }
+    35%  { transform: translateY(1px) scale(0.94); }
+    70%  { transform: translateY(-0.5px) scale(1.015); }
     100% { transform: translateY(0) scale(1); }
   }
 
@@ -175,25 +175,25 @@
       border-block-end: 1px solid var(--vds-color-border-muted);
 
       &:active:not(:disabled) > svg {
-        animation: ni-step-up-press 240ms var(--vds-ease-out) forwards;
+        animation: ni-step-up-press 140ms var(--vds-ease-out) forwards;
       }
     }
 
     &.vds-number-input__step--down {
       &:active:not(:disabled) > svg {
-        animation: ni-step-down-press 240ms var(--vds-ease-out) forwards;
+        animation: ni-step-down-press 140ms var(--vds-ease-out) forwards;
       }
     }
 
     &.vds-number-input__step--dec {
       &:active:not(:disabled) > svg {
-        animation: ni-step-down-press 240ms var(--vds-ease-out) forwards;
+        animation: ni-step-down-press 140ms var(--vds-ease-out) forwards;
       }
     }
 
     &.vds-number-input__step--inc {
       &:active:not(:disabled) > svg {
-        animation: ni-step-up-press 240ms var(--vds-ease-out) forwards;
+        animation: ni-step-up-press 140ms var(--vds-ease-out) forwards;
       }
     }
   }

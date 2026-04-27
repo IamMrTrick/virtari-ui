@@ -41,6 +41,7 @@ interface EditorDropdownProps {
 interface EditorDropdownItemProps {
   children: ReactNode;
   className?: string;
+  closeOnSelect?: boolean;
   onSelect?: () => void;
   title?: string;
 }
@@ -67,6 +68,7 @@ export function useEditorDropdown() {
 export function EditorDropdownItem({
   children,
   className,
+  closeOnSelect = true,
   onSelect,
   title,
 }: EditorDropdownItemProps) {
@@ -92,7 +94,9 @@ export function EditorDropdownItem({
       onMouseDown={(event) => event.preventDefault()}
       onClick={() => {
         onSelect?.();
-        close();
+        if (closeOnSelect) {
+          close();
+        }
       }}
     >
       {children}
@@ -312,7 +316,7 @@ export function EditorDropdown({
   }, [close, open]);
 
   useEffect(() => {
-    if (!open) {
+    if (!open || !closeOnTriggerMove) {
       return;
     }
 

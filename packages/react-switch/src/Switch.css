@@ -9,9 +9,15 @@
     --_switch-height: var(--vds-space-6);
     --_switch-thumb-size: var(--vds-space-5);
     --_switch-thumb-offset: 1px;
+    --_switch-thumb-translate: var(--_switch-thumb-offset);
+    --_switch-thumb-checked-translate: calc(
+      var(--_switch-width) - var(--_switch-thumb-size) -
+        var(--_switch-thumb-offset) - 4px
+    );
 
     display: inline-flex;
     align-items: center;
+    position: relative;
     flex-shrink: 0;
     cursor: pointer;
     border-radius: var(--vds-radius-full);
@@ -28,6 +34,14 @@
 
     &[data-state="checked"] {
       background-color: var(--vds-color-primary-9);
+    }
+
+    &:dir(rtl) {
+      --_switch-thumb-translate: calc(
+        var(--_switch-width) - var(--_switch-thumb-size) -
+          var(--_switch-thumb-offset) - 4px
+      );
+      --_switch-thumb-checked-translate: var(--_switch-thumb-offset);
     }
 
     &:focus-visible {
@@ -59,21 +73,20 @@
 
   .vds-switch-thumb {
     display: block;
+    position: absolute;
+    inset-block-start: 50%;
+    left: 0;
     border-radius: var(--vds-radius-full);
     background-color: var(--vds-color-on-solid);
     box-shadow: var(--vds-shadow-sm);
     inline-size: var(--_switch-thumb-size);
     block-size: var(--_switch-thumb-size);
     transition: translate var(--vds-duration-normal) var(--vds-ease-spring);
-    translate: var(--_switch-thumb-offset) 0;
+    translate: var(--_switch-thumb-translate) -50%;
     pointer-events: none;
 
     .vds-switch[data-state="checked"] > & {
-      translate: calc(
-          var(--_switch-width) - var(--_switch-thumb-size) -
-            var(--_switch-thumb-offset) - 4px
-        )
-        0;
+      translate: var(--_switch-thumb-checked-translate) -50%;
     }
 
     .vds-switch[data-dragging] > & {

@@ -85,12 +85,20 @@ interface EditorChangePayload extends EditorMetrics {
     editorState: EditorState;
     tags: Set<string>;
 }
+interface EditorChangeSerializationOptions {
+    html?: boolean;
+    markdown?: boolean;
+    json?: boolean;
+    debounceMs?: number;
+}
 interface EditorComposerProps {
     namespace?: string;
     preset?: EditorPreset;
     initialValue?: string | SerializedEditorState | null;
     initialValueFormat?: EditorValueFormat;
+    activeMode?: EditorMode;
     onChange?: (payload: EditorChangePayload) => void;
+    changeSerialization?: EditorChangeSerializationOptions;
     onError?: (error: Error, editor: LexicalEditor) => void;
     readOnly?: boolean;
     autoFocus?: boolean;
@@ -207,18 +215,17 @@ interface EditorProps extends Omit<EditorComposerProps, "children">, Omit<Editor
     onCommentsChange?: (comments: EditorCommentThread[]) => void;
 }
 
-declare function EditorComposer({ namespace, preset, initialValue, initialValueFormat, onChange, onError, readOnly, autoFocus, features, linkMatchers, markdownTransformers, editorRef, children, }: EditorComposerProps): react_jsx_runtime.JSX.Element;
+declare function EditorComposer({ namespace, preset, initialValue, initialValueFormat, activeMode, onChange, changeSerialization, onError, readOnly, autoFocus, features, linkMatchers, markdownTransformers, editorRef, children, }: EditorComposerProps): react_jsx_runtime.JSX.Element;
 
 declare const EditorSurface: react.ForwardRefExoticComponent<EditorSurfaceProps & react.RefAttributes<HTMLDivElement>>;
 
-interface EditorContextValue {
-    features: ResolvedEditorFeatureOptions;
+declare function useEditorContext(): {
     metrics: EditorMetrics;
+    features: ResolvedEditorFeatureOptions;
     linkMatchers: LinkMatcher[];
     markdownTransformers: Transformer[];
     readOnly: boolean;
-}
-declare function useEditorContext(): EditorContextValue;
+};
 
 type EditorMediaKind = "embed" | "image" | "video";
 interface SerializedEditorMediaNode extends SerializedLexicalNode {
@@ -260,4 +267,4 @@ declare function createInitialEditorState(initialValue: string | SerializedEdito
 
 declare const EDITOR_THEME: EditorThemeClasses;
 
-export { $createEditorMediaNode as $, type EditorMediaKind as A, EditorMediaNode as B, type EditorMetrics as C, DEFAULT_CORE_FEATURES as D, type EditorCommentThread as E, type EditorPreset as F, type EditorSlashMenuItem as G, EditorSurface as H, type EditorToolbarOption as I, type EditorValueFormat as J, buildEditorNodes as K, createInitialEditorState as L, resolveEditorFeatures as M, useEditorContext as N, type ResolvedEditorFeatureOptions as R, type SerializedEditorMediaNode as S, type EditorBlockToolsPlacement as a, type EditorProps as b, type EditorFloatingToolbarProps as c, type EditorInsertMenuProps as d, type EditorModeSwitcherProps as e, type EditorMode as f, type EditorSlashMenuProps as g, type EditorStatusBarProps as h, type EditorToolbarProps as i, EditorComposer as j, type EditorSurfaceProps as k, $isEditorMediaNode as l, DEFAULT_LINK_MATCHERS as m, DEFAULT_MARKDOWN_TRANSFORMERS as n, DEFAULT_PRO_FEATURES as o, EDITOR_THEME as p, type EditorBlockToolsProps as q, type EditorBlockType as r, type EditorChangePayload as s, type EditorCharacterLimitOptions as t, type EditorCharset as u, type EditorColorSwatch as v, type EditorComposerProps as w, type EditorElementAlignment as x, type EditorFeatureOptions as y, type EditorInsertMenuItem as z };
+export { $createEditorMediaNode as $, type EditorInsertMenuItem as A, type EditorMediaKind as B, EditorMediaNode as C, DEFAULT_CORE_FEATURES as D, type EditorCommentThread as E, type EditorMetrics as F, type EditorPreset as G, type EditorSlashMenuItem as H, EditorSurface as I, type EditorToolbarOption as J, type EditorValueFormat as K, buildEditorNodes as L, createInitialEditorState as M, resolveEditorFeatures as N, useEditorContext as O, type ResolvedEditorFeatureOptions as R, type SerializedEditorMediaNode as S, type EditorBlockToolsPlacement as a, type EditorProps as b, type EditorFloatingToolbarProps as c, type EditorInsertMenuProps as d, type EditorModeSwitcherProps as e, type EditorMode as f, type EditorSlashMenuProps as g, type EditorStatusBarProps as h, type EditorToolbarProps as i, EditorComposer as j, type EditorSurfaceProps as k, $isEditorMediaNode as l, DEFAULT_LINK_MATCHERS as m, DEFAULT_MARKDOWN_TRANSFORMERS as n, DEFAULT_PRO_FEATURES as o, EDITOR_THEME as p, type EditorBlockToolsProps as q, type EditorBlockType as r, type EditorChangePayload as s, type EditorChangeSerializationOptions as t, type EditorCharacterLimitOptions as u, type EditorCharset as v, type EditorColorSwatch as w, type EditorComposerProps as x, type EditorElementAlignment as y, type EditorFeatureOptions as z };

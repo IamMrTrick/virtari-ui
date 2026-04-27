@@ -40,6 +40,13 @@ import {
 import {
   INSERT_TABLE_COMMAND,
   $createTableNodeWithDimensions,
+  $deleteTableColumnAtSelection,
+  $deleteTableRowAtSelection,
+  $getTableCellNodeFromLexicalNode,
+  $getTableNodeFromLexicalNodeOrThrow,
+  $isTableCellNode,
+  $insertTableColumnAtSelection,
+  $insertTableRowAtSelection,
 } from "@lexical/table";
 import {
   $createCodeNode,
@@ -54,12 +61,14 @@ import type {
   ElementFormatType,
   LexicalNode,
   LexicalEditor,
+  NodeKey,
   RangeSelection,
   SerializedEditorState,
   TextFormatType,
 } from "lexical";
 import {
   $createParagraphNode,
+  $getNodeByKey,
   $createTextNode,
   $getNearestNodeFromDOMNode,
   $insertNodes,
@@ -121,6 +130,7 @@ export interface ToolbarState {
   isLowercase: boolean;
   isUppercase: boolean;
   isCapitalize: boolean;
+  isTableSelection: boolean;
   isLink: boolean;
   linkUrl: string;
   fontFamily: string;
@@ -139,6 +149,12 @@ export const EMPTY_EDITOR_METRICS: EditorMetrics = {
   isEmpty: true,
 };
 
+interface BuildEditorChangePayloadOptions {
+  includeHtml?: boolean;
+  includeJson?: boolean;
+  includeMarkdown?: boolean;
+}
+
 export const EMPTY_TOOLBAR_STATE: ToolbarState = {
   blockType: "paragraph",
   elementFormat: "left",
@@ -152,6 +168,7 @@ export const EMPTY_TOOLBAR_STATE: ToolbarState = {
   isLowercase: false,
   isUppercase: false,
   isCapitalize: false,
+  isTableSelection: false,
   isLink: false,
   linkUrl: "",
   fontFamily: "var(--vds-font-sans)",
@@ -169,9 +186,72 @@ export function countCharacters(text: string, charset: EditorCharset) {
 }
 
 export function countWords(text: string) {
-  const trimmed = text.trim();
-  if (!trimmed) return 0;
-  return trimmed.split(/\s+/).filter(Boolean).length;
+  let wordCount = 0;
+  let inWord = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    const isWhitespace = character !== undefined && /\s/.test(character);
+
+    if (isWhitespace) {
+      inWord = false;
+      continue;
+    }
+
+    if (!inWord) {
+      wordCount += 1;
+      inWord = true;
+    }
+  }
+
+  return wordCount;
+}
+
+function hasTextContent(text: string) {
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+
+    if (character !== undefined && !/\s/.test(character)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function areEditorMetricsEqual(
+  current: EditorMetrics,
+  next: EditorMetrics,
+) {
+  return (
+    current.text === next.text &&
+    current.characterCount === next.characterCount &&
+    current.wordCount === next.wordCount &&
+    current.isEmpty === next.isEmpty
+  );
+}
+
+export function buildEditorMetrics(
+  editorState: EditorState,
+  charset: EditorCharset,
+): EditorMetrics {
+  let text = "";
+  let isEmpty = true;
+
+  editorState.read(() => {
+    text = $getRoot().getTextContent();
+    isEmpty = !hasTextContent(text);
+  });
+
+  return {
+    text,
+    html: "",
+    markdown: "",
+    json: null,
+    characterCount: countCharacters(text, charset),
+    wordCount: countWords(text),
+    isEmpty,
+  };
 }
 
 export function buildEditorChangePayload(
@@ -180,6 +260,11 @@ export function buildEditorChangePayload(
   markdownTransformers: Transformer[],
   charset: EditorCharset,
   tags: Set<string>,
+  {
+    includeHtml = true,
+    includeJson = true,
+    includeMarkdown = true,
+  }: BuildEditorChangePayloadOptions = {},
 ): EditorChangePayload {
   let text = "";
   let html = "";
@@ -189,12 +274,18 @@ export function buildEditorChangePayload(
   editorState.read(() => {
     const root = $getRoot();
     text = root.getTextContent();
-    html = $generateHtmlFromNodes(editor, null);
-    markdown = $convertToMarkdownString(markdownTransformers);
-    isEmpty = text.trim().length === 0;
+    if (includeHtml) {
+      html = $generateHtmlFromNodes(editor, null);
+    }
+    if (includeMarkdown) {
+      markdown = $convertToMarkdownString(markdownTransformers);
+    }
+    isEmpty = !hasTextContent(text);
   });
 
-  const json = editorState.toJSON() as SerializedEditorState;
+  const json = includeJson
+    ? (editorState.toJSON() as SerializedEditorState)
+    : null;
 
   return {
     editor,
@@ -239,6 +330,31 @@ function getSourceModeCodeText(
   }
 
   return root.getTextContent();
+}
+
+function getSourceModeCodeNode(
+  root: ReturnType<typeof $getRoot>,
+  mode: Exclude<EditorMode, "rich-text">,
+) {
+  const firstChild = root.getFirstChild();
+
+  if ($isCodeNode(firstChild) && firstChild.getLanguage() === getSourceModeLanguage(mode)) {
+    return firstChild;
+  }
+
+  return null;
+}
+
+function replaceSourceModeContent(
+  root: ReturnType<typeof $getRoot>,
+  mode: Exclude<EditorMode, "rich-text">,
+  source: string,
+) {
+  const code = $createCodeNode(getSourceModeLanguage(mode));
+
+  root.clear().append(code);
+  code.select().insertRawText(source);
+  code.select(0, 0);
 }
 
 function formatHtmlSource(html: string) {
@@ -295,10 +411,10 @@ export function readSourceValue(
 ) {
   return editor.getEditorState().read(() => {
     const root = $getRoot();
-    const existingCodeText = getSourceModeCodeText(root, mode);
+    const existingCodeNode = getSourceModeCodeNode(root, mode);
 
-    if (existingCodeText.trim().length > 0 || $isCodeNode(root.getFirstChild())) {
-      return existingCodeText;
+    if (existingCodeNode) {
+      return existingCodeNode.getTextContent();
     }
 
     if (mode === "markdown") {
@@ -316,11 +432,18 @@ export function writeSourceValue(
 ) {
   editor.update(() => {
     const root = $getRoot();
-    const code = $createCodeNode(getSourceModeLanguage(mode));
+    const firstChild = root.getFirstChild();
+    const currentSource = getSourceModeCodeText(root, mode);
 
-    root.clear().append(code);
-    code.select().insertRawText(source);
-    code.select(0, 0);
+    if (
+      currentSource === source &&
+      $isCodeNode(firstChild) &&
+      firstChild.getLanguage() === getSourceModeLanguage(mode)
+    ) {
+      return;
+    }
+
+    replaceSourceModeContent(root, mode, source);
   });
 }
 
@@ -335,11 +458,8 @@ export function enterSourceMode(
       mode === "markdown"
         ? $convertToMarkdownString(markdownTransformers)
         : formatHtmlSource($generateHtmlFromNodes(editor, null));
-    const code = $createCodeNode(getSourceModeLanguage(mode));
 
-    root.clear().append(code);
-    code.select().insertRawText(source);
-    code.select(0, 0);
+    replaceSourceModeContent(root, mode, source);
   });
 }
 
@@ -393,6 +513,7 @@ export function readToolbarState(): ToolbarState {
     : anchorNode.getTopLevelElementOrThrow();
   const listNode = $findMatchingParent(anchorNode, $isListNode);
   const linkNode = $findMatchingParent(anchorNode, $isLinkNode);
+  const tableCellNode = $getTableCellNodeFromLexicalNode(anchorNode);
   const linkParentElement = linkNode
     ? $findMatchingParent(
         anchorNode,
@@ -446,6 +567,7 @@ export function readToolbarState(): ToolbarState {
     isLowercase: selection.hasFormat("lowercase"),
     isUppercase: selection.hasFormat("uppercase"),
     isCapitalize: selection.hasFormat("capitalize"),
+    isTableSelection: Boolean(tableCellNode),
     isLink: Boolean(linkNode),
     linkUrl: linkNode?.getURL() ?? "",
     fontFamily: $getSelectionStyleValueForProperty(
@@ -546,6 +668,165 @@ export function insertDefaultTable(
     columns: String(columns),
     includeHeaders: true,
   });
+}
+
+export function insertTable(
+  editor: LexicalEditor,
+  rows = 3,
+  columns = 3,
+  targetBlockElement?: HTMLElement | null,
+) {
+  const safeRows = Math.max(1, Math.min(12, Math.trunc(rows) || 3));
+  const safeColumns = Math.max(1, Math.min(12, Math.trunc(columns) || 3));
+
+  editor.update(() => {
+    const targetNode = resolveInsertionTargetNode(targetBlockElement);
+    const table = $createTableNodeWithDimensions(safeRows, safeColumns, true);
+    const paragraph = createSelectableParagraph();
+
+    insertAfterNode(targetNode, [table, paragraph]);
+    paragraph.select();
+  });
+}
+
+function getSelectedTableCell(selectionSnapshot?: RangeSelection | null) {
+  const selection = resolveRangeSelection(selectionSnapshot);
+
+  if (!selection) {
+    return null;
+  }
+
+  return $getTableCellNodeFromLexicalNode(selection.anchor.getNode());
+}
+
+function resolveTableCellNode(
+  selectionSnapshot?: RangeSelection | null,
+  targetCellKey?: NodeKey | null,
+) {
+  if (targetCellKey) {
+    const lexicalNode = $getNodeByKey(targetCellKey);
+
+    if ($isTableCellNode(lexicalNode)) {
+      return lexicalNode;
+    }
+
+    if (lexicalNode) {
+      return $getTableCellNodeFromLexicalNode(lexicalNode);
+    }
+  }
+
+  return getSelectedTableCell(selectionSnapshot);
+}
+
+export function insertTableRow(
+  editor: LexicalEditor,
+  insertAfter: boolean,
+  selectionSnapshot?: RangeSelection | null,
+  targetCellKey?: NodeKey | null,
+) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey,
+    );
+
+    if (!tableCellNode) {
+      return;
+    }
+
+    tableCellNode.selectEnd();
+    $insertTableRowAtSelection(insertAfter);
+  });
+  editor.focus();
+}
+
+export function insertTableColumn(
+  editor: LexicalEditor,
+  insertAfter: boolean,
+  selectionSnapshot?: RangeSelection | null,
+  targetCellKey?: NodeKey | null,
+) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey,
+    );
+
+    if (!tableCellNode) {
+      return;
+    }
+
+    tableCellNode.selectEnd();
+    $insertTableColumnAtSelection(insertAfter);
+  });
+  editor.focus();
+}
+
+export function deleteTableRow(
+  editor: LexicalEditor,
+  selectionSnapshot?: RangeSelection | null,
+  targetCellKey?: NodeKey | null,
+) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey,
+    );
+
+    if (!tableCellNode) {
+      return;
+    }
+
+    tableCellNode.selectEnd();
+    $deleteTableRowAtSelection();
+  });
+  editor.focus();
+}
+
+export function deleteTableColumn(
+  editor: LexicalEditor,
+  selectionSnapshot?: RangeSelection | null,
+  targetCellKey?: NodeKey | null,
+) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey,
+    );
+
+    if (!tableCellNode) {
+      return;
+    }
+
+    tableCellNode.selectEnd();
+    $deleteTableColumnAtSelection();
+  });
+  editor.focus();
+}
+
+export function deleteTable(
+  editor: LexicalEditor,
+  selectionSnapshot?: RangeSelection | null,
+  targetCellKey?: NodeKey | null,
+) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey,
+    );
+
+    if (!tableCellNode) {
+      return;
+    }
+
+    const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode);
+    const paragraph = createSelectableParagraph();
+
+    tableNode.insertAfter(paragraph);
+    tableNode.remove();
+    paragraph.select();
+  });
+  editor.focus();
 }
 
 export function applyLink(
@@ -686,7 +967,22 @@ export function redo(editor: LexicalEditor) {
 export function formatText(
   editor: LexicalEditor,
   format: TextFormatType,
+  selectionSnapshot?: RangeSelection | null,
 ) {
+  if (selectionSnapshot) {
+    editor.update(() => {
+      const selection = resolveRangeSelection(selectionSnapshot);
+
+      if (!selection) {
+        return;
+      }
+
+      selection.formatText(format);
+    });
+    editor.focus();
+    return;
+  }
+
   editor.dispatchCommand(FORMAT_TEXT_COMMAND, format);
 }
 

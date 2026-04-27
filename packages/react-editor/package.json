@@ -95,6 +95,7 @@
     "@virtari-packages/react-input": "workspace:*",
     "@virtari-packages/react-kbd": "workspace:*",
     "@virtari-packages/react-scroll-area": "workspace:*",
+    "@virtari-packages/react-select": "workspace:*",
     "@virtari-packages/react-tabs": "workspace:*",
     "@virtari-packages/react-textarea": "workspace:*",
     "@virtari-packages/react-tooltip": "workspace:*",

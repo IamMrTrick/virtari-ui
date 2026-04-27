@@ -70,5 +70,6 @@
   "fieldset": "Fieldset",
   "stepper": "Stepper",
   "timeline": "Timeline",
-  "tag-input": "Tag Input"
+  "tag-input": "Tag Input",
+  "flow": "React Flow"
 }

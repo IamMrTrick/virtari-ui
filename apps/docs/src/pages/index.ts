@@ -70,6 +70,7 @@ export { TimelinePage } from "./TimelinePage";
 export { TagInputPage } from "./TagInputPage";
 export { CodePage } from "./CodePage";
 export { CarouselPage } from "./CarouselPage";
+export { FlowPage } from "./FlowPage";
 
 export const PAGE_META: Record<string, { title: string; description: string }> = {
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },
@@ -293,6 +294,11 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     title: "Timeline",
     description:
       "Sequential event display — compound indicator, connector, content, and time slots. Grid-based layout with status colors and RTL support.",
+  },
+  flow: {
+    title: "React Flow",
+    description:
+      "Workflow builder primitives â€” token-aware React Flow surface, custom node shell, layered layout helpers, labeled edges, and save/restore utilities.",
   },
   "segmented-control": {
     title: "Segmented Control",

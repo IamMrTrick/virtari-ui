@@ -24,7 +24,7 @@ import {
   IconTable,
   IconTypography,
 } from "@virtari-packages/react-icons";
-import { useEditorContext } from "./context";
+import { useEditorConfig } from "./context";
 import {
   applyBlockType,
   insertBlock,
@@ -53,7 +53,7 @@ export function EditorSlashMenu({
   items,
 }: EditorSlashMenuProps) {
   const [editor] = useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   const [queryString, setQueryString] = useState<string | null>(null);
   const checkForSlashTriggerMatch = useBasicTypeaheadTriggerMatch("/", {
     minLength: 0,

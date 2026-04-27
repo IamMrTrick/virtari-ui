@@ -21,12 +21,12 @@ import { EditorSlashMenu } from "./EditorSlashMenu";
 import { EditorSourcePanel } from "./EditorSourcePanel";
 import { EditorStatusBar } from "./EditorStatusBar";
 import { EditorSurface } from "./EditorSurface";
+import { EditorTableHoverActions } from "./EditorTableHoverActions";
 import { EditorToolbar } from "./EditorToolbar";
 import {
+  applySourceValue,
   countCharacters,
   countWords,
-  enterSourceMode,
-  exitSourceMode,
   getSelectionText,
   readEditorSnapshot,
   readSourceValue,
@@ -151,8 +151,7 @@ export function Editor({
   const internalEditorRef = useRef<LexicalEditor | null>(null);
   const appliedModeRef = useRef<EditorMode>("rich-text");
   const commentSelectionRef = useRef<RangeSelection | null>(null);
-  const [, setLastPayload] =
-    useState<ReturnType<typeof readEditorSnapshot> | null>(null);
+  const sourceValueRef = useRef("");
   const [uncontrolledMode, setUncontrolledMode] =
     useState<EditorMode>(defaultMode);
   const [surfaceElement, setSurfaceElement] = useState<HTMLDivElement | null>(null);
@@ -160,6 +159,7 @@ export function Editor({
   const [commentComposerOpen, setCommentComposerOpen] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
   const [pendingCommentQuote, setPendingCommentQuote] = useState("");
+  const [sourceValue, setSourceValue] = useState("");
 
   const activeMode = mode ?? uncontrolledMode;
   const resolvedFeatures = resolveEditorFeatures(preset, features);
@@ -175,6 +175,10 @@ export function Editor({
   }
 
   function handleComposerChange(payload: ReturnType<typeof readEditorSnapshot>) {
+    if (!onChange) {
+      return;
+    }
+
     const effectiveMode = appliedModeRef.current;
     let nextPayload = payload;
 
@@ -188,16 +192,16 @@ export function Editor({
       nextPayload = {
         ...payload,
         text: source,
-        html: effectiveMode === "html" ? source : payload.html,
-        markdown: effectiveMode === "markdown" ? source : payload.markdown,
+        html: effectiveMode === "html" ? source : "",
+        markdown: effectiveMode === "markdown" ? source : "",
+        json: null,
         characterCount: countCharacters(source, metricsCharset),
         wordCount: countWords(source),
         isEmpty: source.trim().length === 0,
       };
     }
 
-    setLastPayload(nextPayload);
-    onChange?.(nextPayload);
+    onChange(nextPayload);
   }
 
   function applyModeToEditor(
@@ -215,19 +219,23 @@ export function Editor({
       appliedModeRef.current = nextMode;
 
       if (previousMode !== "rich-text") {
-        exitSourceMode(
+        applySourceValue(
           internalEditorRef.current,
+          sourceValueRef.current,
           previousMode,
           resolvedMarkdownTransformers,
         );
       }
 
       if (nextMode !== "rich-text") {
-        enterSourceMode(
+        const nextSource = readSourceValue(
           internalEditorRef.current,
           nextMode,
           resolvedMarkdownTransformers,
         );
+
+        sourceValueRef.current = nextSource;
+        setSourceValue(nextSource);
       }
 
       return true;
@@ -266,6 +274,28 @@ export function Editor({
 
     setUncontrolledMode(nextMode);
     onModeChange?.(nextMode);
+  }
+
+  function handleSourceValueChange(nextValue: string) {
+    sourceValueRef.current = nextValue;
+    setSourceValue(nextValue);
+
+    if (!onChange || !internalEditorRef.current) {
+      return;
+    }
+
+    onChange({
+      editor: internalEditorRef.current,
+      editorState: internalEditorRef.current.getEditorState(),
+      tags: new Set(),
+      text: nextValue,
+      html: activeMode === "html" ? nextValue : "",
+      markdown: activeMode === "markdown" ? nextValue : "",
+      json: null,
+      characterCount: countCharacters(nextValue, metricsCharset),
+      wordCount: countWords(nextValue),
+      isEmpty: nextValue.trim().length === 0,
+    });
   }
 
   function requestComment() {
@@ -361,6 +391,7 @@ export function Editor({
       namespace={namespace}
       initialValue={initialValue}
       initialValueFormat={initialValueFormat}
+      activeMode={activeMode}
       onChange={handleComposerChange}
       onError={onError}
       autoFocus={autoFocus}
@@ -453,8 +484,10 @@ export function Editor({
         ) : (
           <EditorSourcePanel
             mode={activeMode}
+            onChange={handleSourceValueChange}
             minHeight={minHeight}
             maxHeight={maxHeight}
+            value={sourceValue}
           />
         )}
 
@@ -484,6 +517,9 @@ export function Editor({
             anchorElement={surfaceElement}
             onRequestComment={requestComment}
           />
+        ) : null}
+        {resolvedFeatures.tables && activeMode === "rich-text" ? (
+          <EditorTableHoverActions anchorElement={surfaceElement} />
         ) : null}
         {resolvedFeatures.draggableBlocks && activeMode === "rich-text" ? (
           <EditorDraggableBlocks

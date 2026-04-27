@@ -6,7 +6,7 @@ import {
   COMMAND_PRIORITY_HIGH,
   KEY_DOWN_COMMAND,
 } from "lexical";
-import { useEditorContext } from "./context";
+import { useEditorConfig } from "./context";
 import { hasPrimaryModifier } from "./editor-shortcuts";
 import {
   applyBlockType,
@@ -27,7 +27,7 @@ function isToolbarTarget(target: EventTarget | null) {
 
 export function EditorShortcutsPlugin() {
   const [editor] = useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
 
   useEffect(() => {
     if (readOnly || !features.shortcuts) {

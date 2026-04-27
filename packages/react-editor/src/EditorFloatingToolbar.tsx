@@ -342,28 +342,28 @@ export function EditorFloatingToolbar({
             icon={IconBold}
             label="Bold"
             tooltipSide={tooltipSide}
-            onClick={() => formatText(editor, "bold")}
+            onClick={() => formatText(editor, "bold", selectionRef.current)}
           />
           <FloatingToolbarButton
             active={state.isItalic}
             icon={IconItalic}
             label="Italic"
             tooltipSide={tooltipSide}
-            onClick={() => formatText(editor, "italic")}
+            onClick={() => formatText(editor, "italic", selectionRef.current)}
           />
           <FloatingToolbarButton
             active={state.isUnderline}
             icon={IconUnderline}
             label="Underline"
             tooltipSide={tooltipSide}
-            onClick={() => formatText(editor, "underline")}
+            onClick={() => formatText(editor, "underline", selectionRef.current)}
           />
           <FloatingToolbarButton
             active={state.isStrikethrough}
             icon={IconStrikethrough}
             label="Strikethrough"
             tooltipSide={tooltipSide}
-            onClick={() => formatText(editor, "strikethrough")}
+            onClick={() => formatText(editor, "strikethrough", selectionRef.current)}
           />
           {features.advancedTextFormats ? (
             <>
@@ -372,35 +372,35 @@ export function EditorFloatingToolbar({
                 icon={IconSubscript}
                 label="Subscript"
                 tooltipSide={tooltipSide}
-                onClick={() => formatText(editor, "subscript")}
+                onClick={() => formatText(editor, "subscript", selectionRef.current)}
               />
               <FloatingToolbarButton
                 active={state.isSuperscript}
                 icon={IconSuperscript}
                 label="Superscript"
                 tooltipSide={tooltipSide}
-                onClick={() => formatText(editor, "superscript")}
+                onClick={() => formatText(editor, "superscript", selectionRef.current)}
               />
               <FloatingToolbarButton
                 active={state.isUppercase}
                 icon={IconLetterCaseUpper}
                 label="Uppercase"
                 tooltipSide={tooltipSide}
-                onClick={() => formatText(editor, "uppercase")}
+                onClick={() => formatText(editor, "uppercase", selectionRef.current)}
               />
               <FloatingToolbarButton
                 active={state.isLowercase}
                 icon={IconLetterCaseLower}
                 label="Lowercase"
                 tooltipSide={tooltipSide}
-                onClick={() => formatText(editor, "lowercase")}
+                onClick={() => formatText(editor, "lowercase", selectionRef.current)}
               />
               <FloatingToolbarButton
                 active={state.isCapitalize}
                 icon={IconLetterCaseToggle}
                 label="Capitalize"
                 tooltipSide={tooltipSide}
-                onClick={() => formatText(editor, "capitalize")}
+                onClick={() => formatText(editor, "capitalize", selectionRef.current)}
               />
             </>
           ) : null}
@@ -409,7 +409,7 @@ export function EditorFloatingToolbar({
             icon={IconCode}
             label="Inline code"
             tooltipSide={tooltipSide}
-            onClick={() => formatText(editor, "code")}
+            onClick={() => formatText(editor, "code", selectionRef.current)}
           />
 
           {showLinkActions ? (

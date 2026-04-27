@@ -3,20 +3,20 @@
 /* Scale bounce on each printable keystroke — intensity via --_ti (0–1) */
 @keyframes vds-typing-pulse {
   0%   { scale: 1; }
-  30%  { scale: calc(1 + var(--_ti, 0.4) * 0.028); }
-  65%  { scale: calc(1 - var(--_ti, 0.4) * 0.008); }
+  30%  { scale: calc(1 + var(--_ti, 0.4) * 0.01); }
+  65%  { scale: calc(1 - var(--_ti, 0.4) * 0.003); }
   100% { scale: 1; }
 }
 
 @keyframes vds-pw-reveal {
-  0%   { filter: blur(5px); opacity: 0.2; scale: 0.992; }
-  65%  { filter: blur(1px); opacity: 0.9; scale: 1.002; }
+  0%   { filter: blur(2px); opacity: 0.75; scale: 0.998; }
+  65%  { filter: blur(0.5px); opacity: 0.96; scale: 1.001; }
   100% { filter: blur(0);   opacity: 1;   scale: 1; }
 }
 
 @keyframes vds-pw-hide {
   0%   { filter: blur(0);   opacity: 1;   scale: 1; }
-  100% { filter: blur(5px); opacity: 0.2; scale: 0.992; }
+  100% { filter: blur(2px); opacity: 0.75; scale: 0.998; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -49,7 +49,7 @@
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
       box-shadow var(--vds-duration-fast) var(--vds-ease-out),
-      scale 200ms var(--vds-ease-spring);
+      scale 140ms var(--vds-ease-out);
 
     block-size: var(--_input-height);
     padding-inline: var(--_input-px);
@@ -70,12 +70,12 @@
     }
 
     &:active:not(:disabled) {
-      scale: 0.978;
-      transition: scale 35ms linear;
+      scale: 0.992;
+      transition: scale 60ms var(--vds-ease-out);
     }
 
     &.vds-input--pulse {
-      animation: vds-typing-pulse 200ms var(--vds-ease-out) forwards;
+      animation: vds-typing-pulse 140ms var(--vds-ease-out) forwards;
     }
 
     &:disabled {
@@ -239,11 +239,11 @@
   }
 
   .vds-input-field-control[data-pw-anim="reveal"] > .vds-input {
-    animation: vds-pw-reveal 280ms var(--vds-ease-out) both;
+    animation: vds-pw-reveal 180ms var(--vds-ease-out) both;
   }
 
   .vds-input-field-control[data-pw-anim="hide"] > .vds-input {
-    animation: vds-pw-hide 220ms var(--vds-ease-in) both;
+    animation: vds-pw-hide 160ms var(--vds-ease-in) both;
   }
 
   /* nicer password dots — only when field has a value, not on placeholder */

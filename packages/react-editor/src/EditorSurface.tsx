@@ -9,7 +9,7 @@ import {
   RichTextPlugin,
 } from "@lexical/react/LexicalRichTextPlugin";
 import { cn } from "@virtari-packages/utils";
-import { useEditorContext } from "./context";
+import { useEditorConfig } from "./context";
 import type { EditorSurfaceProps } from "./types";
 
 export const EditorSurface = forwardRef<HTMLDivElement, EditorSurfaceProps>(
@@ -28,7 +28,7 @@ export const EditorSurface = forwardRef<HTMLDivElement, EditorSurfaceProps>(
     }: EditorSurfaceProps,
     ref,
   ) {
-    const { readOnly } = useEditorContext();
+    const { readOnly } = useEditorConfig();
 
     return (
       <div

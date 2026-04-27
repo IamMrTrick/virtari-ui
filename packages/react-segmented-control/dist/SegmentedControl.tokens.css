@@ -1,50 +1,7 @@
-.vds-segmented-control {
-  /* ─── Track ─── */
-  --segmented-track-bg:           var(--vds-color-bg-muted, oklch(0.96 0 0));
-  --segmented-track-border-color: var(--vds-color-border, #d1d5db);
-  --segmented-track-border-width: 1px;
-  --segmented-padding:            0.125rem;
-  --segmented-radius:             var(--vds-radius-md, 0.5rem);
-
-  /* ─── Item ─── */
-  --segmented-item-height:         var(--vds-size-md, 2.25rem);
-  --segmented-item-padding-inline: var(--vds-space-3, 0.75rem);
-  --segmented-item-padding-block:  0;
-  --segmented-item-font-size:      var(--vds-text-sm, 0.875rem);
-  --segmented-item-font-weight:    var(--vds-font-medium, 500);
-  --segmented-item-line-height:    var(--vds-control-line-height, 1);
-  --segmented-item-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
-  --segmented-item-radius:         calc(var(--segmented-radius) - var(--segmented-padding));
-  --segmented-item-color:          var(--vds-color-text-muted, #6b7280);
-  --segmented-item-color-hover:    var(--vds-color-text, #111827);
-  --segmented-icon-size:           1em;
-
-  /* ─── Checked state ─── */
-  --segmented-checked-bg:          var(--vds-color-surface, #ffffff);
-  --segmented-checked-color:       var(--vds-color-text, #111827);
-  --segmented-checked-shadow:
-    0 1px 3px 0 oklch(0 0 0 / 0.1),
-    0 1px 2px -1px oklch(0 0 0 / 0.1);
-
-  /* ─── Focus ring ─── */
-  --segmented-focus-ring-color:  var(--vds-color-ring, oklch(0.55 0.2 265));
-  --segmented-focus-ring-width:  2px;
-  --segmented-focus-ring-offset: 2px;
-
-  /* ─── Motion ─── */
-  --segmented-transition: var(--vds-transition-fast, 100ms ease-out);
-}
-
-/* ─── Size modifiers ─── */
-
-.vds-segmented-control[data-size="sm"] {
-  --segmented-item-height:         var(--vds-size-sm, 2rem);
-  --segmented-item-padding-inline: var(--vds-space-2-5, 0.625rem);
-  --segmented-item-font-size:      var(--vds-text-xs, 0.75rem);
-}
-
-.vds-segmented-control[data-size="lg"] {
-  --segmented-item-height:         var(--vds-size-lg, 2.5rem);
-  --segmented-item-padding-inline: var(--vds-space-4, 1rem);
-  --segmented-item-font-size:      var(--vds-text-base, 1rem);
-}
+/*
+ * SegmentedControl tokens are intentionally empty.
+ * All visual tokens (track bg, item height, font-size, indicator colors, etc.)
+ * cascade from Tabs CSS via `.vds-tabs-list[data-variant="segmented"]` on the
+ * inner list element. Override Tabs tokens here if SegmentedControl-specific
+ * values are ever needed.
+ */

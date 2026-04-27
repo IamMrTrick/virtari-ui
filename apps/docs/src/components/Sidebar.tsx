@@ -38,6 +38,7 @@ import {
   IconCompass,
   IconCursorText,
   IconForms,
+  IconGitBranch,
   IconHeading,
   IconIcons,
   IconKeyboard,
@@ -171,6 +172,7 @@ const ICONS: Record<string, ReactNode> = {
   stepper: <IconProgress {...navIconProps} />,
   timeline: <IconArrowsVertical {...navIconProps} />,
   "tag-input": <IconTag {...navIconProps} />,
+  flow: <IconGitBranch {...navIconProps} />,
 };
 
 const FALLBACK_ICON = <IconCircle {...navIconProps} />;
@@ -263,7 +265,7 @@ const NAV_ITEMS: NavGroupData[] = [
   },
   {
     groupKey: "groups.layout",
-    items: ["tabs", "accordion", "collapsible", "scroll-area", "stepper", "timeline", "carousel"],
+    items: ["tabs", "accordion", "collapsible", "scroll-area", "stepper", "timeline", "flow", "carousel"],
   },
   {
     groupKey: "groups.data",

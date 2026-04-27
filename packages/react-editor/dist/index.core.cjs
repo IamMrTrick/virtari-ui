@@ -108,21 +108,42 @@ var EDITOR_THEME = {
   text: {
     bold: "vds-editor-text-bold",
     code: "vds-editor-text-code",
+    highlight: "vds-editor-text-highlight",
     italic: "vds-editor-text-italic",
+    lowercase: "vds-editor-text-lowercase",
+    uppercase: "vds-editor-text-uppercase",
+    capitalize: "vds-editor-text-capitalize",
     strikethrough: "vds-editor-text-strikethrough",
+    subscript: "vds-editor-text-subscript",
+    superscript: "vds-editor-text-superscript",
     underline: "vds-editor-text-underline",
     underlineStrikethrough: "vds-editor-text-underline vds-editor-text-strikethrough"
   }
 };
-var EditorContext = react.createContext(null);
-function useEditorContext() {
-  const value = react.useContext(EditorContext);
+var CONTEXT_ERROR = "Editor components must be rendered inside <EditorComposer>.";
+var EditorConfigContext = react.createContext(null);
+var EditorMetricsContext = react.createContext(null);
+function useEditorConfig() {
+  const value = react.useContext(EditorConfigContext);
   if (!value) {
-    throw new Error(
-      "Editor components must be rendered inside <EditorComposer>."
-    );
+    throw new Error(CONTEXT_ERROR);
   }
   return value;
+}
+function useEditorMetrics() {
+  const value = react.useContext(EditorMetricsContext);
+  if (!value) {
+    throw new Error(CONTEXT_ERROR);
+  }
+  return value;
+}
+function useEditorContext() {
+  const config = useEditorConfig();
+  const metrics = useEditorMetrics();
+  return {
+    ...config,
+    metrics
+  };
 }
 function normalizeKind(kind) {
   if (kind === "embed" || kind === "video") return kind;
@@ -567,11 +588,56 @@ function countCharacters(text, charset) {
   return text.length;
 }
 function countWords(text) {
-  const trimmed = text.trim();
-  if (!trimmed) return 0;
-  return trimmed.split(/\s+/).filter(Boolean).length;
+  let wordCount = 0;
+  let inWord = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    const isWhitespace = character !== void 0 && /\s/.test(character);
+    if (isWhitespace) {
+      inWord = false;
+      continue;
+    }
+    if (!inWord) {
+      wordCount += 1;
+      inWord = true;
+    }
+  }
+  return wordCount;
 }
-function buildEditorChangePayload(editor, editorState, markdownTransformers, charset, tags) {
+function hasTextContent(text) {
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (character !== void 0 && !/\s/.test(character)) {
+      return true;
+    }
+  }
+  return false;
+}
+function areEditorMetricsEqual(current, next) {
+  return current.text === next.text && current.characterCount === next.characterCount && current.wordCount === next.wordCount && current.isEmpty === next.isEmpty;
+}
+function buildEditorMetrics(editorState, charset) {
+  let text = "";
+  let isEmpty = true;
+  editorState.read(() => {
+    text = lexical.$getRoot().getTextContent();
+    isEmpty = !hasTextContent(text);
+  });
+  return {
+    text,
+    html: "",
+    markdown: "",
+    json: null,
+    characterCount: countCharacters(text, charset),
+    wordCount: countWords(text),
+    isEmpty
+  };
+}
+function buildEditorChangePayload(editor, editorState, markdownTransformers, charset, tags, {
+  includeHtml = true,
+  includeJson = true,
+  includeMarkdown = true
+} = {}) {
   let text = "";
   let html$1 = "";
   let markdown$1 = "";
@@ -579,11 +645,15 @@ function buildEditorChangePayload(editor, editorState, markdownTransformers, cha
   editorState.read(() => {
     const root = lexical.$getRoot();
     text = root.getTextContent();
-    html$1 = html.$generateHtmlFromNodes(editor, null);
-    markdown$1 = markdown.$convertToMarkdownString(markdownTransformers);
-    isEmpty = text.trim().length === 0;
+    if (includeHtml) {
+      html$1 = html.$generateHtmlFromNodes(editor, null);
+    }
+    if (includeMarkdown) {
+      markdown$1 = markdown.$convertToMarkdownString(markdownTransformers);
+    }
+    isEmpty = !hasTextContent(text);
   });
-  const json = editorState.toJSON();
+  const json = includeJson ? editorState.toJSON() : null;
   return {
     editor,
     editorState,
@@ -719,7 +789,7 @@ function isToolbarTarget(target) {
 }
 function EditorShortcutsPlugin() {
   const [editor] = LexicalComposerContext.useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   react.useEffect(() => {
     if (readOnly || !features.shortcuts) {
       return;
@@ -826,6 +896,12 @@ function EditorShortcutsPlugin() {
   }, [editor, features, readOnly]);
   return null;
 }
+var DEFAULT_CHANGE_SERIALIZATION = {
+  html: false,
+  markdown: false,
+  json: false,
+  debounceMs: 0
+};
 function EditorEditablePlugin({ editable }) {
   const [editor] = LexicalComposerContext.useLexicalComposerContext();
   react.useEffect(() => {
@@ -838,7 +914,9 @@ function EditorComposer({
   preset = "core",
   initialValue = null,
   initialValueFormat = "json",
+  activeMode = "rich-text",
   onChange,
+  changeSerialization,
   onError = (error) => {
     throw error;
   },
@@ -855,6 +933,9 @@ function EditorComposer({
     [features, preset]
   );
   const [metrics, setMetrics] = react.useState(EMPTY_EDITOR_METRICS);
+  const changeTimeoutRef = react.useRef(null);
+  const onChangeRef = react.useRef(onChange);
+  const markdownTransformersRef = react.useRef(markdownTransformers);
   const initialConfig = react.useMemo(
     () => ({
       namespace,
@@ -879,74 +960,142 @@ function EditorComposer({
     ]
   );
   const characterLimitCharset = resolvedFeatures.characterLimit?.charset ?? "UTF-16";
-  return /* @__PURE__ */ jsxRuntime.jsx(LexicalComposer.LexicalComposer, { initialConfig, children: /* @__PURE__ */ jsxRuntime.jsxs(
-    EditorContext.Provider,
-    {
-      value: {
-        features: resolvedFeatures,
-        metrics,
-        linkMatchers,
-        markdownTransformers,
-        readOnly
-      },
-      children: [
-        editorRef ? /* @__PURE__ */ jsxRuntime.jsx(LexicalEditorRefPlugin.EditorRefPlugin, { editorRef }) : null,
-        /* @__PURE__ */ jsxRuntime.jsx(EditorEditablePlugin, { editable: !readOnly }),
-        resolvedFeatures.history ? /* @__PURE__ */ jsxRuntime.jsx(LexicalHistoryPlugin.HistoryPlugin, {}) : null,
-        resolvedFeatures.links ? /* @__PURE__ */ jsxRuntime.jsx(LexicalLinkPlugin.LinkPlugin, {}) : null,
-        resolvedFeatures.autoLinks ? /* @__PURE__ */ jsxRuntime.jsx(LexicalAutoLinkPlugin.AutoLinkPlugin, { matchers: linkMatchers }) : null,
-        resolvedFeatures.lists ? /* @__PURE__ */ jsxRuntime.jsx(LexicalListPlugin.ListPlugin, { hasStrictIndent: resolvedFeatures.strictListIndent }) : null,
-        resolvedFeatures.checklists ? /* @__PURE__ */ jsxRuntime.jsx(LexicalCheckListPlugin.CheckListPlugin, {}) : null,
-        resolvedFeatures.tables ? /* @__PURE__ */ jsxRuntime.jsx(
-          LexicalTablePlugin.TablePlugin,
-          {
-            hasCellMerge: resolvedFeatures.tableCellMerge,
-            hasCellBackgroundColor: resolvedFeatures.tableCellBackgroundColor,
-            hasHorizontalScroll: resolvedFeatures.tableHorizontalScroll
-          }
-        ) : null,
-        resolvedFeatures.markdownShortcuts ? /* @__PURE__ */ jsxRuntime.jsx(LexicalMarkdownShortcutPlugin.MarkdownShortcutPlugin, { transformers: markdownTransformers }) : null,
-        resolvedFeatures.tabIndentation ? /* @__PURE__ */ jsxRuntime.jsx(LexicalTabIndentationPlugin.TabIndentationPlugin, { maxIndent: resolvedFeatures.maxIndent }) : null,
-        resolvedFeatures.characterLimit ? /* @__PURE__ */ jsxRuntime.jsx(
-          LexicalCharacterLimitPlugin.CharacterLimitPlugin,
-          {
-            charset: resolvedFeatures.characterLimit.charset ?? "UTF-16",
-            maxLength: resolvedFeatures.characterLimit.maxLength,
-            renderer: () => /* @__PURE__ */ jsxRuntime.jsx(
-              "span",
-              {
-                className: "vds-editor-character-limit-meter",
-                "aria-hidden": "true",
-                hidden: true
-              }
-            )
-          }
-        ) : null,
-        resolvedFeatures.codeBlocks ? /* @__PURE__ */ jsxRuntime.jsx(EditorCodeHighlightPlugin, {}) : null,
-        resolvedFeatures.shortcuts ? /* @__PURE__ */ jsxRuntime.jsx(EditorShortcutsPlugin, {}) : null,
-        !readOnly ? /* @__PURE__ */ jsxRuntime.jsx(EditorTrailingParagraphPlugin, {}) : null,
-        /* @__PURE__ */ jsxRuntime.jsx(
-          LexicalOnChangePlugin.OnChangePlugin,
-          {
-            ignoreSelectionChange: true,
-            onChange: (editorState, editor, tags) => {
-              const payload = buildEditorChangePayload(
-                editor,
-                editorState,
-                markdownTransformers,
-                characterLimitCharset,
-                tags
-              );
-              setMetrics(payload);
-              onChange?.(payload);
-            }
-          }
-        ),
-        autoFocus ? /* @__PURE__ */ jsxRuntime.jsx(LexicalAutoFocusPlugin.AutoFocusPlugin, {}) : null,
-        children
-      ]
+  const isSourceMode = activeMode !== "rich-text";
+  const resolvedChangeSerialization = react.useMemo(
+    () => ({
+      ...DEFAULT_CHANGE_SERIALIZATION,
+      ...changeSerialization
+    }),
+    [changeSerialization]
+  );
+  const configValue = react.useMemo(
+    () => ({
+      features: resolvedFeatures,
+      linkMatchers,
+      markdownTransformers,
+      readOnly
+    }),
+    [linkMatchers, markdownTransformers, readOnly, resolvedFeatures]
+  );
+  react.useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+  react.useEffect(() => {
+    markdownTransformersRef.current = markdownTransformers;
+  }, [markdownTransformers]);
+  react.useEffect(
+    () => () => {
+      if (changeTimeoutRef.current !== null) {
+        clearTimeout(changeTimeoutRef.current);
+      }
+    },
+    []
+  );
+  react.useEffect(() => {
+    if (changeTimeoutRef.current !== null) {
+      clearTimeout(changeTimeoutRef.current);
+      changeTimeoutRef.current = null;
     }
-  ) });
+  }, [activeMode]);
+  return /* @__PURE__ */ jsxRuntime.jsx(LexicalComposer.LexicalComposer, { initialConfig, children: /* @__PURE__ */ jsxRuntime.jsx(EditorConfigContext.Provider, { value: configValue, children: /* @__PURE__ */ jsxRuntime.jsxs(EditorMetricsContext.Provider, { value: metrics, children: [
+    editorRef ? /* @__PURE__ */ jsxRuntime.jsx(LexicalEditorRefPlugin.EditorRefPlugin, { editorRef }) : null,
+    /* @__PURE__ */ jsxRuntime.jsx(EditorEditablePlugin, { editable: !readOnly }),
+    resolvedFeatures.history ? /* @__PURE__ */ jsxRuntime.jsx(LexicalHistoryPlugin.HistoryPlugin, {}) : null,
+    resolvedFeatures.links ? /* @__PURE__ */ jsxRuntime.jsx(LexicalLinkPlugin.LinkPlugin, {}) : null,
+    resolvedFeatures.autoLinks ? /* @__PURE__ */ jsxRuntime.jsx(LexicalAutoLinkPlugin.AutoLinkPlugin, { matchers: linkMatchers }) : null,
+    resolvedFeatures.lists ? /* @__PURE__ */ jsxRuntime.jsx(LexicalListPlugin.ListPlugin, { hasStrictIndent: resolvedFeatures.strictListIndent }) : null,
+    resolvedFeatures.checklists ? /* @__PURE__ */ jsxRuntime.jsx(LexicalCheckListPlugin.CheckListPlugin, {}) : null,
+    resolvedFeatures.tables ? /* @__PURE__ */ jsxRuntime.jsx(
+      LexicalTablePlugin.TablePlugin,
+      {
+        hasCellMerge: resolvedFeatures.tableCellMerge,
+        hasCellBackgroundColor: resolvedFeatures.tableCellBackgroundColor,
+        hasHorizontalScroll: resolvedFeatures.tableHorizontalScroll
+      }
+    ) : null,
+    resolvedFeatures.markdownShortcuts ? /* @__PURE__ */ jsxRuntime.jsx(LexicalMarkdownShortcutPlugin.MarkdownShortcutPlugin, { transformers: markdownTransformers }) : null,
+    resolvedFeatures.tabIndentation ? /* @__PURE__ */ jsxRuntime.jsx(LexicalTabIndentationPlugin.TabIndentationPlugin, { maxIndent: resolvedFeatures.maxIndent }) : null,
+    resolvedFeatures.characterLimit ? /* @__PURE__ */ jsxRuntime.jsx(
+      LexicalCharacterLimitPlugin.CharacterLimitPlugin,
+      {
+        charset: resolvedFeatures.characterLimit.charset ?? "UTF-16",
+        maxLength: resolvedFeatures.characterLimit.maxLength,
+        renderer: () => /* @__PURE__ */ jsxRuntime.jsx(
+          "span",
+          {
+            className: "vds-editor-character-limit-meter",
+            "aria-hidden": "true",
+            hidden: true
+          }
+        )
+      }
+    ) : null,
+    resolvedFeatures.codeBlocks ? /* @__PURE__ */ jsxRuntime.jsx(EditorCodeHighlightPlugin, {}) : null,
+    resolvedFeatures.shortcuts ? /* @__PURE__ */ jsxRuntime.jsx(EditorShortcutsPlugin, {}) : null,
+    !readOnly ? /* @__PURE__ */ jsxRuntime.jsx(EditorTrailingParagraphPlugin, {}) : null,
+    /* @__PURE__ */ jsxRuntime.jsx(
+      LexicalOnChangePlugin.OnChangePlugin,
+      {
+        ignoreSelectionChange: true,
+        onChange: (editorState, editor, tags) => {
+          const nextMetrics = buildEditorMetrics(
+            editorState,
+            characterLimitCharset
+          );
+          setMetrics(
+            (currentMetrics) => areEditorMetricsEqual(currentMetrics, nextMetrics) ? currentMetrics : nextMetrics
+          );
+          if (!onChange) {
+            return;
+          }
+          if (changeTimeoutRef.current !== null) {
+            clearTimeout(changeTimeoutRef.current);
+            changeTimeoutRef.current = null;
+          }
+          const nextTags = new Set(tags);
+          const basePayload = {
+            ...nextMetrics,
+            editor,
+            editorState,
+            tags: nextTags
+          };
+          if (isSourceMode || !resolvedChangeSerialization.html && !resolvedChangeSerialization.markdown && !resolvedChangeSerialization.json) {
+            onChange(basePayload);
+            return;
+          }
+          const emitSerializedChange = () => {
+            const nextOnChange = onChangeRef.current;
+            if (!nextOnChange) {
+              return;
+            }
+            const payload = buildEditorChangePayload(
+              editor,
+              editorState,
+              markdownTransformersRef.current,
+              characterLimitCharset,
+              nextTags,
+              {
+                includeHtml: resolvedChangeSerialization.html,
+                includeJson: resolvedChangeSerialization.json,
+                includeMarkdown: resolvedChangeSerialization.markdown
+              }
+            );
+            nextOnChange(payload);
+          };
+          if (resolvedChangeSerialization.debounceMs > 0) {
+            changeTimeoutRef.current = setTimeout(
+              emitSerializedChange,
+              resolvedChangeSerialization.debounceMs
+            );
+            return;
+          }
+          emitSerializedChange();
+        }
+      }
+    ),
+    autoFocus ? /* @__PURE__ */ jsxRuntime.jsx(LexicalAutoFocusPlugin.AutoFocusPlugin, {}) : null,
+    children
+  ] }) }) });
 }
 var EditorSurface = react.forwardRef(
   function EditorSurface2({
@@ -961,7 +1110,7 @@ var EditorSurface = react.forwardRef(
     maxHeight,
     ...contentEditableProps
   }, ref) {
-    const { readOnly } = useEditorContext();
+    const { readOnly } = useEditorConfig();
     return /* @__PURE__ */ jsxRuntime.jsx(
       "div",
       {

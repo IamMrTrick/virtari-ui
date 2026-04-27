@@ -1,0 +1,60 @@
+.vds-fieldset {
+  /* ─── Layout ─── */
+  --fieldset-padding:       var(--vds-space-5, 1.25rem);
+  --fieldset-gap:           var(--vds-space-4, 1rem);
+  --fieldset-border-width:  1px;
+
+  /* ─── Colors ─── */
+  --fieldset-border-color:  var(--vds-color-border, currentColor);
+  --fieldset-bg:            transparent;
+
+  /* ─── Shape ─── */
+  --fieldset-border-radius: var(--vds-radius-card, 0.75rem);
+
+  /* ─── Legend ─── */
+  --fieldset-legend-size:   var(--vds-text-sm, 0.875rem);
+  --fieldset-legend-weight: var(--vds-font-semibold, 600);
+  --fieldset-legend-color:  var(--vds-color-text, currentColor);
+  --fieldset-legend-px:     var(--vds-space-1, 0.25rem);
+
+  /* ─── Description ─── */
+  --fieldset-desc-size:     var(--vds-text-xs, 0.75rem);
+  --fieldset-desc-color:    var(--vds-color-text-muted, currentColor);
+
+  /* ─── Required marker ─── */
+  --fieldset-required-color: var(--vds-color-danger-9, #ef4444);
+}
+
+/* ─── Invalid state ─── */
+
+.vds-fieldset[data-invalid] {
+  --fieldset-border-color: var(--vds-color-danger-7, #fca5a5);
+  --fieldset-legend-color: var(--vds-color-danger-text, #ef4444);
+}
+
+/* ─── Disabled state ─── */
+
+.vds-fieldset[data-disabled] {
+  --fieldset-border-color: var(--vds-color-border-muted, currentColor);
+  --fieldset-legend-color: var(--vds-color-text-muted, currentColor);
+}
+
+.vds-field {
+  --field-gap: var(--vds-space-2, 0.5rem);
+  --field-label-gap: var(--vds-space-1, 0.25rem);
+  --field-label-size: var(--vds-text-sm, 0.875rem);
+  --field-label-weight: var(--vds-font-medium, 500);
+  --field-label-color: var(--vds-color-text, currentColor);
+  --field-required-color: var(--vds-color-danger-9, #ef4444);
+  --field-meta-gap: var(--vds-space-2, 0.5rem);
+  --field-meta-stack-gap: var(--vds-space-1, 0.25rem);
+  --field-meta-size: var(--vds-text-xs, 0.75rem);
+  --field-meta-line-height: var(--vds-leading-snug, 1.375);
+  --field-description-color: var(--vds-color-text-muted, currentColor);
+  --field-error-color: var(--vds-color-danger-10, #dc2626);
+  --field-counter-color: var(--vds-color-text-subtle, currentColor);
+}
+
+.vds-field[data-invalid] {
+  --field-label-color: var(--vds-color-danger-text, #ef4444);
+}
