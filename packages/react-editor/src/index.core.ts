@@ -25,6 +25,7 @@ export type {
   EditorBlockToolsPlacement,
   EditorBlockToolsProps,
   EditorChangePayload,
+  EditorChangeSerializationOptions,
   EditorCharacterLimitOptions,
   EditorCharset,
   EditorColorSwatch,

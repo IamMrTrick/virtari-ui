@@ -30,6 +30,7 @@
   .vds-language-picker-trigger-stack {
     display: inline-flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--_lp-stack-gap);
     min-inline-size: 0;
     flex: 1 1 auto;
@@ -51,7 +52,9 @@
 
   .vds-language-picker-trigger-subtitle {
     display: block;
+    align-self: flex-start;
     min-inline-size: 0;
+    max-inline-size: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -122,6 +125,7 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--_lp-stack-gap);
     min-inline-size: 0;
     line-height: 1.15;
@@ -141,6 +145,8 @@
 
   .vds-language-picker-option-subtitle {
     display: block;
+    align-self: flex-start;
+    max-inline-size: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -173,10 +179,22 @@
   .vds-language-label-stack {
     display: inline-flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--_lp-stack-gap);
     min-inline-size: 0;
     line-height: 1.15;
     text-align: start;
+  }
+
+  [dir="rtl"] .vds-language-picker-trigger,
+  [dir="rtl"] .vds-language-picker-option,
+  [dir="rtl"] .vds-language-label {
+    direction: rtl;
+  }
+
+  [dir="rtl"] .vds-combobox-item:has(.vds-language-picker-option),
+  [dir="rtl"] button.vds-language-picker-drawer-option {
+    direction: rtl;
   }
 
   .vds-language-label-primary {
@@ -192,6 +210,8 @@
 
   .vds-language-label-subtitle {
     display: block;
+    align-self: flex-start;
+    max-inline-size: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

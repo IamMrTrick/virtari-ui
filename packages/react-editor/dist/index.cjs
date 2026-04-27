@@ -49,6 +49,7 @@ var reactTooltip = require('@virtari-packages/react-tooltip');
 var LexicalTypeaheadMenuPlugin = require('@lexical/react/LexicalTypeaheadMenuPlugin');
 var reactColorPicker = require('@virtari-packages/react-color-picker');
 var reactScrollArea = require('@virtari-packages/react-scroll-area');
+var reactSelect = require('@virtari-packages/react-select');
 var reactFieldset = require('@virtari-packages/react-fieldset');
 
 // src/EditorComposer.tsx
@@ -125,21 +126,42 @@ var EDITOR_THEME = {
   text: {
     bold: "vds-editor-text-bold",
     code: "vds-editor-text-code",
+    highlight: "vds-editor-text-highlight",
     italic: "vds-editor-text-italic",
+    lowercase: "vds-editor-text-lowercase",
+    uppercase: "vds-editor-text-uppercase",
+    capitalize: "vds-editor-text-capitalize",
     strikethrough: "vds-editor-text-strikethrough",
+    subscript: "vds-editor-text-subscript",
+    superscript: "vds-editor-text-superscript",
     underline: "vds-editor-text-underline",
     underlineStrikethrough: "vds-editor-text-underline vds-editor-text-strikethrough"
   }
 };
-var EditorContext = react.createContext(null);
-function useEditorContext() {
-  const value = react.useContext(EditorContext);
+var CONTEXT_ERROR = "Editor components must be rendered inside <EditorComposer>.";
+var EditorConfigContext = react.createContext(null);
+var EditorMetricsContext = react.createContext(null);
+function useEditorConfig() {
+  const value = react.useContext(EditorConfigContext);
   if (!value) {
-    throw new Error(
-      "Editor components must be rendered inside <EditorComposer>."
-    );
+    throw new Error(CONTEXT_ERROR);
   }
   return value;
+}
+function useEditorMetrics() {
+  const value = react.useContext(EditorMetricsContext);
+  if (!value) {
+    throw new Error(CONTEXT_ERROR);
+  }
+  return value;
+}
+function useEditorContext() {
+  const config = useEditorConfig();
+  const metrics = useEditorMetrics();
+  return {
+    ...config,
+    metrics
+  };
 }
 function normalizeKind(kind) {
   if (kind === "embed" || kind === "video") return kind;
@@ -590,6 +612,7 @@ var EMPTY_TOOLBAR_STATE = {
   isLowercase: false,
   isUppercase: false,
   isCapitalize: false,
+  isTableSelection: false,
   isLink: false,
   linkUrl: "",
   fontFamily: "var(--vds-font-sans)",
@@ -604,11 +627,56 @@ function countCharacters(text, charset) {
   return text.length;
 }
 function countWords(text) {
-  const trimmed = text.trim();
-  if (!trimmed) return 0;
-  return trimmed.split(/\s+/).filter(Boolean).length;
+  let wordCount = 0;
+  let inWord = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    const isWhitespace = character !== void 0 && /\s/.test(character);
+    if (isWhitespace) {
+      inWord = false;
+      continue;
+    }
+    if (!inWord) {
+      wordCount += 1;
+      inWord = true;
+    }
+  }
+  return wordCount;
 }
-function buildEditorChangePayload(editor, editorState, markdownTransformers, charset, tags) {
+function hasTextContent(text) {
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (character !== void 0 && !/\s/.test(character)) {
+      return true;
+    }
+  }
+  return false;
+}
+function areEditorMetricsEqual(current, next) {
+  return current.text === next.text && current.characterCount === next.characterCount && current.wordCount === next.wordCount && current.isEmpty === next.isEmpty;
+}
+function buildEditorMetrics(editorState, charset) {
+  let text = "";
+  let isEmpty = true;
+  editorState.read(() => {
+    text = lexical.$getRoot().getTextContent();
+    isEmpty = !hasTextContent(text);
+  });
+  return {
+    text,
+    html: "",
+    markdown: "",
+    json: null,
+    characterCount: countCharacters(text, charset),
+    wordCount: countWords(text),
+    isEmpty
+  };
+}
+function buildEditorChangePayload(editor, editorState, markdownTransformers, charset, tags, {
+  includeHtml = true,
+  includeJson = true,
+  includeMarkdown = true
+} = {}) {
   let text = "";
   let html$1 = "";
   let markdown$1 = "";
@@ -616,11 +684,15 @@ function buildEditorChangePayload(editor, editorState, markdownTransformers, cha
   editorState.read(() => {
     const root = lexical.$getRoot();
     text = root.getTextContent();
-    html$1 = html.$generateHtmlFromNodes(editor, null);
-    markdown$1 = markdown.$convertToMarkdownString(markdownTransformers);
-    isEmpty = text.trim().length === 0;
+    if (includeHtml) {
+      html$1 = html.$generateHtmlFromNodes(editor, null);
+    }
+    if (includeMarkdown) {
+      markdown$1 = markdown.$convertToMarkdownString(markdownTransformers);
+    }
+    isEmpty = !hasTextContent(text);
   });
-  const json = editorState.toJSON();
+  const json = includeJson ? editorState.toJSON() : null;
   return {
     editor,
     editorState,
@@ -637,12 +709,12 @@ function buildEditorChangePayload(editor, editorState, markdownTransformers, cha
 function getSourceModeLanguage(mode) {
   return mode === "markdown" ? "markdown" : "html";
 }
-function getSourceModeCodeText(root, mode) {
+function getSourceModeCodeNode(root, mode) {
   const firstChild = root.getFirstChild();
   if (code.$isCodeNode(firstChild) && firstChild.getLanguage() === getSourceModeLanguage(mode)) {
-    return firstChild.getTextContent();
+    return firstChild;
   }
-  return root.getTextContent();
+  return null;
 }
 function formatHtmlSource(html) {
   const normalized = html.replace(/>\s*</g, ">\n<").replace(/\n{3,}/g, "\n\n").trim();
@@ -667,59 +739,14 @@ function formatHtmlSource(html) {
 function readSourceValue(editor, mode, markdownTransformers) {
   return editor.getEditorState().read(() => {
     const root = lexical.$getRoot();
-    const existingCodeText = getSourceModeCodeText(root, mode);
-    if (existingCodeText.trim().length > 0 || code.$isCodeNode(root.getFirstChild())) {
-      return existingCodeText;
+    const existingCodeNode = getSourceModeCodeNode(root, mode);
+    if (existingCodeNode) {
+      return existingCodeNode.getTextContent();
     }
     if (mode === "markdown") {
       return markdown.$convertToMarkdownString(markdownTransformers);
     }
     return formatHtmlSource(html.$generateHtmlFromNodes(editor, null));
-  });
-}
-function writeSourceValue(editor, mode, source) {
-  editor.update(() => {
-    const root = lexical.$getRoot();
-    const code$1 = code.$createCodeNode(getSourceModeLanguage(mode));
-    root.clear().append(code$1);
-    code$1.select().insertRawText(source);
-    code$1.select(0, 0);
-  });
-}
-function enterSourceMode(editor, mode, markdownTransformers) {
-  editor.update(() => {
-    const root = lexical.$getRoot();
-    const source = mode === "markdown" ? markdown.$convertToMarkdownString(markdownTransformers) : formatHtmlSource(html.$generateHtmlFromNodes(editor, null));
-    const code$1 = code.$createCodeNode(getSourceModeLanguage(mode));
-    root.clear().append(code$1);
-    code$1.select().insertRawText(source);
-    code$1.select(0, 0);
-  });
-}
-function exitSourceMode(editor, mode, markdownTransformers) {
-  editor.update(() => {
-    const root = lexical.$getRoot();
-    const source = getSourceModeCodeText(root, mode);
-    root.clear().select();
-    if (source.trim().length === 0) {
-      root.append(lexical.$createParagraphNode()).select();
-      return;
-    }
-    if (mode === "markdown") {
-      markdown.$convertFromMarkdownString(source, markdownTransformers);
-    } else {
-      const parser = new DOMParser();
-      const dom = parser.parseFromString(source, "text/html");
-      const nodes = html.$generateNodesFromDOM(editor, dom);
-      if (nodes.length === 0) {
-        root.append(lexical.$createParagraphNode()).select();
-        return;
-      }
-      lexical.$insertNodes(nodes);
-    }
-    if (root.isEmpty()) {
-      root.append(lexical.$createParagraphNode()).select();
-    }
   });
 }
 function readToolbarState() {
@@ -731,6 +758,7 @@ function readToolbarState() {
   const topLevel = anchorNode.getKey() === "root" ? null : anchorNode.getTopLevelElementOrThrow();
   const listNode = lexical.$findMatchingParent(anchorNode, list.$isListNode);
   const linkNode = lexical.$findMatchingParent(anchorNode, link.$isLinkNode);
+  const tableCellNode = table.$getTableCellNodeFromLexicalNode(anchorNode);
   const linkParentElement = linkNode ? lexical.$findMatchingParent(
     anchorNode,
     (parentNode) => lexical.$isElementNode(parentNode) && !parentNode.isInline()
@@ -766,6 +794,7 @@ function readToolbarState() {
     isLowercase: selection$1.hasFormat("lowercase"),
     isUppercase: selection$1.hasFormat("uppercase"),
     isCapitalize: selection$1.hasFormat("capitalize"),
+    isTableSelection: Boolean(tableCellNode),
     isLink: Boolean(linkNode),
     linkUrl: linkNode?.getURL() ?? "",
     fontFamily: selection.$getSelectionStyleValueForProperty(
@@ -838,6 +867,109 @@ function insertDefaultTable(editor, rows = 3, columns = 3) {
     columns: String(columns),
     includeHeaders: true
   });
+}
+function insertTable(editor, rows = 3, columns = 3, targetBlockElement) {
+  const safeRows = Math.max(1, Math.min(12, Math.trunc(rows) || 3));
+  const safeColumns = Math.max(1, Math.min(12, Math.trunc(columns) || 3));
+  editor.update(() => {
+    const targetNode = resolveInsertionTargetNode(targetBlockElement);
+    const table$1 = table.$createTableNodeWithDimensions(safeRows, safeColumns, true);
+    const paragraph = createSelectableParagraph();
+    insertAfterNode(targetNode, [table$1, paragraph]);
+    paragraph.select();
+  });
+}
+function getSelectedTableCell(selectionSnapshot) {
+  const selection = resolveRangeSelection(selectionSnapshot);
+  if (!selection) {
+    return null;
+  }
+  return table.$getTableCellNodeFromLexicalNode(selection.anchor.getNode());
+}
+function resolveTableCellNode(selectionSnapshot, targetCellKey) {
+  if (targetCellKey) {
+    const lexicalNode = lexical.$getNodeByKey(targetCellKey);
+    if (table.$isTableCellNode(lexicalNode)) {
+      return lexicalNode;
+    }
+    if (lexicalNode) {
+      return table.$getTableCellNodeFromLexicalNode(lexicalNode);
+    }
+  }
+  return getSelectedTableCell(selectionSnapshot);
+}
+function insertTableRow(editor, insertAfter, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    tableCellNode.selectEnd();
+    table.$insertTableRowAtSelection(insertAfter);
+  });
+  editor.focus();
+}
+function insertTableColumn(editor, insertAfter, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    tableCellNode.selectEnd();
+    table.$insertTableColumnAtSelection(insertAfter);
+  });
+  editor.focus();
+}
+function deleteTableRow(editor, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    tableCellNode.selectEnd();
+    table.$deleteTableRowAtSelection();
+  });
+  editor.focus();
+}
+function deleteTableColumn(editor, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    tableCellNode.selectEnd();
+    table.$deleteTableColumnAtSelection();
+  });
+  editor.focus();
+}
+function deleteTable(editor, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    const tableNode = table.$getTableNodeFromLexicalNodeOrThrow(tableCellNode);
+    const paragraph = createSelectableParagraph();
+    tableNode.insertAfter(paragraph);
+    tableNode.remove();
+    paragraph.select();
+  });
+  editor.focus();
 }
 function applyLink(editor, url, selectionSnapshot) {
   const formattedUrl = link.formatUrl(url);
@@ -913,13 +1045,27 @@ function applyTextStyles(editor, styles, selectionSnapshot, skipHistoryStack = f
     skipHistoryStack ? { tag: "historic" } : {}
   );
 }
+function applySourceValue(editor, value, format, markdownTransformers) {
+  applySerializedEditorValue(editor, value, format, markdownTransformers);
+}
 function undo(editor) {
   editor.dispatchCommand(lexical.UNDO_COMMAND, void 0);
 }
 function redo(editor) {
   editor.dispatchCommand(lexical.REDO_COMMAND, void 0);
 }
-function formatText(editor, format) {
+function formatText(editor, format, selectionSnapshot) {
+  if (selectionSnapshot) {
+    editor.update(() => {
+      const selection = resolveRangeSelection(selectionSnapshot);
+      if (!selection) {
+        return;
+      }
+      selection.formatText(format);
+    });
+    editor.focus();
+    return;
+  }
   editor.dispatchCommand(lexical.FORMAT_TEXT_COMMAND, format);
 }
 function formatElement(editor, format) {
@@ -1186,7 +1332,7 @@ function isToolbarTarget(target) {
 }
 function EditorShortcutsPlugin() {
   const [editor] = LexicalComposerContext.useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   react.useEffect(() => {
     if (readOnly || !features.shortcuts) {
       return;
@@ -1293,6 +1439,12 @@ function EditorShortcutsPlugin() {
   }, [editor, features, readOnly]);
   return null;
 }
+var DEFAULT_CHANGE_SERIALIZATION = {
+  html: false,
+  markdown: false,
+  json: false,
+  debounceMs: 0
+};
 function EditorEditablePlugin({ editable }) {
   const [editor] = LexicalComposerContext.useLexicalComposerContext();
   react.useEffect(() => {
@@ -1305,7 +1457,9 @@ function EditorComposer({
   preset = "core",
   initialValue = null,
   initialValueFormat = "json",
+  activeMode = "rich-text",
   onChange,
+  changeSerialization,
   onError = (error) => {
     throw error;
   },
@@ -1322,6 +1476,9 @@ function EditorComposer({
     [features, preset]
   );
   const [metrics, setMetrics] = react.useState(EMPTY_EDITOR_METRICS);
+  const changeTimeoutRef = react.useRef(null);
+  const onChangeRef = react.useRef(onChange);
+  const markdownTransformersRef = react.useRef(markdownTransformers);
   const initialConfig = react.useMemo(
     () => ({
       namespace,
@@ -1346,74 +1503,142 @@ function EditorComposer({
     ]
   );
   const characterLimitCharset = resolvedFeatures.characterLimit?.charset ?? "UTF-16";
-  return /* @__PURE__ */ jsxRuntime.jsx(LexicalComposer.LexicalComposer, { initialConfig, children: /* @__PURE__ */ jsxRuntime.jsxs(
-    EditorContext.Provider,
-    {
-      value: {
-        features: resolvedFeatures,
-        metrics,
-        linkMatchers,
-        markdownTransformers,
-        readOnly
-      },
-      children: [
-        editorRef ? /* @__PURE__ */ jsxRuntime.jsx(LexicalEditorRefPlugin.EditorRefPlugin, { editorRef }) : null,
-        /* @__PURE__ */ jsxRuntime.jsx(EditorEditablePlugin, { editable: !readOnly }),
-        resolvedFeatures.history ? /* @__PURE__ */ jsxRuntime.jsx(LexicalHistoryPlugin.HistoryPlugin, {}) : null,
-        resolvedFeatures.links ? /* @__PURE__ */ jsxRuntime.jsx(LexicalLinkPlugin.LinkPlugin, {}) : null,
-        resolvedFeatures.autoLinks ? /* @__PURE__ */ jsxRuntime.jsx(LexicalAutoLinkPlugin.AutoLinkPlugin, { matchers: linkMatchers }) : null,
-        resolvedFeatures.lists ? /* @__PURE__ */ jsxRuntime.jsx(LexicalListPlugin.ListPlugin, { hasStrictIndent: resolvedFeatures.strictListIndent }) : null,
-        resolvedFeatures.checklists ? /* @__PURE__ */ jsxRuntime.jsx(LexicalCheckListPlugin.CheckListPlugin, {}) : null,
-        resolvedFeatures.tables ? /* @__PURE__ */ jsxRuntime.jsx(
-          LexicalTablePlugin.TablePlugin,
-          {
-            hasCellMerge: resolvedFeatures.tableCellMerge,
-            hasCellBackgroundColor: resolvedFeatures.tableCellBackgroundColor,
-            hasHorizontalScroll: resolvedFeatures.tableHorizontalScroll
-          }
-        ) : null,
-        resolvedFeatures.markdownShortcuts ? /* @__PURE__ */ jsxRuntime.jsx(LexicalMarkdownShortcutPlugin.MarkdownShortcutPlugin, { transformers: markdownTransformers }) : null,
-        resolvedFeatures.tabIndentation ? /* @__PURE__ */ jsxRuntime.jsx(LexicalTabIndentationPlugin.TabIndentationPlugin, { maxIndent: resolvedFeatures.maxIndent }) : null,
-        resolvedFeatures.characterLimit ? /* @__PURE__ */ jsxRuntime.jsx(
-          LexicalCharacterLimitPlugin.CharacterLimitPlugin,
-          {
-            charset: resolvedFeatures.characterLimit.charset ?? "UTF-16",
-            maxLength: resolvedFeatures.characterLimit.maxLength,
-            renderer: () => /* @__PURE__ */ jsxRuntime.jsx(
-              "span",
-              {
-                className: "vds-editor-character-limit-meter",
-                "aria-hidden": "true",
-                hidden: true
-              }
-            )
-          }
-        ) : null,
-        resolvedFeatures.codeBlocks ? /* @__PURE__ */ jsxRuntime.jsx(EditorCodeHighlightPlugin, {}) : null,
-        resolvedFeatures.shortcuts ? /* @__PURE__ */ jsxRuntime.jsx(EditorShortcutsPlugin, {}) : null,
-        !readOnly ? /* @__PURE__ */ jsxRuntime.jsx(EditorTrailingParagraphPlugin, {}) : null,
-        /* @__PURE__ */ jsxRuntime.jsx(
-          LexicalOnChangePlugin.OnChangePlugin,
-          {
-            ignoreSelectionChange: true,
-            onChange: (editorState, editor, tags) => {
-              const payload = buildEditorChangePayload(
-                editor,
-                editorState,
-                markdownTransformers,
-                characterLimitCharset,
-                tags
-              );
-              setMetrics(payload);
-              onChange?.(payload);
-            }
-          }
-        ),
-        autoFocus ? /* @__PURE__ */ jsxRuntime.jsx(LexicalAutoFocusPlugin.AutoFocusPlugin, {}) : null,
-        children
-      ]
+  const isSourceMode = activeMode !== "rich-text";
+  const resolvedChangeSerialization = react.useMemo(
+    () => ({
+      ...DEFAULT_CHANGE_SERIALIZATION,
+      ...changeSerialization
+    }),
+    [changeSerialization]
+  );
+  const configValue = react.useMemo(
+    () => ({
+      features: resolvedFeatures,
+      linkMatchers,
+      markdownTransformers,
+      readOnly
+    }),
+    [linkMatchers, markdownTransformers, readOnly, resolvedFeatures]
+  );
+  react.useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+  react.useEffect(() => {
+    markdownTransformersRef.current = markdownTransformers;
+  }, [markdownTransformers]);
+  react.useEffect(
+    () => () => {
+      if (changeTimeoutRef.current !== null) {
+        clearTimeout(changeTimeoutRef.current);
+      }
+    },
+    []
+  );
+  react.useEffect(() => {
+    if (changeTimeoutRef.current !== null) {
+      clearTimeout(changeTimeoutRef.current);
+      changeTimeoutRef.current = null;
     }
-  ) });
+  }, [activeMode]);
+  return /* @__PURE__ */ jsxRuntime.jsx(LexicalComposer.LexicalComposer, { initialConfig, children: /* @__PURE__ */ jsxRuntime.jsx(EditorConfigContext.Provider, { value: configValue, children: /* @__PURE__ */ jsxRuntime.jsxs(EditorMetricsContext.Provider, { value: metrics, children: [
+    editorRef ? /* @__PURE__ */ jsxRuntime.jsx(LexicalEditorRefPlugin.EditorRefPlugin, { editorRef }) : null,
+    /* @__PURE__ */ jsxRuntime.jsx(EditorEditablePlugin, { editable: !readOnly }),
+    resolvedFeatures.history ? /* @__PURE__ */ jsxRuntime.jsx(LexicalHistoryPlugin.HistoryPlugin, {}) : null,
+    resolvedFeatures.links ? /* @__PURE__ */ jsxRuntime.jsx(LexicalLinkPlugin.LinkPlugin, {}) : null,
+    resolvedFeatures.autoLinks ? /* @__PURE__ */ jsxRuntime.jsx(LexicalAutoLinkPlugin.AutoLinkPlugin, { matchers: linkMatchers }) : null,
+    resolvedFeatures.lists ? /* @__PURE__ */ jsxRuntime.jsx(LexicalListPlugin.ListPlugin, { hasStrictIndent: resolvedFeatures.strictListIndent }) : null,
+    resolvedFeatures.checklists ? /* @__PURE__ */ jsxRuntime.jsx(LexicalCheckListPlugin.CheckListPlugin, {}) : null,
+    resolvedFeatures.tables ? /* @__PURE__ */ jsxRuntime.jsx(
+      LexicalTablePlugin.TablePlugin,
+      {
+        hasCellMerge: resolvedFeatures.tableCellMerge,
+        hasCellBackgroundColor: resolvedFeatures.tableCellBackgroundColor,
+        hasHorizontalScroll: resolvedFeatures.tableHorizontalScroll
+      }
+    ) : null,
+    resolvedFeatures.markdownShortcuts ? /* @__PURE__ */ jsxRuntime.jsx(LexicalMarkdownShortcutPlugin.MarkdownShortcutPlugin, { transformers: markdownTransformers }) : null,
+    resolvedFeatures.tabIndentation ? /* @__PURE__ */ jsxRuntime.jsx(LexicalTabIndentationPlugin.TabIndentationPlugin, { maxIndent: resolvedFeatures.maxIndent }) : null,
+    resolvedFeatures.characterLimit ? /* @__PURE__ */ jsxRuntime.jsx(
+      LexicalCharacterLimitPlugin.CharacterLimitPlugin,
+      {
+        charset: resolvedFeatures.characterLimit.charset ?? "UTF-16",
+        maxLength: resolvedFeatures.characterLimit.maxLength,
+        renderer: () => /* @__PURE__ */ jsxRuntime.jsx(
+          "span",
+          {
+            className: "vds-editor-character-limit-meter",
+            "aria-hidden": "true",
+            hidden: true
+          }
+        )
+      }
+    ) : null,
+    resolvedFeatures.codeBlocks ? /* @__PURE__ */ jsxRuntime.jsx(EditorCodeHighlightPlugin, {}) : null,
+    resolvedFeatures.shortcuts ? /* @__PURE__ */ jsxRuntime.jsx(EditorShortcutsPlugin, {}) : null,
+    !readOnly ? /* @__PURE__ */ jsxRuntime.jsx(EditorTrailingParagraphPlugin, {}) : null,
+    /* @__PURE__ */ jsxRuntime.jsx(
+      LexicalOnChangePlugin.OnChangePlugin,
+      {
+        ignoreSelectionChange: true,
+        onChange: (editorState, editor, tags) => {
+          const nextMetrics = buildEditorMetrics(
+            editorState,
+            characterLimitCharset
+          );
+          setMetrics(
+            (currentMetrics) => areEditorMetricsEqual(currentMetrics, nextMetrics) ? currentMetrics : nextMetrics
+          );
+          if (!onChange) {
+            return;
+          }
+          if (changeTimeoutRef.current !== null) {
+            clearTimeout(changeTimeoutRef.current);
+            changeTimeoutRef.current = null;
+          }
+          const nextTags = new Set(tags);
+          const basePayload = {
+            ...nextMetrics,
+            editor,
+            editorState,
+            tags: nextTags
+          };
+          if (isSourceMode || !resolvedChangeSerialization.html && !resolvedChangeSerialization.markdown && !resolvedChangeSerialization.json) {
+            onChange(basePayload);
+            return;
+          }
+          const emitSerializedChange = () => {
+            const nextOnChange = onChangeRef.current;
+            if (!nextOnChange) {
+              return;
+            }
+            const payload = buildEditorChangePayload(
+              editor,
+              editorState,
+              markdownTransformersRef.current,
+              characterLimitCharset,
+              nextTags,
+              {
+                includeHtml: resolvedChangeSerialization.html,
+                includeJson: resolvedChangeSerialization.json,
+                includeMarkdown: resolvedChangeSerialization.markdown
+              }
+            );
+            nextOnChange(payload);
+          };
+          if (resolvedChangeSerialization.debounceMs > 0) {
+            changeTimeoutRef.current = setTimeout(
+              emitSerializedChange,
+              resolvedChangeSerialization.debounceMs
+            );
+            return;
+          }
+          emitSerializedChange();
+        }
+      }
+    ),
+    autoFocus ? /* @__PURE__ */ jsxRuntime.jsx(LexicalAutoFocusPlugin.AutoFocusPlugin, {}) : null,
+    children
+  ] }) }) });
 }
 var EditorSurface = react.forwardRef(
   function EditorSurface2({
@@ -1428,7 +1653,7 @@ var EditorSurface = react.forwardRef(
     maxHeight,
     ...contentEditableProps
   }, ref) {
-    const { readOnly } = useEditorContext();
+    const { readOnly } = useEditorConfig();
     return /* @__PURE__ */ jsxRuntime.jsx(
       "div",
       {
@@ -1622,6 +1847,7 @@ function useEditorDropdown() {
 function EditorDropdownItem({
   children,
   className,
+  closeOnSelect = true,
   onSelect,
   title
 }) {
@@ -1644,7 +1870,9 @@ function EditorDropdownItem({
       onMouseDown: (event) => event.preventDefault(),
       onClick: () => {
         onSelect?.();
-        close();
+        if (closeOnSelect) {
+          close();
+        }
       },
       children
     }
@@ -1809,7 +2037,7 @@ function EditorDropdown({
     };
   }, [close, open]);
   react.useEffect(() => {
-    if (!open) {
+    if (!open || !closeOnTriggerMove) {
       return;
     }
     const initialRect = buttonRef.current?.getBoundingClientRect();
@@ -2307,6 +2535,8 @@ function EditorMediaDialog({
   ) });
 }
 var DEFAULT_LABEL = "Insert";
+var MIN_TABLE_DIMENSION = 2;
+var MAX_TABLE_DIMENSION = 8;
 function isMediaInsertKind(kind) {
   return kind === "image" || kind === "video" || kind === "embed";
 }
@@ -2442,10 +2672,124 @@ function createDefaultItems(features, compact) {
       description: "Insert a 3 x 3 table with headers.",
       icon: reactIcons.IconTable,
       kind: "table",
-      run: (editor, targetBlockElement) => insertBlock(editor, "table", targetBlockElement)
+      run: (editor, targetBlockElement) => insertTable(editor, 3, 3, targetBlockElement)
     });
   }
   return items;
+}
+function clampTableDimension(value) {
+  return Math.min(MAX_TABLE_DIMENSION, Math.max(MIN_TABLE_DIMENSION, value));
+}
+function TableDimensionStepper({
+  label,
+  value,
+  onChange
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-editor-table-builder-stepper", children: [
+    /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-table-builder-stepper-label", children: label }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-editor-table-builder-stepper-controls", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(
+        reactButton.Button,
+        {
+          type: "button",
+          variant: "ghost",
+          color: "contrast",
+          size: "xs",
+          className: "vds-editor-table-builder-stepper-button",
+          disabled: value <= MIN_TABLE_DIMENSION,
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => onChange(clampTableDimension(value - 1)),
+          children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.Icon, { icon: reactIcons.IconMinus, size: "sm" })
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-table-builder-stepper-value", children: value }),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        reactButton.Button,
+        {
+          type: "button",
+          variant: "ghost",
+          color: "contrast",
+          size: "xs",
+          className: "vds-editor-table-builder-stepper-button",
+          disabled: value >= MAX_TABLE_DIMENSION,
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => onChange(clampTableDimension(value + 1)),
+          children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.Icon, { icon: reactIcons.IconPlus, size: "sm" })
+        }
+      )
+    ] })
+  ] });
+}
+function TableBuilderPanel({
+  onBack,
+  onInsert
+}) {
+  const { close } = useEditorDropdown();
+  const [rows, setRows] = react.useState(3);
+  const [columns, setColumns] = react.useState(3);
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-editor-table-builder", children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-editor-table-builder-header", children: [
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-table-builder-title", children: "Build Table" }),
+      /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-editor-table-builder-summary", children: [
+        rows,
+        " x ",
+        columns,
+        " with header row"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-editor-table-builder-body", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(TableDimensionStepper, { label: "Rows", value: rows, onChange: setRows }),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        TableDimensionStepper,
+        {
+          label: "Columns",
+          value: columns,
+          onChange: setColumns
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-editor-table-builder-actions", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(
+        reactButton.Button,
+        {
+          type: "button",
+          variant: "ghost",
+          color: "contrast",
+          size: "xs",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: onBack,
+          children: "Back"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        reactButton.Button,
+        {
+          type: "button",
+          variant: "ghost",
+          color: "contrast",
+          size: "xs",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => close(),
+          children: "Cancel"
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        reactButton.Button,
+        {
+          type: "button",
+          variant: "soft",
+          color: "primary",
+          size: "xs",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => {
+            onInsert(rows, columns);
+            close();
+          },
+          children: "Insert"
+        }
+      )
+    ] })
+  ] });
 }
 function EditorInsertMenu({
   className,
@@ -2456,8 +2800,9 @@ function EditorInsertMenu({
   targetBlockElement
 }) {
   const [editor] = LexicalComposerContext.useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   const [mediaDialog, setMediaDialog] = react.useState(null);
+  const [tableBuilderOpen, setTableBuilderOpen] = react.useState(false);
   const resolvedItems = react.useMemo(
     () => items ?? createDefaultItems(features, compact),
     [compact, features, items]
@@ -2469,11 +2814,18 @@ function EditorInsertMenu({
         autoFocusItems: !compact,
         className: utils.cn(
           "vds-editor-dropdown vds-editor-menu vds-editor-insert-menu",
-          compact ? "vds-editor-insert-menu-compact" : null
+          compact ? "vds-editor-insert-menu-compact" : null,
+          tableBuilderOpen ? "vds-editor-insert-menu-table-builder" : null
         ),
-        closeOnTriggerMove: !compact,
+        closeOnTriggerMove: false,
         disabled: readOnly,
-        onOpenChange,
+        onOpenChange: (open) => {
+          if (!open) {
+            setTableBuilderOpen(false);
+          }
+          onOpenChange?.(open);
+        },
+        stopCloseOnClickSelf: tableBuilderOpen,
         trigger: ({ buttonRef, controlsId, open, toggle }) => /* @__PURE__ */ jsxRuntime.jsx(
           reactButton.Button,
           {
@@ -2499,36 +2851,53 @@ function EditorInsertMenu({
             onClick: (event) => {
               event.preventDefault();
               event.stopPropagation();
+              if (!open) {
+                setTableBuilderOpen(false);
+              }
               toggle();
             },
             children: compact ? null : label
           }
         ),
-        children: resolvedItems.map((item) => /* @__PURE__ */ jsxRuntime.jsxs(
-          EditorDropdownItem,
+        children: tableBuilderOpen ? /* @__PURE__ */ jsxRuntime.jsx(
+          TableBuilderPanel,
           {
-            className: "vds-editor-menu-item vds-editor-menu-item-rich",
-            onSelect: () => {
-              if (isMediaInsertKind(item.kind)) {
-                setMediaDialog({
-                  kind: item.kind,
-                  targetBlockElement
-                });
-                return;
-              }
-              item.run(editor, targetBlockElement);
+            onBack: () => setTableBuilderOpen(false),
+            onInsert: (rows, columns) => insertTable(editor, rows, columns, targetBlockElement)
+          }
+        ) : resolvedItems.map((item) => {
+          const opensTableBuilder = item.kind === "table" && !compact;
+          return /* @__PURE__ */ jsxRuntime.jsxs(
+            EditorDropdownItem,
+            {
+              className: "vds-editor-menu-item vds-editor-menu-item-rich",
+              closeOnSelect: !opensTableBuilder,
+              onSelect: () => {
+                if (opensTableBuilder) {
+                  setTableBuilderOpen(true);
+                  return;
+                }
+                if (isMediaInsertKind(item.kind)) {
+                  setMediaDialog({
+                    kind: item.kind,
+                    targetBlockElement
+                  });
+                  return;
+                }
+                item.run(editor, targetBlockElement);
+              },
+              children: [
+                item.icon ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-icon", children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.Icon, { icon: item.icon, size: "sm" }) }) : null,
+                /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-editor-menu-item-copy", children: [
+                  /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-label", children: item.title }),
+                  item.description ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-description", children: item.description }) : null
+                ] }),
+                item.shortcut ? /* @__PURE__ */ jsxRuntime.jsx(reactKbd.Kbd, { className: "vds-editor-menu-item-shortcut", children: item.shortcut }) : null
+              ]
             },
-            children: [
-              item.icon ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-icon", children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.Icon, { icon: item.icon, size: "sm" }) }) : null,
-              /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-editor-menu-item-copy", children: [
-                /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-label", children: item.title }),
-                item.description ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-description", children: item.description }) : null
-              ] }),
-              item.shortcut ? /* @__PURE__ */ jsxRuntime.jsx(reactKbd.Kbd, { className: "vds-editor-menu-item-shortcut", children: item.shortcut }) : null
-            ]
-          },
-          item.key
-        ))
+            item.key
+          );
+        })
       }
     ),
     /* @__PURE__ */ jsxRuntime.jsx(
@@ -2658,7 +3027,7 @@ function EditorDraggableBlocks({
   className,
   placement = "inside"
 }) {
-  const { readOnly } = useEditorContext();
+  const { readOnly } = useEditorConfig();
   const menuRef = react.useRef(null);
   const targetLineRef = react.useRef(null);
   const targetBlockElementRef = react.useRef(null);
@@ -2671,7 +3040,7 @@ function EditorDraggableBlocks({
     targetBlockElementRef.current = targetBlockElement;
   }, [targetBlockElement]);
   function handleTargetElementChanged(nextTargetBlockElement) {
-    if (insertMenuOpenRef.current && !nextTargetBlockElement) {
+    if (insertMenuOpenRef.current) {
       return;
     }
     setTargetBlockElement(nextTargetBlockElement);
@@ -3052,7 +3421,7 @@ function EditorFloatingToolbar({
                 icon: reactIcons.IconBold,
                 label: "Bold",
                 tooltipSide,
-                onClick: () => formatText(editor, "bold")
+                onClick: () => formatText(editor, "bold", selectionRef.current)
               }
             ),
             /* @__PURE__ */ jsxRuntime.jsx(
@@ -3062,7 +3431,7 @@ function EditorFloatingToolbar({
                 icon: reactIcons.IconItalic,
                 label: "Italic",
                 tooltipSide,
-                onClick: () => formatText(editor, "italic")
+                onClick: () => formatText(editor, "italic", selectionRef.current)
               }
             ),
             /* @__PURE__ */ jsxRuntime.jsx(
@@ -3072,7 +3441,7 @@ function EditorFloatingToolbar({
                 icon: reactIcons.IconUnderline,
                 label: "Underline",
                 tooltipSide,
-                onClick: () => formatText(editor, "underline")
+                onClick: () => formatText(editor, "underline", selectionRef.current)
               }
             ),
             /* @__PURE__ */ jsxRuntime.jsx(
@@ -3082,7 +3451,7 @@ function EditorFloatingToolbar({
                 icon: reactIcons.IconStrikethrough,
                 label: "Strikethrough",
                 tooltipSide,
-                onClick: () => formatText(editor, "strikethrough")
+                onClick: () => formatText(editor, "strikethrough", selectionRef.current)
               }
             ),
             features.advancedTextFormats ? /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
@@ -3093,7 +3462,7 @@ function EditorFloatingToolbar({
                   icon: reactIcons.IconSubscript,
                   label: "Subscript",
                   tooltipSide,
-                  onClick: () => formatText(editor, "subscript")
+                  onClick: () => formatText(editor, "subscript", selectionRef.current)
                 }
               ),
               /* @__PURE__ */ jsxRuntime.jsx(
@@ -3103,7 +3472,7 @@ function EditorFloatingToolbar({
                   icon: reactIcons.IconSuperscript,
                   label: "Superscript",
                   tooltipSide,
-                  onClick: () => formatText(editor, "superscript")
+                  onClick: () => formatText(editor, "superscript", selectionRef.current)
                 }
               ),
               /* @__PURE__ */ jsxRuntime.jsx(
@@ -3113,7 +3482,7 @@ function EditorFloatingToolbar({
                   icon: reactIcons.IconLetterCaseUpper,
                   label: "Uppercase",
                   tooltipSide,
-                  onClick: () => formatText(editor, "uppercase")
+                  onClick: () => formatText(editor, "uppercase", selectionRef.current)
                 }
               ),
               /* @__PURE__ */ jsxRuntime.jsx(
@@ -3123,7 +3492,7 @@ function EditorFloatingToolbar({
                   icon: reactIcons.IconLetterCaseLower,
                   label: "Lowercase",
                   tooltipSide,
-                  onClick: () => formatText(editor, "lowercase")
+                  onClick: () => formatText(editor, "lowercase", selectionRef.current)
                 }
               ),
               /* @__PURE__ */ jsxRuntime.jsx(
@@ -3133,7 +3502,7 @@ function EditorFloatingToolbar({
                   icon: reactIcons.IconLetterCaseToggle,
                   label: "Capitalize",
                   tooltipSide,
-                  onClick: () => formatText(editor, "capitalize")
+                  onClick: () => formatText(editor, "capitalize", selectionRef.current)
                 }
               )
             ] }) : null,
@@ -3144,7 +3513,7 @@ function EditorFloatingToolbar({
                 icon: reactIcons.IconCode,
                 label: "Inline code",
                 tooltipSide,
-                onClick: () => formatText(editor, "code")
+                onClick: () => formatText(editor, "code", selectionRef.current)
               }
             ),
             showLinkActions ? /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
@@ -3324,7 +3693,7 @@ function EditorSlashMenu({
   items
 }) {
   const [editor] = LexicalComposerContext.useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   const [queryString, setQueryString] = react.useState(null);
   const checkForSlashTriggerMatch = LexicalTypeaheadMenuPlugin.useBasicTypeaheadTriggerMatch("/", {
     minLength: 0
@@ -3493,15 +3862,21 @@ function EditorSlashMenu({
 function EditorSourcePanel({
   maxHeight,
   minHeight = "12rem",
-  mode
+  mode,
+  onChange,
+  value
 }) {
-  const [editor] = LexicalComposerContext.useLexicalComposerContext();
-  const { markdownTransformers, readOnly } = useEditorContext();
-  const [value, setValue] = react.useState("");
+  LexicalComposerContext.useLexicalComposerContext();
+  const { readOnly } = useEditorConfig();
+  const [localValue, setLocalValue] = react.useState(value);
+  const valueRef = react.useRef(value);
   const language = mode === "markdown" ? "markdown" : "html";
   react.useEffect(() => {
-    setValue(readSourceValue(editor, mode, markdownTransformers));
-  }, [editor, markdownTransformers, mode]);
+    valueRef.current = value;
+    setLocalValue(
+      (currentValue) => currentValue === value ? currentValue : value
+    );
+  }, [value]);
   return /* @__PURE__ */ jsxRuntime.jsx(
     "div",
     {
@@ -3514,10 +3889,14 @@ function EditorSourcePanel({
         reactCode.CodeEditor,
         {
           className: "vds-editor-source-code",
-          value,
+          value: localValue,
           onValueChange: (nextValue) => {
-            setValue(nextValue);
-            writeSourceValue(editor, mode, nextValue);
+            if (nextValue === valueRef.current) {
+              return;
+            }
+            valueRef.current = nextValue;
+            setLocalValue(nextValue);
+            onChange?.(nextValue);
           },
           language,
           filename: mode === "markdown" ? "document.md" : "document.html",
@@ -3538,7 +3917,8 @@ function EditorStatusBar({
   className,
   showFeatureHints = true
 }) {
-  const { features, metrics } = useEditorContext();
+  const { features } = useEditorConfig();
+  const metrics = useEditorMetrics();
   const remaining = features.characterLimit != null ? features.characterLimit.maxLength - metrics.characterCount : null;
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: utils.cn("vds-editor-status", className), children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "vds-editor-status-group", children: [
@@ -3571,6 +3951,147 @@ function EditorStatusBar({
       features.comments ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-status-pill", children: "Comments" }) : null
     ] }) : null
   ] });
+}
+var HOVER_ACTIONS_CLASSNAME = "vds-editor-table-hover-actions";
+function EditorTableHoverActions({
+  anchorElement,
+  className
+}) {
+  const [editor] = LexicalComposerContext.useLexicalComposerContext();
+  const { readOnly } = useEditorConfig();
+  const hoveredCellElementRef = react.useRef(null);
+  const [hoveredCell, setHoveredCell] = react.useState(null);
+  function clearHoveredCell() {
+    if (hoveredCellElementRef.current) {
+      delete hoveredCellElementRef.current.dataset.vdsTableHovered;
+    }
+    hoveredCellElementRef.current = null;
+    setHoveredCell(null);
+  }
+  function updateHoveredCell(cellElement) {
+    editor.getEditorState().read(() => {
+      const lexicalNode = lexical.$getNearestNodeFromDOMNode(cellElement);
+      const tableCellNode = table.$isTableCellNode(lexicalNode) ? lexicalNode : lexicalNode ? table.$getTableCellNodeFromLexicalNode(lexicalNode) : null;
+      if (!tableCellNode) {
+        clearHoveredCell();
+        return;
+      }
+      if (hoveredCellElementRef.current && hoveredCellElementRef.current !== cellElement) {
+        delete hoveredCellElementRef.current.dataset.vdsTableHovered;
+      }
+      hoveredCellElementRef.current = cellElement;
+      hoveredCellElementRef.current.dataset.vdsTableHovered = "true";
+      setHoveredCell((currentCell) => {
+        if (currentCell && currentCell.key === tableCellNode.getKey() && currentCell.element === cellElement) {
+          return currentCell;
+        }
+        return {
+          key: tableCellNode.getKey(),
+          element: cellElement
+        };
+      });
+    });
+  }
+  react.useEffect(() => {
+    if (!anchorElement || readOnly) {
+      return;
+    }
+    const activeAnchorElement = anchorElement;
+    function handlePointerMove(event) {
+      const path = event.composedPath();
+      const target = path.find(
+        (node) => node instanceof HTMLElement
+      );
+      if (!(target instanceof HTMLElement)) {
+        clearHoveredCell();
+        return;
+      }
+      if (target.closest(`.${HOVER_ACTIONS_CLASSNAME}`)) {
+        return;
+      }
+      const cellElement = target.closest(".vds-editor-table-cell");
+      if (!cellElement || !activeAnchorElement.contains(cellElement)) {
+        clearHoveredCell();
+        return;
+      }
+      updateHoveredCell(cellElement);
+    }
+    function handlePointerLeave(event) {
+      const relatedTarget = event.relatedTarget;
+      if (relatedTarget instanceof HTMLElement && relatedTarget.closest(`.${HOVER_ACTIONS_CLASSNAME}`)) {
+        return;
+      }
+      clearHoveredCell();
+    }
+    activeAnchorElement.addEventListener("pointermove", handlePointerMove);
+    activeAnchorElement.addEventListener("pointerleave", handlePointerLeave);
+    return () => {
+      clearHoveredCell();
+      activeAnchorElement.removeEventListener("pointermove", handlePointerMove);
+      activeAnchorElement.removeEventListener("pointerleave", handlePointerLeave);
+    };
+  }, [anchorElement, editor, readOnly]);
+  react.useLayoutEffect(() => {
+    if (!anchorElement || !hoveredCellElementRef.current) {
+      return;
+    }
+    const scrollerElement = anchorElement.parentElement;
+    function syncHoveredRect() {
+      if (!hoveredCellElementRef.current?.isConnected) {
+        clearHoveredCell();
+        return;
+      }
+      updateHoveredCell(hoveredCellElementRef.current);
+    }
+    window.addEventListener("resize", syncHoveredRect);
+    scrollerElement?.addEventListener("scroll", syncHoveredRect, {
+      passive: true
+    });
+    return () => {
+      window.removeEventListener("resize", syncHoveredRect);
+      scrollerElement?.removeEventListener("scroll", syncHoveredRect);
+    };
+  }, [anchorElement, hoveredCell]);
+  if (!anchorElement || !hoveredCell || readOnly) {
+    return null;
+  }
+  return reactDom.createPortal(
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: utils.cn(HOVER_ACTIONS_CLASSNAME, className), children: [
+      /* @__PURE__ */ jsxRuntime.jsx(
+        reactButton.Button,
+        {
+          type: "button",
+          variant: "soft",
+          color: "primary",
+          size: "xs",
+          className: "vds-editor-table-hover-button",
+          "data-axis": "column",
+          "aria-label": "Insert column",
+          title: "Insert column to the right",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => insertTableColumn(editor, true, null, hoveredCell.key),
+          children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.Icon, { icon: reactIcons.IconPlus, size: "sm" })
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        reactButton.Button,
+        {
+          type: "button",
+          variant: "soft",
+          color: "primary",
+          size: "xs",
+          className: "vds-editor-table-hover-button",
+          "data-axis": "row",
+          "aria-label": "Insert row",
+          title: "Insert row below",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => insertTableRow(editor, true, null, hoveredCell.key),
+          children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.Icon, { icon: reactIcons.IconPlus, size: "sm" })
+        }
+      )
+    ] }),
+    hoveredCell.element
+  );
 }
 var BLOCK_OPTIONS = [
   { label: "Normal", value: "paragraph", shortcut: SHORTCUTS.NORMAL, icon: reactIcons.IconTypography },
@@ -3622,6 +4143,9 @@ var DEFAULT_HIGHLIGHT_SWATCHES = [
   { label: "Danger", value: "var(--vds-color-danger-4)" },
   { label: "Accent", value: "var(--vds-color-accent-4)" }
 ];
+function areToolbarStatesEqual(current, next) {
+  return current.blockType === next.blockType && current.elementFormat === next.elementFormat && current.isBold === next.isBold && current.isItalic === next.isItalic && current.isUnderline === next.isUnderline && current.isStrikethrough === next.isStrikethrough && current.isInlineCode === next.isInlineCode && current.isSubscript === next.isSubscript && current.isSuperscript === next.isSuperscript && current.isLowercase === next.isLowercase && current.isUppercase === next.isUppercase && current.isCapitalize === next.isCapitalize && current.isTableSelection === next.isTableSelection && current.isLink === next.isLink && current.linkUrl === next.linkUrl && current.fontFamily === next.fontFamily && current.fontSize === next.fontSize && current.fontColor === next.fontColor && current.bgColor === next.bgColor;
+}
 function ToolbarButton({
   active,
   disabled,
@@ -3672,6 +4196,19 @@ function ToolbarMenuItem({
     }
   );
 }
+function ToolbarSelectItemContent({
+  icon,
+  label,
+  shortcut,
+  endSlot,
+  reserveIcon = true
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+    icon ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-icon", children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.Icon, { icon, size: "sm" }) }) : reserveIcon ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-icon vds-editor-menu-item-icon-empty" }) : null,
+    /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-copy", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-menu-item-label", children: label }) }),
+    endSlot ?? (shortcut ? /* @__PURE__ */ jsxRuntime.jsx(reactKbd.Kbd, { children: shortcut }) : null)
+  ] });
+}
 function ToolbarDropdown({
   label,
   icon,
@@ -3718,6 +4255,56 @@ function ToolbarDropdown({
       children
     }
   );
+}
+function ToolbarSelect({
+  label,
+  triggerLabel,
+  value,
+  icon,
+  disabled,
+  triggerClassName,
+  contentClassName,
+  onOpen,
+  onValueChange,
+  children
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: "vds-editor-toolbar-select-wrap", children: /* @__PURE__ */ jsxRuntime.jsxs(
+    reactSelect.Select,
+    {
+      value,
+      onValueChange,
+      disabled,
+      onOpenChange: (open) => {
+        if (open) {
+          onOpen?.();
+        }
+      },
+      children: [
+        /* @__PURE__ */ jsxRuntime.jsx(
+          reactSelect.SelectTrigger,
+          {
+            size: "sm",
+            appearance: "soft",
+            className: utils.cn("vds-editor-toolbar-select", triggerClassName),
+            "aria-label": label,
+            onMouseDown: (event) => event.preventDefault(),
+            children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-editor-toolbar-select-copy", children: [
+              icon ? /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-toolbar-select-icon", children: /* @__PURE__ */ jsxRuntime.jsx(reactIcons.Icon, { icon, size: "sm" }) }) : null,
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-toolbar-select-text", children: triggerLabel })
+            ] })
+          }
+        ),
+        /* @__PURE__ */ jsxRuntime.jsx(
+          reactSelect.SelectContent,
+          {
+            size: "sm",
+            className: utils.cn("vds-editor-toolbar-select-content", contentClassName),
+            children
+          }
+        )
+      ]
+    }
+  ) });
 }
 function ToolbarColorMenu({
   disabled,
@@ -3929,7 +4516,7 @@ function EditorToolbar({
   highlightColorSwatches = DEFAULT_HIGHLIGHT_SWATCHES
 }) {
   const [editor] = LexicalComposerContext.useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   const [state, setState] = react.useState(EMPTY_TOOLBAR_STATE);
   const [canUndo, setCanUndo] = react.useState(false);
   const [canRedo, setCanRedo] = react.useState(false);
@@ -3982,7 +4569,10 @@ function EditorToolbar({
   react.useEffect(() => {
     const updateToolbar = () => {
       editor.getEditorState().read(() => {
-        setState(readToolbarState());
+        const nextState = readToolbarState();
+        setState(
+          (currentState) => areToolbarStatesEqual(currentState, nextState) ? currentState : nextState
+        );
       });
     };
     updateToolbar();
@@ -4111,20 +4701,29 @@ function EditorToolbar({
                   className: "vds-editor-toolbar-group vds-editor-toolbar-rich-group",
                   "aria-label": "Block type",
                   children: /* @__PURE__ */ jsxRuntime.jsx(
-                    ToolbarDropdown,
+                    ToolbarSelect,
                     {
-                      label: currentBlockOption?.label ?? "Normal",
+                      label: "Block type",
+                      triggerLabel: currentBlockOption?.label ?? "Normal",
+                      value: currentBlockOption?.value ?? "paragraph",
                       icon: currentBlockOption?.icon,
                       disabled: richControlsDisabled,
+                      contentClassName: "vds-editor-toolbar-block-menu",
                       onOpen: rememberSelection,
+                      onValueChange: (nextValue) => handleBlockTypeSelect(nextValue),
                       children: blockOptions.map((option) => /* @__PURE__ */ jsxRuntime.jsx(
-                        ToolbarMenuItem,
+                        reactSelect.SelectItem,
                         {
-                          active: state.blockType === option.value,
-                          icon: option.icon,
-                          label: option.label,
-                          shortcut: option.shortcut,
-                          onSelect: () => handleBlockTypeSelect(option.value)
+                          value: option.value,
+                          className: "vds-editor-toolbar-select-item",
+                          children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-toolbar-select-item-content", children: /* @__PURE__ */ jsxRuntime.jsx(
+                            ToolbarSelectItemContent,
+                            {
+                              icon: option.icon,
+                              label: option.label,
+                              shortcut: option.shortcut
+                            }
+                          ) })
                         },
                         option.value
                       ))
@@ -4138,20 +4737,28 @@ function EditorToolbar({
                   className: "vds-editor-toolbar-group vds-editor-toolbar-rich-group",
                   "aria-label": "Font family",
                   children: /* @__PURE__ */ jsxRuntime.jsx(
-                    ToolbarDropdown,
+                    ToolbarSelect,
                     {
-                      label: fontFamilyLabel,
+                      label: "Font family",
+                      triggerLabel: fontFamilyLabel,
+                      value: state.fontFamily,
                       icon: reactIcons.IconTypography,
                       disabled: richControlsDisabled,
-                      dropdownClassName: "vds-editor-font-family-menu",
+                      contentClassName: "vds-editor-font-family-menu",
                       onOpen: rememberSelection,
+                      onValueChange: (nextValue) => applyFontStyle("font-family", nextValue),
                       children: fontFamilies.map((option) => /* @__PURE__ */ jsxRuntime.jsx(
-                        ToolbarMenuItem,
+                        reactSelect.SelectItem,
                         {
-                          active: state.fontFamily === option.value,
-                          label: option.label,
-                          reserveIcon: false,
-                          onSelect: () => applyFontStyle("font-family", option.value)
+                          value: option.value,
+                          className: "vds-editor-toolbar-select-item",
+                          children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-toolbar-select-item-content", children: /* @__PURE__ */ jsxRuntime.jsx(
+                            ToolbarSelectItemContent,
+                            {
+                              label: option.label,
+                              reserveIcon: false
+                            }
+                          ) })
                         },
                         option.value
                       ))
@@ -4191,20 +4798,28 @@ function EditorToolbar({
                       }
                     ),
                     /* @__PURE__ */ jsxRuntime.jsx(
-                      ToolbarDropdown,
+                      ToolbarSelect,
                       {
-                        label: fontSizeLabel,
+                        label: "Font size",
+                        triggerLabel: fontSizeLabel,
+                        value: state.fontSize,
                         disabled: richControlsDisabled,
-                        className: "vds-editor-toolbar-trigger-compact",
-                        dropdownClassName: "vds-editor-font-size-menu",
+                        triggerClassName: "vds-editor-toolbar-select-compact",
+                        contentClassName: "vds-editor-font-size-menu",
                         onOpen: rememberSelection,
+                        onValueChange: (nextValue) => applyFontStyle("font-size", nextValue),
                         children: fontSizes.map((option) => /* @__PURE__ */ jsxRuntime.jsx(
-                          ToolbarMenuItem,
+                          reactSelect.SelectItem,
                           {
-                            active: state.fontSize === option.value,
-                            label: option.label,
-                            reserveIcon: false,
-                            onSelect: () => applyFontStyle("font-size", option.value)
+                            value: option.value,
+                            className: "vds-editor-toolbar-select-item",
+                            children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-editor-toolbar-select-item-content", children: /* @__PURE__ */ jsxRuntime.jsx(
+                              ToolbarSelectItemContent,
+                              {
+                                label: option.label,
+                                reserveIcon: false
+                              }
+                            ) })
                           },
                           option.value
                         ))
@@ -4423,6 +5038,81 @@ function EditorToolbar({
                     ) : null,
                     insertMenu ? /* @__PURE__ */ jsxRuntime.jsx(EditorInsertMenu, { ...insertMenu }) : null
                   ]
+                }
+              ) : null,
+              features.tables && state.isTableSelection ? /* @__PURE__ */ jsxRuntime.jsx(
+                "div",
+                {
+                  className: "vds-editor-toolbar-group vds-editor-toolbar-rich-group",
+                  "aria-label": "Table tools",
+                  children: /* @__PURE__ */ jsxRuntime.jsxs(
+                    ToolbarDropdown,
+                    {
+                      label: "Table",
+                      icon: reactIcons.IconTable,
+                      disabled: richControlsDisabled,
+                      onOpen: rememberSelection,
+                      children: [
+                        /* @__PURE__ */ jsxRuntime.jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Insert row above",
+                            onSelect: () => insertTableRow(editor, false, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntime.jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Insert row below",
+                            onSelect: () => insertTableRow(editor, true, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntime.jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Insert column left",
+                            onSelect: () => insertTableColumn(editor, false, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntime.jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Insert column right",
+                            onSelect: () => insertTableColumn(editor, true, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntime.jsx(EditorDropdownSeparator, { className: "vds-editor-menu-separator" }),
+                        /* @__PURE__ */ jsxRuntime.jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Delete row",
+                            onSelect: () => deleteTableRow(editor, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntime.jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Delete column",
+                            onSelect: () => deleteTableColumn(editor, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntime.jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Delete table",
+                            onSelect: () => deleteTable(editor, selectionRef.current)
+                          }
+                        )
+                      ]
+                    }
+                  )
                 }
               ) : null,
               features.textAlignment ? /* @__PURE__ */ jsxRuntime.jsx(
@@ -4669,13 +5359,14 @@ function Editor({
   const internalEditorRef = react.useRef(null);
   const appliedModeRef = react.useRef("rich-text");
   const commentSelectionRef = react.useRef(null);
-  const [, setLastPayload] = react.useState(null);
+  const sourceValueRef = react.useRef("");
   const [uncontrolledMode, setUncontrolledMode] = react.useState(defaultMode);
   const [surfaceElement, setSurfaceElement] = react.useState(null);
   const [comments, setComments] = react.useState([]);
   const [commentComposerOpen, setCommentComposerOpen] = react.useState(false);
   const [commentDraft, setCommentDraft] = react.useState("");
   const [pendingCommentQuote, setPendingCommentQuote] = react.useState("");
+  const [sourceValue, setSourceValue] = react.useState("");
   const activeMode = mode ?? uncontrolledMode;
   const resolvedFeatures = resolveEditorFeatures(preset, features);
   const blockToolsPlacement = blockTools?.placement ?? "inside";
@@ -4686,6 +5377,9 @@ function Editor({
     onCommentsChange?.(nextComments);
   }
   function handleComposerChange(payload) {
+    if (!onChange) {
+      return;
+    }
     const effectiveMode = appliedModeRef.current;
     let nextPayload = payload;
     if (effectiveMode !== "rich-text" && internalEditorRef.current) {
@@ -4697,15 +5391,15 @@ function Editor({
       nextPayload = {
         ...payload,
         text: source,
-        html: effectiveMode === "html" ? source : payload.html,
-        markdown: effectiveMode === "markdown" ? source : payload.markdown,
+        html: effectiveMode === "html" ? source : "",
+        markdown: effectiveMode === "markdown" ? source : "",
+        json: null,
         characterCount: countCharacters(source, metricsCharset),
         wordCount: countWords(source),
         isEmpty: source.trim().length === 0
       };
     }
-    setLastPayload(nextPayload);
-    onChange?.(nextPayload);
+    onChange(nextPayload);
   }
   function applyModeToEditor(nextMode, previousMode = appliedModeRef.current) {
     if (!internalEditorRef.current) {
@@ -4716,18 +5410,21 @@ function Editor({
     try {
       appliedModeRef.current = nextMode;
       if (previousMode !== "rich-text") {
-        exitSourceMode(
+        applySourceValue(
           internalEditorRef.current,
+          sourceValueRef.current,
           previousMode,
           resolvedMarkdownTransformers
         );
       }
       if (nextMode !== "rich-text") {
-        enterSourceMode(
+        const nextSource = readSourceValue(
           internalEditorRef.current,
           nextMode,
           resolvedMarkdownTransformers
         );
+        sourceValueRef.current = nextSource;
+        setSourceValue(nextSource);
       }
       return true;
     } catch (error) {
@@ -4757,6 +5454,25 @@ function Editor({
     }
     setUncontrolledMode(nextMode);
     onModeChange?.(nextMode);
+  }
+  function handleSourceValueChange(nextValue) {
+    sourceValueRef.current = nextValue;
+    setSourceValue(nextValue);
+    if (!onChange || !internalEditorRef.current) {
+      return;
+    }
+    onChange({
+      editor: internalEditorRef.current,
+      editorState: internalEditorRef.current.getEditorState(),
+      tags: /* @__PURE__ */ new Set(),
+      text: nextValue,
+      html: activeMode === "html" ? nextValue : "",
+      markdown: activeMode === "markdown" ? nextValue : "",
+      json: null,
+      characterCount: countCharacters(nextValue, metricsCharset),
+      wordCount: countWords(nextValue),
+      isEmpty: nextValue.trim().length === 0
+    });
   }
   function requestComment() {
     if (!resolvedFeatures.comments || !internalEditorRef.current) {
@@ -4828,6 +5544,7 @@ function Editor({
       namespace,
       initialValue,
       initialValueFormat,
+      activeMode,
       onChange: handleComposerChange,
       onError,
       autoFocus,
@@ -4907,8 +5624,10 @@ function Editor({
               EditorSourcePanel,
               {
                 mode: activeMode,
+                onChange: handleSourceValueChange,
                 minHeight,
-                maxHeight
+                maxHeight,
+                value: sourceValue
               }
             ),
             resolvedFeatures.comments && activeMode === "rich-text" ? /* @__PURE__ */ jsxRuntime.jsx(
@@ -4935,6 +5654,7 @@ function Editor({
                 onRequestComment: requestComment
               }
             ) : null,
+            resolvedFeatures.tables && activeMode === "rich-text" ? /* @__PURE__ */ jsxRuntime.jsx(EditorTableHoverActions, { anchorElement: surfaceElement }) : null,
             resolvedFeatures.draggableBlocks && activeMode === "rich-text" ? /* @__PURE__ */ jsxRuntime.jsx(
               EditorDraggableBlocks,
               {

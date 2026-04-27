@@ -30,9 +30,27 @@ function Separator({
   className,
   orientation = "horizontal",
   decorative = true,
+  label,
   ref,
   ...props
 }) {
+  if (label && orientation === "horizontal") {
+    return /* @__PURE__ */ jsxRuntime.jsxs(
+      "div",
+      {
+        ref,
+        role: decorative ? "none" : "separator",
+        "aria-orientation": decorative ? void 0 : "horizontal",
+        className: utils.cn("vds-separator vds-separator--labeled", className),
+        "data-orientation": "horizontal",
+        children: [
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-separator__line", "aria-hidden": "true" }),
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-separator__label", children: label }),
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: "vds-separator__line", "aria-hidden": "true" })
+        ]
+      }
+    );
+  }
   return /* @__PURE__ */ jsxRuntime.jsx(
     SeparatorPrimitive__namespace.Root,
     {

@@ -1,4 +1,9 @@
-import { useState } from "react";
+import {
+  startTransition,
+  useDeferredValue,
+  useMemo,
+  useState,
+} from "react";
 import {
   Editor,
   EditorField,
@@ -49,6 +54,17 @@ Hover these rows to compare the plus and drag-handle placement.
 - The drop line should stay strong and easy to read.
 - The block controls should not push the text column around.`;
 
+const OUTPUT_PREVIEW_LIMIT = 12000;
+const JSON_PREVIEW_TEXT_LIMIT = 4000;
+
+function truncateOutput(value: string) {
+  if (value.length <= OUTPUT_PREVIEW_LIMIT) {
+    return value;
+  }
+
+  return `${value.slice(0, OUTPUT_PREVIEW_LIMIT)}\n\n... preview truncated for performance (${value.length.toLocaleString()} chars total).`;
+}
+
 function OutputPanel({
   title,
   value,
@@ -80,6 +96,30 @@ function OutputPanel({
 
 export function EditorPage() {
   const [payload, setPayload] = useState<EditorChangePayload | null>(null);
+  const deferredPayload = useDeferredValue(payload);
+  const markdownPreview = useMemo(
+    () => truncateOutput(deferredPayload?.markdown ?? ""),
+    [deferredPayload?.markdown],
+  );
+  const htmlPreview = useMemo(
+    () => truncateOutput(deferredPayload?.html ?? ""),
+    [deferredPayload?.html],
+  );
+  const jsonPreview = useMemo(() => {
+    if (!deferredPayload) {
+      return "";
+    }
+
+    if (!deferredPayload.json) {
+      return "Live JSON preview is disabled for this editor to keep large pastes responsive.";
+    }
+
+    if ((deferredPayload.text?.length ?? 0) > JSON_PREVIEW_TEXT_LIMIT) {
+      return "JSON preview is paused for large documents to keep the demo responsive.";
+    }
+
+    return truncateOutput(JSON.stringify(deferredPayload.json, null, 2));
+  }, [deferredPayload]);
 
   return (
     <>
@@ -126,7 +166,16 @@ import {
             preset="pro"
             initialValue={INITIAL_MARKDOWN}
             initialValueFormat="markdown"
-            onChange={setPayload}
+            onChange={(nextPayload) => {
+              startTransition(() => {
+                setPayload(nextPayload);
+              });
+            }}
+            changeSerialization={{
+              html: true,
+              markdown: true,
+              debounceMs: 240,
+            }}
             minHeight="18rem"
             features={{
               tables: true,
@@ -149,12 +198,9 @@ import {
               gridTemplateColumns: "repeat(auto-fit, minmax(18rem, 1fr))",
             }}
           >
-            <OutputPanel title="Markdown" value={payload?.markdown ?? ""} />
-            <OutputPanel title="HTML" value={payload?.html ?? ""} />
-            <OutputPanel
-              title="JSON"
-              value={payload?.json ? JSON.stringify(payload.json, null, 2) : ""}
-            />
+            <OutputPanel title="Markdown" value={markdownPreview} />
+            <OutputPanel title="HTML" value={htmlPreview} />
+            <OutputPanel title="JSON" value={jsonPreview} />
           </div>
         </div>
       </Section>

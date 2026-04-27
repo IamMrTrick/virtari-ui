@@ -49,6 +49,7 @@ import {
   IconListNumbers,
   IconPlus,
   IconQuote,
+  IconTable,
   IconSubscript,
   IconTrash,
   IconUnderline,
@@ -61,10 +62,19 @@ import { Input } from "@virtari-packages/react-input";
 import { Kbd } from "@virtari-packages/react-kbd";
 import { ScrollArea } from "@virtari-packages/react-scroll-area";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@virtari-packages/react-select";
+import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_LOW,
   applyBlockType,
+  deleteTable,
+  deleteTableColumn,
+  deleteTableRow,
   applyLink,
   applyTextStyles,
   clearEditor,
@@ -72,6 +82,8 @@ import {
   formatElement,
   formatText,
   indentContent,
+  insertTableColumn,
+  insertTableRow,
   outdentContent,
   readToolbarState,
   redo,
@@ -83,7 +95,7 @@ import {
   EMPTY_TOOLBAR_STATE,
 } from "./editor-utils";
 import { SHORTCUTS } from "./editor-shortcuts";
-import { useEditorContext } from "./context";
+import { useEditorConfig } from "./context";
 import { cn } from "@virtari-packages/utils";
 import {
   EditorDropdown,
@@ -167,6 +179,30 @@ const DEFAULT_HIGHLIGHT_SWATCHES: EditorColorSwatch[] = [
   { label: "Accent", value: "var(--vds-color-accent-4)" },
 ];
 
+function areToolbarStatesEqual(current: ToolbarState, next: ToolbarState) {
+  return (
+    current.blockType === next.blockType &&
+    current.elementFormat === next.elementFormat &&
+    current.isBold === next.isBold &&
+    current.isItalic === next.isItalic &&
+    current.isUnderline === next.isUnderline &&
+    current.isStrikethrough === next.isStrikethrough &&
+    current.isInlineCode === next.isInlineCode &&
+    current.isSubscript === next.isSubscript &&
+    current.isSuperscript === next.isSuperscript &&
+    current.isLowercase === next.isLowercase &&
+    current.isUppercase === next.isUppercase &&
+    current.isCapitalize === next.isCapitalize &&
+    current.isTableSelection === next.isTableSelection &&
+    current.isLink === next.isLink &&
+    current.linkUrl === next.linkUrl &&
+    current.fontFamily === next.fontFamily &&
+    current.fontSize === next.fontSize &&
+    current.fontColor === next.fontColor &&
+    current.bgColor === next.bgColor
+  );
+}
+
 interface ToolbarButtonProps {
   active?: boolean;
   disabled?: boolean;
@@ -214,6 +250,19 @@ interface ToolbarColorPanelProps {
   pickerSwatches: string[];
   resetValue: string;
   onApply: (value: string, skipHistoryStack: boolean) => void;
+}
+
+interface ToolbarSelectProps {
+  label: string;
+  triggerLabel: string;
+  value: string;
+  icon?: ComponentProps<typeof Icon>["icon"];
+  disabled?: boolean;
+  triggerClassName?: string;
+  contentClassName?: string;
+  onOpen?: () => void;
+  onValueChange: (value: string) => void;
+  children: ReactNode;
 }
 
 function ToolbarButton({
@@ -276,6 +325,32 @@ function ToolbarMenuItem({
   );
 }
 
+function ToolbarSelectItemContent({
+  icon,
+  label,
+  shortcut,
+  endSlot,
+  reserveIcon = true,
+}: Omit<ToolbarMenuItemProps, "active" | "onSelect">) {
+  return (
+    <>
+      {icon ? (
+        <span className="vds-editor-menu-item-icon">
+          <Icon icon={icon} size="sm" />
+        </span>
+      ) : reserveIcon ? (
+        <span className="vds-editor-menu-item-icon vds-editor-menu-item-icon-empty" />
+      ) : null}
+
+      <span className="vds-editor-menu-item-copy">
+        <span className="vds-editor-menu-item-label">{label}</span>
+      </span>
+
+      {endSlot ?? (shortcut ? <Kbd>{shortcut}</Kbd> : null)}
+    </>
+  );
+}
+
 function ToolbarDropdown({
   label,
   icon,
@@ -321,6 +396,57 @@ function ToolbarDropdown({
     >
         {children}
     </EditorDropdown>
+  );
+}
+
+function ToolbarSelect({
+  label,
+  triggerLabel,
+  value,
+  icon,
+  disabled,
+  triggerClassName,
+  contentClassName,
+  onOpen,
+  onValueChange,
+  children,
+}: ToolbarSelectProps) {
+  return (
+    <div className="vds-editor-toolbar-select-wrap">
+      <Select
+        value={value}
+        onValueChange={onValueChange}
+        disabled={disabled}
+        onOpenChange={(open) => {
+          if (open) {
+            onOpen?.();
+          }
+        }}
+      >
+        <SelectTrigger
+          size="sm"
+          appearance="soft"
+          className={cn("vds-editor-toolbar-select", triggerClassName)}
+          aria-label={label}
+          onMouseDown={(event) => event.preventDefault()}
+        >
+          <span className="vds-editor-toolbar-select-copy">
+            {icon ? (
+              <span className="vds-editor-toolbar-select-icon">
+                <Icon icon={icon} size="sm" />
+              </span>
+            ) : null}
+            <span className="vds-editor-toolbar-select-text">{triggerLabel}</span>
+          </span>
+        </SelectTrigger>
+        <SelectContent
+          size="sm"
+          className={cn("vds-editor-toolbar-select-content", contentClassName)}
+        >
+          {children}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 
@@ -566,7 +692,7 @@ export function EditorToolbar({
   highlightColorSwatches = DEFAULT_HIGHLIGHT_SWATCHES,
 }: EditorToolbarProps) {
   const [editor] = useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   const [state, setState] = useState<ToolbarState>(EMPTY_TOOLBAR_STATE);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
@@ -635,7 +761,12 @@ export function EditorToolbar({
   useEffect(() => {
     const updateToolbar = () => {
       editor.getEditorState().read(() => {
-        setState(readToolbarState());
+        const nextState = readToolbarState();
+        setState((currentState) =>
+          areToolbarStatesEqual(currentState, nextState)
+            ? currentState
+            : nextState,
+        );
       });
     };
 
@@ -769,23 +900,34 @@ export function EditorToolbar({
             className="vds-editor-toolbar-group vds-editor-toolbar-rich-group"
             aria-label="Block type"
           >
-            <ToolbarDropdown
-              label={currentBlockOption?.label ?? "Normal"}
+            <ToolbarSelect
+              label="Block type"
+              triggerLabel={currentBlockOption?.label ?? "Normal"}
+              value={currentBlockOption?.value ?? "paragraph"}
               icon={currentBlockOption?.icon}
               disabled={richControlsDisabled}
+              contentClassName="vds-editor-toolbar-block-menu"
               onOpen={rememberSelection}
+              onValueChange={(nextValue) =>
+                handleBlockTypeSelect(nextValue as EditorBlockType)
+              }
             >
               {blockOptions.map((option) => (
-                <ToolbarMenuItem
+                <SelectItem
                   key={option.value}
-                  active={state.blockType === option.value}
-                  icon={option.icon}
-                  label={option.label}
-                  shortcut={option.shortcut}
-                  onSelect={() => handleBlockTypeSelect(option.value)}
-                />
+                  value={option.value}
+                  className="vds-editor-toolbar-select-item"
+                >
+                  <span className="vds-editor-toolbar-select-item-content">
+                    <ToolbarSelectItemContent
+                      icon={option.icon}
+                      label={option.label}
+                      shortcut={option.shortcut}
+                    />
+                  </span>
+                </SelectItem>
               ))}
-            </ToolbarDropdown>
+            </ToolbarSelect>
           </div>
 
           {features.fontFamily ? (
@@ -793,23 +935,33 @@ export function EditorToolbar({
               className="vds-editor-toolbar-group vds-editor-toolbar-rich-group"
               aria-label="Font family"
             >
-              <ToolbarDropdown
-                label={fontFamilyLabel}
+              <ToolbarSelect
+                label="Font family"
+                triggerLabel={fontFamilyLabel}
+                value={state.fontFamily}
                 icon={IconTypography}
                 disabled={richControlsDisabled}
-                dropdownClassName="vds-editor-font-family-menu"
+                contentClassName="vds-editor-font-family-menu"
                 onOpen={rememberSelection}
+                onValueChange={(nextValue) =>
+                  applyFontStyle("font-family", nextValue)
+                }
               >
                 {fontFamilies.map((option) => (
-                  <ToolbarMenuItem
+                  <SelectItem
                     key={option.value}
-                    active={state.fontFamily === option.value}
-                    label={option.label}
-                    reserveIcon={false}
-                    onSelect={() => applyFontStyle("font-family", option.value)}
-                  />
+                    value={option.value}
+                    className="vds-editor-toolbar-select-item"
+                  >
+                    <span className="vds-editor-toolbar-select-item-content">
+                      <ToolbarSelectItemContent
+                        label={option.label}
+                        reserveIcon={false}
+                      />
+                    </span>
+                  </SelectItem>
                 ))}
-              </ToolbarDropdown>
+              </ToolbarSelect>
             </div>
           ) : null}
 
@@ -842,23 +994,33 @@ export function EditorToolbar({
                 <Icon icon={IconMinus} size="md" stroke={2} />
               </Button>
 
-              <ToolbarDropdown
-                label={fontSizeLabel}
+              <ToolbarSelect
+                label="Font size"
+                triggerLabel={fontSizeLabel}
+                value={state.fontSize}
                 disabled={richControlsDisabled}
-                className="vds-editor-toolbar-trigger-compact"
-                dropdownClassName="vds-editor-font-size-menu"
+                triggerClassName="vds-editor-toolbar-select-compact"
+                contentClassName="vds-editor-font-size-menu"
                 onOpen={rememberSelection}
+                onValueChange={(nextValue) =>
+                  applyFontStyle("font-size", nextValue)
+                }
               >
                 {fontSizes.map((option) => (
-                  <ToolbarMenuItem
+                  <SelectItem
                     key={option.value}
-                    active={state.fontSize === option.value}
-                    label={option.label}
-                    reserveIcon={false}
-                    onSelect={() => applyFontStyle("font-size", option.value)}
-                  />
+                    value={option.value}
+                    className="vds-editor-toolbar-select-item"
+                  >
+                    <span className="vds-editor-toolbar-select-item-content">
+                      <ToolbarSelectItemContent
+                        label={option.label}
+                        reserveIcon={false}
+                      />
+                    </span>
+                  </SelectItem>
                 ))}
-              </ToolbarDropdown>
+              </ToolbarSelect>
 
               <Button
                 type="button"
@@ -1047,6 +1209,57 @@ export function EditorToolbar({
               {insertMenu ? (
                 <EditorInsertMenu {...insertMenu} />
               ) : null}
+            </div>
+          ) : null}
+
+          {features.tables && state.isTableSelection ? (
+            <div
+              className="vds-editor-toolbar-group vds-editor-toolbar-rich-group"
+              aria-label="Table tools"
+            >
+              <ToolbarDropdown
+                label="Table"
+                icon={IconTable}
+                disabled={richControlsDisabled}
+                onOpen={rememberSelection}
+              >
+                <ToolbarMenuItem
+                  reserveIcon={false}
+                  label="Insert row above"
+                  onSelect={() => insertTableRow(editor, false, selectionRef.current)}
+                />
+                <ToolbarMenuItem
+                  reserveIcon={false}
+                  label="Insert row below"
+                  onSelect={() => insertTableRow(editor, true, selectionRef.current)}
+                />
+                <ToolbarMenuItem
+                  reserveIcon={false}
+                  label="Insert column left"
+                  onSelect={() => insertTableColumn(editor, false, selectionRef.current)}
+                />
+                <ToolbarMenuItem
+                  reserveIcon={false}
+                  label="Insert column right"
+                  onSelect={() => insertTableColumn(editor, true, selectionRef.current)}
+                />
+                <EditorDropdownSeparator className="vds-editor-menu-separator" />
+                <ToolbarMenuItem
+                  reserveIcon={false}
+                  label="Delete row"
+                  onSelect={() => deleteTableRow(editor, selectionRef.current)}
+                />
+                <ToolbarMenuItem
+                  reserveIcon={false}
+                  label="Delete column"
+                  onSelect={() => deleteTableColumn(editor, selectionRef.current)}
+                />
+                <ToolbarMenuItem
+                  reserveIcon={false}
+                  label="Delete table"
+                  onSelect={() => deleteTable(editor, selectionRef.current)}
+                />
+              </ToolbarDropdown>
             </div>
           ) : null}
 

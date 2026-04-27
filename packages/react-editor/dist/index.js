@@ -1,6 +1,6 @@
 "use client";
-import { SHORTCUTS, EditorSurface, EditorComposer, useEditorContext, EMPTY_TOOLBAR_STATE, formatText, clearLink, toggleBulletList, toggleNumberList, toggleCheckList, applyBlockType, insertBlock, insertDefaultTable, COMMAND_PRIORITY_LOW as COMMAND_PRIORITY_LOW$1, CAN_UNDO_COMMAND, CAN_REDO_COMMAND, undo, redo, applyTextStyles, formatElement, outdentContent, indentContent, clearEditor, resolveEditorFeatures, DEFAULT_MARKDOWN_TRANSFORMERS, readSourceValue, countWords, countCharacters, exitSourceMode, enterSourceMode, getSelectionText, wrapSelectionInComment, removeCommentMark, readToolbarState, applyLink, writeSourceValue, insertMediaBlock } from './chunk-Y63EMUH3.js';
-export { $createEditorMediaNode, $isEditorMediaNode, DEFAULT_CORE_FEATURES, DEFAULT_LINK_MATCHERS, DEFAULT_MARKDOWN_TRANSFORMERS, DEFAULT_PRO_FEATURES, EDITOR_THEME, EditorComposer, EditorMediaNode, EditorSurface, buildEditorNodes, createInitialEditorState, resolveEditorFeatures, useEditorContext } from './chunk-Y63EMUH3.js';
+import { SHORTCUTS, EditorSurface, EditorComposer, useEditorConfig, insertTable, useEditorContext, EMPTY_TOOLBAR_STATE, formatText, clearLink, toggleBulletList, toggleNumberList, toggleCheckList, applyBlockType, insertBlock, insertDefaultTable, useEditorMetrics, COMMAND_PRIORITY_LOW as COMMAND_PRIORITY_LOW$1, CAN_UNDO_COMMAND, CAN_REDO_COMMAND, undo, redo, applyTextStyles, insertTableRow, insertTableColumn, deleteTableRow, deleteTableColumn, deleteTable, formatElement, outdentContent, indentContent, clearEditor, resolveEditorFeatures, DEFAULT_MARKDOWN_TRANSFORMERS, readSourceValue, countWords, countCharacters, applySourceValue, getSelectionText, wrapSelectionInComment, removeCommentMark, readToolbarState, applyLink, insertMediaBlock } from './chunk-23ILJFUZ.js';
+export { $createEditorMediaNode, $isEditorMediaNode, DEFAULT_CORE_FEATURES, DEFAULT_LINK_MATCHERS, DEFAULT_MARKDOWN_TRANSFORMERS, DEFAULT_PRO_FEATURES, EDITOR_THEME, EditorComposer, EditorMediaNode, EditorSurface, buildEditorNodes, createInitialEditorState, resolveEditorFeatures, useEditorContext } from './chunk-23ILJFUZ.js';
 import { Button } from '@virtari-packages/react-button';
 import { Textarea } from '@virtari-packages/react-textarea';
 import { IconTypography, IconH1, IconH2, IconH3, IconListNumbers, IconList, IconListCheck, IconQuote, IconCode, IconAlignLeft, IconAlignCenter, IconAlignRight, IconAlignJustified, Icon, IconMessageCircle, IconX, IconCheck, IconTrash, IconChevronDown, IconPlus, IconGripVertical, IconBold, IconItalic, IconUnderline, IconStrikethrough, IconSubscript, IconSuperscript, IconLetterCaseUpper, IconLetterCaseLower, IconLetterCaseToggle, IconLink, IconLinkOff, IconMessageCirclePlus, IconFileCode2, IconMarkdown, IconSourceCode, IconSeparatorHorizontal, IconTable, IconArrowBackUp, IconArrowForwardUp, IconMinus, IconLetterCase, IconPalette, IconHighlight, IconIndentDecrease, IconIndentIncrease, IconPhoto, IconVideo, IconWorld, IconUpload } from '@virtari-packages/react-icons';
@@ -16,12 +16,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { FileUpload } from '@virtari-packages/react-file-upload';
 import { Input } from '@virtari-packages/react-input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@virtari-packages/react-tabs';
-import { SELECTION_CHANGE_COMMAND, COMMAND_PRIORITY_LOW, $getSelection, $isRangeSelection } from 'lexical';
+import { SELECTION_CHANGE_COMMAND, COMMAND_PRIORITY_LOW, $getSelection, $isRangeSelection, $getNearestNodeFromDOMNode } from 'lexical';
 import { mergeRegister } from '@lexical/utils';
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@virtari-packages/react-tooltip';
 import { useBasicTypeaheadTriggerMatch, LexicalTypeaheadMenuPlugin, MenuOption } from '@lexical/react/LexicalTypeaheadMenuPlugin';
+import { $isTableCellNode, $getTableCellNodeFromLexicalNode } from '@lexical/table';
 import { ColorPicker } from '@virtari-packages/react-color-picker';
 import { ScrollArea } from '@virtari-packages/react-scroll-area';
+import { SelectItem, Select, SelectTrigger, SelectContent } from '@virtari-packages/react-select';
 import { composeFieldDescribedBy, Field } from '@virtari-packages/react-fieldset';
 
 function formatThreadDate(value) {
@@ -179,6 +181,7 @@ function useEditorDropdown() {
 function EditorDropdownItem({
   children,
   className,
+  closeOnSelect = true,
   onSelect,
   title
 }) {
@@ -201,7 +204,9 @@ function EditorDropdownItem({
       onMouseDown: (event) => event.preventDefault(),
       onClick: () => {
         onSelect?.();
-        close();
+        if (closeOnSelect) {
+          close();
+        }
       },
       children
     }
@@ -366,7 +371,7 @@ function EditorDropdown({
     };
   }, [close, open]);
   useEffect(() => {
-    if (!open) {
+    if (!open || !closeOnTriggerMove) {
       return;
     }
     const initialRect = buttonRef.current?.getBoundingClientRect();
@@ -864,6 +869,8 @@ function EditorMediaDialog({
   ) });
 }
 var DEFAULT_LABEL = "Insert";
+var MIN_TABLE_DIMENSION = 2;
+var MAX_TABLE_DIMENSION = 8;
 function isMediaInsertKind(kind) {
   return kind === "image" || kind === "video" || kind === "embed";
 }
@@ -999,10 +1006,124 @@ function createDefaultItems(features, compact) {
       description: "Insert a 3 x 3 table with headers.",
       icon: IconTable,
       kind: "table",
-      run: (editor, targetBlockElement) => insertBlock(editor, "table", targetBlockElement)
+      run: (editor, targetBlockElement) => insertTable(editor, 3, 3, targetBlockElement)
     });
   }
   return items;
+}
+function clampTableDimension(value) {
+  return Math.min(MAX_TABLE_DIMENSION, Math.max(MIN_TABLE_DIMENSION, value));
+}
+function TableDimensionStepper({
+  label,
+  value,
+  onChange
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: "vds-editor-table-builder-stepper", children: [
+    /* @__PURE__ */ jsx("span", { className: "vds-editor-table-builder-stepper-label", children: label }),
+    /* @__PURE__ */ jsxs("div", { className: "vds-editor-table-builder-stepper-controls", children: [
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          variant: "ghost",
+          color: "contrast",
+          size: "xs",
+          className: "vds-editor-table-builder-stepper-button",
+          disabled: value <= MIN_TABLE_DIMENSION,
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => onChange(clampTableDimension(value - 1)),
+          children: /* @__PURE__ */ jsx(Icon, { icon: IconMinus, size: "sm" })
+        }
+      ),
+      /* @__PURE__ */ jsx("span", { className: "vds-editor-table-builder-stepper-value", children: value }),
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          variant: "ghost",
+          color: "contrast",
+          size: "xs",
+          className: "vds-editor-table-builder-stepper-button",
+          disabled: value >= MAX_TABLE_DIMENSION,
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => onChange(clampTableDimension(value + 1)),
+          children: /* @__PURE__ */ jsx(Icon, { icon: IconPlus, size: "sm" })
+        }
+      )
+    ] })
+  ] });
+}
+function TableBuilderPanel({
+  onBack,
+  onInsert
+}) {
+  const { close } = useEditorDropdown();
+  const [rows, setRows] = useState(3);
+  const [columns, setColumns] = useState(3);
+  return /* @__PURE__ */ jsxs("div", { className: "vds-editor-table-builder", children: [
+    /* @__PURE__ */ jsxs("div", { className: "vds-editor-table-builder-header", children: [
+      /* @__PURE__ */ jsx("span", { className: "vds-editor-table-builder-title", children: "Build Table" }),
+      /* @__PURE__ */ jsxs("span", { className: "vds-editor-table-builder-summary", children: [
+        rows,
+        " x ",
+        columns,
+        " with header row"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "vds-editor-table-builder-body", children: [
+      /* @__PURE__ */ jsx(TableDimensionStepper, { label: "Rows", value: rows, onChange: setRows }),
+      /* @__PURE__ */ jsx(
+        TableDimensionStepper,
+        {
+          label: "Columns",
+          value: columns,
+          onChange: setColumns
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "vds-editor-table-builder-actions", children: [
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          variant: "ghost",
+          color: "contrast",
+          size: "xs",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: onBack,
+          children: "Back"
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          variant: "ghost",
+          color: "contrast",
+          size: "xs",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => close(),
+          children: "Cancel"
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          variant: "soft",
+          color: "primary",
+          size: "xs",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => {
+            onInsert(rows, columns);
+            close();
+          },
+          children: "Insert"
+        }
+      )
+    ] })
+  ] });
 }
 function EditorInsertMenu({
   className,
@@ -1013,8 +1134,9 @@ function EditorInsertMenu({
   targetBlockElement
 }) {
   const [editor] = useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   const [mediaDialog, setMediaDialog] = useState(null);
+  const [tableBuilderOpen, setTableBuilderOpen] = useState(false);
   const resolvedItems = useMemo(
     () => items ?? createDefaultItems(features, compact),
     [compact, features, items]
@@ -1026,11 +1148,18 @@ function EditorInsertMenu({
         autoFocusItems: !compact,
         className: cn(
           "vds-editor-dropdown vds-editor-menu vds-editor-insert-menu",
-          compact ? "vds-editor-insert-menu-compact" : null
+          compact ? "vds-editor-insert-menu-compact" : null,
+          tableBuilderOpen ? "vds-editor-insert-menu-table-builder" : null
         ),
-        closeOnTriggerMove: !compact,
+        closeOnTriggerMove: false,
         disabled: readOnly,
-        onOpenChange,
+        onOpenChange: (open) => {
+          if (!open) {
+            setTableBuilderOpen(false);
+          }
+          onOpenChange?.(open);
+        },
+        stopCloseOnClickSelf: tableBuilderOpen,
         trigger: ({ buttonRef, controlsId, open, toggle }) => /* @__PURE__ */ jsx(
           Button,
           {
@@ -1056,36 +1185,53 @@ function EditorInsertMenu({
             onClick: (event) => {
               event.preventDefault();
               event.stopPropagation();
+              if (!open) {
+                setTableBuilderOpen(false);
+              }
               toggle();
             },
             children: compact ? null : label
           }
         ),
-        children: resolvedItems.map((item) => /* @__PURE__ */ jsxs(
-          EditorDropdownItem,
+        children: tableBuilderOpen ? /* @__PURE__ */ jsx(
+          TableBuilderPanel,
           {
-            className: "vds-editor-menu-item vds-editor-menu-item-rich",
-            onSelect: () => {
-              if (isMediaInsertKind(item.kind)) {
-                setMediaDialog({
-                  kind: item.kind,
-                  targetBlockElement
-                });
-                return;
-              }
-              item.run(editor, targetBlockElement);
+            onBack: () => setTableBuilderOpen(false),
+            onInsert: (rows, columns) => insertTable(editor, rows, columns, targetBlockElement)
+          }
+        ) : resolvedItems.map((item) => {
+          const opensTableBuilder = item.kind === "table" && !compact;
+          return /* @__PURE__ */ jsxs(
+            EditorDropdownItem,
+            {
+              className: "vds-editor-menu-item vds-editor-menu-item-rich",
+              closeOnSelect: !opensTableBuilder,
+              onSelect: () => {
+                if (opensTableBuilder) {
+                  setTableBuilderOpen(true);
+                  return;
+                }
+                if (isMediaInsertKind(item.kind)) {
+                  setMediaDialog({
+                    kind: item.kind,
+                    targetBlockElement
+                  });
+                  return;
+                }
+                item.run(editor, targetBlockElement);
+              },
+              children: [
+                item.icon ? /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-icon", children: /* @__PURE__ */ jsx(Icon, { icon: item.icon, size: "sm" }) }) : null,
+                /* @__PURE__ */ jsxs("span", { className: "vds-editor-menu-item-copy", children: [
+                  /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-label", children: item.title }),
+                  item.description ? /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-description", children: item.description }) : null
+                ] }),
+                item.shortcut ? /* @__PURE__ */ jsx(Kbd, { className: "vds-editor-menu-item-shortcut", children: item.shortcut }) : null
+              ]
             },
-            children: [
-              item.icon ? /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-icon", children: /* @__PURE__ */ jsx(Icon, { icon: item.icon, size: "sm" }) }) : null,
-              /* @__PURE__ */ jsxs("span", { className: "vds-editor-menu-item-copy", children: [
-                /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-label", children: item.title }),
-                item.description ? /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-description", children: item.description }) : null
-              ] }),
-              item.shortcut ? /* @__PURE__ */ jsx(Kbd, { className: "vds-editor-menu-item-shortcut", children: item.shortcut }) : null
-            ]
-          },
-          item.key
-        ))
+            item.key
+          );
+        })
       }
     ),
     /* @__PURE__ */ jsx(
@@ -1215,7 +1361,7 @@ function EditorDraggableBlocks({
   className,
   placement = "inside"
 }) {
-  const { readOnly } = useEditorContext();
+  const { readOnly } = useEditorConfig();
   const menuRef = useRef(null);
   const targetLineRef = useRef(null);
   const targetBlockElementRef = useRef(null);
@@ -1228,7 +1374,7 @@ function EditorDraggableBlocks({
     targetBlockElementRef.current = targetBlockElement;
   }, [targetBlockElement]);
   function handleTargetElementChanged(nextTargetBlockElement) {
-    if (insertMenuOpenRef.current && !nextTargetBlockElement) {
+    if (insertMenuOpenRef.current) {
       return;
     }
     setTargetBlockElement(nextTargetBlockElement);
@@ -1609,7 +1755,7 @@ function EditorFloatingToolbar({
                 icon: IconBold,
                 label: "Bold",
                 tooltipSide,
-                onClick: () => formatText(editor, "bold")
+                onClick: () => formatText(editor, "bold", selectionRef.current)
               }
             ),
             /* @__PURE__ */ jsx(
@@ -1619,7 +1765,7 @@ function EditorFloatingToolbar({
                 icon: IconItalic,
                 label: "Italic",
                 tooltipSide,
-                onClick: () => formatText(editor, "italic")
+                onClick: () => formatText(editor, "italic", selectionRef.current)
               }
             ),
             /* @__PURE__ */ jsx(
@@ -1629,7 +1775,7 @@ function EditorFloatingToolbar({
                 icon: IconUnderline,
                 label: "Underline",
                 tooltipSide,
-                onClick: () => formatText(editor, "underline")
+                onClick: () => formatText(editor, "underline", selectionRef.current)
               }
             ),
             /* @__PURE__ */ jsx(
@@ -1639,7 +1785,7 @@ function EditorFloatingToolbar({
                 icon: IconStrikethrough,
                 label: "Strikethrough",
                 tooltipSide,
-                onClick: () => formatText(editor, "strikethrough")
+                onClick: () => formatText(editor, "strikethrough", selectionRef.current)
               }
             ),
             features.advancedTextFormats ? /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -1650,7 +1796,7 @@ function EditorFloatingToolbar({
                   icon: IconSubscript,
                   label: "Subscript",
                   tooltipSide,
-                  onClick: () => formatText(editor, "subscript")
+                  onClick: () => formatText(editor, "subscript", selectionRef.current)
                 }
               ),
               /* @__PURE__ */ jsx(
@@ -1660,7 +1806,7 @@ function EditorFloatingToolbar({
                   icon: IconSuperscript,
                   label: "Superscript",
                   tooltipSide,
-                  onClick: () => formatText(editor, "superscript")
+                  onClick: () => formatText(editor, "superscript", selectionRef.current)
                 }
               ),
               /* @__PURE__ */ jsx(
@@ -1670,7 +1816,7 @@ function EditorFloatingToolbar({
                   icon: IconLetterCaseUpper,
                   label: "Uppercase",
                   tooltipSide,
-                  onClick: () => formatText(editor, "uppercase")
+                  onClick: () => formatText(editor, "uppercase", selectionRef.current)
                 }
               ),
               /* @__PURE__ */ jsx(
@@ -1680,7 +1826,7 @@ function EditorFloatingToolbar({
                   icon: IconLetterCaseLower,
                   label: "Lowercase",
                   tooltipSide,
-                  onClick: () => formatText(editor, "lowercase")
+                  onClick: () => formatText(editor, "lowercase", selectionRef.current)
                 }
               ),
               /* @__PURE__ */ jsx(
@@ -1690,7 +1836,7 @@ function EditorFloatingToolbar({
                   icon: IconLetterCaseToggle,
                   label: "Capitalize",
                   tooltipSide,
-                  onClick: () => formatText(editor, "capitalize")
+                  onClick: () => formatText(editor, "capitalize", selectionRef.current)
                 }
               )
             ] }) : null,
@@ -1701,7 +1847,7 @@ function EditorFloatingToolbar({
                 icon: IconCode,
                 label: "Inline code",
                 tooltipSide,
-                onClick: () => formatText(editor, "code")
+                onClick: () => formatText(editor, "code", selectionRef.current)
               }
             ),
             showLinkActions ? /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -1881,7 +2027,7 @@ function EditorSlashMenu({
   items
 }) {
   const [editor] = useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   const [queryString, setQueryString] = useState(null);
   const checkForSlashTriggerMatch = useBasicTypeaheadTriggerMatch("/", {
     minLength: 0
@@ -2050,15 +2196,21 @@ function EditorSlashMenu({
 function EditorSourcePanel({
   maxHeight,
   minHeight = "12rem",
-  mode
+  mode,
+  onChange,
+  value
 }) {
-  const [editor] = useLexicalComposerContext();
-  const { markdownTransformers, readOnly } = useEditorContext();
-  const [value, setValue] = useState("");
+  useLexicalComposerContext();
+  const { readOnly } = useEditorConfig();
+  const [localValue, setLocalValue] = useState(value);
+  const valueRef = useRef(value);
   const language = mode === "markdown" ? "markdown" : "html";
   useEffect(() => {
-    setValue(readSourceValue(editor, mode, markdownTransformers));
-  }, [editor, markdownTransformers, mode]);
+    valueRef.current = value;
+    setLocalValue(
+      (currentValue) => currentValue === value ? currentValue : value
+    );
+  }, [value]);
   return /* @__PURE__ */ jsx(
     "div",
     {
@@ -2071,10 +2223,14 @@ function EditorSourcePanel({
         CodeEditor,
         {
           className: "vds-editor-source-code",
-          value,
+          value: localValue,
           onValueChange: (nextValue) => {
-            setValue(nextValue);
-            writeSourceValue(editor, mode, nextValue);
+            if (nextValue === valueRef.current) {
+              return;
+            }
+            valueRef.current = nextValue;
+            setLocalValue(nextValue);
+            onChange?.(nextValue);
           },
           language,
           filename: mode === "markdown" ? "document.md" : "document.html",
@@ -2095,7 +2251,8 @@ function EditorStatusBar({
   className,
   showFeatureHints = true
 }) {
-  const { features, metrics } = useEditorContext();
+  const { features } = useEditorConfig();
+  const metrics = useEditorMetrics();
   const remaining = features.characterLimit != null ? features.characterLimit.maxLength - metrics.characterCount : null;
   return /* @__PURE__ */ jsxs("div", { className: cn("vds-editor-status", className), children: [
     /* @__PURE__ */ jsxs("div", { className: "vds-editor-status-group", children: [
@@ -2128,6 +2285,147 @@ function EditorStatusBar({
       features.comments ? /* @__PURE__ */ jsx("span", { className: "vds-editor-status-pill", children: "Comments" }) : null
     ] }) : null
   ] });
+}
+var HOVER_ACTIONS_CLASSNAME = "vds-editor-table-hover-actions";
+function EditorTableHoverActions({
+  anchorElement,
+  className
+}) {
+  const [editor] = useLexicalComposerContext();
+  const { readOnly } = useEditorConfig();
+  const hoveredCellElementRef = useRef(null);
+  const [hoveredCell, setHoveredCell] = useState(null);
+  function clearHoveredCell() {
+    if (hoveredCellElementRef.current) {
+      delete hoveredCellElementRef.current.dataset.vdsTableHovered;
+    }
+    hoveredCellElementRef.current = null;
+    setHoveredCell(null);
+  }
+  function updateHoveredCell(cellElement) {
+    editor.getEditorState().read(() => {
+      const lexicalNode = $getNearestNodeFromDOMNode(cellElement);
+      const tableCellNode = $isTableCellNode(lexicalNode) ? lexicalNode : lexicalNode ? $getTableCellNodeFromLexicalNode(lexicalNode) : null;
+      if (!tableCellNode) {
+        clearHoveredCell();
+        return;
+      }
+      if (hoveredCellElementRef.current && hoveredCellElementRef.current !== cellElement) {
+        delete hoveredCellElementRef.current.dataset.vdsTableHovered;
+      }
+      hoveredCellElementRef.current = cellElement;
+      hoveredCellElementRef.current.dataset.vdsTableHovered = "true";
+      setHoveredCell((currentCell) => {
+        if (currentCell && currentCell.key === tableCellNode.getKey() && currentCell.element === cellElement) {
+          return currentCell;
+        }
+        return {
+          key: tableCellNode.getKey(),
+          element: cellElement
+        };
+      });
+    });
+  }
+  useEffect(() => {
+    if (!anchorElement || readOnly) {
+      return;
+    }
+    const activeAnchorElement = anchorElement;
+    function handlePointerMove(event) {
+      const path = event.composedPath();
+      const target = path.find(
+        (node) => node instanceof HTMLElement
+      );
+      if (!(target instanceof HTMLElement)) {
+        clearHoveredCell();
+        return;
+      }
+      if (target.closest(`.${HOVER_ACTIONS_CLASSNAME}`)) {
+        return;
+      }
+      const cellElement = target.closest(".vds-editor-table-cell");
+      if (!cellElement || !activeAnchorElement.contains(cellElement)) {
+        clearHoveredCell();
+        return;
+      }
+      updateHoveredCell(cellElement);
+    }
+    function handlePointerLeave(event) {
+      const relatedTarget = event.relatedTarget;
+      if (relatedTarget instanceof HTMLElement && relatedTarget.closest(`.${HOVER_ACTIONS_CLASSNAME}`)) {
+        return;
+      }
+      clearHoveredCell();
+    }
+    activeAnchorElement.addEventListener("pointermove", handlePointerMove);
+    activeAnchorElement.addEventListener("pointerleave", handlePointerLeave);
+    return () => {
+      clearHoveredCell();
+      activeAnchorElement.removeEventListener("pointermove", handlePointerMove);
+      activeAnchorElement.removeEventListener("pointerleave", handlePointerLeave);
+    };
+  }, [anchorElement, editor, readOnly]);
+  useLayoutEffect(() => {
+    if (!anchorElement || !hoveredCellElementRef.current) {
+      return;
+    }
+    const scrollerElement = anchorElement.parentElement;
+    function syncHoveredRect() {
+      if (!hoveredCellElementRef.current?.isConnected) {
+        clearHoveredCell();
+        return;
+      }
+      updateHoveredCell(hoveredCellElementRef.current);
+    }
+    window.addEventListener("resize", syncHoveredRect);
+    scrollerElement?.addEventListener("scroll", syncHoveredRect, {
+      passive: true
+    });
+    return () => {
+      window.removeEventListener("resize", syncHoveredRect);
+      scrollerElement?.removeEventListener("scroll", syncHoveredRect);
+    };
+  }, [anchorElement, hoveredCell]);
+  if (!anchorElement || !hoveredCell || readOnly) {
+    return null;
+  }
+  return createPortal(
+    /* @__PURE__ */ jsxs("div", { className: cn(HOVER_ACTIONS_CLASSNAME, className), children: [
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          variant: "soft",
+          color: "primary",
+          size: "xs",
+          className: "vds-editor-table-hover-button",
+          "data-axis": "column",
+          "aria-label": "Insert column",
+          title: "Insert column to the right",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => insertTableColumn(editor, true, null, hoveredCell.key),
+          children: /* @__PURE__ */ jsx(Icon, { icon: IconPlus, size: "sm" })
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          variant: "soft",
+          color: "primary",
+          size: "xs",
+          className: "vds-editor-table-hover-button",
+          "data-axis": "row",
+          "aria-label": "Insert row",
+          title: "Insert row below",
+          onMouseDown: (event) => event.preventDefault(),
+          onClick: () => insertTableRow(editor, true, null, hoveredCell.key),
+          children: /* @__PURE__ */ jsx(Icon, { icon: IconPlus, size: "sm" })
+        }
+      )
+    ] }),
+    hoveredCell.element
+  );
 }
 var BLOCK_OPTIONS = [
   { label: "Normal", value: "paragraph", shortcut: SHORTCUTS.NORMAL, icon: IconTypography },
@@ -2179,6 +2477,9 @@ var DEFAULT_HIGHLIGHT_SWATCHES = [
   { label: "Danger", value: "var(--vds-color-danger-4)" },
   { label: "Accent", value: "var(--vds-color-accent-4)" }
 ];
+function areToolbarStatesEqual(current, next) {
+  return current.blockType === next.blockType && current.elementFormat === next.elementFormat && current.isBold === next.isBold && current.isItalic === next.isItalic && current.isUnderline === next.isUnderline && current.isStrikethrough === next.isStrikethrough && current.isInlineCode === next.isInlineCode && current.isSubscript === next.isSubscript && current.isSuperscript === next.isSuperscript && current.isLowercase === next.isLowercase && current.isUppercase === next.isUppercase && current.isCapitalize === next.isCapitalize && current.isTableSelection === next.isTableSelection && current.isLink === next.isLink && current.linkUrl === next.linkUrl && current.fontFamily === next.fontFamily && current.fontSize === next.fontSize && current.fontColor === next.fontColor && current.bgColor === next.bgColor;
+}
 function ToolbarButton({
   active,
   disabled,
@@ -2229,6 +2530,19 @@ function ToolbarMenuItem({
     }
   );
 }
+function ToolbarSelectItemContent({
+  icon,
+  label,
+  shortcut,
+  endSlot,
+  reserveIcon = true
+}) {
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    icon ? /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-icon", children: /* @__PURE__ */ jsx(Icon, { icon, size: "sm" }) }) : reserveIcon ? /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-icon vds-editor-menu-item-icon-empty" }) : null,
+    /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-copy", children: /* @__PURE__ */ jsx("span", { className: "vds-editor-menu-item-label", children: label }) }),
+    endSlot ?? (shortcut ? /* @__PURE__ */ jsx(Kbd, { children: shortcut }) : null)
+  ] });
+}
 function ToolbarDropdown({
   label,
   icon,
@@ -2275,6 +2589,56 @@ function ToolbarDropdown({
       children
     }
   );
+}
+function ToolbarSelect({
+  label,
+  triggerLabel,
+  value,
+  icon,
+  disabled,
+  triggerClassName,
+  contentClassName,
+  onOpen,
+  onValueChange,
+  children
+}) {
+  return /* @__PURE__ */ jsx("div", { className: "vds-editor-toolbar-select-wrap", children: /* @__PURE__ */ jsxs(
+    Select,
+    {
+      value,
+      onValueChange,
+      disabled,
+      onOpenChange: (open) => {
+        if (open) {
+          onOpen?.();
+        }
+      },
+      children: [
+        /* @__PURE__ */ jsx(
+          SelectTrigger,
+          {
+            size: "sm",
+            appearance: "soft",
+            className: cn("vds-editor-toolbar-select", triggerClassName),
+            "aria-label": label,
+            onMouseDown: (event) => event.preventDefault(),
+            children: /* @__PURE__ */ jsxs("span", { className: "vds-editor-toolbar-select-copy", children: [
+              icon ? /* @__PURE__ */ jsx("span", { className: "vds-editor-toolbar-select-icon", children: /* @__PURE__ */ jsx(Icon, { icon, size: "sm" }) }) : null,
+              /* @__PURE__ */ jsx("span", { className: "vds-editor-toolbar-select-text", children: triggerLabel })
+            ] })
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          SelectContent,
+          {
+            size: "sm",
+            className: cn("vds-editor-toolbar-select-content", contentClassName),
+            children
+          }
+        )
+      ]
+    }
+  ) });
 }
 function ToolbarColorMenu({
   disabled,
@@ -2486,7 +2850,7 @@ function EditorToolbar({
   highlightColorSwatches = DEFAULT_HIGHLIGHT_SWATCHES
 }) {
   const [editor] = useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   const [state, setState] = useState(EMPTY_TOOLBAR_STATE);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
@@ -2539,7 +2903,10 @@ function EditorToolbar({
   useEffect(() => {
     const updateToolbar = () => {
       editor.getEditorState().read(() => {
-        setState(readToolbarState());
+        const nextState = readToolbarState();
+        setState(
+          (currentState) => areToolbarStatesEqual(currentState, nextState) ? currentState : nextState
+        );
       });
     };
     updateToolbar();
@@ -2668,20 +3035,29 @@ function EditorToolbar({
                   className: "vds-editor-toolbar-group vds-editor-toolbar-rich-group",
                   "aria-label": "Block type",
                   children: /* @__PURE__ */ jsx(
-                    ToolbarDropdown,
+                    ToolbarSelect,
                     {
-                      label: currentBlockOption?.label ?? "Normal",
+                      label: "Block type",
+                      triggerLabel: currentBlockOption?.label ?? "Normal",
+                      value: currentBlockOption?.value ?? "paragraph",
                       icon: currentBlockOption?.icon,
                       disabled: richControlsDisabled,
+                      contentClassName: "vds-editor-toolbar-block-menu",
                       onOpen: rememberSelection,
+                      onValueChange: (nextValue) => handleBlockTypeSelect(nextValue),
                       children: blockOptions.map((option) => /* @__PURE__ */ jsx(
-                        ToolbarMenuItem,
+                        SelectItem,
                         {
-                          active: state.blockType === option.value,
-                          icon: option.icon,
-                          label: option.label,
-                          shortcut: option.shortcut,
-                          onSelect: () => handleBlockTypeSelect(option.value)
+                          value: option.value,
+                          className: "vds-editor-toolbar-select-item",
+                          children: /* @__PURE__ */ jsx("span", { className: "vds-editor-toolbar-select-item-content", children: /* @__PURE__ */ jsx(
+                            ToolbarSelectItemContent,
+                            {
+                              icon: option.icon,
+                              label: option.label,
+                              shortcut: option.shortcut
+                            }
+                          ) })
                         },
                         option.value
                       ))
@@ -2695,20 +3071,28 @@ function EditorToolbar({
                   className: "vds-editor-toolbar-group vds-editor-toolbar-rich-group",
                   "aria-label": "Font family",
                   children: /* @__PURE__ */ jsx(
-                    ToolbarDropdown,
+                    ToolbarSelect,
                     {
-                      label: fontFamilyLabel,
+                      label: "Font family",
+                      triggerLabel: fontFamilyLabel,
+                      value: state.fontFamily,
                       icon: IconTypography,
                       disabled: richControlsDisabled,
-                      dropdownClassName: "vds-editor-font-family-menu",
+                      contentClassName: "vds-editor-font-family-menu",
                       onOpen: rememberSelection,
+                      onValueChange: (nextValue) => applyFontStyle("font-family", nextValue),
                       children: fontFamilies.map((option) => /* @__PURE__ */ jsx(
-                        ToolbarMenuItem,
+                        SelectItem,
                         {
-                          active: state.fontFamily === option.value,
-                          label: option.label,
-                          reserveIcon: false,
-                          onSelect: () => applyFontStyle("font-family", option.value)
+                          value: option.value,
+                          className: "vds-editor-toolbar-select-item",
+                          children: /* @__PURE__ */ jsx("span", { className: "vds-editor-toolbar-select-item-content", children: /* @__PURE__ */ jsx(
+                            ToolbarSelectItemContent,
+                            {
+                              label: option.label,
+                              reserveIcon: false
+                            }
+                          ) })
                         },
                         option.value
                       ))
@@ -2748,20 +3132,28 @@ function EditorToolbar({
                       }
                     ),
                     /* @__PURE__ */ jsx(
-                      ToolbarDropdown,
+                      ToolbarSelect,
                       {
-                        label: fontSizeLabel,
+                        label: "Font size",
+                        triggerLabel: fontSizeLabel,
+                        value: state.fontSize,
                         disabled: richControlsDisabled,
-                        className: "vds-editor-toolbar-trigger-compact",
-                        dropdownClassName: "vds-editor-font-size-menu",
+                        triggerClassName: "vds-editor-toolbar-select-compact",
+                        contentClassName: "vds-editor-font-size-menu",
                         onOpen: rememberSelection,
+                        onValueChange: (nextValue) => applyFontStyle("font-size", nextValue),
                         children: fontSizes.map((option) => /* @__PURE__ */ jsx(
-                          ToolbarMenuItem,
+                          SelectItem,
                           {
-                            active: state.fontSize === option.value,
-                            label: option.label,
-                            reserveIcon: false,
-                            onSelect: () => applyFontStyle("font-size", option.value)
+                            value: option.value,
+                            className: "vds-editor-toolbar-select-item",
+                            children: /* @__PURE__ */ jsx("span", { className: "vds-editor-toolbar-select-item-content", children: /* @__PURE__ */ jsx(
+                              ToolbarSelectItemContent,
+                              {
+                                label: option.label,
+                                reserveIcon: false
+                              }
+                            ) })
                           },
                           option.value
                         ))
@@ -2980,6 +3372,81 @@ function EditorToolbar({
                     ) : null,
                     insertMenu ? /* @__PURE__ */ jsx(EditorInsertMenu, { ...insertMenu }) : null
                   ]
+                }
+              ) : null,
+              features.tables && state.isTableSelection ? /* @__PURE__ */ jsx(
+                "div",
+                {
+                  className: "vds-editor-toolbar-group vds-editor-toolbar-rich-group",
+                  "aria-label": "Table tools",
+                  children: /* @__PURE__ */ jsxs(
+                    ToolbarDropdown,
+                    {
+                      label: "Table",
+                      icon: IconTable,
+                      disabled: richControlsDisabled,
+                      onOpen: rememberSelection,
+                      children: [
+                        /* @__PURE__ */ jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Insert row above",
+                            onSelect: () => insertTableRow(editor, false, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Insert row below",
+                            onSelect: () => insertTableRow(editor, true, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Insert column left",
+                            onSelect: () => insertTableColumn(editor, false, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Insert column right",
+                            onSelect: () => insertTableColumn(editor, true, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsx(EditorDropdownSeparator, { className: "vds-editor-menu-separator" }),
+                        /* @__PURE__ */ jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Delete row",
+                            onSelect: () => deleteTableRow(editor, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Delete column",
+                            onSelect: () => deleteTableColumn(editor, selectionRef.current)
+                          }
+                        ),
+                        /* @__PURE__ */ jsx(
+                          ToolbarMenuItem,
+                          {
+                            reserveIcon: false,
+                            label: "Delete table",
+                            onSelect: () => deleteTable(editor, selectionRef.current)
+                          }
+                        )
+                      ]
+                    }
+                  )
                 }
               ) : null,
               features.textAlignment ? /* @__PURE__ */ jsx(
@@ -3226,13 +3693,14 @@ function Editor({
   const internalEditorRef = useRef(null);
   const appliedModeRef = useRef("rich-text");
   const commentSelectionRef = useRef(null);
-  const [, setLastPayload] = useState(null);
+  const sourceValueRef = useRef("");
   const [uncontrolledMode, setUncontrolledMode] = useState(defaultMode);
   const [surfaceElement, setSurfaceElement] = useState(null);
   const [comments, setComments] = useState([]);
   const [commentComposerOpen, setCommentComposerOpen] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
   const [pendingCommentQuote, setPendingCommentQuote] = useState("");
+  const [sourceValue, setSourceValue] = useState("");
   const activeMode = mode ?? uncontrolledMode;
   const resolvedFeatures = resolveEditorFeatures(preset, features);
   const blockToolsPlacement = blockTools?.placement ?? "inside";
@@ -3243,6 +3711,9 @@ function Editor({
     onCommentsChange?.(nextComments);
   }
   function handleComposerChange(payload) {
+    if (!onChange) {
+      return;
+    }
     const effectiveMode = appliedModeRef.current;
     let nextPayload = payload;
     if (effectiveMode !== "rich-text" && internalEditorRef.current) {
@@ -3254,15 +3725,15 @@ function Editor({
       nextPayload = {
         ...payload,
         text: source,
-        html: effectiveMode === "html" ? source : payload.html,
-        markdown: effectiveMode === "markdown" ? source : payload.markdown,
+        html: effectiveMode === "html" ? source : "",
+        markdown: effectiveMode === "markdown" ? source : "",
+        json: null,
         characterCount: countCharacters(source, metricsCharset),
         wordCount: countWords(source),
         isEmpty: source.trim().length === 0
       };
     }
-    setLastPayload(nextPayload);
-    onChange?.(nextPayload);
+    onChange(nextPayload);
   }
   function applyModeToEditor(nextMode, previousMode = appliedModeRef.current) {
     if (!internalEditorRef.current) {
@@ -3273,18 +3744,21 @@ function Editor({
     try {
       appliedModeRef.current = nextMode;
       if (previousMode !== "rich-text") {
-        exitSourceMode(
+        applySourceValue(
           internalEditorRef.current,
+          sourceValueRef.current,
           previousMode,
           resolvedMarkdownTransformers
         );
       }
       if (nextMode !== "rich-text") {
-        enterSourceMode(
+        const nextSource = readSourceValue(
           internalEditorRef.current,
           nextMode,
           resolvedMarkdownTransformers
         );
+        sourceValueRef.current = nextSource;
+        setSourceValue(nextSource);
       }
       return true;
     } catch (error) {
@@ -3314,6 +3788,25 @@ function Editor({
     }
     setUncontrolledMode(nextMode);
     onModeChange?.(nextMode);
+  }
+  function handleSourceValueChange(nextValue) {
+    sourceValueRef.current = nextValue;
+    setSourceValue(nextValue);
+    if (!onChange || !internalEditorRef.current) {
+      return;
+    }
+    onChange({
+      editor: internalEditorRef.current,
+      editorState: internalEditorRef.current.getEditorState(),
+      tags: /* @__PURE__ */ new Set(),
+      text: nextValue,
+      html: activeMode === "html" ? nextValue : "",
+      markdown: activeMode === "markdown" ? nextValue : "",
+      json: null,
+      characterCount: countCharacters(nextValue, metricsCharset),
+      wordCount: countWords(nextValue),
+      isEmpty: nextValue.trim().length === 0
+    });
   }
   function requestComment() {
     if (!resolvedFeatures.comments || !internalEditorRef.current) {
@@ -3385,6 +3878,7 @@ function Editor({
       namespace,
       initialValue,
       initialValueFormat,
+      activeMode,
       onChange: handleComposerChange,
       onError,
       autoFocus,
@@ -3464,8 +3958,10 @@ function Editor({
               EditorSourcePanel,
               {
                 mode: activeMode,
+                onChange: handleSourceValueChange,
                 minHeight,
-                maxHeight
+                maxHeight,
+                value: sourceValue
               }
             ),
             resolvedFeatures.comments && activeMode === "rich-text" ? /* @__PURE__ */ jsx(
@@ -3492,6 +3988,7 @@ function Editor({
                 onRequestComment: requestComment
               }
             ) : null,
+            resolvedFeatures.tables && activeMode === "rich-text" ? /* @__PURE__ */ jsx(EditorTableHoverActions, { anchorElement: surfaceElement }) : null,
             resolvedFeatures.draggableBlocks && activeMode === "rich-text" ? /* @__PURE__ */ jsx(
               EditorDraggableBlocks,
               {

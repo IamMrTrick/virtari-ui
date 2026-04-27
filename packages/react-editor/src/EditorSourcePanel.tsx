@@ -1,29 +1,36 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { CodeEditor } from "@virtari-packages/react-code";
-import { useEffect, useState, type CSSProperties } from "react";
-import { useEditorContext } from "./context";
-import { readSourceValue, writeSourceValue } from "./editor-utils";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEditorConfig } from "./context";
 import type { EditorMode } from "./types";
 
 interface EditorSourcePanelProps {
   maxHeight?: CSSProperties["maxHeight"];
   minHeight?: CSSProperties["minHeight"];
   mode: Exclude<EditorMode, "rich-text">;
+  onChange?: (nextValue: string) => void;
+  value: string;
 }
 
 export function EditorSourcePanel({
   maxHeight,
   minHeight = "12rem",
   mode,
+  onChange,
+  value,
 }: EditorSourcePanelProps) {
-  const [editor] = useLexicalComposerContext();
-  const { markdownTransformers, readOnly } = useEditorContext();
-  const [value, setValue] = useState("");
+  useLexicalComposerContext();
+  const { readOnly } = useEditorConfig();
+  const [localValue, setLocalValue] = useState(value);
+  const valueRef = useRef(value);
   const language = mode === "markdown" ? "markdown" : "html";
 
   useEffect(() => {
-    setValue(readSourceValue(editor, mode, markdownTransformers));
-  }, [editor, markdownTransformers, mode]);
+    valueRef.current = value;
+    setLocalValue((currentValue) =>
+      currentValue === value ? currentValue : value,
+    );
+  }, [value]);
 
   return (
     <div
@@ -35,10 +42,15 @@ export function EditorSourcePanel({
     >
       <CodeEditor
         className="vds-editor-source-code"
-        value={value}
+        value={localValue}
         onValueChange={(nextValue) => {
-          setValue(nextValue);
-          writeSourceValue(editor, mode, nextValue);
+          if (nextValue === valueRef.current) {
+            return;
+          }
+
+          valueRef.current = nextValue;
+          setLocalValue(nextValue);
+          onChange?.(nextValue);
         }}
         language={language}
         filename={mode === "markdown" ? "document.md" : "document.html"}

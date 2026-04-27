@@ -283,6 +283,10 @@
     "title": "Timeline",
     "description": "Sequential event display \u2014 compound indicator, connector, content, and time slots. Grid-based layout with RTL support."
   },
+  "flow": {
+    "title": "React Flow",
+    "description": "Workflow builder primitives \u2014 token-aware React Flow surface, custom node shell, layered layout helpers, labeled edges, and save/restore utilities."
+  },
   "tag-input": {
     "title": "Tag Input",
     "description": "Multi-value text input \u2014 Enter or comma to add, Backspace to remove, max-tags limit, custom validation, and chip rendering."

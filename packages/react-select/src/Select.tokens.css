@@ -51,7 +51,7 @@
     --select-content-border-width: 1px;
     --select-content-radius: var(--vds-radius-select-content, var(--vds-radius-element, 0.5rem));
     --select-content-shadow: var(--vds-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
-    --select-content-padding-block: var(--vds-space-1, 0.25rem);
+    --select-content-padding-block: 0;
     --select-content-z-index: var(--vds-z-dropdown, 1500);
 
     --select-content-transition-duration: var(--vds-duration-fast, 100ms);

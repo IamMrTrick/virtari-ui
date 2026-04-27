@@ -111,12 +111,21 @@ export interface EditorChangePayload extends EditorMetrics {
   tags: Set<string>;
 }
 
+export interface EditorChangeSerializationOptions {
+  html?: boolean;
+  markdown?: boolean;
+  json?: boolean;
+  debounceMs?: number;
+}
+
 export interface EditorComposerProps {
   namespace?: string;
   preset?: EditorPreset;
   initialValue?: string | SerializedEditorState | null;
   initialValueFormat?: EditorValueFormat;
+  activeMode?: EditorMode;
   onChange?: (payload: EditorChangePayload) => void;
+  changeSerialization?: EditorChangeSerializationOptions;
   onError?: (error: Error, editor: LexicalEditor) => void;
   readOnly?: boolean;
   autoFocus?: boolean;

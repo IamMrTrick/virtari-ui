@@ -71,8 +71,14 @@ export const EDITOR_THEME: EditorThemeClasses = {
   text: {
     bold: "vds-editor-text-bold",
     code: "vds-editor-text-code",
+    highlight: "vds-editor-text-highlight",
     italic: "vds-editor-text-italic",
+    lowercase: "vds-editor-text-lowercase",
+    uppercase: "vds-editor-text-uppercase",
+    capitalize: "vds-editor-text-capitalize",
     strikethrough: "vds-editor-text-strikethrough",
+    subscript: "vds-editor-text-subscript",
+    superscript: "vds-editor-text-superscript",
     underline: "vds-editor-text-underline",
     underlineStrikethrough:
       "vds-editor-text-underline vds-editor-text-strikethrough",

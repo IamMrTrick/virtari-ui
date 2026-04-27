@@ -6,25 +6,48 @@ import type {
   ResolvedEditorFeatureOptions,
 } from "./types";
 
-export interface EditorContextValue {
+export interface EditorConfigContextValue {
   features: ResolvedEditorFeatureOptions;
-  metrics: EditorMetrics;
   linkMatchers: LinkMatcher[];
   markdownTransformers: Transformer[];
   readOnly: boolean;
 }
 
-export const EditorContext = createContext<EditorContextValue | null>(null);
+const CONTEXT_ERROR =
+  "Editor components must be rendered inside <EditorComposer>.";
 
-export function useEditorContext() {
-  const value = useContext(EditorContext);
+export const EditorConfigContext =
+  createContext<EditorConfigContextValue | null>(null);
+
+export const EditorMetricsContext = createContext<EditorMetrics | null>(null);
+
+export function useEditorConfig() {
+  const value = useContext(EditorConfigContext);
 
   if (!value) {
-    throw new Error(
-      "Editor components must be rendered inside <EditorComposer>.",
-    );
+    throw new Error(CONTEXT_ERROR);
   }
 
   return value;
+}
+
+export function useEditorMetrics() {
+  const value = useContext(EditorMetricsContext);
+
+  if (!value) {
+    throw new Error(CONTEXT_ERROR);
+  }
+
+  return value;
+}
+
+export function useEditorContext() {
+  const config = useEditorConfig();
+  const metrics = useEditorMetrics();
+
+  return {
+    ...config,
+    metrics,
+  };
 }
 

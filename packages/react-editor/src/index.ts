@@ -36,6 +36,7 @@ export type {
 export type {
   EditorBlockToolsPlacement,
   EditorBlockToolsProps,
+  EditorChangeSerializationOptions,
   EditorFloatingToolbarProps,
   EditorCommentThread,
   EditorColorSwatch,

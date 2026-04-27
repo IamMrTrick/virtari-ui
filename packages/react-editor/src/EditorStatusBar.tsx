@@ -1,12 +1,13 @@
 import { cn } from "@virtari-packages/utils";
-import { useEditorContext } from "./context";
+import { useEditorConfig, useEditorMetrics } from "./context";
 import type { EditorStatusBarProps } from "./types";
 
 export function EditorStatusBar({
   className,
   showFeatureHints = true,
 }: EditorStatusBarProps) {
-  const { features, metrics } = useEditorContext();
+  const { features } = useEditorConfig();
+  const metrics = useEditorMetrics();
 
   const remaining =
     features.characterLimit != null

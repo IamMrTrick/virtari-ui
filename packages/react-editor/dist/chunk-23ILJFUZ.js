@@ -13,7 +13,7 @@ import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPl
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
-import { createContext, forwardRef, useContext, useMemo, useState, useEffect } from 'react';
+import { createContext, forwardRef, useContext, useMemo, useState, useRef, useEffect } from 'react';
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
 import { LinkNode, AutoLinkNode, $isLinkNode, formatUrl, $toggleLink } from '@lexical/link';
 import { ListNode, ListItemNode, $isListNode, REMOVE_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, INSERT_ORDERED_LIST_COMMAND, INSERT_CHECK_LIST_COMMAND, $createListNode, $createListItemNode } from '@lexical/list';
@@ -21,10 +21,10 @@ import { TRANSFORMERS, $convertToMarkdownString, $convertFromMarkdownString } fr
 import { $getSelectionStyleValueForProperty, $setBlocksType, $patchStyleText } from '@lexical/selection';
 import { MarkNode, $wrapSelectionInMarkNode, $isMarkNode, $unwrapMarkNode } from '@lexical/mark';
 import { HeadingNode, QuoteNode, $isHeadingNode, $isQuoteNode, $createQuoteNode, $createHeadingNode } from '@lexical/rich-text';
-import { TableNode, TableCellNode, TableRowNode, INSERT_TABLE_COMMAND, $createTableNodeWithDimensions } from '@lexical/table';
+import { TableNode, TableCellNode, TableRowNode, $getTableCellNodeFromLexicalNode, INSERT_TABLE_COMMAND, $createTableNodeWithDimensions, $insertTableRowAtSelection, $insertTableColumnAtSelection, $deleteTableRowAtSelection, $deleteTableColumnAtSelection, $getTableNodeFromLexicalNodeOrThrow, $isTableCellNode } from '@lexical/table';
 import { CodeNode, CodeHighlightNode, $isCodeNode, $createCodeNode, DEFAULT_CODE_LANGUAGE, registerCodeHighlighting } from '@lexical/code';
 import { HorizontalRuleNode, $createHorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
-import { DecoratorNode, $applyNodeReplacement, $getRoot, $createParagraphNode, $insertNodes, $getSelection, $isRangeSelection, $findMatchingParent, $isElementNode, CLEAR_EDITOR_COMMAND, $setSelection, UNDO_COMMAND, REDO_COMMAND, FORMAT_TEXT_COMMAND, FORMAT_ELEMENT_COMMAND, INDENT_CONTENT_COMMAND, OUTDENT_CONTENT_COMMAND, $getNearestNodeFromDOMNode, $createTextNode, KEY_DOWN_COMMAND, COMMAND_PRIORITY_HIGH } from 'lexical';
+import { DecoratorNode, $applyNodeReplacement, $getRoot, $getSelection, $isRangeSelection, $findMatchingParent, $isElementNode, $createParagraphNode, CLEAR_EDITOR_COMMAND, $setSelection, UNDO_COMMAND, REDO_COMMAND, FORMAT_TEXT_COMMAND, FORMAT_ELEMENT_COMMAND, INDENT_CONTENT_COMMAND, OUTDENT_CONTENT_COMMAND, $createTextNode, $getNearestNodeFromDOMNode, $insertNodes, $getNodeByKey, KEY_DOWN_COMMAND, COMMAND_PRIORITY_HIGH } from 'lexical';
 export { CAN_REDO_COMMAND, CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW } from 'lexical';
 import { OverflowNode } from '@lexical/overflow';
 import { jsx, jsxs } from 'react/jsx-runtime';
@@ -107,21 +107,42 @@ var EDITOR_THEME = {
   text: {
     bold: "vds-editor-text-bold",
     code: "vds-editor-text-code",
+    highlight: "vds-editor-text-highlight",
     italic: "vds-editor-text-italic",
+    lowercase: "vds-editor-text-lowercase",
+    uppercase: "vds-editor-text-uppercase",
+    capitalize: "vds-editor-text-capitalize",
     strikethrough: "vds-editor-text-strikethrough",
+    subscript: "vds-editor-text-subscript",
+    superscript: "vds-editor-text-superscript",
     underline: "vds-editor-text-underline",
     underlineStrikethrough: "vds-editor-text-underline vds-editor-text-strikethrough"
   }
 };
-var EditorContext = createContext(null);
-function useEditorContext() {
-  const value = useContext(EditorContext);
+var CONTEXT_ERROR = "Editor components must be rendered inside <EditorComposer>.";
+var EditorConfigContext = createContext(null);
+var EditorMetricsContext = createContext(null);
+function useEditorConfig() {
+  const value = useContext(EditorConfigContext);
   if (!value) {
-    throw new Error(
-      "Editor components must be rendered inside <EditorComposer>."
-    );
+    throw new Error(CONTEXT_ERROR);
   }
   return value;
+}
+function useEditorMetrics() {
+  const value = useContext(EditorMetricsContext);
+  if (!value) {
+    throw new Error(CONTEXT_ERROR);
+  }
+  return value;
+}
+function useEditorContext() {
+  const config = useEditorConfig();
+  const metrics = useEditorMetrics();
+  return {
+    ...config,
+    metrics
+  };
 }
 function normalizeKind(kind) {
   if (kind === "embed" || kind === "video") return kind;
@@ -572,6 +593,7 @@ var EMPTY_TOOLBAR_STATE = {
   isLowercase: false,
   isUppercase: false,
   isCapitalize: false,
+  isTableSelection: false,
   isLink: false,
   linkUrl: "",
   fontFamily: "var(--vds-font-sans)",
@@ -586,11 +608,56 @@ function countCharacters(text, charset) {
   return text.length;
 }
 function countWords(text) {
-  const trimmed = text.trim();
-  if (!trimmed) return 0;
-  return trimmed.split(/\s+/).filter(Boolean).length;
+  let wordCount = 0;
+  let inWord = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    const isWhitespace = character !== void 0 && /\s/.test(character);
+    if (isWhitespace) {
+      inWord = false;
+      continue;
+    }
+    if (!inWord) {
+      wordCount += 1;
+      inWord = true;
+    }
+  }
+  return wordCount;
 }
-function buildEditorChangePayload(editor, editorState, markdownTransformers, charset, tags) {
+function hasTextContent(text) {
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (character !== void 0 && !/\s/.test(character)) {
+      return true;
+    }
+  }
+  return false;
+}
+function areEditorMetricsEqual(current, next) {
+  return current.text === next.text && current.characterCount === next.characterCount && current.wordCount === next.wordCount && current.isEmpty === next.isEmpty;
+}
+function buildEditorMetrics(editorState, charset) {
+  let text = "";
+  let isEmpty = true;
+  editorState.read(() => {
+    text = $getRoot().getTextContent();
+    isEmpty = !hasTextContent(text);
+  });
+  return {
+    text,
+    html: "",
+    markdown: "",
+    json: null,
+    characterCount: countCharacters(text, charset),
+    wordCount: countWords(text),
+    isEmpty
+  };
+}
+function buildEditorChangePayload(editor, editorState, markdownTransformers, charset, tags, {
+  includeHtml = true,
+  includeJson = true,
+  includeMarkdown = true
+} = {}) {
   let text = "";
   let html = "";
   let markdown = "";
@@ -598,11 +665,15 @@ function buildEditorChangePayload(editor, editorState, markdownTransformers, cha
   editorState.read(() => {
     const root = $getRoot();
     text = root.getTextContent();
-    html = $generateHtmlFromNodes(editor, null);
-    markdown = $convertToMarkdownString(markdownTransformers);
-    isEmpty = text.trim().length === 0;
+    if (includeHtml) {
+      html = $generateHtmlFromNodes(editor, null);
+    }
+    if (includeMarkdown) {
+      markdown = $convertToMarkdownString(markdownTransformers);
+    }
+    isEmpty = !hasTextContent(text);
   });
-  const json = editorState.toJSON();
+  const json = includeJson ? editorState.toJSON() : null;
   return {
     editor,
     editorState,
@@ -619,12 +690,12 @@ function buildEditorChangePayload(editor, editorState, markdownTransformers, cha
 function getSourceModeLanguage(mode) {
   return mode === "markdown" ? "markdown" : "html";
 }
-function getSourceModeCodeText(root, mode) {
+function getSourceModeCodeNode(root, mode) {
   const firstChild = root.getFirstChild();
   if ($isCodeNode(firstChild) && firstChild.getLanguage() === getSourceModeLanguage(mode)) {
-    return firstChild.getTextContent();
+    return firstChild;
   }
-  return root.getTextContent();
+  return null;
 }
 function formatHtmlSource(html) {
   const normalized = html.replace(/>\s*</g, ">\n<").replace(/\n{3,}/g, "\n\n").trim();
@@ -649,59 +720,14 @@ function formatHtmlSource(html) {
 function readSourceValue(editor, mode, markdownTransformers) {
   return editor.getEditorState().read(() => {
     const root = $getRoot();
-    const existingCodeText = getSourceModeCodeText(root, mode);
-    if (existingCodeText.trim().length > 0 || $isCodeNode(root.getFirstChild())) {
-      return existingCodeText;
+    const existingCodeNode = getSourceModeCodeNode(root, mode);
+    if (existingCodeNode) {
+      return existingCodeNode.getTextContent();
     }
     if (mode === "markdown") {
       return $convertToMarkdownString(markdownTransformers);
     }
     return formatHtmlSource($generateHtmlFromNodes(editor, null));
-  });
-}
-function writeSourceValue(editor, mode, source) {
-  editor.update(() => {
-    const root = $getRoot();
-    const code = $createCodeNode(getSourceModeLanguage(mode));
-    root.clear().append(code);
-    code.select().insertRawText(source);
-    code.select(0, 0);
-  });
-}
-function enterSourceMode(editor, mode, markdownTransformers) {
-  editor.update(() => {
-    const root = $getRoot();
-    const source = mode === "markdown" ? $convertToMarkdownString(markdownTransformers) : formatHtmlSource($generateHtmlFromNodes(editor, null));
-    const code = $createCodeNode(getSourceModeLanguage(mode));
-    root.clear().append(code);
-    code.select().insertRawText(source);
-    code.select(0, 0);
-  });
-}
-function exitSourceMode(editor, mode, markdownTransformers) {
-  editor.update(() => {
-    const root = $getRoot();
-    const source = getSourceModeCodeText(root, mode);
-    root.clear().select();
-    if (source.trim().length === 0) {
-      root.append($createParagraphNode()).select();
-      return;
-    }
-    if (mode === "markdown") {
-      $convertFromMarkdownString(source, markdownTransformers);
-    } else {
-      const parser = new DOMParser();
-      const dom = parser.parseFromString(source, "text/html");
-      const nodes = $generateNodesFromDOM(editor, dom);
-      if (nodes.length === 0) {
-        root.append($createParagraphNode()).select();
-        return;
-      }
-      $insertNodes(nodes);
-    }
-    if (root.isEmpty()) {
-      root.append($createParagraphNode()).select();
-    }
   });
 }
 function readToolbarState() {
@@ -713,6 +739,7 @@ function readToolbarState() {
   const topLevel = anchorNode.getKey() === "root" ? null : anchorNode.getTopLevelElementOrThrow();
   const listNode = $findMatchingParent(anchorNode, $isListNode);
   const linkNode = $findMatchingParent(anchorNode, $isLinkNode);
+  const tableCellNode = $getTableCellNodeFromLexicalNode(anchorNode);
   const linkParentElement = linkNode ? $findMatchingParent(
     anchorNode,
     (parentNode) => $isElementNode(parentNode) && !parentNode.isInline()
@@ -748,6 +775,7 @@ function readToolbarState() {
     isLowercase: selection.hasFormat("lowercase"),
     isUppercase: selection.hasFormat("uppercase"),
     isCapitalize: selection.hasFormat("capitalize"),
+    isTableSelection: Boolean(tableCellNode),
     isLink: Boolean(linkNode),
     linkUrl: linkNode?.getURL() ?? "",
     fontFamily: $getSelectionStyleValueForProperty(
@@ -820,6 +848,109 @@ function insertDefaultTable(editor, rows = 3, columns = 3) {
     columns: String(columns),
     includeHeaders: true
   });
+}
+function insertTable(editor, rows = 3, columns = 3, targetBlockElement) {
+  const safeRows = Math.max(1, Math.min(12, Math.trunc(rows) || 3));
+  const safeColumns = Math.max(1, Math.min(12, Math.trunc(columns) || 3));
+  editor.update(() => {
+    const targetNode = resolveInsertionTargetNode(targetBlockElement);
+    const table = $createTableNodeWithDimensions(safeRows, safeColumns, true);
+    const paragraph = createSelectableParagraph();
+    insertAfterNode(targetNode, [table, paragraph]);
+    paragraph.select();
+  });
+}
+function getSelectedTableCell(selectionSnapshot) {
+  const selection = resolveRangeSelection(selectionSnapshot);
+  if (!selection) {
+    return null;
+  }
+  return $getTableCellNodeFromLexicalNode(selection.anchor.getNode());
+}
+function resolveTableCellNode(selectionSnapshot, targetCellKey) {
+  if (targetCellKey) {
+    const lexicalNode = $getNodeByKey(targetCellKey);
+    if ($isTableCellNode(lexicalNode)) {
+      return lexicalNode;
+    }
+    if (lexicalNode) {
+      return $getTableCellNodeFromLexicalNode(lexicalNode);
+    }
+  }
+  return getSelectedTableCell(selectionSnapshot);
+}
+function insertTableRow(editor, insertAfter, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    tableCellNode.selectEnd();
+    $insertTableRowAtSelection(insertAfter);
+  });
+  editor.focus();
+}
+function insertTableColumn(editor, insertAfter, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    tableCellNode.selectEnd();
+    $insertTableColumnAtSelection(insertAfter);
+  });
+  editor.focus();
+}
+function deleteTableRow(editor, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    tableCellNode.selectEnd();
+    $deleteTableRowAtSelection();
+  });
+  editor.focus();
+}
+function deleteTableColumn(editor, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    tableCellNode.selectEnd();
+    $deleteTableColumnAtSelection();
+  });
+  editor.focus();
+}
+function deleteTable(editor, selectionSnapshot, targetCellKey) {
+  editor.update(() => {
+    const tableCellNode = resolveTableCellNode(
+      selectionSnapshot,
+      targetCellKey
+    );
+    if (!tableCellNode) {
+      return;
+    }
+    const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode);
+    const paragraph = createSelectableParagraph();
+    tableNode.insertAfter(paragraph);
+    tableNode.remove();
+    paragraph.select();
+  });
+  editor.focus();
 }
 function applyLink(editor, url, selectionSnapshot) {
   const formattedUrl = formatUrl(url);
@@ -895,13 +1026,27 @@ function applyTextStyles(editor, styles, selectionSnapshot, skipHistoryStack = f
     skipHistoryStack ? { tag: "historic" } : {}
   );
 }
+function applySourceValue(editor, value, format, markdownTransformers) {
+  applySerializedEditorValue(editor, value, format, markdownTransformers);
+}
 function undo(editor) {
   editor.dispatchCommand(UNDO_COMMAND, void 0);
 }
 function redo(editor) {
   editor.dispatchCommand(REDO_COMMAND, void 0);
 }
-function formatText(editor, format) {
+function formatText(editor, format, selectionSnapshot) {
+  if (selectionSnapshot) {
+    editor.update(() => {
+      const selection = resolveRangeSelection(selectionSnapshot);
+      if (!selection) {
+        return;
+      }
+      selection.formatText(format);
+    });
+    editor.focus();
+    return;
+  }
   editor.dispatchCommand(FORMAT_TEXT_COMMAND, format);
 }
 function formatElement(editor, format) {
@@ -1168,7 +1313,7 @@ function isToolbarTarget(target) {
 }
 function EditorShortcutsPlugin() {
   const [editor] = useLexicalComposerContext();
-  const { features, readOnly } = useEditorContext();
+  const { features, readOnly } = useEditorConfig();
   useEffect(() => {
     if (readOnly || !features.shortcuts) {
       return;
@@ -1275,6 +1420,12 @@ function EditorShortcutsPlugin() {
   }, [editor, features, readOnly]);
   return null;
 }
+var DEFAULT_CHANGE_SERIALIZATION = {
+  html: false,
+  markdown: false,
+  json: false,
+  debounceMs: 0
+};
 function EditorEditablePlugin({ editable }) {
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
@@ -1287,7 +1438,9 @@ function EditorComposer({
   preset = "core",
   initialValue = null,
   initialValueFormat = "json",
+  activeMode = "rich-text",
   onChange,
+  changeSerialization,
   onError = (error) => {
     throw error;
   },
@@ -1304,6 +1457,9 @@ function EditorComposer({
     [features, preset]
   );
   const [metrics, setMetrics] = useState(EMPTY_EDITOR_METRICS);
+  const changeTimeoutRef = useRef(null);
+  const onChangeRef = useRef(onChange);
+  const markdownTransformersRef = useRef(markdownTransformers);
   const initialConfig = useMemo(
     () => ({
       namespace,
@@ -1328,74 +1484,142 @@ function EditorComposer({
     ]
   );
   const characterLimitCharset = resolvedFeatures.characterLimit?.charset ?? "UTF-16";
-  return /* @__PURE__ */ jsx(LexicalComposer, { initialConfig, children: /* @__PURE__ */ jsxs(
-    EditorContext.Provider,
-    {
-      value: {
-        features: resolvedFeatures,
-        metrics,
-        linkMatchers,
-        markdownTransformers,
-        readOnly
-      },
-      children: [
-        editorRef ? /* @__PURE__ */ jsx(EditorRefPlugin, { editorRef }) : null,
-        /* @__PURE__ */ jsx(EditorEditablePlugin, { editable: !readOnly }),
-        resolvedFeatures.history ? /* @__PURE__ */ jsx(HistoryPlugin, {}) : null,
-        resolvedFeatures.links ? /* @__PURE__ */ jsx(LinkPlugin, {}) : null,
-        resolvedFeatures.autoLinks ? /* @__PURE__ */ jsx(AutoLinkPlugin, { matchers: linkMatchers }) : null,
-        resolvedFeatures.lists ? /* @__PURE__ */ jsx(ListPlugin, { hasStrictIndent: resolvedFeatures.strictListIndent }) : null,
-        resolvedFeatures.checklists ? /* @__PURE__ */ jsx(CheckListPlugin, {}) : null,
-        resolvedFeatures.tables ? /* @__PURE__ */ jsx(
-          TablePlugin,
-          {
-            hasCellMerge: resolvedFeatures.tableCellMerge,
-            hasCellBackgroundColor: resolvedFeatures.tableCellBackgroundColor,
-            hasHorizontalScroll: resolvedFeatures.tableHorizontalScroll
-          }
-        ) : null,
-        resolvedFeatures.markdownShortcuts ? /* @__PURE__ */ jsx(MarkdownShortcutPlugin, { transformers: markdownTransformers }) : null,
-        resolvedFeatures.tabIndentation ? /* @__PURE__ */ jsx(TabIndentationPlugin, { maxIndent: resolvedFeatures.maxIndent }) : null,
-        resolvedFeatures.characterLimit ? /* @__PURE__ */ jsx(
-          CharacterLimitPlugin,
-          {
-            charset: resolvedFeatures.characterLimit.charset ?? "UTF-16",
-            maxLength: resolvedFeatures.characterLimit.maxLength,
-            renderer: () => /* @__PURE__ */ jsx(
-              "span",
-              {
-                className: "vds-editor-character-limit-meter",
-                "aria-hidden": "true",
-                hidden: true
-              }
-            )
-          }
-        ) : null,
-        resolvedFeatures.codeBlocks ? /* @__PURE__ */ jsx(EditorCodeHighlightPlugin, {}) : null,
-        resolvedFeatures.shortcuts ? /* @__PURE__ */ jsx(EditorShortcutsPlugin, {}) : null,
-        !readOnly ? /* @__PURE__ */ jsx(EditorTrailingParagraphPlugin, {}) : null,
-        /* @__PURE__ */ jsx(
-          OnChangePlugin,
-          {
-            ignoreSelectionChange: true,
-            onChange: (editorState, editor, tags) => {
-              const payload = buildEditorChangePayload(
-                editor,
-                editorState,
-                markdownTransformers,
-                characterLimitCharset,
-                tags
-              );
-              setMetrics(payload);
-              onChange?.(payload);
-            }
-          }
-        ),
-        autoFocus ? /* @__PURE__ */ jsx(AutoFocusPlugin, {}) : null,
-        children
-      ]
+  const isSourceMode = activeMode !== "rich-text";
+  const resolvedChangeSerialization = useMemo(
+    () => ({
+      ...DEFAULT_CHANGE_SERIALIZATION,
+      ...changeSerialization
+    }),
+    [changeSerialization]
+  );
+  const configValue = useMemo(
+    () => ({
+      features: resolvedFeatures,
+      linkMatchers,
+      markdownTransformers,
+      readOnly
+    }),
+    [linkMatchers, markdownTransformers, readOnly, resolvedFeatures]
+  );
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+  useEffect(() => {
+    markdownTransformersRef.current = markdownTransformers;
+  }, [markdownTransformers]);
+  useEffect(
+    () => () => {
+      if (changeTimeoutRef.current !== null) {
+        clearTimeout(changeTimeoutRef.current);
+      }
+    },
+    []
+  );
+  useEffect(() => {
+    if (changeTimeoutRef.current !== null) {
+      clearTimeout(changeTimeoutRef.current);
+      changeTimeoutRef.current = null;
     }
-  ) });
+  }, [activeMode]);
+  return /* @__PURE__ */ jsx(LexicalComposer, { initialConfig, children: /* @__PURE__ */ jsx(EditorConfigContext.Provider, { value: configValue, children: /* @__PURE__ */ jsxs(EditorMetricsContext.Provider, { value: metrics, children: [
+    editorRef ? /* @__PURE__ */ jsx(EditorRefPlugin, { editorRef }) : null,
+    /* @__PURE__ */ jsx(EditorEditablePlugin, { editable: !readOnly }),
+    resolvedFeatures.history ? /* @__PURE__ */ jsx(HistoryPlugin, {}) : null,
+    resolvedFeatures.links ? /* @__PURE__ */ jsx(LinkPlugin, {}) : null,
+    resolvedFeatures.autoLinks ? /* @__PURE__ */ jsx(AutoLinkPlugin, { matchers: linkMatchers }) : null,
+    resolvedFeatures.lists ? /* @__PURE__ */ jsx(ListPlugin, { hasStrictIndent: resolvedFeatures.strictListIndent }) : null,
+    resolvedFeatures.checklists ? /* @__PURE__ */ jsx(CheckListPlugin, {}) : null,
+    resolvedFeatures.tables ? /* @__PURE__ */ jsx(
+      TablePlugin,
+      {
+        hasCellMerge: resolvedFeatures.tableCellMerge,
+        hasCellBackgroundColor: resolvedFeatures.tableCellBackgroundColor,
+        hasHorizontalScroll: resolvedFeatures.tableHorizontalScroll
+      }
+    ) : null,
+    resolvedFeatures.markdownShortcuts ? /* @__PURE__ */ jsx(MarkdownShortcutPlugin, { transformers: markdownTransformers }) : null,
+    resolvedFeatures.tabIndentation ? /* @__PURE__ */ jsx(TabIndentationPlugin, { maxIndent: resolvedFeatures.maxIndent }) : null,
+    resolvedFeatures.characterLimit ? /* @__PURE__ */ jsx(
+      CharacterLimitPlugin,
+      {
+        charset: resolvedFeatures.characterLimit.charset ?? "UTF-16",
+        maxLength: resolvedFeatures.characterLimit.maxLength,
+        renderer: () => /* @__PURE__ */ jsx(
+          "span",
+          {
+            className: "vds-editor-character-limit-meter",
+            "aria-hidden": "true",
+            hidden: true
+          }
+        )
+      }
+    ) : null,
+    resolvedFeatures.codeBlocks ? /* @__PURE__ */ jsx(EditorCodeHighlightPlugin, {}) : null,
+    resolvedFeatures.shortcuts ? /* @__PURE__ */ jsx(EditorShortcutsPlugin, {}) : null,
+    !readOnly ? /* @__PURE__ */ jsx(EditorTrailingParagraphPlugin, {}) : null,
+    /* @__PURE__ */ jsx(
+      OnChangePlugin,
+      {
+        ignoreSelectionChange: true,
+        onChange: (editorState, editor, tags) => {
+          const nextMetrics = buildEditorMetrics(
+            editorState,
+            characterLimitCharset
+          );
+          setMetrics(
+            (currentMetrics) => areEditorMetricsEqual(currentMetrics, nextMetrics) ? currentMetrics : nextMetrics
+          );
+          if (!onChange) {
+            return;
+          }
+          if (changeTimeoutRef.current !== null) {
+            clearTimeout(changeTimeoutRef.current);
+            changeTimeoutRef.current = null;
+          }
+          const nextTags = new Set(tags);
+          const basePayload = {
+            ...nextMetrics,
+            editor,
+            editorState,
+            tags: nextTags
+          };
+          if (isSourceMode || !resolvedChangeSerialization.html && !resolvedChangeSerialization.markdown && !resolvedChangeSerialization.json) {
+            onChange(basePayload);
+            return;
+          }
+          const emitSerializedChange = () => {
+            const nextOnChange = onChangeRef.current;
+            if (!nextOnChange) {
+              return;
+            }
+            const payload = buildEditorChangePayload(
+              editor,
+              editorState,
+              markdownTransformersRef.current,
+              characterLimitCharset,
+              nextTags,
+              {
+                includeHtml: resolvedChangeSerialization.html,
+                includeJson: resolvedChangeSerialization.json,
+                includeMarkdown: resolvedChangeSerialization.markdown
+              }
+            );
+            nextOnChange(payload);
+          };
+          if (resolvedChangeSerialization.debounceMs > 0) {
+            changeTimeoutRef.current = setTimeout(
+              emitSerializedChange,
+              resolvedChangeSerialization.debounceMs
+            );
+            return;
+          }
+          emitSerializedChange();
+        }
+      }
+    ),
+    autoFocus ? /* @__PURE__ */ jsx(AutoFocusPlugin, {}) : null,
+    children
+  ] }) }) });
 }
 var EditorSurface = forwardRef(
   function EditorSurface2({
@@ -1410,7 +1634,7 @@ var EditorSurface = forwardRef(
     maxHeight,
     ...contentEditableProps
   }, ref) {
-    const { readOnly } = useEditorContext();
+    const { readOnly } = useEditorConfig();
     return /* @__PURE__ */ jsx(
       "div",
       {
@@ -1450,4 +1674,4 @@ var EditorSurface = forwardRef(
   }
 );
 
-export { $createEditorMediaNode, $isEditorMediaNode, DEFAULT_CORE_FEATURES, DEFAULT_LINK_MATCHERS, DEFAULT_MARKDOWN_TRANSFORMERS, DEFAULT_PRO_FEATURES, EDITOR_THEME, EMPTY_TOOLBAR_STATE, EditorComposer, EditorMediaNode, EditorSurface, SHORTCUTS, applyBlockType, applyLink, applyTextStyles, buildEditorNodes, clearEditor, clearLink, countCharacters, countWords, createInitialEditorState, enterSourceMode, exitSourceMode, formatElement, formatText, getSelectionText, indentContent, insertBlock, insertDefaultTable, insertMediaBlock, outdentContent, readSourceValue, readToolbarState, redo, removeCommentMark, resolveEditorFeatures, toggleBulletList, toggleCheckList, toggleNumberList, undo, useEditorContext, wrapSelectionInComment, writeSourceValue };
+export { $createEditorMediaNode, $isEditorMediaNode, DEFAULT_CORE_FEATURES, DEFAULT_LINK_MATCHERS, DEFAULT_MARKDOWN_TRANSFORMERS, DEFAULT_PRO_FEATURES, EDITOR_THEME, EMPTY_TOOLBAR_STATE, EditorComposer, EditorMediaNode, EditorSurface, SHORTCUTS, applyBlockType, applyLink, applySourceValue, applyTextStyles, buildEditorNodes, clearEditor, clearLink, countCharacters, countWords, createInitialEditorState, deleteTable, deleteTableColumn, deleteTableRow, formatElement, formatText, getSelectionText, indentContent, insertBlock, insertDefaultTable, insertMediaBlock, insertTable, insertTableColumn, insertTableRow, outdentContent, readSourceValue, readToolbarState, redo, removeCommentMark, resolveEditorFeatures, toggleBulletList, toggleCheckList, toggleNumberList, undo, useEditorConfig, useEditorContext, useEditorMetrics, wrapSelectionInComment };

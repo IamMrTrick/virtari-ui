@@ -87,3 +87,8 @@ export function useSyncExternalStoreWithSelector<Snapshot, Selection>(
   return value;
 }
 
+const shimWithSelector = {
+  useSyncExternalStoreWithSelector,
+};
+
+export default shimWithSelector;

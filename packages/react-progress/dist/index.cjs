@@ -26,20 +26,56 @@ function _interopNamespace(e) {
 var ProgressPrimitive__namespace = /*#__PURE__*/_interopNamespace(ProgressPrimitive);
 
 // src/Progress.tsx
-function Progress({ className, value, ref, ...props }) {
-  return /* @__PURE__ */ jsxRuntime.jsx(
+var PRESET_COLORS = /* @__PURE__ */ new Set([
+  "primary",
+  "success",
+  "warning",
+  "danger",
+  "info",
+  "accent",
+  "contrast"
+]);
+function Progress({
+  className,
+  value,
+  color = "primary",
+  variant,
+  size,
+  animated,
+  showLabel,
+  style,
+  ref,
+  ...props
+}) {
+  const isPreset = PRESET_COLORS.has(color);
+  const dataColor = isPreset ? color : "custom";
+  const customStyle = isPreset ? {} : { "--progress-fill-color": color };
+  const animatedValue = animated === true ? "pulse" : animated === false ? void 0 : animated;
+  return /* @__PURE__ */ jsxRuntime.jsxs(
     ProgressPrimitive__namespace.Root,
     {
       ref,
       className: utils.cn("vds-progress", className),
+      "data-color": dataColor,
+      "data-variant": variant,
+      "data-size": size,
+      "data-animated": animatedValue,
+      value,
+      style: { ...customStyle, ...style },
       ...props,
-      children: /* @__PURE__ */ jsxRuntime.jsx(
-        ProgressPrimitive__namespace.Indicator,
-        {
-          className: "vds-progress-indicator",
-          style: { width: `${value ?? 0}%` }
-        }
-      )
+      children: [
+        /* @__PURE__ */ jsxRuntime.jsx(
+          ProgressPrimitive__namespace.Indicator,
+          {
+            className: "vds-progress-indicator",
+            style: { inlineSize: `${value ?? 0}%` }
+          }
+        ),
+        showLabel && value != null && /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "vds-progress-label", "aria-hidden": true, children: [
+          Math.round(value),
+          "%"
+        ] })
+      ]
     }
   );
 }
