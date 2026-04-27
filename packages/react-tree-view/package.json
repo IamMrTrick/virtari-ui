@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-tree-view",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Virtari tree view — hierarchical data display with keyboard navigation, selection, and expand/collapse.",
   "license": "UNLICENSED",
   "author": "Virtari",
