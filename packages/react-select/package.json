@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-select",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Virtari select — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",
