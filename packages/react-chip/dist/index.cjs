@@ -26,7 +26,6 @@ function Chip({
       "data-size": size,
       "data-appearance": appearance,
       "data-interactive": interactive ? "true" : void 0,
-      "data-disabled": disabled ? "true" : void 0,
       "aria-disabled": disabled || void 0,
       ...props
     }

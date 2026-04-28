@@ -1697,7 +1697,6 @@ var DataTableRow = react.forwardRef(
         role: "row",
         "aria-selected": selected || void 0,
         "aria-rowindex": row.index + 1,
-        "data-selected": boolAttr(selected),
         "data-expanded": boolAttr(expanded),
         "data-pinned": pinned,
         "data-index": row.index,
@@ -3886,7 +3885,6 @@ function DataTableBoardCard({
     "article",
     {
       role: "listitem",
-      "data-selected": boolAttr(selected),
       "data-row-id": row.id,
       "aria-selected": selected || void 0,
       className: "vds-data-table-board-card",
@@ -3958,7 +3956,6 @@ function DataTableListItem({
     "div",
     {
       role: "listitem",
-      "data-selected": boolAttr(selected),
       "data-row-id": row.id,
       "aria-selected": selected || void 0,
       className: "vds-data-table-list-item",

@@ -273,10 +273,10 @@
   .vds-data-table-row:hover {
     --data-table-row-bg: var(--data-table-row-bg-hover);
   }
-  .vds-data-table-row[data-selected] {
+  .vds-data-table-row[aria-selected="true"] {
     --data-table-row-bg: var(--data-table-row-bg-selected);
   }
-  .vds-data-table-row[data-selected]:hover {
+  .vds-data-table-row[aria-selected="true"]:hover {
     --data-table-row-bg: var(--data-table-row-bg-selected-hover);
   }
 

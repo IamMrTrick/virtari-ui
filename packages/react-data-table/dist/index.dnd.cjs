@@ -1746,7 +1746,6 @@ var DataTableRow = react.forwardRef(
         role: "row",
         "aria-selected": selected || void 0,
         "aria-rowindex": row.index + 1,
-        "data-selected": boolAttr(selected),
         "data-expanded": boolAttr(expanded),
         "data-pinned": pinned,
         "data-index": row.index,

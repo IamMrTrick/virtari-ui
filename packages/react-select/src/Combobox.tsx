@@ -285,9 +285,6 @@ export function ComboboxTrigger({
         data-size={size}
         data-appearance={appearance}
         data-state={open ? "open" : "closed"}
-        data-disabled={disabled ? "true" : undefined}
-        data-invalid={invalid ? "true" : undefined}
-        data-loading={loading ? "true" : undefined}
         data-placeholder={!hasValue ? "" : undefined}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
@@ -686,8 +683,6 @@ export function ComboboxItem({
       aria-disabled={disabled || undefined}
       className={cn("vds-combobox-item", className)}
       data-highlighted={highlighted ? "true" : undefined}
-      data-selected={selected ? "true" : undefined}
-      data-disabled={disabled ? "true" : undefined}
       onPointerDown={(e) => e.preventDefault()}
       onMouseMove={(e) => {
         onMouseMove?.(e);

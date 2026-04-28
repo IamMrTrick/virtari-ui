@@ -10,7 +10,7 @@
     max-inline-size: 100%;
     direction: ltr;
 
-    &[data-disabled] {
+    &[aria-disabled="true"] {
       opacity: 0.5;
       pointer-events: none;
     }

@@ -464,17 +464,11 @@
     white-space: inherit;
   }
 
-  .vds-button-label:has(> svg:only-child) {
+  .vds-button[data-icon-only] .vds-button-label {
     transform: none;
   }
 
-  /* Icon-only: auto-detected via :has(), or when spinner is the only extra child in loading state */
-  .vds-button:has(> .vds-button-content > .vds-button-section:only-child),
-  .vds-button:has(> .vds-button-content > .vds-button-label:only-child > svg:only-child),
-  .vds-button:has(> svg:only-child),
-  .vds-button:has(> .vds-button-spinner:first-child + svg:last-child),
-  .vds-button:has(> .vds-button-spinner:first-child + .vds-button-content > .vds-button-section:only-child),
-  .vds-button:has(> .vds-button-spinner:first-child + .vds-button-content > .vds-button-label:only-child > svg:only-child) {
+  .vds-button[data-icon-only] {
     padding-inline: 0;
     aspect-ratio: 1;
     --button-min-width: var(--button-height);
@@ -484,13 +478,11 @@
     inline-size: 100%;
   }
 
-  .vds-button[data-loading] {
-    color: transparent;
+  .vds-button[aria-busy="true"] {
     pointer-events: none;
   }
 
-  .vds-button[data-loading] > .vds-button-section,
-  .vds-button[data-loading] > :not(.vds-button-spinner) {
+  .vds-button[aria-busy="true"] > .vds-button-content {
     visibility: hidden;
   }
 
@@ -1661,7 +1653,7 @@
     /* ── Geometry ── */
     --radio-size: 1.125rem;
     --radio-dot-size: 0.5rem;
-    --radio-indicator-offset: var(--vds-control-indicator-offset, 0.0625rem);
+    --radio-indicator-offset: 0;
     --radio-border-width: 2px;
 
     /* ── Motion ── */
@@ -2393,6 +2385,21 @@
     outline-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
   }
 }
+@keyframes vds-control-pop {
+  0%   { scale: 0.86; }
+  62%  { scale: 1.12; }
+  100% { scale: 1; }
+}
+@keyframes vds-radio-dot-spring {
+  0%   { opacity: 0; scale: 0; }
+  46%  { opacity: 1; scale: 1.42; }
+  72%  { scale: 0.86; }
+  100% { scale: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes vds-control-pop        { 0% { scale: 0.86; } 100% { scale: 1; } }
+  @keyframes vds-radio-dot-spring   { 0% { opacity: 0; scale: 0; } 100% { opacity: 1; scale: 1; } }
+}
 @layer components {
   /* =========================================================================
    * Atomic radio — circular selector with inner dot.
@@ -2412,11 +2419,16 @@
     color: var(--radio-dot-color);
     cursor: pointer;
     transition:
-      background-color var(--radio-transition-duration)
-        var(--radio-transition-easing),
-      border-color var(--radio-transition-duration)
-        var(--radio-transition-easing),
-      box-shadow var(--radio-transition-duration) var(--radio-transition-easing);
+      background-color var(--radio-transition-duration) var(--radio-transition-easing),
+      border-color var(--radio-transition-duration) var(--radio-transition-easing),
+      box-shadow var(--radio-transition-duration) var(--radio-transition-easing),
+      scale 180ms var(--vds-ease-spring);
+  }
+
+  /* ── Active press ── */
+  .vds-radio-item:active:not(:disabled) {
+    scale: 0.86;
+    transition: scale 30ms linear;
   }
 
   /* ── Hover (unchecked) ── */
@@ -2429,6 +2441,7 @@
   .vds-radio-item[data-state="checked"] {
     background-color: var(--radio-bg-checked);
     border-color: var(--radio-border-color-checked);
+    animation: vds-control-pop 300ms var(--vds-ease-spring);
   }
 
   .vds-radio-item[data-state="checked"]:hover:not(:disabled) {
@@ -2465,9 +2478,7 @@
     block-size: var(--radio-dot-size);
     border-radius: var(--vds-radius-full, 9999px);
     background-color: var(--radio-dot-color);
-    transform: translateY(var(--radio-indicator-offset));
-    animation: vds-scale-in var(--radio-transition-duration)
-      var(--radio-transition-easing);
+    animation: vds-radio-dot-spring 360ms var(--vds-ease-spring);
   }
 
   /* =========================================================================
@@ -2577,6 +2588,9 @@
     opacity: 0.7;
   }
 }
+[data-vds-no-micro] .vds-radio-item:active             { scale: 1; transition: none; }
+[data-vds-no-micro] .vds-radio-item[data-state="checked"] { animation: none; }
+[data-vds-no-micro] .vds-radio-dot                        { animation: none; }
 @layer design-system.components {
   /* ─────────────────────────────────────────────
    * DateField — tokens
@@ -3078,7 +3092,7 @@
     inset-inline: var(--vds-space-1, 0.25rem);
     inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2) + var(--time-picker-wheel-header-offset));
     block-size: var(--time-picker-wheel-item-height);
-    border-radius: var(--vds-radius-md, 0.375rem);
+    border-radius: var(--vds-radius-4, 0.375rem);
     background: var(--time-picker-wheel-selection-bg);
     pointer-events: none;
   }
@@ -3146,7 +3160,7 @@
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
     scroll-padding-block: calc((var(--time-picker-wheel-height) - var(--time-picker-wheel-item-height)) / 2);
-    border-radius: var(--vds-radius-sm, 0.25rem);
+    border-radius: var(--vds-radius-2, 0.25rem);
     scrollbar-width: none;
     touch-action: pan-y;
     cursor: grab;
@@ -3222,7 +3236,7 @@
     outline: none;
   }
 
-  .vds-time-wheel-item[data-selected="true"] {
+  .vds-time-wheel-item[aria-selected="true"] {
     color: var(--time-picker-wheel-selected-text);
     background: transparent;
     transform: scale(1.08);

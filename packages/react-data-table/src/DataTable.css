@@ -1041,7 +1041,7 @@
       background-color var(--data-table-transition-duration)
         var(--data-table-transition-easing);
   }
-  .vds-data-table-board-card[data-selected] {
+  .vds-data-table-board-card[aria-selected="true"] {
     border-color: var(--vds-color-primary-solid, #6366f1);
     background-color: var(--vds-color-primary-bg, #eef2ff);
   }
@@ -1088,7 +1088,7 @@
   .vds-data-table-list-item:hover {
     background-color: var(--data-table-row-bg-hover);
   }
-  .vds-data-table-list-item[data-selected] {
+  .vds-data-table-list-item[aria-selected="true"] {
     background-color: var(--data-table-row-bg-selected);
   }
   .vds-data-table-list-primary {

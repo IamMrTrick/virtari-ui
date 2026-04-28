@@ -36,8 +36,6 @@ function SelectTrigger({
       className: cn("vds-select-trigger", className),
       "data-size": size,
       "data-appearance": appearance,
-      "data-invalid": invalid ? "true" : void 0,
-      "data-loading": loading ? "true" : void 0,
       "aria-invalid": invalid || void 0,
       "aria-busy": loading || void 0,
       ...props,
@@ -616,9 +614,6 @@ function ComboboxTrigger({
       "data-size": size,
       "data-appearance": appearance,
       "data-state": open ? "open" : "closed",
-      "data-disabled": disabled ? "true" : void 0,
-      "data-invalid": invalid ? "true" : void 0,
-      "data-loading": loading ? "true" : void 0,
       "data-placeholder": !hasValue ? "" : void 0,
       onClick: handleClick,
       onKeyDown: handleKeyDown,
@@ -919,8 +914,6 @@ function ComboboxItem({
       "aria-disabled": disabled || void 0,
       className: cn("vds-combobox-item", className),
       "data-highlighted": highlighted ? "true" : void 0,
-      "data-selected": selected ? "true" : void 0,
-      "data-disabled": disabled ? "true" : void 0,
       onPointerDown: (e) => e.preventDefault(),
       onMouseMove: (e) => {
         onMouseMove?.(e);

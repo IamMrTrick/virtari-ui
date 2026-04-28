@@ -476,7 +476,7 @@
     outline: none;
   }
 
-  .vds-time-wheel-item[data-selected="true"] {
+  .vds-time-wheel-item[aria-selected="true"] {
     color: var(--time-picker-wheel-selected-text);
     background: transparent;
     transform: scale(1.08);

@@ -167,9 +167,6 @@ export function TreeViewItem({
       aria-expanded={hasChildren ? isExpanded : undefined}
       aria-selected={selectionMode !== "none" ? isSelected : undefined}
       aria-disabled={disabled || undefined}
-      data-selected={isSelected || undefined}
-      data-expanded={isExpanded || undefined}
-      data-disabled={disabled || undefined}
       data-level={level}
       className={cn("vds-tree-view-item", className)}
       {...props}

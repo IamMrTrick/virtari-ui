@@ -1191,7 +1191,6 @@ export const DataTableRow = forwardRef<HTMLTableRowElement, DataTableRowProps>(
         role="row"
         aria-selected={selected || undefined}
         aria-rowindex={row.index + 1}
-        data-selected={boolAttr(selected)}
         data-expanded={boolAttr(expanded)}
         data-pinned={pinned}
         data-index={row.index}

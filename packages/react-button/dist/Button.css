@@ -461,17 +461,11 @@
     white-space: inherit;
   }
 
-  .vds-button-label:has(> svg:only-child) {
+  .vds-button[data-icon-only] .vds-button-label {
     transform: none;
   }
 
-  /* Icon-only: auto-detected via :has(), or when spinner is the only extra child in loading state */
-  .vds-button:has(> .vds-button-content > .vds-button-section:only-child),
-  .vds-button:has(> .vds-button-content > .vds-button-label:only-child > svg:only-child),
-  .vds-button:has(> svg:only-child),
-  .vds-button:has(> .vds-button-spinner:first-child + svg:last-child),
-  .vds-button:has(> .vds-button-spinner:first-child + .vds-button-content > .vds-button-section:only-child),
-  .vds-button:has(> .vds-button-spinner:first-child + .vds-button-content > .vds-button-label:only-child > svg:only-child) {
+  .vds-button[data-icon-only] {
     padding-inline: 0;
     aspect-ratio: 1;
     --button-min-width: var(--button-height);
@@ -481,13 +475,11 @@
     inline-size: 100%;
   }
 
-  .vds-button[data-loading] {
-    color: transparent;
+  .vds-button[aria-busy="true"] {
     pointer-events: none;
   }
 
-  .vds-button[data-loading] > .vds-button-section,
-  .vds-button[data-loading] > :not(.vds-button-spinner) {
+  .vds-button[aria-busy="true"] > .vds-button-content {
     visibility: hidden;
   }
 

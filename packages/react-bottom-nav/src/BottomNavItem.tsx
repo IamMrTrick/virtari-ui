@@ -74,7 +74,6 @@ export const BottomNavItem = forwardRef<HTMLElement, BottomNavItemProps>(
     const sharedProps = {
       className: cn("vds-bottom-nav__item", className),
       "data-active": isActive ? ("true" as const) : undefined,
-      "data-disabled": disabled ? ("true" as const) : undefined,
       "aria-current": isActive && isAnchor ? ("page" as const) : undefined,
       "aria-disabled": disabled || undefined,
       onClick: handleClick,

@@ -188,20 +188,20 @@
   /* ─────────────────────────────────────────────
    * 4. States
    * ───────────────────────────────────────────── */
-  .vds-combobox-trigger[data-invalid="true"] {
+  .vds-combobox-trigger[aria-invalid="true"] {
     --combobox-trigger-border-color: var(--vds-color-danger-solid, #ef4444);
     --combobox-trigger-border-color-hover: var(--vds-color-danger-solid-hover, #dc2626);
     --combobox-trigger-focus-ring-color: var(--vds-color-danger-solid, #ef4444);
     --combobox-trigger-focus-border-color: var(--vds-color-danger-solid, #ef4444);
   }
-  .vds-combobox-trigger[data-loading="true"] {
+  .vds-combobox-trigger[aria-busy="true"] {
     --combobox-trigger-icon-opacity: 0.6;
   }
   .vds-combobox-trigger[data-placeholder] {
     --combobox-trigger-text-color: var(--combobox-trigger-placeholder-color);
     --combobox-trigger-icon-opacity: 0.7;
   }
-  .vds-combobox-item[data-disabled="true"] {
+  .vds-combobox-item[aria-disabled="true"] {
     --combobox-item-text-color: var(--vds-color-text-disabled, #9ca3af);
   }
 }

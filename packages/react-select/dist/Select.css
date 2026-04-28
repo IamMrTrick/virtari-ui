@@ -51,7 +51,7 @@
     --select-content-border-width: 1px;
     --select-content-radius: var(--vds-radius-select-content, var(--vds-radius-element, 0.5rem));
     --select-content-shadow: var(--vds-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
-    --select-content-padding-block: var(--vds-space-1, 0.25rem);
+    --select-content-padding-block: 0;
     --select-content-z-index: var(--vds-z-dropdown, 1500);
 
     --select-content-transition-duration: var(--vds-duration-fast, 100ms);
@@ -182,7 +182,7 @@
    * ───────────────────────────────────────────── */
 
   /* Invalid (form error) */
-  .vds-select-trigger[data-invalid="true"] {
+  .vds-select-trigger[aria-invalid="true"] {
     --select-trigger-border-color: var(--vds-color-danger-solid, #ef4444);
     --select-trigger-border-color-hover: var(--vds-color-danger-solid-hover, #dc2626);
     --select-trigger-focus-ring-color: var(--vds-color-danger-solid, #ef4444);
@@ -190,7 +190,7 @@
   }
 
   /* Loading — slightly dim chevron, trigger stays interactive enough to close */
-  .vds-select-trigger[data-loading="true"] {
+  .vds-select-trigger[aria-busy="true"] {
     --select-trigger-icon-opacity: 0.6;
   }
 
@@ -434,7 +434,8 @@
       background-color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
       border-color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
       box-shadow var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
-      color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing);
+      color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
+      scale 140ms var(--select-trigger-transition-easing);
   }
 
   .vds-select-trigger:hover:not(:disabled) {
@@ -448,13 +449,21 @@
     border-color: var(--select-trigger-focus-border-color);
   }
 
+  .vds-select-trigger:active:not(:disabled):not([data-disabled]) {
+    scale: 0.992;
+    transition: scale 60ms var(--select-trigger-transition-easing);
+  }
+}
+[data-vds-no-micro] .vds-select-trigger:active { scale: 1; transition: none; }
+@layer design-system.components {
+
   .vds-select-trigger:disabled,
   .vds-select-trigger[data-disabled] {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .vds-select-trigger[data-loading="true"] {
+  .vds-select-trigger[aria-busy="true"] {
     cursor: progress;
   }
 

@@ -219,7 +219,7 @@
   /* ─────────────────────────────────────────────
    * 7. Disabled state
    * ───────────────────────────────────────────── */
-  .vds-chip[data-disabled="true"] {
+  .vds-chip[aria-disabled="true"] {
     --chip-background: var(--vds-color-bg-disabled, #f3f4f6);
     --chip-border-color: var(--vds-color-border-disabled, #e5e7eb);
     --chip-text-color: var(--vds-color-text-disabled, #9ca3af);

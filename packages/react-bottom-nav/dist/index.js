@@ -276,7 +276,6 @@ var BottomNavItem = forwardRef(
     const sharedProps = {
       className: cn("vds-bottom-nav__item", className),
       "data-active": isActive ? "true" : void 0,
-      "data-disabled": disabled ? "true" : void 0,
       "aria-current": isActive && isAnchor ? "page" : void 0,
       "aria-disabled": disabled || void 0,
       onClick: handleClick,

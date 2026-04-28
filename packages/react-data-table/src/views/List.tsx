@@ -85,7 +85,6 @@ function DataTableListItem({
   return (
     <div
       role="listitem"
-      data-selected={boolAttr(selected)}
       data-row-id={row.id}
       aria-selected={selected || undefined}
       className="vds-data-table-list-item"
