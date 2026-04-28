@@ -576,7 +576,7 @@ function IconOnlySection() {
   return (
     <Section
       title="Icon-only buttons"
-      description="Auto-detected via :has(svg:only-child) — no prop needed. The button becomes square (aspect-ratio 1) and padding collapses. Always pass an aria-label."
+      description="Auto-detected from non-text content. No prop needed. The button becomes square (aspect-ratio 1) and padding collapses. Always pass an aria-label."
     >
       <Row>
         {SIZES.map((s) => (
@@ -899,7 +899,7 @@ function AccessibilitySection() {
       <ul className="docs-prose" style={{ paddingInlineStart: "1.25em" }}>
         <li>
           <strong>Icon-only buttons</strong> must receive an <code>aria-label</code>. The auto
-          <code>:has(svg:only-child)</code> styling does not provide an accessible name.
+          square styling does not provide an accessible name.
         </li>
         <li>
           <strong>Loading</strong> sets <code>aria-disabled</code> and renders a polite{" "}

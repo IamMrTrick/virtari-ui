@@ -39,6 +39,15 @@ pnpm run dev
 - **RTL.** Only add `:dir(rtl) { … }` blocks when logical props can't express the rule (e.g. directional icons). The default layout must already flip correctly via logical props.
 - **TypeScript.** Strict mode; avoid `any`; prefer discriminated unions over booleans for variants.
 
+### Selector audit rules
+
+- **Always anchor selectors to one stable root class.** Prefer `.vds-button[data-variant="outline"]`, not bare `[data-variant="outline"]`.
+- **Use `data-*` only for true styling axes.** Good: variant, size, tone, orientation, loading, open/closed. Bad: presentational one-offs that should just be a class or local wrapper.
+- **Keep selectors shallow.** Target the component root plus at most one descendant in normal cases. If a selector starts encoding DOM ancestry, stop and add an explicit class or `data-*`.
+- **Prefer explicit attributes over relational selectors.** If styling depends on structure detection, add a runtime hook like `data-icon-only` instead of `:has(...)` when possible.
+- **Keep DOM and CSS contracts identical across render paths.** Polymorphic branches like `asChild` must emit the same internal wrappers that the CSS expects.
+- **Reach for `aria-*` only when it is semantic state.** `aria-disabled`, `aria-expanded`, `aria-pressed` are good styling hooks because they already exist for accessibility; don't invent ARIA for purely visual state.
+
 ## Local build
 
 ```bash
