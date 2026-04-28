@@ -47,7 +47,6 @@ export function Chip({
       data-size={size}
       data-appearance={appearance}
       data-interactive={interactive ? "true" : undefined}
-      data-disabled={disabled ? "true" : undefined}
       aria-disabled={disabled || undefined}
       {...props}
     />

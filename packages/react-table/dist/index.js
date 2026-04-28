@@ -93,7 +93,6 @@ function TableRow({
     {
       ref,
       className: cn("vds-table__tr", className),
-      "data-selected": selected || void 0,
       "aria-selected": selected || void 0,
       ...props
     }

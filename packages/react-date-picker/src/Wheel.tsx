@@ -290,7 +290,6 @@ export function ScrollWheel({
               className="vds-time-wheel-item"
               role="option"
               data-value={itemValue}
-              data-selected={selected ? "true" : undefined}
               data-distance={distance}
               aria-selected={selected}
               aria-label={`${label} ${formatValue(itemValue)}`}

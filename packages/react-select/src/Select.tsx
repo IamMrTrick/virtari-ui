@@ -67,8 +67,6 @@ export function SelectTrigger({
       className={cn("vds-select-trigger", className)}
       data-size={size}
       data-appearance={appearance}
-      data-invalid={invalid ? "true" : undefined}
-      data-loading={loading ? "true" : undefined}
       aria-invalid={invalid || undefined}
       aria-busy={loading || undefined}
       {...props}

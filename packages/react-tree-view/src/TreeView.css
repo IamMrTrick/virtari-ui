@@ -44,17 +44,17 @@
   }
 
   /* ── Selected ── */
-  .vds-tree-view-item[data-selected] > .vds-tree-view-row {
+  .vds-tree-view-item[aria-selected="true"] > .vds-tree-view-row {
     background-color: var(--tree-selected-bg);
     color: var(--tree-selected-color);
   }
 
-  .vds-tree-view-item[data-selected] > .vds-tree-view-row:hover {
+  .vds-tree-view-item[aria-selected="true"] > .vds-tree-view-row:hover {
     background-color: var(--tree-selected-bg-hover);
   }
 
   /* ── Disabled ── */
-  .vds-tree-view-item[data-disabled] > .vds-tree-view-row {
+  .vds-tree-view-item[aria-disabled="true"] > .vds-tree-view-row {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;

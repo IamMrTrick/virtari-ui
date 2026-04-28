@@ -100,11 +100,11 @@
       transform var(--item-transition-duration) var(--item-transition-easing);
   }
 
-  .vds-bottom-nav__item:hover:not([data-disabled="true"]) {
+  .vds-bottom-nav__item:hover:not(:disabled):not([aria-disabled="true"]) {
     background-color: var(--item-background-hover);
   }
 
-  .vds-bottom-nav__item:active:not([data-disabled="true"]) {
+  .vds-bottom-nav__item:active:not(:disabled):not([aria-disabled="true"]) {
     background-color: var(--item-background-active);
     transform: scale(var(--item-press-scale));
   }
@@ -129,7 +129,8 @@
     color: var(--item-color-active);
   }
 
-  .vds-bottom-nav__item[data-disabled="true"] {
+  .vds-bottom-nav__item:disabled,
+  .vds-bottom-nav__item[aria-disabled="true"] {
     cursor: not-allowed;
     pointer-events: none;
     opacity: 0.5;

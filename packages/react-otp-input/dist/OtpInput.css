@@ -32,7 +32,7 @@
     direction: ltr;
   }
 
-    .vds-otp-input[data-disabled] {
+    .vds-otp-input[aria-disabled="true"] {
       opacity: 0.5;
       pointer-events: none;
     }

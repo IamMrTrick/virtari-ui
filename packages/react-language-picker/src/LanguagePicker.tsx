@@ -358,12 +358,11 @@ export function LanguagePicker({
           data-size={size}
           data-appearance={appearance}
           data-state={drawerOpen ? "open" : "closed"}
-          data-disabled={disabled ? "true" : undefined}
-          data-invalid={invalid ? "true" : undefined}
           data-placeholder={!selectedEntry ? "" : undefined}
           aria-haspopup="dialog"
           aria-expanded={drawerOpen}
           aria-controls={drawerOpen ? drawerListId : undefined}
+          aria-invalid={invalid || undefined}
           disabled={disabled}
           onClick={() => handleDrawerOpenChange(true)}
         >
@@ -448,7 +447,6 @@ export function LanguagePicker({
                         role="option"
                         aria-selected={selected}
                         className="vds-language-picker-drawer-option"
-                        data-selected={selected ? "true" : undefined}
                         onClick={() => setDrawerDraftValue(item.value)}
                       >
                         <LanguagePickerOption entry={entry} showNative={showNativeName} />

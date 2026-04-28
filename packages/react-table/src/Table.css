@@ -106,19 +106,19 @@
   }
 
   /* Selected row — left stripe + tinted bg. */
-  .vds-table__tr[data-selected="true"] {
+  .vds-table__tr[aria-selected="true"] {
     background-color: var(--table-row-bg-selected);
   }
   .vds-table[data-hoverable="true"]
     .vds-table__tbody
-    .vds-table__tr[data-selected="true"]:hover {
+    .vds-table__tr[aria-selected="true"]:hover {
     background-color: var(--table-row-bg-selected-hover);
   }
-  .vds-table__tr[data-selected="true"] > :first-child {
+  .vds-table__tr[aria-selected="true"] > :first-child {
     box-shadow: inset 3px 0 0 0 var(--table-accent-color);
   }
   /* Flip the stripe in RTL. */
-  [dir="rtl"] .vds-table__tr[data-selected="true"] > :first-child {
+  [dir="rtl"] .vds-table__tr[aria-selected="true"] > :first-child {
     box-shadow: inset -3px 0 0 0 var(--table-accent-color);
   }
 
@@ -239,10 +239,10 @@
     z-index: 3;
   }
   /* Selected rows keep their selected tint under sticky. */
-  .vds-table__tr[data-selected="true"] > .vds-table__td[data-sticky="start"],
-  .vds-table__tr[data-selected="true"] > .vds-table__td[data-sticky="end"],
-  .vds-table__tr[data-selected="true"] > .vds-table__th[data-sticky="start"],
-  .vds-table__tr[data-selected="true"] > .vds-table__th[data-sticky="end"] {
+  .vds-table__tr[aria-selected="true"] > .vds-table__td[data-sticky="start"],
+  .vds-table__tr[aria-selected="true"] > .vds-table__td[data-sticky="end"],
+  .vds-table__tr[aria-selected="true"] > .vds-table__th[data-sticky="start"],
+  .vds-table__tr[aria-selected="true"] > .vds-table__th[data-sticky="end"] {
     background-color: var(--table-row-bg-selected);
   }
   /* Striped rows keep zebra under sticky. */

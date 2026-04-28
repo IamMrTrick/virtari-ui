@@ -63,7 +63,7 @@
     cursor: not-allowed;
   }
 
-  .vds-select-trigger[data-loading="true"] {
+  .vds-select-trigger[aria-busy="true"] {
     cursor: progress;
   }
 

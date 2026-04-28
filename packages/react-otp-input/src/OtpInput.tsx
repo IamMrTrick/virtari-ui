@@ -239,9 +239,7 @@ export function OtpInput({
       aria-invalid={invalid || undefined}
       className={cn("vds-otp-input", className)}
       data-size={inputSize}
-      data-disabled={disabled || undefined}
       data-readonly={readOnly || undefined}
-      data-invalid={invalid || undefined}
       data-complete={sanitizedValue.length === length || undefined}
       dir={dir}
       {...rootProps}

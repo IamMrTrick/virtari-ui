@@ -217,7 +217,6 @@ export function TableRow({
     <tr
       ref={ref}
       className={cn("vds-table__tr", className)}
-      data-selected={selected || undefined}
       aria-selected={selected || undefined}
       {...props}
     />

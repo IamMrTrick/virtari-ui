@@ -121,11 +121,11 @@
     inline-size: 100%;
   }
 
-  .vds-button[data-loading] {
+  .vds-button[aria-busy="true"] {
     pointer-events: none;
   }
 
-  .vds-button[data-loading] > .vds-button-content {
+  .vds-button[aria-busy="true"] > .vds-button-content {
     visibility: hidden;
   }
 

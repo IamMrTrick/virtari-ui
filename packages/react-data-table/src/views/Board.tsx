@@ -75,7 +75,6 @@ function DataTableBoardCard({
   return (
     <article
       role="listitem"
-      data-selected={boolAttr(selected)}
       data-row-id={row.id}
       aria-selected={selected || undefined}
       className="vds-data-table-board-card"
