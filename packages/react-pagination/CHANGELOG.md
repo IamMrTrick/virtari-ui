@@ -1,5 +1,12 @@
 # @virtari-packages/react-pagination
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @virtari-packages/react-select@0.4.1
+
 ## 0.2.0
 
 ### Minor Changes

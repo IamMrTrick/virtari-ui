@@ -1,5 +1,22 @@
 # @virtari-packages/react-language-picker
 
+## 0.4.1
+
+### Patch Changes
+
+- Rolling update 4 — react-flow debut + editor power-up + form-input polish.
+  - **react-flow:** new package — flow canvas, badge edges, persistence hook, layout helper, tokens.
+  - **react-editor:** EditorTableHoverActions + EditorToolbar overhaul, context/utils/types expansion, theme additions.
+  - **react-input / react-number-input / react-textarea:** input CSS refinements.
+  - **react-language-picker:** popover/menu CSS additions.
+  - **react-select:** Combobox + Select CSS + token tweaks.
+  - **react-switch:** Switch CSS + drag hook tuning.
+
+- Updated dependencies [b9889b9]
+- Updated dependencies
+  - @virtari-packages/react-button@0.3.1
+  - @virtari-packages/react-select@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes

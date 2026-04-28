@@ -1,5 +1,12 @@
 # @virtari-packages/react-carousel
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [b9889b9]
+  - @virtari-packages/react-button@0.3.1
+
 ## 0.2.0
 
 ### Minor Changes

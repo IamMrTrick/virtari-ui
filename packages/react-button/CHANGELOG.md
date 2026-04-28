@@ -1,5 +1,11 @@
 # @virtari-packages/react-button
 
+## 0.3.1
+
+### Patch Changes
+
+- b9889b9: Align the Button DOM contract across `asChild` and regular rendering, and replace inferred icon-only styling with an explicit internal state hook.
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,27 @@
 # @virtari-packages/react-editor
 
+## 0.3.0
+
+### Minor Changes
+
+- Rolling update 4 — react-flow debut + editor power-up + form-input polish.
+  - **react-flow:** new package — flow canvas, badge edges, persistence hook, layout helper, tokens.
+  - **react-editor:** EditorTableHoverActions + EditorToolbar overhaul, context/utils/types expansion, theme additions.
+  - **react-input / react-number-input / react-textarea:** input CSS refinements.
+  - **react-language-picker:** popover/menu CSS additions.
+  - **react-select:** Combobox + Select CSS + token tweaks.
+  - **react-switch:** Switch CSS + drag hook tuning.
+
+### Patch Changes
+
+- Updated dependencies [b9889b9]
+- Updated dependencies
+  - @virtari-packages/react-button@0.3.1
+  - @virtari-packages/react-input@0.3.1
+  - @virtari-packages/react-select@0.4.1
+  - @virtari-packages/react-textarea@0.3.1
+  - @virtari-packages/react-color-picker@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

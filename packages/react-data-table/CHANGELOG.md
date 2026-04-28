@@ -1,5 +1,17 @@
 # @virtari-packages/react-data-table
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [b9889b9]
+- Updated dependencies
+  - @virtari-packages/react-button@0.3.1
+  - @virtari-packages/react-input@0.3.1
+  - @virtari-packages/react-select@0.4.1
+  - @virtari-packages/react-switch@0.3.1
+  - @virtari-packages/react-pagination@0.2.1
+
 ## 0.4.0
 
 ### Minor Changes
