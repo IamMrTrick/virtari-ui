@@ -1,5 +1,13 @@
 # @virtari-packages/react-color-picker
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [bdd9b44]
+  - @virtari-packages/react-button@0.4.0
+  - @virtari-packages/react-select@0.5.0
+
 ## 0.2.1
 
 ### Patch Changes

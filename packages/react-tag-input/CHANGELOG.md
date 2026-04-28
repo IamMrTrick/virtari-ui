@@ -1,5 +1,12 @@
 # @virtari-packages/react-tag-input
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [bdd9b44]
+  - @virtari-packages/react-chip@0.4.0
+
 ## 0.2.0
 
 ### Minor Changes

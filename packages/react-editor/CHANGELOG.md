@@ -1,5 +1,14 @@
 # @virtari-packages/react-editor
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [bdd9b44]
+  - @virtari-packages/react-button@0.4.0
+  - @virtari-packages/react-select@0.5.0
+  - @virtari-packages/react-color-picker@0.2.2
+
 ## 0.3.0
 
 ### Minor Changes
