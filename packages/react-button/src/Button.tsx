@@ -1,5 +1,11 @@
 import { cn } from "@virtari-packages/utils";
-import { forwardRef, useContext, type ReactNode } from "react";
+import {
+  Children,
+  forwardRef,
+  isValidElement,
+  useContext,
+  type ReactNode,
+} from "react";
 import { Slot, Slottable } from "@radix-ui/react-slot";
 import { ButtonGroupContext } from "./context";
 
@@ -73,6 +79,17 @@ export interface ButtonProps
   animation?: ButtonAnimation;
 }
 
+function hasReadableText(node: ReactNode): boolean {
+  return Children.toArray(node).some((child) => {
+    if (typeof child === "string") return child.trim().length > 0;
+    if (typeof child === "number") return true;
+    if (isValidElement<{ children?: ReactNode }>(child)) {
+      return hasReadableText(child.props.children);
+    }
+    return false;
+  });
+}
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button({
   color: colorProp,
   variant: variantProp,
@@ -102,23 +119,34 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   // Backward compat: variant="destructive" -> color="danger" + variant="solid".
   const resolvedColor = variant === "destructive" ? "danger" : color;
   const resolvedVariant = variant === "destructive" ? "solid" : variant;
+  const hasTextContent = hasReadableText(children);
+  const hasBareVisualChild = children != null && !hasTextContent;
+  const visualSlotCount =
+    Number(leftSection != null) +
+    Number(rightSection != null) +
+    Number(hasBareVisualChild);
+  const iconOnly = visualSlotCount === 1 && !hasTextContent;
 
   const buttonContent = (
     <>
+      <span className="vds-button-content">
+        {leftSection && (
+          <span className="vds-button-section" data-position="start">
+            {leftSection}
+          </span>
+        )}
+        {children != null ? (
+          <span className="vds-button-label">
+            {asChild ? <Slottable>{children}</Slottable> : children}
+          </span>
+        ) : null}
+        {rightSection && (
+          <span className="vds-button-section" data-position="end">
+            {rightSection}
+          </span>
+        )}
+      </span>
       {loading && <span className="vds-button-spinner" aria-hidden="true" />}
-      {leftSection && (
-        <span className="vds-button-section" data-position="start">
-          {leftSection}
-        </span>
-      )}
-      {children != null ? (
-        <span className="vds-button-label">{children}</span>
-      ) : null}
-      {rightSection && (
-        <span className="vds-button-section" data-position="end">
-          {rightSection}
-        </span>
-      )}
     </>
   );
 
@@ -135,22 +163,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
           data-full-width={fullWidth || undefined}
           data-effect={effect || undefined}
           data-animation={animation || undefined}
+          data-icon-only={iconOnly || undefined}
+          aria-busy={loading || undefined}
           aria-disabled={isDisabled || undefined}
           aria-label={loading ? loadingText : undefined}
           {...props}
         >
-          {loading && <span className="vds-button-spinner" aria-hidden="true" />}
-          {leftSection && (
-            <span className="vds-button-section" data-position="start">
-              {leftSection}
-            </span>
-          )}
-          {children != null ? <Slottable>{children}</Slottable> : null}
-          {rightSection && (
-            <span className="vds-button-section" data-position="end">
-              {rightSection}
-            </span>
-          )}
+          {buttonContent}
         </Slot>
       ) : (
         <button
@@ -163,12 +182,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
           data-full-width={fullWidth || undefined}
           data-effect={effect || undefined}
           data-animation={animation || undefined}
+          data-icon-only={iconOnly || undefined}
           disabled={isDisabled}
+          aria-busy={loading || undefined}
           aria-disabled={isDisabled || undefined}
           aria-label={loading ? loadingText : undefined}
           {...props}
         >
-          <span className="vds-button-content">{buttonContent}</span>
+          {buttonContent}
         </button>
       )}
       {loading && (

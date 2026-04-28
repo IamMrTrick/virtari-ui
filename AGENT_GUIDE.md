@@ -147,6 +147,14 @@ export function SignIn() {
 
 ---
 
+### Selector audit rules
+
+- **Anchor selectors to one root class.** Prefer `.vds-button[data-variant="outline"]`, not bare attribute selectors.
+- **Use `data-*` only for real styling axes.** Variant, size, tone, orientation, loading, semantic state: yes. One-off presentational quirks: no.
+- **Keep selectors shallow.** Root plus at most one descendant in normal cases. If a selector starts encoding ancestry, add an explicit class or state hook instead.
+- **Prefer explicit hooks over inferred structure.** If the component can compute a state such as icon-only, emit `data-icon-only` instead of relying on `:has(...)`.
+- **Keep the DOM contract stable across render paths.** `asChild` and non-`asChild` branches should emit the same wrappers the CSS expects.
+
 ## 6. Theming with tokens
 
 All visual atoms read from `--vds-*` CSS custom properties. Override them at the scope you want.
