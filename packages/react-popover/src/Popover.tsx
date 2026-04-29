@@ -26,6 +26,7 @@ export function Popover({ dir, ...props }: PopoverProps) {
 
 export const PopoverTrigger = PopoverPrimitive.Trigger;
 export const PopoverClose = PopoverPrimitive.Close;
+export const PopoverAnchor = PopoverPrimitive.Anchor;
 
 /* ── PopoverContent ── */
 export interface PopoverContentProps

@@ -467,6 +467,176 @@ export const playgroundInitialValue = {
     ],
     meta: { align: "left", depth: 0, order: 28 },
   },
+  "pg-h2-interactive": {
+    id: "pg-h2-interactive",
+    type: "HeadingTwo",
+    value: [
+      {
+        id: "pg-h2-interactive-el",
+        type: "heading-two",
+        children: [{ text: "Interactive blocks" }],
+        props: { nodeType: "block" },
+      },
+    ],
+    meta: { order: 29, depth: 0 },
+  },
+  "pg-tabs": {
+    id: "pg-tabs",
+    type: "Tabs",
+    value: [
+      {
+        id: "pg-tabs-container",
+        type: "tabs-container",
+        children: [
+          {
+            id: "pg-tabs-list",
+            type: "tabs-list",
+            children: [
+              {
+                id: "pg-tab-1",
+                type: "tabs-item-heading",
+                children: [{ text: "Overview" }],
+              },
+              {
+                id: "pg-tab-2",
+                type: "tabs-item-heading",
+                children: [{ text: "Details" }],
+              },
+              {
+                id: "pg-tab-3",
+                type: "tabs-item-heading",
+                children: [{ text: "Notes" }],
+              },
+            ],
+          },
+          {
+            id: "pg-tab-1-content",
+            type: "tabs-item-content",
+            children: [{ text: "Overview content — these tabs use the Virtari Tabs primitive." }],
+            props: { referenceId: "pg-tab-1" },
+          },
+          {
+            id: "pg-tab-2-content",
+            type: "tabs-item-content",
+            children: [{ text: "Details content — Radix-based active state, design-token styling." }],
+            props: { referenceId: "pg-tab-2" },
+          },
+          {
+            id: "pg-tab-3-content",
+            type: "tabs-item-content",
+            children: [{ text: "Notes content — type into any panel, switch with the heading row." }],
+            props: { referenceId: "pg-tab-3" },
+          },
+        ],
+        props: { activeTabId: "pg-tab-1", nodeType: "block" },
+      },
+    ],
+    meta: { order: 30, depth: 0 },
+  },
+  "pg-accordion": {
+    id: "pg-accordion",
+    type: "Accordion",
+    value: [
+      {
+        id: "pg-acc-list",
+        type: "accordion-list",
+        children: [
+          {
+            id: "pg-acc-1",
+            type: "accordion-list-item",
+            children: [
+              {
+                id: "pg-acc-1-h",
+                type: "accordion-list-item-heading",
+                children: [{ text: "What is the block editor?" }],
+              },
+              {
+                id: "pg-acc-1-c",
+                type: "accordion-list-item-content",
+                children: [{ text: "A Yoopta-Editor wrapped with Virtari design tokens and primitives." }],
+              },
+            ],
+            props: { isExpanded: true },
+          },
+          {
+            id: "pg-acc-2",
+            type: "accordion-list-item",
+            children: [
+              {
+                id: "pg-acc-2-h",
+                type: "accordion-list-item-heading",
+                children: [{ text: "Are these accordions interactive?" }],
+              },
+              {
+                id: "pg-acc-2-c",
+                type: "accordion-list-item-content",
+                children: [{ text: "Yes — click any heading to expand or collapse the panel below." }],
+              },
+            ],
+            props: { isExpanded: false },
+          },
+        ],
+        props: { nodeType: "block" },
+      },
+    ],
+    meta: { order: 31, depth: 0 },
+  },
+  "pg-table": {
+    id: "pg-table",
+    type: "Table",
+    value: [
+      {
+        id: "pg-tbl-root",
+        type: "table",
+        children: [
+          {
+            id: "pg-tbl-row1",
+            type: "table-row",
+            children: [
+              {
+                id: "pg-tbl-c1",
+                type: "table-data-cell",
+                children: [{ text: "Block" }],
+                props: { width: 200, asHeader: true },
+              },
+              {
+                id: "pg-tbl-c2",
+                type: "table-data-cell",
+                children: [{ text: "Description" }],
+                props: { width: 280, asHeader: true },
+              },
+              {
+                id: "pg-tbl-c3",
+                type: "table-data-cell",
+                children: [{ text: "Shortcut" }],
+                props: { width: 160, asHeader: true },
+              },
+            ],
+          },
+          {
+            id: "pg-tbl-row2",
+            type: "table-row",
+            children: [
+              { id: "pg-tbl-c4", type: "table-data-cell", children: [{ text: "Heading 1" }], props: { width: 200 } },
+              { id: "pg-tbl-c5", type: "table-data-cell", children: [{ text: "Big section heading" }], props: { width: 280 } },
+              { id: "pg-tbl-c6", type: "table-data-cell", children: [{ text: "/h1" }], props: { width: 160 } },
+            ],
+          },
+          {
+            id: "pg-tbl-row3",
+            type: "table-row",
+            children: [
+              { id: "pg-tbl-c7", type: "table-data-cell", children: [{ text: "Quote" }], props: { width: 200 } },
+              { id: "pg-tbl-c8", type: "table-data-cell", children: [{ text: "Indented quoted block" }], props: { width: 280 } },
+              { id: "pg-tbl-c9", type: "table-data-cell", children: [{ text: "/quote" }], props: { width: 160 } },
+            ],
+          },
+        ],
+        props: { headerRow: true, headerColumn: false, nodeType: "block" },
+      },
+    ],
+    meta: { order: 32, depth: 0 },
+  },
   "pg-p-end": {
     id: "pg-p-end",
     type: "Paragraph",
@@ -478,6 +648,6 @@ export const playgroundInitialValue = {
         props: { nodeType: "block" },
       },
     ],
-    meta: { order: 29, depth: 0 },
+    meta: { order: 33, depth: 0 },
   },
 } as unknown as YooptaContentValue;

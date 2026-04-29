@@ -1,75 +1,128 @@
-import { useRef, useState } from "react";
-import { BlockOptions as YooBlockOptions, useBlockActions } from "@yoopta/ui/block-options";
+import { useMemo, useRef, useState } from "react";
+import { useYooptaEditor } from "@yoopta/editor";
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from "@virtari-packages/react-popover";
+import {
+  IconCopy,
+  IconLink,
+  IconTrash,
+  IconRepeat,
+} from "@virtari-packages/react-icons";
+
 import { ActionMenu } from "./ActionMenu";
 
 type Props = {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   blockId: string | null;
   anchor?: HTMLElement | null;
 };
 
 export function BlockOptions({ open, onOpenChange, blockId, anchor }: Props) {
-  const { duplicateBlock, copyBlockLink, deleteBlock } = useBlockActions();
+  const editor = useYooptaEditor();
   const turnIntoRef = useRef<HTMLButtonElement>(null);
   const [actionMenuOpen, setActionMenuOpen] = useState(false);
 
-  const onActionMenuClose = (menuOpen: boolean) => {
-    setActionMenuOpen(menuOpen);
-    if (!menuOpen) onOpenChange?.(false);
+  const virtualRef = useMemo(
+    () => ({
+      current: {
+        getBoundingClientRect: () =>
+          anchor?.getBoundingClientRect() ?? new DOMRect(0, 0, 0, 0),
+      },
+    }),
+    [anchor],
+  );
+
+  const onDuplicate = () => {
+    if (!blockId) return;
+    editor.duplicateBlock({ blockId, focus: true });
+    onOpenChange(false);
+  };
+
+  const onCopyLink = () => {
+    if (!blockId) return;
+    if (typeof window !== "undefined" && navigator?.clipboard) {
+      const base = window.location.href.split("#")[0];
+      navigator.clipboard.writeText(`${base}#${blockId}`).catch(() => {});
+    }
+    onOpenChange(false);
+  };
+
+  const onDelete = () => {
+    if (!blockId) return;
+    editor.deleteBlock({ blockId });
+    onOpenChange(false);
+  };
+
+  const onTurnInto = () => {
+    setActionMenuOpen(true);
   };
 
   return (
     <>
-      <YooBlockOptions open={open} onOpenChange={onOpenChange} anchor={anchor}>
-        <YooBlockOptions.Content side="right" align="end">
-          <YooBlockOptions.Group>
-            <YooBlockOptions.Item
+      <Popover open={open && !actionMenuOpen} onOpenChange={onOpenChange}>
+        <PopoverAnchor virtualRef={virtualRef as never} />
+        <PopoverContent
+          side="right"
+          align="end"
+          sideOffset={8}
+          className="vds-yoo-block-options"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
+          <div className="vds-yoo-block-options-group">
+            <button
               ref={turnIntoRef}
-              onSelect={() => setActionMenuOpen(true)}
-              keepOpen
+              type="button"
+              onClick={onTurnInto}
+              className="vds-yoo-block-options-item"
             >
-              Turn into
-            </YooBlockOptions.Item>
-          </YooBlockOptions.Group>
-          <YooBlockOptions.Separator />
-          <YooBlockOptions.Group>
-            <YooBlockOptions.Item
-              onSelect={() => {
-                if (!blockId) return;
-                duplicateBlock(blockId);
-                onOpenChange?.(false);
-              }}
+              <IconRepeat size={16} />
+              <span>Turn into</span>
+            </button>
+          </div>
+          <div className="vds-yoo-block-options-separator" />
+          <div className="vds-yoo-block-options-group">
+            <button
+              type="button"
+              onClick={onDuplicate}
+              className="vds-yoo-block-options-item"
             >
-              Duplicate
-            </YooBlockOptions.Item>
-            <YooBlockOptions.Item
-              onSelect={() => {
-                if (!blockId) return;
-                copyBlockLink(blockId);
-                onOpenChange?.(false);
-              }}
+              <IconCopy size={16} />
+              <span>Duplicate</span>
+            </button>
+            <button
+              type="button"
+              onClick={onCopyLink}
+              className="vds-yoo-block-options-item"
             >
-              Copy link to block
-            </YooBlockOptions.Item>
-            <YooBlockOptions.Item
-              variant="destructive"
-              onSelect={() => {
-                if (!blockId) return;
-                deleteBlock(blockId);
-                onOpenChange?.(false);
-              }}
+              <IconLink size={16} />
+              <span>Copy link to block</span>
+            </button>
+            <button
+              type="button"
+              onClick={onDelete}
+              data-variant="danger"
+              className="vds-yoo-block-options-item"
             >
-              Delete
-            </YooBlockOptions.Item>
-          </YooBlockOptions.Group>
-        </YooBlockOptions.Content>
-      </YooBlockOptions>
+              <IconTrash size={16} />
+              <span>Delete</span>
+            </button>
+          </div>
+        </PopoverContent>
+      </Popover>
+
       <ActionMenu
-        placement="right-start"
         open={actionMenuOpen}
-        onOpenChange={onActionMenuClose}
+        onOpenChange={(o) => {
+          setActionMenuOpen(o);
+          if (!o) onOpenChange(false);
+        }}
         anchor={turnIntoRef.current}
+        placement="right-start"
+        mode={{ kind: "turnInto" }}
       />
     </>
   );
