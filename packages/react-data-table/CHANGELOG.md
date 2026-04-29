@@ -1,5 +1,13 @@
 # @virtari-packages/react-data-table
 
+## 0.5.1
+
+### Patch Changes
+
+- bcc94b9: Widen the optional `@dnd-kit/sortable` peer range to support v10 consumers without install warnings.
+- Updated dependencies [9d56d6d]
+  - @virtari-packages/react-popover@0.4.1
+
 ## 0.5.0
 
 ### Minor Changes

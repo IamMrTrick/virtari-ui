@@ -1,5 +1,13 @@
 # @virtari-packages/react-editor
 
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [9d56d6d]
+  - @virtari-packages/react-file-upload@0.2.1
+  - @virtari-packages/react-color-picker@0.2.3
+
 ## 0.3.1
 
 ### Patch Changes

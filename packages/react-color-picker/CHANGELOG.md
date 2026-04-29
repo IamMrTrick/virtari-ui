@@ -1,5 +1,12 @@
 # @virtari-packages/react-color-picker
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [9d56d6d]
+  - @virtari-packages/react-popover@0.4.1
+
 ## 0.2.2
 
 ### Patch Changes
