@@ -119,7 +119,6 @@ export const FileUploadRoot = forwardRef<HTMLDivElement, FileUploadRootProps>(
       multiple,
       disabled,
       onDrop: handleDrop,
-      noClick: true, // Trigger handles the click explicitly.
       noKeyboard: true, // Trigger owns keyboard semantics.
     });
 
@@ -247,7 +246,9 @@ export const FileUploadTrigger = forwardRef<
       disabled={isDisabled}
       onClick={(e) => {
         onClick?.(e);
-        if (!e.defaultPrevented && !isDisabled) dropzone.open();
+        if (e.defaultPrevented || isDisabled) return;
+        e.stopPropagation();
+        dropzone.open();
       }}
       {...props}
     />

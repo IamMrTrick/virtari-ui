@@ -512,17 +512,28 @@
   }
 
   /* ————————————————————————————————————————————————
-     Floating chrome
+     Floating chrome (custom, no @yoopta/ui)
      ———————————————————————————————————————————————— */
-  .yoopta-ui-floating-toolbar-content {
-    background: var(--vds-yoopta-color-surface-overlay) !important;
-    border: 1px solid var(--vds-yoopta-color-border) !important;
-    border-radius: var(--vds-yoopta-radius-popover) !important;
-    box-shadow: var(--vds-yoopta-shadow-toolbar) !important;
-    padding: var(--vds-space-1) !important;
-    color: var(--vds-yoopta-color-text) !important;
+
+  /* Chrome renders in a portal at <body>, so it cannot reach
+     `.vds-yoopta-editor`-scoped tokens. Use globals only here. */
+
+  /* Floating selection toolbar */
+  .vds-yoo-toolbar {
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    padding: var(--vds-space-1);
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-color-neutral-6);
+    border-radius: var(--vds-radius-md);
+    box-shadow: var(--vds-shadow-md);
+    color: var(--vds-color-text);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
   }
-  .yoopta-ui-floating-toolbar-content button {
+  .vds-yoo-toolbar-button {
     background: transparent;
     color: inherit;
     border: none;
@@ -535,37 +546,72 @@
     align-items: center;
     gap: var(--vds-space-1);
     min-block-size: 1.75rem;
-    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
   }
-  .yoopta-ui-floating-toolbar-content button:hover {
+  .vds-yoo-toolbar-button:hover {
     background: var(--vds-color-surface-hover);
   }
-  .yoopta-ui-floating-toolbar-content button[data-active="true"] {
+  .vds-yoo-toolbar-button[data-active] {
     background: var(--vds-color-primary-bg);
     color: var(--vds-color-primary-text);
   }
-
-  /* Style only the visible content shells, not the positioned wrappers
-     (floating-ui sets inline position/top/left on outer elements; we don't
-     touch those — only paint background/border on the inner content boxes). */
-  .yoopta-ui-slash-command-content,
-  .yoopta-ui-action-menu-list-content {
-    background: var(--vds-yoopta-color-surface-overlay) !important;
-    border: 1px solid var(--vds-yoopta-color-border) !important;
-    border-radius: var(--vds-yoopta-radius-popover) !important;
-    box-shadow: var(--vds-yoopta-shadow-popover) !important;
-    color: var(--vds-yoopta-color-text) !important;
+  .vds-yoo-toolbar-separator {
+    inline-size: 1px;
+    block-size: 1.25rem;
+    background: var(--vds-color-neutral-6);
+    margin-inline: var(--vds-space-1);
   }
-  .yoopta-ui-slash-command-content button,
-  .yoopta-ui-action-menu-list-content button,
-  .yoopta-ui-slash-command-list button,
-  .yoopta-ui-slash-command-item {
+
+  /* Action / slash menu (popover content shell) */
+  .vds-yoo-action-menu {
+    min-inline-size: 18rem;
+    max-block-size: 22rem;
+    padding: var(--vds-space-1);
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-color-neutral-6);
+    border-radius: var(--vds-radius-md);
+    box-shadow: var(--vds-shadow-lg);
+    color: var(--vds-color-text);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 70;
+  }
+  .vds-yoo-action-menu-search {
+    padding: var(--vds-space-1);
+    border-block-end: 1px solid var(--vds-color-neutral-6);
+  }
+  .vds-yoo-action-menu-input {
+    inline-size: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    padding: var(--vds-space-1) var(--vds-space-2);
+  }
+  .vds-yoo-action-menu-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--vds-space-1);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .vds-yoo-action-menu-empty {
+    padding: var(--vds-space-3);
+    color: var(--vds-color-text-muted);
+    text-align: center;
+    font-size: var(--vds-text-sm);
+  }
+  .vds-yoo-action-menu-item {
     inline-size: 100%;
     background: transparent;
     color: inherit;
     border: none;
     text-align: start;
-    padding: var(--vds-space-2) var(--vds-space-3);
+    padding: var(--vds-space-2);
     border-radius: var(--vds-radius-sm);
     font-family: inherit;
     font-size: var(--vds-text-sm);
@@ -573,19 +619,107 @@
     display: flex;
     align-items: center;
     gap: var(--vds-space-2);
-    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
   }
-  .yoopta-ui-slash-command-item:hover,
-  .yoopta-ui-slash-command-item[data-selected="true"],
-  .yoopta-ui-action-menu-list-item:hover,
-  .yoopta-ui-action-menu-list-item[data-selected="true"] {
+  .vds-yoo-action-menu-item[data-active],
+  .vds-yoo-action-menu-item:hover {
     background: var(--vds-color-surface-hover);
   }
+  .vds-yoo-action-menu-item-icon {
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    border-radius: var(--vds-radius-sm);
+    background: var(--vds-color-surface-raised);
+    color: var(--vds-color-text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .vds-yoo-action-menu-item-text {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+  .vds-yoo-action-menu-item-title {
+    color: var(--vds-color-text);
+    font-weight: 500;
+  }
+  .vds-yoo-action-menu-item-desc {
+    color: var(--vds-color-text-muted);
+    font-size: var(--vds-text-xs);
+    line-height: 1.3;
+  }
 
-  .yoopta-ui-floating-block-actions-content button {
+  /* Block options popover */
+  .vds-yoo-block-options {
+    min-inline-size: 12rem;
+    padding: var(--vds-space-1);
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-color-neutral-6);
+    border-radius: var(--vds-radius-md);
+    box-shadow: var(--vds-shadow-lg);
+    color: var(--vds-color-text);
+    z-index: 70;
+  }
+  .vds-yoo-block-options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .vds-yoo-block-options-separator {
+    block-size: 1px;
+    background: var(--vds-color-neutral-6);
+    margin-block: var(--vds-space-1);
+  }
+  .vds-yoo-block-options-item {
+    inline-size: 100%;
+    background: transparent;
+    color: inherit;
+    border: none;
+    text-align: start;
+    padding: var(--vds-space-2);
+    border-radius: var(--vds-radius-sm);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2);
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+  .vds-yoo-block-options-item:hover {
+    background: var(--vds-color-surface-hover);
+  }
+  .vds-yoo-block-options-item[data-variant="danger"] {
+    color: var(--vds-color-danger-text);
+  }
+  .vds-yoo-block-options-item[data-variant="danger"]:hover {
+    background: var(--vds-color-danger-bg);
+  }
+
+  /* Hover plus + drag handle bar (positioned next to a block) */
+  .vds-yoo-block-actions {
+    z-index: 50;
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 2px;
+    padding: 2px;
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-color-neutral-6);
+    border-radius: var(--vds-radius-md);
+    box-shadow: var(--vds-shadow-sm);
+    color: var(--vds-color-text-muted);
+    pointer-events: auto;
+  }
+  .vds-yoo-block-actions[data-frozen] {
+    pointer-events: auto;
+  }
+  .vds-yoo-block-actions-button {
     background: transparent;
     border: none;
-    color: var(--vds-yoopta-color-text-muted);
+    color: inherit;
     border-radius: var(--vds-radius-sm);
     inline-size: 1.5rem;
     block-size: 1.5rem;
@@ -593,62 +727,227 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
-      color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out);
   }
-  .yoopta-ui-floating-block-actions-content button:hover {
+  .vds-yoo-block-actions-button:hover {
     background: var(--vds-color-surface-hover);
+    color: var(--vds-color-text);
+  }
+  .vds-yoo-block-actions-button[draggable="true"] {
+    cursor: grab;
+  }
+  .vds-yoo-block-actions-button[draggable="true"]:active {
+    cursor: grabbing;
+  }
+
+  /* Table add buttons (right edge = add column, bottom edge = add row).
+     Row/column delete is handled by the drag handles + Backspace. */
+  .vds-yoo-table-add-col,
+  .vds-yoo-table-add-row {
+    z-index: 50;
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-color-neutral-6);
+    border-radius: var(--vds-radius-sm);
+    color: var(--vds-color-text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+  .vds-yoo-table-add-col {
+    inline-size: 1.25rem;
+  }
+  .vds-yoo-table-add-row {
+    block-size: 1.25rem;
+  }
+  .vds-yoo-table-add-col:hover,
+  .vds-yoo-table-add-row:hover {
+    background: var(--vds-color-primary-bg);
+    color: var(--vds-color-primary-text);
+  }
+
+  /* Suppress the global "Type / to open menu..." placeholder inside table
+     cells — Yoopta's leaf placeholder fires on every empty leaf, but inside
+     a table cell it crowds the layout and reads as a bug. */
+  .vds-yoopta-editor table .yoopta-placeholder::before,
+  .vds-yoopta-editor table [data-placeholder]::before {
+    content: "" !important;
+  }
+
+  /* TodoList — checkbox + line-through when checked */
+  .vds-yoopta-editor__todo {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .vds-yoopta-editor__todo-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--vds-space-2);
+    padding-block: 0.125rem;
+  }
+  .vds-yoopta-editor__todo-check {
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-block-start: 2px;
+    color: var(--vds-yoopta-color-text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .vds-yoopta-editor__todo[data-checked] .vds-yoopta-editor__todo-check {
+    color: var(--vds-color-primary-solid);
+  }
+  .vds-yoopta-editor__todo-check:hover {
     color: var(--vds-yoopta-color-text);
   }
-
-  .yoopta-ui-block-options-content {
-    background: var(--vds-yoopta-color-surface-overlay) !important;
-    border: 1px solid var(--vds-yoopta-color-border) !important;
-    border-radius: var(--vds-yoopta-radius-popover) !important;
-    box-shadow: var(--vds-yoopta-shadow-popover) !important;
-    color: var(--vds-yoopta-color-text) !important;
-    padding: var(--vds-space-1) !important;
+  .vds-yoopta-editor__todo-text {
+    flex: 1;
+    min-inline-size: 0;
   }
-  .yoopta-ui-block-options-content button,
-  .yoopta-ui-block-options-item {
-    inline-size: 100%;
-    background: transparent;
-    color: inherit;
-    border: none;
-    text-align: start;
-    padding: var(--vds-space-2) var(--vds-space-3);
+  .vds-yoopta-editor__todo[data-checked] .vds-yoopta-editor__todo-text {
+    text-decoration: line-through;
+    color: var(--vds-yoopta-color-text-muted);
+  }
+
+  /* Carousel — horizontal scroll-snap rail */
+  .vds-yoopta-editor__carousel {
+    display: flex;
+    gap: var(--vds-space-3);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-block: var(--vds-space-2);
+    scrollbar-width: thin;
+  }
+  .vds-yoopta-editor__carousel-slide {
+    flex: 0 0 auto;
+    inline-size: 18rem;
+    min-block-size: 9rem;
+    scroll-snap-align: start;
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-popover);
+    padding: var(--vds-space-3);
+    background: var(--vds-yoopta-color-surface-raised);
+  }
+
+  /* ————————————————————————————————————————————————
+     Table column/row selection (Notion-style)
+     ———————————————————————————————————————————————— */
+
+  /* Column drag handle on top of column on hover; click to select, drag to reorder */
+  .vds-yoo-table-col-handle,
+  .vds-yoo-table-row-handle {
+    z-index: 50;
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-color-neutral-6);
     border-radius: var(--vds-radius-sm);
-    font-family: inherit;
-    font-size: var(--vds-text-sm);
-    cursor: pointer;
+    color: var(--vds-color-text-muted);
+    cursor: grab;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out);
   }
-  .yoopta-ui-block-options-item:hover {
-    background: var(--vds-color-surface-hover);
+  .vds-yoo-table-col-handle {
+    block-size: 1rem;
   }
-  .yoopta-ui-block-options-item[data-variant="destructive"] {
-    color: var(--vds-color-danger-text);
+  .vds-yoo-table-row-handle {
+    inline-size: 1rem;
   }
-  .yoopta-ui-block-options-item[data-variant="destructive"]:hover {
-    background: var(--vds-color-danger-bg);
+  .vds-yoo-table-col-handle:hover,
+  .vds-yoo-table-row-handle:hover,
+  .vds-yoo-table-col-handle[data-selected],
+  .vds-yoo-table-row-handle[data-selected] {
+    background: var(--vds-color-primary-solid);
+    color: var(--vds-color-on-solid);
+    border-color: var(--vds-color-primary-solid);
+  }
+  .vds-yoo-table-col-handle:active,
+  .vds-yoo-table-row-handle:active {
+    cursor: grabbing;
   }
 
-  /* Highlight color picker swatches */
-  [class*="yoopta-highlight-color-picker"] button {
+  /* Highlight cells when their column or row is selected */
+  .vds-yoopta-editor table td[data-selected],
+  .vds-yoopta-editor table th[data-selected] {
+    background: color-mix(
+      in oklch,
+      var(--vds-color-primary-solid) 12%,
+      transparent
+    );
+    box-shadow: inset 0 0 0 1.5px var(--vds-color-primary-solid);
+  }
+
+  /* Drop indicator line between columns/rows during drag */
+  .vds-yoo-table-drop-line {
+    position: fixed;
+    z-index: 51;
+    background: var(--vds-color-primary-solid);
+    pointer-events: none;
+    border-radius: 1px;
+  }
+  .vds-yoo-table-drop-line[data-axis="vertical"] {
+    inline-size: 2px;
+  }
+  .vds-yoo-table-drop-line[data-axis="horizontal"] {
+    block-size: 2px;
+  }
+
+  /* Highlight color popover */
+  .vds-yoo-highlight-popover {
+    padding: var(--vds-space-2);
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-color-neutral-6);
+    border-radius: var(--vds-radius-md);
+    box-shadow: var(--vds-shadow-lg);
+    color: var(--vds-color-text);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-2);
+    z-index: 70;
+  }
+  .vds-yoo-highlight-presets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--vds-space-1);
+  }
+  .vds-yoo-highlight-swatch {
     inline-size: 1.5rem;
     block-size: 1.5rem;
     padding: 0;
+    border: 1px solid var(--vds-color-neutral-6);
     border-radius: var(--vds-radius-sm);
+    cursor: pointer;
+    transition: transform var(--vds-duration-fast) var(--vds-ease-out);
   }
-
-  /* Selection marquee */
-  [data-yoopta-selection-box] {
-    background: color-mix(in oklch, var(--vds-color-primary-solid) 15%, transparent);
-    border: 1px solid var(--vds-color-primary-solid);
+  .vds-yoo-highlight-swatch:hover {
+    transform: scale(1.08);
+  }
+  .vds-yoo-highlight-clear {
+    background: transparent;
+    color: var(--vds-color-danger-text);
+    border: none;
     border-radius: var(--vds-radius-sm);
+    padding: var(--vds-space-1) var(--vds-space-2);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    justify-content: center;
   }
-
-  .yoopta-floating-block-actions,
-  [class*="yoopta-floating-block-actions"] > * {
-    pointer-events: auto;
+  .vds-yoo-highlight-clear:hover {
+    background: var(--vds-color-danger-bg);
   }
 }

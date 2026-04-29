@@ -1,18 +1,23 @@
-import { useRef, useState } from "react";
-import { Editor, Range } from "slate";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { Editor as SlateEditor, Range } from "slate";
 import { Blocks, Marks, useYooptaEditor } from "@yoopta/editor";
 import { MathInlineCommands } from "@yoopta/math";
-import { FloatingToolbar } from "@yoopta/ui/floating-toolbar";
-import { HighlightColorPicker } from "@yoopta/ui/highlight-color-picker";
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from "@virtari-packages/react-popover";
 import {
   IconBold,
-  IconItalic,
-  IconUnderline,
-  IconStrikethrough,
+  IconChevronDown,
   IconCode,
   IconHighlight,
-  IconChevronDown,
+  IconItalic,
   IconMath,
+  IconStrikethrough,
+  IconUnderline,
+  IconX,
 } from "@virtari-packages/react-icons";
 
 import { ActionMenu } from "./ActionMenu";
@@ -30,12 +35,47 @@ const HIGHLIGHT_PRESETS = [
 
 export function Toolbar() {
   const editor = useYooptaEditor();
-  const turnIntoRef = useRef<HTMLButtonElement>(null);
+  const [rect, setRect] = useState<DOMRect | null>(null);
   const [actionMenuOpen, setActionMenuOpen] = useState(false);
+  const [highlightOpen, setHighlightOpen] = useState(false);
+  const turnIntoRef = useRef<HTMLButtonElement>(null);
+  const highlightBtnRef = useRef<HTMLButtonElement>(null);
 
-  const highlightValue = Marks.getValue(editor, { type: "highlight" }) as
+  useEffect(() => {
+    const update = () => {
+      if (actionMenuOpen || highlightOpen) return;
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+        setRect(null);
+        return;
+      }
+      const range = sel.getRangeAt(0);
+      const root = editor.refElement;
+      if (!root || !root.contains(range.commonAncestorContainer)) {
+        setRect(null);
+        return;
+      }
+      const r = range.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) {
+        setRect(null);
+        return;
+      }
+      setRect(r);
+    };
+    document.addEventListener("selectionchange", update);
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      document.removeEventListener("selectionchange", update);
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [editor, actionMenuOpen, highlightOpen]);
+
+  const highlightValue = (Marks.getValue(editor, { type: "highlight" }) as
     | { color?: string; backgroundColor?: string }
-    | null;
+    | null) ?? null;
+  const highlightActive = Marks.isActive(editor, { type: "highlight" });
 
   const onInsertMath = () => {
     if (editor.path.current === null) return;
@@ -46,127 +86,206 @@ export function Toolbar() {
     const slate = Blocks.getBlockSlate(editor, { id: currentBlockId });
     if (!slate || !slate.selection) return;
     const selectedText = !Range.isCollapsed(slate.selection)
-      ? Editor.string(slate, slate.selection)
+      ? SlateEditor.string(slate, slate.selection)
       : "";
-    MathInlineCommands.insertMathInline(editor, selectedText || "E = mc^2", { slate });
+    MathInlineCommands.insertMathInline(editor, selectedText || "E = mc^2", {
+      slate,
+    });
   };
+
+  const setHighlight = (color: string) => {
+    Marks.add(editor, {
+      type: "highlight",
+      value: { backgroundColor: color },
+    });
+    setHighlightOpen(false);
+  };
+
+  const clearHighlight = () => {
+    if (highlightActive) Marks.remove(editor, { type: "highlight" });
+    setHighlightOpen(false);
+  };
+
+  const visible = rect !== null || actionMenuOpen || highlightOpen;
+  const anchorRect = rect ?? new DOMRect(0, 0, 0, 0);
+
+  const virtualRef = useMemo(
+    () => ({
+      current: { getBoundingClientRect: () => anchorRect },
+    }),
+    [anchorRect],
+  );
+
+  if (typeof document === "undefined") return null;
 
   return (
     <>
-      <FloatingToolbar frozen={actionMenuOpen}>
-        <FloatingToolbar.Content>
-          <FloatingToolbar.Group>
-            <FloatingToolbar.Button
+      {visible &&
+        rect &&
+        createPortal(
+          <div
+            className="vds-yoo-toolbar"
+            style={{
+              position: "fixed",
+              top: Math.max(8, rect.top - 44),
+              left: rect.left + rect.width / 2,
+              transform: "translateX(-50%)",
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <button
               ref={turnIntoRef}
+              type="button"
+              className="vds-yoo-toolbar-button"
               onClick={() => setActionMenuOpen(true)}
             >
               Turn into
               <IconChevronDown size={14} />
-            </FloatingToolbar.Button>
-          </FloatingToolbar.Group>
-          <FloatingToolbar.Separator />
-          <FloatingToolbar.Group>
+            </button>
+            <span className="vds-yoo-toolbar-separator" />
             {editor.formats.bold && (
-              <FloatingToolbar.Button
+              <ToolbarFormatButton
+                title="Bold"
                 onClick={() => Marks.toggle(editor, { type: "bold" })}
                 active={Marks.isActive(editor, { type: "bold" })}
-                title="Bold"
               >
                 <IconBold size={16} />
-              </FloatingToolbar.Button>
+              </ToolbarFormatButton>
             )}
             {editor.formats.italic && (
-              <FloatingToolbar.Button
+              <ToolbarFormatButton
+                title="Italic"
                 onClick={() => Marks.toggle(editor, { type: "italic" })}
                 active={Marks.isActive(editor, { type: "italic" })}
-                title="Italic"
               >
                 <IconItalic size={16} />
-              </FloatingToolbar.Button>
+              </ToolbarFormatButton>
             )}
             {editor.formats.underline && (
-              <FloatingToolbar.Button
+              <ToolbarFormatButton
+                title="Underline"
                 onClick={() => Marks.toggle(editor, { type: "underline" })}
                 active={Marks.isActive(editor, { type: "underline" })}
-                title="Underline"
               >
                 <IconUnderline size={16} />
-              </FloatingToolbar.Button>
+              </ToolbarFormatButton>
             )}
             {editor.formats.strike && (
-              <FloatingToolbar.Button
+              <ToolbarFormatButton
+                title="Strikethrough"
                 onClick={() => Marks.toggle(editor, { type: "strike" })}
                 active={Marks.isActive(editor, { type: "strike" })}
-                title="Strikethrough"
               >
                 <IconStrikethrough size={16} />
-              </FloatingToolbar.Button>
+              </ToolbarFormatButton>
             )}
             {editor.formats.code && (
-              <FloatingToolbar.Button
+              <ToolbarFormatButton
+                title="Code"
                 onClick={() => Marks.toggle(editor, { type: "code" })}
                 active={Marks.isActive(editor, { type: "code" })}
-                title="Code"
               >
                 <IconCode size={16} />
-              </FloatingToolbar.Button>
+              </ToolbarFormatButton>
             )}
             {editor.formats.highlight && (
-              <HighlightColorPicker
-                value={highlightValue ?? {}}
-                presets={HIGHLIGHT_PRESETS}
-                onChange={(values) => {
-                  Marks.add(editor, {
-                    type: "highlight",
-                    value: {
-                      color: values.color,
-                      backgroundColor: values.backgroundColor,
-                    },
-                  });
+              <button
+                ref={highlightBtnRef}
+                type="button"
+                className="vds-yoo-toolbar-button"
+                data-active={highlightActive ? "" : undefined}
+                title="Highlight"
+                onClick={() => setHighlightOpen((v) => !v)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  if (highlightActive) Marks.remove(editor, { type: "highlight" });
+                }}
+                style={{
+                  backgroundColor: highlightActive
+                    ? highlightValue?.backgroundColor
+                    : undefined,
+                  color: highlightActive ? highlightValue?.color : undefined,
                 }}
               >
-                <FloatingToolbar.Button
-                  active={Marks.isActive(editor, { type: "highlight" })}
-                  title="Highlight"
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    if (Marks.isActive(editor, { type: "highlight" })) {
-                      Marks.remove(editor, { type: "highlight" });
-                    }
-                  }}
-                  style={{
-                    backgroundColor: Marks.isActive(editor, { type: "highlight" })
-                      ? highlightValue?.backgroundColor
-                      : undefined,
-                    color: Marks.isActive(editor, { type: "highlight" })
-                      ? highlightValue?.color
-                      : undefined,
-                  }}
-                >
-                  <IconHighlight size={16} />
-                </FloatingToolbar.Button>
-              </HighlightColorPicker>
+                <IconHighlight size={16} />
+              </button>
             )}
-          </FloatingToolbar.Group>
-          {editor.plugins.MathInline && (
-            <>
-              <FloatingToolbar.Separator />
-              <FloatingToolbar.Group>
-                <FloatingToolbar.Button onClick={onInsertMath} title="Insert Math">
+            {editor.plugins.MathInline && (
+              <>
+                <span className="vds-yoo-toolbar-separator" />
+                <ToolbarFormatButton title="Insert Math" onClick={onInsertMath}>
                   <IconMath size={16} />
-                </FloatingToolbar.Button>
-              </FloatingToolbar.Group>
-            </>
-          )}
-        </FloatingToolbar.Content>
-      </FloatingToolbar>
+                </ToolbarFormatButton>
+              </>
+            )}
+          </div>,
+          document.body,
+        )}
 
       <ActionMenu
         open={actionMenuOpen}
         onOpenChange={setActionMenuOpen}
         anchor={turnIntoRef.current}
         placement="bottom-start"
+        mode={{ kind: "turnInto" }}
       />
+
+      <Popover open={highlightOpen} onOpenChange={setHighlightOpen}>
+        <PopoverAnchor virtualRef={virtualRef as never} />
+        <PopoverContent
+          side="bottom"
+          align="end"
+          sideOffset={6}
+          className="vds-yoo-highlight-popover"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
+          <div className="vds-yoo-highlight-presets">
+            {HIGHLIGHT_PRESETS.map((c) => (
+              <button
+                key={c}
+                type="button"
+                className="vds-yoo-highlight-swatch"
+                style={{ backgroundColor: c }}
+                onClick={() => setHighlight(c)}
+                title={c}
+                aria-label={`Set highlight ${c}`}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            className="vds-yoo-highlight-clear"
+            onClick={clearHighlight}
+          >
+            <IconX size={14} />
+            <span>Remove</span>
+          </button>
+        </PopoverContent>
+      </Popover>
     </>
+  );
+}
+
+function ToolbarFormatButton({
+  active,
+  title,
+  onClick,
+  children,
+}: {
+  active?: boolean;
+  title: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      className="vds-yoo-toolbar-button"
+      data-active={active ? "" : undefined}
+      title={title}
+      onClick={onClick}
+    >
+      {children}
+    </button>
   );
 }

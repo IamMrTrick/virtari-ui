@@ -30,6 +30,17 @@ import {
   AccordionHeadingElement,
   AccordionContentElement,
 } from "./elements/AccordionElements";
+import {
+  TabsContainerElement,
+  TabsListElement,
+  TabsItemHeadingElement,
+  TabsItemContentElement,
+} from "./elements/TabsElements";
+import { TodoListElement } from "./elements/TodoListElement";
+import {
+  CarouselContainerElement,
+  CarouselListItemElement,
+} from "./elements/CarouselElements";
 import { imageUpload, videoUpload, fileUpload } from "./uploads";
 
 type AnyPlugin = YooptaPlugin<Record<string, SlateElement>, Record<string, unknown>>;
@@ -72,7 +83,11 @@ export const YOOPTA_PLUGINS: AnyPlugin[] = [
   Link as unknown as AnyPlugin,
   NumberedList as unknown as AnyPlugin,
   BulletedList as unknown as AnyPlugin,
-  TodoList as unknown as AnyPlugin,
+  TodoList.extend({
+    elements: {
+      "todo-list": { render: TodoListElement as never },
+    },
+  }) as unknown as AnyPlugin,
   Embed as unknown as AnyPlugin,
   Emoji as unknown as AnyPlugin,
   YImage as unknown as AnyPlugin,
@@ -90,8 +105,19 @@ export const YOOPTA_PLUGINS: AnyPlugin[] = [
   }) as unknown as AnyPlugin,
   Carousel.extend({
     injectElementsFromPlugins: [YImage as unknown as AnyPlugin],
+    elements: {
+      "carousel-container": { render: CarouselContainerElement as never },
+      "carousel-list-item": { render: CarouselListItemElement as never },
+    } as never,
   }) as unknown as AnyPlugin,
-  Tabs as unknown as AnyPlugin,
+  Tabs.extend({
+    elements: {
+      "tabs-container": { render: TabsContainerElement as never },
+      "tabs-list": { render: TabsListElement as never },
+      "tabs-item-heading": { render: TabsItemHeadingElement as never },
+      "tabs-item-content": { render: TabsItemContentElement as never },
+    } as never,
+  }) as unknown as AnyPlugin,
   Mention.extend({
     options: {
       onSearch: async (query, trigger) => {

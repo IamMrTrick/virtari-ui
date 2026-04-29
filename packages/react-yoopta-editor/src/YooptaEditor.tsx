@@ -1,17 +1,14 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { CSSProperties } from "react";
 import BaseYooptaEditor, {
   buildBlockData,
   buildBlockElement,
   createYooptaEditor,
   generateId,
-  type RenderBlockProps,
   type YooptaContentValue,
   type YooptaOnChangeOptions,
   type YooptaPath,
 } from "@yoopta/editor";
-import { SelectionBox } from "@yoopta/ui/selection-box";
-import { BlockDndContext, SortableBlock } from "@yoopta/ui/block-dnd";
 import { withMentions } from "@yoopta/mention";
 import { withEmoji } from "@yoopta/emoji";
 import { cn } from "@virtari-packages/utils";
@@ -21,6 +18,7 @@ import { YOOPTA_MARKS } from "./marks";
 import { Toolbar } from "./chrome/Toolbar";
 import { SlashMenu } from "./chrome/SlashMenu";
 import { BlockActions } from "./chrome/BlockActions";
+import { TableHoverActions } from "./chrome/TableHoverActions";
 import "katex/dist/katex.min.css";
 
 export type YooptaEditorProps = {
@@ -96,37 +94,25 @@ export function YooptaEditor({
     });
   }, [editor]);
 
-  const renderBlock = useCallback(
-    ({ children, blockId }: RenderBlockProps) => (
-      <SortableBlock id={blockId} useDragHandle>
-        {children}
-      </SortableBlock>
-    ),
-    [],
-  );
-
   return (
     <div
       ref={containerRef}
       className={cn("vds-yoopta-editor", className)}
       style={style}
     >
-      <BlockDndContext editor={editor}>
-        <BaseYooptaEditor
-          editor={editor}
-          placeholder={placeholder}
-          autoFocus={autoFocus}
-          onChange={onChange}
-          onPathChange={onPathChange}
-          renderBlock={renderBlock}
-          style={{ width: "100%", paddingBottom: 100 }}
-        >
-          <Toolbar />
-          <SlashMenu />
-          <BlockActions />
-          <SelectionBox selectionBoxElement={containerRef} />
-        </BaseYooptaEditor>
-      </BlockDndContext>
+      <BaseYooptaEditor
+        editor={editor}
+        placeholder={placeholder}
+        autoFocus={autoFocus}
+        onChange={onChange}
+        onPathChange={onPathChange}
+        style={{ width: "100%", paddingBottom: 100 }}
+      >
+        <Toolbar />
+        <SlashMenu />
+        <BlockActions />
+        <TableHoverActions />
+      </BaseYooptaEditor>
     </div>
   );
 }
