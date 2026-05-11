@@ -168,7 +168,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
           aria-label={loading ? loadingText : undefined}
           {...props}
         >
-          {buttonContent}
+          {children}
         </Slot>
       ) : (
         <button

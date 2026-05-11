@@ -121,11 +121,14 @@
     display: flex;
     flex-direction: column;
     gap: 0;
+    inline-size: 100%;
     min-inline-size: 0;
+    max-inline-size: 100%;
   }
 
   .vds-date-picker-mobile-panel {
     gap: var(--vds-space-3, 0.75rem);
+    overflow-x: hidden;
   }
 
   .vds-date-picker-mobile-time-panel {
@@ -135,6 +138,7 @@
   .vds-date-picker-content-inner {
     display: flex;
     align-items: stretch;
+    inline-size: 100%;
     max-inline-size: 100%;
     min-inline-size: 0;
   }
@@ -159,6 +163,10 @@
     flex-direction: column;
     min-inline-size: 0;
     max-inline-size: 100%;
+  }
+
+  .vds-date-picker-mobile-panel .vds-date-picker-main {
+    inline-size: 100%;
   }
 
   .vds-date-picker-main[data-layout="split"] {
@@ -301,6 +309,18 @@
   }
 
   @media (max-width: 42rem) {
+    .vds-picker-mobile-body .vds-calendar {
+      --calendar-padding: var(--vds-space-2, 0.5rem);
+      --calendar-cell-size: clamp(1.75rem, 12vw, 2.25rem);
+
+      inline-size: 100%;
+      margin-inline: auto;
+    }
+
+    .vds-picker-mobile-body .vds-calendar-grid {
+      inline-size: 100%;
+    }
+
     .vds-date-picker-content-inner {
       flex-direction: column;
     }

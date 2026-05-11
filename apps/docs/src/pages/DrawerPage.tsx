@@ -190,6 +190,7 @@ type DemoDrawerProps = {
   dragHandleOnly?: boolean;
   dismissible?: boolean;
   scaleBackground?: boolean;
+  stretch?: boolean;
 };
 
 function DemoDrawer({
@@ -1643,6 +1644,12 @@ export function DrawerPage() {
             description="Only the handle initiates drag. The body scrolls instead."
           />
           <DemoDrawer
+            stretch={false}
+            label="No stretch"
+            title="Stretch disabled"
+            description="Dragging past the largest snap keeps the drawer rigid."
+          />
+          <DemoDrawer
             dismissible={false}
             label="Persistent"
             title="Persistent drawer"
@@ -1755,6 +1762,7 @@ import {
   indicator?:      "inside" | "outside" | "progress" | "hidden"  // default "inside"
   headerVariant?:  "plain" | "bordered"                  // default "plain" on top/bottom, "bordered" on left/right
   scaleBackground?: boolean                              // needs data-vds-drawer-wrapper
+  stretch?:         boolean                              // default true; false disables overdrag stretch
 
   // Behavior
   open?:            boolean                              // controlled

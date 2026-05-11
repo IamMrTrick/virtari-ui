@@ -20,7 +20,6 @@ export function TabsContainerElement(renderProps: PluginElementRenderProps) {
   return (
     <Tabs
       defaultValue={activeTabId ?? undefined}
-      variant="underline"
       {...attributes}
       className="vds-yoopta-editor__tabs"
     >
@@ -31,7 +30,11 @@ export function TabsContainerElement(renderProps: PluginElementRenderProps) {
 
 export function TabsListElement(renderProps: PluginElementRenderProps) {
   const { attributes, children } = renderProps;
-  return <TabsList {...attributes}>{children}</TabsList>;
+  return (
+    <TabsList variant="underline" {...attributes}>
+      {children}
+    </TabsList>
+  );
 }
 
 export function TabsItemHeadingElement(renderProps: PluginElementRenderProps) {

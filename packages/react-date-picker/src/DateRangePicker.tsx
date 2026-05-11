@@ -519,7 +519,7 @@ export function DateRangePicker({
                     isReadOnly={props.isReadOnly}
                     allowsNonContiguousRanges={props.allowsNonContiguousRanges}
                     aria-label={props["aria-label"] ?? "Date range calendar"}
-                    visibleDuration={{ months: 2 }}
+                    visibleDuration={isMobile ? { months: 1 } : { months: 2 }}
                     pageBehavior="single"
                     size={size}
                     appearance={appearance}

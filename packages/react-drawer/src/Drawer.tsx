@@ -209,6 +209,7 @@ export interface DrawerProps {
   velocityThreshold?: number;
   dragHandleOnly?: boolean;
   scaleBackground?: boolean;
+  stretch?: boolean;
   modal?: boolean;
   dismissible?: boolean;
   preventAutoFocus?: boolean;
@@ -242,6 +243,7 @@ export function Drawer({
   velocityThreshold = 0.5,
   dragHandleOnly = false,
   scaleBackground = false,
+  stretch = true,
   modal = true,
   dismissible = true,
   preventAutoFocus = true,
@@ -375,6 +377,7 @@ export function Drawer({
     dismissible,
     dragHandleOnly,
     scaleBackground,
+    stretch,
     preventAutoFocus,
     sizeMode,
     size,
@@ -407,6 +410,7 @@ export function Drawer({
     dismissible,
     dragHandleOnly,
     scaleBackground,
+    stretch,
     preventAutoFocus,
     sizeMode,
     size,
@@ -506,6 +510,7 @@ export const DrawerContent = forwardRef<
     onOpenChange,
     onSnapPointChange,
     scaleBackground,
+    stretch,
     preventAutoFocus,
     minimizedSize,
     sizeMode,
@@ -593,7 +598,11 @@ export const DrawerContent = forwardRef<
     const rtl = getComputedStyle(contentEl).direction === "rtl";
     contentEl.style.setProperty(
       "--vds-drawer-transform",
-      getVisualTransform(direction, sizePx, layout.totalSize, { ...options, rtl }),
+      getVisualTransform(direction, sizePx, layout.totalSize, {
+        ...options,
+        disableStretch: options?.disableStretch || !stretch,
+        rtl,
+      }),
     );
 
     const overlayProgress = getOverlayProgress(sizePx, layout.totalSize, layout.overlayStartSize);
@@ -635,6 +644,7 @@ export const DrawerContent = forwardRef<
     layout.totalSize,
     overlayRef,
     scaleBackground,
+    stretch,
   ]);
 
   const flushVisualSize = useCallback(() => {

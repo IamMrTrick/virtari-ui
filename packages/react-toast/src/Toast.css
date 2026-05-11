@@ -132,7 +132,7 @@
     pointer-events: none;
   }
 
-  .vds-toaster[data-position^="bottom"] .vds-toast[data-state="closed"] {
+  .vds-toaster[data-position^="bottom"] .vds-toast[data-state="closed"]:not([data-swipe-exit]) {
     animation-name: vds-toast-exit-bottom;
   }
 

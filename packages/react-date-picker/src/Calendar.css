@@ -15,6 +15,11 @@
     direction: rtl;
   }
 
+  .vds-calendar[data-view="months"],
+  .vds-calendar[data-view="years"] {
+    inline-size: 100%;
+  }
+
   .vds-calendar-header {
     display: flex;
     align-items: center;
@@ -238,7 +243,7 @@
     flex-direction: column;
     gap: var(--vds-space-3, 0.75rem);
     inline-size: 100%;
-    min-inline-size: min(21rem, calc(100vw - 2rem));
+    min-inline-size: 0;
     min-block-size: 0;
   }
 
