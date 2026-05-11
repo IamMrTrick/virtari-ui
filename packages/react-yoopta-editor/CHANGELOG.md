@@ -1,5 +1,17 @@
 # @virtari-packages/react-yoopta-editor
 
+## 0.3.1
+
+### Patch Changes
+
+- b893c0a: Fix typecheck failures in `react-yoopta-editor`:
+  - `TabsElements`: move `variant="underline"` from `<Tabs>` (where it's not a valid prop) to `<TabsList>` (where the `TabsVariant` API lives).
+  - `TableHoverActions`: cast `path` arrays to `never` to work around `@yoopta/table` declaring `Location` without importing it from `slate` (which makes TS resolve to the DOM `Location` interface).
+
+- Updated dependencies [b893c0a]
+  - @virtari-packages/react-button@0.4.1
+  - @virtari-packages/react-input@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes

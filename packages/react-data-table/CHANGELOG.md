@@ -1,5 +1,14 @@
 # @virtari-packages/react-data-table
 
+## 0.5.2
+
+### Patch Changes
+
+- Updated dependencies [b893c0a]
+  - @virtari-packages/react-button@0.4.1
+  - @virtari-packages/react-drawer@0.6.0
+  - @virtari-packages/react-input@0.4.0
+
 ## 0.5.1
 
 ### Patch Changes

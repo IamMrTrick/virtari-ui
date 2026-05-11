@@ -1,5 +1,16 @@
 # @virtari-packages/react-drawer
 
+## 0.6.0
+
+### Minor Changes
+
+- b893c0a: Ship the latest component updates across input, drawer, date picker, button, and toast.
+  - Add PasswordInput, PasswordInputField, PasswordStrengthMeter, configurable password metrics, standard strength presets, and password strength analysis utilities.
+  - Add the Drawer `stretch` prop so consumers can disable overdrag stretching while keeping the existing default behavior.
+  - Improve DatePicker and DateRangePicker mobile layouts, including single-month mobile range calendars, full-width mobile surfaces, and inline/popover usage docs.
+  - Preserve direct slot children for Button `asChild` rendering.
+  - Prevent bottom toast close animation from overriding swipe-exit animation state.
+
 ## 0.5.0
 
 ### Minor Changes

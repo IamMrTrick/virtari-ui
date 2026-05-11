@@ -1,5 +1,13 @@
 # @virtari-packages/react-language-picker
 
+## 0.5.1
+
+### Patch Changes
+
+- Updated dependencies [b893c0a]
+  - @virtari-packages/react-button@0.4.1
+  - @virtari-packages/react-drawer@0.6.0
+
 ## 0.5.0
 
 ### Minor Changes
