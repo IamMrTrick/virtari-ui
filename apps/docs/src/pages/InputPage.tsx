@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { Input, InputField } from "@virtari-packages/react-input";
+import {
+  Input,
+  InputField,
+  PasswordInputField,
+} from "@virtari-packages/react-input";
 import { Switch } from "@virtari-packages/react-switch";
 import { Section, Row, Stack } from "../components";
 
@@ -99,35 +103,40 @@ export function InputPage() {
 
       <Section
         title="Password"
-        description="Add revealable for the eye toggle. Combine with showStrengthMeter for live strength feedback."
+        description="PasswordInputField ships with reveal, progress, compact checks, and configurable metrics."
       >
         <div style={{ display: "grid", gap: "var(--vds-space-6)", maxInlineSize: "34rem" }}>
-          <InputField
-            label="Reveal only"
-            type="password"
-            placeholder="Enter your password"
-            revealable
-          />
-
-          <InputField
-            label="Reveal + strength meter"
-            type="password"
+          <PasswordInputField
+            label="Professional password"
             placeholder="Create a strong password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            description="Use 12+ characters with upper/lowercase, numbers, and symbols."
-            error={password.length > 0 && password.length < 8 ? "Use at least 8 characters" : undefined}
-            revealable
-            showStrengthMeter
             showCounter
             maxLength={64}
+            showRequirements
+            requirementsLabel="Your password must include"
+            strengthLabel="Password Strength"
+            strengthStandard="standard"
+            strengthOptions={{ userInputs: [username, email] }}
           />
 
           <InputField
-            label="Disabled"
+            label="Compatible InputField path"
             type="password"
-            placeholder="Disabled state"
+            placeholder="Create a strong password"
             revealable
+            showStrengthMeter
+          />
+
+          <PasswordInputField
+            label="Metric disabled"
+            placeholder="No strength UI"
+            showStrengthMeter={false}
+          />
+
+          <PasswordInputField
+            label="Disabled"
+            placeholder="Disabled state"
             disabled
           />
         </div>
@@ -149,7 +158,12 @@ export function InputPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Input, InputField } from "@virtari-packages/react-input";
+        <pre className="docs-code">{`import {
+  Input,
+  InputField,
+  PasswordInputField,
+  analyzePasswordStrength,
+} from "@virtari-packages/react-input";
 
 <Input inputSize="lg" placeholder="Enter email..." />
 
@@ -168,6 +182,32 @@ export function InputPage() {
   type="password"
   revealable
   showStrengthMeter
+/>
+
+const analysis = analyzePasswordStrength(password, {
+  standard: "standard",
+  userInputs: [email, username],
+});
+
+<PasswordInputField
+  label="Password"
+  value={password}
+  onChange={(event) => setPassword(event.target.value)}
+  showCounter
+  maxLength={64}
+  showRequirements
+  requirementsLabel="Your password must include"
+  strengthLabel="Password Strength"
+  strengthStandard="standard"
+  strengthOptions={{ userInputs: [email, username] }}
+/>
+
+<PasswordInputField strengthStandard="basic" minLength={8} />
+<PasswordInputField strengthStandard="strict" strongLength={20} />
+
+<PasswordInputField
+  label="No metric"
+  showStrengthMeter={false}
 />`}</pre>
       </Section>
     </>

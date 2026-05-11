@@ -33,6 +33,19 @@ Wrap your app in `I18nProvider` once (from `@react-aria/i18n`) so locale and dir
 
 Every primitive supports: `size` (`2xs`–`2xl` — shared ramp with Button/Input/Select), `appearance` (`soft`|`outline`|`ghost`|`filled`), `invalid`, keyboard a11y, RTL, min/max, and disabled dates.
 
+## Without modal or drawer
+
+Use `overlayMode="popover"` to keep `DatePicker`, `DateRangePicker`, or `TimeField`
+out of the mobile drawer/dialog presentation. For fully inline UIs, compose the
+standalone primitives:
+
+```tsx
+<DateField value={date} onChange={setDate} />
+<Calendar value={date} onChange={setDate} />
+<RangeCalendar value={range} onChange={setRange} />
+<TimeField value={time} onChange={setTime} showPicker={false} />
+```
+
 ## License
 
 MIT. Third-party engines (`react-aria`, `@internationalized/date`) are Apache-2.0 — see `THIRD_PARTY_LICENSES.txt`.

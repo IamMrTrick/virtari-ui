@@ -24,6 +24,7 @@ export interface DrawerContextValue {
   dismissible: boolean;
   dragHandleOnly: boolean;
   scaleBackground: boolean;
+  stretch: boolean;
   preventAutoFocus: boolean;
   sizeMode: DrawerSizeMode;
   size?: DrawerDeclaredSize;

@@ -284,6 +284,16 @@
     color: var(--vds-color-text);
   }
 
+  .vds-input-field-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .vds-input-field-action:disabled:hover {
+    background: transparent;
+    color: var(--vds-color-text-muted);
+  }
+
   .vds-input-field-action:focus-visible {
     outline: 2px solid var(--vds-color-ring);
     outline-offset: 1px;
@@ -334,6 +344,154 @@
     font-size: var(--vds-text-xs);
     color: var(--vds-color-text-muted);
     white-space: nowrap;
+  }
+
+  .vds-password-input-root {
+    display: grid;
+    gap: var(--vds-space-2);
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .vds-password-input-control {
+    inline-size: 100%;
+  }
+
+  .vds-password-strength {
+    --_password-strength-color: var(--vds-color-border-strong, var(--vds-color-border));
+
+    display: grid;
+    gap: var(--vds-space-3);
+    min-inline-size: 0;
+  }
+
+  .vds-password-strength[data-has-requirements] {
+    padding: var(--vds-space-3);
+    border-radius: var(--vds-radius-element);
+    background: var(--vds-color-surface-raised);
+  }
+
+  .vds-password-strength[data-color="danger"] {
+    --_password-strength-color: var(--vds-color-danger-solid, var(--vds-color-danger-8, #dc2626));
+  }
+
+  .vds-password-strength[data-color="warning"] {
+    --_password-strength-color: var(--vds-color-warning-solid, var(--vds-color-warning-8, #f59e0b));
+  }
+
+  .vds-password-strength[data-color="primary"] {
+    --_password-strength-color: var(--vds-color-primary-solid, var(--vds-color-primary-8, #2563eb));
+  }
+
+  .vds-password-strength[data-color="success"] {
+    --_password-strength-color: var(--vds-color-success-solid, var(--vds-color-success-8, #16a34a));
+  }
+
+  .vds-password-strength-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vds-space-2);
+    min-inline-size: 0;
+    font-size: var(--vds-text-xs);
+    line-height: var(--vds-leading-tight, 1.25);
+  }
+
+  .vds-password-strength-title {
+    min-inline-size: 0;
+    color: var(--vds-color-text-muted);
+  }
+
+  .vds-password-strength-value {
+    flex: none;
+    color: var(--_password-strength-color);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    white-space: nowrap;
+  }
+
+  .vds-password-strength-meter {
+    display: grid;
+    gap: var(--vds-space-1);
+    min-inline-size: 0;
+  }
+
+  .vds-password-strength-track {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--vds-space-1);
+    block-size: 0.25rem;
+  }
+
+  .vds-password-strength-segment {
+    display: block;
+    min-inline-size: 0;
+    border-radius: var(--vds-radius-full, 9999px);
+    background: var(--vds-color-border);
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-password-strength-segment[data-active] {
+    background: var(--_password-strength-color);
+  }
+
+  .vds-password-requirements-label {
+    color: var(--vds-color-text);
+    font-size: var(--vds-text-xs);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    line-height: var(--vds-leading-tight, 1.25);
+  }
+
+  .vds-password-requirements {
+    display: grid;
+    gap: var(--vds-space-1-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .vds-password-requirement {
+    display: grid;
+    grid-template-columns: 0.875rem minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--vds-space-2);
+    min-block-size: 1rem;
+    min-inline-size: 0;
+    color: var(--vds-color-text);
+    font-size: var(--vds-text-xs);
+    line-height: var(--vds-leading-snug, 1.375);
+    transition: color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-password-requirement-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    border: 1px solid var(--vds-color-border-strong, var(--vds-color-border));
+    border-radius: var(--vds-radius-checkbox, var(--vds-radius-xs, 0.25rem));
+    background: transparent;
+    color: transparent;
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      opacity var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-password-requirement[data-met] .vds-password-requirement-icon {
+    border-color: var(--vds-color-success-solid, var(--vds-color-success-8, #16a34a));
+    background: var(--vds-color-success-solid, var(--vds-color-success-8, #16a34a));
+    color: var(--vds-color-on-success, #ffffff);
+  }
+
+  .vds-password-strength-feedback {
+    margin: 0;
+    color: var(--vds-color-text-muted);
+    font-size: 0.6875rem;
+    line-height: 1.2;
   }
 }
 

@@ -107,11 +107,14 @@
     display: flex;
     flex-direction: column;
     gap: 0;
+    inline-size: 100%;
     min-inline-size: 0;
+    max-inline-size: 100%;
   }
 
   .vds-date-range-picker-mobile-panel {
     gap: var(--vds-space-3, 0.75rem);
+    overflow-x: hidden;
   }
 
   .vds-date-range-picker-mobile-time-panel {
@@ -125,6 +128,7 @@
   .vds-date-range-picker-content-inner {
     display: flex;
     align-items: stretch;
+    inline-size: 100%;
     max-inline-size: 100%;
     min-inline-size: 0;
   }
@@ -149,6 +153,10 @@
     flex-direction: column;
     min-inline-size: 0;
     max-inline-size: 100%;
+  }
+
+  .vds-date-range-picker-mobile-panel .vds-date-range-picker-main {
+    inline-size: 100%;
   }
 
   .vds-date-range-picker-main[data-layout="split"] {

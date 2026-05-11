@@ -143,7 +143,7 @@ export function MobilePickerSurface({
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
           size={sizeMode === "full" ? "full" : dialogSize}
-          responsive={sizeMode === "full"}
+          responsive
           backdrop="blur"
           className={cn("vds-picker-mobile-surface", "vds-picker-mobile-dialog", className)}
           onOpenAutoFocus={(event: Event) => event.preventDefault()}

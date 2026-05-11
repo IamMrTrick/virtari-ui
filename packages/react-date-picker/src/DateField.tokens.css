@@ -8,6 +8,7 @@
   .vds-date-field,
   .vds-time-field,
   .vds-time-field-picker-content,
+  .vds-picker-mobile-surface,
   .vds-date-picker-group,
   .vds-date-range-picker-group {
     /* Field shell (shared sizing ramp with Button/Input/Select) */

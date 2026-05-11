@@ -232,12 +232,14 @@ export function TableHoverActions() {
         e.preventDefault();
         const cur = hoverRef.current;
         if (selection.kind === "col" && cur && cur.colCount > 1) {
+          // @yoopta/table types declare `Location` without importing it from slate,
+          // so it resolves to the DOM Location — work around by casting the path.
           TableCommands.deleteTableColumn(editor, selection.blockId, {
-            path: [0, 0, selection.idx],
+            path: [0, 0, selection.idx] as never,
           });
         } else if (selection.kind === "row" && cur && cur.rowCount > 1) {
           TableCommands.deleteTableRow(editor, selection.blockId, {
-            path: [0, selection.idx, 0],
+            path: [0, selection.idx, 0] as never,
           });
         }
         setSelection(null);

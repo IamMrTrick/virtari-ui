@@ -38,7 +38,40 @@ yarn add @virtari-packages/react-input
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari-packages/react-input";
+import {
+  Input,
+  InputField,
+  PasswordInputField,
+  analyzePasswordStrength,
+} from "@virtari-packages/react-input";
+```
+
+```tsx
+const analysis = analyzePasswordStrength(password, {
+  standard: "standard",
+  userInputs: [email, username],
+});
+
+<PasswordInputField
+  label="Password"
+  value={password}
+  onChange={(event) => setPassword(event.target.value)}
+  showCounter
+  maxLength={64}
+  showRequirements
+  requirementsLabel="Your password must include"
+  strengthLabel="Password Strength"
+  strengthStandard="standard"
+  strengthOptions={{ userInputs: [email, username] }}
+/>;
+
+<PasswordInputField strengthStandard="basic" minLength={8} />;
+<PasswordInputField strengthStandard="strict" strongLength={20} />;
+
+<PasswordInputField
+  label="Password without metrics"
+  showStrengthMeter={false}
+/>;
 ```
 
 ### Import styles
