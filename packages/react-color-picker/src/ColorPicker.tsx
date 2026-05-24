@@ -1374,7 +1374,9 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
                       sideOffset={8}
                       collisionPadding={12}
                       avoidCollisions
-                      className="vds-color-picker-popover"
+                      className="vds-color-picker vds-color-picker-popover"
+                      data-mode="solid"
+                      data-appearance="floating"
                     >
                       <SolidEditor
                         compact
