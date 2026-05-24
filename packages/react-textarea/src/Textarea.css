@@ -1,14 +1,20 @@
 @import "../../react-fieldset/src/Fieldset.css";
 
 @keyframes vds-typing-pulse {
-  0%   { scale: 1; }
-  30%  { scale: calc(1 + var(--_ti, 0.4) * 0.01); }
-  65%  { scale: calc(1 - var(--_ti, 0.4) * 0.003); }
-  100% { scale: 1; }
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+  }
+  35% {
+    box-shadow: 0 0 0 calc(1px + var(--_ti, 0.4) * 3px)
+      color-mix(in oklch, var(--vds-color-ring) 22%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  @keyframes vds-typing-pulse { 0%, 100% { scale: 1; } }
+  @keyframes vds-typing-pulse { 0%, 100% { box-shadow: none; } }
 }
 
 @layer components {
@@ -26,10 +32,12 @@
     border: 1px solid var(--vds-color-border);
     background-color: var(--vds-color-surface);
     color: var(--vds-color-text);
+    -webkit-touch-callout: default;
+    -webkit-user-select: text;
+    user-select: text;
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
-      box-shadow var(--vds-duration-fast) var(--vds-ease-out),
-      scale 140ms var(--vds-ease-out);
+      box-shadow var(--vds-duration-fast) var(--vds-ease-out);
 
     padding-inline: var(--_textarea-px);
     padding-block: var(--_textarea-py);
@@ -44,11 +52,6 @@
       outline: 2px solid var(--vds-color-ring);
       outline-offset: -1px;
       border-color: var(--vds-color-primary-9);
-    }
-
-    &:active:not(:disabled) {
-      scale: 0.992;
-      transition: scale 60ms var(--vds-ease-out);
     }
 
     &.vds-textarea--pulse {
@@ -110,5 +113,4 @@
   }
 }
 
-[data-vds-no-micro] .vds-textarea:active { scale: 1; transition: none; }
 [data-vds-no-micro] .vds-textarea--pulse { animation: none; }

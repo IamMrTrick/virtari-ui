@@ -39,7 +39,7 @@
     "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
-    "build": "node scripts/generate.mjs && postcss dist/_expanded.css -o dist/utilities.css && rm dist/_expanded.css",
+    "build": "node scripts/generate.mjs && postcss dist/_expanded.css -o dist/utilities.css && node -e \"require('node:fs').rmSync('dist/_expanded.css', { force: true })\"",
     "clean": "rm -rf dist"
   },
   "peerDependencies": {

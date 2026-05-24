@@ -39,8 +39,10 @@
     transition:
       background-color var(--vds-duration-fast) var(--vds-ease-out),
       border-color var(--vds-duration-fast) var(--vds-ease-out),
-      box-shadow var(--vds-duration-fast) var(--vds-ease-out),
-      scale 160ms var(--vds-ease-out);
+      box-shadow var(--vds-duration-fast) var(--vds-ease-out);
+    -webkit-touch-callout: default;
+    -webkit-user-select: text;
+    user-select: text;
 
     /* hide any browser chrome */
     -moz-appearance: textfield;
@@ -58,10 +60,6 @@
       outline: none;
       border-color: var(--vds-color-primary-9);
       box-shadow: 0 0 0 2px var(--vds-color-ring);
-    }
-
-    &:active:not(:disabled) {
-      scale: 0.98;
     }
 
     &[aria-invalid="true"] {
@@ -84,20 +82,4 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .vds-otp-input__slot {
-      transition:
-        background-color var(--vds-duration-fast) var(--vds-ease-out),
-        border-color var(--vds-duration-fast) var(--vds-ease-out),
-        box-shadow var(--vds-duration-fast) var(--vds-ease-out);
-
-      &:active:not(:disabled) {
-        scale: 1;
-      }
-    }
-  }
-}
-
-[data-vds-no-micro] .vds-otp-input__slot:active {
-  scale: 1;
 }
