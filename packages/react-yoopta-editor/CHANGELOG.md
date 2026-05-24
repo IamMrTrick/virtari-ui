@@ -1,5 +1,12 @@
 # @virtari-packages/react-yoopta-editor
 
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [e3f38c5]
+  - @virtari-packages/react-input@0.4.1
+
 ## 0.3.1
 
 ### Patch Changes

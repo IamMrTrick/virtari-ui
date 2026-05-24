@@ -1,5 +1,12 @@
 # @virtari-packages/react-data-table
 
+## 0.5.3
+
+### Patch Changes
+
+- Updated dependencies [e3f38c5]
+  - @virtari-packages/react-input@0.4.1
+
 ## 0.5.2
 
 ### Patch Changes

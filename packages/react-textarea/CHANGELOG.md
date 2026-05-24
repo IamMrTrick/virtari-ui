@@ -1,5 +1,14 @@
 # @virtari-packages/react-textarea
 
+## 0.3.2
+
+### Patch Changes
+
+- e3f38c5: Fix editable color and input interactions.
+  - Restore native iOS text selection/callout behavior for editable controls and replace transform-based typing motion with a non-geometric pulse.
+  - Render gradient stop color popovers as floating solid ColorPicker surfaces so stop editing uses the same single-color picker UI.
+  - Make the utilities build cleanup cross-platform so `pnpm run build` works on Windows.
+
 ## 0.3.1
 
 ### Patch Changes
