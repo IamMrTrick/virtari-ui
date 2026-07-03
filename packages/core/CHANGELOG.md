@@ -1,5 +1,12 @@
 # @virtari-packages/core
 
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [4bfc69a]
+  - @virtari-packages/tokens@0.4.1
+
 ## 0.3.1
 
 ### Patch Changes
