@@ -1,5 +1,26 @@
 # @virtari-packages/react-editor
 
+## 0.3.5
+
+### Patch Changes
+
+- 4bfc69a: Fix radius token behavior in pill mode across the design system.
+  - Keep the generic t-shirt radius scale finite in `data-radius="pill"` so raw `sm` and `md` no longer make cards, inputs, code blocks, editor blocks, or date cells fully rounded.
+  - Add semantic radius aliases for button, action, input, segmented, code, color picker, editor, date picker, file upload, table, and navigation surfaces.
+  - Make true action affordances fully rounded in pill mode, including buttons, toggles, pagination buttons, close buttons, input actions, tabs, and segmented controls.
+  - Keep input-like fields rounded but finite in pill mode, with a stronger 16px radius instead of a full capsule.
+
+- Updated dependencies [4bfc69a]
+  - @virtari-packages/react-button@0.4.2
+  - @virtari-packages/react-code@0.2.1
+  - @virtari-packages/react-color-picker@0.2.6
+  - @virtari-packages/react-dialog@0.3.1
+  - @virtari-packages/react-file-upload@0.2.2
+  - @virtari-packages/react-input@0.4.2
+  - @virtari-packages/react-scroll-area@0.3.1
+  - @virtari-packages/react-select@0.5.1
+  - @virtari-packages/react-tabs@0.4.1
+
 ## 0.3.4
 
 ### Patch Changes

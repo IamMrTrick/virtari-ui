@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-date-picker",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Virtari date picker — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",
