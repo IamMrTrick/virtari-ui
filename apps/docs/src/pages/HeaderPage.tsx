@@ -84,7 +84,7 @@ function Logo() {
           placeItems: "center",
           inlineSize: "1.5rem",
           blockSize: "1.5rem",
-          borderRadius: "var(--vds-radius-sm)",
+          borderRadius: "var(--vds-radius-control-action)",
           background: "var(--vds-color-primary-emphasis)",
           color: "var(--vds-color-on-primary, #fff)",
           fontSize: "0.75rem",

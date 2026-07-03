@@ -3,7 +3,7 @@
     --_otp-gap:       var(--vds-space-2);
     --_otp-slot-size: var(--vds-size-lg);
     --_otp-font-size: var(--vds-text-lg);
-    --_otp-radius:    var(--vds-radius-element);
+    --_otp-radius:    var(--vds-radius-input, var(--vds-radius-element));
     --_otp-border-w:  1.5px;
 
     &[data-size="sm"] {

@@ -648,7 +648,7 @@ function CartDrawer() {
                     style={{
                       inlineSize: "3.5rem",
                       blockSize: "3.5rem",
-                      borderRadius: "var(--vds-radius-lg)",
+                      borderRadius: "var(--vds-radius-card)",
                       background:
                         "linear-gradient(135deg, var(--vds-color-primary-100), var(--vds-color-primary-200))",
                     }}
@@ -784,7 +784,7 @@ function MobileNavDrawer() {
               style={{
                 inlineSize: "2rem",
                 blockSize: "2rem",
-                borderRadius: "var(--vds-radius-lg)",
+                borderRadius: "var(--vds-radius-card)",
                 background: "var(--vds-color-primary-500)",
                 color: "white",
                 display: "grid",
@@ -820,7 +820,7 @@ function MobileNavDrawer() {
                   href={item.href}
                   style={{
                     padding: "var(--vds-space-2) var(--vds-space-3)",
-                    borderRadius: "var(--vds-radius-md)",
+                    borderRadius: "var(--vds-radius-card)",
                     fontSize: "var(--vds-text-sm)",
                     color: "var(--vds-color-text)",
                     textDecoration: "none",
@@ -853,7 +853,7 @@ function MobileNavDrawer() {
                   href={item.href}
                   style={{
                     padding: "var(--vds-space-2) var(--vds-space-3)",
-                    borderRadius: "var(--vds-radius-md)",
+                    borderRadius: "var(--vds-radius-card)",
                     fontSize: "var(--vds-text-sm)",
                     color: "var(--vds-color-text-muted)",
                     textDecoration: "none",
@@ -950,7 +950,7 @@ function NotificationItem({ n }: { n: Notification }) {
         gap: "var(--vds-space-3)",
         alignItems: "start",
         padding: "var(--vds-space-3)",
-        borderRadius: "var(--vds-radius-lg)",
+        borderRadius: "var(--vds-radius-card)",
         background: n.unread
           ? "var(--vds-color-primary-muted)"
           : "transparent",

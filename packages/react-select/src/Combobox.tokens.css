@@ -13,7 +13,7 @@
     --combobox-trigger-padding-inline: var(--vds-space-3, 0.75rem);
     --combobox-trigger-padding-block: var(--vds-space-1, 0.25rem);
     --combobox-trigger-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
-    --combobox-trigger-radius: var(--vds-radius-element, 0.5rem);
+    --combobox-trigger-radius: var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
     --combobox-trigger-border-width: 1px;
     --combobox-trigger-chip-gap: var(--vds-space-1, 0.25rem);
 

@@ -30,7 +30,7 @@
 
     /* Close button */
     --alert-close-size: 1.5rem;
-    --alert-close-radius: var(--vds-radius-sm, 0.375rem);
+    --alert-close-radius: var(--vds-radius-action, var(--vds-radius-control-action, 0.375rem));
     --alert-close-icon-size: 1rem;
     --alert-close-bg: transparent;
     --alert-close-bg-hover: color-mix(in oklch, currentColor 12%, transparent);

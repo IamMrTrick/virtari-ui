@@ -12,7 +12,7 @@
     --date-picker-content-bg: var(--vds-color-surface, #ffffff);
     --date-picker-content-border-color: var(--vds-color-border-muted, #e5e7eb);
     --date-picker-content-border-width: 1px;
-    --date-picker-content-radius: var(--vds-radius-surface, 0.75rem);
+    --date-picker-content-radius: var(--vds-radius-date-content, 0.75rem);
     --date-picker-content-shadow: var(--vds-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
     --date-picker-content-padding: 0;
     --date-picker-content-z-index: var(--vds-z-popover, 1600);

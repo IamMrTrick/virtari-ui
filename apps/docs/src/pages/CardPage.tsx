@@ -121,7 +121,7 @@ export function CardPage() {
           style={{
             ...gridStyle,
             padding: "var(--vds-space-4)",
-            borderRadius: "var(--vds-radius-lg)",
+            borderRadius: "var(--vds-radius-card)",
             background: "var(--vds-color-bg-subtle)",
           }}
         >

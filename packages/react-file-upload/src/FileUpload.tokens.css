@@ -15,7 +15,7 @@
     --vds-file-upload-dropzone-bg-reject:
       var(--vds-color-danger-bg, #fef2f2);
     --vds-file-upload-dropzone-radius:
-      var(--vds-radius-lg, 0.75rem);
+      var(--vds-radius-file-upload-dropzone, 0.75rem);
     --vds-file-upload-dropzone-padding: var(--vds-space-6, 1.5rem);
     --vds-file-upload-dropzone-color-muted:
       var(--vds-color-text-muted, #6b7280);
@@ -29,13 +29,13 @@
       var(--vds-color-border, #e5e7eb);
 
     --vds-file-upload-preview-size: 2.5rem;
-    --vds-file-upload-preview-radius: var(--vds-radius-sm, 0.25rem);
+    --vds-file-upload-preview-radius: var(--vds-radius-file-upload-preview, 0.25rem);
 
     --vds-file-upload-remove-color: var(--vds-color-text-muted, #6b7280);
     --vds-file-upload-remove-color-hover: var(--vds-color-danger-solid, #dc2626);
     --vds-file-upload-remove-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
     --vds-file-upload-remove-size: 1.75rem;
-    --vds-file-upload-remove-radius: var(--vds-radius-sm, 0.25rem);
+    --vds-file-upload-remove-radius: var(--vds-radius-file-upload-remove, 0.25rem);
 
     --vds-file-upload-size-color: var(--vds-color-text-muted, #6b7280);
     --vds-file-upload-size-font-size: var(--vds-text-xs, 0.75rem);

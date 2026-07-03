@@ -30,7 +30,7 @@
   --tree-focus-ring-offset:   -2px;
 
   /* ─── Border radius ─── */
-  --tree-item-radius:         var(--vds-radius-sm, 0.25rem);
+  --tree-item-radius:         var(--vds-radius-tree-item, 0.25rem);
 
   /* ─── Motion ─── */
   --tree-transition:          var(--vds-transition-fast, 100ms ease-out);

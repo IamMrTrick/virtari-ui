@@ -32,7 +32,7 @@ export function StatusBadge({ status }: { status: "active" | "draft" }) {
 const CSS_SNIPPET = `@layer design-system.components {
   .vds-card {
     --card-padding: var(--vds-space-4);
-    --card-radius: var(--vds-radius-lg);
+    --card-radius: var(--vds-radius-card);
     background: var(--vds-color-surface);
     border-radius: var(--card-radius);
     padding: var(--card-padding);

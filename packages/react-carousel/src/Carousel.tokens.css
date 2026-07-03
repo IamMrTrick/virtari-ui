@@ -9,13 +9,13 @@
     /* ── Layout ── */
     --carousel-padding-block: var(--vds-space-0, 0);
     --carousel-padding-inline: var(--vds-space-0, 0);
-    --carousel-radius: var(--vds-radius-card, var(--vds-radius-lg, 0.75rem));
+    --carousel-radius: var(--vds-radius-card, 0.75rem);
     --carousel-track-radius: var(--carousel-radius);
 
     /* ── Navigation buttons ──
      * The button itself is a <Button> component; we only own its absolute
      * positioning offset and corner-radius so pill mode reads as a circle. */
-    --carousel-nav-radius: var(--button-radius, var(--vds-radius-element, 0.5rem));
+    --carousel-nav-radius: var(--button-radius, var(--vds-radius-action, var(--vds-radius-element, 0.5rem)));
     --carousel-nav-offset: var(--vds-space-3, 0.75rem);
     --carousel-nav-disabled-opacity: 0.4;
 
@@ -108,13 +108,13 @@
   .vds-carousel[data-pagination="bars"] {
     --carousel-bullet-size:        1.25rem; /* width */
     --carousel-bullet-active-size: 2rem;
-    --carousel-bullet-radius:      var(--vds-radius-sm, 0.25rem);
+    --carousel-bullet-radius:      var(--vds-radius-full, 9999px);
   }
 
   /* =========================================================================
    * 5. Shape modifier — square nav buttons (override Button's own radius).
    * ========================================================================= */
   .vds-carousel[data-shape="square"] {
-    --carousel-nav-radius: var(--vds-radius-element, 0.5rem);
+    --carousel-nav-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
   }
 }

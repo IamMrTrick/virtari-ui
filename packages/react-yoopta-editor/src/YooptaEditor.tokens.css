@@ -51,9 +51,11 @@
     --vds-yoopta-padding-surface: var(--vds-space-4);
 
     /* Radius */
-    --vds-yoopta-radius-block: var(--vds-radius-md);
-    --vds-yoopta-radius-surface: var(--vds-radius-lg);
-    --vds-yoopta-radius-popover: var(--vds-radius-lg);
+    --vds-yoopta-radius-block: var(--vds-radius-yoopta-block, 0.5rem);
+    --vds-yoopta-radius-surface: var(--vds-radius-yoopta-surface, 0.75rem);
+    --vds-yoopta-radius-popover: var(--vds-radius-yoopta-popover, 0.75rem);
+    --vds-yoopta-radius-inline: var(--vds-radius-yoopta-inline, 0.25rem);
+    --vds-yoopta-radius-control: var(--vds-radius-yoopta-control, 0.375rem);
 
     /* Motion */
     --vds-yoopta-duration: var(--vds-duration-fast);

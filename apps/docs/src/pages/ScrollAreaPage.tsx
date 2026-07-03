@@ -3,7 +3,7 @@ import { ScrollArea } from "@virtari-packages/react-scroll-area";
 import { Section } from "../components";
 
 const frameStyle: React.CSSProperties = {
-  borderRadius: "var(--vds-radius-md)",
+  borderRadius: "var(--vds-radius-card)",
   border: "1px solid var(--vds-color-border)",
   background: "var(--vds-color-surface)",
 };
@@ -260,7 +260,7 @@ function Tile({ n }: { n: number }) {
       style={{
         width: 120,
         height: 80,
-        borderRadius: "var(--vds-radius-md)",
+        borderRadius: "var(--vds-radius-card)",
         background: "var(--vds-color-bg-subtle)",
         color: "var(--vds-color-text)",
         display: "flex",
@@ -282,7 +282,7 @@ function TileItem({ n, interactive }: { n: number; interactive: boolean }) {
   const style: React.CSSProperties = {
     width: 120,
     height: 80,
-    borderRadius: "var(--vds-radius-md)",
+    borderRadius: "var(--vds-radius-card)",
     background: "var(--vds-color-bg-subtle)",
     color: "var(--vds-color-text)",
     display: "flex",

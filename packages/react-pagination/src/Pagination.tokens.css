@@ -8,7 +8,7 @@
 
     --vds-pagination-button-size: var(--vds-size-md, 2rem);
     --vds-pagination-button-padding-inline: var(--vds-space-3, 0.75rem);
-    --vds-pagination-button-radius: var(--vds-radius-element, 0.375rem);
+    --vds-pagination-button-radius: var(--vds-radius-pagination-button, var(--vds-radius-element, 0.375rem));
     --vds-pagination-button-bg: transparent;
     --vds-pagination-button-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
     --vds-pagination-button-bg-active: var(--vds-color-primary-bg, #eef2ff);

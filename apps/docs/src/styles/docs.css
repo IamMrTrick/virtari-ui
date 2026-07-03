@@ -38,7 +38,7 @@ body {
   justify-content: center;
   inline-size: 2rem;
   block-size: 2rem;
-  border-radius: var(--vds-radius-lg);
+  border-radius: var(--vds-radius-control-action);
   background-color: var(--vds-color-primary-500);
   color: white;
   font-weight: var(--vds-font-weight-bold);
@@ -110,7 +110,7 @@ body {
   background: transparent;
   color: var(--vds-color-text-muted);
   cursor: pointer;
-  border-radius: var(--vds-radius-md);
+  border-radius: var(--vds-radius-control-action);
   transition:
     background-color var(--vds-duration-fast) var(--vds-ease-out),
     color var(--vds-duration-fast) var(--vds-ease-out);
@@ -131,7 +131,7 @@ body {
   border: 1px solid var(--vds-color-border-muted);
   background-color: var(--vds-color-surface);
   color: var(--vds-color-text-muted);
-  border-radius: var(--vds-radius-element);
+  border-radius: var(--vds-radius-action, var(--vds-radius-element));
   cursor: pointer;
   transition:
     background-color var(--vds-duration-fast) var(--vds-ease-out),
@@ -230,7 +230,7 @@ body {
   line-height: var(--vds-leading-relaxed);
   background-color: var(--vds-color-bg-subtle);
   border: 1px solid var(--vds-color-border-muted);
-  border-radius: var(--vds-radius-lg);
+  border-radius: var(--vds-radius-code);
   padding: var(--vds-space-4);
   overflow-x: auto;
   white-space: pre;
@@ -264,7 +264,7 @@ body {
   &:focus-visible {
     outline: 2px solid var(--vds-color-border-focus);
     outline-offset: 2px;
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-radius-control-action);
   }
 }
 
@@ -297,7 +297,7 @@ body {
 .docs-color-swatch-block {
   inline-size: 3rem;
   block-size: 3rem;
-  border-radius: var(--vds-radius-lg);
+  border-radius: var(--vds-radius-card);
   border: 1px solid var(--vds-color-border-muted);
 }
 

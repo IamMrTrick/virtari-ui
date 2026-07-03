@@ -134,7 +134,7 @@ function LogoMark() {
         placeItems: "center",
         inlineSize: "1.75rem",
         blockSize: "1.75rem",
-        borderRadius: "var(--vds-radius-sm)",
+        borderRadius: "var(--vds-radius-control-action)",
         background: "var(--vds-color-primary-emphasis)",
         color: "var(--vds-color-on-primary, #fff)",
         fontWeight: "var(--vds-font-weight-semibold)",

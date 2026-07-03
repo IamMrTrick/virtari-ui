@@ -711,7 +711,7 @@ function PortalSection() {
             position: "relative",
             blockSize: "16rem",
             border: "1px dashed var(--vds-color-border)",
-            borderRadius: "var(--vds-radius-md)",
+            borderRadius: "var(--vds-radius-card)",
             background: "var(--vds-color-bg-subtle)",
             overflow: "hidden",
           }}

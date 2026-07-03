@@ -107,7 +107,7 @@
   .vds-bottom-nav[data-variant="floating"] {
     --bottom-nav-offset-block-end: var(--vds-space-3, 0.75rem);
     --bottom-nav-max-inline-size: calc(100% - (var(--vds-space-6, 1.5rem) * 2));
-    --bottom-nav-radius: var(--vds-radius-xl, 1rem);
+    --bottom-nav-radius: var(--vds-radius-bottom-nav, 1rem);
     --bottom-nav-shadow: var(--vds-shadow-xl, 0 20px 25px -5px oklch(0 0 0 / 0.1));
     --bottom-nav-border-block-start-width: 0;
     --bottom-nav-padding-inline: var(--vds-space-2, 0.5rem);

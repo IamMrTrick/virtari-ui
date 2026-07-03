@@ -78,7 +78,7 @@
     --tabs-content-focus-ring-color: var(--vds-color-ring, #6366f1);
     --tabs-content-focus-ring-width: 2px;
     --tabs-content-focus-ring-offset: 2px;
-    --tabs-content-focus-ring-radius: var(--vds-radius-element, 0.5rem);
+    --tabs-content-focus-ring-radius: var(--vds-radius-control, var(--vds-radius-element, 0.5rem));
 
     /* Enter animation when a panel becomes active */
     --tabs-content-enter-duration: var(--vds-duration-fast, 180ms);
@@ -150,18 +150,18 @@
   .vds-tabs-list[data-variant="segmented"] {
     --tabs-list-gap: 0;
     --tabs-list-bg: var(--vds-color-bg-muted, #f3f4f6);
-    --tabs-list-radius: var(--vds-radius-element, 0.5rem);
+    --tabs-list-radius: var(--vds-radius-segmented, var(--vds-radius-element, 0.5rem));
     --tabs-list-padding-inline: var(--vds-space-1, 0.25rem);
     --tabs-list-padding-block: var(--vds-space-1, 0.25rem);
     --tabs-indicator-display: block;
     --tabs-indicator-color: var(--vds-color-surface, #ffffff);
-    --tabs-indicator-radius: calc(var(--vds-radius-element, 0.5rem) - 0.125rem);
+    --tabs-indicator-radius: calc(var(--vds-radius-segmented, var(--vds-radius-element, 0.5rem)) - 0.125rem);
   }
   .vds-tabs-list[data-variant="segmented"] .vds-tabs-trigger {
     --tabs-trigger-optical-offset: calc(
       var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem
     );
-    --tabs-trigger-radius: calc(var(--vds-radius-element, 0.5rem) - 0.125rem);
+    --tabs-trigger-radius: calc(var(--vds-radius-segmented, var(--vds-radius-element, 0.5rem)) - 0.125rem);
     --tabs-trigger-bg-active: var(--vds-color-surface, #ffffff);
     --tabs-trigger-color-active: var(--vds-color-text, #111827);
     --tabs-trigger-shadow-active: var(--vds-shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
@@ -189,7 +189,7 @@
   }
   .vds-tabs-list[data-variant="bordered"] .vds-tabs-trigger {
     --tabs-trigger-border-width: 1px;
-    --tabs-trigger-radius: var(--vds-radius-element, 0.5rem);
+    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.5rem));
     --tabs-trigger-border-color: var(--vds-color-border, #d1d5db);
     --tabs-trigger-border-color-hover: var(--vds-color-border, #d1d5db);
     --tabs-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
@@ -203,7 +203,7 @@
     --tabs-list-gap: var(--vds-space-1, 0.25rem);
   }
   .vds-tabs-list[data-variant="solid"] .vds-tabs-trigger {
-    --tabs-trigger-radius: var(--vds-radius-element, 0.5rem);
+    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.5rem));
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
     --tabs-trigger-bg-active: var(--vds-color-primary-solid, #6366f1);
     --tabs-trigger-color-active: var(--vds-color-on-primary, #ffffff);
@@ -214,7 +214,7 @@
     --tabs-list-gap: var(--vds-space-1, 0.25rem);
   }
   .vds-tabs-list[data-variant="soft"] .vds-tabs-trigger {
-    --tabs-trigger-radius: var(--vds-radius-element, 0.5rem);
+    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.5rem));
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
     --tabs-trigger-bg-active: var(--vds-color-primary-bg, #eef2ff);
     --tabs-trigger-color-active: var(--vds-color-primary-text, #3730a3);
@@ -225,7 +225,7 @@
     --tabs-list-gap: var(--vds-space-1, 0.25rem);
   }
   .vds-tabs-list[data-variant="ghost"] .vds-tabs-trigger {
-    --tabs-trigger-radius: var(--vds-radius-element, 0.5rem);
+    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.5rem));
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
     --tabs-trigger-bg-active: transparent;
     --tabs-trigger-color-active: var(--vds-color-text, #111827);

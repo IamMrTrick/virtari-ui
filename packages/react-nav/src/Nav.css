@@ -325,7 +325,7 @@
    * ──────────────────────────────── */
   .vds-nav[data-variant="tab"] .vds-nav__item {
     --item-tab-size: 0.25rem; /* 4px thickness */
-    --item-tab-radius: var(--vds-radius-sm, 0.25rem);
+    --item-tab-radius: var(--vds-radius-nav-item, 0.25rem);
   }
   .vds-nav[data-variant="tab"] .vds-nav__link,
   .vds-nav[data-variant="tab"] .vds-nav__trigger {

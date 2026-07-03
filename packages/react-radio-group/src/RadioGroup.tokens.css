@@ -196,7 +196,7 @@
 
     /* Icon container (for icon-grid layout) */
     --radio-card-icon-size: 2.5rem;
-    --radio-card-icon-radius: var(--vds-radius-md, 0.5rem);
+    --radio-card-icon-radius: var(--vds-radius-radio-card-icon, 0.5rem);
     --radio-card-icon-bg: var(
       --vds-color-primary-bg-subtle,
       color-mix(in oklch, currentColor 8%, transparent)

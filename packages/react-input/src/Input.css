@@ -57,7 +57,7 @@
     --_input-font-size: var(--vds-text-sm);
     --_input-line-height: var(--vds-control-line-height, 1);
     --_input-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
-    --_input-radius: var(--vds-radius-element);
+    --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
 
     display: flex;
     inline-size: 100%;
@@ -113,21 +113,21 @@
       --_input-height: var(--vds-size-2xs);
       --_input-px: var(--vds-space-1-5);
       --_input-font-size: var(--vds-text-xs);
-      --_input-radius: var(--vds-radius-element);
+      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="xs"] {
       --_input-height: var(--vds-size-xs);
       --_input-px: var(--vds-space-2);
       --_input-font-size: var(--vds-text-xs);
-      --_input-radius: var(--vds-radius-element);
+      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="sm"] {
       --_input-height: var(--vds-size-sm);
       --_input-px: var(--vds-space-2-5);
       --_input-font-size: var(--vds-text-sm);
-      --_input-radius: var(--vds-radius-element);
+      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     /* md uses defaults above */
@@ -136,21 +136,21 @@
       --_input-height: var(--vds-size-lg);
       --_input-px: var(--vds-space-4);
       --_input-font-size: var(--vds-text-base);
-      --_input-radius: var(--vds-radius-element);
+      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="xl"] {
       --_input-height: var(--vds-size-xl);
       --_input-px: var(--vds-space-5);
       --_input-font-size: var(--vds-text-lg);
-      --_input-radius: var(--vds-radius-element);
+      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="2xl"] {
       --_input-height: var(--vds-size-2xl);
       --_input-px: var(--vds-space-6);
       --_input-font-size: var(--vds-text-xl);
-      --_input-radius: var(--vds-radius-element);
+      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
   }
 
@@ -204,13 +204,13 @@
     }
 
     & > .vds-input:first-child {
-      border-start-start-radius: var(--vds-radius-element);
-      border-end-start-radius: var(--vds-radius-element);
+      border-start-start-radius: var(--vds-radius-input, var(--vds-radius-element));
+      border-end-start-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     & > .vds-input:last-child {
-      border-start-end-radius: var(--vds-radius-element);
-      border-end-end-radius: var(--vds-radius-element);
+      border-start-end-radius: var(--vds-radius-input, var(--vds-radius-element));
+      border-end-end-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     & > .vds-input-addon[data-side="start"] + .vds-input {
@@ -238,14 +238,14 @@
 
     &[data-side="start"] {
       border-inline-end: none;
-      border-start-start-radius: var(--vds-radius-element);
-      border-end-start-radius: var(--vds-radius-element);
+      border-start-start-radius: var(--vds-radius-input, var(--vds-radius-element));
+      border-end-start-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-side="end"] {
       border-inline-start: none;
-      border-start-end-radius: var(--vds-radius-element);
-      border-end-end-radius: var(--vds-radius-element);
+      border-start-end-radius: var(--vds-radius-input, var(--vds-radius-element));
+      border-end-end-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
   }
 
@@ -284,8 +284,11 @@
     padding: 0;
     border: 0;
     border-radius: max(
-      calc(var(--_input-radius) - var(--vds-space-1)),
-      var(--vds-radius-sm)
+      calc(
+        var(--_input-radius, var(--vds-radius-input, var(--vds-radius-element))) -
+          var(--vds-space-1)
+      ),
+      var(--vds-radius-action, var(--vds-radius-control-action))
     );
     background: transparent;
     color: var(--vds-color-text-muted);
@@ -383,7 +386,7 @@
 
   .vds-password-strength[data-has-requirements] {
     padding: var(--vds-space-3);
-    border-radius: var(--vds-radius-element);
+    border-radius: var(--vds-radius-card, var(--vds-radius-element));
     background: var(--vds-color-surface-raised);
   }
 
@@ -487,7 +490,7 @@
     inline-size: 0.875rem;
     block-size: 0.875rem;
     border: 1px solid var(--vds-color-border-strong, var(--vds-color-border));
-    border-radius: var(--vds-radius-checkbox, var(--vds-radius-xs, 0.25rem));
+    border-radius: var(--vds-radius-checkbox, var(--vds-radius-2, 0.25rem));
     background: transparent;
     color: transparent;
     transition:

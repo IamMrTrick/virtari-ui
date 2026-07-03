@@ -758,7 +758,7 @@ function EffectsSection() {
           alignItems: "center",
           gap: "var(--vds-space-3)",
           padding: "var(--vds-space-6)",
-          borderRadius: "var(--vds-radius-xl)",
+          borderRadius: "var(--vds-radius-card)",
           background: "linear-gradient(135deg, oklch(0.25 0.15 265), oklch(0.15 0.10 300))",
         }}
       >

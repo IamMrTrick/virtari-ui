@@ -10,7 +10,7 @@
     --_toggle-font-size: var(--vds-text-sm);
     --_toggle-line-height: var(--vds-control-line-height, 1);
     --_toggle-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
-    --_toggle-radius: var(--vds-radius-element);
+    --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
     --_toggle-gap: var(--vds-space-2);
     --_toggle-icon-size: 1.125rem;
 
@@ -74,7 +74,7 @@
       --_toggle-height: var(--vds-size-2xs);
       --_toggle-px: var(--vds-space-1-5);
       --_toggle-font-size: var(--vds-text-xs);
-      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-1);
       --_toggle-icon-size: 0.875rem;
     }
@@ -83,7 +83,7 @@
       --_toggle-height: var(--vds-size-xs);
       --_toggle-px: var(--vds-space-2);
       --_toggle-font-size: var(--vds-text-xs);
-      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-1);
       --_toggle-icon-size: 0.875rem;
     }
@@ -92,7 +92,7 @@
       --_toggle-height: var(--vds-size-sm);
       --_toggle-px: var(--vds-space-2);
       --_toggle-font-size: var(--vds-text-sm);
-      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-1-5);
       --_toggle-icon-size: 1rem;
     }
@@ -103,7 +103,7 @@
       --_toggle-height: var(--vds-size-lg);
       --_toggle-px: var(--vds-space-4);
       --_toggle-font-size: var(--vds-text-base);
-      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-2);
       --_toggle-icon-size: 1.25rem;
     }
@@ -112,7 +112,7 @@
       --_toggle-height: var(--vds-size-xl);
       --_toggle-px: var(--vds-space-5);
       --_toggle-font-size: var(--vds-text-lg);
-      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-2);
       --_toggle-icon-size: 1.25rem;
     }
@@ -121,7 +121,7 @@
       --_toggle-height: var(--vds-size-2xl);
       --_toggle-px: var(--vds-space-6);
       --_toggle-font-size: var(--vds-text-xl);
-      --_toggle-radius: var(--vds-radius-element);
+      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-3);
       --_toggle-icon-size: 1.5rem;
     }
