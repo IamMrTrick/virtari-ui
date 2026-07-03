@@ -490,7 +490,7 @@
     outline: var(--data-table-focus-ring-width) solid
       var(--data-table-focus-ring-color);
     outline-offset: 2px;
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
   }
   .vds-data-table-sort-label {
     overflow: hidden;
@@ -702,7 +702,7 @@
     inline-size: 1.25rem;
     block-size: 1.25rem;
     color: var(--vds-color-text-subtle, #9ca3af);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
     transition: color var(--data-table-transition-duration)
       var(--data-table-transition-easing);
@@ -772,7 +772,7 @@
     padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
     font-size: var(--vds-text-xs, 0.75rem);
     color: var(--vds-color-text-muted, #6b7280);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
     transition: background-color var(--data-table-transition-duration)
       var(--data-table-transition-easing);
@@ -883,7 +883,7 @@
     inline-size: 1.25rem;
     block-size: 1.25rem;
     color: var(--vds-color-text-muted, #6b7280);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
     transition: background-color var(--data-table-transition-duration)
       var(--data-table-transition-easing);
@@ -945,7 +945,7 @@
     gap: var(--vds-space-2, 0.5rem);
     padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
     cursor: pointer;
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-nav-item, var(--vds-radius-element, 0.375rem));
   }
   .vds-data-table-column-visibility-item:hover {
     background-color: var(--data-table-pagination-button-bg-hover);
@@ -983,7 +983,7 @@
     padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
     color: var(--vds-color-text-muted, #6b7280);
     font-size: var(--vds-text-xs, 0.75rem);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
   }
   .vds-data-table-row-pin-trigger:hover {
@@ -1157,7 +1157,7 @@
     color: var(--vds-color-text-muted, #6b7280);
     font-size: var(--vds-text-sm, 0.875rem);
     cursor: pointer;
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
   }
   .vds-data-table-bulk-clear:hover {
     background-color: var(--data-table-pagination-button-bg-hover);
@@ -1170,7 +1170,7 @@
     padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem);
     background-color: var(--data-table-select-all-bg);
     color: var(--data-table-select-all-color);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-data-table, var(--vds-radius-element, 0.375rem));
     font-size: var(--vds-text-sm, 0.875rem);
     flex: 1 1 100%;
   }
@@ -1342,7 +1342,7 @@
     padding: 2px;
     opacity: 0;
     color: var(--vds-color-text-muted, #6b7280);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
     transition: opacity var(--data-table-transition-duration)
       var(--data-table-transition-easing);
@@ -1374,7 +1374,7 @@
     inline-size: 1.75rem;
     block-size: 1.75rem;
     color: var(--vds-color-text-muted, #6b7280);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
   }
   .vds-data-table-actions-cell-trigger:hover {
@@ -1403,7 +1403,7 @@
     padding: var(--vds-space-1, 0.25rem);
     cursor: pointer;
     color: var(--vds-color-text-muted, #6b7280);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
   }
   .vds-data-table-filter-drawer-back:hover {
     background-color: var(--data-table-pagination-button-bg-hover);
@@ -1458,7 +1458,7 @@
     padding: 2px var(--vds-space-2, 0.5rem);
     background-color: var(--vds-color-surface, #ffffff);
     border: 1px dashed var(--vds-color-border, #d1d5db);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
     font-size: var(--vds-text-xs, 0.75rem);
     font-weight: var(--vds-font-weight-semibold, 600);
@@ -1492,7 +1492,7 @@
     padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem);
     background-color: var(--vds-color-surface, #ffffff);
     border: 1px solid var(--vds-color-border-muted, #e5e7eb);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-nav-item, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
     transition: background-color var(--data-table-transition-duration)
       var(--data-table-transition-easing);
@@ -1573,7 +1573,7 @@
     color: var(--vds-color-text-muted, #6b7280);
     font-size: var(--vds-text-xs, 0.75rem);
     padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
   }
   .vds-data-table-customize-drawer-reset:hover {
     background-color: var(--vds-color-surface-hover, #f3f4f6);
@@ -1585,7 +1585,7 @@
     padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem);
     background-color: var(--vds-color-surface, #ffffff);
     border: 1px solid var(--vds-color-border-muted, #e5e7eb);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-control, var(--vds-radius-element, 0.375rem));
   }
   .vds-data-table-customize-item[data-dragging] {
     box-shadow: var(--vds-shadow-md, 0 4px 8px rgba(0, 0, 0, 0.08));

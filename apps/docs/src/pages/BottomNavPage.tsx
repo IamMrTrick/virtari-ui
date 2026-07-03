@@ -47,7 +47,7 @@ function PhoneFrame({
         inlineSize: "min(100%, 22rem)",
         blockSize: tall ? "24rem" : "16rem",
         border: "1px solid var(--vds-color-border-muted)",
-        borderRadius: "var(--vds-radius-xl, 1rem)",
+        borderRadius: "var(--vds-radius-card, 1rem)",
         overflow: "hidden",
         background: "var(--vds-color-bg-subtle)",
         display: "flex",

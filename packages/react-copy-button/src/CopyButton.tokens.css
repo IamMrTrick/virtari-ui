@@ -3,7 +3,7 @@
     --_copy-btn-padding:   var(--vds-space-1-5);
     --_copy-btn-icon-size: 1rem;
     --_copy-btn-font-size: var(--vds-text-sm);
-    --_copy-btn-radius:    var(--vds-radius-element);
+    --_copy-btn-radius:    var(--vds-radius-copy-button, var(--vds-radius-element));
     --_copy-btn-gap:       var(--vds-space-1-5);
 
     &[data-size="2xs"] {

@@ -176,7 +176,7 @@ export function UtilitiesPage() {
         title="Live: flex + gap + padding"
         description="Resize the window — gap increases at md (768px). Uses vds-u-flex, vds-u-gap-2, md:vds-u-gap-6, vds-u-p-4."
       >
-        <div className="vds-u-flex vds-u-gap-2 md:vds-u-gap-6 vds-u-p-4" style={{ background: "var(--vds-color-bg-subtle)", borderRadius: "var(--vds-radius-lg)" }}>
+        <div className="vds-u-flex vds-u-gap-2 md:vds-u-gap-6 vds-u-p-4" style={{ background: "var(--vds-color-bg-subtle)", borderRadius: "var(--vds-radius-card)" }}>
           <Button>One</Button>
           <Button variant="outline">Two</Button>
           <Button variant="ghost">Three</Button>
@@ -211,12 +211,12 @@ export function UtilitiesPage() {
         <div
           dir={rtl ? "rtl" : "ltr"}
           className="vds-u-flex vds-u-items-center vds-u-gap-3 vds-u-p-4"
-          style={{ background: "var(--vds-color-bg-subtle)", borderRadius: "var(--vds-radius-lg)" }}
+          style={{ background: "var(--vds-color-bg-subtle)", borderRadius: "var(--vds-radius-card)" }}
         >
-          <div className="vds-u-mis-auto vds-u-pis-4" style={{ background: "var(--vds-color-primary-500)", color: "white", padding: "var(--vds-space-2) var(--vds-space-3)", borderRadius: "var(--vds-radius-md)" }}>
+          <div className="vds-u-mis-auto vds-u-pis-4" style={{ background: "var(--vds-color-primary-500)", color: "white", padding: "var(--vds-space-2) var(--vds-space-3)", borderRadius: "var(--vds-radius-card)" }}>
             <code style={{ fontSize: "var(--vds-text-xs)" }}>vds-u-mis-auto</code>
           </div>
-          <div style={{ background: "var(--vds-color-bg-muted)", padding: "var(--vds-space-2) var(--vds-space-3)", borderRadius: "var(--vds-radius-md)" }}>
+          <div style={{ background: "var(--vds-color-bg-muted)", padding: "var(--vds-space-2) var(--vds-space-3)", borderRadius: "var(--vds-radius-card)" }}>
             Follows
           </div>
         </div>

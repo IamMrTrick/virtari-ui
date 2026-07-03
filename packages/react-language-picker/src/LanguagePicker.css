@@ -246,7 +246,7 @@
   .vds-language-picker-drawer-search {
     margin-block-start: var(--vds-space-2, 0.5rem);
     border: 1px solid var(--vds-color-border-muted, #e5e7eb);
-    border-radius: var(--vds-radius-element, 0.5rem);
+    border-radius: var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
     background-color: var(--vds-color-surface, #fff);
     padding-inline: var(--vds-space-3, 0.75rem);
     padding-block: var(--vds-space-2, 0.5rem);
@@ -280,7 +280,7 @@
     background: transparent;
     padding-inline: var(--vds-space-3, 0.75rem);
     padding-block: var(--vds-space-2-5, 0.625rem);
-    border-radius: var(--vds-radius-element, 0.5rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
     font: inherit;
     text-align: start;
     cursor: pointer;

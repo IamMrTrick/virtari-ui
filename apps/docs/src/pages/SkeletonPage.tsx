@@ -14,7 +14,7 @@ export function SkeletonPage() {
       </Section>
 
       <Section title="Card Layout" description="A skeleton placeholder mimicking a card with avatar and text.">
-        <div style={{ display: "flex", gap: "var(--vds-space-3)", maxInlineSize: "24rem", padding: "var(--vds-space-4)", borderRadius: "var(--vds-radius-lg)", border: "1px solid var(--vds-color-border)" }}>
+        <div style={{ display: "flex", gap: "var(--vds-space-3)", maxInlineSize: "24rem", padding: "var(--vds-space-4)", borderRadius: "var(--vds-radius-card)", border: "1px solid var(--vds-color-border)" }}>
           <Skeleton style={{ height: "2.5rem", width: "2.5rem", borderRadius: "50%", flexShrink: 0 }} />
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "var(--vds-space-2)" }}>
             <Skeleton style={{ height: "1rem", width: "60%" }} />

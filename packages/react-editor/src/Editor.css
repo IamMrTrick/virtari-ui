@@ -193,7 +193,7 @@
   .vds-editor-toolbar-button {
     --button-height: 2.1rem;
     --button-padding-inline: 0.45rem;
-    --button-radius: calc(var(--vds-editor-toolbar-radius) - 0.2rem);
+    --button-radius: var(--vds-editor-radius-control-sm, var(--vds-editor-toolbar-radius));
     flex: 0 0 auto;
   }
 
@@ -207,7 +207,7 @@
   .vds-editor-toolbar-trigger {
     --button-height: 2.1rem;
     --button-padding-inline: 0.55rem;
-    --button-radius: calc(var(--vds-editor-toolbar-radius) - 0.2rem);
+    --button-radius: var(--vds-editor-radius-control, var(--vds-editor-toolbar-radius));
     --button-gap: var(--vds-space-2, 0.5rem);
     flex: 0 0 auto;
     min-inline-size: fit-content;
@@ -220,7 +220,7 @@
   .vds-editor-font-size-step.vds-button {
     --button-height: 2.1rem;
     --button-padding-inline: 0;
-    --button-radius: calc(var(--vds-editor-toolbar-radius) - 0.2rem);
+    --button-radius: var(--vds-editor-radius-control-sm, var(--vds-editor-toolbar-radius));
     inline-size: 2.1rem;
     min-inline-size: 2.1rem;
   }
@@ -305,7 +305,7 @@
     .vds-editor-toolbar-select-item {
       --select-item-padding-inline: var(--vds-space-2, 0.5rem);
       --select-item-padding-block: var(--vds-space-1-5, 0.375rem);
-      --select-item-radius: var(--vds-radius-element);
+      --select-item-radius: var(--vds-radius-action, var(--vds-radius-element));
     }
 
     .vds-editor-toolbar-select-item-content {
@@ -359,7 +359,7 @@
   .vds-editor-toolbar-text-button {
     --button-height: 2rem;
     --button-padding-inline: var(--vds-space-2, 0.5rem);
-    --button-radius: calc(var(--vds-editor-toolbar-radius) - 0.125rem);
+    --button-radius: var(--vds-editor-radius-control-sm, var(--vds-editor-toolbar-radius));
     --button-gap: var(--vds-space-1, 0.25rem);
     white-space: nowrap;
   }
@@ -381,7 +381,7 @@
   .vds-editor-insert-trigger {
     --button-height: 2.25rem;
     --button-padding-inline: var(--vds-space-3, 0.75rem);
-    --button-radius: var(--vds-editor-toolbar-radius);
+    --button-radius: var(--vds-editor-radius-control, var(--vds-editor-toolbar-radius));
     --button-bg: var(--vds-editor-insert-accent-bg);
     --button-bg-hover: var(--vds-editor-insert-accent-bg-hover);
     --button-bg-active: color-mix(
@@ -673,7 +673,7 @@
     min-inline-size: 0;
     inline-size: 100%;
     border: 0;
-    border-radius: var(--vds-radius-element, 0.5rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
     background: transparent;
     color: inherit;
     font: inherit;
@@ -723,7 +723,7 @@
     justify-content: center;
     inline-size: 1.25rem;
     block-size: 1.25rem;
-    border-radius: var(--vds-radius-sm, 0.375rem);
+    border-radius: var(--vds-editor-radius-control-sm, 0.375rem);
     background: color-mix(in oklch, var(--vds-color-primary-9, #2563eb) 8%, transparent);
     color: var(--vds-editor-text);
   }
@@ -787,7 +787,7 @@
     --button-height: auto;
     --button-padding-inline: var(--vds-space-2, 0.5rem);
     --button-padding-block: var(--vds-space-2, 0.5rem);
-    --button-radius: var(--vds-radius-md, 0.5rem);
+    --button-radius: var(--vds-editor-radius-control, 0.5rem);
     justify-content: flex-start;
     text-align: start;
   }
@@ -815,7 +815,7 @@
     justify-content: center;
     inline-size: 1.5rem;
     block-size: 1.5rem;
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-control-sm, 0.5rem);
     background: color-mix(in oklch, var(--vds-editor-bg-muted) 80%, transparent);
     color: var(--vds-editor-text-muted);
   }
@@ -873,7 +873,7 @@
     inline-size: 1.125rem;
     block-size: 1.125rem;
     border: 1px solid color-mix(in oklch, var(--vds-editor-border) 88%, transparent);
-    border-radius: var(--vds-radius-sm, 0.375rem);
+    border-radius: var(--vds-editor-radius-control-sm, 0.375rem);
     box-shadow: inset 0 0 0 1px color-mix(in oklch, white 30%, transparent);
     cursor: pointer;
   }
@@ -891,7 +891,7 @@
   .vds-editor-color-saturation {
     position: relative;
     block-size: 8rem;
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     background-image:
       linear-gradient(transparent, black),
       linear-gradient(to right, white, transparent);
@@ -934,7 +934,7 @@
 
   .vds-editor-color-preview {
     block-size: 1.75rem;
-    border-radius: var(--vds-radius-sm, 0.375rem);
+    border-radius: var(--vds-editor-radius-control-sm, 0.375rem);
     border: 1px solid color-mix(in oklch, var(--vds-editor-border) 88%, transparent);
   }
 
@@ -1094,7 +1094,7 @@
     padding-inline: var(--vds-space-4, 1rem);
     padding-block: var(--vds-space-3, 0.75rem);
     border-inline-start: 3px solid var(--vds-editor-quote-border);
-    border-radius: var(--vds-radius-lg, 0.75rem);
+    border-radius: var(--vds-editor-radius-surface, 0.75rem);
     background: var(--vds-editor-quote-bg);
     color: var(--vds-editor-text-muted);
     font-style: italic;
@@ -1127,7 +1127,7 @@
   .vds-editor-text-code {
     padding-inline: 0.35em;
     padding-block: 0.12em;
-    border-radius: var(--vds-radius-sm, 0.25rem);
+    border-radius: var(--vds-editor-radius-control-sm, 0.25rem);
     background: var(--vds-editor-inline-code-bg);
     font-family: var(--vds-font-mono, ui-monospace, monospace);
     font-size: 0.92em;
@@ -1135,7 +1135,7 @@
 
   .vds-editor-text-highlight {
     padding-inline: 0.12em;
-    border-radius: var(--vds-radius-sm, 0.25rem);
+    border-radius: var(--vds-editor-radius-control-sm, 0.25rem);
     background: color-mix(
       in oklch,
       var(--vds-color-warning-5, #fde68a) 74%,
@@ -1169,7 +1169,7 @@
 
   .vds-editor-comment-mark {
     padding-inline: 0.08em;
-    border-radius: var(--vds-radius-sm, 0.25rem);
+    border-radius: var(--vds-editor-radius-control-sm, 0.25rem);
     background: var(--vds-editor-comment-bg);
     box-shadow: inset 0 -1px 0 var(--vds-editor-comment-border);
   }
@@ -1186,7 +1186,7 @@
     padding: var(--vds-space-3, 0.75rem) var(--vds-space-3-5, 0.875rem);
     overflow-x: auto;
     border: 1px solid var(--vds-editor-code-border);
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     background:
       linear-gradient(
         90deg,
@@ -1224,7 +1224,7 @@
     inline-size: 100%;
     min-inline-size: 0;
     border: 1px solid var(--vds-editor-border);
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     background: var(--vds-editor-bg-muted);
   }
 
@@ -1255,7 +1255,7 @@
     min-block-size: 7.5rem;
     padding: var(--vds-space-4, 1rem);
     border: 1px dashed var(--vds-editor-drag-placeholder-border);
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     background:
       linear-gradient(
         135deg,
@@ -1370,7 +1370,7 @@
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     background: color-mix(
       in oklch,
       var(--vds-color-primary-9, #2563eb) 12%,
@@ -1394,12 +1394,12 @@
   }
 
   .vds-editor-media-code {
-    --vds-code-radius: var(--vds-radius-md, 0.5rem);
+    --vds-code-radius: var(--vds-editor-radius-block, 0.5rem);
   }
 
   .vds-editor-media-source-hint,
   .vds-editor-media-error {
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     padding: var(--vds-space-2, 0.5rem);
     font-size: var(--vds-text-xs, 0.75rem);
   }
@@ -1583,7 +1583,7 @@
     overflow: auto;
     margin-block: var(--vds-space-4, 1rem);
     border: 1px solid var(--vds-editor-border);
-    border-radius: var(--vds-radius-lg, 0.75rem);
+    border-radius: var(--vds-editor-radius-surface, 0.75rem);
   }
 
   .vds-editor-table {
@@ -1662,7 +1662,7 @@
   .vds-editor-character-limit {
     background: var(--vds-editor-danger-soft);
     color: var(--vds-color-danger-11, #b91c1c);
-    border-radius: var(--vds-radius-sm, 0.25rem);
+    border-radius: var(--vds-editor-radius-control-sm, 0.25rem);
   }
 
   .vds-editor[data-mode="markdown"] .vds-editor-content,
@@ -1689,7 +1689,7 @@
     gap: var(--vds-space-3, 0.75rem);
     padding: var(--vds-space-3, 0.75rem);
     border: 1px solid var(--vds-editor-border);
-    border-radius: var(--vds-radius-xl, 1rem);
+    border-radius: var(--vds-editor-radius-popover, 1rem);
     background: color-mix(in oklch, var(--vds-editor-bg) 92%, transparent);
   }
 
@@ -1719,7 +1719,7 @@
     margin: 0;
     padding: var(--vds-space-3, 0.75rem);
     border-inline-start: 3px solid var(--vds-editor-comment-border);
-    border-radius: var(--vds-radius-lg, 0.75rem);
+    border-radius: var(--vds-editor-radius-surface, 0.75rem);
     background: var(--vds-editor-comment-bg);
     color: var(--vds-editor-text-muted);
     font-size: var(--vds-text-sm, 0.875rem);
@@ -1825,7 +1825,7 @@
     margin-block-start: var(--vds-space-2, 0.5rem);
     padding: var(--vds-space-2, 0.5rem);
     border: 1px solid var(--vds-editor-border);
-    border-radius: var(--vds-radius-xl, 1rem);
+    border-radius: var(--vds-editor-radius-popover, 1rem);
     background: color-mix(in oklch, var(--vds-editor-bg) 94%, transparent);
     box-shadow:
       0 16px 42px -24px color-mix(in oklch, black 30%, transparent),
@@ -1841,7 +1841,7 @@
     inline-size: 100%;
     padding: var(--vds-space-3, 0.75rem);
     border: 0;
-    border-radius: var(--vds-radius-lg, 0.75rem);
+    border-radius: var(--vds-editor-radius-surface, 0.75rem);
     background: transparent;
     color: inherit;
     text-align: start;
@@ -1859,7 +1859,7 @@
     justify-content: center;
     inline-size: 2rem;
     block-size: 2rem;
-    border-radius: var(--vds-radius-lg, 0.75rem);
+    border-radius: var(--vds-editor-radius-surface, 0.75rem);
     background: color-mix(in oklch, var(--vds-editor-bg-muted) 78%, transparent);
     color: var(--vds-editor-text-muted);
   }
@@ -1889,7 +1889,7 @@
     max-inline-size: min(34rem, calc(100vw - 1rem));
     padding: var(--vds-space-1-5, 0.375rem);
     border: 1px solid var(--vds-editor-border);
-    border-radius: var(--vds-radius-lg, 0.75rem);
+    border-radius: var(--vds-editor-radius-surface, 0.75rem);
     background: var(--vds-editor-panel-bg);
     box-shadow:
       0 18px 40px -24px color-mix(in oklch, black 30%, transparent),
@@ -1918,7 +1918,7 @@
   .vds-editor-floating-button {
     --button-height: 2.125rem;
     --button-padding-inline: 0;
-    --button-radius: var(--vds-radius-md, 0.5rem);
+    --button-radius: var(--vds-editor-radius-control-sm, 0.5rem);
     inline-size: 2.125rem;
     min-inline-size: 2.125rem;
   }
@@ -1947,13 +1947,13 @@
   .vds-editor-floating-link-input {
     --_input-height: 1.875rem;
     --_input-font-size: var(--vds-text-xs, 0.75rem);
-    --_input-radius: var(--vds-radius-md, 0.5rem);
+    --_input-radius: var(--vds-editor-radius-control, 0.5rem);
     min-inline-size: 0;
   }
 
   .vds-editor-floating-link-action {
     --button-height: 1.875rem;
-    --button-radius: var(--vds-radius-md, 0.5rem);
+    --button-radius: var(--vds-editor-radius-control, 0.5rem);
     --button-padding-inline: var(--vds-space-2, 0.5rem);
     --button-gap: var(--vds-space-1, 0.25rem);
     white-space: nowrap;
@@ -2009,7 +2009,7 @@
     block-size: calc(var(--vds-editor-block-tools-size) + 0.25rem);
     padding: 0.125rem;
     border: 1px solid transparent;
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     color: var(--vds-editor-block-tools-color);
     background: transparent;
     cursor: grab;
@@ -2043,7 +2043,7 @@
   .vds-editor-block-insert .vds-editor-insert-trigger {
     --button-height: var(--vds-editor-block-tools-size);
     --button-padding-inline: 0;
-    --button-radius: var(--vds-radius-sm, 0.375rem);
+    --button-radius: var(--vds-editor-radius-control-sm, 0.375rem);
     --button-bg: var(--vds-editor-insert-accent-bg);
     --button-bg-hover: var(--vds-editor-insert-accent-bg-hover);
     --button-bg-active: color-mix(
@@ -2090,7 +2090,7 @@
     justify-content: center;
     inline-size: var(--vds-editor-block-tools-size);
     block-size: var(--vds-editor-block-tools-size);
-    border-radius: var(--vds-radius-sm, 0.375rem);
+    border-radius: var(--vds-editor-radius-control-sm, 0.375rem);
     cursor: grab;
     opacity: 0.72;
     transition:
@@ -2140,7 +2140,7 @@
     > [data-vds-drag-source="true"] {
     opacity: 0.5;
     transform: scale(0.998);
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     box-shadow: none;
   }
 
@@ -2166,7 +2166,7 @@
     .vds-editor-content
     > [data-vds-drop-position] {
     position: relative;
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     box-shadow: none;
   }
 
@@ -2258,7 +2258,7 @@
     max-inline-size: min(35rem, calc(100vw - 2rem));
     padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem);
     border: 1px solid var(--vds-editor-drag-placeholder-border, #60a5fa);
-    border-radius: var(--vds-radius-md, 0.5rem);
+    border-radius: var(--vds-editor-radius-block, 0.5rem);
     background: var(--vds-editor-panel-bg, #ffffff);
     color: var(--vds-editor-text, #111827);
     box-shadow:

@@ -83,7 +83,7 @@ function TagInput() {
         gap: "var(--vds-space-2)",
         padding: "var(--vds-space-2) var(--vds-space-3)",
         border: "1px solid var(--vds-color-border)",
-        borderRadius: "var(--vds-radius-md, 0.5rem)",
+        borderRadius: "var(--vds-radius-card, 0.5rem)",
         background: "var(--vds-color-surface)",
         maxInlineSize: "32rem",
       }}
@@ -516,7 +516,7 @@ export function ChipPage() {
             style={{
               padding: "var(--vds-space-4)",
               border: "1px solid var(--vds-color-border)",
-              borderRadius: "var(--vds-radius-lg, 0.75rem)",
+              borderRadius: "var(--vds-radius-card, 0.75rem)",
               background: "var(--vds-color-surface)",
               display: "flex",
               flexDirection: "column",
@@ -569,7 +569,7 @@ export function ChipPage() {
             style={{
               padding: "var(--vds-space-4)",
               border: "1px solid var(--vds-color-border)",
-              borderRadius: "var(--vds-radius-lg, 0.75rem)",
+              borderRadius: "var(--vds-radius-card, 0.75rem)",
               background: "var(--vds-color-surface)",
               display: "flex",
               flexDirection: "column",

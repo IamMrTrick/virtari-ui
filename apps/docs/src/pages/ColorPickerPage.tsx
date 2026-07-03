@@ -30,7 +30,7 @@ function PreviewCard({
           position: "relative",
           minBlockSize: "10rem",
           padding: "var(--vds-space-4)",
-          borderRadius: "var(--vds-radius-xl, 1rem)",
+          borderRadius: "var(--vds-radius-card, 1rem)",
           border: "1px solid color-mix(in oklch, var(--vds-color-border) 58%, transparent)",
           background: value,
           overflow: "hidden",
@@ -264,7 +264,7 @@ export function ColorPickerPage() {
               display: "grid",
               gap: "var(--vds-space-2)",
               padding: "var(--vds-space-4)",
-              borderRadius: "var(--vds-radius-lg)",
+              borderRadius: "var(--vds-radius-card)",
               background: "var(--vds-color-bg-subtle)",
             }}
           >

@@ -15,7 +15,7 @@
     --date-field-height: var(--vds-size-md, 2.5rem);
     --date-field-gap: var(--vds-space-1, 0.25rem);
     --date-field-padding-inline: var(--vds-space-3, 0.75rem);
-    --date-field-radius: var(--vds-radius-element, 0.5rem);
+    --date-field-radius: var(--vds-radius-date-field, 0.5rem);
     --date-field-border-width: 1px;
 
     --date-field-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
@@ -38,7 +38,7 @@
 
     --date-field-segment-focus-bg: var(--vds-color-primary-9, #6366f1);
     --date-field-segment-focus-text: var(--vds-color-primary-contrast, #ffffff);
-    --date-field-segment-radius: var(--vds-radius-sm, 0.25rem);
+    --date-field-segment-radius: var(--vds-radius-date-segment, 0.25rem);
     --date-field-segment-padding-inline: 2px;
 
     --date-field-transition-duration: var(--vds-duration-fast, 100ms);
@@ -50,8 +50,8 @@
     --time-picker-surface-bg: var(--vds-color-surface, #ffffff);
     --time-picker-surface-border-color: var(--vds-color-border-muted, #e5e7eb);
     --time-picker-surface-shadow: var(--vds-shadow-lg, 0 18px 45px rgb(15 23 42 / 0.18));
-    --time-picker-surface-radius: var(--vds-radius-surface, 0.75rem);
-    --time-picker-surface-inner-radius: var(--vds-radius-element, 0.5rem);
+    --time-picker-surface-radius: var(--vds-radius-time-picker-surface, 0.75rem);
+    --time-picker-surface-inner-radius: var(--vds-radius-time-picker-inner, 0.5rem);
     --time-picker-wheel-surface-bg: color-mix(in oklab, var(--vds-color-bg-subtle, #f8fafc) 90%, var(--vds-color-surface, #ffffff));
     --time-picker-wheel-height: 11rem;
     --time-picker-wheel-item-height: 2.75rem;

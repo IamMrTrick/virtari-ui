@@ -50,7 +50,7 @@
     max-inline-size: 100%;
     padding: var(--vds-space-1, 0.25rem) var(--vds-space-2, 0.5rem);
     border: 0;
-    border-radius: var(--vds-radius-sm, 0.25rem);
+    border-radius: var(--calendar-nav-button-radius);
     background: transparent;
     color: inherit;
     font: inherit;
@@ -320,7 +320,7 @@
     block-size: var(--vds-size-md, 2.5rem);
     padding-inline: var(--vds-space-3, 0.75rem);
     border: 1px solid transparent;
-    border-radius: var(--vds-radius-element, 0.5rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
     font: inherit;
     font-size: var(--vds-text-sm, 0.875rem);
     font-weight: var(--vds-font-weight-medium, 500);

@@ -8,7 +8,7 @@
   --tag-input-bg:            var(--vds-color-surface, #ffffff);
   --tag-input-border-color:  var(--vds-color-border, #d1d5db);
   --tag-input-border-width:  1px;
-  --tag-input-radius:        var(--vds-radius-input, 0.5rem);
+  --tag-input-radius:        var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
 
   /* ─── Input field ─── */
   --tag-input-field-size:    var(--vds-text-sm, 0.875rem);

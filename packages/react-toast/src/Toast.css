@@ -332,7 +332,7 @@
     font-weight: var(--vds-font-weight-medium);
     line-height: 1;
     border: 1px solid transparent;
-    border-radius: var(--vds-radius-element);
+    border-radius: var(--vds-radius-toast-action, var(--vds-radius-element));
     background: transparent;
     color: var(--vds-color-text);
     cursor: pointer;

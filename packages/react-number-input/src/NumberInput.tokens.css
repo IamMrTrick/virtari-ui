@@ -3,7 +3,7 @@
     --_ni-height:       var(--vds-size-md);
     --_ni-px:          var(--vds-space-3);
     --_ni-font-size:   var(--vds-text-sm);
-    --_ni-radius:      var(--vds-radius-element);
+    --_ni-radius:      var(--vds-radius-input, var(--vds-radius-element));
     --_ni-stepper-w:   var(--vds-space-6);
     --_ni-stepper-icon: 0.75rem;
 

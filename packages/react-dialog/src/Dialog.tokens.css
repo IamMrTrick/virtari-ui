@@ -45,7 +45,7 @@
     --dialog-close-size: 2rem;
     --dialog-close-icon-size: 1rem;
     --dialog-close-inset: var(--vds-space-3, 0.75rem);
-    --dialog-close-radius: var(--vds-radius-sm, 0.375rem);
+    --dialog-close-radius: var(--vds-radius-action, var(--vds-radius-control-action, 0.375rem));
     --dialog-close-color: var(--vds-color-text-muted, #6b7280);
     --dialog-close-color-hover: var(--vds-color-text, #111827);
     --dialog-close-bg-hover: color-mix(in oklch, currentColor 10%, transparent);

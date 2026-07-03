@@ -13,7 +13,7 @@
     --button-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
     --button-gap: var(--vds-space-2, 0.5rem);
     --button-border-width: 1px;
-    --button-radius: var(--vds-radius-element, 0.375rem);
+    --button-radius: var(--vds-radius-button, var(--vds-radius-element, 0.375rem));
     --button-min-width: var(--button-height);
     --button-icon-size: 1.125rem;
 
@@ -282,7 +282,7 @@
     --button-font-size:      var(--vds-text-xs, 0.75rem);
     --button-gap:            var(--vds-space-1, 0.25rem);
     --button-icon-size:      0.875rem;
-    --button-radius:         var(--vds-radius-element, 0.25rem);
+    --button-radius:         var(--vds-radius-button, var(--vds-radius-element, 0.25rem));
   }
 
   .vds-button[data-size="xs"] {
@@ -291,7 +291,7 @@
     --button-font-size:      var(--vds-text-xs, 0.75rem);
     --button-gap:            var(--vds-space-1, 0.25rem);
     --button-icon-size:      0.875rem;
-    --button-radius:         var(--vds-radius-element, 0.25rem);
+    --button-radius:         var(--vds-radius-button, var(--vds-radius-element, 0.25rem));
   }
 
   .vds-button[data-size="sm"] {

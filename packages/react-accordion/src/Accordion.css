@@ -55,7 +55,7 @@
   .vds-accordion-trigger:focus-visible {
     outline: var(--accordion-focus-ring-width) solid var(--accordion-focus-ring-color);
     outline-offset: var(--accordion-focus-ring-offset);
-    border-radius: var(--vds-radius-element, 0.375rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
   }
 
   .vds-accordion-trigger:disabled {

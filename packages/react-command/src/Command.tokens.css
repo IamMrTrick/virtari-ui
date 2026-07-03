@@ -3,7 +3,7 @@
     --vds-command-bg: var(--vds-color-surface, #ffffff);
     --vds-command-border: 1px solid
       var(--vds-color-border-default, #e5e7eb);
-    --vds-command-radius: var(--vds-radius-lg, 0.75rem);
+    --vds-command-radius: var(--vds-radius-command, 0.75rem);
     --vds-command-padding: var(--vds-space-1, 0.25rem);
 
     --vds-command-input-bg: transparent;

@@ -31,7 +31,7 @@ function DirectionFrame({
         minInlineSize: 0,
         padding: "var(--vds-space-4)",
         border: "1px solid var(--vds-color-border-muted)",
-        borderRadius: "var(--vds-radius-lg)",
+        borderRadius: "var(--vds-radius-card)",
         background: "var(--vds-color-surface)",
         display: "flex",
         flexDirection: "column",

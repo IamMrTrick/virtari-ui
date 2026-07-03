@@ -63,7 +63,7 @@ export function PaginationPage() {
         <Stack>
           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "var(--vds-space-2, 0.5rem)", minBlockSize: "14rem" }}>
             {slice1.map((it) => (
-              <li key={it.id} style={{ padding: "var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem)", border: "1px solid var(--vds-color-border-default, #e5e7eb)", borderRadius: "var(--vds-radius-md, 0.5rem)" }}>
+              <li key={it.id} style={{ padding: "var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem)", border: "1px solid var(--vds-color-border-default, #e5e7eb)", borderRadius: "var(--vds-radius-card, 0.5rem)" }}>
                 <strong>{it.title}</strong>{" "}
                 <span style={{ color: "var(--vds-color-text-muted, #6b7280)" }}>by {it.author}</span>
               </li>

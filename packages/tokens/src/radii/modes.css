@@ -16,11 +16,11 @@
    *   sharp  — minimal rounding → enterprise, technical, dense
    *   soft   — gentle rounding  → default, industry standard (= :root)
    *   round  — noticeable rounding → friendly, modern, consumer
-   *   pill   — fully rounded    → playful, bold, marketing
+   *   pill   — roundest personality → button/pill affordances go fully rounded
    *
    * ── Back-compat aliases ──
    * --vds-radius-element / --vds-radius-surface / --vds-radius-badge remain
-   * as thin aliases over sm / lg / full so existing components keep working.
+   * thin aliases. Component tokens decide what becomes truly full in pill.
    */
   :root {
     --vds-radius-xs:   var(--vds-radius-2);  /* 4px  */
@@ -44,7 +44,6 @@
     --vds-radius-lg:  var(--vds-radius-2);
     --vds-radius-xl:  var(--vds-radius-2);
     --vds-radius-2xl: var(--vds-radius-3);
-    --vds-radius-badge: var(--vds-radius-2);
   }
 
   /* ── Mode: Soft (default — same as :root) ── */
@@ -61,10 +60,10 @@
 
   /* ── Mode: Pill ── */
   [data-radius="pill"] {
-    --vds-radius-xs:  var(--vds-radius-full);
-    --vds-radius-sm:  var(--vds-radius-full);
-    --vds-radius-md:  var(--vds-radius-full);
-    --vds-radius-lg:  var(--vds-radius-7);
+    --vds-radius-xs:  var(--vds-radius-4);
+    --vds-radius-sm:  var(--vds-radius-5);
+    --vds-radius-md:  var(--vds-radius-6);
+    --vds-radius-lg:  var(--vds-radius-6);
     --vds-radius-xl:  var(--vds-radius-7);
     --vds-radius-2xl: var(--vds-radius-7);
   }

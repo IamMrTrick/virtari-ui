@@ -151,7 +151,7 @@
     margin-inline-start: auto;
     padding: 0;
     border: 0;
-    border-radius: var(--vds-radius-sm, 0.25rem);
+    border-radius: var(--vds-radius-date-trigger, 0.25rem);
     background: transparent;
     color: var(--date-field-trigger-color);
     cursor: pointer;

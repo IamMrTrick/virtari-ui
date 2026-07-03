@@ -177,7 +177,7 @@ const vdsBaseTheme = EditorView.theme(
       backgroundColor: "var(--vds-color-surface-overlay, var(--vds-code-bg))",
       color: "var(--vds-code-text)",
       border: "1px solid var(--vds-code-border)",
-      borderRadius: "var(--vds-radius-sm, 0.25rem)",
+      borderRadius: "var(--vds-radius-code-inline, 0.25rem)",
       boxShadow: "var(--vds-shadow-md, 0 4px 12px rgba(0,0,0,0.12))",
     },
     ".cm-tooltip-autocomplete > ul > li[aria-selected]": {

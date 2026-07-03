@@ -89,7 +89,7 @@
   .vds-flow .react-flow__attribution {
     background: color-mix(in oklab, var(--vds-color-surface) 88%, transparent);
     color: var(--vds-color-text-muted);
-    border-top-left-radius: var(--vds-radius-element);
+    border-top-left-radius: var(--vds-radius-control, var(--vds-radius-element));
     backdrop-filter: blur(10px);
   }
 
@@ -227,7 +227,7 @@
     min-inline-size: 0;
     padding: var(--vds-space-2-5);
     border: 1px solid color-mix(in oklab, var(--flow-border) 86%, transparent);
-    border-radius: var(--vds-radius-element);
+    border-radius: var(--vds-radius-card, var(--vds-radius-element));
     background: color-mix(in oklab, var(--_flow-tone-bg, var(--vds-color-bg-subtle)) 42%, transparent);
   }
 

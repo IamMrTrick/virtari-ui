@@ -789,7 +789,7 @@ function thumbnailStyle(tone: string): CSSProperties {
     blockSize: "2rem",
     marginInlineEnd: "-0.5rem",
     border: "2px solid var(--vds-color-surface)",
-    borderRadius: "var(--vds-radius-md)",
+    borderRadius: "var(--vds-radius-card)",
     background: `linear-gradient(135deg, var(--vds-color-${tone}-bg), var(--vds-color-${tone}-solid))`,
     boxShadow: "var(--vds-shadow-xs)",
   };
@@ -800,7 +800,7 @@ function wideThumbStyle(tone: string): CSSProperties {
     inlineSize: "4.75rem",
     blockSize: "2.25rem",
     border: "1px solid var(--vds-color-border-muted)",
-    borderRadius: "var(--vds-radius-md)",
+    borderRadius: "var(--vds-radius-card)",
     background: `radial-gradient(circle at 32% 40%, var(--vds-color-${tone}-solid), transparent 38%), var(--vds-color-${tone}-bg)`,
   };
 }
@@ -821,7 +821,7 @@ function swatchStyle(tone: string): CSSProperties {
 const gradientThumbStyle: CSSProperties = {
   inlineSize: "5rem",
   blockSize: "2.75rem",
-  borderRadius: "var(--vds-radius-md)",
+  borderRadius: "var(--vds-radius-card)",
   background:
     "linear-gradient(135deg, var(--vds-color-primary-solid), var(--vds-color-accent-solid), var(--vds-color-warning-solid))",
   boxShadow: "var(--vds-shadow-xs)",

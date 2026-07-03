@@ -504,7 +504,7 @@ function ShapesSection() {
       </Row>
 
       <Caption>
-        Pill respects the global <code>data-radius</code> mode — in pill mode both shapes converge; in sharp mode the pill stays pill while square becomes sharp.
+        Pill intentionally stays fully rounded across global <code>data-radius</code> modes; square follows the finite control radius scale.
       </Caption>
     </Section>
   );

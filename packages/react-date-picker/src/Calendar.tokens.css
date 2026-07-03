@@ -12,14 +12,14 @@
     --calendar-gap: var(--vds-space-2, 0.5rem);
     --calendar-header-height: var(--vds-size-sm, 2rem);
     --calendar-nav-button-size: var(--vds-size-xs, 1.75rem);
-    --calendar-nav-button-radius: var(--vds-radius-element, 0.5rem);
+    --calendar-nav-button-radius: var(--vds-radius-date-trigger, 0.5rem);
     --calendar-heading-font-size: var(--vds-text-sm, 0.875rem);
     --calendar-heading-font-weight: var(--vds-font-weight-semibold, 600);
 
     /* Grid */
     --calendar-cell-size: 2.25rem;
     --calendar-cell-gap: 2px;
-    --calendar-cell-radius: min(var(--vds-radius-element, 0.5rem), 0.5rem);
+    --calendar-cell-radius: var(--vds-radius-date-cell, 0.5rem);
     --calendar-cell-font-size: var(--vds-text-sm, 0.875rem);
     --calendar-cell-font-weight: var(--vds-font-weight-normal, 400);
 

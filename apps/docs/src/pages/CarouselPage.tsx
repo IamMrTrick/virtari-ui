@@ -451,7 +451,7 @@ export function CarouselPage() {
                 style={{
                   cursor: "pointer",
                   blockSize: "4rem",
-                  borderRadius: "var(--vds-radius-md)",
+                  borderRadius: "var(--vds-radius-card)",
                   background: `var(--vds-color-${hue}-bg)`,
                   display: "flex",
                   alignItems: "center",

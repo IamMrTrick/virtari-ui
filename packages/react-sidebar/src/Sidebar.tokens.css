@@ -50,7 +50,7 @@
 
     /* Trigger (icon button) — respects .vds-sidebar-trigger default sizing */
     --sidebar-trigger-size:   var(--vds-size-sm, 2rem);
-    --sidebar-trigger-radius: var(--vds-radius-element, 0.5rem);
+    --sidebar-trigger-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
   }
 
   /* ─────────────────────────────────────────────

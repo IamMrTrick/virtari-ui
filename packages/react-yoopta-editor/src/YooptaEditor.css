@@ -142,7 +142,7 @@
     block-size: 1.125rem;
     margin-block-start: var(--vds-space-1);
     accent-color: var(--vds-color-primary-solid);
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     cursor: pointer;
   }
   .vds-yoopta-editor [data-checked="true"],
@@ -174,7 +174,7 @@
     background: var(--vds-yoopta-color-code-inline-bg);
     color: var(--vds-color-primary-text);
     padding: 0.125em 0.375em;
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     border: 1px solid var(--vds-color-neutral-6);
   }
 
@@ -186,7 +186,7 @@
     background: var(--vds-yoopta-color-surface-raised);
     color: var(--vds-yoopta-color-text);
     border: 1px solid var(--vds-yoopta-color-border);
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     padding: var(--vds-space-1) var(--vds-space-2);
     font-size: var(--vds-text-xs);
     font-family: var(--vds-yoopta-font);
@@ -480,7 +480,7 @@
     align-items: center;
     gap: var(--vds-space-1);
     padding: 0.125em 0.375em;
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     background: var(--vds-color-primary-bg-subtle);
     color: var(--vds-color-primary-text);
     font-weight: var(--vds-font-weight-medium);
@@ -497,7 +497,7 @@
     background: var(--vds-color-warning-bg);
     color: var(--vds-color-warning-text);
     padding: 0.05em 0.15em;
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
   }
 
   /* ————————————————————————————————————————————————
@@ -527,7 +527,7 @@
     padding: var(--vds-space-1);
     background: var(--vds-color-surface-overlay);
     border: 1px solid var(--vds-color-neutral-6);
-    border-radius: var(--vds-radius-md);
+    border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-md);
     color: var(--vds-color-text);
     font-family: inherit;
@@ -537,7 +537,7 @@
     background: transparent;
     color: inherit;
     border: none;
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     padding: var(--vds-space-1) var(--vds-space-2);
     font-family: inherit;
     font-size: var(--vds-text-sm);
@@ -569,7 +569,7 @@
     padding: var(--vds-space-1);
     background: var(--vds-color-surface-overlay);
     border: 1px solid var(--vds-color-neutral-6);
-    border-radius: var(--vds-radius-md);
+    border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-lg);
     color: var(--vds-color-text);
     display: flex;
@@ -612,7 +612,7 @@
     border: none;
     text-align: start;
     padding: var(--vds-space-2);
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     font-family: inherit;
     font-size: var(--vds-text-sm);
     cursor: pointer;
@@ -628,7 +628,7 @@
   .vds-yoo-action-menu-item-icon {
     inline-size: 1.75rem;
     block-size: 1.75rem;
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     background: var(--vds-color-surface-raised);
     color: var(--vds-color-text-muted);
     display: inline-flex;
@@ -657,7 +657,7 @@
     padding: var(--vds-space-1);
     background: var(--vds-color-surface-overlay);
     border: 1px solid var(--vds-color-neutral-6);
-    border-radius: var(--vds-radius-md);
+    border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-lg);
     color: var(--vds-color-text);
     z-index: 70;
@@ -679,7 +679,7 @@
     border: none;
     text-align: start;
     padding: var(--vds-space-2);
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     font-family: inherit;
     font-size: var(--vds-text-sm);
     cursor: pointer;
@@ -708,7 +708,7 @@
     padding: 2px;
     background: var(--vds-color-surface-overlay);
     border: 1px solid var(--vds-color-neutral-6);
-    border-radius: var(--vds-radius-md);
+    border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-sm);
     color: var(--vds-color-text-muted);
     pointer-events: auto;
@@ -720,7 +720,7 @@
     background: transparent;
     border: none;
     color: inherit;
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     inline-size: 1.5rem;
     block-size: 1.5rem;
     display: inline-flex;
@@ -748,7 +748,7 @@
     z-index: 50;
     background: var(--vds-color-surface-overlay);
     border: 1px solid var(--vds-color-neutral-6);
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     color: var(--vds-color-text-muted);
     cursor: pointer;
     display: inline-flex;
@@ -848,7 +848,7 @@
     z-index: 50;
     background: var(--vds-color-surface-overlay);
     border: 1px solid var(--vds-color-neutral-6);
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     color: var(--vds-color-text-muted);
     cursor: grab;
     display: inline-flex;
@@ -908,7 +908,7 @@
     padding: var(--vds-space-2);
     background: var(--vds-color-surface-overlay);
     border: 1px solid var(--vds-color-neutral-6);
-    border-radius: var(--vds-radius-md);
+    border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-lg);
     color: var(--vds-color-text);
     display: flex;
@@ -926,7 +926,7 @@
     block-size: 1.5rem;
     padding: 0;
     border: 1px solid var(--vds-color-neutral-6);
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     cursor: pointer;
     transition: transform var(--vds-duration-fast) var(--vds-ease-out);
   }
@@ -937,7 +937,7 @@
     background: transparent;
     color: var(--vds-color-danger-text);
     border: none;
-    border-radius: var(--vds-radius-sm);
+    border-radius: var(--vds-yoopta-radius-control);
     padding: var(--vds-space-1) var(--vds-space-2);
     font-family: inherit;
     font-size: var(--vds-text-sm);

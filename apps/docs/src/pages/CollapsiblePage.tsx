@@ -23,15 +23,15 @@ export function CollapsiblePage() {
                 </Button>
               </CollapsibleTrigger>
             </div>
-            <div style={{ marginTop: "var(--vds-space-2)", padding: "var(--vds-space-2)", borderRadius: "var(--vds-radius-md)", border: "1px solid var(--vds-color-border)" }}>
+            <div style={{ marginTop: "var(--vds-space-2)", padding: "var(--vds-space-2)", borderRadius: "var(--vds-radius-card)", border: "1px solid var(--vds-color-border)" }}>
               @virtari-packages/react-button
             </div>
             <CollapsibleContent>
               <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-2)", marginTop: "var(--vds-space-2)" }}>
-                <div style={{ padding: "var(--vds-space-2)", borderRadius: "var(--vds-radius-md)", border: "1px solid var(--vds-color-border)" }}>
+                <div style={{ padding: "var(--vds-space-2)", borderRadius: "var(--vds-radius-card)", border: "1px solid var(--vds-color-border)" }}>
                   @virtari-packages/react-select
                 </div>
-                <div style={{ padding: "var(--vds-space-2)", borderRadius: "var(--vds-radius-md)", border: "1px solid var(--vds-color-border)" }}>
+                <div style={{ padding: "var(--vds-space-2)", borderRadius: "var(--vds-radius-card)", border: "1px solid var(--vds-color-border)" }}>
                   @virtari-packages/react-accordion
                 </div>
               </div>

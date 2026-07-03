@@ -15,7 +15,7 @@
     /* ── Layout ── */
     --vds-code-padding-block: var(--vds-space-3, 0.75rem);
     --vds-code-padding-inline: var(--vds-space-4, 1rem);
-    --vds-code-radius: var(--vds-radius-md, 0.5rem);
+    --vds-code-radius: var(--vds-radius-code, 0.5rem);
     --vds-code-border-width: 1px;
     --vds-code-gutter-padding-inline: var(--vds-space-3, 0.75rem);
 
@@ -159,7 +159,7 @@
     --vds-code-inline-font-size: 0.875em;
     --vds-code-inline-padding-block: 0.125em;
     --vds-code-inline-padding-inline: 0.375em;
-    --vds-code-inline-radius: var(--vds-radius-sm, 0.25rem);
+    --vds-code-inline-radius: var(--vds-radius-code-inline, 0.25rem);
     --vds-code-inline-border-width: 1px;
 
     --vds-code-inline-bg: var(--vds-color-bg-muted, #f3f3f3);

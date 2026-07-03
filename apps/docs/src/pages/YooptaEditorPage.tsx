@@ -33,7 +33,7 @@ import "@virtari-packages/react-yoopta-editor/styles";
           style={{
             inlineSize: "100%",
             border: "1px solid var(--vds-color-neutral-6)",
-            borderRadius: "var(--vds-radius-lg)",
+            borderRadius: "var(--vds-radius-card)",
             padding: "var(--vds-space-6)",
             minBlockSize: "40rem",
             background: "var(--vds-color-surface)",

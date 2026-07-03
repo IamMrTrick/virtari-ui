@@ -48,7 +48,7 @@ export function SpinnerPage() {
                 gap: "var(--vds-space-3)",
                 padding: "var(--vds-space-5)",
                 border: "1px solid var(--vds-color-border)",
-                borderRadius: "var(--vds-radius-lg)",
+                borderRadius: "var(--vds-radius-card)",
                 background: "var(--vds-color-surface-raised)",
               }}
             >
@@ -124,7 +124,7 @@ export function SpinnerPage() {
               alignItems: "center",
               gap: "var(--vds-space-4)",
               padding: "var(--vds-space-3) var(--vds-space-4)",
-              borderRadius: "var(--vds-radius-md)",
+              borderRadius: "var(--vds-radius-card)",
               background: "var(--vds-color-primary-solid)",
               color: "#fff",
               width: "fit-content",
