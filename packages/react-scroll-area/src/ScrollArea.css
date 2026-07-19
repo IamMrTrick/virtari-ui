@@ -412,6 +412,10 @@
    * ───────────────────────────────────────────── */
   .vds-scroll-area-marquee {
     display: flex;
+    /* Centre mixed-height children (text next to dot separators, logos of
+       different sizes) on the cross axis. Also applies to the vertical
+       variant below, where the cross axis is inline. */
+    align-items: center;
     inline-size: max-content;
     gap: var(--scroll-area-marquee-gap);
     padding-inline-end: var(--scroll-area-marquee-gap);
@@ -421,6 +425,10 @@
     will-change: transform;
   }
   .vds-scroll-area-marquee-item {
+    /* Flex (not block) so inline-level children are centred too, instead of
+       sitting on the text baseline with descender space hanging below. */
+    display: flex;
+    align-items: center;
     flex: 0 0 auto;
   }
   .vds-scroll-area-root[data-orientation="vertical"] .vds-scroll-area-marquee {
