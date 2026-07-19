@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>tokens · brand-scope test</title>
+
+<!--
+  Brand-scoping cascade test (no build required).
+
+  Loads the real color sources (../src/colors.css) so it exercises the actual
+  `@layer tokens.base` / `@layer tokens.brand` wiring, then registers a throwaway
+  brand ("__test__") whose primary-9 uses a DISTINCT hue (30) so it is trivially
+  distinguishable from the base primary hue (265).
+
+  It proves the bug fixed in this change: a [data-brand] override placed on the
+  SAME element that is also :root / [data-theme] must win over the base primitive
+  scales — in light, in dark, and on a nested wrapper.
+
+  Run: open this file in any modern browser (Chromium/Firefox/Safari) over file://
+  or a static server. Results render on the page and are also exposed as
+  window.__TEST_RESULT__ = { pass, fail, total, ok, cases } for automation.
+-->
+
+<style>
+  /* Top-level layer order (mirrors packages/core/src/layers.css). */
+  @layer reset, tokens, base, components, design-system, utilities;
+
+  /* Real color sources — pulls in tokens.base (primitives) + tokens.brand
+     (brands/) + the implicit `tokens` sub-layer (semantic). The browser
+     resolves the relative @import chain natively; no PostCSS build needed. */
+  @import "../src/colors.css";
+
+  /* Throwaway brand under the documented author contract: rules go in
+     @layer tokens.brand, override ONLY primitive hues. Hue 30 (base is 265). */
+  @layer tokens.brand {
+    [data-brand="__test__"] {
+      --vds-color-primary-9: oklch(0.55 0.2 30);
+    }
+    [data-brand="__test__"][data-theme="dark"],
+    [data-theme="dark"] [data-brand="__test__"] {
+      --vds-color-primary-9: oklch(0.61 0.2 30);
+    }
+  }
+
+  body { font: 14px/1.5 system-ui, sans-serif; margin: 2rem; }
+  h1 { font-size: 1.1rem; }
+  ul { padding-inline-start: 1.25rem; }
+  li { margin-block: 0.15rem; }
+  .pass { color: #1a7f37; }
+  .fail { color: #cf222e; font-weight: 600; }
+  #summary { font-weight: 700; margin-block: 0.5rem 1rem; }
+  code { background: #f0f0f4; padding: 0 0.25rem; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>tokens · brand-scope cascade test</h1>
+<div id="summary">running…</div>
+<ul id="results"></ul>
+
+<script>
+  const BASE_HUE = "265";   // intents.css primary hue
+  const BRAND_HUE = "30";   // the __test__ brand's primary hue
+
+  // Pull the hue (3rd component) out of an oklch(L C H ...) custom-property value.
+  function hueOf(value) {
+    const m = /oklch\(\s*[\d.]+\s+[\d.]+\s+([\d.]+)/i.exec(value || "");
+    return m ? m[1] : null;
+  }
+
+  const root = document.documentElement;
+  const wrapper = document.createElement("div");
+  document.body.appendChild(wrapper);
+
+  function primaryHue(el) {
+    return hueOf(getComputedStyle(el).getPropertyValue("--vds-color-primary-9"));
+  }
+
+  function reset() {
+    root.removeAttribute("data-brand");
+    root.removeAttribute("data-theme");
+    wrapper.removeAttribute("data-brand");
+    wrapper.removeAttribute("data-theme");
+  }
+
+  const cases = [];
+  function check(name, actual, expected) {
+    const ok = actual === expected;
+    cases.push({ name, actual, expected, ok });
+  }
+
+  // 1. Baseline: no brand → base hue resolves (sanity that the scales loaded).
+  reset();
+  check("baseline <html> (no brand) → base hue", primaryHue(root), BASE_HUE);
+
+  // 2. THE FIX (light): brand on the same element as :root must win over base.
+  reset();
+  root.setAttribute("data-brand", "__test__");
+  check("<html data-brand> light → brand hue wins over base", primaryHue(root), BRAND_HUE);
+
+  // 3. THE FIX (dark, same element): base [data-theme=dark] must not beat brand.
+  reset();
+  root.setAttribute("data-brand", "__test__");
+  root.setAttribute("data-theme", "dark");
+  check("<html data-brand data-theme=dark> → brand dark hue wins", primaryHue(root), BRAND_HUE);
+
+  // 4. Regression: brand on a nested wrapper still works (light).
+  reset();
+  wrapper.setAttribute("data-brand", "__test__");
+  check("wrapper <div data-brand> light → brand hue", primaryHue(wrapper), BRAND_HUE);
+
+  // 5. Regression: brand wrapper nested under a dark root still works.
+  reset();
+  root.setAttribute("data-theme", "dark");
+  wrapper.setAttribute("data-brand", "__test__");
+  check("dark root > wrapper <div data-brand> → brand dark hue", primaryHue(wrapper), BRAND_HUE);
+
+  reset();
+
+  // Render + expose results.
+  const pass = cases.filter((c) => c.ok).length;
+  const fail = cases.length - pass;
+  const listEl = document.getElementById("results");
+  for (const c of cases) {
+    const li = document.createElement("li");
+    li.className = c.ok ? "pass" : "fail";
+    li.innerHTML = (c.ok ? "PASS" : "FAIL") + " — " + c.name +
+      "  (got hue <code>" + c.actual + "</code>, expected <code>" + c.expected + "</code>)";
+    listEl.appendChild(li);
+  }
+  const summaryEl = document.getElementById("summary");
+  summaryEl.textContent = (fail === 0 ? "ALL PASS" : fail + " FAILED") +
+    " — " + pass + "/" + cases.length;
+  summaryEl.className = fail === 0 ? "pass" : "fail";
+
+  window.__TEST_RESULT__ = { pass, fail, total: cases.length, ok: fail === 0, cases };
+</script>
+</body>
+</html>
