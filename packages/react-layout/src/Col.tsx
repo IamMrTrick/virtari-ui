@@ -19,7 +19,9 @@ export interface ColProps extends HTMLAttributes<HTMLElement> {
   spanLg?: ColSpan;
   /** Span at ≥1280px. */
   spanXl?: ColSpan;
-  /** 1-based grid-column-start for manual positioning. */
+  /** 1-based grid-column-start for manual positioning. Applies at every
+   *  breakpoint and combines with the span props (`start={3} span={6}` →
+   *  `grid-column: 3 / span 6`). */
   start?: number;
   /** CSS `order` value. */
   order?: number;
@@ -36,11 +38,19 @@ export interface ColProps extends HTMLAttributes<HTMLElement> {
   ref?: Ref<HTMLElement>;
 }
 
-function spanToGridColumn(span: ColSpan | undefined): string | undefined {
+/* `start` is composed into each emitted grid-column value instead of being
+   declared as a separate `grid-column-start` longhand in Col.css: the span
+   lives in the shorthand's start component, so a later longhand would wipe
+   it — and when `--col-start` was unset the var() was invalid at
+   computed-value time, collapsing every Col to a single track. */
+function spanToGridColumn(
+  span: ColSpan | undefined,
+  start: number | undefined,
+): string | undefined {
   if (span == null) return undefined;
-  if (span === "full") return "1 / -1";
-  if (span === "auto") return "auto";
-  return `span ${span}`;
+  if (span === "full") return start != null ? `${start} / -1` : "1 / -1";
+  if (span === "auto") return start != null ? `${start}` : "auto";
+  return start != null ? `${start} / span ${span}` : `span ${span}`;
 }
 
 export function Col({
@@ -66,11 +76,13 @@ export function Col({
 
   const mergedStyle: CSSProperties = { ...style };
 
-  const base = spanToGridColumn(span);
-  const sm = spanToGridColumn(spanSm);
-  const md = spanToGridColumn(spanMd);
-  const lg = spanToGridColumn(spanLg);
-  const xl = spanToGridColumn(spanXl);
+  /* With `start` but no base span, still emit a base value (`--col-span-base:
+     3`) so the position applies below the first breakpoint a span is set for. */
+  const base = spanToGridColumn(span ?? (start != null ? "auto" : undefined), start);
+  const sm = spanToGridColumn(spanSm, start);
+  const md = spanToGridColumn(spanMd, start);
+  const lg = spanToGridColumn(spanLg, start);
+  const xl = spanToGridColumn(spanXl, start);
 
   if (base != null) (mergedStyle as Record<string, string>)["--col-span-base"] = base;
   if (sm != null) (mergedStyle as Record<string, string>)["--col-span-sm"] = sm;
@@ -78,7 +90,6 @@ export function Col({
   if (lg != null) (mergedStyle as Record<string, string>)["--col-span-lg"] = lg;
   if (xl != null) (mergedStyle as Record<string, string>)["--col-span-xl"] = xl;
 
-  if (start != null) (mergedStyle as Record<string, string>)["--col-start"] = String(start);
   if (order != null) (mergedStyle as Record<string, string>)["--col-order"] = String(order);
 
   if (grow != null) (mergedStyle as Record<string, string>)["--col-grow"] = String(grow);

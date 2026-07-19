@@ -3,15 +3,22 @@
 @layer design-system.components {
   /* ─────────────────────────────────────────────
    * Base — mobile-first. `--col-span-base` is the
-   * always-present span (default: full row). It is
-   * overridden as the viewport widens through a
+   * always-present grid-column value (default: auto).
+   * It is overridden as the viewport widens through a
    * cascading fallback chain that only activates
    * when an inline CSS var has been set.
+   *
+   * The `start` prop is composed into these values by
+   * Col.tsx (`3 / span 6`) — never declare a bare
+   * `grid-column-start: var(--col-start)` here: with the
+   * var unset it is invalid at computed-value time, which
+   * resets the longhand to `auto` and wipes the span the
+   * shorthand just set; and the responsive shorthands
+   * below would override it at ≥640px anyway.
    * ───────────────────────────────────────────── */
   .vds-col {
     grid-column: var(--col-span-base, auto);
-    grid-column-start: var(--col-start);
-    order: var(--col-order);
+    order: var(--col-order, 0);
   }
 
   /* Flex-mode sibling props — ignored in grid mode. */
