@@ -2,11 +2,43 @@
   /*
    * ── Data visualization semantic layer ──
    *
-   * Derives muted / strong variants from the canonical chart-{1..8}
-   * primitives via color-mix. Because chart-1..6 alias onto intent
-   * primitives, brand re-tinting automatically propagates to every
-   * variant. chart-4/7/8 are non-intent hues that remain literal.
+   * Defines the canonical chart-{1..8} primitives, then derives the
+   * muted / strong variants from them via color-mix.
+   *
+   * chart-1/2/3/5/6 alias onto intent step-9 solids, so brand re-tinting
+   * (packages/tokens/src/brands/*.css) automatically propagates to every
+   * chart series and every derived variant. chart-4/7/8 are non-intent
+   * hues (violet / teal / yellow) that fill out an 8-way categorical
+   * palette and carry literal OKLCH values, tuned per theme.
+   *
+   * The primitives are declared at :where(:root, [data-theme], [data-brand])
+   * — zero-specificity, so brand layers keep the upper hand — and matched by
+   * a dark override. That way the aliases re-resolve against the in-scope
+   * intent-9 and the literals swap to their dark tuning at every nested
+   * theme / brand scope, not just the document root.
    */
+
+  /* ─── Canonical chart primitives ─── */
+  :where(:root, [data-theme], [data-brand]) {
+    /* Intent-aliased series — re-tint automatically with the active brand. */
+    --vds-color-chart-1: var(--vds-color-primary-9);
+    --vds-color-chart-2: var(--vds-color-success-9);
+    --vds-color-chart-3: var(--vds-color-accent-9);
+    --vds-color-chart-5: var(--vds-color-info-9);
+    --vds-color-chart-6: var(--vds-color-danger-9);
+
+    /* Non-intent literal hues — light tuning (step-9 lightness/chroma). */
+    --vds-color-chart-4: oklch(0.560 0.185 300); /* violet */
+    --vds-color-chart-7: oklch(0.620 0.105 185); /* teal */
+    --vds-color-chart-8: oklch(0.780 0.150 95);  /* yellow */
+  }
+
+  /* Dark tuning for the literal hues (the aliases re-resolve on their own). */
+  [data-theme="dark"] {
+    --vds-color-chart-4: oklch(0.640 0.180 300);
+    --vds-color-chart-7: oklch(0.690 0.100 185);
+    --vds-color-chart-8: oklch(0.820 0.150 95);
+  }
 
   :root {
     /* ─── Muted variants (30% alpha — area fills) ─── */
