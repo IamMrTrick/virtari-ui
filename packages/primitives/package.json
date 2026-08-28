@@ -1,0 +1,553 @@
+{
+  "name": "@virtari-packages/primitives",
+  "version": "1.0.0",
+  "description": "Virtari headless primitives — accessible, unstyled React behaviour layer (focus management, positioning, keyboard navigation) powering @virtari-packages/react-*.",
+  "license": "MIT",
+  "author": "Virtari",
+  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/primitives#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "directory": "packages/primitives"
+  },
+  "bugs": {
+    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "headless",
+    "primitives",
+    "accessibility"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./package.json": "./package.json",
+    "./accordion": {
+      "import": {
+        "types": "./dist/accordion/index.d.ts",
+        "default": "./dist/accordion/index.js"
+      },
+      "require": {
+        "types": "./dist/accordion/index.d.cts",
+        "default": "./dist/accordion/index.cjs"
+      }
+    },
+    "./alert-dialog": {
+      "import": {
+        "types": "./dist/alert-dialog/index.d.ts",
+        "default": "./dist/alert-dialog/index.js"
+      },
+      "require": {
+        "types": "./dist/alert-dialog/index.d.cts",
+        "default": "./dist/alert-dialog/index.cjs"
+      }
+    },
+    "./arrow": {
+      "import": {
+        "types": "./dist/arrow/index.d.ts",
+        "default": "./dist/arrow/index.js"
+      },
+      "require": {
+        "types": "./dist/arrow/index.d.cts",
+        "default": "./dist/arrow/index.cjs"
+      }
+    },
+    "./avatar": {
+      "import": {
+        "types": "./dist/avatar/index.d.ts",
+        "default": "./dist/avatar/index.js"
+      },
+      "require": {
+        "types": "./dist/avatar/index.d.cts",
+        "default": "./dist/avatar/index.cjs"
+      }
+    },
+    "./checkbox": {
+      "import": {
+        "types": "./dist/checkbox/index.d.ts",
+        "default": "./dist/checkbox/index.js"
+      },
+      "require": {
+        "types": "./dist/checkbox/index.d.cts",
+        "default": "./dist/checkbox/index.cjs"
+      }
+    },
+    "./collapsible": {
+      "import": {
+        "types": "./dist/collapsible/index.d.ts",
+        "default": "./dist/collapsible/index.js"
+      },
+      "require": {
+        "types": "./dist/collapsible/index.d.cts",
+        "default": "./dist/collapsible/index.cjs"
+      }
+    },
+    "./collection": {
+      "import": {
+        "types": "./dist/collection/index.d.ts",
+        "default": "./dist/collection/index.js"
+      },
+      "require": {
+        "types": "./dist/collection/index.d.cts",
+        "default": "./dist/collection/index.cjs"
+      }
+    },
+    "./compose-refs": {
+      "import": {
+        "types": "./dist/compose-refs/index.d.ts",
+        "default": "./dist/compose-refs/index.js"
+      },
+      "require": {
+        "types": "./dist/compose-refs/index.d.cts",
+        "default": "./dist/compose-refs/index.cjs"
+      }
+    },
+    "./context": {
+      "import": {
+        "types": "./dist/context/index.d.ts",
+        "default": "./dist/context/index.js"
+      },
+      "require": {
+        "types": "./dist/context/index.d.cts",
+        "default": "./dist/context/index.cjs"
+      }
+    },
+    "./dialog": {
+      "import": {
+        "types": "./dist/dialog/index.d.ts",
+        "default": "./dist/dialog/index.js"
+      },
+      "require": {
+        "types": "./dist/dialog/index.d.cts",
+        "default": "./dist/dialog/index.cjs"
+      }
+    },
+    "./direction": {
+      "import": {
+        "types": "./dist/direction/index.d.ts",
+        "default": "./dist/direction/index.js"
+      },
+      "require": {
+        "types": "./dist/direction/index.d.cts",
+        "default": "./dist/direction/index.cjs"
+      }
+    },
+    "./dismissable-layer": {
+      "import": {
+        "types": "./dist/dismissable-layer/index.d.ts",
+        "default": "./dist/dismissable-layer/index.js"
+      },
+      "require": {
+        "types": "./dist/dismissable-layer/index.d.cts",
+        "default": "./dist/dismissable-layer/index.cjs"
+      }
+    },
+    "./dropdown-menu": {
+      "import": {
+        "types": "./dist/dropdown-menu/index.d.ts",
+        "default": "./dist/dropdown-menu/index.js"
+      },
+      "require": {
+        "types": "./dist/dropdown-menu/index.d.cts",
+        "default": "./dist/dropdown-menu/index.cjs"
+      }
+    },
+    "./event-handlers": {
+      "import": {
+        "types": "./dist/event-handlers/index.d.ts",
+        "default": "./dist/event-handlers/index.js"
+      },
+      "require": {
+        "types": "./dist/event-handlers/index.d.cts",
+        "default": "./dist/event-handlers/index.cjs"
+      }
+    },
+    "./focus-guards": {
+      "import": {
+        "types": "./dist/focus-guards/index.d.ts",
+        "default": "./dist/focus-guards/index.js"
+      },
+      "require": {
+        "types": "./dist/focus-guards/index.d.cts",
+        "default": "./dist/focus-guards/index.cjs"
+      }
+    },
+    "./focus-scope": {
+      "import": {
+        "types": "./dist/focus-scope/index.d.ts",
+        "default": "./dist/focus-scope/index.js"
+      },
+      "require": {
+        "types": "./dist/focus-scope/index.d.cts",
+        "default": "./dist/focus-scope/index.cjs"
+      }
+    },
+    "./id": {
+      "import": {
+        "types": "./dist/id/index.d.ts",
+        "default": "./dist/id/index.js"
+      },
+      "require": {
+        "types": "./dist/id/index.d.cts",
+        "default": "./dist/id/index.cjs"
+      }
+    },
+    "./label": {
+      "import": {
+        "types": "./dist/label/index.d.ts",
+        "default": "./dist/label/index.js"
+      },
+      "require": {
+        "types": "./dist/label/index.d.cts",
+        "default": "./dist/label/index.cjs"
+      }
+    },
+    "./menu": {
+      "import": {
+        "types": "./dist/menu/index.d.ts",
+        "default": "./dist/menu/index.js"
+      },
+      "require": {
+        "types": "./dist/menu/index.d.cts",
+        "default": "./dist/menu/index.cjs"
+      }
+    },
+    "./number": {
+      "import": {
+        "types": "./dist/number/index.d.ts",
+        "default": "./dist/number/index.js"
+      },
+      "require": {
+        "types": "./dist/number/index.d.cts",
+        "default": "./dist/number/index.cjs"
+      }
+    },
+    "./popover": {
+      "import": {
+        "types": "./dist/popover/index.d.ts",
+        "default": "./dist/popover/index.js"
+      },
+      "require": {
+        "types": "./dist/popover/index.d.cts",
+        "default": "./dist/popover/index.cjs"
+      }
+    },
+    "./popper": {
+      "import": {
+        "types": "./dist/popper/index.d.ts",
+        "default": "./dist/popper/index.js"
+      },
+      "require": {
+        "types": "./dist/popper/index.d.cts",
+        "default": "./dist/popper/index.cjs"
+      }
+    },
+    "./portal": {
+      "import": {
+        "types": "./dist/portal/index.d.ts",
+        "default": "./dist/portal/index.js"
+      },
+      "require": {
+        "types": "./dist/portal/index.d.cts",
+        "default": "./dist/portal/index.cjs"
+      }
+    },
+    "./presence": {
+      "import": {
+        "types": "./dist/presence/index.d.ts",
+        "default": "./dist/presence/index.js"
+      },
+      "require": {
+        "types": "./dist/presence/index.d.cts",
+        "default": "./dist/presence/index.cjs"
+      }
+    },
+    "./primitive": {
+      "import": {
+        "types": "./dist/primitive/index.d.ts",
+        "default": "./dist/primitive/index.js"
+      },
+      "require": {
+        "types": "./dist/primitive/index.d.cts",
+        "default": "./dist/primitive/index.cjs"
+      }
+    },
+    "./progress": {
+      "import": {
+        "types": "./dist/progress/index.d.ts",
+        "default": "./dist/progress/index.js"
+      },
+      "require": {
+        "types": "./dist/progress/index.d.cts",
+        "default": "./dist/progress/index.cjs"
+      }
+    },
+    "./radio-group": {
+      "import": {
+        "types": "./dist/radio-group/index.d.ts",
+        "default": "./dist/radio-group/index.js"
+      },
+      "require": {
+        "types": "./dist/radio-group/index.d.cts",
+        "default": "./dist/radio-group/index.cjs"
+      }
+    },
+    "./rect": {
+      "import": {
+        "types": "./dist/rect/index.d.ts",
+        "default": "./dist/rect/index.js"
+      },
+      "require": {
+        "types": "./dist/rect/index.d.cts",
+        "default": "./dist/rect/index.cjs"
+      }
+    },
+    "./roving-focus": {
+      "import": {
+        "types": "./dist/roving-focus/index.d.ts",
+        "default": "./dist/roving-focus/index.js"
+      },
+      "require": {
+        "types": "./dist/roving-focus/index.d.cts",
+        "default": "./dist/roving-focus/index.cjs"
+      }
+    },
+    "./scroll-area": {
+      "import": {
+        "types": "./dist/scroll-area/index.d.ts",
+        "default": "./dist/scroll-area/index.js"
+      },
+      "require": {
+        "types": "./dist/scroll-area/index.d.cts",
+        "default": "./dist/scroll-area/index.cjs"
+      }
+    },
+    "./select": {
+      "import": {
+        "types": "./dist/select/index.d.ts",
+        "default": "./dist/select/index.js"
+      },
+      "require": {
+        "types": "./dist/select/index.d.cts",
+        "default": "./dist/select/index.cjs"
+      }
+    },
+    "./separator": {
+      "import": {
+        "types": "./dist/separator/index.d.ts",
+        "default": "./dist/separator/index.js"
+      },
+      "require": {
+        "types": "./dist/separator/index.d.cts",
+        "default": "./dist/separator/index.cjs"
+      }
+    },
+    "./slider": {
+      "import": {
+        "types": "./dist/slider/index.d.ts",
+        "default": "./dist/slider/index.js"
+      },
+      "require": {
+        "types": "./dist/slider/index.d.cts",
+        "default": "./dist/slider/index.cjs"
+      }
+    },
+    "./slot": {
+      "import": {
+        "types": "./dist/slot/index.d.ts",
+        "default": "./dist/slot/index.js"
+      },
+      "require": {
+        "types": "./dist/slot/index.d.cts",
+        "default": "./dist/slot/index.cjs"
+      }
+    },
+    "./switch": {
+      "import": {
+        "types": "./dist/switch/index.d.ts",
+        "default": "./dist/switch/index.js"
+      },
+      "require": {
+        "types": "./dist/switch/index.d.cts",
+        "default": "./dist/switch/index.cjs"
+      }
+    },
+    "./tabs": {
+      "import": {
+        "types": "./dist/tabs/index.d.ts",
+        "default": "./dist/tabs/index.js"
+      },
+      "require": {
+        "types": "./dist/tabs/index.d.cts",
+        "default": "./dist/tabs/index.cjs"
+      }
+    },
+    "./toast": {
+      "import": {
+        "types": "./dist/toast/index.d.ts",
+        "default": "./dist/toast/index.js"
+      },
+      "require": {
+        "types": "./dist/toast/index.d.cts",
+        "default": "./dist/toast/index.cjs"
+      }
+    },
+    "./toggle": {
+      "import": {
+        "types": "./dist/toggle/index.d.ts",
+        "default": "./dist/toggle/index.js"
+      },
+      "require": {
+        "types": "./dist/toggle/index.d.cts",
+        "default": "./dist/toggle/index.cjs"
+      }
+    },
+    "./tooltip": {
+      "import": {
+        "types": "./dist/tooltip/index.d.ts",
+        "default": "./dist/tooltip/index.js"
+      },
+      "require": {
+        "types": "./dist/tooltip/index.d.cts",
+        "default": "./dist/tooltip/index.cjs"
+      }
+    },
+    "./use-callback-ref": {
+      "import": {
+        "types": "./dist/use-callback-ref/index.d.ts",
+        "default": "./dist/use-callback-ref/index.js"
+      },
+      "require": {
+        "types": "./dist/use-callback-ref/index.d.cts",
+        "default": "./dist/use-callback-ref/index.cjs"
+      }
+    },
+    "./use-controllable-state": {
+      "import": {
+        "types": "./dist/use-controllable-state/index.d.ts",
+        "default": "./dist/use-controllable-state/index.js"
+      },
+      "require": {
+        "types": "./dist/use-controllable-state/index.d.cts",
+        "default": "./dist/use-controllable-state/index.cjs"
+      }
+    },
+    "./use-effect-event": {
+      "import": {
+        "types": "./dist/use-effect-event/index.d.ts",
+        "default": "./dist/use-effect-event/index.js"
+      },
+      "require": {
+        "types": "./dist/use-effect-event/index.d.cts",
+        "default": "./dist/use-effect-event/index.cjs"
+      }
+    },
+    "./use-escape-keydown": {
+      "import": {
+        "types": "./dist/use-escape-keydown/index.d.ts",
+        "default": "./dist/use-escape-keydown/index.js"
+      },
+      "require": {
+        "types": "./dist/use-escape-keydown/index.d.cts",
+        "default": "./dist/use-escape-keydown/index.cjs"
+      }
+    },
+    "./use-is-hydrated": {
+      "import": {
+        "types": "./dist/use-is-hydrated/index.d.ts",
+        "default": "./dist/use-is-hydrated/index.js"
+      },
+      "require": {
+        "types": "./dist/use-is-hydrated/index.d.cts",
+        "default": "./dist/use-is-hydrated/index.cjs"
+      }
+    },
+    "./use-layout-effect": {
+      "import": {
+        "types": "./dist/use-layout-effect/index.d.ts",
+        "default": "./dist/use-layout-effect/index.js"
+      },
+      "require": {
+        "types": "./dist/use-layout-effect/index.d.cts",
+        "default": "./dist/use-layout-effect/index.cjs"
+      }
+    },
+    "./use-previous": {
+      "import": {
+        "types": "./dist/use-previous/index.d.ts",
+        "default": "./dist/use-previous/index.js"
+      },
+      "require": {
+        "types": "./dist/use-previous/index.d.cts",
+        "default": "./dist/use-previous/index.cjs"
+      }
+    },
+    "./use-rect": {
+      "import": {
+        "types": "./dist/use-rect/index.d.ts",
+        "default": "./dist/use-rect/index.js"
+      },
+      "require": {
+        "types": "./dist/use-rect/index.d.cts",
+        "default": "./dist/use-rect/index.cjs"
+      }
+    },
+    "./use-size": {
+      "import": {
+        "types": "./dist/use-size/index.d.ts",
+        "default": "./dist/use-size/index.js"
+      },
+      "require": {
+        "types": "./dist/use-size/index.d.cts",
+        "default": "./dist/use-size/index.cjs"
+      }
+    },
+    "./visually-hidden": {
+      "import": {
+        "types": "./dist/visually-hidden/index.d.ts",
+        "default": "./dist/visually-hidden/index.js"
+      },
+      "require": {
+        "types": "./dist/visually-hidden/index.d.cts",
+        "default": "./dist/visually-hidden/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/emit-dual-dts.mjs dist",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@floating-ui/react-dom": "^2.1.8",
+    "aria-hidden": "^1.2.6",
+    "react-remove-scroll": "^2.7.2",
+    "use-sync-external-store": "^1.6.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.4",
+    "@types/use-sync-external-store": "^1.5.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0",
+    "tsup": "^8.0.0"
+  }
+}
