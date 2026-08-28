@@ -1,5 +1,12 @@
 # @virtari-packages/utilities
 
+## 4.0.0
+
+### Patch Changes
+
+- Updated dependencies [374334c]
+  - @virtari-packages/tokens@0.5.0
+
 ## 3.0.3
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @virtari-packages/react-phone-input
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [93cd22a]
+  - @virtari-packages/react-input@1.0.0
+  - @virtari-packages/react-select@1.1.0
+
 ## 1.0.0
 
 ### Major Changes

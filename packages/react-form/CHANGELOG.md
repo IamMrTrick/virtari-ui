@@ -1,5 +1,12 @@
 # @virtari-packages/react-form
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [93cd22a]
+  - @virtari-packages/react-label@1.1.0
+
 ## 1.0.0
 
 ### Major Changes

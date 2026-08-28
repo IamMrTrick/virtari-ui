@@ -1,5 +1,13 @@
 # @virtari-packages/react-breadcrumb
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [93cd22a]
+  - @virtari-packages/react-dropdown-menu@1.1.0
+  - @virtari-packages/react-icons@0.4.0
+
 ## 1.0.0
 
 ### Major Changes
