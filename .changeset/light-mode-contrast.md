@@ -2,22 +2,27 @@
 "@virtari-packages/tokens": minor
 ---
 
-Clear WCAG AA in light mode, and decouple warning's pressed state from its text step.
+Every solid intent state now clears WCAG AA, in both themes.
 
-The dark-mode pass corrected `intent-9` but left light mode alone, on the grounds that these are brand colours in the default mode. Measured with CSS Color 4 gamut mapping, three light-mode pairings were below 4.5:1:
+All 36 pairings — 6 intents × solid/hover/active × light/dark — were measured from actual browser rendering, not computed. That distinction mattered: an offline CSS Color 4 gamut mapping reported `success` and `info` as passing at 4.55–4.57:1, while the browser rendered them at 4.22–4.41:1. Those chromas sit outside sRGB and browsers clip differently than the spec's mapping, so the numbers were corrected against what actually paints.
 
-- `accent-solid` carried white at **3.27:1** — the worst pairing in the system. Lightness 0.665 → 0.580, now 4.59:1. It also matches what dark mode already resolves to, so accent is one value across both modes.
-- `accent-solid-hover` was **3.99:1**. Lightness 0.615 → 0.530, now 5.63:1, and the ladder stays monotonic (0.580 → 0.530 → 0.475).
-- `success-solid` was **4.45:1**, just under. Lightness 0.555 → 0.550, now 4.55:1.
+**Solid (step 9)**
 
-Hue and chroma are held in every case; only lightness moves, and only by the minimum that clears the bar on the scale's own 0.005 grid.
+| | before | after |
+| --- | --- | --- |
+| light `accent` | 3.27:1 | 4.62:1 |
+| light `success` | 4.35:1 | 4.58:1 |
+| light `info` | 4.22:1 | 4.56:1 |
+| dark `success` | 4.41:1 | 4.58:1 |
+| dark `info` | 4.22:1 | 4.56:1 |
 
-**`warning-solid-active` no longer rides step 11.**
+Hue and chroma are held; only lightness moves, by the minimum that clears the bar. `accent` and `info` now resolve to one value across both modes.
 
-Step 11 serves two roles: `{intent}-solid-active`, a *background* under `on-{intent}` ink, and `{intent}-text`, a *foreground* on the page canvas. For the five white-ink intents that is harmless — in light mode the ladder darkens toward step 11, which improves white contrast and page-text contrast together.
+**Hover and active are decoupled from steps 10 and 11.**
 
-Warning carries black ink, so the two roles pull in opposite directions. Light `warning-11` (L 0.500) is only **3.47:1** under black as a solid, while lightening it to fix that pushes warning *text* toward the canvas. The luminance window satisfying both is 0.005 wide — real, but it would not survive a brand retune.
+Those steps serve two roles: `{intent}-solid-hover`/`-active` are *backgrounds* under `on-{intent}` ink, while `{intent}-text-muted`/`-text` are *foregrounds* on the page canvas. Whenever the ladder runs toward the ink, the roles agree; whenever it runs away, they conflict.
 
-So warning's pressed state gets its own mode-aware tone: L 0.600 in light, which is darker than `solid-hover` (0.650) so a press still reads as a press, and **5.27:1** under black ink. Dark mode is unaffected — there the ladder lightens toward step 11, both roles agree, and `warning-11` is already 11.73:1 under black.
+- **Dark, white ink.** Steps 10 and 11 must be light to work as text on a dark canvas — which is exactly what made them fail as solids: hover measured 2.69–3.33:1, active 1.98–2.23:1. Lightening cannot fix it, because step 9 already sits at the lightest value clearing 4.5:1. So dark solids now darken on hover, matching what light mode already did — one behaviour in both themes. Derived from step 9 with `color-mix`, so a brand that retunes its solid gets correct interaction states for free.
+- **Light, black ink (`warning`).** The mirror image. Light `warning-11` is 3.47:1 under black as a solid, while lightening it pushes warning *text* toward the canvas. The luminance window satisfying both roles is 0.005 wide — real, but it would not survive a brand retune. Warning's pressed state gets its own tone at 5.28:1, still darker than hover so a press reads as a press.
 
-Known remaining gap: in **dark** mode `solid-hover` and `solid-active` still carry white at 1.98–3.28:1. That is the same two-role conflict, mirrored — dark step 11 must be light to serve as text on a dark canvas, which is exactly what makes it fail under white ink as a solid. Fixing it needs the same decoupling applied to the five white-ink intents.
+Dark `warning` needed no exception: there the ladder lightens toward step 11, both roles agree, and it already measured 11.77:1.

@@ -56,8 +56,8 @@
     --vds-color-primary-bg-hover:     var(--vds-color-primary-4);
     --vds-color-primary-bg-active:    var(--vds-color-primary-5);
     --vds-color-primary-solid:        var(--vds-color-primary-9);
-    --vds-color-primary-solid-hover:  var(--vds-color-primary-10);
-    --vds-color-primary-solid-active: var(--vds-color-primary-11);
+    --vds-color-primary-solid-hover:  var(--vds-color-primary-solid-hover-tone);
+    --vds-color-primary-solid-active: var(--vds-color-primary-solid-active-tone);
     --vds-color-primary-text:         var(--vds-color-primary-11);
     --vds-color-primary-text-muted:   var(--vds-color-primary-10);
 
@@ -67,8 +67,8 @@
     --vds-color-success-bg-hover:     var(--vds-color-success-4);
     --vds-color-success-bg-active:    var(--vds-color-success-5);
     --vds-color-success-solid:        var(--vds-color-success-9);
-    --vds-color-success-solid-hover:  var(--vds-color-success-10);
-    --vds-color-success-solid-active: var(--vds-color-success-11);
+    --vds-color-success-solid-hover:  var(--vds-color-success-solid-hover-tone);
+    --vds-color-success-solid-active: var(--vds-color-success-solid-active-tone);
     --vds-color-success-text:         var(--vds-color-success-11);
     --vds-color-success-text-muted:   var(--vds-color-success-10);
 
@@ -101,8 +101,8 @@
     --vds-color-danger-bg-hover:     var(--vds-color-danger-4);
     --vds-color-danger-bg-active:    var(--vds-color-danger-5);
     --vds-color-danger-solid:        var(--vds-color-danger-9);
-    --vds-color-danger-solid-hover:  var(--vds-color-danger-10);
-    --vds-color-danger-solid-active: var(--vds-color-danger-11);
+    --vds-color-danger-solid-hover:  var(--vds-color-danger-solid-hover-tone);
+    --vds-color-danger-solid-active: var(--vds-color-danger-solid-active-tone);
     --vds-color-danger-text:         var(--vds-color-danger-11);
     --vds-color-danger-text-muted:   var(--vds-color-danger-10);
 
@@ -112,8 +112,8 @@
     --vds-color-info-bg-hover:     var(--vds-color-info-4);
     --vds-color-info-bg-active:    var(--vds-color-info-5);
     --vds-color-info-solid:        var(--vds-color-info-9);
-    --vds-color-info-solid-hover:  var(--vds-color-info-10);
-    --vds-color-info-solid-active: var(--vds-color-info-11);
+    --vds-color-info-solid-hover:  var(--vds-color-info-solid-hover-tone);
+    --vds-color-info-solid-active: var(--vds-color-info-solid-active-tone);
     --vds-color-info-text:         var(--vds-color-info-11);
     --vds-color-info-text-muted:   var(--vds-color-info-10);
 
@@ -123,8 +123,8 @@
     --vds-color-accent-bg-hover:     var(--vds-color-accent-4);
     --vds-color-accent-bg-active:    var(--vds-color-accent-5);
     --vds-color-accent-solid:        var(--vds-color-accent-9);
-    --vds-color-accent-solid-hover:  var(--vds-color-accent-10);
-    --vds-color-accent-solid-active: var(--vds-color-accent-11);
+    --vds-color-accent-solid-hover:  var(--vds-color-accent-solid-hover-tone);
+    --vds-color-accent-solid-active: var(--vds-color-accent-solid-active-tone);
     --vds-color-accent-text:         var(--vds-color-accent-11);
     --vds-color-accent-text-muted:   var(--vds-color-accent-10);
   }
@@ -147,6 +147,48 @@
   [data-theme="dark"],
   [data-theme="dark-oled"] {
     --vds-color-warning-solid-active-tone: var(--vds-color-warning-11);
+  }
+
+
+  /* Solid hover/active for the five white-ink intents, per mode.
+   * The same two-role conflict as warning above, mirrored. Steps 10 and 11
+   * are also --{intent}-text-muted and --{intent}-text, which on a DARK
+   * canvas must be light to stay readable — and that is exactly what makes
+   * them fail under white ink as solids: dark hover measured 2.69–3.33:1
+   * and active 1.98–2.23:1.
+   *
+   * Lightening is not available as a fix. Step 9 already sits at the
+   * lightest value clearing 4.5:1 under white, so anything lighter fails by
+   * construction. In dark mode the solid therefore darkens on hover, which
+   * is what it already does in light mode — one behaviour in both themes.
+   *
+   * Derived from step 9 with color-mix rather than hardcoded, so a brand
+   * that retunes its solid gets correct interaction states for free. */
+  :root {
+    --vds-color-primary-solid-hover-tone:  var(--vds-color-primary-10);
+    --vds-color-primary-solid-active-tone: var(--vds-color-primary-11);
+    --vds-color-success-solid-hover-tone:  var(--vds-color-success-10);
+    --vds-color-success-solid-active-tone: var(--vds-color-success-11);
+    --vds-color-danger-solid-hover-tone:  var(--vds-color-danger-10);
+    --vds-color-danger-solid-active-tone: var(--vds-color-danger-11);
+    --vds-color-info-solid-hover-tone:  var(--vds-color-info-10);
+    --vds-color-info-solid-active-tone: var(--vds-color-info-11);
+    --vds-color-accent-solid-hover-tone:  var(--vds-color-accent-10);
+    --vds-color-accent-solid-active-tone: var(--vds-color-accent-11);
+  }
+
+  [data-theme="dark"],
+  [data-theme="dark-oled"] {
+    --vds-color-primary-solid-hover-tone:  color-mix(in oklch, var(--vds-color-primary-9), black 8%);
+    --vds-color-primary-solid-active-tone: color-mix(in oklch, var(--vds-color-primary-9), black 16%);
+    --vds-color-success-solid-hover-tone:  color-mix(in oklch, var(--vds-color-success-9), black 8%);
+    --vds-color-success-solid-active-tone: color-mix(in oklch, var(--vds-color-success-9), black 16%);
+    --vds-color-danger-solid-hover-tone:  color-mix(in oklch, var(--vds-color-danger-9), black 8%);
+    --vds-color-danger-solid-active-tone: color-mix(in oklch, var(--vds-color-danger-9), black 16%);
+    --vds-color-info-solid-hover-tone:  color-mix(in oklch, var(--vds-color-info-9), black 8%);
+    --vds-color-info-solid-active-tone: color-mix(in oklch, var(--vds-color-info-9), black 16%);
+    --vds-color-accent-solid-hover-tone:  color-mix(in oklch, var(--vds-color-accent-9), black 8%);
+    --vds-color-accent-solid-active-tone: color-mix(in oklch, var(--vds-color-accent-9), black 16%);
   }
 
 }
