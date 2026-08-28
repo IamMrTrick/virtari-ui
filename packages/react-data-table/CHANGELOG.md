@@ -1,5 +1,23 @@
 # @virtari-packages/react-data-table
 
+## 0.5.5
+
+### Patch Changes
+
+- Updated dependencies [08252d7]
+  - @virtari-packages/react-avatar@1.0.0
+  - @virtari-packages/react-badge@1.0.0
+  - @virtari-packages/react-button@1.0.0
+  - @virtari-packages/react-checkbox@1.0.0
+  - @virtari-packages/react-chip@1.0.0
+  - @virtari-packages/react-drawer@1.0.0
+  - @virtari-packages/react-dropdown-menu@1.0.0
+  - @virtari-packages/react-popover@1.0.0
+  - @virtari-packages/react-select@1.0.0
+  - @virtari-packages/react-switch@1.0.0
+  - @virtari-packages/react-tabs@1.0.0
+  - @virtari-packages/react-pagination@0.2.4
+
 ## 0.5.4
 
 ### Patch Changes

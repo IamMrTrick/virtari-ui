@@ -1,5 +1,20 @@
 # @virtari-packages/react-editor
 
+## 0.3.6
+
+### Patch Changes
+
+- Updated dependencies [08252d7]
+- Updated dependencies [9288f8c]
+  - @virtari-packages/react-button@1.0.0
+  - @virtari-packages/react-dialog@1.0.0
+  - @virtari-packages/react-file-upload@1.0.0
+  - @virtari-packages/react-scroll-area@1.0.0
+  - @virtari-packages/react-select@1.0.0
+  - @virtari-packages/react-tabs@1.0.0
+  - @virtari-packages/react-tooltip@1.0.0
+  - @virtari-packages/react-color-picker@0.2.7
+
 ## 0.3.5
 
 ### Patch Changes

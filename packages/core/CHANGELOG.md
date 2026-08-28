@@ -1,5 +1,13 @@
 # @virtari-packages/core
 
+## 0.3.3
+
+### Patch Changes
+
+- Updated dependencies [f2e0170]
+- Updated dependencies [a2903fb]
+  - @virtari-packages/tokens@0.4.2
+
 ## 0.3.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-tooltip",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "Virtari tooltip — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",

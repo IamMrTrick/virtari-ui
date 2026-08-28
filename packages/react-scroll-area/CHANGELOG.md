@@ -1,5 +1,27 @@
 # @virtari-packages/react-scroll-area
 
+## 1.0.0
+
+### Major Changes
+
+- 08252d7: Own the primitive layer: every component now builds on `@virtari-packages/primitives` instead of `@radix-ui/*`.
+
+  The behaviour layer — focus management, keyboard navigation, portalling, dismissable layers, floating positioning — has been forked into a new in-tree package we maintain ourselves. Component behaviour and accessibility are unchanged; what changes is who owns the code and what it writes into the DOM.
+
+  **Breaking — anything that targeted the old names must be updated:**
+  - Generated element ids are now prefixed `vds-` instead of `radix-` (e.g. `aria-controls="vds-_r_4o_"`). Affects DOM snapshots and tests that assert on ids.
+  - Emitted attributes are now `data-vds-*` instead of `data-radix-*` — `data-vds-popper-content-wrapper`, `data-vds-focus-guard`, `data-vds-collection-item`, `data-vds-select-viewport`, `data-vds-scroll-area-viewport`, `data-vds-menu-content`.
+  - Emitted CSS custom properties are now `--vds-*` instead of `--radix-*` — `--vds-popper-available-width`, `--vds-select-trigger-width`, `--vds-accordion-content-height`, `--vds-collapsible-content-height`, and the rest of the popper/toast/slider/scroll-area set.
+  - Every `@radix-ui/*` dependency is gone. Apps that render Radix components _inside_ ours via `asChild` were relying on a shared Radix context; that context is no longer shared.
+
+  **Also fixed:** `ScrollArea`'s corner never received its background colour — the stylesheet targeted `[data-radix-scroll-area-corner]`, an attribute the primitive never emitted. The corner now carries `.vds-scroll-area-corner` and the rule matches.
+
+### Patch Changes
+
+- 9288f8c: Fix marquee cross-axis alignment for mixed-height children.
+  - Centre marquee items on the cross axis (`align-items: center` on `.vds-scroll-area-marquee`), so text, dot separators, and logos of different sizes share a midline instead of stretching. The vertical variant inherits the same rule, centring items on the inline axis.
+  - Make each `.vds-scroll-area-marquee-item` wrapper a centring flex so inline-level children no longer sit on the text baseline and hang low.
+
 ## 0.3.1
 
 ### Patch Changes
