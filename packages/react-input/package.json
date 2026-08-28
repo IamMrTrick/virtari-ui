@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-input",
-  "version": "0.4.2",
+  "version": "1.0.0",
   "description": "Virtari input — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",

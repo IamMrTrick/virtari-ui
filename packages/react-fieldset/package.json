@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-fieldset",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Virtari fieldset — semantic form section grouping with legend and description slots.",
   "license": "UNLICENSED",
   "author": "Virtari",

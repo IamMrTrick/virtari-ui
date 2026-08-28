@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-table",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Virtari table — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",

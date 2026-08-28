@@ -1,5 +1,12 @@
 # @virtari-packages/react-button-group
 
+## 4.0.0
+
+### Patch Changes
+
+- Updated dependencies [93cd22a]
+  - @virtari-packages/react-button@1.1.0
+
 ## 3.0.0
 
 ### Patch Changes
