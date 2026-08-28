@@ -1,5 +1,24 @@
 # @virtari-packages/react-otp-input
 
+## 0.3.2
+
+### Patch Changes
+
+- 4bfc69a: Fix radius token behavior in pill mode across the design system.
+  - Keep the generic t-shirt radius scale finite in `data-radius="pill"` so raw `sm` and `md` no longer make cards, inputs, code blocks, editor blocks, or date cells fully rounded.
+  - Add semantic radius aliases for button, action, input, segmented, code, color picker, editor, date picker, file upload, table, and navigation surfaces.
+  - Make true action affordances fully rounded in pill mode, including buttons, toggles, pagination buttons, close buttons, input actions, tabs, and segmented controls.
+  - Keep input-like fields rounded but finite in pill mode, with a stronger 16px radius instead of a full capsule.
+
+## 0.3.1
+
+### Patch Changes
+
+- e3f38c5: Fix editable color and input interactions.
+  - Restore native iOS text selection/callout behavior for editable controls and replace transform-based typing motion with a non-geometric pulse.
+  - Render gradient stop color popovers as floating solid ColorPicker surfaces so stop editing uses the same single-color picker UI.
+  - Make the utilities build cleanup cross-platform so `pnpm run build` works on Windows.
+
 ## 0.3.0
 
 ### Minor Changes

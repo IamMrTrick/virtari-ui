@@ -1,5 +1,21 @@
 # @virtari-packages/utilities
 
+## 3.0.2
+
+### Patch Changes
+
+- Updated dependencies [4bfc69a]
+  - @virtari-packages/tokens@0.4.1
+
+## 3.0.1
+
+### Patch Changes
+
+- e3f38c5: Fix editable color and input interactions.
+  - Restore native iOS text selection/callout behavior for editable controls and replace transform-based typing motion with a non-geometric pulse.
+  - Render gradient stop color popovers as floating solid ColorPicker surfaces so stop editing uses the same single-color picker UI.
+  - Make the utilities build cleanup cross-platform so `pnpm run build` works on Windows.
+
 ## 3.0.0
 
 ### Minor Changes

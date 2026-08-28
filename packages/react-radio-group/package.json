@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-radio-group",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Virtari radio group — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",

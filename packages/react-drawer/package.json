@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-drawer",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Virtari drawer — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",

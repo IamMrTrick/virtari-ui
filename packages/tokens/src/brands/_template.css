@@ -5,6 +5,12 @@
    * Copy this file to brands/{your-brand}.css, replace "BRAND_ID" with
    * your brand id, and uncomment + tune the OKLCH values.
    *
+   * Keep every rule inside `@layer tokens.brand`. That sub-layer is ordered
+   * AFTER `tokens.base` (see colors.css), so these overrides win over the
+   * base primitive scales on the SAME element — including <html data-brand>
+   * and same-element combos like <section data-brand data-theme="dark"> —
+   * regardless of specificity.
+   *
    * Override ONLY primitive hues. The semantic layer (bg, surface, text,
    * border, ring, etc.) and per-component tokens reference these
    * primitives, so the entire system retints automatically.

@@ -19,6 +19,27 @@
  * Order matters: primitives must load before brands (so brands can
  * override them) before semantic (so semantic resolves the final values).
  */
+
+/*
+ * Sub-layer order within `tokens` (the top-level order lives in
+ * packages/core/src/layers.css). Declared up-front — a `@layer` statement is
+ * allowed before `@import` — so the order holds regardless of import order:
+ *
+ *   tokens.base    raw primitive scales (neutral, intents, alphas)
+ *   tokens.brand   [data-brand="…"] primitive overrides
+ *   tokens         (implicit sub-layer, ordered LAST) semantic aliases
+ *
+ * Why this matters: rules placed directly in a parent layer form an implicit
+ * sub-layer that CSS orders AFTER every named sub-layer. When the base scales
+ * lived in bare `@layer tokens`, that implicit sub-layer outranked
+ * `tokens.brand`, so on a single element that is both `:root` and
+ * `[data-brand]` (i.e. `<html data-brand="x">`) the base declaration always
+ * won and brand overrides silently did nothing — layer order beats
+ * specificity. Naming the base sub-layer and ordering it before `tokens.brand`
+ * makes `[data-brand]` overrides win on the same element, in light and dark.
+ */
+@layer tokens.base, tokens.brand;
+
 @import "./colors/primitives.css";
 @import "./brands/index.css";
 @import "./colors/semantic.css";

@@ -1,5 +1,26 @@
 # @virtari-packages/react-button
 
+## 0.4.2
+
+### Patch Changes
+
+- 4bfc69a: Fix radius token behavior in pill mode across the design system.
+  - Keep the generic t-shirt radius scale finite in `data-radius="pill"` so raw `sm` and `md` no longer make cards, inputs, code blocks, editor blocks, or date cells fully rounded.
+  - Add semantic radius aliases for button, action, input, segmented, code, color picker, editor, date picker, file upload, table, and navigation surfaces.
+  - Make true action affordances fully rounded in pill mode, including buttons, toggles, pagination buttons, close buttons, input actions, tabs, and segmented controls.
+  - Keep input-like fields rounded but finite in pill mode, with a stronger 16px radius instead of a full capsule.
+
+## 0.4.1
+
+### Patch Changes
+
+- b893c0a: Ship the latest component updates across input, drawer, date picker, button, and toast.
+  - Add PasswordInput, PasswordInputField, PasswordStrengthMeter, configurable password metrics, standard strength presets, and password strength analysis utilities.
+  - Add the Drawer `stretch` prop so consumers can disable overdrag stretching while keeping the existing default behavior.
+  - Improve DatePicker and DateRangePicker mobile layouts, including single-month mobile range calendars, full-width mobile surfaces, and inline/popover usage docs.
+  - Preserve direct slot children for Button `asChild` rendering.
+  - Prevent bottom toast close animation from overriding swipe-exit animation state.
+
 ## 0.4.0
 
 ### Minor Changes

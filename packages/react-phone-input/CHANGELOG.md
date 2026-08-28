@@ -1,5 +1,32 @@
 # @virtari-packages/react-phone-input
 
+## 0.3.5
+
+### Patch Changes
+
+- Updated dependencies [4bfc69a]
+  - @virtari-packages/react-input@0.4.2
+  - @virtari-packages/react-select@0.5.1
+
+## 0.3.4
+
+### Patch Changes
+
+- e3f38c5: Fix editable color and input interactions.
+  - Restore native iOS text selection/callout behavior for editable controls and replace transform-based typing motion with a non-geometric pulse.
+  - Render gradient stop color popovers as floating solid ColorPicker surfaces so stop editing uses the same single-color picker UI.
+  - Make the utilities build cleanup cross-platform so `pnpm run build` works on Windows.
+
+- Updated dependencies [e3f38c5]
+  - @virtari-packages/react-input@0.4.1
+
+## 0.3.3
+
+### Patch Changes
+
+- Updated dependencies [b893c0a]
+  - @virtari-packages/react-input@0.4.0
+
 ## 0.3.2
 
 ### Patch Changes

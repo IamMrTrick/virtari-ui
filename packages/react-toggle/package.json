@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-toggle",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Virtari toggle — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",
