@@ -13,10 +13,22 @@
     --sidebar-inline-size:   var(--sidebar-width);
     --sidebar-block-size:    100svh;
 
-    /* Padding around direct children (header / body / footer) */
+    /* Padding around direct children (header / body / footer).
+       `--sidebar-padding-block` is the *edge* inset: the aside applies it to
+       the leading edge of its first slot and the trailing edge of its last.
+       The seam BETWEEN two adjacent slots is owned by the container through
+       the single `--sidebar-slot-gap` token, so no two slots ever stack their
+       own paddings into a doubled gutter. */
     --sidebar-padding-block:  var(--vds-space-2, 0.5rem);
     --sidebar-padding-inline: var(--vds-space-3, 0.75rem);
+    --sidebar-slot-gap:       var(--vds-slot-gap, var(--vds-space-4, 1rem));
+    /* Half the seam on each side of a separator keeps it optically centred
+       in the same gutter. */
+    --sidebar-separator-gap:  calc(var(--sidebar-slot-gap) / 2);
+    /* Stack gap inside the body (nav sections). */
     --sidebar-section-gap:    var(--vds-sidebar-gap-default, 0.25rem);
+    /* Inline cluster gap inside header / footer (brand + trigger, avatar + name). */
+    --sidebar-cluster-gap:    var(--vds-cluster-gap, var(--vds-space-2, 0.5rem));
 
     /*
      * Header / footer minimum heights.
@@ -51,6 +63,11 @@
     /* Trigger (icon button) — respects .vds-sidebar-trigger default sizing */
     --sidebar-trigger-size:   var(--vds-size-sm, 2rem);
     --sidebar-trigger-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
+
+    /* Focus ring — one shared width/offset across the design system */
+    --sidebar-focus-ring-width:  var(--vds-focus-ring-width, 2px);
+    --sidebar-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
+    --sidebar-focus-ring-color:  var(--vds-color-ring, currentColor);
   }
 
   /* ─────────────────────────────────────────────

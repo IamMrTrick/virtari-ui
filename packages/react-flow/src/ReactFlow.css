@@ -50,7 +50,7 @@
   .vds-flow .react-flow__controls {
     overflow: hidden;
     border: 1px solid var(--flow-border);
-    border-radius: calc(var(--flow-radius) - 0.25rem);
+    border-radius: var(--flow-panel-radius);
     background: color-mix(in oklab, var(--vds-color-surface) 90%, transparent);
     box-shadow: var(--flow-shadow);
     backdrop-filter: blur(18px);
@@ -75,7 +75,7 @@
 
   .vds-flow .react-flow__minimap {
     border: 1px solid var(--flow-border);
-    border-radius: calc(var(--flow-radius) - 0.25rem);
+    border-radius: var(--flow-panel-radius);
     background: color-mix(in oklab, var(--vds-color-surface) 90%, transparent);
     box-shadow: var(--flow-shadow);
     overflow: hidden;

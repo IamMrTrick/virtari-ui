@@ -35,13 +35,13 @@
     background-color: var(--vds-file-upload-dropzone-bg-reject);
   }
   .vds-file-upload-dropzone[data-disabled] {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
   .vds-file-upload-dropzone:focus-visible {
     outline: var(--vds-file-upload-focus-ring-width) solid
       var(--vds-file-upload-focus-ring-color);
-    outline-offset: 2px;
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   /* List */
@@ -111,7 +111,7 @@
   .vds-file-upload-item-remove:focus-visible {
     outline: var(--vds-file-upload-focus-ring-width) solid
       var(--vds-file-upload-focus-ring-color);
-    outline-offset: 2px;
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   /* Plain file input */
@@ -129,14 +129,14 @@
       var(--vds-file-upload-transition-easing);
   }
   .vds-file-upload-input[data-disabled] {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
     pointer-events: none;
   }
   .vds-file-upload-input:focus-within {
     outline: var(--vds-file-upload-focus-ring-width) solid
       var(--vds-file-upload-focus-ring-color);
-    outline-offset: 2px;
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   .vds-file-upload-input-native {

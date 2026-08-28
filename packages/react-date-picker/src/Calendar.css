@@ -128,7 +128,7 @@
 
   .vds-calendar-heading-button:focus-visible {
     outline: var(--calendar-cell-focus-ring-width) solid var(--calendar-cell-focus-ring-color);
-    outline-offset: 2px;
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   .vds-calendar-nav {
@@ -156,11 +156,11 @@
 
   .vds-calendar-nav:focus-visible {
     outline: var(--calendar-cell-focus-ring-width) solid var(--calendar-cell-focus-ring-color);
-    outline-offset: 1px;
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   .vds-calendar-nav:disabled {
-    opacity: 0.4;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 
@@ -230,7 +230,7 @@
 
   .vds-calendar-selector-item:focus-visible {
     outline: var(--calendar-cell-focus-ring-width) solid var(--calendar-cell-focus-ring-color);
-    outline-offset: 2px;
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   .vds-calendar-selector-item[data-selected="true"] {
@@ -317,7 +317,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    block-size: var(--vds-size-md, 2.5rem);
+    block-size: var(--vds-size-md, 2.25rem);
     padding-inline: var(--vds-space-3, 0.75rem);
     border: 1px solid transparent;
     border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
@@ -351,7 +351,7 @@
 
   .vds-calendar-year-action:focus-visible {
     outline: var(--date-field-focus-ring-width, 2px) solid var(--date-field-focus-ring-color, var(--vds-color-ring, #6366f1));
-    outline-offset: 1px;
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   .vds-calendar-weekday {

@@ -26,6 +26,9 @@ export interface OtpInputProps
   type?: OtpInputType;
   /** Render slots as password fields. */
   mask?: boolean;
+  /** Control size. Canonical name, shared with every other sized control. */
+  size?: OtpInputSize;
+  /** @deprecated Use `size`. Kept as an alias so existing call sites keep working. */
   inputSize?: OtpInputSize;
   disabled?: boolean;
   readOnly?: boolean;
@@ -87,7 +90,8 @@ export function OtpInput({
   onComplete,
   type = "numeric",
   mask = false,
-  inputSize = "md",
+  size,
+  inputSize,
   disabled = false,
   readOnly = false,
   invalid = false,
@@ -238,7 +242,7 @@ export function OtpInput({
       aria-disabled={disabled || undefined}
       aria-invalid={invalid || undefined}
       className={cn("vds-otp-input", className)}
-      data-size={inputSize}
+      data-size={size ?? inputSize ?? "md"}
       data-readonly={readOnly || undefined}
       data-complete={sanitizedValue.length === length || undefined}
       dir={dir}

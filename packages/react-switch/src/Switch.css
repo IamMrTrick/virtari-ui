@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-switch {
     /*
      * ── Config (Proportional) ──
@@ -30,7 +30,10 @@
 
     inline-size: var(--_switch-width);
     block-size: var(--_switch-height);
-    background-color: var(--vds-color-neutral-6);
+    /* WCAG 1.4.11: the track IS the switch's boundary. neutral-6 sat at
+       ~1.4:1 on a light surface, which also hid the white thumb.
+       --vds-color-border-interactive is the first step that clears 3:1. */
+    background-color: var(--vds-color-border-interactive, var(--vds-color-neutral-9));
 
     &[data-state="checked"] {
       background-color: var(--vds-color-primary-9);
@@ -45,12 +48,12 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
+      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+      outline-offset: var(--vds-focus-ring-offset, 2px);
     }
 
     &:disabled {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       cursor: not-allowed;
     }
 

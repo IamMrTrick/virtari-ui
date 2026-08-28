@@ -30,7 +30,7 @@
    * 2. Row — base tokens
    * ───────────────────────────────────────────── */
   .vds-header__row {
-    --row-block-size:      var(--vds-app-chrome-row, var(--vds-size-lg, 2.75rem));
+    --row-block-size:      var(--vds-app-chrome-row, var(--vds-size-lg, 2.5rem));
     --row-padding-inline:  var(--vds-section-gutter-md, 1.5rem);
     --row-section-gap:     var(--vds-space-4, 1rem);
     --row-container-width: var(--vds-container-width-default, 80rem);

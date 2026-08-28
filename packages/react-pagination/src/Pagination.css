@@ -62,7 +62,7 @@
     outline-offset: 2px;
   }
   .vds-pagination-button:disabled {
-    opacity: 0.4;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 

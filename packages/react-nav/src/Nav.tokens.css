@@ -21,7 +21,7 @@
    * ───────────────────────────────────────────── */
   .vds-nav__item {
     --item-gap: var(--vds-space-2, 0.5rem);
-    --item-height: var(--vds-size-md, 2.5rem);
+    --item-height: var(--vds-size-md, 2.25rem);
     --item-padding-inline: var(--vds-space-3, 0.75rem);
     --item-radius: var(--vds-radius-nav-item, 0.375rem);
     --item-font-size: var(--vds-text-sm, 0.875rem);
@@ -96,7 +96,7 @@
   }
 
   .vds-nav[data-size="lg"] .vds-nav__item {
-    --item-height: var(--vds-size-lg, 2.75rem);
+    --item-height: var(--vds-size-lg, 2.5rem);
     --item-padding-inline: var(--vds-space-4, 1rem);
     --item-font-size: var(--vds-text-base, 1rem);
     --item-icon-size: 1.25rem;
@@ -116,7 +116,7 @@
 
   .vds-nav__submenu[data-nav-size="lg"] .vds-nav__item,
   .vds-nav__mega[data-nav-size="lg"] .vds-nav__item {
-    --item-height: var(--vds-size-lg, 2.75rem);
+    --item-height: var(--vds-size-lg, 2.5rem);
     --item-padding-inline: var(--vds-space-4, 1rem);
     --item-font-size: var(--vds-text-base, 1rem);
     --item-icon-size: 1.25rem;
@@ -166,7 +166,7 @@
     --submenu-header-title-weight: var(--vds-font-weight-semibold, 600);
     --submenu-header-title-color: var(--vds-color-text, #111827);
 
-    --submenu-open-duration: var(--vds-duration-base, 200ms);
+    --submenu-open-duration: var(--vds-duration-normal, 200ms);
     --submenu-open-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
   }
 

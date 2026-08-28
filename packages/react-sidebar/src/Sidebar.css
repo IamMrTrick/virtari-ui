@@ -43,10 +43,8 @@
     flex: none;
     display: flex;
     align-items: center;
-    gap: var(--vds-space-2, 0.5rem);
+    gap: var(--sidebar-cluster-gap);
     min-block-size: var(--sidebar-header-min-block-size, 0);
-    padding-block: var(--sidebar-padding-block);
-    padding-inline: var(--sidebar-padding-inline);
   }
 
   /* ── Body — main scrollable nav area ── */
@@ -56,8 +54,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--sidebar-section-gap);
-    padding-block: var(--sidebar-padding-block);
-    padding-inline: var(--sidebar-padding-inline);
     overflow-y: auto;
     overscroll-behavior: contain;
   }
@@ -67,10 +63,43 @@
     flex: none;
     display: flex;
     align-items: center;
-    gap: var(--vds-space-2, 0.5rem);
+    gap: var(--sidebar-cluster-gap);
     min-block-size: var(--sidebar-footer-min-block-size, 0);
-    padding-block: var(--sidebar-padding-block);
+  }
+
+  /* ── Slot geometry — the container owns the edges and the seams ──
+   *
+   * Previously header, body and footer each applied the full
+   * `--sidebar-padding-block` on both edges, so every internal seam came out
+   * at twice the outer inset. Now a slot carries no block padding of its own:
+   * the aside pads the leading edge of the first slot, the trailing edge of
+   * the last, and puts one named `--sidebar-slot-gap` between any two
+   * adjacent slots. Separators sit in that same gutter, split evenly.
+   * ───────────────────────────────────────────── */
+  .vds-sidebar
+    > :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer) {
     padding-inline: var(--sidebar-padding-inline);
+    padding-block: 0;
+  }
+
+  .vds-sidebar
+    > :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer):not(
+      :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer) ~ *
+    ) {
+    padding-block-start: var(--sidebar-padding-block);
+  }
+
+  .vds-sidebar
+    > :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer):not(
+      :has(~ :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer))
+    ) {
+    padding-block-end: var(--sidebar-padding-block);
+  }
+
+  .vds-sidebar
+    > :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer)
+    + :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer) {
+    padding-block-start: var(--sidebar-slot-gap);
   }
 
   /* ── Separator ── */
@@ -78,6 +107,7 @@
     flex: none;
     block-size: 1px;
     margin-inline: var(--sidebar-padding-inline);
+    margin-block: var(--sidebar-separator-gap);
     background-color: var(--sidebar-border-color);
     border: 0;
   }
@@ -111,9 +141,12 @@
   .vds-sidebar-trigger:active {
     background-color: var(--vds-color-surface-active, color-mix(in oklch, currentColor 14%, transparent));
   }
+  /* Fallbacks are load-bearing: <SidebarTrigger> may be rendered outside the
+     <Sidebar> (in a page header), where the aside's tokens don't inherit. */
   .vds-sidebar-trigger:focus-visible {
-    outline: 2px solid var(--vds-color-ring, currentColor);
-    outline-offset: 2px;
+    outline: var(--sidebar-focus-ring-width, var(--vds-focus-ring-width, 2px)) solid
+      var(--sidebar-focus-ring-color, var(--vds-color-ring, currentColor));
+    outline-offset: var(--sidebar-focus-ring-offset, var(--vds-focus-ring-offset, 2px));
   }
 
   /* Rotation only applies to the built-in chevron icon. Custom children

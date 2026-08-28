@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-slider {
     position: relative;
     display: flex;
@@ -11,7 +11,7 @@
 
     &[data-disabled] {
       cursor: not-allowed;
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
     }
   }
 
@@ -52,8 +52,8 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
+      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+      outline-offset: var(--vds-focus-ring-offset, 2px);
     }
 
     .vds-slider[data-disabled] & {

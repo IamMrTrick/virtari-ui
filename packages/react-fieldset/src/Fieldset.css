@@ -44,12 +44,23 @@
 
   /* ── Disabled cascade ── */
   .vds-fieldset[data-disabled] {
-    opacity: 0.6;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 
   .vds-fieldset[data-disabled] * {
     pointer-events: none;
+  }
+
+  /*
+   * Dim once. A disabled <fieldset> disables every control inside it and each
+   * of those applies --vds-opacity-disabled itself; without this reset the
+   * opacities multiply and the group becomes unreadable.
+   */
+  .vds-fieldset[data-disabled] :disabled,
+  .vds-fieldset[data-disabled] [data-disabled],
+  .vds-fieldset[data-disabled] [aria-disabled="true"] {
+    opacity: 1;
   }
 
   .vds-field {
@@ -138,6 +149,13 @@
   }
 
   .vds-field[data-disabled] {
-    opacity: 0.6;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  /* Dim once - see the fieldset rule above. */
+  .vds-field[data-disabled] :disabled,
+  .vds-field[data-disabled] [data-disabled],
+  .vds-field[data-disabled] [aria-disabled="true"] {
+    opacity: 1;
   }
 }

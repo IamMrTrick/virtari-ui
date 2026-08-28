@@ -9,7 +9,7 @@
   /* ── Trigger ── */
   .vds-select-trigger {
     /* Layout (md defaults — shared ramp with Button, Input, Toggle) */
-    --select-trigger-height: var(--vds-size-md, 2.5rem);
+    --select-trigger-height: var(--vds-size-md, 2.25rem);
     --select-trigger-gap: var(--vds-space-2, 0.5rem);
     --select-trigger-padding-inline: var(--vds-space-3, 0.75rem);
     --select-trigger-padding-block: 0;
@@ -26,17 +26,17 @@
     /* Colors — soft appearance (default) */
     --select-trigger-bg: var(--vds-color-surface, #ffffff);
     --select-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
-    --select-trigger-border-color: var(--vds-color-border, #d1d5db);
-    --select-trigger-border-color-hover: var(--vds-color-border-strong, #9ca3af);
+    --select-trigger-border-color: var(--vds-color-border-interactive, #6b7280);
+    --select-trigger-border-color-hover: var(--vds-color-neutral-10, #4b5563);
     --select-trigger-text-color: var(--vds-color-text, #111827);
-    --select-trigger-placeholder-color: var(--vds-color-text-subtle, #9ca3af);
+    --select-trigger-placeholder-color: var(--vds-color-text-placeholder, #4b5563);
     --select-trigger-icon-color: var(--vds-color-text-muted, #6b7280);
     --select-trigger-icon-opacity: 1;
 
     /* Focus ring */
     --select-trigger-focus-ring-color: var(--vds-color-ring, #6366f1);
-    --select-trigger-focus-ring-width: 2px;
-    --select-trigger-focus-ring-offset: -1px;
+    --select-trigger-focus-ring-width: var(--vds-focus-ring-width, 2px);
+    --select-trigger-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
     --select-trigger-focus-border-color: var(--vds-color-primary-9, #6366f1);
 
     /* Motion */
@@ -149,17 +149,17 @@
   }
   /* md uses defaults */
   .vds-select-trigger[data-size="lg"] {
-    --select-trigger-height: var(--vds-size-lg, 3rem);
+    --select-trigger-height: var(--vds-size-lg, 2.5rem);
     --select-trigger-padding-inline: var(--vds-space-4, 1rem);
     --select-trigger-font-size: var(--vds-text-base, 1rem);
   }
   .vds-select-trigger[data-size="xl"] {
-    --select-trigger-height: var(--vds-size-xl, 3.5rem);
+    --select-trigger-height: var(--vds-size-xl, 2.75rem);
     --select-trigger-padding-inline: var(--vds-space-5, 1.25rem);
     --select-trigger-font-size: var(--vds-text-lg, 1.125rem);
   }
   .vds-select-trigger[data-size="2xl"] {
-    --select-trigger-height: var(--vds-size-2xl, 4rem);
+    --select-trigger-height: var(--vds-size-2xl, 3.25rem);
     --select-trigger-padding-inline: var(--vds-space-6, 1.5rem);
     --select-trigger-font-size: var(--vds-text-xl, 1.25rem);
   }

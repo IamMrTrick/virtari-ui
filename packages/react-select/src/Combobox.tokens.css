@@ -8,7 +8,7 @@
   /* ── Trigger (div with role=combobox) ── */
   .vds-combobox-trigger {
     /* Layout (md defaults) */
-    --combobox-trigger-min-block-size: var(--vds-size-md, 2.5rem);
+    --combobox-trigger-min-block-size: var(--vds-size-md, 2.25rem);
     --combobox-trigger-gap: var(--vds-space-2, 0.5rem);
     --combobox-trigger-padding-inline: var(--vds-space-3, 0.75rem);
     --combobox-trigger-padding-block: var(--vds-space-1, 0.25rem);
@@ -26,17 +26,17 @@
     /* Colors (soft appearance default) */
     --combobox-trigger-bg: var(--vds-color-surface, #ffffff);
     --combobox-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
-    --combobox-trigger-border-color: var(--vds-color-border, #d1d5db);
-    --combobox-trigger-border-color-hover: var(--vds-color-border-strong, #9ca3af);
+    --combobox-trigger-border-color: var(--vds-color-border-interactive, #6b7280);
+    --combobox-trigger-border-color-hover: var(--vds-color-neutral-10, #4b5563);
     --combobox-trigger-text-color: var(--vds-color-text, #111827);
-    --combobox-trigger-placeholder-color: var(--vds-color-text-subtle, #9ca3af);
+    --combobox-trigger-placeholder-color: var(--vds-color-text-placeholder, #4b5563);
     --combobox-trigger-icon-color: var(--vds-color-text-muted, #6b7280);
     --combobox-trigger-icon-opacity: 1;
 
     /* Focus ring */
     --combobox-trigger-focus-ring-color: var(--vds-color-ring, #6366f1);
-    --combobox-trigger-focus-ring-width: 2px;
-    --combobox-trigger-focus-ring-offset: -1px;
+    --combobox-trigger-focus-ring-width: var(--vds-focus-ring-width, 2px);
+    --combobox-trigger-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
     --combobox-trigger-focus-border-color: var(--vds-color-primary-9, #6366f1);
 
     /* Motion */
@@ -67,7 +67,7 @@
     --combobox-input-icon-size: 0.875rem;
     --combobox-input-icon-color: var(--vds-color-text-muted, #6b7280);
     --combobox-input-text-color: var(--vds-color-text, #111827);
-    --combobox-input-placeholder-color: var(--vds-color-text-subtle, #9ca3af);
+    --combobox-input-placeholder-color: var(--vds-color-text-placeholder, #4b5563);
     --combobox-input-border-color: var(--vds-color-border-muted, #e5e7eb);
     --combobox-input-font-size: var(--vds-text-sm, 0.875rem);
   }
@@ -157,17 +157,17 @@
   }
   /* md uses defaults */
   .vds-combobox-trigger[data-size="lg"] {
-    --combobox-trigger-min-block-size: var(--vds-size-lg, 3rem);
+    --combobox-trigger-min-block-size: var(--vds-size-lg, 2.5rem);
     --combobox-trigger-padding-inline: var(--vds-space-4, 1rem);
     --combobox-trigger-font-size: var(--vds-text-base, 1rem);
   }
   .vds-combobox-trigger[data-size="xl"] {
-    --combobox-trigger-min-block-size: var(--vds-size-xl, 3.5rem);
+    --combobox-trigger-min-block-size: var(--vds-size-xl, 2.75rem);
     --combobox-trigger-padding-inline: var(--vds-space-5, 1.25rem);
     --combobox-trigger-font-size: var(--vds-text-lg, 1.125rem);
   }
   .vds-combobox-trigger[data-size="2xl"] {
-    --combobox-trigger-min-block-size: var(--vds-size-2xl, 4rem);
+    --combobox-trigger-min-block-size: var(--vds-size-2xl, 3.25rem);
     --combobox-trigger-padding-inline: var(--vds-space-6, 1.5rem);
     --combobox-trigger-font-size: var(--vds-text-xl, 1.25rem);
   }

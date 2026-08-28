@@ -1,8 +1,18 @@
 @layer design-system.components {
   .vds-editor {
     --vds-editor-radius: var(--vds-radius-editor-surface, var(--vds-radius-card, 1rem));
+
+    /* Toolbar interior padding. The concentric radius below is derived from
+     * these, so retuning the spacing scale keeps the corners parallel. */
+    --vds-editor-toolbar-padding-block: var(--vds-space-2, 0.5rem);
+    --vds-editor-toolbar-padding-inline: var(--vds-space-3, 0.75rem);
+
+    /* Radius for controls sitting directly inside the toolbar. Concentric with
+     * the editor surface (outer radius minus the toolbar's own padding), then
+     * capped so it never exceeds the block radius. Never let this exceed
+     * --vds-editor-radius: an inner corner cannot be rounder than its host. */
     --vds-editor-toolbar-radius: min(
-      calc(var(--vds-editor-radius) - 0.25rem),
+      calc(var(--vds-editor-radius) - var(--vds-editor-toolbar-padding-block)),
       var(--vds-radius-editor-block, 0.75rem)
     );
     --vds-editor-radius-block: var(--vds-radius-editor-block, 0.5rem);
@@ -29,11 +39,11 @@
     --vds-editor-toolbar-button-bg-hover: var(--vds-editor-bg-hover);
     --vds-editor-toolbar-button-bg-active: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 14%,
+      var(--vds-color-primary-solid, #2563eb) 14%,
       transparent
     );
     --vds-editor-toolbar-button-fg: var(--vds-editor-text-muted);
-    --vds-editor-toolbar-button-fg-active: var(--vds-color-primary-11, #1d4ed8);
+    --vds-editor-toolbar-button-fg-active: var(--vds-color-primary-text, #1d4ed8);
     --vds-editor-toolbar-button-border: color-mix(
       in oklch,
       var(--vds-editor-border) 75%,
@@ -42,9 +52,13 @@
     --vds-editor-toolbar-gap: var(--vds-space-2, 0.5rem);
     --vds-editor-content-padding: var(--vds-space-4, 1rem);
     --vds-editor-content-padding-block-start: var(--vds-space-3, 0.75rem);
-    --vds-editor-content-padding-inline-start: 4.25rem;
-    --vds-editor-content-padding-inline-start-edge: 2.75rem;
-    --vds-editor-content-padding-inline-end: 2rem;
+    /* Gutter that clears the block-tools rail: edge padding + rail width. */
+    --vds-editor-content-padding-inline-start: calc(
+      var(--vds-editor-content-padding-inline-start-edge) +
+        var(--vds-editor-block-tools-size)
+    );
+    --vds-editor-content-padding-inline-start-edge: var(--vds-space-11, 2.75rem);
+    --vds-editor-content-padding-inline-end: var(--vds-space-8, 2rem);
     --vds-editor-content-padding-inline: var(
       --vds-editor-content-padding-inline-start
     );
@@ -54,42 +68,42 @@
     --vds-editor-block-tools-edge-outset: -1.625rem;
     --vds-editor-block-tools-bg-hover: color-mix(
       in oklch,
-      var(--vds-color-primary-5, #bfdbfe) 72%,
+      var(--vds-color-primary-bg-active, #bfdbfe) 72%,
       var(--vds-editor-bg) 28%
     );
-    --vds-editor-block-tools-color: var(--vds-color-primary-10, #2563eb);
-    --vds-editor-block-tools-color-hover: var(--vds-color-primary-12, #172554);
+    --vds-editor-block-tools-color: var(--vds-color-primary-text-muted, #2563eb);
+    --vds-editor-block-tools-color-hover: var(--vds-color-primary-text, #172554);
     --vds-editor-block-tools-border-hover: color-mix(
       in oklch,
       var(--vds-color-primary-8, #60a5fa) 56%,
       transparent
     );
     --vds-editor-block-tools-shadow-hover: 0 0.5rem 1.5rem
-      color-mix(in oklch, var(--vds-color-primary-9, #2563eb) 14%, transparent);
+      color-mix(in oklch, var(--vds-color-primary-solid, #2563eb) 14%, transparent);
     --vds-editor-insert-accent-bg: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 30%,
+      var(--vds-color-primary-solid, #2563eb) 30%,
       var(--vds-editor-bg)
     );
     --vds-editor-insert-accent-bg-hover: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 44%,
+      var(--vds-color-primary-solid, #2563eb) 44%,
       var(--vds-editor-bg)
     );
-    --vds-editor-insert-accent-fg: var(--vds-color-primary-12, #172554);
+    --vds-editor-insert-accent-fg: var(--vds-color-primary-text, #172554);
     --vds-editor-insert-accent-border: color-mix(
       in oklch,
       var(--vds-color-primary-8, #60a5fa) 62%,
       transparent
     );
-    --vds-editor-drop-line-color: var(--vds-color-primary-9, #2563eb);
+    --vds-editor-drop-line-color: var(--vds-color-primary-solid, #2563eb);
     --vds-editor-drop-line-shadow:
       0 0 0 1px color-mix(in oklch, var(--vds-editor-bg) 86%, transparent),
-      0 0.5rem 1.25rem color-mix(in oklch, var(--vds-color-primary-9, #2563eb) 24%, transparent);
+      0 0.5rem 1.25rem color-mix(in oklch, var(--vds-color-primary-solid, #2563eb) 24%, transparent);
     --vds-editor-drag-placeholder-size: 2.35rem;
     --vds-editor-drag-placeholder-bg: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 14%,
+      var(--vds-color-primary-solid, #2563eb) 14%,
       var(--vds-editor-bg)
     );
     --vds-editor-drag-placeholder-border: color-mix(
@@ -110,42 +124,42 @@
     );
     --vds-editor-code-bg: color-mix(
       in oklch,
-      var(--vds-color-neutral-2, #f8fafc) 78%,
+      var(--vds-color-bg-subtle, #f8fafc) 78%,
       var(--vds-editor-bg) 22%
     );
-    --vds-editor-code-fg: var(--vds-color-neutral-12, #111827);
+    --vds-editor-code-fg: var(--vds-color-text, #111827);
     --vds-editor-code-border: color-mix(
       in oklch,
       var(--vds-editor-border) 82%,
-      var(--vds-color-primary-7, #93c5fd) 18%
+      var(--vds-color-border-primary, #93c5fd) 18%
     );
     --vds-editor-code-shadow: inset 0 1px 0
       color-mix(
         in oklch,
-        var(--vds-color-neutral-1, #ffffff) 72%,
+        var(--vds-color-surface, #ffffff) 72%,
         transparent
       );
     --vds-editor-code-gutter-bg: color-mix(
       in oklch,
-      var(--vds-color-primary-3, #dbeafe) 36%,
+      var(--vds-color-primary-bg, #dbeafe) 36%,
       transparent
     );
     --vds-editor-inline-code-bg: color-mix(
       in oklch,
-      var(--vds-color-neutral-12, #111827) 8%,
+      var(--vds-color-text, #111827) 8%,
       transparent
     );
     --vds-editor-quote-bg: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 6%,
+      var(--vds-color-primary-solid, #2563eb) 6%,
       transparent
     );
     --vds-editor-quote-border: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 30%,
+      var(--vds-color-primary-solid, #2563eb) 30%,
       transparent
     );
-    --vds-editor-list-marker-color: var(--vds-color-primary-10, #2563eb);
+    --vds-editor-list-marker-color: var(--vds-color-primary-text-muted, #2563eb);
     --vds-editor-table-header-bg: color-mix(
       in oklch,
       var(--vds-editor-bg-muted) 82%,
@@ -153,17 +167,17 @@
     );
     --vds-editor-comment-bg: color-mix(
       in oklch,
-      var(--vds-color-warning-4, #fef3c7) 56%,
+      var(--vds-color-warning-bg-hover, #fef3c7) 56%,
       transparent
     );
     --vds-editor-comment-bg-strong: color-mix(
       in oklch,
-      var(--vds-color-warning-5, #fde68a) 74%,
+      var(--vds-color-warning-bg-active, #fde68a) 74%,
       transparent
     );
     --vds-editor-comment-border: color-mix(
       in oklch,
-      var(--vds-color-warning-9, #d97706) 28%,
+      var(--vds-color-warning-solid, #d97706) 28%,
       transparent
     );
     --vds-editor-source-bg: color-mix(
@@ -171,17 +185,17 @@
       var(--vds-editor-bg-muted) 80%,
       var(--vds-editor-bg)
     );
-    --vds-editor-code-token-attr: var(--vds-color-primary-11, #1d4ed8);
-    --vds-editor-code-token-comment: var(--vds-color-neutral-9, #64748b);
-    --vds-editor-code-token-deleted: var(--vds-color-danger-11, #b91c1c);
-    --vds-editor-code-token-function: var(--vds-color-warning-11, #a16207);
-    --vds-editor-code-token-inserted: var(--vds-color-success-11, #15803d);
-    --vds-editor-code-token-operator: var(--vds-color-neutral-11, #334155);
-    --vds-editor-code-token-property: var(--vds-color-sky-11, #0369a1);
+    --vds-editor-code-token-attr: var(--vds-color-primary-text, #1d4ed8);
+    --vds-editor-code-token-comment: var(--vds-color-text-subtle, #64748b);
+    --vds-editor-code-token-deleted: var(--vds-color-danger-text, #b91c1c);
+    --vds-editor-code-token-function: var(--vds-color-warning-text, #a16207);
+    --vds-editor-code-token-inserted: var(--vds-color-success-text, #15803d);
+    --vds-editor-code-token-operator: var(--vds-color-text-muted, #334155);
+    --vds-editor-code-token-property: var(--vds-color-sky-11, var(--vds-color-info-text, #0369a1));
     --vds-editor-code-token-punctuation: var(--vds-color-neutral-10, #475569);
-    --vds-editor-code-token-selector: var(--vds-color-emerald-11, #047857);
+    --vds-editor-code-token-selector: var(--vds-color-emerald-11, var(--vds-color-success-text, #047857));
     --vds-editor-code-token-unchanged: var(--vds-editor-text);
-    --vds-editor-code-token-variable: var(--vds-color-violet-11, #7c3aed);
+    --vds-editor-code-token-variable: var(--vds-color-violet-11, var(--vds-color-accent-text, #7c3aed));
     --vds-editor-divider-color: color-mix(
       in oklch,
       var(--vds-editor-border) 88%,
@@ -189,7 +203,7 @@
     );
     --vds-editor-danger-soft: color-mix(
       in oklch,
-      var(--vds-color-danger-9, #dc2626) 16%,
+      var(--vds-color-danger-solid, #dc2626) 16%,
       transparent
     );
   }

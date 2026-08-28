@@ -239,7 +239,10 @@
   .vds-nav[data-variant="outline"] .vds-nav__link[data-active="true"],
   .vds-nav[data-variant="outline"] .vds-nav__trigger[data-active="true"] {
     border-color: var(--vds-color-primary-solid, #6366f1);
-    background-color: var(--vds-color-primary-subtle, transparent);
+    /* Real semantic role. The old `--vds-color-primary-subtle` never existed,
+     * so this fell through to `transparent` and the active item lost its
+     * background entirely. */
+    background-color: var(--vds-color-primary-bg, #e0e7ff);
   }
 
   /* ────────────────────────────────

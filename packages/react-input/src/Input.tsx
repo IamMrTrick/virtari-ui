@@ -5,7 +5,15 @@ import type { Ref } from "react";
 export type InputSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
+  /**
+   * Control size. Canonical name, shared with every other sized control
+   * (Button, Select, Toggle, ...) so a form row can be sized by spreading one
+   * prop. Shadows the native `size` attribute, which is inert here because
+   * `.vds-input` is always `inline-size: 100%`.
+   */
+  size?: InputSize;
+  /** @deprecated Use `size`. Kept as an alias so existing call sites keep working. */
   inputSize?: InputSize;
   /**
    * Each printable keystroke fires a brief ring-burst animation.
@@ -20,7 +28,8 @@ function isPrintable(e: React.KeyboardEvent): boolean {
 }
 
 export function Input({
-  inputSize = "md",
+  size,
+  inputSize,
   className,
   ref,
   typingPulse = false,
@@ -71,7 +80,7 @@ export function Input({
     <input
       ref={mergedRef}
       className={cn("vds-input", className)}
-      data-size={inputSize}
+      data-size={size ?? inputSize ?? "md"}
       onKeyDown={handleKeyDown}
       {...props}
     />

@@ -25,7 +25,7 @@
     align-items: stretch;
     inline-size: 100%;
     block-size: var(--_ni-height);
-    border: 1px solid var(--vds-color-border);
+    border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
     border-radius: var(--_ni-radius);
     background-color: var(--vds-color-surface);
     overflow: hidden;
@@ -34,8 +34,8 @@
       box-shadow var(--vds-duration-fast) var(--vds-ease-out);
 
     &:focus-within {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: -1px;
+      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+      outline-offset: var(--vds-focus-ring-offset, 2px);
       border-color: var(--vds-color-primary-9);
     }
 
@@ -47,8 +47,13 @@
     }
 
     &[data-disabled] {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       pointer-events: none;
+    }
+
+    /* Dim once: the shell already carries the disabled opacity. */
+    &[data-disabled] .vds-number-input__step:disabled {
+      opacity: 1;
     }
 
     &[data-readonly] .vds-number-input__steppers {
@@ -106,7 +111,7 @@
     user-select: text;
 
     &::placeholder {
-      color: var(--vds-color-text-subtle);
+      color: var(--vds-color-text-placeholder, var(--vds-color-neutral-11));
     }
 
     /* hide browser native spinners */
@@ -169,7 +174,7 @@
     }
 
     &:disabled {
-      opacity: 0.35;
+      opacity: var(--vds-opacity-disabled, 0.5);
       cursor: not-allowed;
     }
 

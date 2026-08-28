@@ -155,13 +155,23 @@
     --tabs-list-padding-block: var(--vds-space-1, 0.25rem);
     --tabs-indicator-display: block;
     --tabs-indicator-color: var(--vds-color-surface, #ffffff);
-    --tabs-indicator-radius: calc(var(--vds-radius-segmented, var(--vds-radius-element, 0.5rem)) - 0.125rem);
+    /* Concentric inner radius: outer radius minus the track padding that sits
+     * between the list edge and the tile. Derived from the list's own resolved
+     * radius (not the global token) so a --tabs-list-radius override on the
+     * element propagates to the tile and indicator. */
+    --tabs-indicator-radius: max(
+      0px,
+      calc(var(--tabs-list-radius) - var(--tabs-list-padding-block))
+    );
   }
   .vds-tabs-list[data-variant="segmented"] .vds-tabs-trigger {
     --tabs-trigger-optical-offset: calc(
       var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem
     );
-    --tabs-trigger-radius: calc(var(--vds-radius-segmented, var(--vds-radius-element, 0.5rem)) - 0.125rem);
+    --tabs-trigger-radius: max(
+      0px,
+      calc(var(--tabs-list-radius) - var(--tabs-list-padding-block))
+    );
     --tabs-trigger-bg-active: var(--vds-color-surface, #ffffff);
     --tabs-trigger-color-active: var(--vds-color-text, #111827);
     --tabs-trigger-shadow-active: var(--vds-shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));

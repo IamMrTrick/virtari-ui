@@ -23,7 +23,7 @@
     }
 
     &:disabled {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       cursor: not-allowed;
     }
 
@@ -48,10 +48,10 @@
     }
 
     &[data-variant="soft"] {
-      background-color: var(--vds-color-neutral-3);
+      background-color: var(--vds-color-bg-muted);
       color: var(--vds-color-text);
       &:hover:not(:disabled) {
-        background-color: var(--vds-color-neutral-4);
+        background-color: var(--vds-color-surface-active);
       }
     }
 

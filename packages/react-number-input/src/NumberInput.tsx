@@ -30,6 +30,9 @@ export interface NumberInputProps
   precision?: number;
   /** Clamp to min/max on blur. Default: true. */
   clampOnBlur?: boolean;
+  /** Control size. Canonical name, shared with every other sized control. */
+  size?: NumberInputSize;
+  /** @deprecated Use `size`. Kept as an alias so existing call sites keep working. */
   inputSize?: NumberInputSize;
   /**
    * Stepper layout.
@@ -67,7 +70,8 @@ export function NumberInput({
   step = 1,
   precision,
   clampOnBlur = true,
-  inputSize = "md",
+  size,
+  inputSize,
   stepper = "stacked",
   disabled = false,
   readOnly = false,
@@ -202,7 +206,7 @@ export function NumberInput({
   return (
     <div
       className={cn("vds-number-input", className)}
-      data-size={inputSize}
+      data-size={size ?? inputSize ?? "md"}
       data-stepper={stepper}
       data-disabled={disabled || undefined}
       data-invalid={invalid || undefined}

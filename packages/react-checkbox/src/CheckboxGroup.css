@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-checkbox-group {
     display: block;
     min-inline-size: 0;
@@ -98,6 +98,16 @@
   }
 
   .vds-checkbox-group[data-disabled] {
-    opacity: 0.7;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  /* Dim once: a disabled group propagates `disabled` to every descendant, so
+     without this the group, the field and the control would compound their
+     opacities down to ~0.2. */
+  .vds-checkbox-group[data-disabled] .vds-checkbox-field[data-disabled],
+  .vds-checkbox-group[data-disabled] .vds-checkbox-card[data-disabled],
+  .vds-checkbox-group[data-disabled] .vds-pill-checkbox-item:disabled,
+  .vds-checkbox-group[data-disabled] .vds-checkbox:disabled {
+    opacity: 1;
   }
 }

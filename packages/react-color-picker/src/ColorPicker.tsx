@@ -489,7 +489,7 @@ function SolidEditor({
     allowEyedropper && typeof window !== "undefined" && typeof window.EyeDropper === "function";
 
   const saturationStyle = {
-    "--vds-color-picker-hue": `${hsva.h}deg`,
+    "--color-picker-hue": `${hsva.h}deg`,
   } as CSSProperties;
 
   function handleSaturationPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
@@ -1242,7 +1242,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
                 data-active={stop.id === activeStopId ? "true" : undefined}
                 style={{
                   insetInlineStart: `${toFiniteNumber(stop.position, 0)}%`,
-                  "--vds-color-picker-stop-color": rgbaToHexString(stop.color, stop.color.a < 1),
+                  "--color-picker-stop-color": rgbaToHexString(stop.color, stop.color.a < 1),
                 } as CSSProperties}
                 aria-label={`Gradient stop at ${safeRound(stop.position, 1)} percent`}
                 onClick={() => {

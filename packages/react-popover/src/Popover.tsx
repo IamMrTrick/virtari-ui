@@ -29,13 +29,21 @@ export const PopoverClose = PopoverPrimitive.Close;
 export const PopoverAnchor = PopoverPrimitive.Anchor;
 
 /* ── PopoverContent ── */
+
+/** Width ceiling preset. The popover stays content-driven; a size only moves
+ *  the maximum it may grow to (sm 16rem · md 20rem · lg 24rem · xl 32rem). */
+export type PopoverSize = "sm" | "md" | "lg" | "xl";
+
 export interface PopoverContentProps
   extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> {
+  /** Max-width preset. Defaults to `"md"`. */
+  size?: PopoverSize;
   ref?: Ref<ComponentRef<typeof PopoverPrimitive.Content>>;
 }
 
 export function PopoverContent({
   className,
+  size = "md",
   sideOffset = 4,
   align = "center",
   ref,
@@ -45,6 +53,7 @@ export function PopoverContent({
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content
         ref={ref}
+        data-size={size}
         sideOffset={sideOffset}
         align={align}
         className={cn("vds-popover-content", className)}

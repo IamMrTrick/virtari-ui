@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-label {
     font-family: var(--vds-font-sans);
     font-size: var(--vds-text-sm);
@@ -9,7 +9,7 @@
     user-select: none;
 
     &[data-disabled] {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       cursor: not-allowed;
     }
   }

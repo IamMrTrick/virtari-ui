@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-toggle {
     /*
      * ── Config ──
@@ -50,18 +50,18 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
+      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+      outline-offset: var(--vds-focus-ring-offset, 2px);
     }
 
     &:disabled {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       cursor: not-allowed;
     }
 
     /* ── Variant: outline ── */
     &[data-variant="outline"] {
-      border-color: var(--vds-color-border);
+      border-color: var(--vds-color-border-interactive, var(--vds-color-neutral-9));
 
       &[data-state="on"] {
         background-color: var(--vds-color-bg-subtle);

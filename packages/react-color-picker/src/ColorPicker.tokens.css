@@ -1,86 +1,86 @@
-@layer design-system.tokens {
+@layer design-system.components {
   .vds-color-picker {
     /* — Layout — */
-    --vds-color-picker-width: 100%;
-    --vds-color-picker-max-width: 17.5rem;
-    --vds-color-picker-padding: var(--vds-space-3, 0.75rem);
-    --vds-color-picker-gap: var(--vds-space-2-5, 0.625rem);
-    --vds-color-picker-gap-sm: var(--vds-space-2, 0.5rem);
-    --vds-color-picker-gap-xs: var(--vds-space-1-5, 0.375rem);
+    --color-picker-width: 100%;
+    --color-picker-max-width: 17.5rem;
+    --color-picker-padding: var(--vds-space-3, 0.75rem);
+    --color-picker-gap: var(--vds-space-2-5, 0.625rem);
+    --color-picker-gap-sm: var(--vds-space-2, 0.5rem);
+    --color-picker-gap-xs: var(--vds-space-1-5, 0.375rem);
 
     /* — Surfaces / borders —
      * Light-mode-friendly defaults. The semantic tokens (--vds-color-surface,
      * --vds-color-bg-subtle, etc.) flip automatically in dark mode via the
      * global [data-theme="dark"] selector, so we don't duplicate values here. */
-    --vds-color-picker-radius: var(--vds-radius-color-picker, 0.75rem);
-    --vds-color-picker-panel-radius: var(--vds-radius-color-picker-panel, 0.5rem);
-    --vds-color-picker-field-radius: var(--vds-radius-color-picker-field, 0.375rem);
-    --vds-color-picker-border: var(--vds-color-border-subtle, var(--vds-color-border, #e5e7eb));
-    --vds-color-picker-border-strong: var(--vds-color-border, #d1d5db);
-    --vds-color-picker-bg: var(--vds-color-surface, #ffffff);
-    --vds-color-picker-panel-bg: var(--vds-color-bg-subtle, #f5f5f5);
-    --vds-color-picker-sunken-bg: var(--vds-color-bg-muted, #ebebeb);
-    --vds-color-picker-row-bg: var(--vds-color-bg-subtle, #f5f5f5);
-    --vds-color-picker-row-bg-hover: var(--vds-color-surface-hover, var(--vds-color-bg-muted, #ebebeb));
-    --vds-color-picker-row-bg-active: color-mix(
+    --color-picker-radius: var(--vds-radius-color-picker, 0.75rem);
+    --color-picker-panel-radius: var(--vds-radius-color-picker-panel, 0.5rem);
+    --color-picker-field-radius: var(--vds-radius-color-picker-field, 0.375rem);
+    --color-picker-border: var(--vds-color-border-subtle, var(--vds-color-border, #e5e7eb));
+    --color-picker-border-strong: var(--vds-color-border, #d1d5db);
+    --color-picker-bg: var(--vds-color-surface, #ffffff);
+    --color-picker-panel-bg: var(--vds-color-bg-subtle, #f5f5f5);
+    --color-picker-sunken-bg: var(--vds-color-bg-muted, #ebebeb);
+    --color-picker-row-bg: var(--vds-color-bg-subtle, #f5f5f5);
+    --color-picker-row-bg-hover: var(--vds-color-surface-hover, var(--vds-color-bg-muted, #ebebeb));
+    --color-picker-row-bg-active: color-mix(
       in oklch,
-      var(--vds-color-primary-3, var(--vds-color-primary-bg, #e0e7ff)) 80%,
+      var(--vds-color-primary-bg, #e0e7ff) 80%,
       var(--vds-color-surface, #ffffff)
     );
 
     /* — Shadow (used by floating appearance) — */
-    --vds-color-picker-shadow: var(--vds-shadow-lg, 0 16px 40px -8px var(--vds-color-shadow-tint, rgba(15, 23, 42, 0.18)));
+    --color-picker-shadow: var(--vds-shadow-lg, 0 16px 40px -8px var(--vds-color-shadow-tint, rgba(15, 23, 42, 0.18)));
 
     /* — Text / accent — */
-    --vds-color-picker-text: var(--vds-color-text, #171717);
-    --vds-color-picker-text-muted: var(--vds-color-text-muted, #525252);
-    --vds-color-picker-text-subtle: var(--vds-color-text-subtle, #a3a3a3);
-    --vds-color-picker-accent: var(--vds-color-primary-9, var(--vds-color-primary-solid, #4f46e5));
-    --vds-color-picker-accent-bg: color-mix(
+    --color-picker-text: var(--vds-color-text, #171717);
+    --color-picker-text-muted: var(--vds-color-text-muted, #525252);
+    --color-picker-text-subtle: var(--vds-color-text-subtle, #a3a3a3);
+    --color-picker-accent: var(--vds-color-primary-solid, #4f46e5);
+    --color-picker-accent-bg: color-mix(
       in oklch,
-      var(--vds-color-primary-9, var(--vds-color-primary-solid, #4f46e5)) 16%,
+      var(--vds-color-primary-solid, #4f46e5) 16%,
       transparent
     );
-    --vds-color-picker-accent-text: var(--vds-color-on-primary, #ffffff);
-    --vds-color-picker-focus: var(--vds-color-ring, var(--vds-color-primary-9, #4f46e5));
-    --vds-color-picker-danger: var(--vds-color-danger-9, var(--vds-color-danger-solid, #dc2626));
+    --color-picker-accent-text: var(--vds-color-on-primary, #ffffff);
+    --color-picker-focus: var(--vds-color-ring, var(--vds-color-primary-solid, #4f46e5));
+    --color-picker-danger: var(--vds-color-danger-solid, #dc2626);
 
     /* — Typography / motion — */
-    --vds-color-picker-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
-    --vds-color-picker-mono-family: var(--vds-font-mono, ui-monospace, monospace);
-    --vds-color-picker-text-size: var(--vds-text-xs, 0.75rem);
-    --vds-color-picker-label-size: 0.6875rem;
-    --vds-color-picker-transition: var(--vds-duration-fast, 120ms)
+    --color-picker-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --color-picker-mono-family: var(--vds-font-mono, ui-monospace, monospace);
+    --color-picker-text-size: var(--vds-text-xs, 0.75rem);
+    --color-picker-label-size: 0.6875rem;
+    --color-picker-transition: var(--vds-duration-fast, 120ms)
       var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
 
     /* — Control sizing (compact) —
      * 1.5rem matches the design-system Input "xs" preset so format Select,
      * HexField, NumberField, and add/remove buttons share one height. */
-    --vds-color-picker-control-height: 1.5rem;
-    --vds-color-picker-control-height-lg: 1.75rem;
-    --vds-color-picker-icon-size: 1rem;
-    --vds-color-picker-slider-height: 0.625rem;
-    --vds-color-picker-thumb-size: 0.875rem;
-    --vds-color-picker-stop-size: 0.875rem;
-    --vds-color-picker-grid-cell: 0.5rem;
-    --vds-color-picker-swatch-size: 1.25rem;
-    --vds-color-picker-saturation-block: 9.5rem;
-    --vds-color-picker-code-preview-height: 3.5rem;
+    --color-picker-control-height: 1.5rem;
+    --color-picker-control-height-lg: 1.75rem;
+    --color-picker-icon-size: 1rem;
+    --color-picker-slider-height: 0.625rem;
+    --color-picker-thumb-size: 0.875rem;
+    --color-picker-stop-size: 0.875rem;
+    --color-picker-grid-cell: 0.5rem;
+    --color-picker-swatch-size: 1.25rem;
+    --color-picker-saturation-block: 9.5rem;
+    --color-picker-code-preview-height: 3.5rem;
   }
 
   /* ── Appearance: floating ──
    * Solid surface + soft elevation. Use when the picker pops out (e.g. inside
    * a Popover/Dialog). The shadow is subtle so it works on both light and dark. */
   .vds-color-picker[data-appearance="floating"] {
-    --vds-color-picker-bg: var(--vds-color-surface-overlay, var(--vds-color-surface, #ffffff));
-    --vds-color-picker-border: var(--vds-color-border, #d1d5db);
+    --color-picker-bg: var(--vds-color-surface-overlay, var(--vds-color-surface, #ffffff));
+    --color-picker-border: var(--vds-color-border, #d1d5db);
   }
 
   /* ── Appearance: flat ──
    * No background, no border, no padding — drops cleanly into a parent that
    * already supplies its own surface (e.g. a Card body). */
   .vds-color-picker[data-appearance="flat"] {
-    --vds-color-picker-bg: transparent;
-    --vds-color-picker-border: transparent;
+    --color-picker-bg: transparent;
+    --color-picker-border: transparent;
   }
 }

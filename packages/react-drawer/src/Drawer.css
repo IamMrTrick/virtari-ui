@@ -1,11 +1,13 @@
-@layer components {
+@import "./Drawer.tokens.css";
+
+@layer design-system.components {
   .vds-drawer-overlay {
     --vds-drawer-duration: var(--vds-duration-slower);
     --vds-drawer-ease: var(--vds-ease-ios);
     position: fixed;
     inset: 0;
     z-index: var(--vds-z-overlay);
-    background-color: var(--vds-color-scrim);
+    background-color: var(--drawer-overlay-bg);
     opacity: var(--vds-drawer-overlay-opacity, 0);
     pointer-events: none;
     will-change: opacity;
@@ -40,12 +42,7 @@
     min-inline-size: 0;
     flex-direction: column;
     box-sizing: border-box;
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in oklch, var(--vds-color-surface), white 4%),
-        var(--vds-color-surface)
-      );
+    background: var(--drawer-background);
     outline: none;
     overflow: hidden;
     overscroll-behavior: contain;
@@ -187,28 +184,29 @@
     display: flex;
     flex-shrink: 0;
     flex-direction: column;
-    gap: var(--vds-space-2);
-    padding: var(--vds-space-4) var(--vds-space-6);
+    gap: var(--drawer-header-gap);
+    padding-block: var(--drawer-padding-block);
+    padding-inline: var(--drawer-padding-inline);
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
     /* Plain (default): a single flat step of contrast vs the drawer body.
        surface-sunken inverts automatically (slightly darker in light,
        slightly lighter in dark) because neutral-2 is mode-aware. */
-    background: var(--vds-color-surface-sunken);
+    background: var(--drawer-header-surface);
   }
 
   .vds-drawer-header[data-variant="bordered"] {
     /* Bordered: uniform with the drawer body, differentiated only by a
        bottom rule. */
     background: transparent;
-    border-block-end: 1px solid var(--vds-color-border-muted);
+    border-block-end: var(--drawer-section-border);
   }
 
   .vds-drawer-content[data-direction="top"] .vds-drawer-header,
   .vds-drawer-content[data-direction="left"] .vds-drawer-header,
   .vds-drawer-content[data-direction="right"] .vds-drawer-header {
-    padding-block-start: max(var(--vds-space-4), env(safe-area-inset-top));
+    padding-block-start: max(var(--drawer-padding-block), env(safe-area-inset-top));
   }
 
   .vds-drawer-header > .vds-drawer-title,
@@ -226,7 +224,7 @@
   .vds-drawer-content[data-direction="bottom"]
     .vds-drawer-header
     > .vds-drawer-handle[data-placement="progress"] {
-    margin-block: calc(var(--vds-space-2) * -1) var(--vds-space-3);
+    margin-block: calc(var(--drawer-header-gap) * -1) var(--drawer-handle-padding-block);
   }
 
   .vds-drawer-content[data-direction="top"]
@@ -239,7 +237,7 @@
     inset-block-end: 0;
     inset-inline: 0;
     justify-content: center;
-    padding-block: var(--vds-space-3);
+    padding-block: var(--drawer-handle-padding-block);
     margin: 0;
   }
 
@@ -247,9 +245,7 @@
     .vds-drawer-body,
   .vds-drawer-content[data-direction="top"][data-indicator="progress"]
     .vds-drawer-body {
-    padding-block-end: calc(
-      var(--vds-drawer-handle-thickness) + var(--vds-space-5)
-    );
+    padding-block-end: var(--drawer-handle-clearance);
   }
 
   .vds-drawer-content[data-direction="left"][data-indicator="inside"]
@@ -264,9 +260,7 @@
     .vds-drawer-body,
   .vds-drawer-content[data-direction="left"][data-indicator="progress"]
     .vds-drawer-footer {
-    padding-inline-end: calc(
-      var(--vds-drawer-handle-thickness) + var(--vds-space-5)
-    );
+    padding-inline-end: var(--drawer-handle-clearance);
   }
 
   .vds-drawer-content[data-direction="right"][data-indicator="inside"]
@@ -281,9 +275,7 @@
     .vds-drawer-body,
   .vds-drawer-content[data-direction="right"][data-indicator="progress"]
     .vds-drawer-footer {
-    padding-inline-start: calc(
-      var(--vds-drawer-handle-thickness) + var(--vds-space-5)
-    );
+    padding-inline-start: var(--drawer-handle-clearance);
   }
 
   .vds-drawer-body {
@@ -294,13 +286,24 @@
     -webkit-overflow-scrolling: touch;
     user-select: auto;
     -webkit-user-select: auto;
-    padding-inline: var(--vds-space-6);
-    padding-block: var(--vds-space-4);
+    padding-inline: var(--drawer-padding-inline);
+    padding-block: var(--drawer-padding-block);
     touch-action: auto;
   }
 
-  .vds-drawer-header + .vds-drawer-body {
-    padding-block-start: 0;
+  /* Slot seam — the container owns the gap between adjacent slots via one
+     named token; a slot never zeroes its own leading edge. The header and
+     footer are tinted surfaces that keep their own interior padding, so the
+     seam is measured from the tint boundary to the body's first line. */
+  .vds-drawer-content
+    > :where(.vds-drawer-header, .vds-drawer-footer)
+    + .vds-drawer-body {
+    padding-block-start: var(--drawer-slot-gap);
+  }
+
+  .vds-drawer-content
+    > .vds-drawer-body:has(+ :where(.vds-drawer-header, .vds-drawer-footer)) {
+    padding-block-end: var(--drawer-slot-gap);
   }
 
   .vds-drawer-handle {
@@ -308,7 +311,7 @@
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    padding-block: var(--vds-space-3);
+    padding-block: var(--drawer-handle-padding-block);
     user-select: none;
     -webkit-user-select: none;
     touch-action: none;
@@ -330,7 +333,7 @@
     &[data-direction="right"] {
       position: absolute;
       inset-block: 0;
-      padding-inline: var(--vds-space-3);
+      padding-inline: var(--drawer-handle-padding-inline);
       padding-block: 0;
       block-size: 100%;
 
@@ -360,7 +363,7 @@
     position: absolute;
     z-index: 2;
     margin: 0;
-    padding: var(--vds-space-2);
+    padding: var(--drawer-handle-offset);
     background: none;
     border: none;
     box-shadow: none;
@@ -374,12 +377,12 @@
 
   .vds-drawer-handle[data-placement="outside"][data-direction="bottom"] {
     inset-block-start: 0;
-    transform: translate(-50%, calc(-100% - var(--vds-space-2)));
+    transform: translate(-50%, calc(-100% - var(--drawer-handle-offset)));
   }
 
   .vds-drawer-handle[data-placement="outside"][data-direction="top"] {
     inset-block-end: 0;
-    transform: translate(-50%, calc(100% + var(--vds-space-2)));
+    transform: translate(-50%, calc(100% + var(--drawer-handle-offset)));
   }
 
   .vds-drawer-handle[data-placement="outside"][data-direction="left"],
@@ -391,12 +394,12 @@
 
   .vds-drawer-handle[data-placement="outside"][data-direction="left"] {
     inset-inline-end: 0;
-    transform: translate(calc(100% + var(--vds-space-2)), -50%);
+    transform: translate(calc(100% + var(--drawer-handle-offset)), -50%);
   }
 
   .vds-drawer-handle[data-placement="outside"][data-direction="right"] {
     inset-inline-start: 0;
-    transform: translate(calc(-100% - var(--vds-space-2)), -50%);
+    transform: translate(calc(-100% - var(--drawer-handle-offset)), -50%);
   }
 
   .vds-drawer-handle-bar {
@@ -420,7 +423,7 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background-color: var(--vds-color-primary-9, var(--vds-color-text));
+    background-color: var(--drawer-handle-progress-color);
     transform-origin: center;
     transform: scaleX(var(--vds-drawer-close-progress, 0));
     transition: transform var(--vds-duration-fast) var(--vds-ease-out);
@@ -466,36 +469,32 @@
   }
 
   .vds-drawer-title {
-    padding-inline: var(--vds-space-6);
-    font-family: var(--vds-font-sans);
-    font-size: var(--vds-text-lg);
-    font-weight: var(--vds-font-weight-semibold);
-    line-height: var(--vds-leading-tight);
-    color: var(--vds-color-text);
+    padding-inline: var(--drawer-padding-inline);
+    font-family: var(--drawer-title-font-family);
+    font-size: var(--drawer-title-font-size);
+    font-weight: var(--drawer-title-font-weight);
+    line-height: var(--drawer-title-line-height);
+    color: var(--drawer-title-color);
   }
 
   .vds-drawer-description {
-    margin-block-start: var(--vds-space-1);
-    padding-inline: var(--vds-space-6);
-    font-size: var(--vds-text-sm);
-    line-height: var(--vds-leading-normal);
-    color: var(--vds-color-text-muted);
+    margin-block-start: var(--drawer-label-gap);
+    padding-inline: var(--drawer-padding-inline);
+    font-size: var(--drawer-description-font-size);
+    line-height: var(--drawer-description-line-height);
+    color: var(--drawer-description-color);
   }
 
   .vds-drawer-footer {
     display: flex;
-    gap: var(--vds-space-3);
+    gap: var(--drawer-footer-gap);
     flex-shrink: 0;
-    padding: var(--vds-space-4) var(--vds-space-6);
-    padding-block-end: max(var(--vds-space-4), env(safe-area-inset-bottom));
+    padding-block: var(--drawer-padding-block);
+    padding-inline: var(--drawer-padding-inline);
+    padding-block-end: max(var(--drawer-padding-block), env(safe-area-inset-bottom));
     margin-block-start: auto;
-    border-block-start: 1px solid var(--vds-color-border-muted);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in oklch, var(--vds-color-surface), transparent 8%),
-        color-mix(in oklch, var(--vds-color-surface), black 2%)
-      );
+    border-block-start: var(--drawer-section-border);
+    background: var(--drawer-footer-background);
   }
 
   @container (inline-size < 26rem) {

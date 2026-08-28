@@ -14,9 +14,13 @@
     --data-table-line-height:          var(--vds-leading-tight, 1.35);
     --data-table-cell-padding-inline:  var(--vds-space-2, 0.5rem);
     --data-table-cell-padding-block:   var(--vds-space-1, 0.25rem);
-    --data-table-row-height:           1.75rem;
-    --data-table-header-row-height:    1.875rem;
-    --data-table-footer-row-height:    2rem;
+    /* Density ramp (md default). The row must clear the tallest thing the
+       package puts in a cell: a `sm` Avatar / `sm` Button, both 2rem, plus
+       the block padding above and below. Header and footer track the body so
+       the three never drift apart. */
+    --data-table-row-height:           2.5rem;   /* 40px */
+    --data-table-header-row-height:    var(--data-table-row-height);
+    --data-table-footer-row-height:    var(--data-table-row-height);
     --data-table-col-min-width:        4rem;
     --data-table-col-default-width:    10rem;
 
@@ -227,7 +231,7 @@
     --data-table-pagination-padding-inline: var(--vds-space-4, 1rem);
     --data-table-pagination-padding-block:  var(--vds-space-2, 0.5rem);
     --data-table-pagination-gap: var(--vds-space-2, 0.5rem);
-    --data-table-pagination-button-size: var(--vds-size-md, 2rem);
+    --data-table-pagination-button-size: var(--vds-size-md, 2.25rem);
     --data-table-pagination-sticky-offset: 0px;
     --data-table-bulk-sticky-offset: 0px;
     --data-table-pagination-button-bg: transparent;
@@ -245,20 +249,17 @@
 
   /* ── Density ─────────────────────────────────────────────── */
   .vds-data-table[data-size="sm"] {
-    --data-table-row-height:           1.5rem;
-    --data-table-header-row-height:    1.625rem;
+    --data-table-row-height:           2rem;     /* 32px */
     --data-table-cell-padding-inline:  var(--vds-space-2-5, 0.625rem);
-    --data-table-cell-padding-block:   0.125rem;
+    --data-table-cell-padding-block:   var(--vds-space-0-5, 0.125rem);
     --data-table-font-size:            var(--vds-text-xs, 0.75rem);
     --data-table-header-letter-spacing: 0;
   }
   .vds-data-table[data-size="md"] {
-    --data-table-row-height:        1.75rem;
-    --data-table-header-row-height: 1.875rem;
+    --data-table-row-height:        2.5rem;      /* 40px */
   }
   .vds-data-table[data-size="lg"] {
-    --data-table-row-height:          2.25rem;
-    --data-table-header-row-height:   2.125rem;
+    --data-table-row-height:          3rem;      /* 48px */
     --data-table-cell-padding-inline: var(--vds-space-3, 0.75rem);
     --data-table-cell-padding-block:  var(--vds-space-1-5, 0.375rem);
     --data-table-font-size:           var(--vds-text-sm, 0.875rem);

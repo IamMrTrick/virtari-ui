@@ -11,9 +11,9 @@
     --scroll-area-scrollbar-padding: 2px;
     --scroll-area-track-bg: transparent;
     --scroll-area-track-bg-hover: var(--vds-color-bg-subtle, rgba(0, 0, 0, 0.04));
-    --scroll-area-thumb-bg: var(--vds-color-neutral-6, #d4d4d8);
-    --scroll-area-thumb-bg-hover: var(--vds-color-neutral-8, #a1a1aa);
-    --scroll-area-thumb-bg-active: var(--vds-color-neutral-9, #71717a);
+    --scroll-area-thumb-bg: var(--vds-color-border-muted, #d4d4d8);
+    --scroll-area-thumb-bg-hover: var(--vds-color-border-strong, #a1a1aa);
+    --scroll-area-thumb-bg-active: var(--vds-color-border-interactive, #71717a);
     --scroll-area-thumb-radius: var(--vds-radius-scrollbar-thumb, 6px);
     --scroll-area-transition-duration: var(--vds-duration-fast, 150ms);
     --scroll-area-transition-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));

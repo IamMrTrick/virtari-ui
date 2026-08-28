@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-segmented-radio {
     display: inline-flex;
     align-items: stretch;
@@ -69,7 +69,7 @@
   /* ── Disabled ── */
   .vds-segmented-radio-item:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
   }
 
   /* ── Error — entire segmented group shows danger state ── */

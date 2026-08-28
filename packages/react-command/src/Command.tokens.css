@@ -1,8 +1,14 @@
 @layer design-system.components {
+  /* A command palette is conventionally wider than a plain `md` dialog —
+     the result list needs the room. 40rem = 640px. */
+  .vds-command-dialog {
+    --command-dialog-width: 40rem;
+  }
+
   .vds-command {
     --vds-command-bg: var(--vds-color-surface, #ffffff);
     --vds-command-border: 1px solid
-      var(--vds-color-border-default, #e5e7eb);
+      var(--vds-color-border-default, var(--vds-color-border, #e5e7eb));
     --vds-command-radius: var(--vds-radius-command, 0.75rem);
     --vds-command-padding: var(--vds-space-1, 0.25rem);
 
@@ -13,7 +19,7 @@
     --vds-command-input-padding-inline: var(--vds-space-3, 0.75rem);
     --vds-command-input-padding-block: var(--vds-space-3, 0.75rem);
     --vds-command-input-border-block-end: 1px solid
-      var(--vds-color-border-default, #e5e7eb);
+      var(--vds-color-border-default, var(--vds-color-border, #e5e7eb));
 
     --vds-command-list-max-block-size: 20rem;
     --vds-command-list-padding: var(--vds-space-1, 0.25rem);

@@ -23,7 +23,7 @@
     --_lp-primary-color: var(--vds-color-text, currentColor);
     --_lp-primary-weight: var(--vds-font-weight-medium, 500);
     --_lp-subtitle-color: var(--vds-color-text-muted, #6b7280);
-    --_lp-subtitle-weight: var(--vds-font-weight-regular, 400);
+    --_lp-subtitle-weight: var(--vds-font-weight-normal, 400);
     --_lp-script-stack: var(--vds-font-sans, ui-sans-serif), "Noto Sans",
       "Noto Sans CJK", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
   }
@@ -35,7 +35,7 @@
     --_lp-primary-color: var(--vds-color-text, currentColor);
     --_lp-primary-weight: var(--vds-font-weight-medium, 500);
     --_lp-subtitle-color: var(--vds-color-text-muted, #6b7280);
-    --_lp-subtitle-weight: var(--vds-font-weight-regular, 400);
+    --_lp-subtitle-weight: var(--vds-font-weight-normal, 400);
     --_lp-script-stack: var(--vds-font-sans, ui-sans-serif), "Noto Sans",
       "Noto Sans CJK", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
   }

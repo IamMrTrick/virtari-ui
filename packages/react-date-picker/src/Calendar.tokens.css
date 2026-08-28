@@ -53,7 +53,7 @@
 
     /* Focus */
     --calendar-cell-focus-ring-color: var(--vds-color-ring, #6366f1);
-    --calendar-cell-focus-ring-width: 2px;
+    --calendar-cell-focus-ring-width: var(--vds-focus-ring-width, 2px);
 
     /* Motion */
     --calendar-transition-duration: var(--vds-duration-fastest, 50ms);

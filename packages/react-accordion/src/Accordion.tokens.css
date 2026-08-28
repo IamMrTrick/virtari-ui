@@ -22,8 +22,12 @@
     --accordion-trigger-font-weight:    var(--vds-font-weight-medium, 500);
     --accordion-trigger-line-height:    var(--vds-leading-tight, 1.35);
 
-    /* Content body */
-    --accordion-content-padding-block-start: 0;
+    /* Content body.
+     * The gap between the trigger and the panel body is the panel's own, not
+     * borrowed from the trigger's bottom padding — a variant that draws a
+     * border or background at that seam (bordered / separated) would
+     * otherwise butt the first line of content straight against it. */
+    --accordion-content-padding-block-start: var(--vds-stack-gap, var(--vds-space-3, 0.75rem));
     --accordion-content-padding-block-end:   var(--vds-space-4, 1rem);
     --accordion-content-padding-inline:      0;
     --accordion-content-font-size:           var(--vds-text-sm, 0.875rem);
@@ -48,8 +52,8 @@
     --accordion-color-text-muted:  var(--vds-color-text-muted, #6b7280);
     --accordion-color-text-hover:  var(--vds-color-text, #111827);
     --accordion-color-bg:          transparent;
-    --accordion-color-bg-hover:    var(--vds-color-neutral-3, rgb(0 0 0 / 0.03));
-    --accordion-color-bg-active:   var(--vds-color-neutral-4, rgb(0 0 0 / 0.06));
+    --accordion-color-bg-hover:    var(--vds-color-surface-hover, rgb(0 0 0 / 0.03));
+    --accordion-color-bg-active:   var(--vds-color-surface-active, rgb(0 0 0 / 0.06));
     --accordion-color-border:      var(--vds-color-border-muted, #e5e7eb);
     --accordion-color-accent:      var(--vds-color-primary-solid, #4f46e5);
 
@@ -171,12 +175,12 @@
     --accordion-content-padding-inline:    var(--vds-space-4, 1rem);
   }
   .vds-accordion[data-variant="filled"] .vds-accordion-item {
-    background-color: var(--vds-color-neutral-2, rgb(0 0 0 / 0.025));
+    background-color: var(--vds-color-bg-subtle, rgb(0 0 0 / 0.025));
     border-radius: var(--accordion-item-radius);
     overflow: clip;
   }
   .vds-accordion[data-variant="filled"] .vds-accordion-item[data-state="open"] {
-    background-color: var(--vds-color-neutral-3, rgb(0 0 0 / 0.05));
+    background-color: var(--vds-color-bg-muted, rgb(0 0 0 / 0.05));
   }
 
   /* ghost — no frame at all, only hover tint on the trigger. */

@@ -12,10 +12,19 @@
     --flow-border: color-mix(in oklab, var(--vds-color-border-muted) 86%, transparent);
     --flow-border-strong: color-mix(in oklab, var(--vds-color-border-strong) 92%, transparent);
     --flow-shadow: 0 20px 40px rgb(0 0 0 / 0.16);
+    /* Selection ring. `--vds-color-border-primary` is the real semantic role
+     * (the compat alias `--vds-color-primary-border` never existed, which made
+     * the whole box-shadow invalid-at-computed-value-time and the selection
+     * affordance invisible). Fallback keeps the ring standalone-safe. */
     --flow-shadow-selected:
-      0 0 0 1px var(--vds-color-primary-border),
+      0 0 0 1px var(--vds-color-border-primary, var(--vds-color-primary-solid, #6366f1)),
       0 24px 48px rgb(0 0 0 / 0.22);
-    --flow-radius: calc(var(--vds-radius-card) + 0.125rem);
+    /* Nodes are canvas cards — same radius family as every other card surface. */
+    --flow-radius: var(--vds-radius-card, var(--vds-radius-surface, 0.75rem));
+    /* Floating canvas chrome (controls bar, minimap). One step tighter than a
+     * node so the chrome reads as secondary — driven by the mode-reactive
+     * scale rather than a hardcoded subtraction off the node radius. */
+    --flow-panel-radius: var(--vds-radius-md, 0.5rem);
     --flow-handle-size: 0.95rem;
     --flow-handle-ring: 0 0 0 3px color-mix(in oklab, var(--vds-color-surface) 78%, transparent);
     --flow-edge-width: 2.75px;
@@ -30,7 +39,7 @@
     --flow-surface-elevated: color-mix(in oklab, var(--vds-color-surface) 94%, black 6%);
     --flow-shadow: 0 14px 28px rgb(15 23 42 / 0.08);
     --flow-shadow-selected:
-      0 0 0 1px var(--vds-color-primary-border),
+      0 0 0 1px var(--vds-color-border-primary, var(--vds-color-primary-solid, #6366f1)),
       0 18px 32px rgb(15 23 42 / 0.14);
     --flow-label-shadow: 0 10px 18px rgb(15 23 42 / 0.1);
   }

@@ -44,25 +44,39 @@
   @keyframes vds-pw-hide      { 0%, 100% { box-shadow: none; } }
 }
 
-@layer components {
+@layer design-system.components {
   .vds-input {
     /*
-     * ── Config ──
+     * ── Public config ──
      * Height uses shared --vds-size-* tokens (same as Button, Select, Toggle).
      * Override these to customize.
      */
-    --_input-height: var(--vds-size-md);
-    --_input-px: var(--vds-space-3);
-    --_input-py: 0;
-    --_input-font-size: var(--vds-text-sm);
-    --_input-line-height: var(--vds-control-line-height, 1);
-    --_input-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
-    --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
+    --input-height: var(--vds-size-md);
+    --input-padding-inline: var(--vds-space-3);
+    --input-padding-block: 0;
+    --input-font-size: var(--vds-text-sm);
+    --input-line-height: var(--vds-control-line-height, 1);
+    --input-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
+    --input-radius: var(--vds-radius-input, var(--vds-radius-element));
+
+    /*
+     * ── Legacy private aliases ──
+     * Kept so packages that already override --_input-* (ColorPicker, Editor)
+     * and the iOS auto-zoom guard in @virtari-packages/core keep working.
+     * New code should set the public --input-* names above.
+     */
+    --_input-height: var(--input-height);
+    --_input-px: var(--input-padding-inline);
+    --_input-py: var(--input-padding-block);
+    --_input-font-size: var(--input-font-size);
+    --_input-line-height: var(--input-line-height);
+    --_input-optical-offset: var(--input-optical-offset);
+    --_input-radius: var(--input-radius);
 
     display: flex;
     inline-size: 100%;
     font-family: var(--vds-font-sans);
-    border: 1px solid var(--vds-color-border);
+    border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
     background-color: var(--vds-color-surface);
     color: var(--vds-color-text);
     -webkit-touch-callout: default;
@@ -81,12 +95,12 @@
     border-radius: var(--_input-radius);
 
     &::placeholder {
-      color: var(--vds-color-text-subtle);
+      color: var(--vds-color-text-placeholder, var(--vds-color-neutral-11));
     }
 
     &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: -1px;
+      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+      outline-offset: var(--vds-focus-ring-offset, 2px);
       border-color: var(--vds-color-primary-9);
     }
 
@@ -95,7 +109,7 @@
     }
 
     &:disabled {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       cursor: not-allowed;
     }
 
@@ -110,47 +124,47 @@
     /* ── Sizes (same ramp as Button) ── */
 
     &[data-size="2xs"] {
-      --_input-height: var(--vds-size-2xs);
-      --_input-px: var(--vds-space-1-5);
-      --_input-font-size: var(--vds-text-xs);
-      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
+      --input-height: var(--vds-size-2xs);
+      --input-padding-inline: var(--vds-space-1-5);
+      --input-font-size: var(--vds-text-xs);
+      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="xs"] {
-      --_input-height: var(--vds-size-xs);
-      --_input-px: var(--vds-space-2);
-      --_input-font-size: var(--vds-text-xs);
-      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
+      --input-height: var(--vds-size-xs);
+      --input-padding-inline: var(--vds-space-2);
+      --input-font-size: var(--vds-text-xs);
+      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="sm"] {
-      --_input-height: var(--vds-size-sm);
-      --_input-px: var(--vds-space-2-5);
-      --_input-font-size: var(--vds-text-sm);
-      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
+      --input-height: var(--vds-size-sm);
+      --input-padding-inline: var(--vds-space-2-5);
+      --input-font-size: var(--vds-text-sm);
+      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     /* md uses defaults above */
 
     &[data-size="lg"] {
-      --_input-height: var(--vds-size-lg);
-      --_input-px: var(--vds-space-4);
-      --_input-font-size: var(--vds-text-base);
-      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
+      --input-height: var(--vds-size-lg);
+      --input-padding-inline: var(--vds-space-4);
+      --input-font-size: var(--vds-text-base);
+      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="xl"] {
-      --_input-height: var(--vds-size-xl);
-      --_input-px: var(--vds-space-5);
-      --_input-font-size: var(--vds-text-lg);
-      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
+      --input-height: var(--vds-size-xl);
+      --input-padding-inline: var(--vds-space-5);
+      --input-font-size: var(--vds-text-lg);
+      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="2xl"] {
-      --_input-height: var(--vds-size-2xl);
-      --_input-px: var(--vds-space-6);
-      --_input-font-size: var(--vds-text-xl);
-      --_input-radius: var(--vds-radius-input, var(--vds-radius-element));
+      --input-height: var(--vds-size-2xl);
+      --input-padding-inline: var(--vds-space-6);
+      --input-font-size: var(--vds-text-xl);
+      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
   }
 
@@ -222,6 +236,13 @@
       border-start-end-radius: 0;
       border-end-end-radius: 0;
     }
+
+    /* The focus ring is drawn outside the box (canonical offset), so lift the
+       focused member above its neighbours or the next addon paints over it. */
+    & > .vds-input:focus-visible {
+      position: relative;
+      z-index: 1;
+    }
   }
 
   /* ── InputAddon — the bordered text box that attaches to the input ── */
@@ -232,7 +253,7 @@
     font-size: var(--vds-text-sm);
     color: var(--vds-color-text-muted);
     background-color: var(--vds-color-surface-raised);
-    border: 1px solid var(--vds-color-border);
+    border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
     white-space: nowrap;
     flex-shrink: 0;
 
@@ -252,6 +273,16 @@
   .vds-input-field-control {
     position: relative;
     min-inline-size: 0;
+
+    /*
+     * The field and its inline action button are siblings, so the geometry
+     * they share has to live on their common ancestor for both to read it.
+     * --input-action-inset is the gap between the field's border box and the
+     * action button; --input-action-size is the button's inline size.
+     */
+    --input-radius: var(--vds-radius-input, var(--vds-radius-element));
+    --input-action-inset: var(--vds-space-1);
+    --input-action-size: var(--vds-space-8);
   }
 
   .vds-input-field-control[data-pw-anim="reveal"] > .vds-input {
@@ -268,27 +299,31 @@
   }
 
   .vds-input-field-control[data-has-action] > .vds-input {
-    padding-inline-end: calc(var(--_input-px) + var(--vds-space-8));
+    padding-inline-end: calc(var(--_input-px) + var(--input-action-size));
   }
 
   .vds-input-field-action {
     position: absolute;
-    inset-inline-end: var(--vds-space-1);
+    inset-inline-end: var(--input-action-inset);
     inset-block-start: 50%;
     transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--vds-space-8);
-    block-size: calc(100% - var(--vds-space-1));
+    inline-size: var(--input-action-size);
+    block-size: calc(100% - var(--input-action-inset));
     padding: 0;
     border: 0;
+    /*
+     * Concentric with the field: the action sits --input-action-inset inside
+     * the field's corner, so its own corner is that much tighter. Floored at
+     * 0px only — a floor at or above the field radius (the old
+     * --vds-radius-action) made the calc() dead code and turned the button
+     * into a full circle in pill mode.
+     */
     border-radius: max(
-      calc(
-        var(--_input-radius, var(--vds-radius-input, var(--vds-radius-element))) -
-          var(--vds-space-1)
-      ),
-      var(--vds-radius-action, var(--vds-radius-control-action))
+      0px,
+      calc(var(--input-radius) - var(--input-action-inset))
     );
     background: transparent;
     color: var(--vds-color-text-muted);
@@ -305,7 +340,7 @@
 
   .vds-input-field-action:disabled {
     cursor: not-allowed;
-    opacity: 0.55;
+    opacity: var(--vds-opacity-disabled, 0.5);
   }
 
   .vds-input-field-action:disabled:hover {
@@ -314,8 +349,8 @@
   }
 
   .vds-input-field-action:focus-visible {
-    outline: 2px solid var(--vds-color-ring);
-    outline-offset: 1px;
+    outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   .vds-input-field-strength {

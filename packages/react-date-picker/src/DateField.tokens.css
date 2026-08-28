@@ -12,7 +12,7 @@
   .vds-date-picker-group,
   .vds-date-range-picker-group {
     /* Field shell (shared sizing ramp with Button/Input/Select) */
-    --date-field-height: var(--vds-size-md, 2.5rem);
+    --date-field-height: var(--vds-size-md, 2.25rem);
     --date-field-gap: var(--vds-space-1, 0.25rem);
     --date-field-padding-inline: var(--vds-space-3, 0.75rem);
     --date-field-radius: var(--vds-radius-date-field, 0.5rem);
@@ -24,16 +24,16 @@
 
     --date-field-bg: var(--vds-color-surface, #ffffff);
     --date-field-bg-hover: var(--vds-color-surface-hover, #f9fafb);
-    --date-field-border-color: var(--vds-color-border, #d1d5db);
-    --date-field-border-color-hover: var(--vds-color-border-strong, #9ca3af);
+    --date-field-border-color: var(--vds-color-border-interactive, #6b7280);
+    --date-field-border-color-hover: var(--vds-color-neutral-10, #4b5563);
     --date-field-text-color: var(--vds-color-text, #111827);
-    --date-field-placeholder-color: var(--vds-color-text-subtle, #9ca3af);
+    --date-field-placeholder-color: var(--vds-color-text-placeholder, #4b5563);
     --date-field-label-color: var(--vds-color-text-muted, #6b7280);
     --date-field-description-color: var(--vds-color-text-muted, #6b7280);
     --date-field-error-color: var(--vds-color-danger-solid, #ef4444);
 
     --date-field-focus-ring-color: var(--vds-color-ring, #6366f1);
-    --date-field-focus-ring-width: 2px;
+    --date-field-focus-ring-width: var(--vds-focus-ring-width, 2px);
     --date-field-focus-border-color: var(--vds-color-primary-9, #6366f1);
 
     --date-field-segment-focus-bg: var(--vds-color-primary-9, #6366f1);
@@ -132,7 +132,7 @@
   .vds-time-field[data-size="lg"],
   .vds-date-picker[data-size="lg"] .vds-date-picker-group,
   .vds-date-range-picker[data-size="lg"] .vds-date-range-picker-group {
-    --date-field-height: var(--vds-size-lg, 3rem);
+    --date-field-height: var(--vds-size-lg, 2.5rem);
     --date-field-padding-inline: var(--vds-space-4, 1rem);
     --date-field-font-size: var(--vds-text-base, 1rem);
   }
@@ -141,7 +141,7 @@
   .vds-time-field[data-size="xl"],
   .vds-date-picker[data-size="xl"] .vds-date-picker-group,
   .vds-date-range-picker[data-size="xl"] .vds-date-range-picker-group {
-    --date-field-height: var(--vds-size-xl, 3.5rem);
+    --date-field-height: var(--vds-size-xl, 2.75rem);
     --date-field-padding-inline: var(--vds-space-5, 1.25rem);
     --date-field-font-size: var(--vds-text-lg, 1.125rem);
   }
@@ -150,7 +150,7 @@
   .vds-time-field[data-size="2xl"],
   .vds-date-picker[data-size="2xl"] .vds-date-picker-group,
   .vds-date-range-picker[data-size="2xl"] .vds-date-range-picker-group {
-    --date-field-height: var(--vds-size-2xl, 4rem);
+    --date-field-height: var(--vds-size-2xl, 3.25rem);
     --date-field-padding-inline: var(--vds-space-6, 1.5rem);
     --date-field-font-size: var(--vds-text-xl, 1.25rem);
   }

@@ -55,7 +55,7 @@
     pointer-events: none;
   }
   .vds-segmented-control[data-disabled] .vds-tabs-list {
-    opacity: 0.6;
+    opacity: var(--vds-opacity-disabled, 0.5);
   }
   .vds-segmented-control[data-disabled] .vds-tabs-trigger {
     opacity: 1;

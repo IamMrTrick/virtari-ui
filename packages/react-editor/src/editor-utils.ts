@@ -173,7 +173,7 @@ export const EMPTY_TOOLBAR_STATE: ToolbarState = {
   linkUrl: "",
   fontFamily: "var(--vds-font-sans)",
   fontSize: "var(--vds-text-base)",
-  fontColor: "var(--vds-color-neutral-12)",
+  fontColor: "var(--vds-color-text)",
   bgColor: "transparent",
 };
 
@@ -590,7 +590,7 @@ export function readToolbarState(): ToolbarState {
     fontColor: $getSelectionStyleValueForProperty(
       selection,
       "color",
-      "var(--vds-color-neutral-12)",
+      "var(--vds-color-text)",
     ),
     bgColor: $getSelectionStyleValueForProperty(
       selection,

@@ -83,7 +83,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--vds-space-2, 0.5rem);
-    padding: var(--vds-space-2, 0.5rem) var(--vds-space-3, 0.75rem);
+    padding-block: var(--vds-editor-toolbar-padding-block);
+    padding-inline: var(--vds-editor-toolbar-padding-inline);
     border-block-end: 1px solid var(--vds-editor-border);
     background:
       linear-gradient(
@@ -123,8 +124,10 @@
     --scroll-area-arrow-shadow: 0 10px 24px -20px color-mix(in oklch, black 35%, transparent);
   }
 
+  /* Sits flush inside the toolbar, so it shares the toolbar's inner radius —
+     it must never round more than its host. */
   .vds-editor-toolbar-scroll .vds-scroll-area {
-    border-radius: calc(var(--vds-editor-toolbar-radius) + 0.25rem);
+    border-radius: var(--vds-editor-toolbar-radius);
   }
 
   .vds-editor-toolbar-scroll .vds-scroll-area-viewport {
@@ -200,7 +203,7 @@
   .vds-editor-toolbar-button:disabled,
   .vds-editor-toolbar-select:disabled,
   .vds-editor-toolbar-link-input:disabled {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 
@@ -245,7 +248,9 @@
   .vds-editor-toolbar-select {
       min-inline-size: 8.5rem;
       --select-trigger-height: 2.1rem;
-      --select-trigger-radius: calc(var(--vds-editor-toolbar-radius) - 0.15rem);
+      /* Direct child of the toolbar (the wrap adds no inset), so it matches
+         the toolbar's inner radius exactly. */
+      --select-trigger-radius: var(--vds-editor-toolbar-radius);
       --select-trigger-padding-inline: var(--vds-space-2-5, 0.625rem);
       --select-trigger-bg: var(--vds-editor-toolbar-button-bg);
       --select-trigger-bg-hover: var(--vds-editor-toolbar-button-bg-hover);
@@ -264,7 +269,7 @@
       --select-trigger-bg: var(--vds-editor-toolbar-button-bg-hover);
       --select-trigger-border-color: color-mix(
         in oklch,
-        var(--vds-color-primary-9, #2563eb) 34%,
+        var(--vds-color-primary-solid, #2563eb) 34%,
         var(--vds-editor-toolbar-button-border)
       );
     }
@@ -339,9 +344,10 @@
   }
 
   .vds-editor-toolbar-link-input {
-    --_input-height: 2rem;
-    --_input-font-size: var(--vds-text-xs, 0.75rem);
-    --_input-radius: calc(var(--vds-editor-toolbar-radius) - 0.125rem);
+    --input-height: 2rem;
+    --input-font-size: var(--vds-text-xs, 0.75rem);
+    /* Block-flush inside the wrap, so the only gap is the wrap's 1px border. */
+    --input-radius: calc(var(--vds-editor-toolbar-radius) - 1px);
     flex: 1 1 auto;
     min-inline-size: 0;
     inline-size: 100%;
@@ -386,7 +392,7 @@
     --button-bg-hover: var(--vds-editor-insert-accent-bg-hover);
     --button-bg-active: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 48%,
+      var(--vds-color-primary-solid, #2563eb) 48%,
       var(--vds-editor-bg)
     );
     --button-text: var(--vds-editor-insert-accent-fg);
@@ -399,7 +405,7 @@
     --button-color-bg-hover: var(--vds-editor-insert-accent-bg-hover);
     --button-color-bg-active: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 48%,
+      var(--vds-color-primary-solid, #2563eb) 48%,
       var(--vds-editor-bg)
     );
     --button-color-text: var(--vds-editor-insert-accent-fg);
@@ -434,15 +440,22 @@
   }
 
   .vds-editor-mode-list {
+    /* One padding token drives both the track inset and the concentric radius
+       of the trigger/indicator inside it. */
+    --vds-editor-mode-list-padding: var(--vds-space-1, 0.25rem);
     --tabs-list-bg: color-mix(in oklch, var(--vds-editor-bg) 92%, transparent);
     --tabs-list-radius: var(--vds-editor-toolbar-radius);
-    --tabs-list-padding-inline: var(--vds-space-1, 0.25rem);
-    --tabs-list-padding-block: var(--vds-space-1, 0.25rem);
+    --tabs-list-padding-inline: var(--vds-editor-mode-list-padding);
+    --tabs-list-padding-block: var(--vds-editor-mode-list-padding);
     --tabs-indicator-color: var(--vds-editor-bg);
-    --tabs-indicator-radius: calc(var(--vds-editor-toolbar-radius) - 0.125rem);
+    --tabs-indicator-radius: calc(
+      var(--vds-editor-toolbar-radius) - var(--vds-editor-mode-list-padding)
+    );
     --tabs-trigger-height: 2rem;
     --tabs-trigger-padding-inline: var(--vds-space-2-5, 0.625rem);
-    --tabs-trigger-radius: calc(var(--vds-editor-toolbar-radius) - 0.125rem);
+    --tabs-trigger-radius: calc(
+      var(--vds-editor-toolbar-radius) - var(--vds-editor-mode-list-padding)
+    );
     --tabs-trigger-bg-hover: transparent;
     --tabs-trigger-bg-active: var(--vds-editor-bg);
     --tabs-trigger-color-active: var(--vds-editor-text);
@@ -470,7 +483,7 @@
     --vds-editor-text: var(--vds-color-text, #111827);
     --vds-editor-text-muted: var(--vds-color-text-muted, #475569);
     --vds-editor-text-subtle: var(--vds-color-text-subtle, #64748b);
-    --vds-editor-toolbar-button-fg-active: var(--vds-color-primary-11, #1d4ed8);
+    --vds-editor-toolbar-button-fg-active: var(--vds-color-primary-text, #1d4ed8);
     --vds-editor-panel-bg: color-mix(
       in oklch,
       var(--vds-editor-bg) 96%,
@@ -685,16 +698,16 @@
   .vds-editor-menu-item.is-active {
     background: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 20%,
+      var(--vds-color-primary-solid, #2563eb) 20%,
       transparent
     );
-    color: var(--vds-color-primary-12, #172554);
+    color: var(--vds-color-primary-text, #172554);
   }
 
   .vds-editor-menu-item:hover {
     background: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 12%,
+      var(--vds-color-primary-solid, #2563eb) 12%,
       var(--vds-editor-bg)
     );
     color: var(--vds-editor-text);
@@ -724,7 +737,7 @@
     inline-size: 1.25rem;
     block-size: 1.25rem;
     border-radius: var(--vds-editor-radius-control-sm, 0.375rem);
-    background: color-mix(in oklch, var(--vds-color-primary-9, #2563eb) 8%, transparent);
+    background: color-mix(in oklch, var(--vds-color-primary-solid, #2563eb) 8%, transparent);
     color: var(--vds-editor-text);
   }
 
@@ -737,10 +750,10 @@
   .vds-editor-menu-item.is-active .vds-editor-menu-item-icon {
     background: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 28%,
+      var(--vds-color-primary-solid, #2563eb) 28%,
       transparent
     );
-    color: var(--vds-color-primary-12, #172554);
+    color: var(--vds-color-primary-text, #172554);
   }
 
   .vds-editor-menu-item-icon-empty {
@@ -806,7 +819,7 @@
   }
 
   .vds-editor-insert-option .vds-button-section[data-position="start"] {
-    margin-block-start: 0.1rem;
+    margin-block-start: var(--vds-control-optical-offset, 0.09375rem);
   }
 
   .vds-editor-insert-option-icon {
@@ -838,10 +851,10 @@
 
   .vds-editor-color-picker {
     inline-size: 100%;
-    --vds-color-picker-max-width: 15.75rem;
-    --vds-color-picker-padding: var(--vds-space-1, 0.25rem);
-    --vds-color-picker-gap: var(--vds-space-2, 0.5rem);
-    --vds-color-picker-saturation-block: 8rem;
+    --color-picker-max-width: 15.75rem;
+    --color-picker-padding: var(--vds-space-1, 0.25rem);
+    --color-picker-gap: var(--vds-space-2, 0.5rem);
+    --color-picker-saturation-block: 8rem;
   }
 
   .vds-editor-color-input-row {
@@ -883,7 +896,7 @@
       0 0 0 2px color-mix(in oklch, var(--vds-editor-bg) 100%, transparent),
       0 0 0 4px color-mix(
         in oklch,
-        var(--vds-color-primary-9, #2563eb) 42%,
+        var(--vds-color-primary-solid, #2563eb) 42%,
         transparent
       );
   }
@@ -1138,7 +1151,7 @@
     border-radius: var(--vds-editor-radius-control-sm, 0.25rem);
     background: color-mix(
       in oklch,
-      var(--vds-color-warning-5, #fde68a) 74%,
+      var(--vds-color-warning-bg-active, #fde68a) 74%,
       transparent
     );
   }
@@ -1235,7 +1248,9 @@
 
   video.vds-editor-media-preview {
     aspect-ratio: 16 / 9;
-    background: var(--vds-color-neutral-12, #111827);
+    /* Letterbox behind `object-fit: contain` video. Must stay black in both
+       modes: an inverting neutral step turns this near-white in dark. */
+    background: var(--vds-color-black, #000000);
   }
 
   .vds-editor-media-frame {
@@ -1259,7 +1274,7 @@
     background:
       linear-gradient(
         135deg,
-        color-mix(in oklch, var(--vds-color-primary-9, #2563eb) 10%, transparent),
+        color-mix(in oklch, var(--vds-color-primary-solid, #2563eb) 10%, transparent),
         transparent 62%
       ),
       color-mix(in oklch, var(--vds-editor-bg-muted) 84%, var(--vds-editor-bg));
@@ -1286,19 +1301,16 @@
     --vds-editor-text: var(--vds-color-text, #111827);
     --vds-editor-text-muted: var(--vds-color-text-muted, #475569);
     --vds-editor-text-subtle: var(--vds-color-text-subtle, #64748b);
-    --dialog-max-width: min(92vw, 34rem);
+    /* Resolved width. --dialog-max-width is the viewport clamp only, so the
+       intended size has to be set through --dialog-width. */
+    --dialog-width: 34rem;
     --dialog-title-font-size: var(--vds-text-lg, 1.125rem);
     --dialog-description-font-size: var(--vds-text-xs, 0.75rem);
     --dialog-padding-inline: var(--vds-space-4, 1rem);
     --dialog-padding-block: var(--vds-space-4, 1rem);
-    --dialog-header-padding-block-start: var(--vds-space-4, 1rem);
-    --dialog-header-padding-block-end: var(--vds-space-3, 0.75rem);
-    --dialog-body-padding-block: var(--vds-space-3, 0.75rem);
-    --dialog-footer-padding-block: var(--vds-space-3, 0.75rem);
-  }
-
-  .vds-editor-media-dialog .vds-dialog-header + .vds-dialog-body {
-    padding-block-start: var(--vds-space-3, 0.75rem);
+    /* Seam between header / body / footer. Dialog owns the slot gaps now, so
+       the media dialog only retunes the one token. */
+    --dialog-slot-gap: var(--vds-space-3, 0.75rem);
   }
 
   .vds-editor-media-dialog .vds-dialog-footer {
@@ -1373,10 +1385,10 @@
     border-radius: var(--vds-editor-radius-block, 0.5rem);
     background: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 12%,
+      var(--vds-color-primary-solid, #2563eb) 12%,
       transparent
     );
-    color: var(--vds-color-primary-11, #1d4ed8);
+    color: var(--vds-color-primary-text, #1d4ed8);
   }
 
   .vds-editor-media-file-main {
@@ -1407,19 +1419,19 @@
   .vds-editor-media-source-hint {
     background: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 8%,
+      var(--vds-color-primary-solid, #2563eb) 8%,
       transparent
     );
     color: var(--vds-editor-text-muted);
   }
 
   .vds-editor-media-source-hint[data-trusted] {
-    color: var(--vds-color-success-11, #15803d);
+    color: var(--vds-color-success-text, #15803d);
   }
 
   .vds-editor-media-error {
     background: var(--vds-editor-danger-soft);
-    color: var(--vds-color-danger-11, #b91c1c);
+    color: var(--vds-color-danger-text, #b91c1c);
   }
 
   .vds-editor[data-mode="markdown"] .vds-editor-code-block,
@@ -1540,9 +1552,14 @@
 
   .vds-editor-list-item-checked,
   .vds-editor-list-item-unchecked {
+    /* Indent is derived from the marker box plus one spacing step, so the
+       checkbox and the text stay aligned if either token is retuned. */
+    --vds-editor-task-marker-size: 1rem;
     position: relative;
     list-style: none;
-    padding-inline-start: 1.9rem;
+    padding-inline-start: calc(
+      var(--vds-editor-task-marker-size) + var(--vds-space-3, 0.75rem)
+    );
   }
 
   .vds-editor-list-item-checked::before,
@@ -1551,8 +1568,8 @@
     position: absolute;
     inset-inline-start: 0;
     inset-block-start: 0.35em;
-    inline-size: 1rem;
-    block-size: 1rem;
+    inline-size: var(--vds-editor-task-marker-size);
+    block-size: var(--vds-editor-task-marker-size);
     border: 1px solid var(--vds-editor-border-strong);
     border-radius: var(--vds-radius-checkbox, 0.375rem);
     background: var(--vds-editor-bg);
@@ -1609,12 +1626,12 @@
     position: relative;
     box-shadow: inset 0 0 0 1px color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 58%,
+      var(--vds-color-primary-solid, #2563eb) 58%,
       transparent
     );
     background: color-mix(
       in oklch,
-      var(--vds-color-primary-4, #dbeafe) 34%,
+      var(--vds-color-primary-bg-hover, #dbeafe) 34%,
       var(--vds-editor-bg)
     );
   }
@@ -1661,7 +1678,7 @@
 
   .vds-editor-character-limit {
     background: var(--vds-editor-danger-soft);
-    color: var(--vds-color-danger-11, #b91c1c);
+    color: var(--vds-color-danger-text, #b91c1c);
     border-radius: var(--vds-editor-radius-control-sm, 0.25rem);
   }
 
@@ -1802,15 +1819,15 @@
   .vds-editor-status-pill[data-state="near"] {
     background: color-mix(
       in oklch,
-      var(--vds-color-warning-9, #d97706) 12%,
+      var(--vds-color-warning-solid, #d97706) 12%,
       transparent
     );
-    color: var(--vds-color-warning-11, #92400e);
+    color: var(--vds-color-warning-text, #92400e);
   }
 
   .vds-editor-status-pill[data-state="over"] {
     background: var(--vds-editor-danger-soft);
-    color: var(--vds-color-danger-11, #b91c1c);
+    color: var(--vds-color-danger-text, #b91c1c);
   }
 
   .vds-editor-slash-anchor {
@@ -1945,9 +1962,9 @@
   }
 
   .vds-editor-floating-link-input {
-    --_input-height: 1.875rem;
-    --_input-font-size: var(--vds-text-xs, 0.75rem);
-    --_input-radius: var(--vds-editor-radius-control, 0.5rem);
+    --input-height: 1.875rem;
+    --input-font-size: var(--vds-text-xs, 0.75rem);
+    --input-radius: var(--vds-editor-radius-control, 0.5rem);
     min-inline-size: 0;
   }
 
@@ -2048,7 +2065,7 @@
     --button-bg-hover: var(--vds-editor-insert-accent-bg-hover);
     --button-bg-active: color-mix(
       in oklch,
-      var(--vds-color-primary-9, #2563eb) 48%,
+      var(--vds-color-primary-solid, #2563eb) 48%,
       var(--vds-editor-bg)
     );
     --button-text: var(--vds-editor-insert-accent-fg);
@@ -2103,7 +2120,7 @@
   .vds-editor-drag-handle:hover {
     background: color-mix(
       in oklch,
-      var(--vds-color-primary-5, #bfdbfe) 44%,
+      var(--vds-color-primary-bg-active, #bfdbfe) 44%,
       transparent
     );
   }
@@ -2275,13 +2292,13 @@
     --field-label-size: var(--vds-text-sm, 0.875rem);
     --field-label-weight: var(--vds-font-medium, 500);
     --field-label-color: var(--vds-color-text, currentColor);
-    --field-required-color: var(--vds-color-danger-9, #ef4444);
+    --field-required-color: var(--vds-color-danger-solid, #ef4444);
     --field-meta-gap: var(--vds-space-2, 0.5rem);
     --field-meta-stack-gap: var(--vds-space-1, 0.25rem);
     --field-meta-size: var(--vds-text-xs, 0.75rem);
     --field-meta-line-height: var(--vds-leading-snug, 1.375);
     --field-description-color: var(--vds-color-text-muted, currentColor);
-    --field-error-color: var(--vds-color-danger-10, #dc2626);
+    --field-error-color: var(--vds-color-danger-text-muted, #dc2626);
     --field-counter-color: var(--vds-color-text-subtle, currentColor);
     display: block;
     min-inline-size: 0;
@@ -2292,7 +2309,7 @@
   }
 
   .vds-field[data-disabled] {
-    opacity: 0.6;
+    opacity: var(--vds-opacity-disabled, 0.5);
   }
 
   .vds-field > * + * {

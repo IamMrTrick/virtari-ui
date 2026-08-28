@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-separator {
     flex-shrink: 0;
     background-color: var(--vds-color-border-muted);

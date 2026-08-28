@@ -6,6 +6,9 @@ export type TextareaSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  /** Control size. Canonical name, shared with every other sized control. */
+  size?: TextareaSize;
+  /** @deprecated Use `size`. Kept as an alias so existing call sites keep working. */
   inputSize?: TextareaSize;
   /**
    * Each printable keystroke fires a brief ring-burst animation.
@@ -20,7 +23,8 @@ function isPrintable(e: React.KeyboardEvent): boolean {
 }
 
 export function Textarea({
-  inputSize = "md",
+  size,
+  inputSize,
   className,
   ref,
   typingPulse = false,
@@ -71,7 +75,7 @@ export function Textarea({
     <textarea
       ref={mergedRef}
       className={cn("vds-textarea", className)}
-      data-size={inputSize}
+      data-size={size ?? inputSize ?? "md"}
       onKeyDown={handleKeyDown}
       {...props}
     />

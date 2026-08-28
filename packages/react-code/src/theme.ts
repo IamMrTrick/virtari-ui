@@ -75,7 +75,7 @@ const vdsHighlightStyle = HighlightStyle.define([
   { tag: t.monospace, color: "var(--vds-code-token-string)" },
 
   /* Diagnostic / state */
-  { tag: t.invalid, color: "var(--vds-color-danger-11, var(--vds-code-token-tag))", textDecoration: "underline wavy" },
+  { tag: t.invalid, color: "var(--vds-color-danger-text, var(--vds-code-token-tag))", textDecoration: "underline wavy" },
 ]);
 
 /**

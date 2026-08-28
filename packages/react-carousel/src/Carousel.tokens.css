@@ -17,7 +17,10 @@
      * positioning offset and corner-radius so pill mode reads as a circle. */
     --carousel-nav-radius: var(--button-radius, var(--vds-radius-action, var(--vds-radius-element, 0.5rem)));
     --carousel-nav-offset: var(--vds-space-3, 0.75rem);
-    --carousel-nav-disabled-opacity: 0.4;
+    /* Mirrors the height the nav <Button> resolves to at this carousel size.
+     * The "outside" gutter reserves this much, so the two must stay in step. */
+    --carousel-nav-size: var(--vds-size-md, 2.25rem);
+    --carousel-nav-disabled-opacity: var(--vds-opacity-disabled, 0.5);
 
     /* ── Pagination (bullets / fraction / progress) ── */
     --carousel-pagination-gap: var(--vds-space-1-5, 0.375rem);
@@ -49,17 +52,17 @@
      * ===================================================================== */
     --carousel-color-solid:        var(--vds-color-primary-solid, #4f46e5);
 
-    --carousel-bullet-bg:        var(--vds-color-neutral-7, color-mix(in oklch, currentColor 25%, transparent));
-    --carousel-bullet-bg-hover:  var(--vds-color-neutral-9, color-mix(in oklch, currentColor 45%, transparent));
+    --carousel-bullet-bg:        var(--vds-color-border, color-mix(in oklch, currentColor 25%, transparent));
+    --carousel-bullet-bg-hover:  var(--vds-color-border-interactive, color-mix(in oklch, currentColor 45%, transparent));
     --carousel-bullet-active-bg: var(--carousel-color-solid);
 
-    --carousel-progress-track:   var(--vds-color-neutral-5, color-mix(in oklch, currentColor 12%, transparent));
+    --carousel-progress-track:   var(--vds-color-bg-muted, color-mix(in oklch, currentColor 12%, transparent));
     --carousel-progress-fill:    var(--carousel-color-solid);
 
-    --carousel-scrollbar-track:  var(--vds-color-neutral-4, color-mix(in oklch, currentColor 8%, transparent));
-    --carousel-scrollbar-thumb:  var(--vds-color-neutral-9, color-mix(in oklch, currentColor 45%, transparent));
+    --carousel-scrollbar-track:  var(--vds-color-surface-active, color-mix(in oklch, currentColor 8%, transparent));
+    --carousel-scrollbar-thumb:  var(--vds-color-border-interactive, color-mix(in oklch, currentColor 45%, transparent));
 
-    --carousel-fraction-fg:      var(--vds-color-text, var(--vds-color-neutral-12, #171717));
+    --carousel-fraction-fg:      var(--vds-color-text, #171717);
   }
 
   /* =========================================================================
@@ -72,7 +75,7 @@
   .vds-carousel[data-color="danger"]  { --carousel-color-solid: var(--vds-color-danger-solid,  #dc2626); }
   .vds-carousel[data-color="info"]    { --carousel-color-solid: var(--vds-color-info-solid,    #0891b2); }
   .vds-carousel[data-color="accent"]  { --carousel-color-solid: var(--vds-color-accent-solid,  var(--vds-color-accent-emphasis, #f97316)); }
-  .vds-carousel[data-color="neutral"] { --carousel-color-solid: var(--vds-color-neutral-12, #171717); }
+  .vds-carousel[data-color="neutral"] { --carousel-color-solid: var(--vds-color-text, #171717); }
 
   /* =========================================================================
    * 3. Sizes — control bullet dimensions + spacing.
@@ -81,6 +84,7 @@
    * ========================================================================= */
   .vds-carousel[data-size="xs"] {
     --carousel-nav-offset:         var(--vds-space-2, 0.5rem);
+    --carousel-nav-size:           var(--vds-size-xs, 1.75rem);
     --carousel-bullet-size:        0.375rem; /* 6px */
     --carousel-bullet-active-size: 0.875rem;
     --carousel-pagination-gap:     var(--vds-space-1, 0.25rem);
@@ -88,6 +92,7 @@
   }
   .vds-carousel[data-size="sm"] {
     --carousel-nav-offset:         var(--vds-space-2-5, 0.625rem);
+    --carousel-nav-size:           var(--vds-size-sm, 2rem);
     --carousel-bullet-size:        0.4375rem; /* 7px */
     --carousel-bullet-active-size: 1rem;
     --carousel-pagination-gap:     var(--vds-space-1, 0.25rem);
@@ -96,6 +101,7 @@
   /* md — default, inherits base tokens (8px bullet, 20px active) */
   .vds-carousel[data-size="lg"] {
     --carousel-nav-offset:         var(--vds-space-4, 1rem);
+    --carousel-nav-size:           var(--vds-size-lg, 2.5rem);
     --carousel-bullet-size:        0.625rem; /* 10px */
     --carousel-bullet-active-size: 1.5rem;
     --carousel-pagination-gap:     var(--vds-space-2, 0.5rem);

@@ -175,7 +175,7 @@
     color: var(--vds-color-primary-text);
     padding: 0.125em 0.375em;
     border-radius: var(--vds-yoopta-radius-control);
-    border: 1px solid var(--vds-color-neutral-6);
+    border: 1px solid var(--vds-yoopta-color-border);
   }
 
   /* Code block chrome (language selector, copy button) shipped by @yoopta/code */
@@ -526,7 +526,7 @@
     gap: var(--vds-space-1);
     padding: var(--vds-space-1);
     background: var(--vds-color-surface-overlay);
-    border: 1px solid var(--vds-color-neutral-6);
+    border: 1px solid var(--vds-yoopta-color-border);
     border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-md);
     color: var(--vds-color-text);
@@ -558,7 +558,7 @@
   .vds-yoo-toolbar-separator {
     inline-size: 1px;
     block-size: 1.25rem;
-    background: var(--vds-color-neutral-6);
+    background: var(--vds-yoopta-color-border);
     margin-inline: var(--vds-space-1);
   }
 
@@ -568,7 +568,7 @@
     max-block-size: 22rem;
     padding: var(--vds-space-1);
     background: var(--vds-color-surface-overlay);
-    border: 1px solid var(--vds-color-neutral-6);
+    border: 1px solid var(--vds-yoopta-color-border);
     border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-lg);
     color: var(--vds-color-text);
@@ -579,7 +579,7 @@
   }
   .vds-yoo-action-menu-search {
     padding: var(--vds-space-1);
-    border-block-end: 1px solid var(--vds-color-neutral-6);
+    border-block-end: 1px solid var(--vds-yoopta-color-border);
   }
   .vds-yoo-action-menu-input {
     inline-size: 100%;
@@ -656,7 +656,7 @@
     min-inline-size: 12rem;
     padding: var(--vds-space-1);
     background: var(--vds-color-surface-overlay);
-    border: 1px solid var(--vds-color-neutral-6);
+    border: 1px solid var(--vds-yoopta-color-border);
     border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-lg);
     color: var(--vds-color-text);
@@ -669,7 +669,7 @@
   }
   .vds-yoo-block-options-separator {
     block-size: 1px;
-    background: var(--vds-color-neutral-6);
+    background: var(--vds-yoopta-color-border);
     margin-block: var(--vds-space-1);
   }
   .vds-yoo-block-options-item {
@@ -707,7 +707,7 @@
     gap: 2px;
     padding: 2px;
     background: var(--vds-color-surface-overlay);
-    border: 1px solid var(--vds-color-neutral-6);
+    border: 1px solid var(--vds-yoopta-color-border);
     border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-sm);
     color: var(--vds-color-text-muted);
@@ -747,7 +747,7 @@
   .vds-yoo-table-add-row {
     z-index: 50;
     background: var(--vds-color-surface-overlay);
-    border: 1px solid var(--vds-color-neutral-6);
+    border: 1px solid var(--vds-yoopta-color-border);
     border-radius: var(--vds-yoopta-radius-control);
     color: var(--vds-color-text-muted);
     cursor: pointer;
@@ -847,7 +847,7 @@
   .vds-yoo-table-row-handle {
     z-index: 50;
     background: var(--vds-color-surface-overlay);
-    border: 1px solid var(--vds-color-neutral-6);
+    border: 1px solid var(--vds-yoopta-color-border);
     border-radius: var(--vds-yoopta-radius-control);
     color: var(--vds-color-text-muted);
     cursor: grab;
@@ -894,7 +894,7 @@
     z-index: 51;
     background: var(--vds-color-primary-solid);
     pointer-events: none;
-    border-radius: 1px;
+    border-radius: var(--vds-radius-full, 9999px);
   }
   .vds-yoo-table-drop-line[data-axis="vertical"] {
     inline-size: 2px;
@@ -907,7 +907,7 @@
   .vds-yoo-highlight-popover {
     padding: var(--vds-space-2);
     background: var(--vds-color-surface-overlay);
-    border: 1px solid var(--vds-color-neutral-6);
+    border: 1px solid var(--vds-yoopta-color-border);
     border-radius: var(--vds-yoopta-radius-popover);
     box-shadow: var(--vds-shadow-lg);
     color: var(--vds-color-text);
@@ -925,7 +925,7 @@
     inline-size: 1.5rem;
     block-size: 1.5rem;
     padding: 0;
-    border: 1px solid var(--vds-color-neutral-6);
+    border: 1px solid var(--vds-yoopta-color-border);
     border-radius: var(--vds-yoopta-radius-control);
     cursor: pointer;
     transition: transform var(--vds-duration-fast) var(--vds-ease-out);

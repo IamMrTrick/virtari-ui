@@ -1,6 +1,25 @@
 @import "./Command.tokens.css";
 
 @layer design-system.components {
+  /* ── CommandDialog surface ──
+   * A palette is a search field first: it must reach the surface edge, so the
+   * Dialog "simple layout" padding (which would inset the input by
+   * --dialog-padding-inline) is neutralised here. The selector matches that
+   * rule's own shape so it wins regardless of stylesheet import order.
+   * Width comes from --command-dialog-width at the default size only;
+   * passing an explicit `size` falls back to the standard Dialog ramp. */
+  .vds-dialog-content.vds-command-dialog[data-size="md"] {
+    --dialog-width: var(--command-dialog-width);
+  }
+
+  .vds-dialog-content.vds-command-dialog:not(:has(> .vds-dialog-header)):not(
+      :has(> .vds-dialog-body)
+    ) {
+    padding-block: 0;
+    padding-inline: 0;
+    gap: 0;
+  }
+
   .vds-command {
     display: flex;
     flex-direction: column;
@@ -70,7 +89,7 @@
     background-color: var(--vds-command-item-bg-hover);
   }
   .vds-command-item[data-disabled="true"] {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 

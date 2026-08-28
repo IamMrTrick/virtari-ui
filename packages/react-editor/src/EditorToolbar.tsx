@@ -167,22 +167,22 @@ const DEFAULT_FONT_SIZES: EditorToolbarOption[] = [
 ];
 
 const DEFAULT_TEXT_COLOR_SWATCHES: EditorColorSwatch[] = [
-  { label: "Ink", value: "var(--vds-color-neutral-12)" },
-  { label: "Primary", value: "var(--vds-color-primary-11)" },
-  { label: "Info", value: "var(--vds-color-info-11)" },
-  { label: "Success", value: "var(--vds-color-success-11)" },
-  { label: "Warning", value: "var(--vds-color-warning-11)" },
-  { label: "Danger", value: "var(--vds-color-danger-11)" },
-  { label: "Accent", value: "var(--vds-color-accent-11)" },
+  { label: "Ink", value: "var(--vds-color-text)" },
+  { label: "Primary", value: "var(--vds-color-primary-text)" },
+  { label: "Info", value: "var(--vds-color-info-text)" },
+  { label: "Success", value: "var(--vds-color-success-text)" },
+  { label: "Warning", value: "var(--vds-color-warning-text)" },
+  { label: "Danger", value: "var(--vds-color-danger-text)" },
+  { label: "Accent", value: "var(--vds-color-accent-text)" },
 ];
 
 const DEFAULT_HIGHLIGHT_SWATCHES: EditorColorSwatch[] = [
-  { label: "Primary", value: "var(--vds-color-primary-4)" },
-  { label: "Info", value: "var(--vds-color-info-4)" },
-  { label: "Success", value: "var(--vds-color-success-4)" },
-  { label: "Warning", value: "var(--vds-color-warning-4)" },
-  { label: "Danger", value: "var(--vds-color-danger-4)" },
-  { label: "Accent", value: "var(--vds-color-accent-4)" },
+  { label: "Primary", value: "var(--vds-color-primary-bg-hover)" },
+  { label: "Info", value: "var(--vds-color-info-bg-hover)" },
+  { label: "Success", value: "var(--vds-color-success-bg-hover)" },
+  { label: "Warning", value: "var(--vds-color-warning-bg-hover)" },
+  { label: "Danger", value: "var(--vds-color-danger-bg-hover)" },
+  { label: "Accent", value: "var(--vds-color-accent-bg-hover)" },
 ];
 
 function areToolbarStatesEqual(current: ToolbarState, next: ToolbarState) {
@@ -1155,7 +1155,7 @@ export function EditorToolbar({
                 icon={IconPalette}
                 value={state.fontColor}
                 swatches={textColorSwatches}
-                resetValue="var(--vds-color-neutral-12)"
+                resetValue="var(--vds-color-text)"
                 onOpen={rememberSelection}
                 onApply={(value, skipHistoryStack) =>
                   applyTextStyles(
