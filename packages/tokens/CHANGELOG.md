@@ -1,5 +1,20 @@
 # @virtari-packages/tokens
 
+## 0.4.2
+
+### Patch Changes
+
+- f2e0170: Define the missing `--vds-color-chart-{1..8}` primitives so data-viz tokens resolve to real colors.
+  - The `-muted` / `-strong` chart variants in `colors/semantic/data-viz.css` referenced base `chart-{1..8}` primitives that were never declared anywhere, leaving every chart token invalid at computed-value time (guaranteed-invalid substitution).
+  - Add the canonical primitive block: `chart-1/2/3/5/6` alias onto intent step-9 solids (so brand re-tinting propagates automatically), and `chart-4/7/8` carry literal OKLCH hues (violet / teal / yellow) with per-theme tuning.
+  - Declared at `:where(:root, [data-theme], [data-brand])` plus a dark override so both the intent aliases and the literals re-resolve at nested theme/brand scopes.
+
+- a2903fb: Fix `[data-brand]` primitive overrides being ignored on the root element.
+  - Move the base primitive scales (neutral, intents, alphas) from the bare `@layer tokens` (an implicit sub-layer that CSS orders _after_ every named sub-layer) into a named `@layer tokens.base`, and declare `@layer tokens.base, tokens.brand;` up-front so base is ordered before brand.
+  - This makes `[data-brand="…"]` overrides win over the base scales on the _same_ element regardless of specificity, so `<html data-brand="x">` now retints in light and dark — previously only wrapper elements picked up the brand.
+  - Also fixes same-element mode combos like `<section data-brand="x" data-theme="dark">`, where the base `[data-theme="dark"]` block used to beat the brand's dark arm.
+  - Add a build-free browser cascade test at `packages/tokens/test/brand-scope.html`.
+
 ## 0.4.1
 
 ### Patch Changes

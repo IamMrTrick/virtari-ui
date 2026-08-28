@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-phone-input",
-  "version": "0.3.5",
+  "version": "1.0.0",
   "description": "Virtari phone input — accessible React component built on CSS variables and logical properties.",
   "license": "UNLICENSED",
   "author": "Virtari",

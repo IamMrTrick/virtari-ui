@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/react-visually-hidden",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Virtari visually-hidden — accessible screen-reader-only wrapper built on CSS utilities.",
   "license": "UNLICENSED",
   "author": "Virtari",

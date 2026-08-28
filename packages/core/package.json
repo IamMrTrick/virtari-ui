@@ -1,6 +1,6 @@
 {
   "name": "@virtari-packages/core",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Base reset, layers, and global primitives for the Virtari design system.",
   "license": "UNLICENSED",
   "author": "Virtari",
