@@ -489,7 +489,7 @@ function SolidEditor({
     allowEyedropper && typeof window !== "undefined" && typeof window.EyeDropper === "function";
 
   const saturationStyle = {
-    "--vds-color-picker-hue": `${hsva.h}deg`,
+    "--color-picker-hue": `${hsva.h}deg`,
   } as CSSProperties;
 
   function handleSaturationPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
@@ -1104,7 +1104,14 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
       {showHeader ? (
         <div className="vds-color-picker-header">
           {showModeStrip ? (
-            <div className="vds-color-picker-mode-strip" role="tablist" aria-label="Picker mode">
+            <div
+              className="vds-color-picker-mode-strip"
+              /* Draws the track corner the mode buttons subtract from —
+                 see the host block in ColorPicker.css. */
+              data-radius-host=""
+              role="tablist"
+              aria-label="Picker mode"
+            >
               {MODE_OPTIONS.map((option) => {
                 const Icon = option.icon;
                 const isActive = internalMode === option.mode;
@@ -1242,7 +1249,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
                 data-active={stop.id === activeStopId ? "true" : undefined}
                 style={{
                   insetInlineStart: `${toFiniteNumber(stop.position, 0)}%`,
-                  "--vds-color-picker-stop-color": rgbaToHexString(stop.color, stop.color.a < 1),
+                  "--color-picker-stop-color": rgbaToHexString(stop.color, stop.color.a < 1),
                 } as CSSProperties}
                 aria-label={`Gradient stop at ${safeRound(stop.position, 1)} percent`}
                 onClick={() => {

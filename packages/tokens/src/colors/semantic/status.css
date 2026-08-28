@@ -15,10 +15,11 @@
    *   {intent}-solid-active solid active            (intent-11)
    *   {intent}-text         high-contrast text      (intent-11)
    *   {intent}-text-muted   low-contrast text       (intent-10)
-   *   on-{intent}           text/icon on *-solid    (white or neutral-12)
+   *   on-{intent}           text/icon on *-solid    (white or black)
    *
-   * Legacy aliases (*-emphasis, *-muted, *-muted-text, *-hover, *-active)
-   * live in _legacy.css and point at the canonical names here.
+   * The `*-emphasis`, `*-on-emphasis`, `*-muted`, `*-muted-text` and
+   * `*-subtle` spellings live in ../aliases.css and forward to the
+   * canonical names here.
    */
 
   :root {
@@ -32,10 +33,19 @@
      * We intentionally do NOT use contrast-color() here: early Chromium
      * implementations use an OKLCH L=0.5 threshold, which picks black on
      * brand colors that sit just above that midpoint (e.g. primary-9 at
-     * L=0.550), even though white has demonstrably higher WCAG contrast. */
+     * L=0.550), even though white has demonstrably higher WCAG contrast.
+     *
+     * Every value here MUST be mode-independent. `--vds-color-white` and
+     * `--vds-color-black` are the absolute anchors; the 12-step scale is
+     * not. on-warning used to read `--vds-color-neutral-12`, which is
+     * near-black in light mode but near-white in dark — so the moment the
+     * theme flipped, every warning solid rendered white-on-amber at
+     * 2.19:1. Amber stays amber in both modes (warning-9 is L≈0.70
+     * either way), so its ink must not move either: black gives 7.78:1
+     * in both. */
     --vds-color-on-primary: var(--vds-color-white);
     --vds-color-on-success: var(--vds-color-white);
-    --vds-color-on-warning: var(--vds-color-neutral-12);
+    --vds-color-on-warning: var(--vds-color-black);
     --vds-color-on-danger:  var(--vds-color-white);
     --vds-color-on-info:    var(--vds-color-white);
     --vds-color-on-accent:  var(--vds-color-white);

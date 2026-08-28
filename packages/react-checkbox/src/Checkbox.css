@@ -30,7 +30,7 @@
   @keyframes vds-indeterminate-slide-in { 0% { opacity: 0; } 100% { opacity: 1; } }
 }
 
-@layer components {
+@layer design-system.components {
   .vds-checkbox {
     display: inline-flex;
     align-items: center;
@@ -86,7 +86,7 @@
 
   /* ── Disabled ── */
   .vds-checkbox:disabled {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 

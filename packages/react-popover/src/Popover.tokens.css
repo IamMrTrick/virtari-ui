@@ -1,0 +1,60 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Base component tokens
+   *    Semantic → component mapping with fallbacks
+   *    so the package works standalone if dropped
+   *    into a project without @virtari-packages/tokens.
+   * ───────────────────────────────────────────── */
+  .vds-popover-content {
+    /* Geometry.
+       Widths come from the sizing scale, never from the spacing scale —
+       --vds-space-* is a rhythm unit and has no business setting an
+       inline-size. */
+    --popover-min-width: 12rem;
+    --popover-max-width: var(--vds-surface-width-xs, 20rem);
+    --popover-padding-inline: var(--vds-surface-padding-inline, var(--vds-space-4, 1rem));
+    --popover-padding-block: var(--vds-surface-padding-block, var(--vds-space-4, 1rem));
+
+    /* Surface */
+    --popover-surface: var(--vds-color-surface, #ffffff);
+    --popover-border-width: 1px;
+    --popover-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --popover-radius: var(--vds-radius-surface, 0.75rem);
+    --popover-shadow: var(
+      --vds-shadow-lg,
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1)
+    );
+
+    /* Layering */
+    --popover-z: var(--vds-z-popover, 1200);
+
+    /* Motion */
+    --popover-enter-duration: var(--vds-duration-fast, 100ms);
+    --popover-exit-duration: var(--vds-duration-fastest, 50ms);
+    --popover-enter-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    --popover-exit-ease: var(--vds-ease-in, cubic-bezier(0.4, 0, 1, 1));
+  }
+
+  /* ─────────────────────────────────────────────
+   * 2. Sizes — the popover stays content-driven
+   *    (it is anchored, not centred), so a size
+   *    only moves the ceiling it may grow to.
+   *    `md` is the base and needs no block.
+   *    sm 16rem/256px · md 20rem/320px ·
+   *    lg 24rem/384px · xl 32rem/512px
+   * ───────────────────────────────────────────── */
+  .vds-popover-content[data-size="sm"] {
+    --popover-max-width: 16rem;
+    --popover-padding-inline: var(--vds-space-3, 0.75rem);
+    --popover-padding-block: var(--vds-space-3, 0.75rem);
+  }
+
+  .vds-popover-content[data-size="lg"] {
+    --popover-max-width: var(--vds-surface-width-sm, 24rem);
+  }
+
+  .vds-popover-content[data-size="xl"] {
+    --popover-max-width: var(--vds-surface-width-md, 32rem);
+  }
+}

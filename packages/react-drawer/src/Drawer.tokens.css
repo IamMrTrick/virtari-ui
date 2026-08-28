@@ -1,0 +1,71 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Base component tokens
+   *    Semantic → component mapping with fallbacks
+   *    so the package works standalone if dropped
+   *    into a project without @virtari-packages/tokens.
+   *
+   *    NOTE: the `--vds-drawer-*` names declared in
+   *    Drawer.css are the runtime channel — the drag
+   *    hook and Drawer.tsx write to them from JS
+   *    (transform, available-size, keyboard-inset, …).
+   *    They are deliberately left alone. Everything
+   *    below is the *theming* surface.
+   * ───────────────────────────────────────────── */
+  .vds-drawer-content {
+    /* Interior geometry */
+    --drawer-padding-inline: var(--vds-surface-padding-inline, var(--vds-space-6, 1.5rem));
+    --drawer-padding-block: var(--vds-space-4, 1rem);
+    /* The one seam token: gap between adjacent slots (header ↔ body ↔ footer). */
+    --drawer-slot-gap: var(--vds-slot-gap, var(--vds-space-4, 1rem));
+    --drawer-header-gap: var(--vds-cluster-gap, var(--vds-space-2, 0.5rem));
+    --drawer-footer-gap: var(--vds-space-3, 0.75rem);
+    --drawer-label-gap: var(--vds-label-gap, var(--vds-space-1, 0.25rem));
+
+    /* Surfaces */
+    --drawer-surface: var(--vds-color-surface, #ffffff);
+    --drawer-background: linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--drawer-surface), white 4%),
+      var(--drawer-surface)
+    );
+    --drawer-header-surface: var(--vds-color-surface-sunken, #f9fafb);
+    --drawer-footer-background: linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--drawer-surface), transparent 8%),
+      color-mix(in oklch, var(--drawer-surface), black 2%)
+    );
+    --drawer-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --drawer-section-border: 1px solid var(--drawer-border-color);
+
+    /* Typography */
+    --drawer-title-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --drawer-title-font-size: var(--vds-text-lg, 1.125rem);
+    --drawer-title-font-weight: var(--vds-font-weight-semibold, 600);
+    --drawer-title-line-height: var(--vds-leading-tight, 1.25);
+    --drawer-title-color: var(--vds-color-text, #111827);
+    --drawer-description-font-size: var(--vds-text-sm, 0.875rem);
+    --drawer-description-line-height: var(--vds-leading-normal, 1.5);
+    --drawer-description-color: var(--vds-color-text-muted, #6b7280);
+
+    /* Drag handle */
+    --drawer-handle-padding-block: var(--vds-space-3, 0.75rem);
+    --drawer-handle-padding-inline: var(--vds-space-3, 0.75rem);
+    /* Offset used by the "outside" placement — both its padding and the
+       visual gap it floats beyond the drawer edge. */
+    --drawer-handle-offset: var(--vds-cluster-gap, var(--vds-space-2, 0.5rem));
+    /* Room the slots must leave so text never runs under an inside/progress
+       handle: the bar itself plus a comfortable gutter. */
+    --drawer-handle-clearance: calc(
+      var(--vds-drawer-handle-thickness) + var(--vds-space-5, 1.25rem)
+    );
+    --drawer-handle-progress-color: var(
+      --vds-color-primary-9,
+      var(--vds-color-text, #111827)
+    );
+  }
+
+  .vds-drawer-overlay {
+    --drawer-overlay-bg: var(--vds-color-scrim, rgb(0 0 0 / 0.6));
+  }
+}

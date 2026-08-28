@@ -66,11 +66,11 @@
 
   .vds-date-range-picker-trigger:focus-visible {
     outline: var(--date-field-focus-ring-width) solid var(--date-field-focus-ring-color);
-    outline-offset: 1px;
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   .vds-date-range-picker-trigger:disabled {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 

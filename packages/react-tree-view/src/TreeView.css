@@ -55,7 +55,7 @@
 
   /* ── Disabled ── */
   .vds-tree-view-item[aria-disabled="true"] > .vds-tree-view-row {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
     pointer-events: none;
   }

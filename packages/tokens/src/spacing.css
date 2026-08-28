@@ -1,3 +1,18 @@
+/*
+ * Spacing — two tiers.
+ *
+ *   this file          Raw scale (--vds-space-*). Change to reshape the
+ *                      whole system's rhythm at once.
+ *   spacing/semantic   Purpose-named interior spacing (surface padding,
+ *                      slot/stack/cluster/label gaps, control padding).
+ *                      Components consume these.
+ *
+ * Component CSS should reach for the semantic tier. Drop to a raw
+ * --vds-space-* only for a one-off the semantic tier has no name for —
+ * and never for an inline-size (see --vds-surface-width-* in sizing.css).
+ */
+@import "./spacing/semantic.css";
+
 @layer tokens {
   :root {
     --vds-space-0: 0;

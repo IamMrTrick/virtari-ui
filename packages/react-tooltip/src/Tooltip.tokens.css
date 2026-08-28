@@ -13,7 +13,7 @@
     --tooltip-max-width: 18rem;
 
     /* Surface */
-    --tooltip-surface: var(--vds-color-neutral-12, #111827);
+    --tooltip-surface: var(--vds-color-surface-inverse, #111827);
     --tooltip-color: var(--vds-color-text-inverse, #ffffff);
     --tooltip-shadow: var(--vds-shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1));
     --tooltip-border-color: transparent;
@@ -46,9 +46,7 @@
     --tooltip-arrow-size: 6px;
   }
 
-  .vds-tooltip-content[data-size="md"] {
-    /* defaults */
-  }
+  /* md — the base block above; no rule of its own. */
 
   .vds-tooltip-content[data-size="lg"] {
     --tooltip-padding-inline: var(--vds-space-4, 1rem);
@@ -69,21 +67,21 @@
 
   .vds-tooltip-content[data-variant="info"] {
     --tooltip-surface: var(--vds-color-info-solid, #0ea5e9);
-    --tooltip-color: var(--vds-color-info-on-emphasis, #ffffff);
+    --tooltip-color: var(--vds-color-on-info, #ffffff);
   }
 
   .vds-tooltip-content[data-variant="success"] {
     --tooltip-surface: var(--vds-color-success-solid, #16a34a);
-    --tooltip-color: var(--vds-color-success-on-emphasis, #ffffff);
+    --tooltip-color: var(--vds-color-on-success, #ffffff);
   }
 
   .vds-tooltip-content[data-variant="warning"] {
     --tooltip-surface: var(--vds-color-warning-solid, #f59e0b);
-    --tooltip-color: var(--vds-color-warning-on-emphasis, #1f2937);
+    --tooltip-color: var(--vds-color-on-warning, #1f2937);
   }
 
   .vds-tooltip-content[data-variant="danger"] {
     --tooltip-surface: var(--vds-color-danger-solid, #ef4444);
-    --tooltip-color: var(--vds-color-danger-on-emphasis, #ffffff);
+    --tooltip-color: var(--vds-color-on-danger, #ffffff);
   }
 }

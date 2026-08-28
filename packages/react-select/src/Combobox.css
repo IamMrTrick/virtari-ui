@@ -54,7 +54,7 @@
 
   .vds-combobox-trigger:disabled,
   .vds-combobox-trigger[aria-disabled="true"] {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 
@@ -155,7 +155,7 @@
   }
   .vds-combobox-clear:focus-visible {
     outline: var(--combobox-trigger-focus-ring-width) solid var(--combobox-trigger-focus-ring-color);
-    outline-offset: 1px;
+    outline-offset: var(--vds-focus-ring-offset, 2px);
   }
   .vds-combobox-clear > svg {
     inline-size: 0.625rem;
@@ -285,7 +285,7 @@
   }
 
   .vds-combobox-item[aria-disabled="true"] {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 

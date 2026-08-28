@@ -407,6 +407,9 @@ export const FileUploadInput = forwardRef<HTMLInputElement, FileUploadInputProps
     return (
       <label
         className={cn("vds-file-upload-input", className)}
+        /* Draws the control's corner; the "Browse" button is welded to its
+           inner edge and reads --vds-radius-flush. See FileUpload.css. */
+        data-radius-host=""
         data-disabled={disabled ? "" : undefined}
       >
         <input

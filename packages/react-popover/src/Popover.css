@@ -1,25 +1,36 @@
-@layer components {
+@import "./Popover.tokens.css";
+
+@layer design-system.components {
   .vds-popover-content {
-    z-index: var(--vds-z-popover);
-    background-color: var(--vds-color-surface);
-    border: 1px solid var(--vds-color-border-muted);
-    border-radius: var(--vds-radius-surface);
-    box-shadow: var(--vds-shadow-lg);
-    padding: var(--vds-space-4);
-    min-inline-size: var(--vds-space-48);
-    max-inline-size: var(--vds-space-80);
-    animation: vds-fade-in var(--vds-duration-fast) var(--vds-ease-out);
+    z-index: var(--popover-z);
+    background-color: var(--popover-surface);
+    border: var(--popover-border-width) solid var(--popover-border-color);
+    border-radius: var(--popover-radius);
+    box-shadow: var(--popover-shadow);
+    padding-inline: var(--popover-padding-inline);
+    padding-block: var(--popover-padding-block);
+    min-inline-size: var(--popover-min-width);
+    max-inline-size: var(--popover-max-width);
+
+    /* Not a concentricity host (packages/tokens/src/radii/nesting.css): the
+       popover's padding (16px, 12px at size="sm") meets or exceeds its own
+       corner (4–16px across the radius modes), so the concentric answer for
+       a child inside it is a square corner everywhere except size="sm" in
+       the roundest modes, where it reaches 3px. The constraint is slack; a
+       host declaration here would publish nothing worth reading. */
+
+    animation: vds-fade-in var(--popover-enter-duration) var(--popover-enter-ease);
 
     &[data-state="closed"] {
-      animation: vds-fade-out var(--vds-duration-fastest) var(--vds-ease-in);
+      animation: vds-fade-out var(--popover-exit-duration) var(--popover-exit-ease);
     }
 
     &[data-side="bottom"] {
-      animation: vds-slide-in-from-top var(--vds-duration-fast) var(--vds-ease-out);
+      animation: vds-slide-in-from-top var(--popover-enter-duration) var(--popover-enter-ease);
     }
 
     &[data-side="top"] {
-      animation: vds-slide-in-from-bottom var(--vds-duration-fast) var(--vds-ease-out);
+      animation: vds-slide-in-from-bottom var(--popover-enter-duration) var(--popover-enter-ease);
     }
 
     /* `data-side` is the resolved physical side from the popper primitive (which flips
@@ -28,11 +39,11 @@
        side="left" slides from inline-end and side="right" from inline-start.
        Using logical keyframes makes the motion mirror under :dir(rtl). */
     &[data-side="left"] {
-      animation: vds-slide-in-from-inline-end var(--vds-duration-fast) var(--vds-ease-out);
+      animation: vds-slide-in-from-inline-end var(--popover-enter-duration) var(--popover-enter-ease);
     }
 
     &[data-side="right"] {
-      animation: vds-slide-in-from-inline-start var(--vds-duration-fast) var(--vds-ease-out);
+      animation: vds-slide-in-from-inline-start var(--popover-enter-duration) var(--popover-enter-ease);
     }
 
     &:focus-visible {

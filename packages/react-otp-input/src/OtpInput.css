@@ -11,7 +11,7 @@
     direction: ltr;
 
     &[aria-disabled="true"] {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       pointer-events: none;
     }
 
@@ -31,7 +31,7 @@
     font-feature-settings: "tnum";
     color: var(--vds-color-text);
     background-color: var(--vds-color-surface);
-    border: var(--_otp-border-w) solid var(--vds-color-border);
+    border: var(--_otp-border-w) solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
     border-radius: var(--_otp-radius);
     caret-color: var(--vds-color-primary-9);
     appearance: none;
@@ -52,25 +52,29 @@
     }
 
     &:hover:not(:disabled) {
-      border-color: var(--vds-color-border-strong);
+      /* neutral-10, not border-strong (neutral-8): the resting boundary is now
+         neutral-9, so border-strong would make hover *lighter* than rest. */
+      border-color: var(--vds-color-neutral-10);
       background-color: var(--vds-color-surface-raised);
     }
 
     &:focus-visible {
+      /* Box-shadow ring is deliberate here: adjacent slots sit --_otp-gap
+         apart and an outline would collide between them. */
       outline: none;
       border-color: var(--vds-color-primary-9);
-      box-shadow: 0 0 0 2px var(--vds-color-ring);
+      box-shadow: 0 0 0 var(--vds-focus-ring-width, 2px) var(--vds-color-ring);
     }
 
     &[aria-invalid="true"] {
       border-color: var(--vds-color-danger-9);
       &:focus-visible {
-        box-shadow: 0 0 0 2px color-mix(in oklch, var(--vds-color-danger-9) 30%, transparent);
+        box-shadow: 0 0 0 var(--vds-focus-ring-width, 2px) color-mix(in oklch, var(--vds-color-danger-9) 30%, transparent);
       }
     }
 
     &[data-filled]:not(:focus-visible) {
-      border-color: var(--vds-color-border-strong);
+      border-color: var(--vds-color-neutral-10);
     }
 
     &[data-mask] {

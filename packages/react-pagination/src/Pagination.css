@@ -62,7 +62,7 @@
     outline-offset: 2px;
   }
   .vds-pagination-button:disabled {
-    opacity: 0.4;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 
@@ -142,7 +142,16 @@
       inline-size: 100%;
       margin-inline-start: 0;
       overflow-x: auto;
-      padding-block-end: 1px;
+      /* A scrolling axis forces the other one to `auto` too, and the buttons
+         sit flush against this box — so a focus ring drawn at
+         `outline-offset` would be trimmed off top and bottom. `overflow`
+         clips at the padding box: buy the ring room there and take the same
+         amount back with a negative margin, so the row lands where it did. */
+      --pagination-ring-reach: calc(
+        var(--vds-pagination-focus-ring-width) + 2px
+      );
+      padding-block: var(--pagination-ring-reach);
+      margin-block: calc(-1 * var(--pagination-ring-reach));
     }
   }
 }

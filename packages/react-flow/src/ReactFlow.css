@@ -1,4 +1,13 @@
-@import "@xyflow/react/dist/style.css";
+/* xyflow ships its stylesheet unlayered, and an unlayered rule beats every
+ * layered one regardless of specificity — so every .react-flow__* rule we
+ * write below was dead. Importing it into `components` (which core orders
+ * before `design-system`) lets our rules win, deterministically and without
+ * touching the global layer statement.
+ *
+ * Anything we do NOT override still comes from xyflow, which is the point:
+ * handle positioning, the pane transform, edge interaction. Only override
+ * what is genuinely ours. */
+@import "@xyflow/react/dist/style.css" layer(components);
 @import "./ReactFlow.tokens.css";
 
 @layer design-system.components {
@@ -50,7 +59,7 @@
   .vds-flow .react-flow__controls {
     overflow: hidden;
     border: 1px solid var(--flow-border);
-    border-radius: calc(var(--flow-radius) - 0.25rem);
+    border-radius: var(--flow-panel-radius);
     background: color-mix(in oklab, var(--vds-color-surface) 90%, transparent);
     box-shadow: var(--flow-shadow);
     backdrop-filter: blur(18px);
@@ -75,7 +84,7 @@
 
   .vds-flow .react-flow__minimap {
     border: 1px solid var(--flow-border);
-    border-radius: calc(var(--flow-radius) - 0.25rem);
+    border-radius: var(--flow-panel-radius);
     background: color-mix(in oklab, var(--vds-color-surface) 90%, transparent);
     box-shadow: var(--flow-shadow);
     overflow: hidden;
@@ -84,6 +93,19 @@
 
   .vds-flow .react-flow__panel {
     margin: var(--vds-space-4);
+  }
+
+  /* xyflow bakes its own 15px margin into the centring transform
+   * (`translateX(-15px) translateX(-50%)`). Ours is --vds-space-4, so the
+   * compensation has to track it or a centred panel sits 1px off centre. */
+  .vds-flow .react-flow__panel.top.center,
+  .vds-flow .react-flow__panel.bottom.center {
+    transform: translateX(calc(-1 * var(--vds-space-4))) translateX(-50%);
+  }
+
+  .vds-flow .react-flow__panel.left.center,
+  .vds-flow .react-flow__panel.right.center {
+    transform: translateY(calc(-1 * var(--vds-space-4))) translateY(-50%);
   }
 
   .vds-flow .react-flow__attribution {
@@ -101,8 +123,18 @@
     flex-direction: column;
     gap: var(--vds-space-3);
     padding: var(--vds-space-4);
-    border: 1px solid var(--flow-border);
+    border: var(--_flow-node-border-width) solid var(--flow-border);
     border-radius: var(--flow-radius);
+    --_flow-node-border-width: 1px;
+    /* The tone strip below is absolutely positioned, so it spans the node's
+     * padding box — inside the border. A flush child's corner is the host's
+     * radius minus that border, never the host's radius repeated. `max()`
+     * floors it at square for sharp mode, where the node radius can be
+     * smaller than the border. */
+    --_flow-node-strip-radius: max(
+      0px,
+      calc(var(--flow-radius) - var(--_flow-node-border-width))
+    );
     background:
       linear-gradient(180deg, color-mix(in oklab, var(--flow-surface-elevated) 74%, transparent), transparent 46%),
       var(--flow-surface);
@@ -154,8 +186,8 @@
     inset-block-start: 0;
     inset-inline: 0;
     block-size: 0.2rem;
-    border-start-start-radius: inherit;
-    border-start-end-radius: inherit;
+    border-start-start-radius: var(--_flow-node-strip-radius);
+    border-start-end-radius: var(--_flow-node-strip-radius);
     background:
       linear-gradient(90deg, color-mix(in oklab, var(--_flow-tone, var(--vds-color-primary-solid)) 82%, white 18%), transparent);
     opacity: 0.9;
@@ -255,14 +287,18 @@
     background: var(--_flow-tone, var(--vds-color-primary-solid));
     box-shadow: var(--flow-handle-ring);
     transition:
-      transform var(--vds-duration-fast, 160ms) ease,
+      scale var(--vds-duration-fast, 160ms) ease,
       box-shadow var(--vds-duration-fast, 160ms) ease;
   }
 
   .vds-flow-handle:hover,
   .vds-flow-handle.connecting,
   .vds-flow-handle.valid {
-    transform: scale(1.08);
+    /* `scale`, not `transform`. xyflow centres each handle with a per-side
+     * translate (top/left -50%,-50%; right 50%,-50%; bottom -50%,50%), so a
+     * `transform` here would replace it and throw the handle off its edge.
+     * The independent `scale` property composes with `transform` instead. */
+    scale: 1.08;
     box-shadow:
       var(--flow-handle-ring),
       0 0 0 6px color-mix(in oklab, var(--_flow-tone, var(--vds-color-primary-solid)) 16%, transparent);

@@ -6,7 +6,13 @@
      * use the t-shirt scale in modes.css or a component token
      * from components.css instead.
      */
-    --vds-radius-0: 0;
+    /* `0px`, not `0`. A unitless zero is a <number>, and <number> is not
+     * a <length> — so `calc(var(--vds-radius-0) - 1px)` is invalid at
+     * computed-value time and the whole declaration is dropped. That
+     * matters because radius arithmetic is exactly what nesting.css does
+     * to keep concentric corners aligned, and sharp mode maps
+     * --vds-radius-xs onto this token. Keep the unit. */
+    --vds-radius-0: 0px;
     --vds-radius-1: 0.125rem;  /* 2px */
     --vds-radius-2: 0.25rem;   /* 4px */
     --vds-radius-3: 0.375rem;  /* 6px */

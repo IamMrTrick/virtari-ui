@@ -24,5 +24,62 @@
     --vds-size-xl: 2.75rem;
     --vds-size-2xl: 3.25rem;
     --vds-size-3xl: 4rem;
+
+    /*
+     * ── Surface Width Ramp ──
+     * The inline-size of anything that floats over the page: dialog,
+     * alert-dialog, drawer, sheet, popover, dropdown, command palette,
+     * toast.
+     *
+     * These are widths, not gaps. NEVER reach for --vds-space-* to set an
+     * inline-size — `--vds-space-96` happens to equal 24rem today, and the
+     * day someone retunes the spacing ramp every dialog in the system
+     * resizes. The two scales answer different questions and are allowed
+     * to move independently.
+     *
+     * Size  Width  Pixels  Typical use
+     * ───── ────── ─────── ─────────────────────────────────────────────
+     * xs    20rem  320px   confirm prompt, compact popover
+     * sm    24rem  384px   single-field dialog, toast, dropdown
+     * md    32rem  512px   default dialog / drawer — start here
+     * lg    48rem  768px   form with two columns, command palette
+     * xl    64rem  1024px  detail panel, side-by-side editor
+     * 2xl   80rem  1280px  full-bleed workspace overlay
+     *
+     * Pair with `max-inline-size: 100%` (or `min()`) so a fixed width
+     * never overflows a narrow viewport.
+     */
+    --vds-surface-width-xs:  20rem;
+    --vds-surface-width-sm:  24rem;
+    --vds-surface-width-md:  32rem;
+    --vds-surface-width-lg:  48rem;
+    --vds-surface-width-xl:  64rem;
+    --vds-surface-width-2xl: 80rem;
+
+    /*
+     * ── Focus Ring Geometry ──
+     * The colour lives in colors/semantic/interactive.css
+     * (--vds-color-ring); the shape lives here.
+     *
+     * One width and one offset for the whole system. Forty component CSS
+     * files had been restating the same `2px` literal, which is how a
+     * design system ends up with 2px rings on buttons and 1px rings on
+     * the inputs beside them the first time someone retunes one of them.
+     * A focus indicator is a wayfinding device: it has to look like the
+     * same object everywhere, or it stops reading as "you are here".
+     *
+     * 2px fully enclosing the control also meets the area half of WCAG
+     * 2.2 SC 2.4.13 (Focus Appearance); the contrast half is on
+     * --vds-color-ring against whatever the ring sits between.
+     *
+     *   outline: var(--vds-focus-ring-width) solid var(--vds-color-ring);
+     *   outline-offset: var(--vds-focus-ring-offset);
+     *
+     * Use a negative offset (`calc(var(--vds-focus-ring-offset) * -1)`)
+     * for a control clipped by an overflow container, so the ring draws
+     * inside the box instead of being cut off.
+     */
+    --vds-focus-ring-width:  2px;
+    --vds-focus-ring-offset: 2px;
   }
 }

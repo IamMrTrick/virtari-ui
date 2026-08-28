@@ -29,7 +29,7 @@
     --button-letter-spacing: var(--vds-tracking-normal, 0);
 
     /* ── Motion ── */
-    --button-transition-duration: var(--vds-duration-fast, 120ms);
+    --button-transition-duration: var(--vds-duration-fast, 100ms);
     --button-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
     --button-press-scale: 0.98;
 
@@ -52,7 +52,7 @@
     );
 
     /* ── Disabled ── */
-    --button-disabled-opacity: 0.5;
+    --button-disabled-opacity: var(--vds-opacity-disabled, 0.5);
 
     /* =====================================================================
      * Intent palette — default: primary
@@ -186,17 +186,20 @@
 
   /* High-contrast: nearly pure black on light, nearly pure white on dark.
    * Mode inversion is achieved via the mode-aware neutral scale — no
-   * light-dark() wrapper needed (double-switches with mode-aware primitives). */
+   * light-dark() wrapper needed (double-switches with mode-aware primitives).
+   * Semantic roles are used wherever the neutral family exposes one; the two
+   * raw steps left (4 / 5) are the hover/active rungs of the muted background,
+   * which the neutral family has no role for yet. */
   .vds-button[data-color="contrast"] {
-    --button-color-solid:        var(--vds-color-neutral-12, #0a0a0a);
+    --button-color-solid:        var(--vds-color-bg-inverse, #0a0a0a);
     --button-color-solid-hover:  var(--vds-color-neutral-11, #262626);
     --button-color-solid-active: oklch(from var(--button-color-solid) calc(l * 0.85) c h);
-    --button-color-on-solid:     var(--vds-color-neutral-1, #fafafa);
-    --button-color-bg:           var(--vds-color-neutral-3, #e5e5e5);
+    --button-color-on-solid:     var(--vds-color-text-inverse, #fafafa);
+    --button-color-bg:           var(--vds-color-neutral-bg, #e5e5e5);
     --button-color-bg-hover:     var(--vds-color-neutral-4, #d4d4d4);
     --button-color-bg-active:    var(--vds-color-neutral-5, #a3a3a3);
-    --button-color-text:         var(--vds-color-neutral-12, #0a0a0a);
-    --button-color-border:       var(--vds-color-neutral-12, #0a0a0a);
+    --button-color-text:         var(--vds-color-text, #0a0a0a);
+    --button-color-border:       var(--vds-color-bg-inverse, #0a0a0a);
   }
 
   /* =========================================================================
@@ -282,7 +285,6 @@
     --button-font-size:      var(--vds-text-xs, 0.75rem);
     --button-gap:            var(--vds-space-1, 0.25rem);
     --button-icon-size:      0.875rem;
-    --button-radius:         var(--vds-radius-button, var(--vds-radius-element, 0.25rem));
   }
 
   .vds-button[data-size="xs"] {
@@ -291,7 +293,6 @@
     --button-font-size:      var(--vds-text-xs, 0.75rem);
     --button-gap:            var(--vds-space-1, 0.25rem);
     --button-icon-size:      0.875rem;
-    --button-radius:         var(--vds-radius-button, var(--vds-radius-element, 0.25rem));
   }
 
   .vds-button[data-size="sm"] {

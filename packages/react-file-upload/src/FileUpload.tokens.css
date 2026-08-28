@@ -3,7 +3,7 @@
     --vds-file-upload-gap: var(--vds-space-3, 0.75rem);
 
     --vds-file-upload-dropzone-border: 2px dashed
-      var(--vds-color-border, #d1d5db);
+      var(--vds-color-border-interactive, #6b7280);
     --vds-file-upload-dropzone-border-active: 2px dashed
       var(--vds-color-primary-solid, #6366f1);
     --vds-file-upload-dropzone-border-reject: 2px dashed
@@ -23,7 +23,10 @@
     --vds-file-upload-item-gap: var(--vds-space-3, 0.75rem);
     --vds-file-upload-item-padding-inline: var(--vds-space-3, 0.75rem);
     --vds-file-upload-item-padding-block: var(--vds-space-2, 0.5rem);
-    --vds-file-upload-item-radius: var(--vds-radius-card, 0.5rem);
+    /* Fallback matches --vds-radius-card's own resting value (0.75rem). It read
+       0.5rem, so a standalone drop-in without @virtari-packages/tokens drew a
+       4px-tighter row than the tokenized build. */
+    --vds-file-upload-item-radius: var(--vds-radius-card, 0.75rem);
     --vds-file-upload-item-bg: var(--vds-color-surface, #ffffff);
     --vds-file-upload-item-border: 1px solid
       var(--vds-color-border, #e5e7eb);
@@ -40,7 +43,7 @@
     --vds-file-upload-size-color: var(--vds-color-text-muted, #6b7280);
     --vds-file-upload-size-font-size: var(--vds-text-xs, 0.75rem);
 
-    --vds-file-upload-focus-ring-width: 2px;
+    --vds-file-upload-focus-ring-width: var(--vds-focus-ring-width, 2px);
     --vds-file-upload-focus-ring-color:
       var(--vds-color-ring, #6366f1);
 
@@ -48,8 +51,13 @@
     --vds-file-upload-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
     --vds-file-upload-input-border: 1px solid
-      var(--vds-color-border, #d1d5db);
-    --vds-file-upload-input-radius: var(--vds-radius-card, 0.5rem);
+      var(--vds-color-border-interactive, #6b7280);
+    /* A control, not a surface: this is a full-width form row that sits beside
+       Input / Select / NumberInput, so it belongs to the control radius family.
+       It was on --vds-radius-card, which resolves 12px where the neighbouring
+       controls resolve 6px — and its 0.5rem fallback did not match that token
+       either, so the standalone and tokenized builds disagreed. */
+    --vds-file-upload-input-radius: var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
     --vds-file-upload-input-bg: var(--vds-color-surface, #ffffff);
     --vds-file-upload-input-font-size: var(--vds-text-sm, 0.875rem);
 

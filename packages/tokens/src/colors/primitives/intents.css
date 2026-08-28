@@ -107,8 +107,36 @@
     --vds-color-accent-12: oklch(0.275 0.090 45);
   }
 
-  /* ── Intent solids — dark mode ── */
-  [data-theme="dark"] {
+  /* ── Intent solids — dark mode ──
+   *
+   * Step 9 carries `on-{intent}` — white on every intent but warning — so
+   * its lightness is not a free parameter: it is capped by the 4.5:1 that
+   * white needs against it. The dark ladder used to sit above that cap
+   * (3.30–4.01:1 across primary/success/info/danger/accent), because it
+   * was derived by lightening the light ladder for elevation without
+   * re-checking the ink that sits on top.
+   *
+   * Each step 9 below is the *highest* L on the scale's 0.005 grid that
+   * still clears 4.5:1 with chroma and hue held exactly, so the brand
+   * character is unchanged and the 8 → 9 → 10 ladder stays monotonic.
+   * Before → after, with white contrast, sRGB gamut-mapped:
+   *
+   *   primary  0.610 → 0.575   3.94 → 4.56
+   *   success  0.610 → 0.545   3.54 → 4.65
+   *   danger   0.620 → 0.585   4.01 → 4.64
+   *   info     0.620 → 0.555   3.49 → 4.57
+   *   accent   0.665 → 0.580   3.27 → 4.59
+   *
+   * warning is untouched: it carries black ink (7.78:1), not white.
+   *
+   * The selector also covers dark-oled. It always should have: the OLED
+   * block below deliberately overrides step 1 *only*, which is only
+   * coherent if steps 2–12 already come from this ladder. While this read
+   * `[data-theme="dark"]` alone, an OLED page got the light-mode intent
+   * ramp on a pure-black canvas.
+   */
+  [data-theme="dark"],
+  [data-theme="dark-oled"] {
     /* Primary */
     --vds-color-primary-1:  oklch(0.190 0.020 265);
     --vds-color-primary-2:  oklch(0.215 0.035 265);
@@ -118,7 +146,7 @@
     --vds-color-primary-6:  oklch(0.355 0.135 265);
     --vds-color-primary-7:  oklch(0.420 0.160 265);
     --vds-color-primary-8:  oklch(0.500 0.180 265);
-    --vds-color-primary-9:  oklch(0.610 0.200 265);
+    --vds-color-primary-9:  oklch(0.575 0.200 265);
     --vds-color-primary-10: oklch(0.665 0.195 265);
     --vds-color-primary-11: oklch(0.760 0.180 265);
     --vds-color-primary-12: oklch(0.910 0.080 265);
@@ -132,7 +160,7 @@
     --vds-color-success-6:  oklch(0.345 0.110 155);
     --vds-color-success-7:  oklch(0.405 0.130 155);
     --vds-color-success-8:  oklch(0.485 0.155 155);
-    --vds-color-success-9:  oklch(0.610 0.170 155);
+    --vds-color-success-9:  oklch(0.545 0.170 155);
     --vds-color-success-10: oklch(0.660 0.165 155);
     --vds-color-success-11: oklch(0.755 0.150 155);
     --vds-color-success-12: oklch(0.905 0.080 155);
@@ -160,7 +188,7 @@
     --vds-color-danger-6:  oklch(0.355 0.130 25);
     --vds-color-danger-7:  oklch(0.420 0.155 25);
     --vds-color-danger-8:  oklch(0.500 0.180 25);
-    --vds-color-danger-9:  oklch(0.620 0.200 25);
+    --vds-color-danger-9:  oklch(0.585 0.200 25);
     --vds-color-danger-10: oklch(0.670 0.195 25);
     --vds-color-danger-11: oklch(0.770 0.175 25);
     --vds-color-danger-12: oklch(0.910 0.085 25);
@@ -174,7 +202,7 @@
     --vds-color-info-6:  oklch(0.350 0.095 210);
     --vds-color-info-7:  oklch(0.410 0.115 210);
     --vds-color-info-8:  oklch(0.490 0.135 210);
-    --vds-color-info-9:  oklch(0.620 0.140 210);
+    --vds-color-info-9:  oklch(0.555 0.140 210);
     --vds-color-info-10: oklch(0.670 0.135 210);
     --vds-color-info-11: oklch(0.760 0.120 210);
     --vds-color-info-12: oklch(0.905 0.075 210);
@@ -188,7 +216,7 @@
     --vds-color-accent-6:  oklch(0.360 0.130 45);
     --vds-color-accent-7:  oklch(0.420 0.150 45);
     --vds-color-accent-8:  oklch(0.500 0.165 45);
-    --vds-color-accent-9:  oklch(0.665 0.180 45);
+    --vds-color-accent-9:  oklch(0.580 0.180 45);
     --vds-color-accent-10: oklch(0.715 0.175 45);
     --vds-color-accent-11: oklch(0.795 0.155 45);
     --vds-color-accent-12: oklch(0.920 0.080 45);

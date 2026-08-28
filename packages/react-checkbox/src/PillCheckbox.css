@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-pill-checkbox {
     display: inline-flex;
     align-items: center;
@@ -65,7 +65,7 @@
   /* ── Disabled ── */
   .vds-pill-checkbox-item:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
   }
 
   /* ── Error ── */

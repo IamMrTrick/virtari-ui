@@ -29,8 +29,8 @@ const HIGHLIGHT_PRESETS = [
   "var(--vds-color-danger-solid)",
   "var(--vds-color-accent-solid)",
   "var(--vds-color-primary-solid)",
-  "var(--vds-color-neutral-9)",
-  "var(--vds-color-neutral-12)",
+  "var(--vds-color-neutral-solid)",
+  "var(--vds-color-bg-inverse)",
 ];
 
 export function Toolbar() {

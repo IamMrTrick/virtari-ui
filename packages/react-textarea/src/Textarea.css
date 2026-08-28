@@ -17,19 +17,32 @@
   @keyframes vds-typing-pulse { 0%, 100% { box-shadow: none; } }
 }
 
-@layer components {
+@layer design-system.components {
   .vds-textarea {
-    --_textarea-px: var(--vds-space-3);
-    --_textarea-py: var(--vds-space-2);
-    --_textarea-font-size: var(--vds-text-sm);
-    --_textarea-radius: var(--vds-radius-textarea);
+    /* ── Public config ── */
+    --textarea-padding-inline: var(--vds-space-3);
+    --textarea-padding-block: var(--vds-space-2);
+    --textarea-font-size: var(--vds-text-sm);
+    --textarea-radius: var(--vds-radius-textarea);
+    /* Roughly three rows at the matching font size — scales with data-size. */
+    --textarea-min-block-size: var(--vds-space-20);
+
+    /*
+     * ── Legacy private aliases ──
+     * Kept for the iOS auto-zoom guard in @virtari-packages/core and for any
+     * package already overriding --_textarea-*. New code sets --textarea-*.
+     */
+    --_textarea-px: var(--textarea-padding-inline);
+    --_textarea-py: var(--textarea-padding-block);
+    --_textarea-font-size: var(--textarea-font-size);
+    --_textarea-radius: var(--textarea-radius);
 
     display: flex;
     inline-size: 100%;
-    min-block-size: var(--vds-space-20);
+    min-block-size: var(--textarea-min-block-size);
     resize: vertical;
     font-family: var(--vds-font-sans);
-    border: 1px solid var(--vds-color-border);
+    border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
     background-color: var(--vds-color-surface);
     color: var(--vds-color-text);
     -webkit-touch-callout: default;
@@ -45,12 +58,12 @@
     border-radius: var(--_textarea-radius);
 
     &::placeholder {
-      color: var(--vds-color-text-subtle);
+      color: var(--vds-color-text-placeholder, var(--vds-color-neutral-11));
     }
 
     &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: -1px;
+      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+      outline-offset: var(--vds-focus-ring-offset, 2px);
       border-color: var(--vds-color-primary-9);
     }
 
@@ -59,7 +72,7 @@
     }
 
     &:disabled {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       cursor: not-allowed;
     }
 
@@ -74,41 +87,47 @@
     /* ── Sizes ── */
 
     &[data-size="2xs"] {
-      --_textarea-px: var(--vds-space-1-5);
-      --_textarea-py: var(--vds-space-1);
-      --_textarea-font-size: var(--vds-text-xs);
+      --textarea-padding-inline: var(--vds-space-1-5);
+      --textarea-padding-block: var(--vds-space-1);
+      --textarea-font-size: var(--vds-text-xs);
+      --textarea-min-block-size: var(--vds-space-12);
     }
 
     &[data-size="xs"] {
-      --_textarea-px: var(--vds-space-2);
-      --_textarea-py: var(--vds-space-1);
-      --_textarea-font-size: var(--vds-text-xs);
+      --textarea-padding-inline: var(--vds-space-2);
+      --textarea-padding-block: var(--vds-space-1);
+      --textarea-font-size: var(--vds-text-xs);
+      --textarea-min-block-size: var(--vds-space-14);
     }
 
     &[data-size="sm"] {
-      --_textarea-px: var(--vds-space-2-5);
-      --_textarea-py: var(--vds-space-1-5);
-      --_textarea-font-size: var(--vds-text-sm);
+      --textarea-padding-inline: var(--vds-space-2-5);
+      --textarea-padding-block: var(--vds-space-1-5);
+      --textarea-font-size: var(--vds-text-sm);
+      --textarea-min-block-size: var(--vds-space-16);
     }
 
     /* md uses defaults above */
 
     &[data-size="lg"] {
-      --_textarea-px: var(--vds-space-4);
-      --_textarea-py: var(--vds-space-3);
-      --_textarea-font-size: var(--vds-text-base);
+      --textarea-padding-inline: var(--vds-space-4);
+      --textarea-padding-block: var(--vds-space-3);
+      --textarea-font-size: var(--vds-text-base);
+      --textarea-min-block-size: var(--vds-space-24);
     }
 
     &[data-size="xl"] {
-      --_textarea-px: var(--vds-space-5);
-      --_textarea-py: var(--vds-space-3-5);
-      --_textarea-font-size: var(--vds-text-lg);
+      --textarea-padding-inline: var(--vds-space-5);
+      --textarea-padding-block: var(--vds-space-3-5);
+      --textarea-font-size: var(--vds-text-lg);
+      --textarea-min-block-size: var(--vds-space-28);
     }
 
     &[data-size="2xl"] {
-      --_textarea-px: var(--vds-space-6);
-      --_textarea-py: var(--vds-space-4);
-      --_textarea-font-size: var(--vds-text-xl);
+      --textarea-padding-inline: var(--vds-space-6);
+      --textarea-padding-block: var(--vds-space-4);
+      --textarea-font-size: var(--vds-text-xl);
+      --textarea-min-block-size: var(--vds-space-32);
     }
   }
 }

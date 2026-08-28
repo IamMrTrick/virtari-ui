@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useHotkey } from "@virtari-packages/utils";
+import { cn, useHotkey } from "@virtari-packages/utils";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +22,13 @@ export interface CommandDialogProps
   description?: ReactNode;
   /** Hide title/description visually but keep them for screen readers. */
   hideTitle?: boolean;
+  /**
+   * Dialog width preset. At the default `"md"` the palette uses its own
+   * `--command-dialog-width` (40rem / 640px — the conventional palette width)
+   * instead of the plain dialog `md` width. Pass any other size to opt back
+   * into the standard Dialog ramp.
+   */
+  size?: DialogContentProps["size"];
   children?: ReactNode;
 }
 
@@ -32,6 +39,8 @@ export function CommandDialog({
   title = "Command palette",
   description,
   hideTitle = true,
+  size = "md",
+  className,
   children,
   ...contentProps
 }: CommandDialogProps) {
@@ -44,7 +53,11 @@ export function CommandDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogPortal>
         <DialogOverlay />
-        <DialogContent size="md" {...contentProps}>
+        <DialogContent
+          size={size}
+          className={cn("vds-command-dialog", className)}
+          {...contentProps}
+        >
           <DialogTitle className={hideTitle ? "vds-sr-only" : undefined}>
             {title}
           </DialogTitle>

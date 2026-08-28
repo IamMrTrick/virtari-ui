@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-switch {
     /*
      * ── Config (Proportional) ──
@@ -8,11 +8,22 @@
     --_switch-width: var(--vds-space-11);
     --_switch-height: var(--vds-space-6);
     --_switch-thumb-size: var(--vds-space-5);
-    --_switch-thumb-offset: 1px;
+    /*
+     * The track's transparent border IS the thumb's inset. At every size the
+     * thumb exactly fills the padding box in the block axis, so the gap above
+     * and below is --_switch-border-width and nothing else. The thumb is
+     * anchored to the padding box (`left: 0`) too, which means the inline gap
+     * is already that same border — any extra offset here makes the inline gap
+     * larger than the block gap and the round thumb stops being concentric
+     * with the round track (track r − border = thumb r only when the gap is
+     * uniform). It was 1px; concentric requires 0.
+     */
+    --_switch-border-width: 2px;
+    --_switch-thumb-offset: 0px;
     --_switch-thumb-translate: var(--_switch-thumb-offset);
     --_switch-thumb-checked-translate: calc(
       var(--_switch-width) - var(--_switch-thumb-size) -
-        var(--_switch-thumb-offset) - 4px
+        var(--_switch-thumb-offset) - 2 * var(--_switch-border-width)
     );
 
     display: inline-flex;
@@ -21,7 +32,7 @@
     flex-shrink: 0;
     cursor: pointer;
     border-radius: var(--vds-radius-full);
-    border: 2px solid transparent;
+    border: var(--_switch-border-width) solid transparent;
     transition: background-color var(--vds-duration-normal) var(--vds-ease-out);
     touch-action: none;
     user-select: none;
@@ -30,7 +41,10 @@
 
     inline-size: var(--_switch-width);
     block-size: var(--_switch-height);
-    background-color: var(--vds-color-neutral-6);
+    /* WCAG 1.4.11: the track IS the switch's boundary. neutral-6 sat at
+       ~1.4:1 on a light surface, which also hid the white thumb.
+       --vds-color-border-interactive is the first step that clears 3:1. */
+    background-color: var(--vds-color-border-interactive, var(--vds-color-neutral-9));
 
     &[data-state="checked"] {
       background-color: var(--vds-color-primary-9);
@@ -39,18 +53,18 @@
     &:dir(rtl) {
       --_switch-thumb-translate: calc(
         var(--_switch-width) - var(--_switch-thumb-size) -
-          var(--_switch-thumb-offset) - 4px
+          var(--_switch-thumb-offset) - 2 * var(--_switch-border-width)
       );
       --_switch-thumb-checked-translate: var(--_switch-thumb-offset);
     }
 
     &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
+      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+      outline-offset: var(--vds-focus-ring-offset, 2px);
     }
 
     &:disabled {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       cursor: not-allowed;
     }
 

@@ -11,9 +11,14 @@
     background-color: var(--vds-color-bg);
   }
 
+  /* The system-wide focus indicator. Geometry from the shared tokens
+     (tokens/src/sizing.css) rather than literals, so a component that
+     needs to redraw its own ring — clipped by an overflow parent, drawn
+     as a box-shadow, offset inward — lands on the same 2px/2px as this
+     one instead of re-deciding it locally. */
   :focus-visible {
-    outline: 2px solid var(--vds-color-ring);
-    outline-offset: 2px;
+    outline: var(--vds-focus-ring-width) solid var(--vds-color-ring);
+    outline-offset: var(--vds-focus-ring-offset);
   }
 
   ::selection {
@@ -38,9 +43,14 @@
     background: transparent;
   }
 
+  /* --vds-radius-scrollbar-thumb exists specifically to stop this from
+     being a capsule: the thumb is 8px thick, so any radius at or above
+     4px rounds it into a pill/circle that reads as a rendering glitch
+     rather than a scrollbar. The token caps at 6px and still lets sharp
+     mode tighten it. The 999px literal here was bypassing all of that. */
   *::-webkit-scrollbar-thumb {
     background-color: var(--vds-color-border);
-    border-radius: 999px;
+    border-radius: var(--vds-radius-scrollbar-thumb);
   }
 
   *::-webkit-scrollbar-thumb:hover {

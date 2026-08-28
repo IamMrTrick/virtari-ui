@@ -10,8 +10,8 @@
     --vds-yoopta-color-surface: var(--vds-color-surface);
     --vds-yoopta-color-surface-raised: var(--vds-color-surface-raised);
     --vds-yoopta-color-surface-overlay: var(--vds-color-surface-overlay);
-    --vds-yoopta-color-border: var(--vds-color-neutral-6);
-    --vds-yoopta-color-border-strong: var(--vds-color-neutral-7);
+    --vds-yoopta-color-border: var(--vds-color-border-muted);
+    --vds-yoopta-color-border-strong: var(--vds-color-border);
 
     /* Text */
     --vds-yoopta-color-text: var(--vds-color-text);
@@ -38,9 +38,9 @@
     --vds-yoopta-color-callout-danger-text: var(--vds-color-danger-text);
 
     /* Code */
-    --vds-yoopta-color-code-bg: var(--vds-color-neutral-2);
+    --vds-yoopta-color-code-bg: var(--vds-color-bg-subtle);
     --vds-yoopta-color-code-text: var(--vds-color-text);
-    --vds-yoopta-color-code-inline-bg: var(--vds-color-neutral-3);
+    --vds-yoopta-color-code-inline-bg: var(--vds-color-bg-muted);
 
     /* Quote */
     --vds-yoopta-color-quote-border: var(--vds-color-primary-solid);

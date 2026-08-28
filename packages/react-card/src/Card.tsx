@@ -23,6 +23,7 @@ export function Card({
     <div
       ref={ref}
       className={cn("vds-card", className)}
+      data-radius-host=""
       data-variant={variant !== "surface" ? variant : undefined}
       data-size={size !== "md" ? size : undefined}
       data-interactive={interactive || undefined}

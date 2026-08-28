@@ -1,0 +1,133 @@
+/*
+ * ── Radius nesting (the concentricity channel) ──
+ *
+ * Rounded corners nest badly. Put a 12px-radius panel inside a
+ * 12px-radius card with 16px of padding and the inner corner does not
+ * follow the outer one — it bulges, because two concentric arcs are only
+ * parallel when their radii differ by exactly the distance between them.
+ * The eye reads the mismatch instantly even when it can't name it. Every
+ * design system that draws a card with something rounded inside it hits
+ * this, and most solve it by hand-tuning a literal per component, which
+ * then silently rots the moment `data-radius` changes the mode.
+ *
+ * The rule is one subtraction:
+ *
+ *   inner radius = outer radius − distance from the outer edge
+ *
+ * There are two distances worth naming:
+ *
+ *   flush   the child touches the host's inner edge — a media strip
+ *           across the top of a card, a sticky header inside a dialog,
+ *           a table filling a panel. Distance = the host's border.
+ *
+ *   inset   the child sits inside the host's padding — a code block in
+ *           a card, a nested field in a picker, a highlighted row in a
+ *           menu. Distance = the host's border + its padding.
+ *
+ * ── Using it ──
+ *
+ * The host carries `data-radius-host` in its markup, and declares what it
+ * is on the element that draws the corner:
+ *
+ *   .vds-card {
+ *     border-radius: var(--vds-radius-card);
+ *     border: 1px solid var(--vds-color-border);
+ *     padding: var(--vds-surface-padding-block) var(--vds-surface-padding-inline);
+ *
+ *     --vds-radius-host-r: var(--vds-radius-card);
+ *     --vds-radius-host-b: 1px;
+ *     --vds-radius-host-p: var(--vds-surface-padding-inline);
+ *   }
+ *
+ * A direct child then reads the answer:
+ *
+ *   .vds-card__media  { border-radius: var(--vds-radius-flush); }
+ *   .vds-card__code   { border-radius: var(--vds-radius-inset); }
+ *
+ * The host's own radius still comes from the component token, so radius
+ * modes (`data-radius="sharp|soft|round|pill"`) keep working — the
+ * children just follow whatever the host landed on.
+ *
+ * ── Why exactly one level ──
+ *
+ * `--vds-radius-inset` and `--vds-radius-flush` are registered with
+ * `inherits: false`. Only the host's *direct children* are given a
+ * value; anything deeper computes the initial `0px` — a square corner —
+ * rather than inheriting a number that would be wrong for it. A
+ * grandchild is not concentric with the host (there is another border
+ * and another padding in between), so failing flat is the correct
+ * failure. If a grandchild needs concentric corners, its own parent
+ * becomes a host.
+ *
+ * Registering `--vds-radius-host-r/-b/-p` as `<length>` matters too: it
+ * keeps the subtraction valid. Unregistered, a host that set the radius
+ * but not the padding would produce an invalid `calc()` and CSS would
+ * drop the child's whole `border-radius` declaration; registered, the
+ * missing input is `0px` and the corner is merely un-inset.
+ *
+ * Those three DO inherit — the direct-child rule has to be able to read
+ * them. Which means: always set all three on a host, even the zeroes. A
+ * host nested inside another host that declares only `-r` will inherit
+ * the outer host's `-b` and `-p` and subtract the wrong distance. The
+ * `0px` initial only protects a host with no host above it.
+ *
+ * ── Status ──
+ *
+ * Infrastructure. Components are NOT being migrated onto this in the
+ * pass that introduced it — adopt it when you next touch a component
+ * that actually nests rounded corners.
+ */
+
+@property --vds-radius-host-r {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --vds-radius-host-b {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --vds-radius-host-p {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+/* The two public outputs. `inherits: false` is what confines them to one
+ * level — see "Why exactly one level" above. */
+@property --vds-radius-inset {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --vds-radius-flush {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@layer tokens {
+  /*
+   * `max(0px, …)` clamps the subtraction. A host rounder than it is deep
+   * (a pill-mode control, or any surface whose padding exceeds its
+   * radius) would otherwise hand its children a negative length, which is
+   * invalid for border-radius. Square is the right floor: once the outer
+   * arc has been fully consumed there is nothing left for the inner one
+   * to follow.
+   */
+  [data-radius-host] > * {
+    --vds-radius-flush: max(
+      0px,
+      var(--vds-radius-host-r) - var(--vds-radius-host-b)
+    );
+    --vds-radius-inset: max(
+      0px,
+      var(--vds-radius-host-r) - var(--vds-radius-host-b) -
+        var(--vds-radius-host-p)
+    );
+  }
+}

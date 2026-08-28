@@ -22,7 +22,7 @@
     --header-z-bottom: 30;
 
     /* Motion */
-    --header-transition-duration: var(--vds-duration-base, 200ms);
+    --header-transition-duration: var(--vds-duration-normal, 200ms);
     --header-transition-easing:   var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
   }
 
@@ -30,9 +30,13 @@
    * 2. Row — base tokens
    * ───────────────────────────────────────────── */
   .vds-header__row {
-    --row-block-size:      var(--vds-app-chrome-row, var(--vds-size-lg, 2.75rem));
+    --row-block-size:      var(--vds-app-chrome-row, var(--vds-size-lg, 2.5rem));
     --row-padding-inline:  var(--vds-section-gutter-md, 1.5rem);
+    /* Gap between the three sections (start / center / end) — owned by the
+       row's inner grid. `--row-section-item-gap` is the gap *within* one
+       section, between the controls a consumer drops into it. */
     --row-section-gap:     var(--vds-space-4, 1rem);
+    --row-section-item-gap: var(--vds-space-3, 0.75rem);
     --row-container-width: var(--vds-container-width-default, 80rem);
 
     --row-background:     var(--vds-color-surface, #ffffff);
@@ -44,7 +48,12 @@
   /* ─────────────────────────────────────────────
    * 3. Row height presets
    * ───────────────────────────────────────────── */
-  .vds-header__row[data-height="sm"] { --row-block-size: 2.5rem;  }
+  /* `sm` is the app-chrome row height — the same expression the base block
+     uses, not a 2.5rem copy of it, so retuning `--vds-app-chrome-row` in a
+     theme can't silently desync the unsized default from its own ramp step. */
+  .vds-header__row[data-height="sm"] {
+    --row-block-size: var(--vds-app-chrome-row, var(--vds-size-lg, 2.5rem));
+  }
   .vds-header__row[data-height="md"] { --row-block-size: 3.5rem;  }
   .vds-header__row[data-height="lg"] { --row-block-size: 4rem;    }
   .vds-header__row[data-height="xl"] { --row-block-size: 5rem;    }

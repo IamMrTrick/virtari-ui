@@ -5,4 +5,4 @@ export {
   PopoverClose,
   PopoverAnchor,
 } from "./Popover";
-export type { PopoverContentProps } from "./Popover";
+export type { PopoverContentProps, PopoverProps, PopoverSize } from "./Popover";

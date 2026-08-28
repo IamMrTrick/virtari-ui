@@ -1,37 +1,39 @@
-.vds-tree-view {
-  /* ─── Layout ─── */
-  --tree-item-height:    2.25rem;
-  --tree-indent-size:    1.25rem;
-  --tree-toggle-size:    1rem;
-  --tree-icon-size:      1.125rem;
-  --tree-gap:            0px;
+@layer design-system.components {
+  .vds-tree-view {
+    /* ─── Layout ─── */
+    --tree-item-height:    2.25rem;
+    --tree-indent-size:    1.25rem;
+    --tree-toggle-size:    1rem;
+    --tree-icon-size:      1.125rem;
+    --tree-gap:            0px;
 
-  /* ─── Surface ─── */
-  --tree-item-bg:             transparent;
-  --tree-item-bg-hover:       var(--vds-color-hover, oklch(0 0 0 / 0.04));
-  --tree-item-bg-active:      var(--vds-color-active, oklch(0 0 0 / 0.07));
-  --tree-selected-bg:         var(--vds-color-primary-a3, oklch(0.5 0.2 264 / 0.12));
-  --tree-selected-bg-hover:   var(--vds-color-primary-a4, oklch(0.5 0.2 264 / 0.16));
+    /* ─── Surface ─── */
+    --tree-item-bg:             transparent;
+    --tree-item-bg-hover:       var(--vds-color-hover, oklch(0 0 0 / 0.04));
+    --tree-item-bg-active:      var(--vds-color-active, oklch(0 0 0 / 0.07));
+    --tree-selected-bg:         var(--vds-color-primary-a3, oklch(0.5 0.2 264 / 0.12));
+    --tree-selected-bg-hover:   var(--vds-color-primary-a4, oklch(0.5 0.2 264 / 0.16));
 
-  /* ─── Text ─── */
-  --tree-item-color:          var(--vds-color-text, currentColor);
-  --tree-item-color-muted:    var(--vds-color-text-muted, currentColor);
-  --tree-selected-color:      var(--vds-color-primary-text, currentColor);
-  --tree-label-size:          var(--vds-text-sm, 0.875rem);
-  --tree-label-weight:        var(--vds-font-normal, 400);
+    /* ─── Text ─── */
+    --tree-item-color:          var(--vds-color-text, currentColor);
+    --tree-item-color-muted:    var(--vds-color-text-muted, currentColor);
+    --tree-selected-color:      var(--vds-color-primary-text, currentColor);
+    --tree-label-size:          var(--vds-text-sm, 0.875rem);
+    --tree-label-weight:        var(--vds-font-normal, 400);
 
-  /* ─── Toggle icon ─── */
-  --tree-toggle-color:        var(--vds-color-text-muted, currentColor);
-  --tree-toggle-transition:   var(--vds-transition-fast, 100ms ease-out);
+    /* ─── Toggle icon ─── */
+    --tree-toggle-color:        var(--vds-color-text-muted, currentColor);
+    --tree-toggle-transition:   var(--vds-transition-fast, 100ms ease-out);
 
-  /* ─── Focus ring ─── */
-  --tree-focus-ring-color:    var(--vds-color-ring, oklch(0.55 0.2 265));
-  --tree-focus-ring-width:    2px;
-  --tree-focus-ring-offset:   -2px;
+    /* ─── Focus ring ─── */
+    --tree-focus-ring-color:    var(--vds-color-ring, oklch(0.55 0.2 265));
+    --tree-focus-ring-width:    2px;
+    --tree-focus-ring-offset:   -2px;
 
-  /* ─── Border radius ─── */
-  --tree-item-radius:         var(--vds-radius-tree-item, 0.25rem);
+    /* ─── Border radius ─── */
+    --tree-item-radius:         var(--vds-radius-tree-item, 0.25rem);
 
-  /* ─── Motion ─── */
-  --tree-transition:          var(--vds-transition-fast, 100ms ease-out);
+    /* ─── Motion ─── */
+    --tree-transition:          var(--vds-transition-fast, 100ms ease-out);
+  }
 }

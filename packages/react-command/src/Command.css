@@ -1,12 +1,45 @@
 @import "./Command.tokens.css";
 
 @layer design-system.components {
+  /* ── CommandDialog surface ──
+   * A palette is a search field first: it must reach the surface edge, so the
+   * Dialog "simple layout" padding (which would inset the input by
+   * --dialog-padding-inline) is neutralised here. The selector matches that
+   * rule's own shape so it wins regardless of stylesheet import order.
+   * Width comes from --command-dialog-width at the default size only;
+   * passing an explicit `size` falls back to the standard Dialog ramp. */
+  .vds-dialog-content.vds-command-dialog[data-size="md"] {
+    --dialog-width: var(--command-dialog-width);
+  }
+
+  .vds-dialog-content.vds-command-dialog:not(:has(> .vds-dialog-header)):not(
+      :has(> .vds-dialog-body)
+    ) {
+    padding-block: 0;
+    padding-inline: 0;
+    gap: 0;
+
+    /* The Dialog's simple layout sets this to its inline padding; the
+       palette removes that padding, so its children are flush again. */
+    --vds-radius-host-p: 0px;
+  }
+
   .vds-command {
     display: flex;
     flex-direction: column;
     background-color: var(--vds-command-bg);
     border-radius: var(--vds-command-radius);
     overflow: hidden;
+  }
+
+  /* Inside a CommandDialog the palette fills the dialog edge to edge, so its
+     corner is the dialog's corner minus the dialog's border — not its own
+     standalone radius, which would sit 1px proud of it. --vds-radius-flush
+     is published by the dialog host (packages/tokens/src/radii/nesting.css)
+     and only resolves for its direct children, which is exactly what the
+     palette is. */
+  .vds-command-dialog > .vds-command {
+    border-radius: var(--vds-radius-flush);
   }
 
   /* Input */
@@ -70,7 +103,7 @@
     background-color: var(--vds-command-item-bg-hover);
   }
   .vds-command-item[data-disabled="true"] {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 

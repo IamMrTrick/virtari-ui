@@ -22,7 +22,7 @@
   @keyframes vds-radio-dot-spring   { 0% { opacity: 0; scale: 0; } 100% { opacity: 1; scale: 1; } }
 }
 
-@layer components {
+@layer design-system.components {
   /* =========================================================================
    * Atomic radio — circular selector with inner dot.
    * ========================================================================= */
@@ -79,7 +79,7 @@
 
   /* ── Disabled ── */
   .vds-radio-item:disabled {
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
 
@@ -207,7 +207,18 @@
   }
 
   .vds-radio-group[data-disabled] {
-    opacity: 0.7;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  /* Dim once: a disabled group propagates `disabled` to every descendant, so
+     without this the group, the field and the control would compound their
+     opacities down to ~0.2. */
+  .vds-radio-group[data-disabled] .vds-radio-field[data-disabled],
+  .vds-radio-group[data-disabled] .vds-radio-card[data-disabled],
+  .vds-radio-group[data-disabled] .vds-pill-radio-item:disabled,
+  .vds-radio-group[data-disabled] .vds-segmented-radio-item:disabled,
+  .vds-radio-group[data-disabled] .vds-radio-item:disabled {
+    opacity: 1;
   }
 }
 

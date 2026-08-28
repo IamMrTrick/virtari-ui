@@ -11,6 +11,14 @@
     --phone-input-country-padding-inline: var(--vds-space-2-5, 0.625rem);
     --phone-input-country-gap: var(--vds-space-1-5, 0.375rem);
     --phone-input-value-gap: var(--_input-px, var(--vds-space-3, 0.75rem));
+    /* The field's corner, republished on the wrapper. The country button is a
+     * sibling of the <input> — not a child — so it cannot read the input's own
+     * --_input-radius, and its `border-radius: inherit` was resolving against
+     * this wrapper, which had no radius at all: the button's start corners came
+     * out square over the field's rounded end. Visible the moment the button
+     * paints (hover, focus) and worst in pill mode, where the field's corner is
+     * 16px and the button's was 0. */
+    --phone-input-radius: var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
   }
 
   /* Size-aware country-slot widths (kept narrow on small inputs, generous on large). */

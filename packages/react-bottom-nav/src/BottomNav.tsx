@@ -260,6 +260,7 @@ export const BottomNav = forwardRef<HTMLElement, BottomNavProps>(
           ref={setRef}
           className={cn("vds-bottom-nav", className)}
           style={mergedStyle}
+          data-radius-host=""
           data-variant={variant}
           data-size={size}
           data-position={position}

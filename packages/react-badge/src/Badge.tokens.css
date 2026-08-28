@@ -115,16 +115,19 @@
     --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
   }
 
-  /* Neutral — desaturated. Useful for "secondary" status chips. */
+  /* Neutral — desaturated. Useful for "secondary" status chips.
+   * Reads semantic roles wherever the neutral family exposes one. The two
+   * remaining raw steps (11 / 4) are the hover rungs the neutral family has
+   * no role for yet — there is no --vds-color-neutral-*-hover. */
   .vds-badge[data-color="neutral"] {
-    --badge-color-solid:        var(--vds-color-neutral-12, #171717);
+    --badge-color-solid:        var(--vds-color-bg-inverse, #171717);
     --badge-color-solid-hover:  var(--vds-color-neutral-11, #262626);
-    --badge-color-on-solid:     var(--vds-color-neutral-1, #fafafa);
-    --badge-color-bg:           var(--vds-color-neutral-3, var(--vds-color-bg-subtle, #f5f5f5));
-    --badge-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-neutral-3, #e5e5e5));
-    --badge-color-text:         var(--vds-color-neutral-12, var(--vds-color-text, #171717));
-    --badge-color-border:       var(--vds-color-neutral-8, var(--vds-color-border, #a3a3a3));
-    --badge-color-border-soft:  var(--vds-color-neutral-6, color-mix(in oklch, var(--badge-color-solid) 20%, transparent));
+    --badge-color-on-solid:     var(--vds-color-text-inverse, #fafafa);
+    --badge-color-bg:           var(--vds-color-neutral-bg, var(--vds-color-bg-muted, #f5f5f5));
+    --badge-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-neutral-bg, #e5e5e5));
+    --badge-color-text:         var(--vds-color-text, #171717);
+    --badge-color-border:       var(--vds-color-border-strong, #a3a3a3);
+    --badge-color-border-soft:  var(--vds-color-border-muted, color-mix(in oklch, var(--badge-color-solid) 20%, transparent));
   }
 
   /* =========================================================================

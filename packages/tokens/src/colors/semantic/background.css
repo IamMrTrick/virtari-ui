@@ -27,10 +27,24 @@
 
   :root {
     /* ─── Color-scheme signaling ───
-     * `light dark` lets the browser honor prefers-color-scheme when the
-     * user hasn't forced a theme via data-theme. light-dark() functions
-     * and form-control rendering both depend on this being set. */
-    color-scheme: light dark;
+     * Must state exactly one scheme here, and it must be the scheme the
+     * tokens are actually in.
+     *
+     * This used to say `light dark`, which invites the browser to honor
+     * prefers-color-scheme. Nothing in this repo does: there is not one
+     * `@media (prefers-color-scheme: …)` rule anywhere, and every dark
+     * value is keyed off `[data-theme="dark"]`. So on a machine set to
+     * dark, the browser darkened everything it owns — scrollbars, form
+     * controls, the canvas behind the page, autofill, spellcheck
+     * underlines, `<select>` popups — while every token stayed light.
+     * Dark chrome, light UI, on a theme nobody selected.
+     *
+     * `light` is the honest default because :root's token values are the
+     * light ones. `[data-theme]` below re-states it whenever the app
+     * actually switches. Add `light dark` back only together with real
+     * prefers-color-scheme support — that is a product decision, not a
+     * token one. */
+    color-scheme: light;
   }
   [data-theme="light"] {
     color-scheme: light;
@@ -60,7 +74,7 @@
 
     /* ─── Scrim (canonical) ───
        Always black alpha — shadows/scrims must not invert in dark.
-       `overlay*` aliases remain in _legacy.css for backwards compat. */
+       The older `overlay*` spelling lives in ../aliases.css. */
     --vds-color-scrim:        var(--vds-color-black-a7);
     --vds-color-scrim-light:  var(--vds-color-black-a4);
     --vds-color-scrim-strong: var(--vds-color-black-a9);

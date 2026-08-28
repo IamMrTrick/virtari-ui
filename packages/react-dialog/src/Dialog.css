@@ -36,7 +36,10 @@
     flex-direction: column;
     box-sizing: border-box;
 
-    min-inline-size: var(--dialog-min-width);
+    /* `inline-size` is what actually sizes the surface. Without it the
+       fixed-position box is shrink-to-fit and every `data-size` collapses
+       to the same content-driven width. */
+    inline-size: var(--dialog-width);
     max-inline-size: var(--dialog-max-width);
     max-block-size: var(--dialog-max-height);
 
@@ -47,6 +50,23 @@
 
     overflow: hidden;
     container-type: inline-size;
+
+    /*
+     * Concentricity host (packages/tokens/src/radii/nesting.css).
+     * A surface that fills the dialog edge to edge — the command palette,
+     * a full-bleed media band, a sticky sub-header — reads
+     * --vds-radius-flush and lands parallel to the dialog corner instead
+     * of relying on the overflow clip. All three are declared, including
+     * the zero: a host that omits one inherits it from an outer host and
+     * subtracts the wrong distance.
+     *
+     * -p is 0 because the slot layout puts the inline padding on the
+     * slots, not on this box. The simple (slot-less) layout below, which
+     * does pad this box, overrides it.
+     */
+    --vds-radius-host-r: var(--dialog-radius);
+    --vds-radius-host-b: var(--dialog-border-width);
+    --vds-radius-host-p: 0px;
 
     animation: var(--dialog-enter-animation) var(--dialog-enter-duration) var(--dialog-enter-ease);
 
@@ -93,7 +113,70 @@
    * ───────────────────────────────────────────── */
   .vds-dialog-content:not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body)) {
     gap: var(--dialog-gap);
-    padding: var(--dialog-padding-block) var(--dialog-padding-inline);
+    padding-block: var(--dialog-padding-block);
+    padding-inline: var(--dialog-padding-inline);
+
+    /* Here the padding really is on this box, so a direct child is inset
+       by it. */
+    --vds-radius-host-p: var(--dialog-padding-inline);
+  }
+
+  /* In that quick-start markup the content box already carries the padding,
+     so a lone Footer must not add its own on top of it. */
+  .vds-dialog-content:not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body))
+    > .vds-dialog-footer {
+    padding-block: 0;
+    padding-inline: 0;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Slot geometry — the container owns the edges
+   * and the seams.
+   *
+   * A slot never zeroes its own leading edge. Each
+   * slot ships with no block padding at all; the
+   * content box assigns the leading edge to the
+   * first slot, the trailing edge to the last, and
+   * one named gap (--dialog-slot-gap) between any
+   * two adjacent slots. A slot that draws its own
+   * boundary (bordered header, dividing footer)
+   * additionally pads the inside of that boundary,
+   * so the rule never sits flush against text.
+   *
+   * The close icon renders after the slots, so the
+   * first/last selectors match on slot siblings
+   * rather than :first-child / :last-child.
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer) {
+    padding-inline: var(--dialog-padding-inline);
+    padding-block: 0;
+  }
+
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer):not(
+      :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer) ~ *
+    ) {
+    padding-block-start: var(--dialog-padding-block);
+  }
+
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer):not(
+      :has(~ :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer))
+    ) {
+    padding-block-end: var(--dialog-padding-block);
+  }
+
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer)
+    + :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer) {
+    padding-block-start: var(--dialog-slot-gap);
+  }
+
+  /* Slots that precede a divider pad the inside of it. */
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body):has(+ .vds-dialog-footer) {
+    padding-block-end: var(--dialog-slot-gap);
   }
 
   /* ─────────────────────────────────────────────
@@ -104,13 +187,17 @@
     flex-direction: column;
     flex-shrink: 0;
     gap: var(--dialog-header-gap);
-    padding-inline: var(--dialog-padding-inline);
-    padding-block-start: var(--dialog-header-padding-block-start);
-    padding-block-end: var(--dialog-header-padding-block-end);
   }
 
   .vds-dialog-header[data-variant="bordered"] {
     border-block-end: var(--dialog-section-border);
+  }
+
+  .vds-dialog-content
+    > .vds-dialog-header[data-variant="bordered"]:has(
+      ~ :where(.vds-dialog-body, .vds-dialog-footer)
+    ) {
+    padding-block-end: var(--dialog-slot-gap);
   }
 
   /* ─────────────────────────────────────────────
@@ -122,15 +209,9 @@
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    padding-inline: var(--dialog-padding-inline);
-    padding-block: var(--dialog-body-padding-block);
     color: var(--vds-color-text, #111827);
     font-size: var(--dialog-description-font-size);
     line-height: var(--dialog-description-line-height);
-  }
-
-  .vds-dialog-header + .vds-dialog-body {
-    padding-block-start: 0;
   }
 
   /* ─────────────────────────────────────────────
@@ -142,8 +223,6 @@
     align-items: center;
     flex-shrink: 0;
     gap: var(--dialog-footer-gap);
-    padding-inline: var(--dialog-padding-inline);
-    padding-block: var(--dialog-footer-padding-block);
   }
 
   .vds-dialog-body + .vds-dialog-footer,
@@ -218,8 +297,8 @@
   }
 
   .vds-dialog-close-icon:focus-visible {
-    outline: 2px solid var(--vds-color-ring, #6366f1);
-    outline-offset: 2px;
+    outline: var(--dialog-focus-ring-width) solid var(--dialog-focus-ring-color);
+    outline-offset: var(--dialog-focus-ring-offset);
   }
 
   .vds-dialog-close-icon > svg {
@@ -231,7 +310,10 @@
      so the title never collides with it. */
   .vds-dialog-content:has(> .vds-dialog-close-icon) .vds-dialog-header,
   .vds-dialog-content:has(> .vds-dialog-close-icon):not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body)) {
-    padding-inline-end: calc(var(--dialog-close-inset) + var(--dialog-close-size) + var(--vds-space-2, 0.5rem));
+    padding-inline-end: calc(
+      var(--dialog-close-inset) + var(--dialog-close-size) +
+        var(--vds-cluster-gap, var(--vds-space-2, 0.5rem))
+    );
   }
 
   /* ─────────────────────────────────────────────

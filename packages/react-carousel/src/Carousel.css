@@ -27,6 +27,13 @@
     padding-inline: var(--carousel-padding-inline);
   }
 
+  /* Slot adjacency — the container owns the gap between topSlot, the track
+   * and bottomSlot. Only adjacent pairs get it, so an omitted slot leaves no
+   * dangling space and neither slot has to manage its own leading edge. */
+  .vds-carousel > * + * {
+    margin-block-start: var(--carousel-slot-gap);
+  }
+
   /* Track wrapper — establishes the positioning anchor for nav buttons,
    * pagination, and scrollbar. Must wrap the Swiper *and* its overlays so
    * absolute positioning is anchored to the track regardless of topSlot /
@@ -164,7 +171,7 @@
 
   /* Outside variant — push horizontal nav into a side gutter. */
   .vds-carousel[data-variant="outside"]:not([data-orientation="vertical"]) {
-    padding-inline: calc(var(--carousel-nav-offset) * 2 + 2.5rem);
+    padding-inline: calc(var(--carousel-nav-offset) * 2 + var(--carousel-nav-size));
   }
   .vds-carousel[data-variant="outside"]:not([data-orientation="vertical"]) .vds-carousel-nav--prev {
     inset-inline-start: 0;
@@ -376,19 +383,21 @@
    * 5. Lazy loading + zoom helpers
    * ========================================================================= */
   .vds-carousel :where(.swiper-lazy-preloader) {
-    inline-size: 2.5rem;
-    block-size: 2.5rem;
+    --carousel-preloader-size: var(--vds-size-lg, 2.5rem);
+    inline-size: var(--carousel-preloader-size);
+    block-size: var(--carousel-preloader-size);
     position: absolute;
     inset-inline-start: 50%;
     inset-block-start: 50%;
-    margin-inline-start: -1.25rem;
-    margin-block-start: -1.25rem;
+    /* Half the spinner box, so centering follows the size token. */
+    margin-inline-start: calc(var(--carousel-preloader-size) / -2);
+    margin-block-start: calc(var(--carousel-preloader-size) / -2);
     z-index: 10;
     transform-origin: 50%;
     box-sizing: border-box;
     border: 4px solid var(--carousel-progress-track);
     border-radius: 50%;
-    border-top-color: transparent;
+    border-block-start-color: transparent;
     animation: vds-carousel-spin 1s linear infinite;
   }
   @keyframes vds-carousel-spin {

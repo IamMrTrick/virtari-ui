@@ -133,7 +133,7 @@
   .vds-bottom-nav__item[aria-disabled="true"] {
     cursor: not-allowed;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: var(--vds-opacity-disabled, 0.5);
   }
 
   /* ─────────────────────────────────────────────
@@ -273,10 +273,6 @@
       transform: scaleX(1);
       opacity: 1;
     }
-  }
-
-  .vds-bottom-nav__sliding-indicator[data-measured="true"] {
-    opacity: 1;
   }
 
   /* Variant-specific sliding indicator placement.

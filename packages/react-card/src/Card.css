@@ -12,6 +12,25 @@
     border-radius: var(--card-radius);
     box-shadow: var(--card-shadow);
     overflow: hidden;
+
+    /*
+     * Concentricity host (packages/tokens/src/radii/nesting.css).
+     * The Card is the container everything else nests inside, so it
+     * publishes its own corner + the distance to its children. A direct
+     * child that reaches the inner edge (a media strip) reads
+     * --vds-radius-flush; one that sits inside the padding reads
+     * --vds-radius-inset. All three are declared, including the zero —
+     * a host that omits one inherits it from an outer host and subtracts
+     * the wrong distance.
+     *
+     * -p is 0 here because the slot layout gives the padding to the slots
+     * themselves, not to this box; the simple (slot-less) card overrides
+     * it below, where the padding really is on the container.
+     */
+    --vds-radius-host-r: var(--card-radius);
+    --vds-radius-host-b: var(--card-border-width);
+    --vds-radius-host-p: 0px;
+
     transition:
       background-color var(--card-transition-duration)
         var(--card-transition-easing),
@@ -39,12 +58,25 @@
   .vds-card:not(:has(> .vds-card-header, > .vds-card-content, > .vds-card-footer)) {
     padding-inline: var(--card-padding-inline);
     padding-block: var(--card-padding-block);
+
+    /* In the slot-less card the padding is on this box, so a direct child
+       really is inset by it. */
+    --vds-radius-host-p: var(--card-padding-inline);
   }
 
   .vds-card > :where(.vds-card-header, .vds-card-content, .vds-card-footer) {
     min-inline-size: 0;
     padding-inline: var(--card-padding-inline);
     padding-block: 0;
+
+    /*
+     * The slots deliberately do NOT re-host. A slot insets its children by
+     * --card-padding-inline (16px at the smallest) while the card's corner
+     * is at most 16px and its inner corner 15px, so the concentric answer
+     * for anything inside a slot is always a square corner — the arc is
+     * fully consumed before the child starts. The constraint is slack;
+     * re-hosting here would publish a channel that can only ever say 0px.
+     */
   }
 
   .vds-card

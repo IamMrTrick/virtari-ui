@@ -18,8 +18,8 @@
 
     /* ── Focus ── */
     --radio-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
-    --radio-focus-ring-width: 2px;
-    --radio-focus-ring-offset: 2px;
+    --radio-focus-ring-width: var(--vds-focus-ring-width, 2px);
+    --radio-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
 
     /* ── Default palette (unchecked) ── */
     --radio-bg: var(--vds-color-surface, #ffffff);
@@ -27,7 +27,7 @@
       --vds-color-primary-bg-subtle,
       color-mix(in oklch, currentColor 8%, transparent)
     );
-    --radio-border-color: var(--vds-color-border, #d1d5db);
+    --radio-border-color: var(--vds-color-border-interactive, #6b7280);
     --radio-border-color-hover: var(
       --vds-color-primary-solid,
       oklch(0.55 0.2 265)
@@ -256,8 +256,8 @@
     --segmented-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
 
     --segmented-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
-    --segmented-focus-ring-width: 2px;
-    --segmented-focus-ring-offset: 2px;
+    --segmented-focus-ring-width: var(--vds-focus-ring-width, 2px);
+    --segmented-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   .vds-segmented-radio[data-size="sm"] {
@@ -287,7 +287,7 @@
 
     /* Default palette */
     --pill-radio-item-bg: var(--vds-color-surface, #ffffff);
-    --pill-radio-item-border-color: var(--vds-color-border, #d1d5db);
+    --pill-radio-item-border-color: var(--vds-color-border-interactive, #6b7280);
     --pill-radio-item-color: var(--vds-color-text, #111827);
 
     /* Hover */
@@ -318,8 +318,8 @@
     --pill-radio-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
 
     --pill-radio-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
-    --pill-radio-focus-ring-width: 2px;
-    --pill-radio-focus-ring-offset: 2px;
+    --pill-radio-focus-ring-width: var(--vds-focus-ring-width, 2px);
+    --pill-radio-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
   }
 
   .vds-pill-radio[data-size="sm"] {

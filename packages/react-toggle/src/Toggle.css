@@ -1,4 +1,4 @@
-@layer components {
+@layer design-system.components {
   .vds-toggle {
     /*
      * ── Config ──
@@ -50,31 +50,34 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--vds-color-ring);
-      outline-offset: 2px;
+      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+      outline-offset: var(--vds-focus-ring-offset, 2px);
     }
 
     &:disabled {
-      opacity: 0.5;
+      opacity: var(--vds-opacity-disabled, 0.5);
       cursor: not-allowed;
     }
 
     /* ── Variant: outline ── */
     &[data-variant="outline"] {
-      border-color: var(--vds-color-border);
+      border-color: var(--vds-color-border-interactive, var(--vds-color-neutral-9));
 
       &[data-state="on"] {
         background-color: var(--vds-color-bg-subtle);
       }
     }
 
-    /* ── Sizes ── */
+    /* ── Sizes ──
+       Every size keeps the base --_toggle-radius: the radius is a mode
+       (`data-radius`), not a function of the control's height. Each block used
+       to restate it verbatim, which was dead weight and an invitation to let
+       one size drift. */
 
     &[data-size="2xs"] {
       --_toggle-height: var(--vds-size-2xs);
       --_toggle-px: var(--vds-space-1-5);
       --_toggle-font-size: var(--vds-text-xs);
-      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-1);
       --_toggle-icon-size: 0.875rem;
     }
@@ -83,7 +86,6 @@
       --_toggle-height: var(--vds-size-xs);
       --_toggle-px: var(--vds-space-2);
       --_toggle-font-size: var(--vds-text-xs);
-      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-1);
       --_toggle-icon-size: 0.875rem;
     }
@@ -92,7 +94,6 @@
       --_toggle-height: var(--vds-size-sm);
       --_toggle-px: var(--vds-space-2);
       --_toggle-font-size: var(--vds-text-sm);
-      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-1-5);
       --_toggle-icon-size: 1rem;
     }
@@ -103,7 +104,6 @@
       --_toggle-height: var(--vds-size-lg);
       --_toggle-px: var(--vds-space-4);
       --_toggle-font-size: var(--vds-text-base);
-      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-2);
       --_toggle-icon-size: 1.25rem;
     }
@@ -112,7 +112,6 @@
       --_toggle-height: var(--vds-size-xl);
       --_toggle-px: var(--vds-space-5);
       --_toggle-font-size: var(--vds-text-lg);
-      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-2);
       --_toggle-icon-size: 1.25rem;
     }
@@ -121,7 +120,6 @@
       --_toggle-height: var(--vds-size-2xl);
       --_toggle-px: var(--vds-space-6);
       --_toggle-font-size: var(--vds-text-xl);
-      --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
       --_toggle-gap: var(--vds-space-3);
       --_toggle-icon-size: 1.5rem;
     }
