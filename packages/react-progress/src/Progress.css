@@ -50,7 +50,7 @@
     animation: vds-progress-stripes var(--progress-animation-duration) linear infinite;
   }
 
-  /* ── Indeterminate (data-state driven by Radix) ── */
+  /* ── Indeterminate (data-state driven by the progress primitive) ── */
   .vds-progress[data-state="indeterminate"] .vds-progress-indicator {
     inline-size: 40% !important;
     animation: vds-progress-indeterminate calc(var(--progress-animation-duration) * 1.1) var(--vds-ease-in-out, cubic-bezier(0.4, 0, 0.2, 1)) infinite;

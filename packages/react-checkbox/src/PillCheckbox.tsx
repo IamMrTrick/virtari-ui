@@ -6,7 +6,7 @@ import {
   type ReactNode,
   type Ref,
 } from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import * as CheckboxPrimitive from "@virtari-packages/primitives/checkbox";
 import {
   CheckboxGroupContext,
   useCheckboxGroupContext,

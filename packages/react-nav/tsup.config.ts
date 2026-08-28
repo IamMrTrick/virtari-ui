@@ -11,7 +11,7 @@ export default defineConfig({
     "react-dom",
     "react/jsx-runtime",
     "@floating-ui/react",
-    "@radix-ui/react-slot",
+    "@virtari-packages/primitives/slot",
     "@virtari-packages/utils",
   ],
   treeshake: true,

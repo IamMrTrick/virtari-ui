@@ -7,7 +7,7 @@ import {
   type TimeValue,
 } from "@react-stately/datepicker";
 import { useLocale } from "@react-aria/i18n";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
+import * as PopoverPrimitive from "@virtari-packages/primitives/popover";
 import { createCalendar, resolveLocale, type CalendarSystem, type DateValue } from "./date-utils";
 import type { DatePickerSize, DatePickerAppearance } from "./context";
 import { Calendar, type CalendarView, type CalendarHandle } from "./Calendar";

@@ -303,7 +303,7 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   "segmented-control": {
     title: "Segmented Control",
     description:
-      "Standalone toggle button group — radio semantics via Radix UI, three sizes, full-width option, icon support, and keyboard navigation.",
+      "Standalone toggle button group — radio semantics, three sizes, full-width option, icon support, and keyboard navigation.",
   },
   "tag-input": {
     title: "Tag Input",

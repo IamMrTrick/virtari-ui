@@ -1,7 +1,7 @@
 import { cn, useDirection } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as SliderPrimitive from "@radix-ui/react-slider";
-import { DirectionProvider } from "@radix-ui/react-direction";
+import * as SliderPrimitive from "@virtari-packages/primitives/slider";
+import { DirectionProvider } from "@virtari-packages/primitives/direction";
 
 /* ── Slider ── */
 export interface SliderProps
@@ -27,7 +27,7 @@ export function Slider({
         ? defaultValue
         : [min, max];
   /* Auto-detect direction so the range fill anchors to inline-start and
-     keyboard arrows mirror in RTL. DirectionProvider is Radix's designated
+     keyboard arrows mirror in RTL. DirectionProvider is the primitives' designated
      channel for passing direction down to primitives. Explicit `dir` wins. */
   const autoDir = useDirection();
 

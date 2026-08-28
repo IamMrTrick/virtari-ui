@@ -141,7 +141,7 @@ function SignupForm() {
 
 /* ────────────────────────────────────────────────────────────
  * Showcase 2 — Mixed controls (Input + Select + Checkbox)
- * Demonstrates composition with Radix-based controls via Controller.
+ * Demonstrates composition with primitive-backed controls via Controller.
  * ──────────────────────────────────────────────────────────── */
 
 const profileSchema = z.object({
@@ -248,7 +248,7 @@ export function FormPage() {
 
       <Section
         title="Mixed controls"
-        description="Radix-based controls (Select, Checkbox) wire via `Controller` — pass field.value / field.onChange / field.ref. FormControl is the universal Slot-based adapter that injects id + aria into whatever child it wraps."
+        description="Primitive-backed controls (Select, Checkbox) wire via `Controller` — pass field.value / field.onChange / field.ref. FormControl is the universal Slot-based adapter that injects id + aria into whatever child it wraps."
       >
         <ProfileForm />
       </Section>

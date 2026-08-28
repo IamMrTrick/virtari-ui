@@ -52,7 +52,7 @@
     &[data-state="closed"] { animation-name: vds-tooltip-out-to-top; }
   }
   /* Logical side animations — `data-side` is resolved physical (flipped by
-     Radix under dir="rtl"); the keyframes themselves flip their translate
+     the primitive under dir="rtl"); the keyframes themselves flip their translate
      direction under :dir(rtl) via --tooltip-x-inline, so the motion always
      points from the trigger toward the content's resting position. */
   .vds-tooltip-content[data-side="left"] {

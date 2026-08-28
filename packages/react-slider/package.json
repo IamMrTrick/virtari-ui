@@ -53,8 +53,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/react-direction": "^1.1.1",
-    "@radix-ui/react-slider": "^1.3.6",
+    "@virtari-packages/primitives": "workspace:*",
     "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {

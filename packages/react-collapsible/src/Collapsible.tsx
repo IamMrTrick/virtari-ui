@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+import * as CollapsiblePrimitive from "@virtari-packages/primitives/collapsible";
 
 /* ── Collapsible ── */
 export const Collapsible = CollapsiblePrimitive.Root;

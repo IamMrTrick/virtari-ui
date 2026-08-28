@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { cn } from "@virtari-packages/utils";
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import * as RadioGroupPrimitive from "@virtari-packages/primitives/radio-group";
 import type { ComponentRef, Ref, ReactNode } from "react";
 import { useSegmentedIndicator } from "./use-segmented-indicator";
 

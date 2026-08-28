@@ -1,9 +1,33 @@
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+const require = createRequire(import.meta.url);
+const prismGlobalScript = readFileSync(require.resolve("prismjs/prism.js"), "utf8");
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    {
+      name: "virtari-prism-global",
+      transformIndexHtml() {
+        return [
+          {
+            tag: "script",
+            attrs: { "data-prism-global": "true" },
+            children: prismGlobalScript,
+            injectTo: "head-prepend",
+          },
+        ];
+      },
+    },
+    react(),
+  ],
+  define: {
+    // @lexical/code imports Prism language files that read a global `Prism`.
+    Prism: "globalThis.Prism",
+  },
   server: {
     allowedHosts: true,
   },
@@ -251,28 +275,28 @@ export default defineConfig({
       "react/jsx-runtime",
       "i18next",
       "react-i18next",
-      "@radix-ui/react-accordion",
-      "@radix-ui/react-alert-dialog",
-      "@radix-ui/react-avatar",
-      "@radix-ui/react-checkbox",
-      "@radix-ui/react-collapsible",
-      "@radix-ui/react-dialog",
-      "@radix-ui/react-direction",
-      "@radix-ui/react-dropdown-menu",
-      "@radix-ui/react-label",
-      "@radix-ui/react-popover",
-      "@radix-ui/react-progress",
-      "@radix-ui/react-radio-group",
-      "@radix-ui/react-scroll-area",
-      "@radix-ui/react-select",
-      "@radix-ui/react-separator",
-      "@radix-ui/react-slider",
-      "@radix-ui/react-slot",
-      "@radix-ui/react-switch",
-      "@radix-ui/react-tabs",
-      "@radix-ui/react-toast",
-      "@radix-ui/react-toggle",
-      "@radix-ui/react-tooltip",
+      "@virtari-packages/primitives/accordion",
+      "@virtari-packages/primitives/alert-dialog",
+      "@virtari-packages/primitives/avatar",
+      "@virtari-packages/primitives/checkbox",
+      "@virtari-packages/primitives/collapsible",
+      "@virtari-packages/primitives/dialog",
+      "@virtari-packages/primitives/direction",
+      "@virtari-packages/primitives/dropdown-menu",
+      "@virtari-packages/primitives/label",
+      "@virtari-packages/primitives/popover",
+      "@virtari-packages/primitives/progress",
+      "@virtari-packages/primitives/radio-group",
+      "@virtari-packages/primitives/scroll-area",
+      "@virtari-packages/primitives/select",
+      "@virtari-packages/primitives/separator",
+      "@virtari-packages/primitives/slider",
+      "@virtari-packages/primitives/slot",
+      "@virtari-packages/primitives/switch",
+      "@virtari-packages/primitives/tabs",
+      "@virtari-packages/primitives/toast",
+      "@virtari-packages/primitives/toggle",
+      "@virtari-packages/primitives/tooltip",
       "@internationalized/date",
       "@react-aria/calendar",
       "@react-aria/datepicker",

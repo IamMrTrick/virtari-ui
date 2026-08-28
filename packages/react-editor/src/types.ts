@@ -10,6 +10,7 @@ import type {
 } from "lexical";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import type { IconProps } from "@virtari-packages/react-icons";
+import type { EditorMediaKind } from "./EditorMediaNode";
 
 export type EditorPreset = "core" | "pro";
 export type EditorValueFormat = "json" | "html" | "markdown";
@@ -28,6 +29,9 @@ export type EditorBlockType =
   | "h1"
   | "h2"
   | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
   | "quote"
   | "code"
   | "bullet"
@@ -189,12 +193,19 @@ export interface EditorInsertMenuItem {
   run: (editor: LexicalEditor, targetBlockElement?: HTMLElement | null) => void;
 }
 
+export interface EditorMediaInsertRequest {
+  editor: LexicalEditor;
+  kind: EditorMediaKind;
+  targetBlockElement?: HTMLElement | null;
+}
+
 export interface EditorInsertMenuProps {
   className?: string;
   items?: EditorInsertMenuItem[];
   label?: string;
   compact?: boolean;
   onOpenChange?: (open: boolean) => void;
+  onRequestMediaInsert?: (request: EditorMediaInsertRequest) => void;
   targetBlockElement?: HTMLElement | null;
 }
 

@@ -736,7 +736,7 @@ export function RadioGroupPage() {
 
       <Section
         title="Segmented Control"
-        description="Standalone segmented control built on Radix UI RadioGroup — three sizes, full-width, vertical orientation, icon support, and keyboard navigation."
+        description="Standalone segmented control built on the Virtari RadioGroup primitive — three sizes, full-width, vertical orientation, icon support, and keyboard navigation."
       >
         <div style={groupRowStyle}>
           <div style={cardFrame}>

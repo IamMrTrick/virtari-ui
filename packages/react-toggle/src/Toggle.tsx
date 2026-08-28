@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as TogglePrimitive from "@radix-ui/react-toggle";
+import * as TogglePrimitive from "@virtari-packages/primitives/toggle";
 
 export type ToggleVariant = "default" | "outline";
 export type ToggleSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";

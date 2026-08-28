@@ -142,8 +142,8 @@ export function SignIn() {
 
 ### Conventions applied across every component
 - **Variant props** live in `[data-variant]`, sizes in `[data-size]`, state in `[data-state]` / `data-disabled`.
-- Compound components (Dialog/Drawer/Select/DropdownMenu/etc.) follow the Radix pattern: `Root` → `Trigger` → `Content` → slots like `Header`, `Body`, `Footer`.
-- Most primitives accept `asChild` from Radix Slot so you can swap the underlying element.
+- Compound components (Dialog/Drawer/Select/DropdownMenu/etc.) follow a consistent anatomy: `Root` → `Trigger` → `Content` → slots like `Header`, `Body`, `Footer`.
+- Most primitives accept `asChild` (via `Slot` from `@virtari-packages/primitives`) so you can swap the underlying element.
 
 ---
 

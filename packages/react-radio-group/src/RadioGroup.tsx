@@ -6,7 +6,7 @@ import {
   type ReactNode,
   type Ref,
 } from "react";
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import * as RadioGroupPrimitive from "@virtari-packages/primitives/radio-group";
 import { IconAlertCircle } from "@virtari-packages/react-icons";
 import {
   RadioGroupContext,

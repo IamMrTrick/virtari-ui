@@ -144,7 +144,7 @@ Defines `--vds-command-*` tokens for background, border, input, list max-height,
 ## Accessibility & RTL
 
 - cmdk ships with full keyboard nav: `ArrowUp`/`ArrowDown`, `Home`/`End`, `Enter` to select, `PageUp`/`PageDown`
-- `CommandDialog` uses our Radix-based Dialog — focus trap, escape to close, overlay, portal
+- `CommandDialog` uses our own Dialog — focus trap, escape to close, overlay, portal
 - Title/description are rendered visually-hidden by default (`vds-sr-only`) so the dialog is accessible without a visible header
 - Layout uses logical CSS properties; `leftSection` appears first in DOM order so it auto-flips in RTL
 

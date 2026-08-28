@@ -10,7 +10,7 @@ import {
   type ReactNode,
   type Ref,
 } from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@virtari-packages/primitives/slot";
 import { cn } from "@virtari-packages/utils";
 import {
   IconChevronRight,

@@ -278,7 +278,7 @@
     min-block-size: 44px;
   }
 
-  .vds-scroll-area [data-radix-scroll-area-corner] {
+  .vds-scroll-area-corner {
     background-color: var(--scroll-area-track-bg);
   }
 

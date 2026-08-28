@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@virtari-packages/primitives/slot";
 import type { ComponentPropsWithoutRef } from "react";
 
 import { useFormField } from "./use-form-field";
@@ -7,7 +7,7 @@ import { useFormField } from "./use-form-field";
 export interface FormControlProps extends ComponentPropsWithoutRef<typeof Slot> {}
 
 /**
- * Wraps a single form control (Input/Select/Checkbox/…) via Radix Slot and
+ * Wraps a single form control (Input/Select/Checkbox/…) via Slot and
  * injects the id + aria wiring derived from the enclosing FormField/FormItem.
  * The child receives `id`, `aria-describedby`, and `aria-invalid`.
  */

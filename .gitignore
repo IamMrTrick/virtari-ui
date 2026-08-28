@@ -20,3 +20,7 @@ vite-err.txt
 # Local config
 .npmrc
 .claude/scheduled_tasks.lock
+
+# Agent worktrees (full repo copies) + local-only settings
+.claude/worktrees/
+.claude/settings.local.json

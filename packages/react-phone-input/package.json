@@ -57,7 +57,7 @@
     "typecheck": "pnpm codegen && tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/react-popover": "^1.1.15",
+    "@virtari-packages/primitives": "workspace:*",
     "@virtari-packages/react-flag": "workspace:*",
     "@virtari-packages/react-input": "workspace:*",
     "@virtari-packages/react-select": "workspace:*",

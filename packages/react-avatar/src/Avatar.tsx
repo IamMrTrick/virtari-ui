@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import { useMemo, type ComponentRef, type Ref } from "react";
-import * as AvatarPrimitive from "@radix-ui/react-avatar";
+import * as AvatarPrimitive from "@virtari-packages/primitives/avatar";
 
 export type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl";
 

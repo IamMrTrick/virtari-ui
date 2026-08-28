@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import * as DialogPrimitive from "@virtari-packages/primitives/dialog";
 import { IconX } from "@virtari-packages/react-icons";
 
 /* ── Shared types ── */

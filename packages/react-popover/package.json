@@ -53,8 +53,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/react-direction": "^1.1.1",
-    "@radix-ui/react-popover": "^1.1.15",
+    "@virtari-packages/primitives": "workspace:*",
     "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {

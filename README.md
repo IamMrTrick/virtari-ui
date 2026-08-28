@@ -18,7 +18,7 @@ Token-driven, accessibility-first, RTL-safe, and shipped as independent packages
 - **Token-first.** Every visual surface reads from CSS custom properties in `@virtari-packages/tokens`. Brand or dark-mode overrides cascade through automatically.
 - **Logical & RTL-safe.** Layouts use `margin-inline` / `padding-block` / `inset-*` and `:dir(rtl)` adjustments, so the same markup flips correctly in Arabic, Hebrew, or Persian.
 - **Composable CSS layers.** Styles sit in the `design-system.components` cascade layer, so consumer apps can always override without `!important`.
-- **Accessible by default.** Built on Radix, React Aria, and strict semantic HTML — focus management, ARIA wiring, and keyboard support are non-optional.
+- **Accessible by default.** Built on `@virtari-packages/primitives` — our own headless behaviour layer — plus React Aria and strict semantic HTML. Focus management, ARIA wiring, and keyboard support are non-optional.
 - **No framework lock-in.** Packages ship ESM + CJS + CSS. Use them in Next.js, Remix, Vite, Astro, or any React host.
 - **Atomic, independent releases.** Each component is its own package — import only what you use. Versioned with [Changesets](https://github.com/changesets/changesets) and published privately to GitHub Packages.
 

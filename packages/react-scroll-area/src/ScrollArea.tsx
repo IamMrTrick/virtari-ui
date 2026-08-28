@@ -10,7 +10,7 @@ import {
   type ReactNode,
   type Ref,
 } from "react";
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
+import * as ScrollAreaPrimitive from "@virtari-packages/primitives/scroll-area";
 import { cn } from "@virtari-packages/utils";
 import { ScrollAreaArrow } from "./ScrollAreaArrow";
 import { useDragScroll } from "./hooks/use-drag-scroll";
@@ -79,7 +79,7 @@ export interface ScrollAreaProps
 }
 
 /**
- * Virtari ScrollArea — customised scrollbars (via @radix-ui/react-scroll-area)
+ * Virtari ScrollArea — customised scrollbars (via @virtari-packages/primitives/scroll-area)
  * plus a set of ergonomic behaviors that cover modern scroll UX patterns:
  *
  *   drag                 click-and-drag-to-scroll (desktop + touch)
@@ -282,7 +282,7 @@ export function ScrollArea({
         {(orientation === "horizontal" || orientation === "both") && (
           <ScrollBar orientation="horizontal" />
         )}
-        <ScrollAreaPrimitive.Corner />
+        <ScrollAreaPrimitive.Corner className="vds-scroll-area-corner" />
       </ScrollAreaPrimitive.Root>
 
       {showArrows && (

@@ -10,7 +10,7 @@ import {
   ComboboxOptions,
   useComboboxContext,
 } from "@virtari-packages/react-select";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
+import * as PopoverPrimitive from "@virtari-packages/primitives/popover";
 import {
   useCallback,
   useId,

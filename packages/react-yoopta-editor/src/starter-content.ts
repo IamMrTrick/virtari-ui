@@ -518,7 +518,7 @@ export const playgroundInitialValue = {
           {
             id: "pg-tab-2-content",
             type: "tabs-item-content",
-            children: [{ text: "Details content — Radix-based active state, design-token styling." }],
+            children: [{ text: "Details content — primitive-driven active state, design-token styling." }],
             props: { referenceId: "pg-tab-2" },
           },
           {

@@ -74,6 +74,18 @@ export function EditorShortcutsPlugin() {
               event.preventDefault();
               applyBlockType(editor, "h3");
               return true;
+            case "4":
+              event.preventDefault();
+              applyBlockType(editor, "h4");
+              return true;
+            case "5":
+              event.preventDefault();
+              applyBlockType(editor, "h5");
+              return true;
+            case "6":
+              event.preventDefault();
+              applyBlockType(editor, "h6");
+              return true;
             case "c":
               if (!features.codeBlocks) return false;
               event.preventDefault();

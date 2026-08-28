@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
+import * as AlertDialogPrimitive from "@virtari-packages/primitives/alert-dialog";
 
 /* ─────────────────────────────────────────────────────────────
  * AlertDialog is a thin variant of Dialog. It renders with the
