@@ -120,7 +120,7 @@ t(\"sidebar.noMatches\", { query })
 
 - CSS at-rules: `@layer`, `@import`, `@property`, `@custom-media`, `@keyframes`.
 - CSS functions/features: `color-mix()`, `:has()`, `OKLCH`, `Container Queries`, `Logical Properties` (keep English \u2014 canonical).
-- Package names: `@virtari-packages/core`, `@radix-ui/*`.
+- Package names: `@virtari-packages/core`, `@virtari-packages/primitives/*`.
 - Component / prop names: `<Button variant=\"outline\">`, `aria-label`, `data-state`.
 - File paths and CLI commands.
 - Token names like `--vds-color-text`.

@@ -6,7 +6,7 @@ import {
   useContext,
   type ReactNode,
 } from "react";
-import { Slot, Slottable } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@virtari-packages/primitives/slot";
 import { ButtonGroupContext } from "./context";
 
 /** Intent palette — orthogonal to variant. Picks the hue family. */

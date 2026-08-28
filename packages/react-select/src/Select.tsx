@@ -1,11 +1,11 @@
 import { cn, useDirection } from "@virtari-packages/utils";
 import type { ComponentRef, MouseEvent, ReactNode, Ref } from "react";
-import * as SelectPrimitive from "@radix-ui/react-select";
-import { DirectionProvider } from "@radix-ui/react-direction";
+import * as SelectPrimitive from "@virtari-packages/primitives/select";
+import { DirectionProvider } from "@virtari-packages/primitives/direction";
 import { IconCheck, IconChevronDown, IconLoader2, IconX } from "@virtari-packages/react-icons";
 
 /* ── Root ──
- * Auto-threads the active text direction so Radix's keyboard navigation,
+ * Auto-threads the active text direction so the select primitive's keyboard navigation,
  * type-ahead, and listbox popover placement flip under RTL. DirectionProvider
  * is the designated channel; Root doesn't accept `dir` directly. Explicit
  * `dir` still wins. */

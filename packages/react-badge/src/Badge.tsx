@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { Ref, ReactNode, MouseEvent } from "react";
-import { Slot, Slottable } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@virtari-packages/primitives/slot";
 
 /** Intent palette — orthogonal to variant. */
 export type BadgeColor =

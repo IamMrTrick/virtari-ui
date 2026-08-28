@@ -16,7 +16,7 @@ import type {
   ReactNode,
   RefObject,
 } from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@virtari-packages/primitives/slot";
 import {
   useDropzone,
   type DropzoneOptions,

@@ -1,10 +1,10 @@
 import { cn, useDirection } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { DirectionProvider } from "@radix-ui/react-direction";
+import * as DropdownMenuPrimitive from "@virtari-packages/primitives/dropdown-menu";
+import { DirectionProvider } from "@virtari-packages/primitives/direction";
 
 /* ── Root ──
- * Auto-threads the active text direction into Radix so submenu placement,
+ * Auto-threads the active text direction into the menu primitive so submenu placement,
  * focus traversal, and arrow-key navigation flip under RTL. Consumers can
  * still override by passing `dir`. */
 export interface DropdownMenuProps

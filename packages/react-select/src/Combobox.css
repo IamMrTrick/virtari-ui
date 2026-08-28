@@ -183,7 +183,6 @@
 
   /* ── Content (popover) ── */
   .vds-combobox-content {
-    --vds-popover-trigger-width: var(--radix-popover-trigger-width);
     z-index: var(--combobox-content-z-index);
     min-inline-size: var(--combobox-content-min-inline-size);
     /* Match trigger width when wider */

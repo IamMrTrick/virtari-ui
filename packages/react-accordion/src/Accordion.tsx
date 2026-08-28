@@ -7,7 +7,7 @@ import {
   type ReactNode,
   type Ref,
 } from "react";
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import * as AccordionPrimitive from "@virtari-packages/primitives/accordion";
 import {
   IconChevronDown,
   IconPlus,

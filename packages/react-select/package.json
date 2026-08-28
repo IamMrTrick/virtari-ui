@@ -68,10 +68,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/react-direction": "^1.1.1",
-    "@radix-ui/react-popover": "^1.1.15",
-    "@radix-ui/react-select": "^2.2.6",
     "@tanstack/react-virtual": "^3.10.0",
+    "@virtari-packages/primitives": "workspace:*",
     "@virtari-packages/react-chip": "workspace:*",
     "@virtari-packages/react-fieldset": "workspace:*",
     "@virtari-packages/react-icons": "workspace:*",

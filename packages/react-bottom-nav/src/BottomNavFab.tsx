@@ -1,5 +1,5 @@
 import { cn } from "@virtari-packages/utils";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@virtari-packages/primitives/slot";
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 
 export type BottomNavFabColor = "primary" | "accent" | "success";
@@ -12,7 +12,7 @@ export interface BottomNavFabProps
   label?: string;
   /** Color intent. Default `"primary"`. */
   color?: BottomNavFabColor;
-  /** Render as child element (polymorphic via Radix Slot). */
+  /** Render as child element (polymorphic via Slot). */
   asChild?: boolean;
 }
 

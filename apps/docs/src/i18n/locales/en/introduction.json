@@ -1,7 +1,7 @@
 {
   "whatIs": {
     "title": "What is Virtari DS?",
-    "body": "Virtari Design System is a package-based component library built on <1>React</1>, <2>Radix UI</2>, and <3>pure vanilla CSS</3> using 2026 standards. Every component is its own publishable npm package under the <4>@virtari</4> scope."
+    "body": "Virtari Design System is a package-based component library built on <1>React</1>, <2>our own headless primitives</2>, and <3>pure vanilla CSS</3> using 2026 standards. Every component is its own publishable npm package under the <4>@virtari</4> scope."
   },
   "cssFeatures": {
     "title": "CSS Features"

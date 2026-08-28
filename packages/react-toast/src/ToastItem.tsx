@@ -10,7 +10,7 @@ import {
   type MouseEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import * as ToastPrimitive from "@radix-ui/react-toast";
+import * as ToastPrimitive from "@virtari-packages/primitives/toast";
 import { cn } from "@virtari-packages/utils";
 import { CloseIcon, TOAST_ICON_MAP } from "./icons";
 import { toastStore } from "./store";

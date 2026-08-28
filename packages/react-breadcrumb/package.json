@@ -54,7 +54,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/react-slot": "^1.2.4",
+    "@virtari-packages/primitives": "workspace:*",
     "@virtari-packages/react-dropdown-menu": "workspace:*",
     "@virtari-packages/react-icons": "workspace:*",
     "@virtari-packages/utils": "workspace:*"

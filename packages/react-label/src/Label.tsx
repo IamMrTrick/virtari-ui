@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as LabelPrimitive from "@radix-ui/react-label";
+import * as LabelPrimitive from "@virtari-packages/primitives/label";
 
 /* ── Label ── */
 export interface LabelProps

@@ -101,7 +101,7 @@ function MyForm() {
 
 - `<FormItem>` generates a stable base id and provides `FormItemContext`.
 - `<FormLabel>` reads the base id and sets `htmlFor`; adds `data-error` when the field is invalid.
-- `<FormControl>` is a Radix Slot that injects `id`, `aria-describedby`, and `aria-invalid` onto whatever child it wraps — works with `<Input>`, `<Select>`, `<Checkbox>`, `<DatePicker>`, and any custom control.
+- `<FormControl>` is a `Slot` that injects `id`, `aria-describedby`, and `aria-invalid` onto whatever child it wraps — works with `<Input>`, `<Select>`, `<Checkbox>`, `<DatePicker>`, and any custom control.
 - `<FormDescription>` renders helper text and is always linked via `aria-describedby`.
 - `<FormMessage>` renders the validation error (if any). Both description and message are exposed to assistive tech.
 

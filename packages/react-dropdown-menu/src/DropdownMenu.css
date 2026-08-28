@@ -22,7 +22,7 @@
       animation: vds-slide-in-from-bottom var(--vds-duration-fast) var(--vds-ease-out);
     }
 
-    /* Logical side animations — Radix flips `data-side` under dir="rtl", and
+    /* Logical side animations — the menu primitive flips `data-side` under dir="rtl", and
        the logical keyframes flip their motion axis, so both combine to a
        correctly mirrored slide in Persian/Arabic. */
     &[data-side="left"] {

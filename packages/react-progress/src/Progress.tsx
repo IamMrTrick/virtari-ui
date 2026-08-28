@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { CSSProperties, ComponentRef, Ref } from "react";
-import * as ProgressPrimitive from "@radix-ui/react-progress";
+import * as ProgressPrimitive from "@virtari-packages/primitives/progress";
 
 export type ProgressColor =
   | "primary"

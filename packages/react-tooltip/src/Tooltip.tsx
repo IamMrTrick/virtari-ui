@@ -1,7 +1,7 @@
 import { cn, useDirection } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { DirectionProvider } from "@radix-ui/react-direction";
+import * as TooltipPrimitive from "@virtari-packages/primitives/tooltip";
+import { DirectionProvider } from "@virtari-packages/primitives/direction";
 
 export type TooltipSize = "sm" | "md" | "lg";
 export type TooltipVariant =
@@ -30,7 +30,7 @@ export function TooltipProvider({
   ...props
 }: TooltipProviderProps) {
   /* Auto-thread the active text direction so per-instance `side` resolution
-     flips under RTL. DirectionProvider is Radix's designated channel and
+     flips under RTL. DirectionProvider is the primitives' designated channel and
      the Tooltip.Provider itself doesn't accept `dir`. Consumers can still
      override with an explicit `dir`. */
   const autoDir = useDirection();

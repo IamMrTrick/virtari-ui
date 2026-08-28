@@ -12,7 +12,7 @@ import {
   useRef,
   useState,
 } from "react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import * as DialogPrimitive from "@virtari-packages/primitives/dialog";
 import { cn } from "@virtari-packages/utils";
 import { DrawerProvider, useDrawerContext } from "./DrawerContext";
 import { useDrawerDrag } from "./useDrawerDrag";

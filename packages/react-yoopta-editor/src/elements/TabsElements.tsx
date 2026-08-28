@@ -8,7 +8,7 @@ import type { PluginElementRenderProps } from "@yoopta/editor";
  *       tabs-item-heading (each, element.id = activeTabId target)
  *     tabs-item-content (each panel, props.referenceId = matching heading.id)
  *
- * Mapped onto Virtari Tabs (Radix-based). Active state lives in Radix —
+ * Mapped onto Virtari Tabs. Active state lives in the tabs primitive —
  * the Slate `activeTabId` is used only as `defaultValue`.
  */
 

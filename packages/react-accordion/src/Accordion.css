@@ -128,7 +128,6 @@
 
   /* ── Content ── */
   .vds-accordion-content {
-    --vds-accordion-content-height: var(--radix-accordion-content-height);
     overflow: hidden;
     font-size:   var(--accordion-content-font-size);
     line-height: var(--accordion-content-line-height);

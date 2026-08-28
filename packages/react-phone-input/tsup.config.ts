@@ -10,7 +10,7 @@ export default defineConfig({
     "react",
     "react-dom",
     "react/jsx-runtime",
-    "@radix-ui/react-popover",
+    "@virtari-packages/primitives/popover",
     "@virtari-packages/utils",
     "@virtari-packages/react-flag",
     "@virtari-packages/react-input",

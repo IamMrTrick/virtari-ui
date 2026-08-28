@@ -1,5 +1,5 @@
 import { cn } from "@virtari-packages/utils";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
+import * as PopoverPrimitive from "@virtari-packages/primitives/popover";
 import {
   Chip,
   ChipLabel,

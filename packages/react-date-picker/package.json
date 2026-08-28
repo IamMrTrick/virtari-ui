@@ -100,7 +100,7 @@
     "@react-aria/i18n": "^3.12.3",
     "@react-stately/calendar": "^3.5.5",
     "@react-stately/datepicker": "^3.10.3",
-    "@radix-ui/react-popover": "^1.1.15",
+    "@virtari-packages/primitives": "workspace:*",
     "@virtari-packages/react-button": "workspace:*",
     "@virtari-packages/react-dialog": "workspace:*",
     "@virtari-packages/react-drawer": "workspace:*",

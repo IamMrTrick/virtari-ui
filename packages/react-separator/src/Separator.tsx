@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as SeparatorPrimitive from "@radix-ui/react-separator";
+import * as SeparatorPrimitive from "@virtari-packages/primitives/separator";
 
 /* ── Separator ── */
 export interface SeparatorProps

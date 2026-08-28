@@ -1,6 +1,5 @@
 @layer components {
   .vds-collapsible-content {
-    --vds-collapsible-content-height: var(--radix-collapsible-content-height);
     overflow: hidden;
 
     &[data-state="open"] {

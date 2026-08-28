@@ -5,7 +5,7 @@ import {
   type Ref,
   type RefObject,
 } from "react";
-import * as TabsPrimitive from "@radix-ui/react-tabs";
+import * as TabsPrimitive from "@virtari-packages/primitives/tabs";
 import { useTabsIndicator } from "./use-tabs-indicator";
 import { useTabsSwipe } from "./use-tabs-swipe";
 import { useTabsAutoScroll } from "./use-tabs-auto-scroll";

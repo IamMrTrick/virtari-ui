@@ -25,5 +25,27 @@
     "postcss-nesting": "^14.0.0",
     "tsup": "^8.0.0",
     "typescript": "^5.5.0"
-  }
+  },
+  "version": "1.0.0",
+  "description": "<div align=\"center\">",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "cmdk": "^1.1.1",
+    "libphonenumber-js": "^1.12.41",
+    "react-dropzone": "^14.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
+  },
+  "homepage": "https://github.com/Virtari-Packages/virtari-design-system#readme"
 }

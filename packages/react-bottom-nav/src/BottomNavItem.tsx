@@ -1,5 +1,5 @@
 import { cn } from "@virtari-packages/utils";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@virtari-packages/primitives/slot";
 import {
   forwardRef,
   type HTMLAttributes,
@@ -12,7 +12,7 @@ export interface BottomNavItemProps
   extends Omit<HTMLAttributes<HTMLElement>, "children"> {
   /** Renders the item as an <a> when set; otherwise a <button>. */
   href?: string;
-  /** Render as child element (polymorphic via Radix Slot). */
+  /** Render as child element (polymorphic via Slot). */
   asChild?: boolean;
   /** The tab's glyph — required. */
   icon: ReactNode;

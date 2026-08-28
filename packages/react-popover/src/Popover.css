@@ -22,7 +22,7 @@
       animation: vds-slide-in-from-bottom var(--vds-duration-fast) var(--vds-ease-out);
     }
 
-    /* `data-side` is the resolved physical side from Radix (which flips
+    /* `data-side` is the resolved physical side from the popper primitive (which flips
        automatically when `dir="rtl"` is threaded into the Root). The popover
        slides from the trigger's direction toward its resting position, so
        side="left" slides from inline-end and side="right" from inline-start.

@@ -1,6 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import * as CheckboxPrimitive from "@virtari-packages/primitives/checkbox";
 import { IconCheck, IconMinus } from "@virtari-packages/react-icons";
 import { useCheckboxGroupContext } from "./context";
 

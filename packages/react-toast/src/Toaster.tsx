@@ -6,7 +6,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import * as ToastPrimitive from "@radix-ui/react-toast";
+import * as ToastPrimitive from "@virtari-packages/primitives/toast";
 import { cn } from "@virtari-packages/utils";
 import { toastStore } from "./store";
 import { ToastItem } from "./ToastItem";

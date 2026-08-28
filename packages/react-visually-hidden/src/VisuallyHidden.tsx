@@ -1,5 +1,5 @@
 import { cn } from "@virtari-packages/utils";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot } from "@virtari-packages/primitives/slot";
 import type { Ref } from "react";
 
 export interface VisuallyHiddenProps extends React.HTMLAttributes<HTMLSpanElement> {

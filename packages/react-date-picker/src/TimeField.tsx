@@ -18,7 +18,7 @@ import {
 } from "@react-stately/datepicker";
 import { useLocale } from "@react-aria/i18n";
 import { Time } from "@internationalized/date";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
+import * as PopoverPrimitive from "@virtari-packages/primitives/popover";
 import type { DatePickerAppearance, DatePickerSize } from "./context";
 import { StaticFieldSegments, padTimeSegmentText } from "./DateField";
 import {

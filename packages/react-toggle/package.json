@@ -53,7 +53,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/react-toggle": "^1.1.10",
+    "@virtari-packages/primitives": "workspace:*",
     "@virtari-packages/utils": "workspace:*"
   },
   "peerDependencies": {

@@ -14,7 +14,7 @@ import type { PluginElementRenderProps } from "@yoopta/editor";
  *       accordion-list-item-content (content)
  *
  * We map each level to the matching Virtari Accordion compound part.
- * Expansion state lives in Radix (uncontrolled multi-mode); the Slate
+ * Expansion state lives in the accordion primitive (uncontrolled multi-mode); the Slate
  * `isExpanded` flag is left untouched so saving + reload still preserves
  * the same default open items via `defaultValue`.
  */

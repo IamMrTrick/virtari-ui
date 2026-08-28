@@ -2,7 +2,7 @@
   /* Picker root — per-instance size tokens are injected via inline style
    * (see `internals.ts`). These defaults cover the `md` ramp and are
    * re-declared on .vds-combobox-content / .vds-drawer-content below so
-   * they're reachable inside portals (Radix renders popovers detached). */
+   * they're reachable inside portals (popovers render detached). */
   .vds-language-picker {
     --language-picker-trigger-flag-size: 1.375rem;
     --language-picker-option-flag-size: 1.4375rem;
