@@ -79,7 +79,19 @@
     --vds-color-warning-bg-active:    var(--vds-color-warning-5);
     --vds-color-warning-solid:        var(--vds-color-warning-9);
     --vds-color-warning-solid-hover:  var(--vds-color-warning-10);
-    --vds-color-warning-solid-active: var(--vds-color-warning-11);
+    /* The only intent whose solid-active cannot reuse step 11.
+     * Step 11 serves two roles: --{intent}-solid-active (a BACKGROUND, under
+     * on-{intent} ink) and --{intent}-text (a FOREGROUND on the page canvas).
+     * For the five white-ink intents that is harmless — in light mode the
+     * ladder darkens toward 11, which improves white contrast and page-text
+     * contrast together. warning carries BLACK ink, so the two roles pull in
+     * opposite directions: light warning-11 (L 0.500) is 3.47:1 under black
+     * as a solid, while lightening it to fix that would push warning TEXT
+     * toward the canvas. The luminance window satisfying both is 0.005 wide —
+     * real, but it would not survive a brand retune. So solid-active gets its
+     * own value: darker than solid-hover (L 0.650) so a press still reads as
+     * a press, and 5.27:1 under black ink. */
+    --vds-color-warning-solid-active: var(--vds-color-warning-solid-active-tone);
     --vds-color-warning-text:         var(--vds-color-warning-11);
     --vds-color-warning-text-muted:   var(--vds-color-warning-10);
 
@@ -115,6 +127,26 @@
     --vds-color-accent-solid-active: var(--vds-color-accent-11);
     --vds-color-accent-text:         var(--vds-color-accent-11);
     --vds-color-accent-text-muted:   var(--vds-color-accent-10);
+  }
+
+  /* warning solid-active, per mode.
+   * This is the one intent whose solid-active cannot ride step 11, because
+   * warning carries BLACK ink and step 11 is also --warning-text. In LIGHT
+   * mode the ladder darkens toward 11, so warning-11 (L 0.500) is only
+   * 3.47:1 under black as a solid — while lightening it to fix that would
+   * push warning TEXT toward the canvas. The luminance window satisfying
+   * both roles is 0.005 wide: real, but it would not survive a brand retune.
+   * In DARK mode the ladder lightens toward 11, so both roles agree and
+   * warning-11 is 11.73:1 under black — no exception needed there. */
+  :root {
+    /* darker than solid-hover (L 0.650) so a press still reads as a press;
+     * 5.27:1 under black ink. */
+    --vds-color-warning-solid-active-tone: oklch(0.600 0.145 85);
+  }
+
+  [data-theme="dark"],
+  [data-theme="dark-oled"] {
+    --vds-color-warning-solid-active-tone: var(--vds-color-warning-11);
   }
 
 }
