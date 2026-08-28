@@ -254,6 +254,10 @@
      * collapse to zero and the tail end of the list becomes unreachable. */
     --time-picker-wheel-height: 11rem;
     --time-picker-wheel-item-height: 2.5rem;
+    /* Hoisted for the same reason as the rest of this block: the selection
+       band below reads it, and a standalone <Calendar> is outside the
+       DateField token scope that normally declares it. */
+    --time-picker-surface-inner-radius: var(--vds-radius-time-picker-inner, 0.5rem);
     --time-picker-wheel-font-size: var(--vds-text-lg, 1.125rem);
     --time-picker-wheel-muted-text: var(--vds-color-text-muted, #6b7280);
     --time-picker-wheel-hover-text: color-mix(
@@ -286,7 +290,9 @@
     inset-inline: var(--vds-space-1, 0.25rem);
     inset-block-start: calc(50% - (var(--time-picker-wheel-item-height) / 2));
     block-size: var(--time-picker-wheel-item-height);
-    border-radius: var(--vds-radius-4, 0.375rem);
+    /* Same band as .vds-time-picker-wheels::before in DateField.css — see the
+       note there. Uses the purpose-built token instead of a raw primitive. */
+    border-radius: var(--time-picker-surface-inner-radius);
     background: var(--time-picker-wheel-selection-bg);
     pointer-events: none;
   }

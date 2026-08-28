@@ -30,10 +30,9 @@
     --vds-pagination-font-size: var(--vds-text-xs, 0.75rem);
   }
 
-  .vds-pagination[data-size="md"] {
-    --vds-pagination-button-size: var(--vds-size-md, 2.25rem);
-    --vds-pagination-font-size: var(--vds-text-sm, 0.875rem);
-  }
+  /* md — default. The base .vds-pagination block already *is* the md step;
+     restating it here only added a higher-specificity copy for consumer
+     overrides to fight. */
 
   .vds-pagination[data-size="lg"] {
     --vds-pagination-button-size: var(--vds-size-lg, 2.5rem);

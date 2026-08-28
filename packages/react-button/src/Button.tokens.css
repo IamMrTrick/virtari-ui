@@ -29,7 +29,7 @@
     --button-letter-spacing: var(--vds-tracking-normal, 0);
 
     /* ── Motion ── */
-    --button-transition-duration: var(--vds-duration-fast, 120ms);
+    --button-transition-duration: var(--vds-duration-fast, 100ms);
     --button-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
     --button-press-scale: 0.98;
 
@@ -285,7 +285,6 @@
     --button-font-size:      var(--vds-text-xs, 0.75rem);
     --button-gap:            var(--vds-space-1, 0.25rem);
     --button-icon-size:      0.875rem;
-    --button-radius:         var(--vds-radius-button, var(--vds-radius-element, 0.25rem));
   }
 
   .vds-button[data-size="xs"] {
@@ -294,7 +293,6 @@
     --button-font-size:      var(--vds-text-xs, 0.75rem);
     --button-gap:            var(--vds-space-1, 0.25rem);
     --button-icon-size:      0.875rem;
-    --button-radius:         var(--vds-radius-button, var(--vds-radius-element, 0.25rem));
   }
 
   .vds-button[data-size="sm"] {

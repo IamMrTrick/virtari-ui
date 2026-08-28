@@ -50,6 +50,17 @@
     padding: var(--vds-space-1, 0.25rem);
     border-radius: var(--color-picker-panel-radius);
     background: var(--color-picker-sunken-bg);
+
+    /* ── Radius nesting host ──
+       A sunken segmented track: the mode buttons fill it and their corners have
+       to follow its own. Publishes radius / border / padding — all three,
+       zeroes included, so the strip cannot inherit the picker shell's border
+       and padding and subtract the wrong distance. The buttons were pinned to
+       --color-picker-field-radius, which happens to equal the concentric answer
+       in round and pill mode and is 2px too round in soft and sharp. */
+    --vds-radius-host-r: var(--color-picker-panel-radius);
+    --vds-radius-host-b: 0px;
+    --vds-radius-host-p: var(--vds-space-1, 0.25rem);
   }
 
   .vds-color-picker-header-actions {
@@ -93,6 +104,15 @@
     --button-bg-soft: var(--color-picker-row-bg);
     --button-color-soft: var(--color-picker-text);
     --button-bg-soft-hover: var(--color-picker-row-bg-hover);
+  }
+
+  /* Concentric with the mode strip — see the host block above. Must come after
+     the --button-radius declaration in .vds-color-picker-button.vds-button:
+     both selectors are (0,2,0), so source order decides. Matched on
+     `> .vds-button` rather than a modifier class because PickerButton emits
+     .vds-color-picker-button, not a strip-specific one. */
+  .vds-color-picker-mode-strip > .vds-button {
+    --button-radius: var(--vds-radius-inset);
   }
 
   /* ── Solid editor ──────────────────────────────────────── */
@@ -287,7 +307,8 @@
     inset-block-start: 0;
     inline-size: var(--color-picker-stop-size);
     block-size: var(--color-picker-stop-size);
-    border-radius: 0.25rem;
+    /* Chip family — see .vds-color-picker-swatch. */
+    border-radius: var(--vds-radius-xs, 0.25rem);
     border: 2px solid #fff;
     background: var(--color-picker-stop-color);
     box-shadow:
@@ -639,7 +660,11 @@
     aspect-ratio: 1;
     min-block-size: var(--color-picker-swatch-size);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 0.25rem;
+    /* Same chip family as .vds-color-picker-stop-color-chip, which already
+       reads this token. The literal 0.25rem here was mode-invariant, so the
+       swatch grid stayed at 4px while every other corner in the picker moved
+       with `data-radius`. */
+    border-radius: var(--vds-radius-xs, 0.25rem);
     background-color: transparent;
     cursor: pointer;
     transition:

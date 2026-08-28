@@ -52,9 +52,22 @@ export function SegmentedControl({
       className={cn("vds-segmented-control", className)}
       {...props}
     >
+      {/*
+        This is a hand-rolled copy of Tabs' <TabsList>, because the items are
+        radios rather than tabs. It has to carry the same `data-radius-host`
+        the real TabsList does: the segmented trigger's radius is
+        `var(--vds-radius-inset)`, and that custom property is registered
+        `inherits: false`, so it is only ever given a value by the
+        `[data-radius-host] > *` rule. Without the attribute every segment fell
+        back to the registered initial 0px and rendered square inside the
+        rounded track — while the sliding indicator, which re-derives the same
+        subtraction from the inheriting --vds-radius-host-* inputs, stayed
+        correctly rounded.
+      */}
       <div
         ref={listRef}
         className="vds-tabs-list"
+        data-radius-host=""
         data-variant="segmented"
         data-animated="true"
         data-size={size}

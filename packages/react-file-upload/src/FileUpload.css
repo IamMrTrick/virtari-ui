@@ -123,10 +123,21 @@
     border: var(--vds-file-upload-input-border);
     border-radius: var(--vds-file-upload-input-radius);
     background-color: var(--vds-file-upload-input-bg);
-    overflow: hidden;
     cursor: pointer;
     transition: border-color var(--vds-file-upload-transition-duration)
       var(--vds-file-upload-transition-easing);
+
+    /* ── Radius nesting host ──
+       The "Browse" chip is welded to this control's inner edge, so it has to
+       carry the control's corner minus the 1px border. That used to be done by
+       `overflow: hidden`, which works but clips anything a consumer puts
+       inside, focus rings included; there is no scrollport here, so real
+       corner inheritance is the better tool. All three are declared, zeroes
+       included, so a file input dropped inside another host cannot inherit
+       that host's border/padding and subtract the wrong distance. */
+    --vds-radius-host-r: var(--vds-file-upload-input-radius);
+    --vds-radius-host-b: 1px;
+    --vds-radius-host-p: 0px;
   }
   .vds-file-upload-input[data-disabled] {
     opacity: var(--vds-opacity-disabled, 0.5);
@@ -159,6 +170,9 @@
     color: var(--vds-file-upload-input-btn-color);
     font-size: var(--vds-file-upload-input-font-size);
     border-inline-end: var(--vds-file-upload-input-border);
+    /* Flush with the control's inner edge — see the host block above. */
+    border-start-start-radius: var(--vds-radius-flush);
+    border-end-start-radius: var(--vds-radius-flush);
     white-space: nowrap;
     transition: background-color var(--vds-file-upload-transition-duration)
       var(--vds-file-upload-transition-easing);

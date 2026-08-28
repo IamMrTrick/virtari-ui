@@ -328,7 +328,7 @@
    * ──────────────────────────────── */
   .vds-nav[data-variant="tab"] .vds-nav__item {
     --item-tab-size: 0.25rem; /* 4px thickness */
-    --item-tab-radius: var(--vds-radius-nav-item, 0.25rem);
+    --item-tab-radius: var(--vds-radius-nav-item, 0.375rem);
   }
   .vds-nav[data-variant="tab"] .vds-nav__link,
   .vds-nav[data-variant="tab"] .vds-nav__trigger {
@@ -527,7 +527,24 @@
   .vds-nav__submenu[data-mode="inline"] > .vds-nav__list {
     overflow: hidden;
     min-block-size: 0;
+
+    /* The clip that makes the 0fr→1fr height animation possible would also
+     * trim the focus ring off every item in here — items are full-bleed, so
+     * a ring drawn at `outline-offset` lands entirely outside the clip box
+     * and disappears on the inline axis. `overflow` clips at the *padding*
+     * box, so growing the padding by exactly the ring's reach and pulling the
+     * same amount back with a negative margin buys the ring room without
+     * moving anything. The block-start edge already had that much room from
+     * the existing gap to the parent trigger. */
+    --nav-ring-reach: calc(
+      var(--item-focus-ring-offset, 2px) + var(--item-focus-ring-width, 2px)
+    );
     padding-block-start: var(--vds-space-1, 0.25rem);
+    padding-block-end: var(--nav-ring-reach);
+    margin-block-end: calc(-1 * var(--nav-ring-reach));
+    padding-inline: var(--nav-ring-reach);
+    margin-inline: calc(-1 * var(--nav-ring-reach));
+    inline-size: calc(100% + 2 * var(--nav-ring-reach));
   }
 
   /* ────────────────────────────────

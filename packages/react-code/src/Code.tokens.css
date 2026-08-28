@@ -112,18 +112,21 @@
    *    "card" is baked into the base above (border + bg + radius).
    * ========================================================================= */
 
+  /* `0px`, not `0`: --vds-code-border-width and --vds-code-radius feed the
+   * <length>-typed nesting channel (--vds-radius-host-b / -r), and a unitless
+   * zero is a <number> there — invalid at computed-value time. */
   .vds-code[data-variant="minimal"] {
     --vds-code-bg: transparent;
-    --vds-code-border-width: 0;
-    --vds-code-padding-block: 0;
-    --vds-code-padding-inline: 0;
+    --vds-code-border-width: 0px;
+    --vds-code-padding-block: 0px;
+    --vds-code-padding-inline: 0px;
     --vds-code-header-bg: transparent;
     --vds-code-header-border: transparent;
   }
 
   .vds-code[data-variant="embedded"] {
-    --vds-code-radius: 0;
-    --vds-code-border-width: 0;
+    --vds-code-radius: 0px;
+    --vds-code-border-width: 0px;
   }
 
   /* =========================================================================

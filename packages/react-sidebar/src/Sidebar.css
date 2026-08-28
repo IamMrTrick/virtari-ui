@@ -4,7 +4,7 @@
   /* ── Root <aside> ── */
   .vds-sidebar {
     position: sticky;
-    top: var(--sidebar-sticky-offset);
+    inset-block-start: var(--sidebar-sticky-offset);
     z-index: var(--sidebar-z);
 
     flex: none;

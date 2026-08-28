@@ -8,24 +8,38 @@
 
   /* ── List ── */
   .vds-tabs-list {
-    /* Layout */
+    /* Layout — lengths carry units even at zero because they feed the
+       registered `--vds-radius-host-*` properties below, whose `<length>`
+       syntax must parse for the concentricity subtraction to stay valid. */
     --tabs-list-gap: var(--vds-space-1, 0.25rem);
-    --tabs-list-padding-inline: 0;
-    --tabs-list-padding-block: 0;
-    --tabs-list-radius: 0;
+    --tabs-list-padding-inline: 0px;
+    --tabs-list-padding-block: 0px;
+    --tabs-list-radius: 0px;
 
     /* Surface */
     --tabs-list-bg: transparent;
     --tabs-list-border-color: var(--vds-color-border, #d1d5db);
-    --tabs-list-border-width: 0;
+    --tabs-list-border-width: 0px;
+
+    /* ── Radius nesting host ──
+       The list is the element that draws the track corner, so it publishes
+       its radius / border / padding for its direct children (the triggers)
+       to subtract from. All three are declared — including the zeroes — so a
+       list dropped inside another host (a Card, a Dialog) cannot inherit the
+       outer host's border/padding and subtract the wrong distance.
+       `-p` uses the block padding; the segmented track is the only variant
+       with padding and it is symmetric, so either axis gives the same answer. */
+    --vds-radius-host-r: var(--tabs-list-radius);
+    --vds-radius-host-b: var(--tabs-list-border-width);
+    --vds-radius-host-p: var(--tabs-list-padding-block);
 
     /* Sliding indicator */
     --tabs-indicator-color: var(--vds-color-primary-solid, #6366f1);
     --tabs-indicator-thickness: 2px;
-    --tabs-indicator-radius: 0;
-    --tabs-indicator-inset: 0;
+    --tabs-indicator-radius: 0px;
+    --tabs-indicator-inset: 0px;
     --tabs-indicator-display: none;
-    --tabs-indicator-transition-duration: var(--vds-duration-fast, 150ms);
+    --tabs-indicator-transition-duration: var(--vds-duration-fast, 100ms);
     --tabs-indicator-transition-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
   }
 
@@ -68,7 +82,7 @@
     --tabs-trigger-focus-ring-offset: 2px;
 
     /* Motion */
-    --tabs-trigger-transition-duration: var(--vds-duration-fast, 150ms);
+    --tabs-trigger-transition-duration: var(--vds-duration-fast, 100ms);
     --tabs-trigger-transition-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
   }
 
@@ -78,10 +92,10 @@
     --tabs-content-focus-ring-color: var(--vds-color-ring, #6366f1);
     --tabs-content-focus-ring-width: 2px;
     --tabs-content-focus-ring-offset: 2px;
-    --tabs-content-focus-ring-radius: var(--vds-radius-control, var(--vds-radius-element, 0.5rem));
+    --tabs-content-focus-ring-radius: var(--vds-radius-control, var(--vds-radius-element, 0.375rem));
 
     /* Enter animation when a panel becomes active */
-    --tabs-content-enter-duration: var(--vds-duration-fast, 180ms);
+    --tabs-content-enter-duration: var(--vds-duration-fast, 100ms);
     --tabs-content-enter-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
     --tabs-content-enter-translate: 0.5rem;
   }
@@ -150,27 +164,48 @@
   .vds-tabs-list[data-variant="segmented"] {
     --tabs-list-gap: 0;
     --tabs-list-bg: var(--vds-color-bg-muted, #f3f4f6);
-    --tabs-list-radius: var(--vds-radius-segmented, var(--vds-radius-element, 0.5rem));
+    --tabs-list-radius: var(--vds-radius-segmented, var(--vds-radius-element, 0.375rem));
     --tabs-list-padding-inline: var(--vds-space-1, 0.25rem);
     --tabs-list-padding-block: var(--vds-space-1, 0.25rem);
     --tabs-indicator-display: block;
     --tabs-indicator-color: var(--vds-color-surface, #ffffff);
-    /* Concentric inner radius: outer radius minus the track padding that sits
-     * between the list edge and the tile. Derived from the list's own resolved
-     * radius (not the global token) so a --tabs-list-radius override on the
-     * element propagates to the tile and indicator. */
+    /* The indicator is an ::after on the list, and a pseudo-element is not a
+     * child — the nesting channel's `--vds-radius-inset` is registered
+     * `inherits: false`, so it never reaches it. It re-runs the subtraction
+     * over the same three --tabs-list-* tokens the host block publishes as
+     * r / b / p, which keeps one source of truth and keeps working when the
+     * package is used without @virtari-packages/tokens. */
     --tabs-indicator-radius: max(
       0px,
-      calc(var(--tabs-list-radius) - var(--tabs-list-padding-block))
+      calc(
+        var(--tabs-list-radius) - var(--tabs-list-border-width) -
+          var(--tabs-list-padding-block)
+      )
     );
   }
   .vds-tabs-list[data-variant="segmented"] .vds-tabs-trigger {
     --tabs-trigger-optical-offset: calc(
       var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem
     );
-    --tabs-trigger-radius: max(
-      0px,
-      calc(var(--tabs-list-radius) - var(--tabs-list-padding-block))
+    /* Concentric with the track. The list carries `data-radius-host`, so a
+     * trigger — a direct child — simply reads the channel's answer:
+     * track radius − track border − track padding.
+     *
+     * The var() fallback is the standalone path, not a default. With the
+     * tokens package loaded `--vds-radius-inset` is a *registered* property,
+     * so it always has a value and the fallback can never fire (a trigger
+     * that is not a direct child gets the registered `0px` initial — the
+     * channel's deliberate fail-flat). Without the package the property does
+     * not exist at all, and this keeps the tile concentric anyway. */
+    --tabs-trigger-radius: var(
+      --vds-radius-inset,
+      max(
+        0px,
+        calc(
+          var(--tabs-list-radius) - var(--tabs-list-border-width) -
+            var(--tabs-list-padding-block)
+        )
+      )
     );
     --tabs-trigger-bg-active: var(--vds-color-surface, #ffffff);
     --tabs-trigger-color-active: var(--vds-color-text, #111827);
@@ -199,7 +234,7 @@
   }
   .vds-tabs-list[data-variant="bordered"] .vds-tabs-trigger {
     --tabs-trigger-border-width: 1px;
-    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.5rem));
+    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.375rem));
     --tabs-trigger-border-color: var(--vds-color-border, #d1d5db);
     --tabs-trigger-border-color-hover: var(--vds-color-border, #d1d5db);
     --tabs-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
@@ -213,7 +248,7 @@
     --tabs-list-gap: var(--vds-space-1, 0.25rem);
   }
   .vds-tabs-list[data-variant="solid"] .vds-tabs-trigger {
-    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.5rem));
+    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.375rem));
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
     --tabs-trigger-bg-active: var(--vds-color-primary-solid, #6366f1);
     --tabs-trigger-color-active: var(--vds-color-on-primary, #ffffff);
@@ -224,7 +259,7 @@
     --tabs-list-gap: var(--vds-space-1, 0.25rem);
   }
   .vds-tabs-list[data-variant="soft"] .vds-tabs-trigger {
-    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.5rem));
+    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.375rem));
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
     --tabs-trigger-bg-active: var(--vds-color-primary-bg, #eef2ff);
     --tabs-trigger-color-active: var(--vds-color-primary-text, #3730a3);
@@ -235,7 +270,7 @@
     --tabs-list-gap: var(--vds-space-1, 0.25rem);
   }
   .vds-tabs-list[data-variant="ghost"] .vds-tabs-trigger {
-    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.5rem));
+    --tabs-trigger-radius: var(--vds-radius-tabs-trigger, var(--vds-radius-element, 0.375rem));
     --tabs-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
     --tabs-trigger-bg-active: transparent;
     --tabs-trigger-color-active: var(--vds-color-text, #111827);
@@ -264,12 +299,11 @@
     --tabs-trigger-gap: var(--vds-space-1-5, 0.375rem);
     --tabs-trigger-font-size: var(--vds-text-sm, 0.875rem);
   }
-  .vds-tabs-list[data-size="md"] .vds-tabs-trigger {
-    --tabs-trigger-height: var(--vds-size-md, 2.25rem);
-    --tabs-trigger-padding-inline: var(--vds-space-4, 1rem);
-    --tabs-trigger-gap: var(--vds-space-2, 0.5rem);
-    --tabs-trigger-font-size: var(--vds-text-sm, 0.875rem);
-  }
+  /* md — default. The base .vds-tabs-trigger block above *is* the md step, so
+     restating it here would only add a higher-specificity copy that consumer
+     overrides have to fight. An unsized trigger renders md for the same
+     reason. */
+
   .vds-tabs-list[data-size="lg"] .vds-tabs-trigger {
     --tabs-trigger-height: var(--vds-size-lg, 2.5rem);
     --tabs-trigger-padding-inline: var(--vds-space-5, 1.25rem);

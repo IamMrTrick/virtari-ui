@@ -14,8 +14,12 @@
     }
   }
 
-  /* ── Separator with label ── */
-  .vds-separator--labeled {
+  /* ── Separator with label ──
+   * Written as a compound selector so it outranks
+   * `.vds-separator[data-orientation="horizontal"]` above, which the labeled
+   * element also matches. At a single class it lost the specificity contest
+   * on `block-size` and the labeled row collapsed to the 1px rule height. */
+  .vds-separator.vds-separator--labeled {
     display: flex;
     align-items: center;
     gap: var(--vds-space-3);

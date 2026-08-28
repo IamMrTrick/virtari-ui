@@ -97,6 +97,11 @@
       var(--vds-color-primary-solid, #6366f1);
     --data-table-focus-ring-width:  2px;
     --data-table-focus-ring-offset: -2px;
+    /* How far past a cell's border box the clip box extends. Cell-level
+     * affordances (row expand / pin, actions trigger, copy button, the inline
+     * editor) draw their ring at `outline-offset: 2px`, so the clip has to
+     * clear offset + ring or it slices the ring off. */
+    --data-table-cell-clip-margin: calc(2px + var(--data-table-focus-ring-width));
 
     /* ── Sort trigger ────────────────────────────────────────── */
     --data-table-sort-icon-color:
@@ -255,9 +260,9 @@
     --data-table-font-size:            var(--vds-text-xs, 0.75rem);
     --data-table-header-letter-spacing: 0;
   }
-  .vds-data-table[data-size="md"] {
-    --data-table-row-height:        2.5rem;      /* 40px */
-  }
+  /* No [data-size="md"] block: the base already is md (40px row height), so a
+   * block here would only restate it and give the ramp a second source of
+   * truth to drift from. The ramp is 32 / 40 / 48. */
   .vds-data-table[data-size="lg"] {
     --data-table-row-height:          3rem;      /* 48px */
     --data-table-cell-padding-inline: var(--vds-space-3, 0.75rem);

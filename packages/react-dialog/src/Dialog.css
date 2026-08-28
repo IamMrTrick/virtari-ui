@@ -51,6 +51,23 @@
     overflow: hidden;
     container-type: inline-size;
 
+    /*
+     * Concentricity host (packages/tokens/src/radii/nesting.css).
+     * A surface that fills the dialog edge to edge — the command palette,
+     * a full-bleed media band, a sticky sub-header — reads
+     * --vds-radius-flush and lands parallel to the dialog corner instead
+     * of relying on the overflow clip. All three are declared, including
+     * the zero: a host that omits one inherits it from an outer host and
+     * subtracts the wrong distance.
+     *
+     * -p is 0 because the slot layout puts the inline padding on the
+     * slots, not on this box. The simple (slot-less) layout below, which
+     * does pad this box, overrides it.
+     */
+    --vds-radius-host-r: var(--dialog-radius);
+    --vds-radius-host-b: var(--dialog-border-width);
+    --vds-radius-host-p: 0px;
+
     animation: var(--dialog-enter-animation) var(--dialog-enter-duration) var(--dialog-enter-ease);
 
     &[data-state="closed"] {
@@ -98,6 +115,10 @@
     gap: var(--dialog-gap);
     padding-block: var(--dialog-padding-block);
     padding-inline: var(--dialog-padding-inline);
+
+    /* Here the padding really is on this box, so a direct child is inset
+       by it. */
+    --vds-radius-host-p: var(--dialog-padding-inline);
   }
 
   /* In that quick-start markup the content box already carries the padding,

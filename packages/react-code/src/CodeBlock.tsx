@@ -125,6 +125,7 @@ export function CodeBlock({
     <div
       ref={ref}
       className={cn("vds-code", className)}
+      data-radius-host=""
       data-variant={variant !== "card" ? variant : undefined}
       data-size={size !== "md" ? size : undefined}
       data-readonly="true"

@@ -118,6 +118,7 @@ export function TabsList({
     <TabsPrimitive.List
       ref={mergeRefs(innerRef, ref)}
       className={cn("vds-tabs-list", className)}
+      data-radius-host=""
       data-variant={variant}
       data-size={size}
       data-full-width={fullWidth ? "true" : undefined}

@@ -17,7 +17,6 @@
   .vds-tabs[data-orientation="vertical"] > .vds-tabs-content {
     flex: 1 1 0;
     min-inline-size: 0;
-    padding-block-start: 0;
     padding-inline-start: var(--tabs-root-gap);
     border-inline-start: 1px solid var(--tabs-root-separator-color);
   }
@@ -46,10 +45,19 @@
     border: 0 solid var(--tabs-list-border-color);
     border-block-end-width: var(--tabs-list-border-width);
     /* Responsive: cap at container width and scroll horizontally when
-       triggers would overflow. Vertical overflow stays visible so the
-       sliding indicator and boxed curve pseudo-elements aren't clipped.
-       Scrollbar is hidden to preserve the design — users scroll by
-       touch / trackpad / wheel. */
+       triggers would overflow. Scrollbar is hidden to preserve the design —
+       users scroll by touch / trackpad / wheel, and useTabsAutoScroll keeps
+       the active trigger in view.
+
+       `overflow-y: visible` below is a declaration of intent, not an
+       outcome: CSS computes `visible` to `auto` whenever the other axis
+       scrolls, so this box does clip vertically. Consequences: a trigger's
+       focus ring (drawn at `outline-offset`) and the underline/line
+       indicator's 1px overhang past the padding box are trimmed on a list
+       that scrolls. There is no CSS escape — `overflow-clip-margin` needs
+       `clip`, which also degrades to `hidden` next to a scrolling axis — so
+       the variants that genuinely cannot be clipped opt out of scrolling
+       instead: see `[data-variant="boxed"] { overflow: visible }`. */
     max-inline-size: 100%;
     overflow-x: auto;
     overflow-y: visible;
@@ -165,7 +173,17 @@
   /* ─────────────────────────────────────────────
    * Content
    * ───────────────────────────────────────────── */
-  .vds-tabs-content {
+  /* Seam between the list and the panel below it. The root owns it, on a
+     sibling-adjacency rule with one named token, rather than every panel
+     padding its own leading edge — otherwise each container that puts a panel
+     somewhere *other* than under the list (TabsPanels, or vertical
+     orientation, where the list sits beside it) has to zero that padding back
+     out, and the two of them disagree about which token means "the gap".
+     `~` and not `+`: inactive panels stay in the DOM, so only the first panel
+     would be adjacent to the list. */
+  .vds-tabs:not([data-orientation="vertical"])
+    > .vds-tabs-list
+    ~ .vds-tabs-content {
     padding-block-start: var(--tabs-content-padding-block);
   }
 
@@ -267,11 +285,13 @@
     display: block;
   }
   /* Inside the carousel the per-panel enter animation is replaced by the
-     track translation; disable the default fade/slide. */
+     track translation; disable the default fade/slide. The panels container
+     owns the seam to the list (--tabs-panels-padding-block above), and a
+     panel nested in a slide is no longer a sibling of the list, so there is
+     no leading padding here to cancel. */
   .vds-tabs-panels .vds-tabs-content[data-state="active"],
   .vds-tabs-panels .vds-tabs-content {
     animation: none;
-    padding-block-start: 0;
   }
   /* Inactive panels inside the carousel shouldn't steal pointer events from
      the visible one (e.g., links in an adjacent panel). They stay visible

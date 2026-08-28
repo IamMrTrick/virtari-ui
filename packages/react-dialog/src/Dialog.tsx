@@ -111,6 +111,7 @@ export function DialogContent({
         data-animation={animation}
         data-intent={intent}
         data-responsive={responsive ? "" : undefined}
+        data-radius-host=""
         className={cn("vds-dialog-content", className)}
         onEscapeKeyDown={(event) => {
           onEscapeKeyDown?.(event);

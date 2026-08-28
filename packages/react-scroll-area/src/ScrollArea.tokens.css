@@ -55,9 +55,8 @@
   .vds-scroll-area-root[data-size="sm"] {
     --scroll-area-scrollbar-size: var(--vds-space-2, 0.5rem); /* 8px */
   }
-  .vds-scroll-area-root[data-size="md"] {
-    --scroll-area-scrollbar-size: var(--vds-space-2-5, 0.625rem); /* 10px */
-  }
+  /* No [data-size="md"] block: the base above already is md, so restating it
+   * here would only be a second place to keep in sync. */
   .vds-scroll-area-root[data-size="lg"] {
     --scroll-area-scrollbar-size: var(--vds-space-3, 0.75rem); /* 12px */
   }

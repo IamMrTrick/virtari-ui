@@ -27,7 +27,25 @@
     --vds-command-item-padding-inline: var(--vds-space-3, 0.75rem);
     --vds-command-item-padding-block: var(--vds-space-2, 0.5rem);
     --vds-command-item-gap: var(--vds-space-2, 0.5rem);
-    --vds-command-item-radius: var(--vds-radius-nav-item, 0.5rem);
+    /*
+     * Concentric with the palette surface. An item is inset from the
+     * palette's corner by exactly the list's padding (the palette itself
+     * draws no border), so the item's corner is the surface corner minus
+     * that distance — 12px − 4px = 8px in the default mode, where a flat
+     * --vds-radius-nav-item gave 6px and bulged away from the corner of
+     * the last row. The subtraction keeps following `data-radius` when the
+     * mode changes; max() floors it at a square corner once a sharp mode
+     * has consumed the whole arc.
+     *
+     * Written as a subtraction rather than read from --vds-radius-inset
+     * because cmdk owns the [cmdk-group-items] wrapper between the list
+     * and a grouped item, and the channel deliberately reaches only one
+     * level. A grouped and an ungrouped item must round identically.
+     */
+    --vds-command-item-radius: max(
+      0px,
+      calc(var(--vds-command-radius) - var(--vds-command-list-padding))
+    );
     --vds-command-item-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
     --vds-command-item-bg-selected: var(--vds-color-primary-bg, #eef2ff);
     --vds-command-item-fg-selected:

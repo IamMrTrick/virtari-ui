@@ -22,8 +22,15 @@
     --chip-line-height: var(--vds-leading-none, 1);
     --chip-letter-spacing: var(--vds-tracking-normal, 0);
 
-    /* Icon / Avatar slot */
+    /* Icon / Avatar slot.
+     * The slot is round: it holds an avatar as often as a glyph, and its
+     * `> img` inherits this corner. Concentric with the chip too — the chip
+     * is a pill (effective radius = half its height, 18px at md), the slot
+     * sits 9px in from that edge (padding − the negative margin + border),
+     * so the concentric answer is 9px on a 16px box: past the point where
+     * the arc closes, i.e. a circle. */
     --chip-icon-size: 1rem;
+    --chip-icon-radius: var(--vds-radius-full, 9999px);
     --chip-icon-inset-inline-start: calc(var(--vds-space-1, 0.25rem) * -1);
 
     /* Remove button */

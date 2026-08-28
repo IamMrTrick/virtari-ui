@@ -123,25 +123,25 @@
 
     /* ── Sizes (same ramp as Button) ── */
 
+    /* Every size keeps the base --input-radius: the radius is a mode
+       (`data-radius`), not a function of the control's height. */
+
     &[data-size="2xs"] {
       --input-height: var(--vds-size-2xs);
       --input-padding-inline: var(--vds-space-1-5);
       --input-font-size: var(--vds-text-xs);
-      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="xs"] {
       --input-height: var(--vds-size-xs);
       --input-padding-inline: var(--vds-space-2);
       --input-font-size: var(--vds-text-xs);
-      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="sm"] {
       --input-height: var(--vds-size-sm);
       --input-padding-inline: var(--vds-space-2-5);
       --input-font-size: var(--vds-text-sm);
-      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     /* md uses defaults above */
@@ -150,21 +150,18 @@
       --input-height: var(--vds-size-lg);
       --input-padding-inline: var(--vds-space-4);
       --input-font-size: var(--vds-text-base);
-      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="xl"] {
       --input-height: var(--vds-size-xl);
       --input-padding-inline: var(--vds-space-5);
       --input-font-size: var(--vds-text-lg);
-      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
 
     &[data-size="2xl"] {
       --input-height: var(--vds-size-2xl);
       --input-padding-inline: var(--vds-space-6);
       --input-font-size: var(--vds-text-xl);
-      --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     }
   }
 
@@ -207,6 +204,14 @@
 
   /* ── InputGroup — merges input border with inline addons ── */
   .vds-input-group {
+    /*
+     * The group's outer corner. The input and the addons are siblings, so the
+     * radius they have to agree on lives on their common ancestor — hardcoding
+     * the token in each rule meant an --input-radius override on .vds-input
+     * rounded the field but not the addon welded to it.
+     */
+    --input-radius: var(--vds-radius-input, var(--vds-radius-element));
+
     display: flex;
     align-items: stretch;
     inline-size: 100%;
@@ -218,13 +223,13 @@
     }
 
     & > .vds-input:first-child {
-      border-start-start-radius: var(--vds-radius-input, var(--vds-radius-element));
-      border-end-start-radius: var(--vds-radius-input, var(--vds-radius-element));
+      border-start-start-radius: var(--_input-radius);
+      border-end-start-radius: var(--_input-radius);
     }
 
     & > .vds-input:last-child {
-      border-start-end-radius: var(--vds-radius-input, var(--vds-radius-element));
-      border-end-end-radius: var(--vds-radius-input, var(--vds-radius-element));
+      border-start-end-radius: var(--_input-radius);
+      border-end-end-radius: var(--_input-radius);
     }
 
     & > .vds-input-addon[data-side="start"] + .vds-input {
@@ -257,16 +262,18 @@
     white-space: nowrap;
     flex-shrink: 0;
 
+    /* Reads the group's --input-radius so the welded corner always matches the
+       field it is welded to; falls back to the token when used standalone. */
     &[data-side="start"] {
       border-inline-end: none;
-      border-start-start-radius: var(--vds-radius-input, var(--vds-radius-element));
-      border-end-start-radius: var(--vds-radius-input, var(--vds-radius-element));
+      border-start-start-radius: var(--input-radius, var(--vds-radius-input, var(--vds-radius-element)));
+      border-end-start-radius: var(--input-radius, var(--vds-radius-input, var(--vds-radius-element)));
     }
 
     &[data-side="end"] {
       border-inline-start: none;
-      border-start-end-radius: var(--vds-radius-input, var(--vds-radius-element));
-      border-end-end-radius: var(--vds-radius-input, var(--vds-radius-element));
+      border-start-end-radius: var(--input-radius, var(--vds-radius-input, var(--vds-radius-element)));
+      border-end-end-radius: var(--input-radius, var(--vds-radius-input, var(--vds-radius-element)));
     }
   }
 
@@ -311,7 +318,14 @@
     align-items: center;
     justify-content: center;
     inline-size: var(--input-action-size);
-    block-size: calc(100% - var(--input-action-inset));
+    /*
+     * Two insets, not one: the button is centred, so subtracting a single
+     * --input-action-inset left --input-action-inset/2 above and below while
+     * the inline-end gap was the full inset. The radius below subtracts the
+     * full inset, which is only the concentric answer if the gap is that inset
+     * on every side.
+     */
+    block-size: calc(100% - 2 * var(--input-action-inset));
     padding: 0;
     border: 0;
     /*

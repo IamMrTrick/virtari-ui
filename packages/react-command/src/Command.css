@@ -18,6 +18,10 @@
     padding-block: 0;
     padding-inline: 0;
     gap: 0;
+
+    /* The Dialog's simple layout sets this to its inline padding; the
+       palette removes that padding, so its children are flush again. */
+    --vds-radius-host-p: 0px;
   }
 
   .vds-command {
@@ -26,6 +30,16 @@
     background-color: var(--vds-command-bg);
     border-radius: var(--vds-command-radius);
     overflow: hidden;
+  }
+
+  /* Inside a CommandDialog the palette fills the dialog edge to edge, so its
+     corner is the dialog's corner minus the dialog's border — not its own
+     standalone radius, which would sit 1px proud of it. --vds-radius-flush
+     is published by the dialog host (packages/tokens/src/radii/nesting.css)
+     and only resolves for its direct children, which is exactly what the
+     palette is. */
+  .vds-command-dialog > .vds-command {
+    border-radius: var(--vds-radius-flush);
   }
 
   /* Input */

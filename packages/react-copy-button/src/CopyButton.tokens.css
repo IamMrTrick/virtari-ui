@@ -1,4 +1,8 @@
 @layer design-system.components {
+  /* The default size is `sm`, not `md` — a copy button is an affordance
+   * riding on someone else's surface (a code block header, a table cell), so
+   * it sizes below the surrounding control. The base block below therefore
+   * restates `sm`; there is deliberately no `[data-size="sm"]` block. */
   .vds-copy-button {
     --_copy-btn-padding:   var(--vds-space-1-5);
     --_copy-btn-icon-size: 1rem;
@@ -16,12 +20,6 @@
       --_copy-btn-padding:   var(--vds-space-1);
       --_copy-btn-icon-size: 0.875rem;
       --_copy-btn-font-size: var(--vds-text-xs);
-    }
-
-    &[data-size="sm"] {
-      --_copy-btn-padding:   var(--vds-space-1-5);
-      --_copy-btn-icon-size: 1rem;
-      --_copy-btn-font-size: var(--vds-text-sm);
     }
 
     &[data-size="md"] {

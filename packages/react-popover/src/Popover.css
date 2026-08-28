@@ -11,6 +11,14 @@
     padding-block: var(--popover-padding-block);
     min-inline-size: var(--popover-min-width);
     max-inline-size: var(--popover-max-width);
+
+    /* Not a concentricity host (packages/tokens/src/radii/nesting.css): the
+       popover's padding (16px, 12px at size="sm") meets or exceeds its own
+       corner (4–16px across the radius modes), so the concentric answer for
+       a child inside it is a square corner everywhere except size="sm" in
+       the roundest modes, where it reaches 3px. The constraint is slack; a
+       host declaration here would publish nothing worth reading. */
+
     animation: vds-fade-in var(--popover-enter-duration) var(--popover-enter-ease);
 
     &[data-state="closed"] {

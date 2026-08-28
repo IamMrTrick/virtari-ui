@@ -46,9 +46,7 @@
     --tooltip-arrow-size: 6px;
   }
 
-  .vds-tooltip-content[data-size="md"] {
-    /* defaults */
-  }
+  /* md — the base block above; no rule of its own. */
 
   .vds-tooltip-content[data-size="lg"] {
     --tooltip-padding-inline: var(--vds-space-4, 1rem);

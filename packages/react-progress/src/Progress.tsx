@@ -40,7 +40,7 @@ export function Progress({
   value,
   color = "primary",
   variant,
-  size,
+  size = "md",
   animated,
   showLabel,
   style,

@@ -19,10 +19,23 @@
     flex-direction: column;
     inline-size: 100%;
     min-inline-size: 0;
-    border: 1px solid var(--vds-editor-border);
+    border: var(--_vds-editor-border-width) solid var(--vds-editor-border);
     border-radius: var(--vds-editor-radius);
     background: var(--vds-editor-bg);
     color: var(--vds-editor-text);
+    --_vds-editor-border-width: 1px;
+
+    /* Concentricity channel. The shell has no padding of its own — the bands
+     * it stacks (utility bar, toolbar, surface, source panel, comments,
+     * status) all sit flush against its inner edge, so their outer corner is
+     * the shell's radius minus its border. This matters beyond decoration:
+     * `data-block-tools-placement="edge"` below switches the shell to
+     * `overflow: visible`, and without a real corner on each band their square
+     * backgrounds paint straight over the shell's arc. */
+    --vds-radius-host-r: var(--vds-editor-radius);
+    --vds-radius-host-b: var(--_vds-editor-border-width);
+    --vds-radius-host-p: 0px;
+
     overflow: clip;
     transition:
       border-color var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease),
@@ -95,10 +108,17 @@
     backdrop-filter: blur(8px);
   }
 
-  .vds-editor > .vds-editor-utility-bar:first-child,
-  .vds-editor > .vds-editor-toolbar:first-child {
-    border-start-start-radius: calc(var(--vds-editor-radius) - 1px);
-    border-start-end-radius: calc(var(--vds-editor-radius) - 1px);
+  /* Whichever band happens to land against the shell's top edge — the utility
+   * bar and toolbar are both optional, so the source panel can be first too.
+   * --vds-radius-flush is the shell's radius minus its border, floored at
+   * square, and it tracks `data-radius` modes for free. */
+  .vds-editor > :where(
+      .vds-editor-utility-bar,
+      .vds-editor-toolbar,
+      .vds-editor-source-panel
+    ):first-child {
+    border-start-start-radius: var(--vds-radius-flush);
+    border-start-end-radius: var(--vds-radius-flush);
   }
 
   .vds-editor-toolbar[data-sticky] {
@@ -982,8 +1002,14 @@
     min-block-size: 100%;
     border: 0;
     border-radius: 0;
-    --vds-code-radius: 0;
-    --vds-code-border-width: 0;
+    /* `0px`, not `0`. .vds-code is a radius host and publishes these into the
+     * <length>-typed --vds-radius-host-r/-b. A unitless zero is a <number>
+     * there — invalid at computed-value time — and because those properties
+     * inherit, the invalid value resolves to the *editor shell's* radius
+     * rather than to zero, which would hand this square panel a 12px inner
+     * corner. */
+    --vds-code-radius: 0px;
+    --vds-code-border-width: 0px;
     --vds-code-bg: var(--vds-editor-source-bg);
   }
 
@@ -1596,11 +1622,16 @@
     transform: rotate(45deg);
   }
 
+  /* The shell is the scrollport, so its corners are the only ones that can be
+   * rounded — `border-collapse: collapse` cells cannot follow them. That is
+   * exactly what --vds-radius-data-table is capped for: above 8px the cell
+   * grid and the scrollbar leave visible wedges inside the arc. Same geometry
+   * here as in DataTable, so the same token rather than the surface radius. */
   .vds-editor-table-scroll {
     overflow: auto;
     margin-block: var(--vds-space-4, 1rem);
     border: 1px solid var(--vds-editor-border);
-    border-radius: var(--vds-editor-radius-surface, 0.75rem);
+    border-radius: var(--vds-radius-data-table, var(--vds-editor-radius-block, 0.5rem));
   }
 
   .vds-editor-table {
@@ -1786,10 +1817,15 @@
     background: var(--vds-editor-status-bg);
   }
 
-  .vds-editor > .vds-editor-status:last-child,
-  .vds-editor > .vds-editor-source-panel:last-child {
-    border-end-start-radius: calc(var(--vds-editor-radius) - 1px);
-    border-end-end-radius: calc(var(--vds-editor-radius) - 1px);
+  /* Same at the bottom edge. The comments panel is last whenever the status
+   * bar is off, and the source panel is last in html/markdown mode. */
+  .vds-editor > :where(
+      .vds-editor-status,
+      .vds-editor-source-panel,
+      .vds-editor-comments
+    ):last-child {
+    border-end-start-radius: var(--vds-radius-flush);
+    border-end-end-radius: var(--vds-radius-flush);
   }
 
   .vds-editor-status-group {
@@ -1840,14 +1876,25 @@
     gap: var(--vds-space-1, 0.25rem);
     inline-size: min(22rem, calc(100vw - 2rem));
     margin-block-start: var(--vds-space-2, 0.5rem);
-    padding: var(--vds-space-2, 0.5rem);
-    border: 1px solid var(--vds-editor-border);
+    padding: var(--_vds-editor-slash-menu-padding);
+    border: var(--_vds-editor-slash-menu-border-width) solid var(--vds-editor-border);
     border-radius: var(--vds-editor-radius-popover, 1rem);
     background: color-mix(in oklch, var(--vds-editor-bg) 94%, transparent);
     box-shadow:
       0 16px 42px -24px color-mix(in oklch, black 30%, transparent),
       0 8px 20px -16px color-mix(in oklch, black 18%, transparent);
     backdrop-filter: blur(10px);
+
+    --_vds-editor-slash-menu-padding: var(--vds-space-2, 0.5rem);
+    --_vds-editor-slash-menu-border-width: 1px;
+
+    /* Options sit inside this padding, so their corner is the menu's radius
+     * minus the border and that padding. It used to repeat the menu's own
+     * radius, which is the one value it can never be: two arcs are only
+     * parallel when they differ by the distance between them. */
+    --vds-radius-host-r: var(--vds-editor-radius-popover, 1rem);
+    --vds-radius-host-b: var(--_vds-editor-slash-menu-border-width);
+    --vds-radius-host-p: var(--_vds-editor-slash-menu-padding);
   }
 
   .vds-editor-slash-option {
@@ -1858,7 +1905,7 @@
     inline-size: 100%;
     padding: var(--vds-space-3, 0.75rem);
     border: 0;
-    border-radius: var(--vds-editor-radius-surface, 0.75rem);
+    border-radius: var(--vds-radius-inset);
     background: transparent;
     color: inherit;
     text-align: start;

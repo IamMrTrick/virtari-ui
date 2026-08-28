@@ -149,10 +149,19 @@
   /* ─────────────────────────────────────────────
    * 6. Submenu tokens
    * ───────────────────────────────────────────── */
+  /* Radius nesting, for the record: the popover panel is 12px-round with a
+   * 1px border and 8px of padding, so the concentric target for an item is
+   * 12 − 1 − 8 = 3px against the 6px an item actually draws. Deliberately not
+   * reconciled. Nav's padded-panel style floats items *inside* the frame —
+   * the alternative to Select's flush contract (`padding: 0` + `radius: 0`) —
+   * and only the first and last item are corner-adjacent at all; flattening
+   * every item to 3px to serve those two would be a redesign, and reaching
+   * the element that draws the corner (panel > ul > li > link) would take
+   * three chained `data-radius-host`s. */
   .vds-nav__submenu {
     --submenu-background: var(--vds-color-surface, #ffffff);
     --submenu-border-color: var(--vds-color-border-muted, #e5e7eb);
-    --submenu-radius: var(--vds-radius-surface, 0.5rem);
+    --submenu-radius: var(--vds-radius-surface, 0.75rem);
     --submenu-shadow: var(--vds-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
     --submenu-padding: var(--vds-space-2, 0.5rem);
     --submenu-item-padding-inline: var(--vds-space-3, 0.75rem);
@@ -174,7 +183,7 @@
   .vds-nav__mega {
     --mega-background: var(--vds-color-surface, #ffffff);
     --mega-border-color: var(--vds-color-border-muted, #e5e7eb);
-    --mega-radius: var(--vds-radius-surface, 0.5rem);
+    --mega-radius: var(--vds-radius-surface, 0.75rem);
     --mega-shadow: var(--vds-shadow-xl, 0 20px 25px -5px rgb(0 0 0 / 0.1));
     --mega-padding: var(--vds-space-6, 1.5rem);
     --mega-column-gap: var(--vds-space-6, 1.5rem);

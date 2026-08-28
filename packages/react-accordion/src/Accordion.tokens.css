@@ -20,7 +20,7 @@
     --accordion-trigger-font-family:    var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --accordion-trigger-font-size:      var(--vds-text-sm, 0.875rem);
     --accordion-trigger-font-weight:    var(--vds-font-weight-medium, 500);
-    --accordion-trigger-line-height:    var(--vds-leading-tight, 1.35);
+    --accordion-trigger-line-height:    var(--vds-leading-tight, 1.25);
 
     /* Content body.
      * The gap between the trigger and the panel body is the panel's own, not
@@ -42,10 +42,17 @@
     --accordion-transition-duration: var(--vds-duration-normal, 200ms);
     --accordion-transition-easing:   var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
 
-    /* ── Focus ── */
+    /* ── Focus ──
+     * `--accordion-focus-ring-offset` goes negative in every variant that
+     * clips its items (see §3): the trigger is full-bleed inside the frame,
+     * so an outward ring lands entirely outside the clip box and vanishes.
+     * `--accordion-focus-ring-radius` is what the ring traces; it is a token
+     * rather than a literal so a variant that gives the trigger a corner
+     * (ghost) can keep the ring on that same corner. */
     --accordion-focus-ring-color:  var(--vds-color-ring, #4f46e5);
     --accordion-focus-ring-width:  2px;
     --accordion-focus-ring-offset: 2px;
+    --accordion-focus-ring-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
 
     /* ── Color palette — default: neutral (orthogonal to variant) ── */
     --accordion-color-text:        var(--vds-color-text, #111827);
@@ -123,9 +130,21 @@
 
   /* bordered — every item framed individually, stacked with shared borders.
    * Inline padding lives on the trigger/content (not the item) so the hover
-   * background paints edge-to-edge instead of leaving bare strips on the sides. */
+   * background paints edge-to-edge instead of leaving bare strips on the sides.
+   *
+   * On the `overflow: clip` and the radius-nesting channel: the clip box is
+   * the padding box, whose corner radius is already `border-radius − border-
+   * width` — the exact value `--vds-radius-flush` would hand the first/last
+   * item. So the corners here are concentric by construction. The clip is
+   * additionally load-bearing in a way corner inheritance cannot replace: the
+   * surface that overflows is the *trigger's* hover background, a grandchild
+   * (item > header > trigger), and the channel deliberately reaches one level
+   * only. Hence: keep the clip, no channel adoption. The cost — a clipped
+   * focus ring — is paid off by the inset ring offset above. */
   .vds-accordion[data-variant="bordered"] {
     --accordion-gap: 0;
+    /* Clipped frame → inset ring. See --accordion-focus-ring-offset above. */
+    --accordion-focus-ring-offset: calc(-1 * var(--accordion-focus-ring-width));
     --accordion-item-radius:     var(--vds-radius-card, 0.75rem);
     --accordion-trigger-padding-block:  var(--vds-space-3, 0.75rem);
     --accordion-trigger-padding-inline: var(--vds-space-4, 1rem);
@@ -147,6 +166,9 @@
    * to the rounded card edge. */
   .vds-accordion[data-variant="separated"] {
     --accordion-gap: var(--vds-space-2, 0.5rem);
+    /* Clipped card → inset ring. A closed item is exactly as tall as its
+     * trigger, so an outward ring would have nowhere at all to draw. */
+    --accordion-focus-ring-offset: calc(-1 * var(--accordion-focus-ring-width));
     --accordion-item-radius:  var(--vds-radius-card, 0.75rem);
     --accordion-trigger-padding-block:  var(--vds-space-3, 0.75rem);
     --accordion-trigger-padding-inline: var(--vds-space-4, 1rem);
@@ -168,6 +190,8 @@
   /* filled — soft tinted background per item. Best for FAQ cards. */
   .vds-accordion[data-variant="filled"] {
     --accordion-gap: var(--vds-space-2, 0.5rem);
+    /* Clipped card → inset ring. See "separated" above. */
+    --accordion-focus-ring-offset: calc(-1 * var(--accordion-focus-ring-width));
     --accordion-item-radius:  var(--vds-radius-card, 0.75rem);
     --accordion-trigger-padding-block:  var(--vds-space-3, 0.75rem);
     --accordion-trigger-padding-inline: var(--vds-space-4, 1rem);
@@ -188,6 +212,10 @@
     --accordion-gap: 0;
     --accordion-trigger-padding-inline: var(--vds-space-3, 0.75rem);
     --accordion-content-padding-inline: var(--vds-space-3, 0.75rem);
+    /* The only variant where the trigger draws its own corner — so point the
+     * ring at that same corner token instead of the generic action radius,
+     * which a theme is free to move independently of --vds-radius-nav-item. */
+    --accordion-focus-ring-radius: var(--vds-radius-nav-item, 0.375rem);
   }
   .vds-accordion[data-variant="ghost"] .vds-accordion-trigger {
     border-radius: var(--vds-radius-nav-item, 0.375rem);
@@ -196,6 +224,8 @@
   /* contained — one outer frame with dividers inside. Best for long FAQ. */
   .vds-accordion[data-variant="contained"] {
     --accordion-gap: 0;
+    /* Clipped frame → inset ring. See --accordion-focus-ring-offset above. */
+    --accordion-focus-ring-offset: calc(-1 * var(--accordion-focus-ring-width));
     --accordion-item-radius:  var(--vds-radius-card, 0.75rem);
     --accordion-trigger-padding-inline: var(--vds-space-5, 1.25rem);
     --accordion-content-padding-inline: var(--vds-space-5, 1.25rem);
@@ -219,7 +249,7 @@
     --accordion-trigger-padding-block: var(--vds-space-2-5, 0.625rem);
     --accordion-trigger-font-size:     var(--vds-text-sm, 0.875rem);
     --accordion-content-padding-block-end: var(--vds-space-2-5, 0.625rem);
-    --accordion-content-font-size:     var(--vds-text-xs, 0.8125rem);
+    --accordion-content-font-size:     var(--vds-text-xs, 0.75rem);
     --accordion-icon-size: 0.875rem;
   }
 

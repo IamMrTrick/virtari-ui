@@ -408,6 +408,7 @@ export function Editor({
       <div
         className={cn("vds-editor", className)}
         style={style}
+        data-radius-host=""
         data-read-only={readOnly || undefined}
         data-mode={activeMode}
         data-block-tools-placement={

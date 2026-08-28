@@ -275,10 +275,6 @@
     }
   }
 
-  .vds-bottom-nav__sliding-indicator[data-measured="true"] {
-    opacity: 1;
-  }
-
   /* Variant-specific sliding indicator placement.
    * For material, JS sets inset-block-start + block-size from the active
    * icon's measured rect — the pill hugs the icon instead of the whole

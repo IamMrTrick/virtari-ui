@@ -9,13 +9,24 @@
     /* ── Layout ── */
     --carousel-padding-block: var(--vds-space-0, 0);
     --carousel-padding-inline: var(--vds-space-0, 0);
+    /* Gap between topSlot / track / bottomSlot. The container owns it, so a
+     * slot never has to zero or add its own leading edge. */
+    --carousel-slot-gap: var(--vds-space-3, 0.75rem);
     --carousel-radius: var(--vds-radius-card, 0.75rem);
     --carousel-track-radius: var(--carousel-radius);
 
     /* ── Navigation buttons ──
      * The button itself is a <Button> component; we only own its absolute
-     * positioning offset and corner-radius so pill mode reads as a circle. */
-    --carousel-nav-radius: var(--button-radius, var(--vds-radius-action, var(--vds-radius-element, 0.5rem)));
+     * positioning offset and corner-radius.
+     *
+     * `shape="pill"` is the default and the nav has `aspect-ratio: 1`, so the
+     * default corner is fully round — a circle. It used to read
+     * `var(--button-radius, …)`, but --button-radius is declared on
+     * `.vds-button`, which is a *descendant* of the element this token is
+     * declared on, never an ancestor; the var never resolved and every
+     * carousel fell through to the same finite corner as `shape="square"`,
+     * making that modifier a no-op. */
+    --carousel-nav-radius: var(--vds-radius-full, 9999px);
     --carousel-nav-offset: var(--vds-space-3, 0.75rem);
     /* Mirrors the height the nav <Button> resolves to at this carousel size.
      * The "outside" gutter reserves this much, so the two must stay in step. */
@@ -119,8 +130,12 @@
 
   /* =========================================================================
    * 5. Shape modifier — square nav buttons (override Button's own radius).
+   *    --vds-radius-control-action, not --vds-radius-action: the latter is
+   *    remapped to --vds-radius-full under `data-radius="pill"`, which would
+   *    turn the opt-out back into the circle it exists to opt out of. The
+   *    control-action token is capped at 8px in every mode.
    * ========================================================================= */
   .vds-carousel[data-shape="square"] {
-    --carousel-nav-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
+    --carousel-nav-radius: var(--vds-radius-control-action, var(--vds-radius-element, 0.5rem));
   }
 }

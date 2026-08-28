@@ -23,7 +23,10 @@
     --vds-file-upload-item-gap: var(--vds-space-3, 0.75rem);
     --vds-file-upload-item-padding-inline: var(--vds-space-3, 0.75rem);
     --vds-file-upload-item-padding-block: var(--vds-space-2, 0.5rem);
-    --vds-file-upload-item-radius: var(--vds-radius-card, 0.5rem);
+    /* Fallback matches --vds-radius-card's own resting value (0.75rem). It read
+       0.5rem, so a standalone drop-in without @virtari-packages/tokens drew a
+       4px-tighter row than the tokenized build. */
+    --vds-file-upload-item-radius: var(--vds-radius-card, 0.75rem);
     --vds-file-upload-item-bg: var(--vds-color-surface, #ffffff);
     --vds-file-upload-item-border: 1px solid
       var(--vds-color-border, #e5e7eb);
@@ -49,7 +52,12 @@
 
     --vds-file-upload-input-border: 1px solid
       var(--vds-color-border-interactive, #6b7280);
-    --vds-file-upload-input-radius: var(--vds-radius-card, 0.5rem);
+    /* A control, not a surface: this is a full-width form row that sits beside
+       Input / Select / NumberInput, so it belongs to the control radius family.
+       It was on --vds-radius-card, which resolves 12px where the neighbouring
+       controls resolve 6px — and its 0.5rem fallback did not match that token
+       either, so the standalone and tokenized builds disagreed. */
+    --vds-file-upload-input-radius: var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
     --vds-file-upload-input-bg: var(--vds-color-surface, #ffffff);
     --vds-file-upload-input-font-size: var(--vds-text-sm, 0.875rem);
 

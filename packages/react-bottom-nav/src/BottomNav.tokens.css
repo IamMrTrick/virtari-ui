@@ -12,7 +12,7 @@
     --bottom-nav-padding-block: var(--vds-space-1, 0.25rem);
     --bottom-nav-gap: var(--vds-space-1, 0.25rem);
     --bottom-nav-max-inline-size: 100%;
-    --bottom-nav-radius: 0;
+    --bottom-nav-radius: 0px;
 
     /* Safe area — iOS home-bar */
     --bottom-nav-safe-area: env(safe-area-inset-bottom, 0px);
@@ -26,6 +26,18 @@
     --bottom-nav-border-color: var(--vds-color-border-muted, #e5e7eb);
     --bottom-nav-border-block-start-width: 1px;
     --bottom-nav-shadow: var(--vds-shadow-none, 0 0 0 0 transparent);
+
+    /* ── Radius nesting host ──
+     * The bar draws the corner; items, the FAB and the sliding indicator are
+     * its direct children. All three are declared (zeroes included) so a bar
+     * placed inside another host cannot inherit that host's border/padding
+     * and subtract the wrong distance.
+     * `-p` is the *inline* padding, which is the larger of the two insets —
+     * the safe one. A child inset further than the arc can only be flatter
+     * than the concentric answer, never bulge past it. */
+    --vds-radius-host-r: var(--bottom-nav-radius);
+    --vds-radius-host-b: var(--bottom-nav-border-block-start-width);
+    --vds-radius-host-p: var(--bottom-nav-padding-inline);
 
     /* Typography */
     --bottom-nav-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
@@ -60,7 +72,7 @@
     --item-gap: var(--vds-space-1-5, 0.375rem);
     --item-padding-inline: var(--vds-space-2, 0.5rem);
     --item-padding-block: var(--vds-space-1, 0.25rem);
-    --item-radius: var(--vds-radius-nav-item, 0.5rem);
+    --item-radius: var(--vds-radius-nav-item, 0.375rem);
     --item-press-scale: 0.94;
 
     --item-icon-size: 1.5rem;
@@ -107,10 +119,39 @@
   .vds-bottom-nav[data-variant="floating"] {
     --bottom-nav-offset-block-end: var(--vds-space-3, 0.75rem);
     --bottom-nav-max-inline-size: calc(100% - (var(--vds-space-6, 1.5rem) * 2));
-    --bottom-nav-radius: var(--vds-radius-bottom-nav, 1rem);
+    --bottom-nav-radius: var(--vds-radius-bottom-nav, 0.75rem);
     --bottom-nav-shadow: var(--vds-shadow-xl, 0 20px 25px -5px oklch(0 0 0 / 0.1));
-    --bottom-nav-border-block-start-width: 0;
+    --bottom-nav-border-block-start-width: 0px;
     --bottom-nav-padding-inline: var(--vds-space-2, 0.5rem);
+  }
+  /* The only variant whose bar is actually round, so the only one where an
+   * item has a corner to follow: 12px bar − 0 border − 8px padding = 4px,
+   * against the 6px an item draws on a square bar. `min()` keeps the item's
+   * own radius as the ceiling, so a consumer who rounds the bar further gets
+   * a nav item, not a pill. The square variants are left alone on purpose —
+   * their bar has no arc to be concentric with, and letting the channel
+   * fail flat there would square off every item in the default variant.
+   *
+   * The var() fallback below is the standalone path, not a default: with the
+   * tokens package loaded `--vds-radius-inset` is a *registered* property, so
+   * it always has a value and the fallback can never fire. Without the
+   * package the property does not exist and this keeps the item concentric. */
+  .vds-bottom-nav[data-variant="floating"] .vds-bottom-nav__item {
+    --bottom-nav-item-inset-radius: var(
+      --vds-radius-inset,
+      max(
+        0px,
+        calc(
+          var(--bottom-nav-radius) -
+            var(--bottom-nav-border-block-start-width) -
+            var(--bottom-nav-padding-inline)
+        )
+      )
+    );
+    --item-radius: min(
+      var(--vds-radius-nav-item, 0.375rem),
+      var(--bottom-nav-item-inset-radius)
+    );
   }
 
   /* underline — 3px top-bar indicator, no pill. */
@@ -133,9 +174,9 @@
     --item-label-font-size: var(--vds-text-xs, 0.75rem);
   }
 
-  .vds-bottom-nav[data-size="md"] {
-    --bottom-nav-height: var(--vds-size-2xl, 3.25rem);
-  }
+  /* md — default. The base .vds-bottom-nav block already *is* the md step;
+     restating it here only added a higher-specificity copy for consumer
+     overrides to fight. */
 
   .vds-bottom-nav[data-size="lg"] {
     --bottom-nav-height: var(--vds-size-3xl, 4rem);

@@ -65,6 +65,10 @@
     inline-size: var(--chip-icon-size);
     block-size: var(--chip-icon-size);
     margin-inline-start: var(--chip-icon-inset-inline-start);
+    /* Load-bearing: `> img` below inherits this. Without a radius here the
+       inherit resolved to the initial 0 and an avatar in the slot rendered
+       square inside a pill. */
+    border-radius: var(--chip-icon-radius);
 
     color: var(--chip-icon-color);
   }

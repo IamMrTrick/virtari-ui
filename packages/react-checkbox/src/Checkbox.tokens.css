@@ -146,7 +146,11 @@
 
     /* Icon container (for icon-grid layout) */
     --checkbox-card-icon-size: 2.5rem;
-    --checkbox-card-icon-radius: var(--vds-radius-4, 0.5rem);
+    /* Mirrors RadioCard's --vds-radius-radio-card-icon, which is this same
+       control-action token. It was pinned to the raw --vds-radius-4 primitive,
+       which is mode-invariant: the checkbox card's icon tile stayed at 8px in
+       sharp mode while its radio twin tightened to 2px. */
+    --checkbox-card-icon-radius: var(--vds-radius-control-action, var(--vds-radius-4, 0.5rem));
     --checkbox-card-icon-bg: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
     --checkbox-card-icon-color: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
     --checkbox-card-icon-glyph-size: 1.25rem;

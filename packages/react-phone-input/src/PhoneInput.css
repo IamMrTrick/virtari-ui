@@ -5,6 +5,10 @@
    * We just widen the leading-icon slot and style the country button. */
   .vds-phone-input {
     position: relative;
+    /* Paints nothing — the wrapper has no background or border. It exists so
+     * the overlaid country button's `border-radius: inherit` has the field's
+     * corner to inherit. See --phone-input-radius. */
+    border-radius: var(--phone-input-radius);
   }
 
   /* Force the nested tel input to stay LTR — phone numbers read left-to-right

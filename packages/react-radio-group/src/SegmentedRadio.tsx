@@ -32,6 +32,9 @@ export function SegmentedRadio({
       data-size={size}
       data-error={error ? "" : undefined}
       data-disabled={disabled ? "" : undefined}
+      /* The track draws the corner the items have to be concentric with; see
+         the host block in SegmentedRadio.css. */
+      data-radius-host=""
       className={cn("vds-segmented-radio", className)}
       {...props}
     />

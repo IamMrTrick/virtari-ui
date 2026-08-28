@@ -213,7 +213,10 @@ export function EditorSlashMenu({
       ) =>
         anchorElementRef.current && menuOptions.length > 0
           ? createPortal(
-              <div className={cn("vds-editor-slash-menu", className)}>
+              <div
+                className={cn("vds-editor-slash-menu", className)}
+                data-radius-host=""
+              >
                 {menuOptions.map((option, index) => (
                   <button
                     key={option.key}

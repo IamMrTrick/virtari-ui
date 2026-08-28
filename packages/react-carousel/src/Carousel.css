@@ -27,6 +27,13 @@
     padding-inline: var(--carousel-padding-inline);
   }
 
+  /* Slot adjacency — the container owns the gap between topSlot, the track
+   * and bottomSlot. Only adjacent pairs get it, so an omitted slot leaves no
+   * dangling space and neither slot has to manage its own leading edge. */
+  .vds-carousel > * + * {
+    margin-block-start: var(--carousel-slot-gap);
+  }
+
   /* Track wrapper — establishes the positioning anchor for nav buttons,
    * pagination, and scrollbar. Must wrap the Swiper *and* its overlays so
    * absolute positioning is anchored to the track regardless of topSlot /

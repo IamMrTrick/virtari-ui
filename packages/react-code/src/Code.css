@@ -17,6 +17,21 @@
     font-size: var(--vds-code-font-size);
     line-height: var(--vds-code-line-height);
     letter-spacing: var(--vds-code-letter-spacing);
+
+    /* Concentricity channel. Header / body / caption sit flush against the
+     * shell's inner edge — there is no padding between the shell and its
+     * slots — so a flush child's corner is the shell's radius minus its
+     * border. Follows --vds-code-radius, so `data-radius` modes and the
+     * `embedded` variant (radius 0) carry through automatically. */
+    --vds-radius-host-r: var(--vds-code-radius);
+    --vds-radius-host-b: var(--vds-code-border-width);
+    --vds-radius-host-p: 0px;
+
+    /* Kept, deliberately. CodeMirror paints surfaces we cannot round from
+     * here — the scroller's overflowing content, the gutter background, the
+     * search panel, selection layers — and they are grandchildren, past the
+     * one level the channel reaches. This is the only element that can mask
+     * them against the shell's corner. */
     overflow: hidden;
     transition:
       background-color var(--vds-code-transition-duration) var(--vds-code-transition-easing),
@@ -93,6 +108,22 @@
     flex: 1 1 auto;
     min-block-size: 0;
     background-color: var(--vds-code-bg);
+
+    /* Squared against whichever of header / caption abuts it, flush where it
+     * meets the shell. The CodeMirror wrapper reads this back with
+     * `border-radius: inherit` so the focus ring follows the same corner
+     * instead of drawing a square one inside a rounded shell. */
+    border-radius: 0;
+  }
+
+  .vds-code-body:first-child {
+    border-start-start-radius: var(--vds-radius-flush);
+    border-start-end-radius: var(--vds-radius-flush);
+  }
+
+  .vds-code-body:last-child {
+    border-end-start-radius: var(--vds-radius-flush);
+    border-end-end-radius: var(--vds-radius-flush);
   }
 
   /* =========================================================================

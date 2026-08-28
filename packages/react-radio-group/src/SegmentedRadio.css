@@ -8,6 +8,22 @@
       var(--segmented-track-border-color);
     border-radius: var(--segmented-radius);
     min-inline-size: 0;
+
+    /* ── Radius nesting host ──
+       The track is the element that draws the corner, so it publishes its
+       radius / border / padding and the items — its direct children — read the
+       answer from --vds-radius-inset. All three are declared, zeroes included,
+       so a segmented group dropped inside another host cannot inherit that
+       host's border/padding and subtract the wrong distance.
+
+       This replaces `calc(--segmented-radius - --segmented-padding)`, which
+       subtracted the padding but not the 1px track border: --segmented-radius
+       is the track's *outer* radius, so the distance to an item is border +
+       padding, not padding alone. The items were 1px too round in every mode
+       that has a finite radius. */
+    --vds-radius-host-r: var(--segmented-radius);
+    --vds-radius-host-b: var(--segmented-track-border-width);
+    --vds-radius-host-p: var(--segmented-padding);
   }
 
   .vds-segmented-radio[data-orientation="vertical"] {
@@ -33,7 +49,8 @@
     color: var(--segmented-item-color);
     background-color: transparent;
     border: 0;
-    border-radius: calc(var(--segmented-radius) - var(--segmented-padding));
+    /* Concentric with the track — see the host declaration above. */
+    border-radius: var(--vds-radius-inset);
     cursor: pointer;
     white-space: nowrap;
     transition:

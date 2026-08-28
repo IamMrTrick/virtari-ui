@@ -202,7 +202,18 @@
       var(--data-table-border-color);
     border-inline-end: var(--data-table-border-width) solid
       var(--data-table-border-color);
-    overflow: hidden;
+
+    /* `clip`, not `hidden`. The cell still has to contain its content to the
+     * column width — `table-layout: fixed` does not do that on its own — but
+     * `hidden` cut the focus rings off the interactive things that live in
+     * cells (row expand / pin triggers, the actions-cell trigger, the copyable
+     * button, the inline editor), all of which draw at `outline-offset: 2px`.
+     * `overflow-clip-margin` widens the clip box by exactly the ring, so the
+     * ring survives and the content is still contained. Browsers without
+     * `overflow-clip-margin` fall back to clipping at the border box, i.e.
+     * the previous behaviour. */
+    overflow: clip;
+    overflow-clip-margin: var(--data-table-cell-clip-margin);
   }
   .vds-data-table-row > .vds-data-table-cell:last-child {
     border-inline-end: 0;
