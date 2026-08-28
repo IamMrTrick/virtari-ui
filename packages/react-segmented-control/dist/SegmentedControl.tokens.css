@@ -1,7 +1,0 @@
-/*
- * SegmentedControl tokens are intentionally empty.
- * All visual tokens (track bg, item height, font-size, indicator colors, etc.)
- * cascade from Tabs CSS via `.vds-tabs-list[data-variant="segmented"]` on the
- * inner list element. Override Tabs tokens here if SegmentedControl-specific
- * values are ever needed.
- */
