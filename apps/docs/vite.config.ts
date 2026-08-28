@@ -30,6 +30,14 @@ export default defineConfig({
   },
   server: {
     allowedHosts: true,
+    // Honour the port the launcher assigns. Editor preview panes (and most
+    // dev-server supervisors) pick a free port, export it as PORT, and then
+    // open a browser there — but plain `vite` ignores PORT and picks its own,
+    // falling back to 5174+ whenever 5173 is taken by another project. The
+    // pane then points at a port nothing is listening on, which shows up as a
+    // blank white page rather than an error. Undefined keeps Vite's default
+    // behaviour when PORT is not set.
+    port: process.env.PORT ? Number(process.env.PORT) : undefined,
   },
   resolve: {
     // Explicit aliases bypass Vite's exports-field resolver, which sporadically
