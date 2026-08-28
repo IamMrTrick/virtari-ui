@@ -1,14 +1,37 @@
 /*
- * Radii — three-tier architecture.
+ * Radii — three tiers, plus a composition channel.
  *
  * primitives.css   Raw scale. Change to shift the whole system.
  * modes.css        T-shirt semantic scale + data-radius mode overrides.
  * components.css   Per-component tokens with caps where pill mode would break the component.
+ * nesting.css      Concentricity — what a rounded corner INSIDE another one should be.
  *
  * Components should consume:
  *   • a component token (--vds-radius-checkbox, --vds-radius-card, ...) when a cap is required, or
  *   • the t-shirt scale (--vds-radius-sm, --vds-radius-md, ...) / legacy element/surface aliases otherwise.
+ *
+ * ── Composition ──
+ *
+ * The three tiers above answer "how round is this box". They do not answer
+ * "how round is the box inside it", and those are different questions: two
+ * rounded rectangles only look concentric when their radii differ by exactly
+ * the distance between their edges. Give a panel inside a card the same 12px
+ * the card has and the inner corner visibly bulges away from the outer one.
+ *
+ * So the rule for any nested rounded corner is a subtraction, never a repeat:
+ *
+ *   inner = outer − (border [+ padding])
+ *
+ * nesting.css turns that into a channel. A container opts in with
+ * `data-radius-host` and publishes its own radius / border / padding via
+ * --vds-radius-host-r / -b / -p; its direct children read the answer from
+ * --vds-radius-flush (child touches the host's inner edge) or
+ * --vds-radius-inset (child sits inside the host's padding). Registered with
+ * `inherits: false`, so it reaches exactly one level and no further.
+ *
+ * Never hardcode the inner value. It has to move when `data-radius` moves.
  */
 @import "./radii/primitives.css";
 @import "./radii/modes.css";
 @import "./radii/components.css";
+@import "./radii/nesting.css";

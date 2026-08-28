@@ -5,6 +5,7 @@
    * Canonical home for every border token.
    *
    *   border             = default UI border      (neutral-7)
+   *   border-interactive = boundary of a control  (neutral-9)
    *   border-muted       = subtle border          (neutral-6)
    *   border-subtle      = alias of border-muted  (neutral-6)
    *   border-strong      = strong divider         (neutral-8)
@@ -25,6 +26,19 @@
     --vds-color-border-subtle:   var(--vds-color-neutral-6);
     --vds-color-border-strong:   var(--vds-color-neutral-8);
     --vds-color-border-disabled: var(--vds-color-neutral-5);
+
+    /* ─── Interactive boundary ───
+     * WCAG 1.4.11 wants the boundary of a control (the thing that tells
+     * you an input IS an input) to clear 3:1 against its surroundings.
+     * `--vds-color-border` is neutral-7 — 1.73:1 light, 2.01:1 dark. It
+     * is a *divider* weight, correct for separating content, wrong for
+     * outlining a control. neutral-9 is the first step that clears the
+     * bar: 4.11:1 light, 3.57:1 dark, 3.89:1 oled.
+     *
+     * Use this on anything a user can operate — input, select, textarea,
+     * checkbox, radio, switch track, slider rail, outlined button. Keep
+     * `--vds-color-border` for cards, dividers and other decoration. */
+    --vds-color-border-interactive: var(--vds-color-neutral-9);
 
     /* ─── Form input borders ─── */
     --vds-color-border-input:       var(--vds-color-neutral-7);

@@ -9,7 +9,7 @@
    *   text-muted        = secondary copy        (neutral-11)
    *   text-subtle       = low-contrast copy     (neutral-9)
    *   text-disabled     = disabled copy         (neutral-8)
-   *   text-placeholder  = form placeholders     (neutral-9)
+   *   text-placeholder  = form placeholders     (neutral-11)
    *   text-inverse      = text on bg-inverse    (neutral-1)
    *   text-link / hover / visited               (primary-11/10/12)
    *   text-selection    = default selection text
@@ -23,8 +23,14 @@
     --vds-color-text-subtle:   var(--vds-color-neutral-9);
     --vds-color-text-disabled: var(--vds-color-neutral-8);
 
-    /* ─── Form placeholders ─── */
-    --vds-color-text-placeholder: var(--vds-color-neutral-9);
+    /* ─── Form placeholders ───
+     * Placeholder text is real content — it carries the format hint, and
+     * for a lot of people it is the only label they get. WCAG applies.
+     * neutral-9 measured 4.11:1 in light and 3.57:1 in dark, i.e. it
+     * failed AA in both. neutral-11 is 7.77:1 / 7.60:1 on the canvas and
+     * still ≥6.5:1 on the sunken and muted surfaces inputs actually sit
+     * on, while staying visibly lighter than `--vds-color-text`. */
+    --vds-color-text-placeholder: var(--vds-color-neutral-11);
 
     /* ─── Hyperlinks ─── */
     --vds-color-text-link:         var(--vds-color-primary-11);
