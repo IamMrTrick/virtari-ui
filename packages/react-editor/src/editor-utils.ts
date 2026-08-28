@@ -535,7 +535,14 @@ export function readToolbarState(): ToolbarState {
   } else if (topLevel && $isHeadingNode(topLevel)) {
     const tag = topLevel.getTag();
     blockType =
-      tag === "h1" || tag === "h2" || tag === "h3" ? tag : "paragraph";
+      tag === "h1" ||
+      tag === "h2" ||
+      tag === "h3" ||
+      tag === "h4" ||
+      tag === "h5" ||
+      tag === "h6"
+        ? tag
+        : "paragraph";
   } else if (topLevel && $isQuoteNode(topLevel)) {
     blockType = "quote";
   } else if (topLevel && $isCodeNode(topLevel)) {
@@ -605,6 +612,9 @@ export function applyBlockType(
       case "h1":
       case "h2":
       case "h3":
+      case "h4":
+      case "h5":
+      case "h6":
         $setBlocksType(selection, () => $createHeadingNode(blockType));
         return;
       case "quote":
@@ -1077,7 +1087,10 @@ function createBlockInsertion(kind: EditorInsertBlockKind) {
     }
     case "h1":
     case "h2":
-    case "h3": {
+    case "h3":
+    case "h4":
+    case "h5":
+    case "h6": {
       const heading = $createHeadingNode(kind);
       heading.append($createTextNode(""));
       return {

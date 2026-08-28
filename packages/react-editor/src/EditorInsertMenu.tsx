@@ -341,6 +341,7 @@ export function EditorInsertMenu({
   label = DEFAULT_LABEL,
   compact = false,
   onOpenChange,
+  onRequestMediaInsert,
   targetBlockElement,
 }: EditorInsertMenuProps) {
   const [editor] = useLexicalComposerContext();
@@ -433,6 +434,14 @@ export function EditorInsertMenu({
                   }
 
                   if (isMediaInsertKind(item.kind)) {
+                    if (onRequestMediaInsert) {
+                      onRequestMediaInsert({
+                        editor,
+                        kind: item.kind,
+                        targetBlockElement,
+                      });
+                      return;
+                    }
                     setMediaDialog({
                       kind: item.kind,
                       targetBlockElement,

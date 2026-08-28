@@ -30,6 +30,12 @@ import {
   Icon,
   IconBold,
   IconCode,
+  IconH1,
+  IconH2,
+  IconH3,
+  IconH4,
+  IconH5,
+  IconH6,
   IconItalic,
   IconLetterCaseLower,
   IconLetterCaseToggle,
@@ -40,11 +46,13 @@ import {
   IconStrikethrough,
   IconSubscript,
   IconSuperscript,
+  IconTypography,
   IconUnderline,
 } from "@virtari-packages/react-icons";
 import { cn } from "@virtari-packages/utils";
 import { useEditorContext } from "./context";
 import {
+  applyBlockType,
   applyLink,
   clearLink,
   EMPTY_TOOLBAR_STATE,
@@ -52,6 +60,24 @@ import {
   readToolbarState,
   type ToolbarState,
 } from "./editor-utils";
+import type { EditorBlockType } from "./types";
+
+const FLOATING_BLOCK_OPTIONS: Array<{
+  value: Extract<
+    EditorBlockType,
+    "paragraph" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+  >;
+  label: string;
+  icon: ComponentProps<typeof Icon>["icon"];
+}> = [
+  { value: "paragraph", label: "Normal text", icon: IconTypography },
+  { value: "h1", label: "Heading 1", icon: IconH1 },
+  { value: "h2", label: "Heading 2", icon: IconH2 },
+  { value: "h3", label: "Heading 3", icon: IconH3 },
+  { value: "h4", label: "Heading 4", icon: IconH4 },
+  { value: "h5", label: "Heading 5", icon: IconH5 },
+  { value: "h6", label: "Heading 6", icon: IconH6 },
+];
 import type { EditorFloatingToolbarProps } from "./types";
 
 const FLOATING_TOOLBAR_ICON_SIZE: ComponentProps<typeof Icon>["size"] = "md";
@@ -337,6 +363,17 @@ export function EditorFloatingToolbar({
     >
       <TooltipProvider delayDuration={180} skipDelayDuration={80}>
         <div className="vds-editor-floating-row">
+          {FLOATING_BLOCK_OPTIONS.map((option) => (
+            <FloatingToolbarButton
+              key={option.value}
+              active={state.blockType === option.value}
+              icon={option.icon}
+              label={option.label}
+              tooltipSide={tooltipSide}
+              onClick={() => applyBlockType(editor, option.value)}
+            />
+          ))}
+          <span className="vds-editor-floating-divider" aria-hidden="true" />
           <FloatingToolbarButton
             active={state.isBold}
             icon={IconBold}
