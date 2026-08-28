@@ -15,8 +15,11 @@ Thanks for working on Virtari. This guide covers the day-to-day workflow, conven
 git clone https://github.com/IamMrTrick/virtari-design-system.git
 cd virtari-design-system
 pnpm install
+pnpm run build
 pnpm run dev
 ```
+
+The `pnpm run build` step is required on a fresh clone: package `dist/` output is gitignored (the release workflow rebuilds before publishing), and the docs app resolves several packages through their `dist/`.
 
 `pnpm run dev` boots [`apps/docs`](./apps/docs) on http://localhost:5173. Every component has a page there — treat it as a live spec.
 

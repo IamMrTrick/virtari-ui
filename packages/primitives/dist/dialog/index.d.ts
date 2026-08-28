@@ -1,2 +1,0 @@
-export { Close, Content, Description, Dialog, DialogClose, DialogContent, DialogDescription, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger, Overlay, Portal, Root, Title, Trigger, WarningProvider, createDialogScope } from './dialog';
-export type { DialogCloseProps, DialogContentProps, DialogDescriptionProps, DialogOverlayProps, DialogPortalProps, DialogProps, DialogTitleProps, DialogTriggerProps } from './dialog';

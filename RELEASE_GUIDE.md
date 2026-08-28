@@ -131,7 +131,7 @@ PAT باید scope `read:packages` داشته باشه (و `write:packages` اگ
 
 2. **`access: restricted` توی config حیاتیه.** اگه `public` باشه میره روی npm.org عمومی.
 
-3. **dist رو commit نکن.** Workflow خودش build می‌زنه. اون M هایی که گاهی توی `git status` می‌بینی از rebuild لوکالن — صرف‌نظر کن (یا `git checkout -- packages/`).
+3. **dist توی گیت نیست.** `packages/*/dist` داخل `.gitignore`ه، چون workflow قبل از publish خودش build می‌زنه. پس دیگه اون `M`های همیشگی توی `git status` رو نمی‌بینی و لازم نیست چیزی discard کنی. فقط یادت باشه روی clone تازه اول `pnpm build` بزنی وگرنه `apps/docs` بالا نمیاد.
 
 4. **Workflow Token:** `GITHUB_TOKEN` با `packages: write` scope که توی workflow YAML تعریف شده.
 
