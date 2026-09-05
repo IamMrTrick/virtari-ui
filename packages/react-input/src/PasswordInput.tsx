@@ -1,10 +1,11 @@
+import { forwardRef } from "react";
 import { composeFieldDescribedBy } from "@virtari-packages/react-fieldset";
 import {
   IconCheck,
   IconEye,
   IconEyeOff,
 } from "@virtari-packages/react-icons";
-import { cn } from "@virtari-packages/utils";
+import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
 import {
   useCallback,
   useEffect,
@@ -182,7 +183,7 @@ export function PasswordStrengthMeter({
   );
 }
 
-export function PasswordInput({
+export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(function PasswordInput({
   rootClassName,
   rootStyle,
   className,
@@ -208,7 +209,6 @@ export function PasswordInput({
   strengthLabel,
   showPasswordLabel = "Show password",
   hidePasswordLabel = "Hide password",
-  ref,
   id,
   value,
   defaultValue,
@@ -218,7 +218,7 @@ export function PasswordInput({
   readOnly,
   "aria-describedby": ariaDescribedBy,
   ...props
-}: PasswordInputProps) {
+}, ref) {
   const generatedId = useId();
   const localRef = useRef<HTMLInputElement>(null);
   const controlId = id ?? `vds-password-input-${generatedId}`;
@@ -228,6 +228,7 @@ export function PasswordInput({
   const [uncontrolledValue, setUncontrolledValue] = useState(
     resolveTextValue(defaultValue),
   );
+  useFormReset(localRef, () => setUncontrolledValue(resolveTextValue(defaultValue)), props.form);
   const isValueControlled = value !== undefined;
   const isRevealedControlled = revealed !== undefined;
   const currentValue = isValueControlled
@@ -254,16 +255,7 @@ export function PasswordInput({
   );
   const resolvedType = isRevealed ? "text" : "password";
 
-  const mergedRef = useCallback(
-    (node: HTMLInputElement | null) => {
-      localRef.current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) {
-        (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
-      }
-    },
-    [ref],
-  );
+  const mergedRef = useComposedRefs(localRef, ref);
 
   useEffect(() => {
     onStrengthChange?.(analysis);
@@ -343,4 +335,4 @@ export function PasswordInput({
       ) : null}
     </div>
   );
-}
+});

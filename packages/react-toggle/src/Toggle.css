@@ -26,7 +26,8 @@
     user-select: none;
     transition:
       background-color var(--vds-duration-fast) var(--vds-ease-out),
-      color var(--vds-duration-fast) var(--vds-ease-out);
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow 180ms ease-out;
 
     block-size: var(--_toggle-height);
     padding-inline: var(--_toggle-px);
@@ -50,8 +51,13 @@
     }
 
     &:focus-visible {
-      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
-      outline-offset: var(--vds-focus-ring-offset, 2px);
+      outline: none;
+      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
     }
 
     &:disabled {
@@ -134,6 +140,10 @@
     & > svg {
       inline-size: var(--_toggle-icon-size);
       block-size: var(--_toggle-icon-size);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
     }
   }
 }

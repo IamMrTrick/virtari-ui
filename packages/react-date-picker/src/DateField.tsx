@@ -1,4 +1,5 @@
-import { cn } from "@virtari-packages/utils";
+import { forwardRef } from "react";
+import { cn, useComposedRefs } from "@virtari-packages/utils";
 import { useRef, type ReactNode, type Ref } from "react";
 import { useDateField, useDateSegment } from "@react-aria/datepicker";
 import {
@@ -30,6 +31,8 @@ export interface DateFieldProps {
   "aria-label"?: string;
   name?: string;
   autoFocus?: boolean;
+  form?: string;
+  validationBehavior?: "native" | "aria";
 
   /* ── Visual ── */
   size?: DatePickerSize;
@@ -42,7 +45,7 @@ export interface DateFieldProps {
   ref?: Ref<HTMLDivElement>;
 }
 
-export function DateField({
+export const DateField = forwardRef<HTMLDivElement, DateFieldProps>(function DateField({
   size = "md",
   appearance = "soft",
   invalid,
@@ -52,9 +55,8 @@ export function DateField({
   description,
   errorMessage,
   className,
-  ref,
   ...props
-}: DateFieldProps) {
+}, ref) {
   const { locale: detectedLocale, direction } = useLocale();
   const usedLocale = resolveLocale(locale ?? detectedLocale, calendar);
   const state = useDateFieldState({
@@ -64,8 +66,10 @@ export function DateField({
     createCalendar,
   });
   const localRef = useRef<HTMLDivElement>(null);
-  const { labelProps, fieldProps, descriptionProps, errorMessageProps } =
-    useDateField({ ...props, label, isInvalid: invalid ?? props.isInvalid }, state, localRef);
+  const nativeInputRef = useRef<HTMLInputElement>(null);
+  const mergedRef = useComposedRefs(localRef, ref);
+  const { labelProps, fieldProps, inputProps, descriptionProps, errorMessageProps } =
+    useDateField({ ...props, inputRef: nativeInputRef, label, isInvalid: invalid ?? props.isInvalid }, state, localRef);
 
   const isInvalid = invalid ?? state.isInvalid;
 
@@ -79,6 +83,7 @@ export function DateField({
       data-readonly={props.isReadOnly ? "true" : undefined}
       data-dir={direction}
     >
+      <input {...inputProps} ref={nativeInputRef} form={props.form} />
       {label ? (
         <span {...labelProps} className="vds-date-field-label">
           {label}
@@ -86,7 +91,7 @@ export function DateField({
       ) : null}
       <div
         {...fieldProps}
-        ref={ref ?? localRef}
+        ref={mergedRef}
         className="vds-date-field-group"
       >
         {state.segments.map((segment, i) => (
@@ -110,7 +115,7 @@ export function DateField({
       </span>
     </div>
   );
-}
+});
 
 /* ──────────────────────────────────────────────────────────── *
  * FieldSegment — exported so DatePicker can reuse it

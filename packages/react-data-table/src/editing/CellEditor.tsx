@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
 import { Input } from "@virtari-packages/react-input";
-import { cn } from "@virtari-packages/utils";
+import { cn, useComposedRefs } from "@virtari-packages/utils";
 
 export type CellEditorMode = "text" | "number" | "date";
 
@@ -37,6 +37,7 @@ export const CellEditor = forwardRef<HTMLInputElement, CellEditorProps>(
       }
     }, [autoFocus]);
 
+    const mergedRef = useComposedRefs(inputRef, ref);
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       if (mode === "number") {
         onValueChange(
@@ -48,6 +49,7 @@ export const CellEditor = forwardRef<HTMLInputElement, CellEditorProps>(
     };
 
     const handleKey = (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.defaultPrevented || e.nativeEvent.isComposing) return;
       if (e.key === "Enter") {
         e.preventDefault();
         onCommit();
@@ -59,16 +61,18 @@ export const CellEditor = forwardRef<HTMLInputElement, CellEditorProps>(
 
     return (
       <Input
-        ref={(node) => {
-          inputRef.current = node;
-          if (typeof ref === "function") ref(node);
-          else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
-        }}
+        ref={mergedRef}
         inputSize="sm"
         type={mode === "number" ? "number" : mode === "date" ? "date" : "text"}
         value={value}
         onChange={handleChange}
-        onBlur={onCommit}
+        onBlur={(event) => {
+          // Browser chrome and password-manager popups may blur the window.
+          const input = event.currentTarget;
+          requestAnimationFrame(() => {
+            if (input.isConnected && input.ownerDocument.hasFocus() && input.ownerDocument.activeElement !== input) onCommit();
+          });
+        }}
         onKeyDown={handleKey}
         className={cn("vds-data-table-cell-editor", className)}
       />

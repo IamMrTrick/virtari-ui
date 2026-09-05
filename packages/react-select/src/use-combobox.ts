@@ -36,6 +36,7 @@ export type ComboboxFilter<T extends ComboboxItemData = ComboboxItemData> = (
  * ───────────────────────────────────────────── */
 
 export interface ComboboxContextValue {
+  reset: () => void;
   /* config */
   multiple: boolean;
   searchable: boolean;
@@ -112,6 +113,8 @@ const defaultFilter: ComboboxFilter = (item, query) => {
  * ───────────────────────────────────────────── */
 
 export interface UseComboboxProps<T extends ComboboxItemData = ComboboxItemData> {
+  name?: string;
+  form?: string;
   items: T[];
   value?: string | string[];
   defaultValue?: string | string[];
@@ -165,10 +168,11 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
 
   const commitValue = useCallback(
     (next: string | string[]) => {
+      if (disabled) return;
       if (controlledValue === undefined) setUncontrolledValue(next);
       onValueChange?.(next);
     },
-    [controlledValue, onValueChange],
+    [controlledValue, onValueChange, disabled],
   );
 
   /* ── controlled/uncontrolled open ── */
@@ -292,6 +296,7 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
   /* ── keyboard ── */
   const handleInputKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.defaultPrevented || e.nativeEvent.isComposing || disabled) return;
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
@@ -302,14 +307,6 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
           e.preventDefault();
           if (!open) setOpen(true);
           moveHighlight(-1);
-          break;
-        case "Home":
-          e.preventDefault();
-          moveHighlight("start");
-          break;
-        case "End":
-          e.preventDefault();
-          moveHighlight("end");
           break;
         case "Enter":
           if (open) {
@@ -333,13 +330,19 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
           }
           break;
         case "Tab":
-          if (open) setOpen(false);
+          if (open) {
+            // The search lives in a portal. Start native Tab navigation at
+            // the trigger so it advances to the adjacent form control.
+            triggerRef.current?.focus();
+            setOpen(false);
+          }
           break;
         default:
           break;
       }
     },
     [
+      disabled,
       open,
       setOpen,
       moveHighlight,
@@ -363,6 +366,13 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
   );
 
   return {
+    reset: () => {
+      const next = defaultValue ?? (multiple ? [] : "");
+      if (controlledValue === undefined) setUncontrolledValue(next);
+      onValueChange?.(next);
+      setSearchQuery("");
+      setOpen(false);
+    },
     multiple,
     searchable,
     disabled,

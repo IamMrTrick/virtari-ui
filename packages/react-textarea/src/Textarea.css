@@ -2,19 +2,18 @@
 
 @keyframes vds-typing-pulse {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
   }
   35% {
-    box-shadow: 0 0 0 calc(1px + var(--_ti, 0.4) * 3px)
-      color-mix(in oklch, var(--vds-color-ring) 22%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2), 0 0 0 6px var(--vds-color-primary-a3);
   }
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  @keyframes vds-typing-pulse { 0%, 100% { box-shadow: none; } }
+  @keyframes vds-typing-pulse { 0%, 100% { box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); } }
 }
 
 @layer design-system.components {
@@ -50,7 +49,7 @@
     user-select: text;
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
-      box-shadow var(--vds-duration-fast) var(--vds-ease-out);
+      box-shadow 180ms ease-out;
 
     padding-inline: var(--_textarea-px);
     padding-block: var(--_textarea-py);
@@ -62,9 +61,14 @@
     }
 
     &:focus-visible {
-      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
-      outline-offset: var(--vds-focus-ring-offset, 2px);
       border-color: var(--vds-color-primary-9);
+      outline: none;
+      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
     }
 
     &.vds-textarea--pulse {
@@ -80,7 +84,20 @@
       border-color: var(--vds-color-danger-9);
 
       &:focus-visible {
-        outline-color: var(--vds-color-danger-9);
+        outline: none;
+        box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+
+        @media (forced-colors: active) {
+          outline: 2px solid Highlight;
+          outline-offset: 2px;
+          box-shadow: none;
+        }
+      }
+
+      transition: box-shadow 180ms ease-out;
+
+      @media (prefers-reduced-motion: reduce) {
+        transition-duration: 0s;
       }
     }
 
@@ -128,6 +145,10 @@
       --textarea-padding-block: var(--vds-space-4);
       --textarea-font-size: var(--vds-text-xl);
       --textarea-min-block-size: var(--vds-space-32);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
     }
   }
 }

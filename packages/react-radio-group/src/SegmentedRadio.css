@@ -58,9 +58,11 @@
         var(--segmented-transition-easing),
       color var(--segmented-transition-duration)
         var(--segmented-transition-easing),
-      box-shadow var(--segmented-transition-duration)
-        var(--segmented-transition-easing);
+      box-shadow 180ms ease-out;
     flex: 1;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   /* ── Hover ── */
@@ -77,10 +79,14 @@
 
   /* ── Focus ring ── */
   .vds-segmented-radio-item:focus-visible {
-    outline: var(--segmented-focus-ring-width) solid
-      var(--segmented-focus-ring-color);
-    outline-offset: var(--segmented-focus-ring-offset);
     z-index: 1;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   /* ── Disabled ── */
@@ -94,7 +100,20 @@
     border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
   }
 
+  .vds-segmented-radio[data-error] .vds-segmented-radio-item {
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+
   .vds-segmented-radio[data-error] .vds-segmented-radio-item:focus-visible {
-    outline-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 }

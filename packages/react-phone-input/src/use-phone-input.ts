@@ -73,22 +73,22 @@ export function usePhoneInput({
 
   const currentRaw = isControlled ? (value ?? "") : internalRaw;
 
-  // When a controlled value arrives as E.164, infer country from it so the
+  // When a value arrives as E.164, infer country from it so the
   // picker stays in sync without the consumer threading two props.
   const inferredCountry: CountryCode = useMemo(() => {
-    if (!isControlled) return internalCountry;
+
     const lib = getLibPhone();
     if (!lib) return internalCountry;
     try {
-      const parsed = lib.parsePhoneNumberFromString(currentRaw);
+      const parsed = lib.parsePhoneNumberFromString(normalize ? normalizeDigits(currentRaw) : currentRaw);
       if (parsed?.country) return parsed.country.toLowerCase() as CountryCode;
     } catch {
       /* ignore */
     }
     return internalCountry;
-  }, [currentRaw, isControlled, internalCountry]);
+  }, [currentRaw, internalCountry, normalize, libReady]);
 
-  const country: CountryCode = isControlled ? inferredCountry : internalCountry;
+  const country: CountryCode = inferredCountry;
   const countryEntry: CountryEntry =
     countriesByCode[country] ?? (countriesByCode.us as CountryEntry);
 
@@ -117,7 +117,7 @@ export function usePhoneInput({
     } catch {
       return { country, national: normalized, e164: null, isValid: false };
     }
-  }, [currentRaw, country, normalize]);
+  }, [currentRaw, country, normalize, libReady]);
 
   const prevValidity = useRef<boolean>(formatted.isValid);
   useEffect(() => {
@@ -139,7 +139,7 @@ export function usePhoneInput({
         const number = ayt.getNumber();
         const isValid = number?.isValid() ?? false;
         return {
-          country,
+          country: (number?.country?.toLowerCase() as CountryCode | undefined) ?? country,
           national,
           e164: isValid ? (number!.number as string) : null,
           isValid,
@@ -153,8 +153,7 @@ export function usePhoneInput({
   const setCountry = useCallback(
     (nextCountry: CountryCode) => {
       setInternalCountry(nextCountry);
-      const entry = countriesByCode[nextCountry];
-      const stripped = stripDialPrefix(currentRaw, entry?.dialCode ?? "+");
+      const stripped = stripDialPrefix(currentRaw, countryEntry.dialCode);
       if (!isControlled) setInternalRaw(stripped);
       const lib = getLibPhone();
       if (lib) {
@@ -177,7 +176,7 @@ export function usePhoneInput({
         });
       }
     },
-    [currentRaw, isControlled, normalize, onChange],
+    [currentRaw, countryEntry.dialCode, isControlled, normalize, onChange],
   );
 
   return {
@@ -185,6 +184,27 @@ export function usePhoneInput({
     countryEntry,
     value: formatted,
     allCountries: countries,
+    reset: () => {
+      const fallback = defaultCountry ?? detectCountry();
+      const raw = normalize ? normalizeDigits(defaultValue ?? "") : defaultValue ?? "";
+      setInternalCountry(fallback);
+      if (!isControlled) setInternalRaw(raw);
+      const lib = getLibPhone();
+      if (!lib) {
+        onChange?.({ country: fallback, national: raw, e164: null, isValid: false });
+        return;
+      }
+      const formatter = new lib.AsYouType(fallback.toUpperCase() as never);
+      const national = formatter.input(raw);
+      const number = formatter.getNumber();
+      const isValid = number?.isValid() ?? false;
+      onChange?.({
+        country: (number?.country?.toLowerCase() as CountryCode | undefined) ?? fallback,
+        national,
+        e164: isValid ? number!.number as string : null,
+        isValid,
+      });
+    },
     setCountry,
     setNational: setNationalFromUser,
   } as const;

@@ -333,11 +333,6 @@ export default function App() {
       data-vds-drawer-wrapper
       className="docs-app"
     >
-      <Sidebar
-        activePage={activePage}
-        onNavigate={handleNavigate}
-        hrefFor={hrefFor}
-      />
       <MobileSidebar
         open={sidebarOpen}
         onOpenChange={setSidebarOpen}
@@ -346,6 +341,10 @@ export default function App() {
         hrefFor={hrefFor}
       />
       <Layout
+        activePage={activePage}
+        hrefFor={hrefFor}
+        onNavigate={handleNavigate}
+        sidebar={<Sidebar activePage={activePage} onNavigate={handleNavigate} hrefFor={hrefFor} />}
         dark={dark}
         onToggleDark={setDark}
         radius={radius}

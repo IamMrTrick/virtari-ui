@@ -377,6 +377,12 @@ export function useDrawerDrag(config: DragConfig) {
 
   const bindMouseListeners = useCallback(() => {
     const onMouseMove = (event: MouseEvent) => {
+      // Mouseup can be lost outside the browser or in an embedded surface.
+      // Never consume a new position once the primary button is released.
+      if ((event.buttons & 1) === 0) {
+        endSession(false);
+        return;
+      }
       moveSession(
         getMainCoord(configRef.current.direction, event.clientX, event.clientY),
         getCrossCoord(configRef.current.direction, event.clientX, event.clientY),
@@ -384,19 +390,21 @@ export function useDrawerDrag(config: DragConfig) {
       );
     };
 
-    const onMouseUp = () => endSession(false);
+    const onMouseUp = (event: MouseEvent) => {
+      if (event.button === 0 || (event.buttons & 1) === 0) endSession(false);
+    };
     const onWindowBlur = () => {
       if (!stateRef.current) return;
       endSession(true);
     };
 
     window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("mouseup", onMouseUp, true);
     window.addEventListener("blur", onWindowBlur);
 
     removeWindowListenersRef.current = () => {
       window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("mouseup", onMouseUp, true);
       window.removeEventListener("blur", onWindowBlur);
     };
   }, [endSession, moveSession]);
@@ -405,6 +413,10 @@ export function useDrawerDrag(config: DragConfig) {
     const onPointerMove = (event: PointerEvent) => {
       const state = stateRef.current;
       if (!state || state.pointerId !== event.pointerId) return;
+      if ((event.buttons & 1) === 0) {
+        endSession(false);
+        return;
+      }
       moveSession(
         getMainCoord(configRef.current.direction, event.clientX, event.clientY),
         getCrossCoord(configRef.current.direction, event.clientX, event.clientY),
@@ -432,14 +444,14 @@ export function useDrawerDrag(config: DragConfig) {
     };
 
     window.addEventListener("pointermove", onPointerMove, { passive: false });
-    window.addEventListener("pointerup", onPointerUp);
-    window.addEventListener("pointercancel", onPointerCancel);
+    window.addEventListener("pointerup", onPointerUp, true);
+    window.addEventListener("pointercancel", onPointerCancel, true);
     window.addEventListener("blur", onWindowBlur);
 
     removeWindowListenersRef.current = () => {
       window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", onPointerUp);
-      window.removeEventListener("pointercancel", onPointerCancel);
+      window.removeEventListener("pointerup", onPointerUp, true);
+      window.removeEventListener("pointercancel", onPointerCancel, true);
       window.removeEventListener("blur", onWindowBlur);
     };
   }, [endSession, moveSession]);
@@ -538,6 +550,7 @@ export function useDrawerDrag(config: DragConfig) {
   const onPointerDown = useCallback((event: ReactPointerEvent) => {
     if (stateRef.current) return;
     if (event.pointerType === "mouse" || event.pointerType === "touch") return;
+    if (event.button !== 0) return;
     if (configRef.current.drawerSize <= 0) return;
 
     const target = event.target instanceof HTMLElement ? event.target : null;

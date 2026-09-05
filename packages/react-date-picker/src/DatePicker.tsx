@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { cn } from "@virtari-packages/utils";
 import { useEffect, useRef, useState, type ReactNode, type Ref } from "react";
 import { useDatePicker, useDateField } from "@react-aria/datepicker";
@@ -48,6 +49,8 @@ export interface DatePickerProps {
    */
   defaultTimeValue?: TimeValue;
   autoFocus?: boolean;
+  form?: string;
+  validationBehavior?: "native" | "aria";
   name?: string;
 
   label?: ReactNode;
@@ -75,7 +78,7 @@ export interface DatePickerPresetRenderProps {
   setValue: (value: DateValue | null) => void;
 }
 
-export function DatePicker({
+export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(function DatePicker({
   size = "md",
   appearance = "soft",
   invalid,
@@ -91,9 +94,8 @@ export function DatePicker({
   mobilePresentation = "drawer",
   mobileSizeMode = "content",
   defaultTimeValue,
-  ref,
   ...props
-}: DatePickerProps) {
+}, ref) {
   const { locale: detectedLocale, direction } = useLocale();
   const usedLocale = resolveLocale(locale ?? detectedLocale, calendar);
   const isMobile = useIsMobileViewport();
@@ -153,7 +155,8 @@ export function DatePicker({
     createCalendar,
   });
   const fieldRef = useRef<HTMLDivElement>(null);
-  const { fieldProps: innerFieldProps } = useDateField(fieldProps, fieldState, fieldRef);
+  const nativeInputRef = useRef<HTMLInputElement>(null);
+  const { fieldProps: innerFieldProps, inputProps } = useDateField({ ...fieldProps, inputRef: nativeInputRef, form: props.form }, fieldState, fieldRef);
 
   const draftPickerState = useDatePickerState({
     ...props,
@@ -364,6 +367,7 @@ export function DatePicker({
       data-readonly={props.isReadOnly ? "true" : undefined}
       data-dir={direction}
     >
+      <input {...inputProps} ref={nativeInputRef} form={props.form} />
       {label ? (
         <span {...labelProps} className="vds-date-picker-label">
           {label}
@@ -491,7 +495,7 @@ export function DatePicker({
       </span>
     </div>
   );
-}
+});
 
 function CalendarIcon() {
   return (

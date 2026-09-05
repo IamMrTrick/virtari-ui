@@ -1498,14 +1498,14 @@ export function DrawerPage() {
 
       <Section
         title="Offset — floating sheet"
-        description="Add a gap between the drawer and its opening edge for a card-like, elevated look. Accepts a number (px) or a string (any CSS length)."
+        description="Keep a gap from every viewport edge with all four corners rounded. Accepts a number (px) or a string (any CSS length)."
       >
         <Row>
           <DemoDrawer
             offset={16}
             label="Floating bottom"
             title="Offset 16"
-            description="16px gap from the bottom edge."
+            description="16px from the bottom and sides, with at least 16px reserved above."
           />
           <DemoDrawer
             direction="right"
@@ -1514,7 +1514,7 @@ export function DrawerPage() {
             offset={24}
             label="Floating right"
             title="Offset 24"
-            description="24px gap from the right edge."
+            description="24px from the top, bottom, and right, with at least 24px reserved on the left."
           />
         </Row>
       </Section>
@@ -1644,10 +1644,9 @@ export function DrawerPage() {
             description="Only the handle initiates drag. The body scrolls instead."
           />
           <DemoDrawer
-            stretch={false}
-            label="No stretch"
-            title="Stretch disabled"
-            description="Dragging past the largest snap keeps the drawer rigid."
+            label="Elastic edge (default)"
+            title="A little give at the edge"
+            description="Pull past the open limit: the free edge extends slightly while the docked edge stays pinned. Text stays unscaled, and the handle adds a soft primary halo. Release to settle back."
           />
           <DemoDrawer
             dismissible={false}
@@ -1762,7 +1761,7 @@ import {
   indicator?:      "inside" | "outside" | "progress" | "hidden"  // default "inside"
   headerVariant?:  "plain" | "bordered"                  // default "plain" on top/bottom, "bordered" on left/right
   scaleBackground?: boolean                              // needs data-vds-drawer-wrapper
-  stretch?:         boolean                              // default true; false disables overdrag stretch
+  stretch?:         boolean                              // default true; bounded edge extension, no content scaling
 
   // Behavior
   open?:            boolean                              // controlled

@@ -39,7 +39,10 @@
     overflow: clip;
     transition:
       border-color var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease),
-      box-shadow var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease);
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-editor[data-block-tools-placement="edge"] {
@@ -58,13 +61,13 @@
 
   .vds-editor:focus-within {
     border-color: var(--vds-editor-border-focus);
-    box-shadow:
-      0 0 0 1px var(--vds-editor-border-focus),
-      0 12px 32px -20px color-mix(
-        in oklch,
-        var(--vds-editor-border-focus) 38%,
-        transparent
-      );
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-editor-utility-bar {
@@ -253,10 +256,25 @@
     block-size: 1.05rem;
   }
 
+  .vds-editor-toolbar-select,
+  .vds-editor-toolbar-link-input{
+    transition: box-shadow 180ms ease-out;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+
   .vds-editor-toolbar-select:focus-visible,
   .vds-editor-toolbar-link-input:focus-visible {
-    outline: 2px solid var(--vds-editor-border-focus);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-editor-toolbar-select-wrap {
@@ -2083,7 +2101,7 @@
       background-color var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease),
       border-color var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease),
       color var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease),
-      box-shadow var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease),
+      box-shadow 180ms ease-out,
       transform var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease),
       opacity var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease);
   }
@@ -2191,7 +2209,7 @@
       margin-block-end 200ms var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
       opacity 200ms var(--vds-ease-out, ease),
       transform 200ms var(--vds-ease-out, ease),
-      box-shadow var(--vds-duration-fast, 160ms) var(--vds-ease-out, ease);
+      box-shadow 180ms ease-out;
   }
 
   .vds-editor-content > [data-vds-drag-settling="true"] {

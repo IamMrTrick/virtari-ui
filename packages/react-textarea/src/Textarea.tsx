@@ -1,4 +1,5 @@
-import { cn } from "@virtari-packages/utils";
+import { forwardRef } from "react";
+import { cn, useComposedRefs } from "@virtari-packages/utils";
 import { useCallback, useEffect, useRef } from "react";
 import type { Ref } from "react";
 
@@ -22,27 +23,19 @@ function isPrintable(e: React.KeyboardEvent): boolean {
   return e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
 }
 
-export function Textarea({
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({
   size,
   inputSize,
   className,
-  ref,
   typingPulse = false,
   onKeyDown,
   ...props
-}: TextareaProps) {
+}, ref) {
   const localRef = useRef<HTMLTextAreaElement>(null);
   const lastKeyAt = useRef(0);
   const lastPulseAt = useRef(0);
 
-  const mergedRef = useCallback(
-    (node: HTMLTextAreaElement | null) => {
-      (localRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = node;
-    },
-    [ref],
-  );
+  const mergedRef = useComposedRefs(localRef, ref);
 
   useEffect(() => {
     if (!typingPulse) return;
@@ -55,7 +48,7 @@ export function Textarea({
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
     onKeyDown?.(e);
-    if (!typingPulse || !isPrintable(e)) return;
+    if (e.defaultPrevented || e.nativeEvent.isComposing || !typingPulse || !isPrintable(e)) return;
     const el = localRef.current;
     if (!el) return;
     const now = Date.now();
@@ -80,4 +73,4 @@ export function Textarea({
       {...props}
     />
   );
-}
+});

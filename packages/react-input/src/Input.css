@@ -3,45 +3,44 @@
 /* Non-geometric pulse: do not transform editable controls on iOS. */
 @keyframes vds-typing-pulse {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
   }
   35% {
-    box-shadow: 0 0 0 calc(1px + var(--_ti, 0.4) * 3px)
-      color-mix(in oklch, var(--vds-color-ring) 22%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2), 0 0 0 6px var(--vds-color-primary-a3);
   }
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
   }
 }
 
 @keyframes vds-pw-reveal {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
   }
   55% {
-    box-shadow: 0 0 0 2px color-mix(in oklch, var(--vds-color-ring) 18%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2), 0 0 0 6px var(--vds-color-primary-a3);
   }
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
   }
 }
 
 @keyframes vds-pw-hide {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
   }
   45% {
-    box-shadow: 0 0 0 2px color-mix(in oklch, var(--vds-color-ring) 14%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2), 0 0 0 6px var(--vds-color-primary-a3);
   }
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  @keyframes vds-typing-pulse { 0%, 100% { box-shadow: none; } }
-  @keyframes vds-pw-reveal    { 0%, 100% { box-shadow: none; } }
-  @keyframes vds-pw-hide      { 0%, 100% { box-shadow: none; } }
+  @keyframes vds-typing-pulse { 0%, 100% { box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); } }
+  @keyframes vds-pw-reveal    { 0%, 100% { box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); } }
+  @keyframes vds-pw-hide      { 0%, 100% { box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); } }
 }
 
 @layer design-system.components {
@@ -84,7 +83,7 @@
     user-select: text;
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
-      box-shadow var(--vds-duration-fast) var(--vds-ease-out);
+      box-shadow 180ms ease-out;
 
     block-size: var(--_input-height);
     padding-inline: var(--_input-px);
@@ -99,9 +98,14 @@
     }
 
     &:focus-visible {
-      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
-      outline-offset: var(--vds-focus-ring-offset, 2px);
       border-color: var(--vds-color-primary-9);
+      outline: none;
+      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
     }
 
     &.vds-input--pulse {
@@ -117,7 +121,19 @@
       border-color: var(--vds-color-danger-9);
 
       &:focus-visible {
-        outline-color: var(--vds-color-danger-9);
+        outline: none;
+        box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+        @media (forced-colors: active) {
+          outline: 2px solid Highlight;
+          outline-offset: 2px;
+          box-shadow: none;
+        }
+      }
+
+      transition: box-shadow 180ms ease-out;
+
+      @media (prefers-reduced-motion: reduce) {
+        transition-duration: 0s;
       }
     }
 
@@ -162,6 +178,10 @@
       --input-height: var(--vds-size-2xl);
       --input-padding-inline: var(--vds-space-6);
       --input-font-size: var(--vds-text-xl);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
     }
   }
 
@@ -344,7 +364,11 @@
     cursor: pointer;
     transition:
       background-color var(--vds-duration-fast) var(--vds-ease-out),
-      color var(--vds-duration-fast) var(--vds-ease-out);
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-input-field-action:hover {
@@ -363,8 +387,13 @@
   }
 
   .vds-input-field-action:focus-visible {
-    outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-input-field-strength {

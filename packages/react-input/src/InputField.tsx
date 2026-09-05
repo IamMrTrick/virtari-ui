@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import {
   Field,
   composeFieldDescribedBy,
@@ -7,8 +8,8 @@ import {
   IconEye,
   IconEyeOff,
 } from "@virtari-packages/react-icons";
-import { cn } from "@virtari-packages/utils";
-import { useId, useState } from "react";
+import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
+import { useId, useState, useRef } from "react";
 import type { CSSProperties, ReactNode, Ref } from "react";
 import { Input, type InputProps } from "./Input";
 import { getPasswordStrength } from "./passwordStrength";
@@ -63,7 +64,7 @@ function defaultStrengthFormatter(score: number) {
   return labels[score] ?? labels[0];
 }
 
-export function InputField({
+export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(function InputField({
   label,
   description,
   error,
@@ -84,7 +85,6 @@ export function InputField({
   strengthFormatter = defaultStrengthFormatter,
   afterControl,
   invalid,
-  ref,
   id,
   value,
   defaultValue,
@@ -96,7 +96,9 @@ export function InputField({
   "aria-describedby": ariaDescribedBy,
   "aria-invalid": ariaInvalid,
   ...props
-}: InputFieldProps) {
+}, ref) {
+  const localRef = useRef<HTMLInputElement>(null);
+  const mergedRef = useComposedRefs(localRef, ref);
   const generatedId = useId();
   const controlId = id ?? `vds-input-field-${generatedId}`;
   const descriptionId = description
@@ -117,6 +119,7 @@ export function InputField({
   const [uncontrolledValue, setUncontrolledValue] = useState(
     resolveTextValue(defaultValue),
   );
+  useFormReset(localRef, () => setUncontrolledValue(resolveTextValue(defaultValue)), props.form);
   const isControlled = value !== undefined;
   const currentValue = isControlled
     ? resolveTextValue(value)
@@ -189,7 +192,7 @@ export function InputField({
       >
         <Input
           {...props}
-          ref={ref}
+          ref={mergedRef}
           id={controlId}
           value={value}
           defaultValue={defaultValue}
@@ -213,6 +216,7 @@ export function InputField({
             className="vds-input-field-action"
             aria-label={revealed ? "Hide password" : "Show password"}
             aria-pressed={revealed}
+            disabled={disabled}
             onClick={() => {
               const next = !revealed;
               setRevealed(next);
@@ -229,4 +233,4 @@ export function InputField({
       </div>
     </Field>
   );
-}
+});

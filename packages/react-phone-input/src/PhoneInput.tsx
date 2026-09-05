@@ -1,4 +1,5 @@
-import { cn } from "@virtari-packages/utils";
+import { forwardRef } from "react";
+import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
 import { Input, type InputProps } from "@virtari-packages/react-input";
 import type { CountryCode } from "@virtari-packages/react-flag";
 import {
@@ -59,7 +60,7 @@ export interface PhoneInputProps
  * picker driven by a `<Combobox>`. Handles parsing, format-as-you-type,
  * Persian/Arabic digit normalization, ARIA, autofill hints, and RTL layout.
  */
-export function PhoneInput({
+export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneInput({
   value,
   defaultValue,
   defaultCountry,
@@ -67,6 +68,7 @@ export function PhoneInput({
   size = "md",
   invalid,
   disabled,
+  readOnly,
   onChange,
   onValidityChange,
   locale,
@@ -76,10 +78,11 @@ export function PhoneInput({
   placeholder,
   searchPlaceholder,
   className,
-  ref,
   id,
   ...rest
-}: PhoneInputProps) {
+}, ref) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const mergedRef = useComposedRefs(inputRef, ref);
   const reactId = useId();
   const triggerId = `${id ?? reactId}-country`;
   const errorId = `${id ?? reactId}-error`;
@@ -94,6 +97,7 @@ export function PhoneInput({
     value: formatted,
     setCountry,
     setNational,
+    reset,
   } = usePhoneInput({
     value,
     defaultValue,
@@ -102,6 +106,8 @@ export function PhoneInput({
     onValidityChange,
     normalize: normalizeDigits,
   });
+
+  useFormReset(inputRef, reset, rest.form);
 
   // Announce country changes in a polite live region so screen readers catch them.
   useEffect(() => {
@@ -112,16 +118,16 @@ export function PhoneInput({
 
   const handleCountryChange = useCallback(
     (code: CountryCode) => {
-      setCountry(code);
+      if (!disabled && !readOnly) setCountry(code);
     },
-    [setCountry],
+    [setCountry, disabled, readOnly],
   );
 
   const handleInputChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      setNational(e.target.value);
+      if (!disabled && !readOnly) setNational(e.target.value);
     },
-    [setNational],
+    [setNational, disabled, readOnly],
   );
 
   const ariaDescribedBy = [dialId, rest["aria-describedby"]].filter(Boolean).join(" ") || undefined;
@@ -140,7 +146,7 @@ export function PhoneInput({
         size={size}
         preferredCountries={preferredCountries}
         locale={locale}
-        disabled={disabled}
+        disabled={disabled || readOnly}
         invalid={invalid}
         searchPlaceholder={searchPlaceholder}
         label={label}
@@ -152,7 +158,7 @@ export function PhoneInput({
       </span>
 
       <Input
-        ref={ref}
+        ref={mergedRef}
         id={id ?? reactId}
         inputSize={size}
         type="tel"
@@ -162,6 +168,7 @@ export function PhoneInput({
         value={formatted.national}
         onChange={handleInputChange}
         disabled={disabled}
+        readOnly={readOnly}
         aria-invalid={invalid || undefined}
         aria-describedby={ariaDescribedBy}
         aria-errormessage={invalid ? errorId : undefined}
@@ -178,18 +185,20 @@ export function PhoneInput({
       />
 
       {/* Canonical E.164 for form submissions — only emitted when `name` is set. */}
-      {name && formatted.e164 ? (
+      {name ? (
         <input
           type="hidden"
           name={name}
-          value={formatted.e164}
+          value={formatted.e164 ?? ""}
+          form={rest.form}
+          disabled={disabled}
           autoComplete="tel"
           readOnly
         />
       ) : null}
     </div>
   );
-}
+});
 
 export { PhoneInputCountrySelect };
 export { countries, countriesByCode, dialCodeToCountries } from "./generated/countries";

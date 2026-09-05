@@ -1,4 +1,4 @@
-import { cn } from "@virtari-packages/utils";
+import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
 import * as PopoverPrimitive from "@virtari-packages/primitives/popover";
 import {
   Chip,
@@ -7,6 +7,7 @@ import {
   type ChipSize,
 } from "@virtari-packages/react-chip";
 import {
+  forwardRef,
   createContext,
   useCallback,
   useContext,
@@ -63,12 +64,16 @@ export function Combobox<T extends ComboboxItemData = ComboboxItemData>({
   ...hookProps
 }: ComboboxProps<T>) {
   const ctx = useCombobox(hookProps);
+  useFormReset(ctx.triggerRef, ctx.reset, hookProps.form);
 
   return (
     <ComboboxProvider value={ctx}>
       <ComboboxVisualContext.Provider value={{ size, appearance }}>
         <PopoverPrimitive.Root open={ctx.open} onOpenChange={ctx.setOpen}>
           {children}
+          {hookProps.name && (Array.isArray(ctx.value) ? ctx.value : [ctx.value]).map((value, index) => (
+            <input key={index} type="hidden" name={hookProps.name} form={hookProps.form} value={value} disabled={ctx.disabled} />
+          ))}
         </PopoverPrimitive.Root>
       </ComboboxVisualContext.Provider>
     </ComboboxProvider>
@@ -200,16 +205,15 @@ export interface ComboboxTriggerProps
   ref?: Ref<HTMLDivElement>;
 }
 
-export function ComboboxTrigger({
+export const ComboboxTrigger = forwardRef<HTMLDivElement, ComboboxTriggerProps>(function ComboboxTrigger({
   placeholder = "Select…",
   clearable,
   renderValue,
   className,
   onClick,
   onKeyDown,
-  ref,
   ...props
-}: ComboboxTriggerProps) {
+}, ref) {
   const {
     multiple,
     disabled,
@@ -231,14 +235,7 @@ export function ComboboxTrigger({
     ? (value as string[]).length > 0
     : Boolean(value);
 
-  const setRef = useCallback(
-    (el: HTMLDivElement | null) => {
-      triggerRef.current = el;
-      if (typeof ref === "function") ref(el);
-      else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
-    },
-    [ref, triggerRef],
-  );
+  const setRef = useComposedRefs(triggerRef, ref);
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     if (disabled) return;
@@ -371,7 +368,7 @@ export function ComboboxTrigger({
       </div>
     </PopoverPrimitive.Anchor>
   );
-}
+});
 
 /* ─────────────────────────────────────────────
  * <ComboboxContent>
@@ -383,18 +380,20 @@ export interface ComboboxContentProps
   ref?: Ref<React.ComponentRef<typeof PopoverPrimitive.Content>>;
 }
 
-export function ComboboxContent({
+export const ComboboxContent = forwardRef<HTMLDivElement, ComboboxContentProps>(function ComboboxContent({
   className,
   sideOffset = 4,
   align = "start",
   children,
   onOpenAutoFocus,
   onCloseAutoFocus,
-  ref,
+  onInteractOutside,
+  onKeyDownCapture,
   ...props
-}: ComboboxContentProps) {
+}, ref) {
   const { size } = useComboboxVisual();
   const { inputRef, triggerRef, searchable } = useComboboxContext();
+  const leaveFocus = useRef(false);
 
   return (
     <PopoverPrimitive.Portal>
@@ -405,16 +404,27 @@ export function ComboboxContent({
         className={cn("vds-combobox-content", className)}
         data-size={size}
         onOpenAutoFocus={(e) => {
+          leaveFocus.current = false;
           onOpenAutoFocus?.(e);
           if (e.defaultPrevented) return;
-          e.preventDefault();
-          if (searchable) inputRef.current?.focus();
+          if (searchable) {
+            e.preventDefault();
+            inputRef.current?.focus();
+          }
+        }}
+        onInteractOutside={(e) => {
+          onInteractOutside?.(e);
+          if (!e.defaultPrevented) leaveFocus.current = true;
+        }}
+        onKeyDownCapture={(e) => {
+          onKeyDownCapture?.(e);
+          if (!e.defaultPrevented && e.key === "Tab") leaveFocus.current = true;
         }}
         onCloseAutoFocus={(e) => {
           onCloseAutoFocus?.(e);
           if (e.defaultPrevented) return;
           e.preventDefault();
-          triggerRef.current?.focus();
+          if (!leaveFocus.current) triggerRef.current?.focus();
         }}
         {...props}
       >
@@ -422,7 +432,7 @@ export function ComboboxContent({
       </PopoverPrimitive.Content>
     </PopoverPrimitive.Portal>
   );
-}
+});
 
 /* ─────────────────────────────────────────────
  * <ComboboxInput>
@@ -436,13 +446,12 @@ export interface ComboboxInputProps
   ref?: Ref<HTMLInputElement>;
 }
 
-export function ComboboxInput({
+export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(function ComboboxInput({
   className,
   placeholder = "Search…",
   onKeyDown,
-  ref,
   ...props
-}: ComboboxInputProps) {
+}, ref) {
   const {
     inputRef,
     inputId,
@@ -456,14 +465,7 @@ export function ComboboxInput({
     filteredItems,
   } = useComboboxContext();
 
-  const setRef = useCallback(
-    (el: HTMLInputElement | null) => {
-      inputRef.current = el;
-      if (typeof ref === "function") ref(el);
-      else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el;
-    },
-    [ref, inputRef],
-  );
+  const setRef = useComposedRefs(inputRef, ref);
 
   if (!searchable) return null;
 
@@ -489,6 +491,8 @@ export function ComboboxInput({
         ref={setRef}
         id={inputId}
         type="text"
+        role="combobox"
+        aria-expanded={true}
         aria-autocomplete="list"
         aria-controls={listId}
         aria-activedescendant={activeId}
@@ -507,7 +511,7 @@ export function ComboboxInput({
       />
     </div>
   );
-}
+});
 
 /* ─────────────────────────────────────────────
  * <ComboboxList>
@@ -518,7 +522,7 @@ export interface ComboboxListProps extends React.HTMLAttributes<HTMLDivElement> 
   ref?: Ref<HTMLDivElement>;
 }
 
-export function ComboboxList({ className, children, ref, ...props }: ComboboxListProps) {
+export const ComboboxList = forwardRef<HTMLDivElement, ComboboxListProps>(function ComboboxList({ className, children, ...props }, ref) {
   const { listId } = useComboboxContext();
   return (
     <div
@@ -531,7 +535,7 @@ export function ComboboxList({ className, children, ref, ...props }: ComboboxLis
       {children}
     </div>
   );
-}
+});
 
 /* ─────────────────────────────────────────────
  * <ComboboxOptions>
@@ -646,7 +650,7 @@ export interface ComboboxItemProps
   ref?: Ref<HTMLDivElement>;
 }
 
-export function ComboboxItem({
+export const ComboboxItem = forwardRef<HTMLDivElement, ComboboxItemProps>(function ComboboxItem({
   value,
   disabled,
   className,
@@ -654,9 +658,8 @@ export function ComboboxItem({
   onSelect,
   onClick,
   onMouseMove,
-  ref,
   ...props
-}: ComboboxItemProps) {
+}, ref) {
   const {
     filteredItems,
     highlightedIndex,
@@ -719,7 +722,7 @@ export function ComboboxItem({
       ) : null}
     </div>
   );
-}
+});
 
 /* ─────────────────────────────────────────────
  * <ComboboxGroup>
@@ -730,13 +733,12 @@ export interface ComboboxGroupProps extends React.HTMLAttributes<HTMLDivElement>
   ref?: Ref<HTMLDivElement>;
 }
 
-export function ComboboxGroup({
+export const ComboboxGroup = forwardRef<HTMLDivElement, ComboboxGroupProps>(function ComboboxGroup({
   heading,
   className,
   children,
-  ref,
   ...props
-}: ComboboxGroupProps) {
+}, ref) {
   return (
     <div
       ref={ref}
@@ -748,7 +750,7 @@ export function ComboboxGroup({
       {children}
     </div>
   );
-}
+});
 
 /* ─────────────────────────────────────────────
  * <ComboboxEmpty>
@@ -758,12 +760,11 @@ export interface ComboboxEmptyProps extends React.HTMLAttributes<HTMLDivElement>
   ref?: Ref<HTMLDivElement>;
 }
 
-export function ComboboxEmpty({
+export const ComboboxEmpty = forwardRef<HTMLDivElement, ComboboxEmptyProps>(function ComboboxEmpty({
   className,
   children,
-  ref,
   ...props
-}: ComboboxEmptyProps) {
+}, ref) {
   const { filteredItems, loading, emptyMessage } = useComboboxContext();
   if (loading || filteredItems.length > 0) return null;
   return (
@@ -776,7 +777,7 @@ export function ComboboxEmpty({
       {children ?? emptyMessage}
     </div>
   );
-}
+});
 
 /* ─────────────────────────────────────────────
  * <ComboboxLoading>
@@ -786,12 +787,11 @@ export interface ComboboxLoadingProps extends React.HTMLAttributes<HTMLDivElemen
   ref?: Ref<HTMLDivElement>;
 }
 
-export function ComboboxLoading({
+export const ComboboxLoading = forwardRef<HTMLDivElement, ComboboxLoadingProps>(function ComboboxLoading({
   className,
   children,
-  ref,
   ...props
-}: ComboboxLoadingProps) {
+}, ref) {
   const { loading } = useComboboxContext();
   if (!loading) return null;
   return (
@@ -819,7 +819,7 @@ export function ComboboxLoading({
       <span>{children ?? "Loading…"}</span>
     </div>
   );
-}
+});
 
 /* ─────────────────────────────────────────────
  * <ComboboxSeparator>

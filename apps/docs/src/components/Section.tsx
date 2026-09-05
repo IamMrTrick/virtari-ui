@@ -1,3 +1,6 @@
+import { Stack as VdsStack, Cluster, type StackProps, type ClusterProps } from "@virtari-packages/react-layout";
+import { Heading } from "@virtari-packages/react-text";
+
 export function Section({
   title,
   description,
@@ -8,18 +11,18 @@ export function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="docs-section">
-      <h2 className="docs-section-title">{title}</h2>
+    <VdsStack as="section" className="docs-section" gap="md">
+      <Heading level={2} size="5" className="docs-section-title">{title}</Heading>
       {description && <p className="docs-section-description">{description}</p>}
       {children}
-    </section>
+    </VdsStack>
   );
 }
 
-export function Row({ children }: { children: React.ReactNode }) {
-  return <div className="docs-row">{children}</div>;
+export function Row({ className, ...props }: ClusterProps) {
+  return <Cluster {...props} className={["docs-row", className].filter(Boolean).join(" ")} />;
 }
 
-export function Stack({ children }: { children: React.ReactNode }) {
-  return <div className="docs-stack">{children}</div>;
+export function Stack({ className, ...props }: StackProps) {
+  return <VdsStack {...props} className={["docs-stack", className].filter(Boolean).join(" ")} />;
 }

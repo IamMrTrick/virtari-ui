@@ -951,3 +951,10 @@
     background: var(--vds-color-danger-bg);
   }
 }
+
+@layer design-system.components {
+  .vds-yoopta-editor { transition: box-shadow 180ms ease-out; }
+  .vds-yoopta-editor:focus-within { outline: none; box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); }
+  @media (prefers-reduced-motion: reduce) { .vds-yoopta-editor { transition-duration: 0s; } }
+  @media (forced-colors: active) { .vds-yoopta-editor:focus-within { outline: 2px solid Highlight; outline-offset: 2px; box-shadow: none; } }
+}

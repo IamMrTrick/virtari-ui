@@ -305,12 +305,27 @@
 
   /* ───── Grid interaction-mode focus ring ───────────────────── */
   .vds-data-table[data-interaction-mode="grid"]
+    .vds-data-table-cell,
+  .vds-data-table[data-interaction-mode="grid"]
+    .vds-data-table-header-cell{
+    transition: box-shadow 180ms ease-out;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+  .vds-data-table[data-interaction-mode="grid"]
     .vds-data-table-cell:focus-visible,
   .vds-data-table[data-interaction-mode="grid"]
     .vds-data-table-header-cell:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: var(--data-table-focus-ring-offset);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   /* ───── Empty + loading overlay ────────────────────────────── */
@@ -420,18 +435,24 @@
     border-radius: var(--data-table-filter-radius);
     outline: none;
     transition: border-color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
+      var(--data-table-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-data-table-global-filter::placeholder {
     color: var(--data-table-filter-placeholder-color);
   }
   .vds-data-table-global-filter:focus-visible {
     border-color: var(--data-table-focus-ring-color);
-    box-shadow: 0 0 0 3px color-mix(
-      in oklch,
-      var(--data-table-focus-ring-color),
-      transparent 80%
-    );
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-data-table-search-field {
@@ -497,12 +518,20 @@
     font: inherit;
     text-transform: inherit;
     letter-spacing: inherit;
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-data-table-sort-trigger:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
     border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
   .vds-data-table-sort-label {
     overflow: hidden;
@@ -551,15 +580,25 @@
   .vds-data-table-resize-handle:focus-visible {
     outline: none; /* delegate focus ring to the line below */
   }
+  .vds-data-table-resize-handle
+    .vds-data-table-resize-handle-line{
+    transition: box-shadow 180ms ease-out;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
   .vds-data-table-resize-handle:focus-visible
     .vds-data-table-resize-handle-line {
     inline-size: var(--data-table-resize-line-width-active);
     background-color: var(--data-table-resize-line-color-active);
-    box-shadow: 0 0 0 2px color-mix(
-      in oklch,
-      var(--data-table-resize-line-color-active),
-      transparent 70%
-    );
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   /* Resize guideline overlay — full-height 1px line during drag.
@@ -720,7 +759,11 @@
     border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
     transition: color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
+      var(--data-table-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-data-table-filter-trigger:hover {
     color: var(--vds-color-text, #111827);
@@ -730,9 +773,14 @@
     color: var(--vds-color-primary-solid, #6366f1);
   }
   .vds-data-table-filter-trigger:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-data-table-filter-popover {
@@ -790,7 +838,11 @@
     border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
     transition: background-color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
+      var(--data-table-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-data-table-pin-trigger:hover {
     background-color: var(--data-table-pagination-button-bg-hover);
@@ -799,9 +851,14 @@
     color: var(--vds-color-primary-solid, #6366f1);
   }
   .vds-data-table-pin-trigger:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   /* ───── Selection cells ────────────────────────────────────── */
@@ -901,15 +958,24 @@
     border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
     transition: background-color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
+      var(--data-table-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-data-table-row-expand-trigger:hover {
     background-color: var(--data-table-pagination-button-bg-hover);
   }
   .vds-data-table-row-expand-trigger:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
   .vds-data-table-row-expand-icon {
     transition: transform var(--data-table-transition-duration)
@@ -1392,15 +1458,24 @@
     color: var(--vds-color-text-muted, #6b7280);
     border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.375rem));
     cursor: pointer;
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-data-table-actions-cell-trigger:hover {
     background-color: var(--data-table-pagination-button-bg-hover);
     color: var(--vds-color-text, #111827);
   }
   .vds-data-table-actions-cell-trigger:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
   .vds-data-table-actions-cell-item-icon {
     display: inline-flex;
@@ -1664,14 +1739,23 @@
     --chip-border-color: var(--vds-color-border-muted, var(--vds-color-border, #d1d5db));
     --chip-text-color: var(--data-table-cell-color);
     cursor: pointer;
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-data-table-filter-chip:hover {
     --chip-background: var(--chip-background-hover);
   }
   .vds-data-table-filter-chip:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
   .vds-data-table-filter-chip-label {
     color: var(--vds-color-text-muted, #9ca3af);
@@ -1704,16 +1788,25 @@
     border-radius: 999px;
     cursor: pointer;
     transition: color var(--data-table-transition-duration)
-      var(--data-table-transition-easing);
+      var(--data-table-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-data-table-filter-add:hover {
     color: var(--data-table-cell-color);
     background-color: var(--data-table-toolbar-button-bg-hover);
   }
   .vds-data-table-filter-add:focus-visible {
-    outline: var(--data-table-focus-ring-width) solid
-      var(--data-table-focus-ring-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   /* ───── Reduced motion ─────────────────────────────────────── */

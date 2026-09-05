@@ -209,6 +209,7 @@ export interface DrawerProps {
   velocityThreshold?: number;
   dragHandleOnly?: boolean;
   scaleBackground?: boolean;
+  /** Allow a small, anchored size extension on overdrag without scaling content. */
   stretch?: boolean;
   modal?: boolean;
   dismissible?: boolean;
@@ -537,6 +538,8 @@ export const DrawerContent = forwardRef<
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const keyboardOpenRef = useRef(false);
   const draggingRef = useRef(false);
+  const elasticCleanupRef = useRef(0);
+  useEffect(() => () => window.clearTimeout(elasticCleanupRef.current), []);
   const currentSizeRef = useRef(0);
   const pendingSizeRef = useRef(0);
   const measureFrameRef = useRef(0);
@@ -562,7 +565,7 @@ export const DrawerContent = forwardRef<
 
   const activeStageKind: "snap" | "minimized" = activeState.kind === "minimized" ? "minimized" : "snap";
 
-  const setAnimated = useCallback((animated: boolean) => {
+  const setAnimated = useCallback((animated: boolean, opening = false) => {
     const contentEl = contentRef.current;
     const overlayEl = overlayRef.current;
     const wrapperEl = getWrapperEl();
@@ -573,7 +576,10 @@ export const DrawerContent = forwardRef<
       return;
     }
     const { ms, ease } = readDrawerTiming(contentEl);
-    setTransition(contentEl, `transform ${ms}ms ${ease}`);
+    const moveEase = opening && contentEl
+      ? getComputedStyle(contentEl).getPropertyValue("--vds-drawer-open-ease").trim() || ease
+      : ease;
+    setTransition(contentEl, `transform ${ms}ms ${moveEase}, block-size ${ms}ms ${ease}, inline-size ${ms}ms ${ease}`);
     setTransition(overlayEl, `opacity ${ms}ms ${ease}`);
     if (scaleBackground) {
       setTransition(
@@ -596,11 +602,33 @@ export const DrawerContent = forwardRef<
     if (layout.totalSize <= 0 || !contentEl) return;
 
     const rtl = getComputedStyle(contentEl).direction === "rtl";
+    // Share bounded tension between the handle and the unscaled edge extension.
+    const overdrag = Math.max(0, sizePx - layout.totalSize);
+    const tension = 1 - Math.exp(-overdrag / Math.max(20, layout.totalSize * 0.05));
+    contentEl.style.setProperty("--vds-drawer-overdrag-progress", tension.toFixed(3));
+    const extension = stretch && !options?.disableStretch && !keyboardOpenRef.current &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? Math.min(14, layout.totalSize * 0.04) * tension : 0;
+    if (extension > 0) {
+      window.clearTimeout(elasticCleanupRef.current);
+      elasticCleanupRef.current = 0;
+      contentEl.style.setProperty("--vds-drawer-elastic-size", `${layout.totalSize + extension}px`);
+      contentEl.setAttribute("data-elastic", "");
+    } else if (contentEl.hasAttribute("data-elastic")) {
+      contentEl.style.setProperty("--vds-drawer-elastic-size", `${layout.totalSize}px`);
+      if (!elasticCleanupRef.current) {
+        elasticCleanupRef.current = window.setTimeout(() => {
+          contentEl.removeAttribute("data-elastic");
+          contentEl.style.removeProperty("--vds-drawer-elastic-size");
+          elasticCleanupRef.current = 0;
+        }, readDrawerTiming(contentEl).ms + 32);
+      }
+    }
     contentEl.style.setProperty(
       "--vds-drawer-transform",
       getVisualTransform(direction, sizePx, layout.totalSize, {
         ...options,
-        disableStretch: options?.disableStretch || !stretch,
+        disableStretch: true,
         rtl,
       }),
     );
@@ -730,7 +758,7 @@ export const DrawerContent = forwardRef<
     }
     if (contentEl) void contentEl.offsetHeight;
 
-    setAnimated(true);
+    setAnimated(true, current <= 0.5 && target > current && !resizeAnimation);
     if (contentEl) void contentEl.offsetHeight;
     if (openAnimRef.current) cancelAnimationFrame(openAnimRef.current);
     openAnimRef.current = requestAnimationFrame(() => {
@@ -783,11 +811,9 @@ export const DrawerContent = forwardRef<
   const measure = useCallback(() => {
     const contentEl = contentRef.current;
     if (!contentEl) return;
-    // Don't re-measure during drag — the rubber-band stretch writes a scale
-    // transform that inflates getBoundingClientRect(). Re-reading it and
-    // updating layout.totalSize would feed back into writeVisualSize's
-    // divisor, shrinking the scale on the next frame — visible as jitter.
-    if (draggingRef.current) return;
+    // Keep the resting size independent of the temporary elastic extension,
+    // including its release transition, to avoid feeding it back into layout.
+    if (draggingRef.current || contentEl.hasAttribute("data-elastic")) return;
     // Keep snap/layout sizing on the pre-keyboard viewport. Android fires a
     // visualViewport resize for the keyboard; remeasuring there would shrink
     // available-size and then CSS would subtract keyboard-inset a second time.
@@ -797,10 +823,11 @@ export const DrawerContent = forwardRef<
     const viewportInfo = getViewportInfo(direction, viewportSize);
     const resolvedOffset = resolveDirectionalValue(offset, direction);
     const edgeOffsetPx = resolveDeclaredPixels(resolvedOffset, viewportInfo, direction);
-    const availableSize = Math.max(viewportSize * VIEWPORT_RATIO - edgeOffsetPx, 1);
+    const availableSize = Math.max(viewportSize * VIEWPORT_RATIO - edgeOffsetPx - Math.max(0, edgeOffsetPx), 1);
     const resolvedOffsetCss = resolveDeclaredSize(resolvedOffset, viewportInfo) ?? "0px";
 
     contentEl.style.setProperty("--vds-drawer-edge-offset", resolvedOffsetCss);
+    contentEl.toggleAttribute("data-floating", edgeOffsetPx > 0);
     contentEl.style.setProperty("--vds-drawer-available-size", `${availableSize}px`);
     contentEl.style.setProperty("--vds-drawer-adaptive-size", getDefaultAdaptiveSize(direction));
 
@@ -1235,7 +1262,8 @@ export const DrawerContent = forwardRef<
     snapSkipThreshold,
     dismissible,
     dragHandleOnly,
-    onDragStart: () => {
+      onDragStart: () => {
+        draggingRef.current = true;
       setDragging(true);
       setAnimated(false);
     },

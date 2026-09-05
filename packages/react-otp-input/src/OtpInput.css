@@ -39,7 +39,7 @@
     transition:
       background-color var(--vds-duration-fast) var(--vds-ease-out),
       border-color var(--vds-duration-fast) var(--vds-ease-out),
-      box-shadow var(--vds-duration-fast) var(--vds-ease-out);
+      box-shadow 180ms ease-out;
     -webkit-touch-callout: default;
     -webkit-user-select: text;
     user-select: text;
@@ -61,15 +61,31 @@
     &:focus-visible {
       /* Box-shadow ring is deliberate here: adjacent slots sit --_otp-gap
          apart and an outline would collide between them. */
-      outline: none;
       border-color: var(--vds-color-primary-9);
-      box-shadow: 0 0 0 var(--vds-focus-ring-width, 2px) var(--vds-color-ring);
+      outline: none;
+      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
     }
 
     &[aria-invalid="true"] {
       border-color: var(--vds-color-danger-9);
       &:focus-visible {
-        box-shadow: 0 0 0 var(--vds-focus-ring-width, 2px) color-mix(in oklch, var(--vds-color-danger-9) 30%, transparent);
+        outline: none;
+        box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+
+        @media (forced-colors: active) {
+          outline: 2px solid Highlight;
+          outline-offset: 2px;
+          box-shadow: none;
+        }
+      }
+      transition: box-shadow 180ms ease-out;
+      @media (prefers-reduced-motion: reduce) {
+        transition-duration: 0s;
       }
     }
 
@@ -84,6 +100,9 @@
     &:disabled {
       cursor: not-allowed;
     }
-  }
 
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
 }

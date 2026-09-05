@@ -48,8 +48,10 @@
     transition:
       background-color var(--checkbox-transition-duration) var(--checkbox-transition-easing),
       border-color var(--checkbox-transition-duration) var(--checkbox-transition-easing),
-      box-shadow var(--checkbox-transition-duration) var(--checkbox-transition-easing),
+      box-shadow 180ms ease-out,
       scale 180ms var(--vds-ease-spring);
+    @media (prefers-reduced-motion: reduce) { transition-duration: 0s;
+    }
   }
 
   /* ── Active press ── */
@@ -79,9 +81,10 @@
   }
 
   /* ── Focus ring ── */
-  .vds-checkbox:focus-visible {
-    outline: var(--checkbox-focus-ring-width) solid var(--checkbox-focus-ring-color);
-    outline-offset: var(--checkbox-focus-ring-offset);
+  .vds-checkbox:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) { outline: 2px solid Highlight; outline-offset: 2px; box-shadow: none;
+    }
   }
 
   /* ── Disabled ── */

@@ -46,7 +46,11 @@
     line-height: 1;
     cursor: pointer;
     user-select: none;
-    transition: background-color var(--vds-duration-fast, 100ms) var(--vds-ease-out, ease-out);
+    transition: background-color var(--vds-duration-fast, 100ms) var(--vds-ease-out, ease-out),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-phone-input-country:hover:not(:disabled) {
@@ -54,8 +58,14 @@
   }
 
   .vds-phone-input-country:focus-visible {
-    outline: 2px solid var(--vds-color-ring, #6366f1);
-    outline-offset: -2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-phone-input-country:disabled {

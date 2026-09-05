@@ -24,7 +24,11 @@
       background-color var(--vds-file-upload-transition-duration)
         var(--vds-file-upload-transition-easing),
       border-color var(--vds-file-upload-transition-duration)
-        var(--vds-file-upload-transition-easing);
+        var(--vds-file-upload-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-file-upload-dropzone[data-drag-active] {
     border: var(--vds-file-upload-dropzone-border-active);
@@ -39,9 +43,14 @@
     cursor: not-allowed;
   }
   .vds-file-upload-dropzone:focus-visible {
-    outline: var(--vds-file-upload-focus-ring-width) solid
-      var(--vds-file-upload-focus-ring-color);
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   /* List */
@@ -102,16 +111,25 @@
       background-color var(--vds-file-upload-transition-duration)
         var(--vds-file-upload-transition-easing),
       color var(--vds-file-upload-transition-duration)
-        var(--vds-file-upload-transition-easing);
+        var(--vds-file-upload-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-file-upload-item-remove:hover {
     color: var(--vds-file-upload-remove-color-hover);
     background-color: var(--vds-file-upload-remove-bg-hover);
   }
   .vds-file-upload-item-remove:focus-visible {
-    outline: var(--vds-file-upload-focus-ring-width) solid
-      var(--vds-file-upload-focus-ring-color);
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   /* Plain file input */
@@ -125,7 +143,8 @@
     background-color: var(--vds-file-upload-input-bg);
     cursor: pointer;
     transition: border-color var(--vds-file-upload-transition-duration)
-      var(--vds-file-upload-transition-easing);
+      var(--vds-file-upload-transition-easing),
+      box-shadow 180ms ease-out;
 
     /* ── Radius nesting host ──
        The "Browse" chip is welded to this control's inner edge, so it has to
@@ -138,6 +157,9 @@
     --vds-radius-host-r: var(--vds-file-upload-input-radius);
     --vds-radius-host-b: 1px;
     --vds-radius-host-p: 0px;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
   .vds-file-upload-input[data-disabled] {
     opacity: var(--vds-opacity-disabled, 0.5);
@@ -145,9 +167,14 @@
     pointer-events: none;
   }
   .vds-file-upload-input:focus-within {
-    outline: var(--vds-file-upload-focus-ring-width) solid
-      var(--vds-file-upload-focus-ring-color);
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-file-upload-input-native {

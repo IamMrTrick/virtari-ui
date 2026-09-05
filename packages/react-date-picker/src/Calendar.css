@@ -57,6 +57,10 @@
     text-transform: inherit;
     cursor: pointer;
     overflow: hidden;
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-slot-counter {
@@ -127,8 +131,14 @@
   }
 
   .vds-calendar-heading-button:focus-visible {
-    outline: var(--calendar-cell-focus-ring-width) solid var(--calendar-cell-focus-ring-color);
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-calendar-nav {
@@ -146,7 +156,11 @@
     appearance: none;
     transition:
       background-color var(--calendar-transition-duration) var(--calendar-transition-easing),
-      color var(--calendar-transition-duration) var(--calendar-transition-easing);
+      color var(--calendar-transition-duration) var(--calendar-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-calendar-nav:hover:not(:disabled) {
@@ -155,8 +169,14 @@
   }
 
   .vds-calendar-nav:focus-visible {
-    outline: var(--calendar-cell-focus-ring-width) solid var(--calendar-cell-focus-ring-color);
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-calendar-nav:disabled {
@@ -222,6 +242,10 @@
     font-size: var(--calendar-cell-font-size);
     font-weight: var(--calendar-cell-font-weight);
     cursor: pointer;
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-calendar-selector-item:hover {
@@ -229,8 +253,14 @@
   }
 
   .vds-calendar-selector-item:focus-visible {
-    outline: var(--calendar-cell-focus-ring-width) solid var(--calendar-cell-focus-ring-color);
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-calendar-selector-item[data-selected="true"] {
@@ -334,7 +364,11 @@
     transition:
       background-color var(--date-field-transition-duration) var(--date-field-transition-easing),
       color var(--date-field-transition-duration) var(--date-field-transition-easing),
-      border-color var(--date-field-transition-duration) var(--date-field-transition-easing);
+      border-color var(--date-field-transition-duration) var(--date-field-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-calendar-year-action--secondary {
@@ -356,8 +390,14 @@
   }
 
   .vds-calendar-year-action:focus-visible {
-    outline: var(--date-field-focus-ring-width, 2px) solid var(--date-field-focus-ring-color, var(--vds-color-ring, #6366f1));
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-calendar-weekday {
@@ -393,7 +433,11 @@
     outline: none;
     transition:
       background-color var(--calendar-transition-duration) var(--calendar-transition-easing),
-      color var(--calendar-transition-duration) var(--calendar-transition-easing);
+      color var(--calendar-transition-duration) var(--calendar-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-calendar-cell[hidden] {
@@ -405,9 +449,14 @@
   }
 
   .vds-calendar-cell:focus-visible {
-    outline: var(--calendar-cell-focus-ring-width) solid var(--calendar-cell-focus-ring-color);
-    outline-offset: -1px;
     z-index: 1;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-calendar-cell:not([data-selected])[data-today="true"] {

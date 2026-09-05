@@ -1,4 +1,5 @@
-import { cn, useDirection } from "@virtari-packages/utils";
+import { createContext, useContext, forwardRef, useRef } from "react";
+import { cn, useDirection, useComposedRefs } from "@virtari-packages/utils";
 import type { ComponentRef, MouseEvent, ReactNode, Ref } from "react";
 import * as SelectPrimitive from "@virtari-packages/primitives/select";
 import { DirectionProvider } from "@virtari-packages/primitives/direction";
@@ -15,11 +16,15 @@ export interface SelectProps
   dir?: "ltr" | "rtl";
 }
 
+const SelectDisabledContext = createContext(false);
+
 export function Select({ dir, ...props }: SelectProps) {
   const autoDir = useDirection();
   return (
     <DirectionProvider dir={dir ?? autoDir}>
-      <SelectPrimitive.Root {...props} />
+      <SelectDisabledContext.Provider value={props.disabled ?? false}>
+        <SelectPrimitive.Root {...props} />
+      </SelectDisabledContext.Provider>
     </DirectionProvider>
   );
 }
@@ -49,7 +54,7 @@ export interface SelectTriggerProps
   ref?: Ref<ComponentRef<typeof SelectPrimitive.Trigger>>;
 }
 
-export function SelectTrigger({
+export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(function SelectTrigger({
   size = "md",
   appearance = "soft",
   invalid,
@@ -58,12 +63,16 @@ export function SelectTrigger({
   onClear,
   className,
   children,
-  ref,
   ...props
-}: SelectTriggerProps) {
+}, ref) {
+  const rootDisabled = useContext(SelectDisabledContext);
+  const disabled = rootDisabled || props.disabled;
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const mergedRef = useComposedRefs(triggerRef, ref);
   return (
+    <span className="vds-select-control" data-size={size} data-appearance={appearance}>
     <SelectPrimitive.Trigger
-      ref={ref}
+      ref={mergedRef}
       className={cn("vds-select-trigger", className)}
       data-size={size}
       data-appearance={appearance}
@@ -73,20 +82,7 @@ export function SelectTrigger({
     >
       <span className="vds-select-trigger-value">{children}</span>
       <span className="vds-select-trigger-actions">
-        {clearable ? (
-          <button
-            type="button"
-            className="vds-select-clear"
-            aria-label="Clear selection"
-            onPointerDown={(e) => e.preventDefault()}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.stopPropagation();
-              onClear?.();
-            }}
-          >
-            <IconX size={12} stroke={1.5} aria-hidden focusable={false} />
-          </button>
-        ) : null}
+        {clearable ? <span className="vds-select-clear-space" aria-hidden="true" /> : null}
         {loading ? (
           <span className="vds-select-spinner" aria-hidden="true">
             <IconLoader2 size={24} stroke={2.5} aria-hidden focusable={false} />
@@ -98,8 +94,25 @@ export function SelectTrigger({
         )}
       </span>
     </SelectPrimitive.Trigger>
+      {clearable ? (
+          <button
+            type="button"
+            disabled={disabled}
+            className="vds-select-clear"
+            aria-label="Clear selection"
+            onPointerDown={(e) => e.preventDefault()}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation();
+              onClear?.();
+              triggerRef.current?.focus();
+            }}
+          >
+            <IconX size={12} stroke={1.5} aria-hidden focusable={false} />
+          </button>
+        ) : null}
+    </span>
   );
-}
+});
 
 /* ── Content ── */
 export interface SelectContentProps
@@ -109,14 +122,13 @@ export interface SelectContentProps
   ref?: Ref<ComponentRef<typeof SelectPrimitive.Content>>;
 }
 
-export function SelectContent({
+export const SelectContent = forwardRef<ComponentRef<typeof SelectPrimitive.Content>, SelectContentProps>(function SelectContent({
   className,
   children,
   position = "popper",
   size = "md",
-  ref,
   ...props
-}: SelectContentProps) {
+}, ref) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
@@ -133,7 +145,7 @@ export function SelectContent({
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   );
-}
+});
 
 /* ── Item ── */
 export interface SelectItemProps
@@ -141,7 +153,7 @@ export interface SelectItemProps
   ref?: Ref<ComponentRef<typeof SelectPrimitive.Item>>;
 }
 
-export function SelectItem({ className, children, ref, ...props }: SelectItemProps) {
+export const SelectItem = forwardRef<ComponentRef<typeof SelectPrimitive.Item>, SelectItemProps>(function SelectItem({ className, children, ...props }, ref) {
   return (
     <SelectPrimitive.Item
       ref={ref}
@@ -154,7 +166,7 @@ export function SelectItem({ className, children, ref, ...props }: SelectItemPro
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );
-}
+});
 
 /* ── Label ── */
 export interface SelectLabelProps
@@ -162,7 +174,7 @@ export interface SelectLabelProps
   ref?: Ref<ComponentRef<typeof SelectPrimitive.Label>>;
 }
 
-export function SelectLabel({ className, ref, ...props }: SelectLabelProps) {
+export const SelectLabel = forwardRef<ComponentRef<typeof SelectPrimitive.Label>, SelectLabelProps>(function SelectLabel({ className, ...props }, ref) {
   return (
     <SelectPrimitive.Label
       ref={ref}
@@ -170,7 +182,7 @@ export function SelectLabel({ className, ref, ...props }: SelectLabelProps) {
       {...props}
     />
   );
-}
+});
 
 /* ── Separator ── */
 export interface SelectSeparatorProps
@@ -178,7 +190,7 @@ export interface SelectSeparatorProps
   ref?: Ref<ComponentRef<typeof SelectPrimitive.Separator>>;
 }
 
-export function SelectSeparator({ className, ref, ...props }: SelectSeparatorProps) {
+export const SelectSeparator = forwardRef<ComponentRef<typeof SelectPrimitive.Separator>, SelectSeparatorProps>(function SelectSeparator({ className, ...props }, ref) {
   return (
     <SelectPrimitive.Separator
       ref={ref}
@@ -186,7 +198,7 @@ export function SelectSeparator({ className, ref, ...props }: SelectSeparatorPro
       {...props}
     />
   );
-}
+});
 
 /* ── Empty state row ── *
  * Rendered inside SelectContent as a sibling of SelectItems when the

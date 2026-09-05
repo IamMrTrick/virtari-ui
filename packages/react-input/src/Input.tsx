@@ -1,5 +1,6 @@
-import { cn } from "@virtari-packages/utils";
-import { useCallback, useEffect, useRef } from "react";
+import { forwardRef } from "react";
+import { cn, useComposedRefs } from "@virtari-packages/utils";
+import { useEffect, useRef } from "react";
 import type { Ref } from "react";
 
 export type InputSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
@@ -27,27 +28,19 @@ function isPrintable(e: React.KeyboardEvent): boolean {
   return e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
 }
 
-export function Input({
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   size,
   inputSize,
   className,
-  ref,
   typingPulse = false,
   onKeyDown,
   ...props
-}: InputProps) {
+}, ref) {
   const localRef = useRef<HTMLInputElement>(null);
   const lastKeyAt = useRef(0);
   const lastPulseAt = useRef(0);
 
-  const mergedRef = useCallback(
-    (node: HTMLInputElement | null) => {
-      (localRef as React.MutableRefObject<HTMLInputElement | null>).current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
-    },
-    [ref],
-  );
+  const mergedRef = useComposedRefs(localRef, ref);
 
   useEffect(() => {
     if (!typingPulse) return;
@@ -60,7 +53,7 @@ export function Input({
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     onKeyDown?.(e);
-    if (!typingPulse || !isPrintable(e)) return;
+    if (e.defaultPrevented || e.nativeEvent.isComposing || !typingPulse || !isPrintable(e)) return;
     const el = localRef.current;
     if (!el) return;
     const now = Date.now();
@@ -85,7 +78,7 @@ export function Input({
       {...props}
     />
   );
-}
+});
 
 /* ── InputWrapper ── */
 
@@ -93,9 +86,9 @@ export interface InputWrapperProps extends React.HTMLAttributes<HTMLDivElement> 
   ref?: Ref<HTMLDivElement>;
 }
 
-export function InputWrapper({ className, ref, ...props }: InputWrapperProps) {
+export const InputWrapper = forwardRef<HTMLDivElement, InputWrapperProps>(function InputWrapper({ className, ...props }, ref) {
   return <div ref={ref} className={cn("vds-input-wrapper", className)} {...props} />;
-}
+});
 
 /* ── InputIcon ── */
 
@@ -103,11 +96,11 @@ export interface InputIconProps extends React.HTMLAttributes<HTMLSpanElement> {
   ref?: Ref<HTMLSpanElement>;
 }
 
-export function InputIcon({ className, ref, ...props }: InputIconProps) {
+export const InputIcon = forwardRef<HTMLSpanElement, InputIconProps>(function InputIcon({ className, ...props }, ref) {
   return (
     <span ref={ref} className={cn("vds-input-icon", className)} aria-hidden="true" {...props} />
   );
-}
+});
 
 /* ── InputGroup ── */
 
@@ -115,9 +108,9 @@ export interface InputGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   ref?: Ref<HTMLDivElement>;
 }
 
-export function InputGroup({ className, ref, ...props }: InputGroupProps) {
+export const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(function InputGroup({ className, ...props }, ref) {
   return <div ref={ref} className={cn("vds-input-group", className)} {...props} />;
-}
+});
 
 /* ── InputAddon ── */
 
@@ -128,8 +121,8 @@ export interface InputAddonProps extends React.HTMLAttributes<HTMLSpanElement> {
   ref?: Ref<HTMLSpanElement>;
 }
 
-export function InputAddon({ side = "start", className, ref, ...props }: InputAddonProps) {
+export const InputAddon = forwardRef<HTMLSpanElement, InputAddonProps>(function InputAddon({ side = "start", className, ...props }, ref) {
   return (
     <span ref={ref} className={cn("vds-input-addon", className)} data-side={side} {...props} />
   );
-}
+});

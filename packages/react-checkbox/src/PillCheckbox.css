@@ -39,7 +39,11 @@
       border-color var(--pill-checkbox-transition-duration)
         var(--pill-checkbox-transition-easing),
       color var(--pill-checkbox-transition-duration)
-        var(--pill-checkbox-transition-easing);
+        var(--pill-checkbox-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   /* ── Hover (unchecked) ── */
@@ -57,9 +61,13 @@
 
   /* ── Focus ring ── */
   .vds-pill-checkbox-item:focus-visible {
-    outline: var(--pill-checkbox-focus-ring-width) solid
-      var(--pill-checkbox-focus-ring-color);
-    outline-offset: var(--pill-checkbox-focus-ring-offset);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   /* ── Disabled ── */
@@ -71,9 +79,19 @@
   /* ── Error ── */
   .vds-pill-checkbox[data-error] .vds-pill-checkbox-item {
     border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-pill-checkbox[data-error] .vds-pill-checkbox-item:focus-visible {
-    outline-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 }

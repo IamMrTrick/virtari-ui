@@ -1,5 +1,5 @@
-import { cn } from "@virtari-packages/utils";
-import { useCallback, useEffect, useRef } from "react";
+import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import type { Ref } from "react";
 
 function isPrintable(e: KeyboardEvent): boolean {
@@ -60,206 +60,128 @@ export interface NumberInputProps
   typingPulse?: boolean;
 }
 
-export function NumberInput({
-  value,
-  defaultValue,
-  onChange,
-  onBlur,
-  min,
-  max,
-  step = 1,
-  precision,
-  clampOnBlur = true,
-  size,
-  inputSize,
-  stepper = "stacked",
-  disabled = false,
-  readOnly = false,
-  invalid = false,
-  className,
-  ref,
-  wheelEnabled = false,
-  wheelSnap = false,
-  typingPulse = false,
-  ...props
-}: NumberInputProps) {
+
+function parseNumber(text: string): number | undefined {
+  if (!text.trim()) return undefined;
+  const number = Number(text);
+  return Number.isFinite(number) ? number : undefined;
+}
+
+export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(function NumberInput(allProps, ref) {
+  const {
+    value, defaultValue, onChange, onBlur, onKeyDown, min, max, step = 1,
+    precision, clampOnBlur = true, size, inputSize, stepper = "stacked",
+    disabled = false, readOnly = false, invalid = false, className,
+    wheelEnabled = false, wheelSnap = false, typingPulse = false,
+    inputMode = "decimal", ...props
+  } = allProps;
+  const controlled = Object.prototype.hasOwnProperty.call(allProps, "value");
+  const [draft, setDraft] = useState(() => String(value ?? defaultValue ?? ""));
+  const parsedDraft = parseNumber(draft);
+  // Retain in-progress text ("-", "1.", "1e-") when its numeric value matches.
+  // A genuinely different external value still wins immediately.
+  const text = controlled && !Object.is(value, parsedDraft) ? String(value ?? "") : draft;
+  const current = parseNumber(text);
   const inputRef = useRef<HTMLInputElement>(null);
-  const resolvedRef = (ref ?? inputRef) as React.RefObject<HTMLInputElement>;
-
-  const clamp = useCallback(
-    (n: number) => {
-      let v = n;
-      if (min !== undefined) v = Math.max(min, v);
-      if (max !== undefined) v = Math.min(max, v);
-      return precision !== undefined ? parseFloat(v.toFixed(precision)) : v;
-    },
-    [min, max, precision],
-  );
-
+  const mergedRef = useComposedRefs(inputRef, ref);
   const lastKeyAt = useRef(0);
   const lastPulseAt = useRef(0);
-
-  // Live ref so wheel + typing handlers never capture stale props.
-  const liveRef = useRef({ value, disabled, readOnly, min, max, step, precision, wheelSnap, onChange, clamp });
-  liveRef.current = { value, disabled, readOnly, min, max, step, precision, wheelSnap, onChange, clamp };
-
+  const clamp = useCallback((number: number) => {
+    let next = number;
+    if (min !== undefined) next = Math.max(min, next);
+    if (max !== undefined) next = Math.min(max, next);
+    if (precision !== undefined) next = Number(next.toFixed(Math.min(100, Math.max(0, precision))));
+    return next;
+  }, [min, max, precision]);
+  const commit = (raw: string) => { setDraft(raw); onChange?.(parseNumber(raw)); };
+  const stepBy = (direction: number) => {
+    if (disabled || readOnly) return;
+    const start = parseNumber(inputRef.current?.value ?? text) ?? min ?? 0;
+    const amount = Number.isFinite(step) && step > 0 ? step : 1;
+    const next = Number((start + direction * amount).toPrecision(15));
+    commit(String(clamp(next)));
+  };
+  const live = useRef({ disabled, readOnly, min, step, wheelSnap, clamp, commit });
+  live.current = { disabled, readOnly, min, step, wheelSnap, clamp, commit };
   useEffect(() => {
-    if (!typingPulse) return;
-    const el = resolvedRef.current;
-    if (!el) return;
-    const onEnd = () => el.classList.remove("vds-field--pulse");
-    el.addEventListener("animationend", onEnd);
-    return () => el.removeEventListener("animationend", onEnd);
-  }, [typingPulse]);
-
-  useEffect(() => {
-    const el = resolvedRef.current;
+    const el = inputRef.current;
     if (!el || !wheelEnabled) return;
-
-    const handler = (e: WheelEvent) => {
-      const { disabled, readOnly, min, step, wheelSnap, onChange, clamp, value } = liveRef.current;
-      if (disabled || readOnly) return;
-      if (document.activeElement !== el) return;
-      e.preventDefault();
-      e.stopPropagation();
-
-      const delta = e.deltaY < 0 ? step : -step;
-      const current = value ?? min ?? 0;
-      const next = wheelSnap
-        ? Math.round((current + delta) / step) * step
-        : current + delta;
-      onChange?.(clamp(next));
+    const wheel = (event: WheelEvent) => {
+      const p = live.current;
+      if (event.defaultPrevented || !event.deltaY || p.disabled || p.readOnly || el.ownerDocument.activeElement !== el) return;
+      event.preventDefault();
+      const amount = Number.isFinite(p.step) && p.step > 0 ? p.step : 1;
+      const start = parseNumber(el.value) ?? p.min ?? 0;
+      let next = start + (event.deltaY < 0 ? amount : -amount);
+      if (p.wheelSnap) next = Math.round(next / amount) * amount;
+      p.commit(String(p.clamp(Number(next.toPrecision(15)))));
     };
-
-    el.addEventListener("wheel", handler, { passive: false });
-    return () => el.removeEventListener("wheel", handler);
+    el.addEventListener("wheel", wheel, { passive: false });
+    return () => el.removeEventListener("wheel", wheel);
   }, [wheelEnabled]);
-
-  const increment = () => {
-    if (disabled || readOnly) return;
-    onChange?.(clamp((value ?? min ?? 0) + step));
-  };
-
-  const decrement = () => {
-    if (disabled || readOnly) return;
-    onChange?.(clamp((value ?? min ?? 0) - step));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value;
-    if (raw === "" || raw === "-") { onChange?.(undefined); return; }
-    const n = Number(raw);
-    if (!isNaN(n)) onChange?.(n);
-  };
-
-  const handleBlur: React.FocusEventHandler<HTMLInputElement> = (e) => {
-    if (clampOnBlur && value !== undefined) onChange?.(clamp(value));
-    (onBlur as React.FocusEventHandler<HTMLInputElement> | undefined)?.(e);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "ArrowUp")   { e.preventDefault(); increment(); }
-    if (e.key === "ArrowDown") { e.preventDefault(); decrement(); }
-    if (typingPulse && isPrintable(e.nativeEvent)) {
-      const el = resolvedRef.current;
-      if (el) {
-        const now = Date.now();
-        const gap = now - lastKeyAt.current;
-        lastKeyAt.current = now;
-        const intensity = Math.max(0.2, Math.min(1, 1 - (gap - 40) / 380));
-        el.style.setProperty("--_ti", String(intensity));
-        if (now - lastPulseAt.current >= 80) {
-          lastPulseAt.current = now;
-          el.classList.remove("vds-field--pulse");
-          void el.offsetWidth;
-          el.classList.add("vds-field--pulse");
-        }
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el || !typingPulse) return;
+    const end = () => el.classList.remove("vds-field--pulse");
+    el.addEventListener("animationend", end);
+    return () => el.removeEventListener("animationend", end);
+  }, [typingPulse]);
+  useFormReset(inputRef, () => commit(String(defaultValue ?? "")), props.form);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    onKeyDown?.(event);
+    if (event.defaultPrevented || event.nativeEvent.isComposing || disabled || readOnly) return;
+    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      event.preventDefault(); stepBy(event.key === "ArrowUp" ? 1 : -1); return;
+    }
+    if (typingPulse && isPrintable(event.nativeEvent)) {
+      const el = event.currentTarget;
+      const now = Date.now();
+      const intensity = Math.max(0.2, Math.min(1, 1 - (now - lastKeyAt.current - 40) / 380));
+      lastKeyAt.current = now;
+      el.style.setProperty("--_ti", String(intensity));
+      if (now - lastPulseAt.current >= 80) {
+        lastPulseAt.current = now;
+        el.classList.remove("vds-field--pulse"); void el.offsetWidth; el.classList.add("vds-field--pulse");
       }
     }
   };
-
-  const atMin = min !== undefined && (value ?? -Infinity) <= min;
-  const atMax = max !== undefined && (value ?? Infinity)  >= max;
-
-  const inputEl = (
-    <input
-      ref={resolvedRef}
-      type="text"
-      inputMode="numeric"
-      role="spinbutton"
-      aria-valuenow={value}
-      aria-valuemin={min}
-      aria-valuemax={max}
-      aria-invalid={invalid || undefined}
-      disabled={disabled}
-      readOnly={readOnly}
-      value={value !== undefined ? String(value) : ""}
-      defaultValue={defaultValue !== undefined ? String(defaultValue) : undefined}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      onKeyDown={handleKeyDown}
-      className="vds-number-input__field"
-      {...props}
-    />
-  );
-
-  return (
-    <div
-      className={cn("vds-number-input", className)}
-      data-size={size ?? inputSize ?? "md"}
-      data-stepper={stepper}
-      data-disabled={disabled || undefined}
-      data-invalid={invalid || undefined}
-      data-readonly={readOnly || undefined}
-      data-wheel={wheelEnabled || undefined}
-    >
-      {stepper === "inline" ? (
-        <>
-          <button
-            type="button"
-            tabIndex={-1}
-            className="vds-number-input__step vds-number-input__step--dec"
-            onClick={decrement}
-            disabled={disabled || readOnly || atMin}
-          >
-            <IconMinus aria-hidden focusable={false} />
-          </button>
-          {inputEl}
-          <button
-            type="button"
-            tabIndex={-1}
-            className="vds-number-input__step vds-number-input__step--inc"
-            onClick={increment}
-            disabled={disabled || readOnly || atMax}
-          >
-            <IconPlus aria-hidden focusable={false} />
-          </button>
-        </>
-      ) : (
-        <>
-          {inputEl}
-          <div className="vds-number-input__steppers" aria-hidden="true">
-            <button
-              type="button"
-              tabIndex={-1}
-              className="vds-number-input__step vds-number-input__step--up"
-              onClick={increment}
-              disabled={disabled || readOnly || atMax}
-            >
-              <IconChevronUp aria-hidden focusable={false} />
-            </button>
-            <button
-              type="button"
-              tabIndex={-1}
-              className="vds-number-input__step vds-number-input__step--down"
-              onClick={decrement}
-              disabled={disabled || readOnly || atMin}
-            >
-              <IconChevronDown aria-hidden focusable={false} />
-            </button>
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
+  const atMin = min !== undefined && current !== undefined && current <= min;
+  const atMax = max !== undefined && current !== undefined && current >= max;
+  const field = <input
+    {...props} key="field" ref={mergedRef} type="text" inputMode={inputMode} role="spinbutton"
+    aria-valuenow={current} aria-valuemin={min} aria-valuemax={max}
+    aria-invalid={invalid || props["aria-invalid"] || undefined}
+    disabled={disabled} readOnly={readOnly} value={text}
+    onChange={(event) => {
+      if (disabled || readOnly) return;
+      const raw = event.target.value;
+      if (/^[+-]?(?:\d*\.?\d*)(?:[eE][+-]?\d*)?$/.test(raw)) commit(raw);
+    }}
+    onBlur={(event) => {
+      if (!disabled && !readOnly) {
+        const number = parseNumber(event.currentTarget.value);
+        commit(number === undefined ? "" : String(clampOnBlur ? clamp(number) : number));
+      }
+      onBlur?.(event);
+    }}
+    onKeyDown={handleKeyDown} className="vds-number-input__field"
+  />;
+  const button = (direction: number, modifier: string, icon: React.ReactNode) => <button
+    key={direction} type="button" tabIndex={-1}
+    aria-label={direction > 0 ? "Increase value" : "Decrease value"}
+    className={"vds-number-input__step vds-number-input__step--" + modifier}
+    disabled={disabled || readOnly || (direction > 0 ? atMax : atMin)}
+    onMouseDown={(event) => event.preventDefault()}
+    onClick={() => stepBy(direction)}
+  >{icon}</button>;
+  return <div className={cn("vds-number-input", className)} data-size={size ?? inputSize ?? "md"}
+    data-stepper={stepper} data-disabled={disabled || undefined} data-invalid={invalid || undefined}
+    data-readonly={readOnly || undefined} data-wheel={wheelEnabled || undefined}>
+    {stepper === "inline" ? button(-1, "dec", <IconMinus aria-hidden />) : null}
+    {field}
+    {stepper === "inline" ? button(1, "inc", <IconPlus aria-hidden />) : <div className="vds-number-input__steppers">
+      {button(1, "up", <IconChevronUp aria-hidden />)}
+      {button(-1, "down", <IconChevronDown aria-hidden />)}
+    </div>}
+  </div>;
+});

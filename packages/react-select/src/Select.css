@@ -31,9 +31,12 @@
     transition:
       background-color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
       border-color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
-      box-shadow var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
+      box-shadow 180ms ease-out,
       color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
       scale 140ms var(--select-trigger-transition-easing);
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-select-trigger:hover:not(:disabled) {
@@ -42,9 +45,14 @@
   }
 
   .vds-select-trigger:focus-visible {
-    outline: var(--select-trigger-focus-ring-width) solid var(--select-trigger-focus-ring-color);
-    outline-offset: var(--select-trigger-focus-ring-offset);
     border-color: var(--select-trigger-focus-border-color);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-select-trigger:active:not(:disabled):not([data-disabled]) {
@@ -118,7 +126,11 @@
     color: var(--select-trigger-icon-color);
     cursor: pointer;
     appearance: none;
-    transition: background-color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing);
+    transition: background-color var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-select-clear:hover {
@@ -126,8 +138,14 @@
   }
 
   .vds-select-clear:focus-visible {
-    outline: var(--select-trigger-focus-ring-width) solid var(--select-trigger-focus-ring-color);
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-select-clear > svg {
@@ -253,4 +271,11 @@
     text-align: center;
     user-select: none;
   }
+}
+
+@layer design-system.components {
+  .vds-select-control { position: relative; display: inline-flex; inline-size: 100%; min-inline-size: 0; }
+  .vds-select-control > .vds-select-clear { position: absolute; inset-inline-end: calc(var(--select-trigger-padding-inline) + 0.875rem + var(--select-trigger-gap)); inset-block-start: calc(50% - 0.5rem); }
+  .vds-select-clear-space { inline-size: 1rem; }
+  .vds-select-clear:disabled { cursor: not-allowed; opacity: var(--vds-opacity-disabled, 0.5); }
 }

@@ -1,5 +1,7 @@
-import { cn } from "@virtari-packages/utils";
+import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
 import {
+  forwardRef,
+  useState,
   useCallback,
   useEffect,
   useId,
@@ -20,6 +22,8 @@ export interface OtpInputProps
   /** Number of input slots. */
   length?: number;
   value?: string;
+  defaultValue?: string;
+  form?: string;
   onChange?: (value: string) => void;
   /** Called when all slots are filled. */
   onComplete?: (value: string) => void;
@@ -83,9 +87,11 @@ function sanitizeValue(
     .join("");
 }
 
-export function OtpInput({
+export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpInput({
   length = 6,
-  value = "",
+  value: controlledValue,
+  defaultValue = "",
+  form,
   onChange,
   onComplete,
   type = "numeric",
@@ -103,12 +109,16 @@ export function OtpInput({
   normalizeDigits = true,
   selectOnFocus = true,
   className,
-  ref,
   id,
   dir = "ltr",
   "aria-describedby": ariaDescribedBy,
   ...rootProps
-}: OtpInputProps) {
+}, ref) {
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const value = controlledValue ?? internalValue;
+  const rootRef = useRef<HTMLDivElement>(null);
+  const mergedRef = useComposedRefs(rootRef, ref);
+  useFormReset(rootRef, () => { setInternalValue(defaultValue); onChange?.(defaultValue); lastCompletedValue.current = null; }, form);
   const generatedId = useId();
   const rootId = id ?? generatedId;
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
@@ -134,6 +144,7 @@ export function OtpInput({
   const commitValue = useCallback(
     (nextValue: string) => {
       const next = sanitizeValue(nextValue, type, length, normalizeDigits);
+      if (controlledValue === undefined) setInternalValue(next);
       onChange?.(next);
 
       if (next.length === length) {
@@ -146,7 +157,7 @@ export function OtpInput({
 
       lastCompletedValue.current = null;
     },
-    [type, length, normalizeDigits, onChange, onComplete],
+    [type, length, normalizeDigits, onChange, onComplete, controlledValue],
   );
 
   const insertValue = useCallback(
@@ -172,7 +183,7 @@ export function OtpInput({
 
   const handleChange = useCallback(
     (index: number, incoming: string) => {
-      if (readOnly) return;
+      if (disabled || readOnly) return;
       if (!incoming) {
         const chars = Array.from(sanitizedValue);
         chars.splice(index, 1);
@@ -182,12 +193,12 @@ export function OtpInput({
 
       insertValue(index, incoming);
     },
-    [commitValue, insertValue, readOnly, sanitizedValue],
+    [commitValue, insertValue, disabled, readOnly, sanitizedValue],
   );
 
   const handleKeyDown = useCallback(
     (index: number, e: KeyboardEvent<HTMLInputElement>) => {
-      if (disabled || readOnly) return;
+      if (disabled || readOnly || e.defaultPrevented || e.nativeEvent.isComposing) return;
 
       if (e.key === "Backspace") {
         e.preventDefault();
@@ -225,16 +236,16 @@ export function OtpInput({
 
   const handlePaste = useCallback(
     (index: number, e: ClipboardEvent<HTMLInputElement>) => {
-      if (readOnly) return;
+      if (disabled || readOnly) return;
       e.preventDefault();
       insertValue(index, e.clipboardData.getData("text"));
     },
-    [insertValue, readOnly],
+    [insertValue, disabled, readOnly],
   );
 
   return (
     <div
-      ref={ref}
+      ref={mergedRef}
       id={rootId}
       role="group"
       aria-label={label}
@@ -264,6 +275,7 @@ export function OtpInput({
           maxLength={i === 0 ? length : 1}
           value={char}
           required={required}
+          form={form}
           disabled={disabled}
           readOnly={readOnly}
           aria-invalid={invalid || undefined}
@@ -283,8 +295,8 @@ export function OtpInput({
         />
       ))}
       {name ? (
-        <input type="hidden" name={name} value={sanitizedValue} readOnly />
+        <input type="hidden" name={name} form={form} disabled={disabled} value={sanitizedValue} readOnly />
       ) : null}
     </div>
   );
-}
+});

@@ -1,10 +1,11 @@
+import { forwardRef } from "react";
 import {
   Field,
   composeFieldDescribedBy,
   type FieldProps,
 } from "@virtari-packages/react-fieldset";
-import { cn } from "@virtari-packages/utils";
-import { useId, useState } from "react";
+import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
+import { useId, useState, useRef } from "react";
 import type { CSSProperties, ReactNode, Ref } from "react";
 import { Textarea, type TextareaProps } from "./Textarea";
 
@@ -48,7 +49,7 @@ function defaultCounterFormatter(current: number, maxLength?: number) {
   return maxLength ? `${current}/${maxLength}` : current;
 }
 
-export function TextareaField({
+export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>(function TextareaField({
   label,
   description,
   error,
@@ -65,7 +66,6 @@ export function TextareaField({
   showCounter,
   counterFormatter = defaultCounterFormatter,
   invalid,
-  ref,
   id,
   value,
   defaultValue,
@@ -76,7 +76,9 @@ export function TextareaField({
   "aria-describedby": ariaDescribedBy,
   "aria-invalid": ariaInvalid,
   ...props
-}: TextareaFieldProps) {
+}, ref) {
+  const localRef = useRef<HTMLTextAreaElement>(null);
+  const mergedRef = useComposedRefs(localRef, ref);
   const generatedId = useId();
   const controlId = id ?? `vds-textarea-field-${generatedId}`;
   const descriptionId = description
@@ -95,6 +97,7 @@ export function TextareaField({
   const [uncontrolledValue, setUncontrolledValue] = useState(
     resolveTextValue(defaultValue),
   );
+  useFormReset(localRef, () => setUncontrolledValue(resolveTextValue(defaultValue)), props.form);
   const isControlled = value !== undefined;
   const currentValue = isControlled
     ? resolveTextValue(value)
@@ -128,7 +131,7 @@ export function TextareaField({
     >
       <Textarea
         {...props}
-        ref={ref}
+        ref={mergedRef}
         id={controlId}
         value={value}
         defaultValue={defaultValue}
@@ -146,4 +149,4 @@ export function TextareaField({
       />
     </Field>
   );
-}
+});

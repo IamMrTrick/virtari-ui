@@ -182,7 +182,8 @@ export function getVisualTransform(
   options?: { disableStretch?: boolean; rtl?: boolean },
 ): string {
   const translate = getTranslate(direction, openPx, totalPx, options?.rtl);
-  const stretchScale = options?.disableStretch ? 1 : getStretchScale(openPx, totalPx);
+  if (options?.disableStretch) return translate;
+  const stretchScale = getStretchScale(openPx, totalPx);
   if (getAxis(direction) === "x") {
     return `${translate} scale3d(${stretchScale}, 1, 1)`;
   }

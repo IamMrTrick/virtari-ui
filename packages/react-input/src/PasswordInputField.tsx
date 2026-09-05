@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import {
   Field,
   composeFieldDescribedBy,
@@ -58,7 +59,7 @@ function defaultCounterFormatter(current: number, maxLength?: number) {
   return maxLength ? `${current}/${maxLength}` : current;
 }
 
-export function PasswordInputField({
+export const PasswordInputField = forwardRef<HTMLInputElement, PasswordInputFieldProps>(function PasswordInputField({
   label,
   description,
   error,
@@ -77,7 +78,6 @@ export function PasswordInputField({
   showCounter,
   counterFormatter = defaultCounterFormatter,
   invalid,
-  ref,
   id,
   value,
   defaultValue,
@@ -90,7 +90,7 @@ export function PasswordInputField({
   "aria-describedby": ariaDescribedBy,
   "aria-invalid": ariaInvalid,
   ...props
-}: PasswordInputFieldProps) {
+}, ref) {
   const generatedId = useId();
   const controlId = id ?? `vds-password-input-field-${generatedId}`;
   const descriptionId = description
@@ -166,4 +166,4 @@ export function PasswordInputField({
       />
     </Field>
   );
-}
+});

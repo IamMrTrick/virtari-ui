@@ -49,7 +49,7 @@ export function FieldsetPage() {
           <FieldsetDescription>Please review the highlighted fields.</FieldsetDescription>
           <div>
             <Label htmlFor="card-num">Card number</Label>
-            <Input id="card-num" placeholder="0000 0000 0000 0000" invalid />
+            <Input id="card-num" placeholder="0000 0000 0000 0000" aria-invalid="true" />
           </div>
         </Fieldset>
       </Section>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import BaseYooptaEditor, {
   buildBlockData,
@@ -64,7 +64,8 @@ export function YooptaEditor({
   style,
 }: YooptaEditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const initialValueRef = useRef(value);
+  const initialized = useRef(false);
+  const [documentRevision, setDocumentRevision] = useState(0);
 
   const editor = useMemo(
     () =>
@@ -77,22 +78,25 @@ export function YooptaEditor({
           }),
         ),
       ),
-    [readOnly],
+    [],
   );
 
-  /* Sync the value into the editor ONCE on mount. Yoopta is internally
-     stateful — re-running setEditorValue on every external value change
-     resets selection/focus, which kills typing after Enter. The initial
-     value is captured at first render and applied once; subsequent value
-     prop changes are observed via onChange but not pushed back in. */
+  // Keep the editor identity and selection when the parent echoes an edit.
+  // Only a distinct external document needs to replace the editor content.
+  editor.readOnly = readOnly ?? false;
   useEffect(() => {
-    const initial = isEmptyValue(initialValueRef.current)
-      ? buildStarterValue()
-      : initialValueRef.current!;
+    if (initialized.current && value === undefined) return;
+    const serialized = value === undefined ? undefined : JSON.stringify(value);
+    if (initialized.current && serialized === JSON.stringify(editor.getEditorValue())) return;
+    const next = isEmptyValue(value) ? buildStarterValue() : value!;
+    initialized.current = true;
     editor.withoutSavingHistory(() => {
-      editor.setEditorValue(initial);
+      editor.setEditorValue(next);
     });
-  }, [editor]);
+    // Slate caches its mounted block editors. Refresh that view only when an
+    // external document is loaded; ordinary edit echoes keep focus/selection.
+    setDocumentRevision((revision) => revision + 1);
+  }, [editor, value]);
 
   return (
     <div
@@ -101,6 +105,7 @@ export function YooptaEditor({
       style={style}
     >
       <BaseYooptaEditor
+        key={documentRevision}
         editor={editor}
         placeholder={placeholder}
         autoFocus={autoFocus}

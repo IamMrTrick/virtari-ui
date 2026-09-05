@@ -57,7 +57,11 @@
     cursor: pointer;
     appearance: none;
     flex: none;
-    transition: background-color var(--date-field-transition-duration) var(--date-field-transition-easing);
+    transition: background-color var(--date-field-transition-duration) var(--date-field-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-date-range-picker-trigger:hover:not(:disabled) {
@@ -65,8 +69,14 @@
   }
 
   .vds-date-range-picker-trigger:focus-visible {
-    outline: var(--date-field-focus-ring-width) solid var(--date-field-focus-ring-color);
-    outline-offset: var(--vds-focus-ring-offset, 2px);
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-date-range-picker-trigger:disabled {

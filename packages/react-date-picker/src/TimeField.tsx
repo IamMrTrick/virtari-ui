@@ -1,4 +1,5 @@
-import { cn } from "@virtari-packages/utils";
+import { forwardRef } from "react";
+import { cn, useComposedRefs } from "@virtari-packages/utils";
 import {
   useCallback,
   useEffect,
@@ -50,6 +51,8 @@ export interface TimeFieldProps {
   "aria-label"?: string;
   name?: string;
   autoFocus?: boolean;
+  form?: string;
+  validationBehavior?: "native" | "aria";
 
   size?: DatePickerSize;
   appearance?: DatePickerAppearance;
@@ -87,7 +90,7 @@ export interface TimePickerEditorProps {
   millisecondStep: number;
 }
 
-export function TimeField({
+export const TimeField = forwardRef<HTMLDivElement, TimeFieldProps>(function TimeField({
   size = "md",
   appearance = "soft",
   invalid,
@@ -104,9 +107,8 @@ export function TimeField({
   overlayMode = "auto",
   mobilePresentation = "drawer",
   mobileSizeMode = "content",
-  ref,
   ...props
-}: TimeFieldProps) {
+}, ref) {
   const { locale: detectedLocale, direction } = useLocale();
   const isMobile = useIsMobileViewport();
   const resolvedOverlayMode = overlayMode === "auto"
@@ -121,8 +123,10 @@ export function TimeField({
     locale: locale ?? detectedLocale,
   });
   const localRef = useRef<HTMLDivElement>(null);
-  const { labelProps, fieldProps, descriptionProps, errorMessageProps } = useTimeField(
-    { ...props, label, isInvalid: invalid ?? props.isInvalid },
+  const nativeInputRef = useRef<HTMLInputElement>(null);
+  const mergedRef = useComposedRefs(localRef, ref);
+  const { labelProps, fieldProps, inputProps, descriptionProps, errorMessageProps } = useTimeField(
+    { ...props, inputRef: nativeInputRef, label, isInvalid: invalid ?? props.isInvalid },
     state,
     localRef,
   );
@@ -179,7 +183,7 @@ export function TimeField({
   const fieldGroup = (
     <div
       {...fieldProps}
-      ref={composeRefs(ref, localRef)}
+      ref={mergedRef}
       className="vds-time-field-group"
       data-surface-trigger={usesSurfaceField ? "true" : undefined}
       onClick={(event) => {
@@ -232,6 +236,7 @@ export function TimeField({
       data-dir={direction}
       data-picker={showPicker ? "true" : undefined}
     >
+      <input {...inputProps} ref={nativeInputRef} form={props.form} />
       {label ? (
         <span {...labelProps} className="vds-time-field-label">
           {label}
@@ -303,7 +308,7 @@ export function TimeField({
       </span>
     </div>
   );
-}
+});
 
 interface TimeSegmentProps {
   segment: DateSegment;
@@ -590,17 +595,4 @@ function nearestValue(values: number[], value: number): number {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
-}
-
-function composeRefs<T>(...refs: Array<Ref<T> | undefined>) {
-  return (node: T | null) => {
-    refs.forEach((ref) => {
-      if (!ref) return;
-      if (typeof ref === "function") {
-        ref(node);
-      } else {
-        ref.current = node;
-      }
-    });
-  };
 }

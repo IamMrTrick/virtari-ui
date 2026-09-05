@@ -468,7 +468,11 @@
     cursor: pointer;
     transition:
       transform var(--color-picker-transition),
-      border-color var(--color-picker-transition);
+      border-color var(--color-picker-transition),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-color-picker-stop-color-chip:hover:not(:disabled) {
@@ -477,8 +481,14 @@
   }
 
   .vds-color-picker-stop-color-chip:focus-visible {
-    outline: 2px solid var(--color-picker-focus);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-color-picker-stop-color-chip[data-state="open"] {
@@ -509,6 +519,10 @@
     color: var(--color-picker-text);
     font-family: var(--color-picker-mono-family);
     text-align: center;
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
   }
 
   .vds-color-picker .vds-input:hover:not(:disabled) {
@@ -518,7 +532,12 @@
   .vds-color-picker .vds-input:focus-visible {
     border-color: var(--color-picker-focus);
     outline: none;
-    box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-picker-focus) 30%, transparent);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-color-picker .vds-textarea {
@@ -742,12 +761,28 @@
   }
 
   /* ── Focus / a11y ─────────────────────────────────────── */
+  .vds-color-picker-slider,
+  .vds-color-picker-saturation,
+  .vds-color-picker-stop,
+  .vds-color-picker-swatch{
+    transition: box-shadow 180ms ease-out;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
   .vds-color-picker-slider:focus-visible,
   .vds-color-picker-saturation:focus-visible,
   .vds-color-picker-stop:focus-visible,
   .vds-color-picker-swatch:focus-visible {
-    outline: 2px solid var(--color-picker-focus);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
   }
 
   .vds-color-picker-slider[data-disabled="true"],
@@ -817,9 +852,9 @@
     .vds-color-picker-stop-row {
       transition:
         background-color var(--color-picker-transition),
-        border-color var(--color-picker-transition),
-        opacity 160ms var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
-        transform 160ms var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+      border-color var(--color-picker-transition),
+      opacity 160ms var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      transform 160ms var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
     }
 
     @starting-style {
@@ -871,4 +906,11 @@
     opacity: var(--vds-opacity-disabled, 0.5);
     cursor: not-allowed;
   }
+}
+
+@layer design-system.components {
+  .vds-color-picker-inline-chip { transition: box-shadow 180ms ease-out; }
+  .vds-color-picker-inline-chip:focus-within { outline: none; box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); }
+  @media (prefers-reduced-motion: reduce) { .vds-color-picker-inline-chip { transition-duration: 0s; } }
+  @media (forced-colors: active) { .vds-color-picker-inline-chip:focus-within { outline: 2px solid Highlight; outline-offset: 2px; box-shadow: none; } }
 }

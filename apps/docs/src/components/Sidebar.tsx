@@ -184,7 +184,7 @@ const FALLBACK_ICON = <IconCircle {...navIconProps} />;
  * ──────────────────────────────── */
 type NavGroupData = { groupKey: string; items: string[] };
 
-const NAV_ITEMS: NavGroupData[] = [
+export const NAV_ITEMS: NavGroupData[] = [
   { groupKey: "groups.overview", items: ["introduction"] },
   {
     groupKey: "groups.foundations",
@@ -465,7 +465,6 @@ function NavContent({
               <NavItem
                 key={item.path}
                 href={hrefFor(item.path)}
-                icon={ICONS[item.path] ?? FALLBACK_ICON}
                 label={item.label}
                 onClick={(e) => {
                   if (e.metaKey || e.ctrlKey || e.button === 1) return;
@@ -528,7 +527,12 @@ export function Sidebar({
 
   return (
     <VdsSidebar
-      mode="full-height"
+      className="docs-navigation"
+      mode="below-header"
+      stickyOffset="var(--docs-header-height)"
+      inlineSize="100%"
+      collapsible={false}
+      bordered={false}
       size="md"
       background="surface"
       aria-label={t("sidebar.ariaPrimary")}
@@ -546,7 +550,6 @@ export function Sidebar({
           gap: "var(--vds-space-2)",
         }}
       >
-        <HeaderRow homeHref={hrefFor("introduction")} />
         <NavSearch value={query} onChange={setQuery} />
       </SidebarHeader>
       <SidebarSeparator />

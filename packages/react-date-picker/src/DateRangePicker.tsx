@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { cn } from "@virtari-packages/utils";
 import { useEffect, useRef, useState, type ReactNode, type Ref } from "react";
 import { useDateRangePicker, useDateField } from "@react-aria/datepicker";
@@ -50,6 +51,8 @@ export interface DateRangePickerProps {
   defaultTimeValue?: TimeValue;
   allowsNonContiguousRanges?: boolean;
   autoFocus?: boolean;
+  form?: string;
+  validationBehavior?: "native" | "aria";
   startName?: string;
   endName?: string;
 
@@ -78,7 +81,7 @@ export interface DateRangePickerPresetRenderProps {
   setValue: (value: DateRange | null) => void;
 }
 
-export function DateRangePicker({
+export const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(function DateRangePicker({
   size = "md",
   appearance = "soft",
   invalid,
@@ -94,9 +97,8 @@ export function DateRangePicker({
   mobilePresentation = "drawer",
   mobileSizeMode = "full",
   defaultTimeValue,
-  ref,
   ...props
-}: DateRangePickerProps) {
+}, ref) {
   const { locale: detectedLocale, direction } = useLocale();
   const usedLocale = resolveLocale(locale ?? detectedLocale, calendar);
   const isMobile = useIsMobileViewport();
@@ -161,7 +163,8 @@ export function DateRangePicker({
     createCalendar,
   });
   const startFieldRef = useRef<HTMLDivElement>(null);
-  const { fieldProps: innerStartFieldProps } = useDateField(
+  const startInputRef = useRef<HTMLInputElement>(null);
+  const { fieldProps: innerStartFieldProps, inputProps: startInputProps } = useDateField(
     startFieldProps,
     startFieldState,
     startFieldRef,
@@ -173,7 +176,8 @@ export function DateRangePicker({
     createCalendar,
   });
   const endFieldRef = useRef<HTMLDivElement>(null);
-  const { fieldProps: innerEndFieldProps } = useDateField(
+  const endInputRef = useRef<HTMLInputElement>(null);
+  const { fieldProps: innerEndFieldProps, inputProps: endInputProps } = useDateField(
     endFieldProps,
     endFieldState,
     endFieldRef,
@@ -439,6 +443,8 @@ export function DateRangePicker({
       data-readonly={props.isReadOnly ? "true" : undefined}
       data-dir={direction}
     >
+      <input {...startInputProps} ref={startInputRef} form={props.form} />
+      <input {...endInputProps} ref={endInputRef} form={props.form} />
       {label ? (
         <span {...labelProps} className="vds-date-range-picker-label">
           {label}
@@ -595,7 +601,7 @@ export function DateRangePicker({
       </span>
     </div>
   );
-}
+});
 
 function CalendarIcon() {
   return (

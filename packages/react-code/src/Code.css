@@ -167,10 +167,26 @@
  * are set in theme.ts via EditorView.theme().
  * ========================================================================= */
 
+.vds-code {
+  transition: box-shadow 180ms ease-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0s;
+  }
+}
+
 .vds-code .cm-editor.cm-focused {
-  outline: var(--vds-code-focus-ring-width) solid var(--vds-code-focus-ring-color);
-  outline-offset: calc(-1 * var(--vds-code-focus-ring-width));
-  border-radius: inherit;
+  outline: none;
+}
+
+.vds-code:has(.cm-focused) {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  @media (forced-colors: active) {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
 }
 
 .vds-code .cm-scroller::-webkit-scrollbar {
