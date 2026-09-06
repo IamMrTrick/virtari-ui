@@ -1,6 +1,6 @@
 # virtari API snapshot
 
-Version: 0.1.2. Export entry points (exact package.json map):
+Version: 0.1.3. Export entry points (exact package.json map):
 
 ```json
 {}

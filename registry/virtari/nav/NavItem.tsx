@@ -3,7 +3,6 @@ import { cn } from "../../lib/utils";
 import {
   useCallback,
   useMemo,
-  type ElementType,
   type HTMLAttributes,
   type ReactNode,
   type Ref,
@@ -79,7 +78,7 @@ export function NavKbd({ className, ref, ...rest }: NavKbdProps) {
   );
 }
 
-export interface NavChevronProps extends HTMLAttributes<SVGElement> {}
+export type NavChevronProps = HTMLAttributes<SVGElement>;
 
 export function NavChevron({ className, ...rest }: NavChevronProps) {
   return (

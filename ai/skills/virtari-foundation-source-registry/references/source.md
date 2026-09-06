@@ -47,9 +47,9 @@ The default target can be changed before installation:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v0.1.2/virtari.schema.json",
+  "$schema": "https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v0.1.3/virtari.schema.json",
   "target": "src/design-system",
-  "registry": "https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v0.1.2/registry.json",
+  "registry": "https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v0.1.3/registry.json",
   "install": true
 }
 ```
@@ -81,7 +81,7 @@ The root `registry.json` follows the public shadcn source-registry schema. A
 consumer can use the standard shadcn CLI without installing the Virtari CLI:
 
 ```bash
-pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.2
+pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.3
 ```
 
 Registry dependencies use full same-repository GitHub addresses because bare
@@ -181,8 +181,8 @@ publishing with OIDC.
       "description": "Virtari cascade layers, design tokens, global reset, primitives, and shared React utilities.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-core#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-core#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -200,8 +200,8 @@ publishing with OIDC.
       "description": "Base reset, layers, and global primitives for the Virtari design system.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-tokens#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-tokens#cli-v0.1.3"
       ],
       "files": [
         {
@@ -238,16 +238,16 @@ publishing with OIDC.
       "description": "Headless Accordion behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-collapsible#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-collapsible#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -269,12 +269,12 @@ publishing with OIDC.
       "description": "Headless Alert Dialog behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -296,8 +296,8 @@ publishing with OIDC.
       "description": "Headless Arrow behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -319,12 +319,12 @@ publishing with OIDC.
       "description": "Headless Avatar behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-is-hydrated#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-is-hydrated#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -346,15 +346,15 @@ publishing with OIDC.
       "description": "Headless Checkbox behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -376,15 +376,15 @@ publishing with OIDC.
       "description": "Headless Collapsible behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -406,10 +406,10 @@ publishing with OIDC.
       "description": "Headless Collection behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -453,7 +453,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -475,7 +475,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -485,19 +485,19 @@ publishing with OIDC.
       "description": "Headless Dialog behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -535,7 +535,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -545,12 +545,12 @@ publishing with OIDC.
       "description": "Headless Dismissable Layer behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-escape-keydown#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-escape-keydown#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -572,14 +572,14 @@ publishing with OIDC.
       "description": "Headless Dropdown Menu behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-menu#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-menu#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -618,7 +618,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -640,7 +640,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -650,10 +650,10 @@ publishing with OIDC.
       "description": "Headless Focus Scope behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -675,8 +675,8 @@ publishing with OIDC.
       "description": "Headless Id behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -698,8 +698,8 @@ publishing with OIDC.
       "description": "Headless Label behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -721,23 +721,23 @@ publishing with OIDC.
       "description": "Headless Menu behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-roving-focus#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-roving-focus#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -775,7 +775,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -785,20 +785,20 @@ publishing with OIDC.
       "description": "Headless Popover behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -824,15 +824,15 @@ publishing with OIDC.
       "description": "Headless Popper behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-arrow#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-rect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-arrow#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-rect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "dependencies": [
         "@floating-ui/react-dom@^2.1.8"
@@ -857,9 +857,9 @@ publishing with OIDC.
       "description": "Headless Portal behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -881,9 +881,9 @@ publishing with OIDC.
       "description": "Headless Presence behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -910,8 +910,8 @@ publishing with OIDC.
       "description": "Headless Primitive behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -933,9 +933,9 @@ publishing with OIDC.
       "description": "Headless Progress behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -957,17 +957,17 @@ publishing with OIDC.
       "description": "Headless Radio Group behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-roving-focus#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-roving-focus#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1006,7 +1006,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -1016,16 +1016,16 @@ publishing with OIDC.
       "description": "Headless Roving Focus behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1047,16 +1047,16 @@ publishing with OIDC.
       "description": "Headless Scroll Area behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-number#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-number#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1083,26 +1083,26 @@ publishing with OIDC.
       "description": "Headless Select behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-number#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-visually-hidden#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-number#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-visually-hidden#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -1128,8 +1128,8 @@ publishing with OIDC.
       "description": "Headless Separator behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1151,17 +1151,17 @@ publishing with OIDC.
       "description": "Headless Slider behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-number#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-number#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1183,8 +1183,8 @@ publishing with OIDC.
       "description": "Headless Slot behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1206,14 +1206,14 @@ publishing with OIDC.
       "description": "Headless Switch behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1235,15 +1235,15 @@ publishing with OIDC.
       "description": "Headless Tabs behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-roving-focus#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-roving-focus#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1265,19 +1265,19 @@ publishing with OIDC.
       "description": "Headless Toast behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-visually-hidden#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-visually-hidden#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1299,10 +1299,10 @@ publishing with OIDC.
       "description": "Headless Toggle behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1324,19 +1324,19 @@ publishing with OIDC.
       "description": "Headless Tooltip behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-visually-hidden#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-visually-hidden#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1370,7 +1370,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -1380,9 +1380,9 @@ publishing with OIDC.
       "description": "Headless Use Controllable State behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-use-effect-event#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-use-effect-event#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1409,8 +1409,8 @@ publishing with OIDC.
       "description": "Headless Use Effect Event behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1432,8 +1432,8 @@ publishing with OIDC.
       "description": "Headless Use Escape Keydown behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1470,7 +1470,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -1492,7 +1492,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -1514,7 +1514,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -1524,8 +1524,8 @@ publishing with OIDC.
       "description": "Headless Use Rect behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-rect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-rect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1547,8 +1547,8 @@ publishing with OIDC.
       "description": "Headless Use Size behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1570,8 +1570,8 @@ publishing with OIDC.
       "description": "Headless Visually Hidden behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1593,56 +1593,56 @@ publishing with OIDC.
       "description": "Complete headless primitive collection. Component installs use smaller primitive items automatically.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-accordion#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-alert-dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-arrow#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-avatar#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-checkbox#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-collapsible#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dropdown-menu#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-label#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-menu#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-number#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-progress#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-radio-group#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-rect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-roving-focus#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-scroll-area#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-select#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-separator#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slider#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-switch#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-tabs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-toast#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-toggle#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-tooltip#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-effect-event#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-escape-keydown#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-is-hydrated#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-rect#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-visually-hidden#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-accordion#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-alert-dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-arrow#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-avatar#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-checkbox#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-collapsible#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-collection#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-compose-refs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-context#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dismissable-layer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dropdown-menu#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-event-handlers#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-guards#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-focus-scope#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-id#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-label#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-menu#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-number#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popper#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-portal#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-presence#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-primitive#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-progress#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-radio-group#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-rect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-roving-focus#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-scroll-area#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-select#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-separator#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slider#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-switch#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-tabs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-toast#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-toggle#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-tooltip#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-callback-ref#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-controllable-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-effect-event#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-escape-keydown#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-is-hydrated#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-layout-effect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-previous#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-rect#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-use-size#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-visually-hidden#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -1652,11 +1652,11 @@ publishing with OIDC.
       "description": "Accordion source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-accordion#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-accordion#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -1697,10 +1697,10 @@ publishing with OIDC.
       "description": "Alert source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1733,10 +1733,10 @@ publishing with OIDC.
       "description": "Alert Dialog source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-alert-dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-alert-dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1764,10 +1764,10 @@ publishing with OIDC.
       "description": "Avatar source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-avatar#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-avatar#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1795,10 +1795,10 @@ publishing with OIDC.
       "description": "Badge source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1831,10 +1831,10 @@ publishing with OIDC.
       "description": "Bottom Nav source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1892,12 +1892,12 @@ publishing with OIDC.
       "description": "Breadcrumb source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/dropdown-menu#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/dropdown-menu#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1930,10 +1930,10 @@ publishing with OIDC.
       "description": "Button source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -1981,10 +1981,10 @@ publishing with OIDC.
       "description": "Button Group source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -2017,9 +2017,9 @@ publishing with OIDC.
       "description": "Card source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -2057,11 +2057,11 @@ publishing with OIDC.
       "description": "Carousel source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "swiper@^12.1.2"
@@ -2097,11 +2097,11 @@ publishing with OIDC.
       "description": "Checkbox source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-checkbox#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-checkbox#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -2182,10 +2182,10 @@ publishing with OIDC.
       "description": "Chip source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -2218,10 +2218,10 @@ publishing with OIDC.
       "description": "Code source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/copy-button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/copy-button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@codemirror/autocomplete@^6.18.4",
@@ -2310,10 +2310,10 @@ publishing with OIDC.
       "description": "Collapsible source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-collapsible#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-collapsible#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -2341,15 +2341,15 @@ publishing with OIDC.
       "description": "Color Picker source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/popover#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/select#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/textarea#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/popover#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/select#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/textarea#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -2397,12 +2397,12 @@ publishing with OIDC.
       "description": "Command source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/kbd#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/kbd#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "cmdk@^1.0.0"
@@ -2448,10 +2448,10 @@ publishing with OIDC.
       "description": "Copy Button source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -2484,23 +2484,23 @@ publishing with OIDC.
       "description": "Data Table source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/avatar#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/badge#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/checkbox#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/chip#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/drawer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/dropdown-menu#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/pagination#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/popover#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/select#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/switch#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tabs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/avatar#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/badge#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/checkbox#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/chip#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/drawer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/dropdown-menu#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/pagination#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/popover#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/select#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/switch#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tabs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@dnd-kit/core@^6.1.0",
@@ -2861,15 +2861,15 @@ publishing with OIDC.
       "description": "Date Picker source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/drawer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/radio-group#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/drawer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/radio-group#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@internationalized/date@^3.5.6",
@@ -3001,11 +3001,11 @@ publishing with OIDC.
       "description": "Dialog source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -3041,10 +3041,10 @@ publishing with OIDC.
       "description": "Drawer source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -3092,11 +3092,11 @@ publishing with OIDC.
       "description": "Dropdown Menu source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-dropdown-menu#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-dropdown-menu#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -3124,23 +3124,23 @@ publishing with OIDC.
       "description": "Editor source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/code#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/color-picker#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/file-upload#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/kbd#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/scroll-area#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/select#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tabs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/textarea#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tooltip#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/code#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/color-picker#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/file-upload#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/kbd#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/scroll-area#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/select#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tabs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/textarea#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tooltip#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@lexical/code@^0.38.2",
@@ -3325,9 +3325,9 @@ publishing with OIDC.
       "description": "Empty State source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -3360,9 +3360,9 @@ publishing with OIDC.
       "description": "Fieldset source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -3400,12 +3400,12 @@ publishing with OIDC.
       "description": "File Upload source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/progress#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/progress#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "react-dropzone@^14.2.0"
@@ -3456,9 +3456,9 @@ publishing with OIDC.
       "description": "Flag source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -4861,9 +4861,9 @@ publishing with OIDC.
       "description": "Flow source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@xyflow/react@^12.10.2"
@@ -4919,11 +4919,11 @@ publishing with OIDC.
       "description": "Form source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/label#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/label#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "react-hook-form@^7.0.0"
@@ -4999,9 +4999,9 @@ publishing with OIDC.
       "description": "Header source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5049,9 +5049,9 @@ publishing with OIDC.
       "description": "Icons source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -5092,11 +5092,11 @@ publishing with OIDC.
       "description": "Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5144,9 +5144,9 @@ publishing with OIDC.
       "description": "Kbd source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5174,10 +5174,10 @@ publishing with OIDC.
       "description": "Label source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-label#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-label#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5205,13 +5205,13 @@ publishing with OIDC.
       "description": "Language Picker source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/drawer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/flag#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/select#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/drawer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/flag#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/select#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5269,9 +5269,9 @@ publishing with OIDC.
       "description": "Layout source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5434,10 +5434,10 @@ publishing with OIDC.
       "description": "Nav source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@floating-ui/react@^0.27.0"
@@ -5498,11 +5498,11 @@ publishing with OIDC.
       "description": "Number Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5540,9 +5540,9 @@ publishing with OIDC.
       "description": "Otp Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5575,11 +5575,11 @@ publishing with OIDC.
       "description": "Pagination source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/select#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/select#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5622,13 +5622,13 @@ publishing with OIDC.
       "description": "Phone Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/flag#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/select#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/flag#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/select#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "libphonenumber-js@^1.11.0"
@@ -5694,11 +5694,11 @@ publishing with OIDC.
       "description": "Popover source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5731,10 +5731,10 @@ publishing with OIDC.
       "description": "Progress source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-progress#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-progress#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5767,12 +5767,12 @@ publishing with OIDC.
       "description": "Radio Group source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-radio-group#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-radio-group#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -5858,10 +5858,10 @@ publishing with OIDC.
       "description": "Scroll Area source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-scroll-area#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-scroll-area#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5919,12 +5919,12 @@ publishing with OIDC.
       "description": "Segmented Control source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-radio-group#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tabs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-radio-group#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tabs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -5962,15 +5962,15 @@ publishing with OIDC.
       "description": "Select source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/chip#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-select#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/chip#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-popover#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-select#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0",
@@ -6037,10 +6037,10 @@ publishing with OIDC.
       "description": "Separator source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-separator#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-separator#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6068,9 +6068,9 @@ publishing with OIDC.
       "description": "Sidebar source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6113,9 +6113,9 @@ publishing with OIDC.
       "description": "Skeleton source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6143,11 +6143,11 @@ publishing with OIDC.
       "description": "Slider source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-slider#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-slider#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6175,9 +6175,9 @@ publishing with OIDC.
       "description": "Spinner source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6210,9 +6210,9 @@ publishing with OIDC.
       "description": "Stepper source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6250,10 +6250,10 @@ publishing with OIDC.
       "description": "Switch source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-switch#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-switch#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6286,9 +6286,9 @@ publishing with OIDC.
       "description": "Table source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6321,11 +6321,11 @@ publishing with OIDC.
       "description": "Tabs source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-tabs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-tabs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6388,10 +6388,10 @@ publishing with OIDC.
       "description": "Tag Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/chip#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/chip#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6424,10 +6424,10 @@ publishing with OIDC.
       "description": "Text source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6475,10 +6475,10 @@ publishing with OIDC.
       "description": "Textarea source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6511,9 +6511,9 @@ publishing with OIDC.
       "description": "Timeline source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6546,11 +6546,11 @@ publishing with OIDC.
       "description": "Toast source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-toast#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-toast#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -6621,10 +6621,10 @@ publishing with OIDC.
       "description": "Toggle source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-toggle#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-toggle#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6652,11 +6652,11 @@ publishing with OIDC.
       "description": "Tooltip source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/primitive-tooltip#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-direction#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/primitive-tooltip#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6689,9 +6689,9 @@ publishing with OIDC.
       "description": "Tree View source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6729,10 +6729,10 @@ publishing with OIDC.
       "description": "Visually Hidden source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/primitive-slot#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "files": [
         {
@@ -6755,19 +6755,19 @@ publishing with OIDC.
       "description": "Yoopta Editor source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/accordion#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/dropdown-menu#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/file-upload#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/popover#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/scroll-area#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tabs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tooltip#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/accordion#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/dropdown-menu#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/file-upload#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/popover#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/scroll-area#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tabs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tooltip#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utils#cli-v0.1.3"
       ],
       "dependencies": [
         "@yoopta/accordion@^6.0.3",
@@ -7151,7 +7151,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -7161,8 +7161,8 @@ publishing with OIDC.
       "description": "Utility CSS classes (spacing, sizing, layout, z-index) driven by Virtari tokens.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-tokens#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-tokens#cli-v0.1.3"
       ],
       "files": [
         {
@@ -7226,7 +7226,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3"
       ]
     },
     {
@@ -7236,76 +7236,76 @@ publishing with OIDC.
       "description": "The complete Virtari source component collection. Prefer individual items for smaller applications.",
       "author": "Virtari",
       "registryDependencies": [
-        "IamMrTrick/virtari-ui/accordion#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/alert#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/alert-dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/avatar#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/badge#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/bottom-nav#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/breadcrumb#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/button-group#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/card#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/carousel#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/checkbox#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/chip#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/code#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/collapsible#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/color-picker#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/command#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/copy-button#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/data-table#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/date-picker#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/dialog#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/drawer#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/dropdown-menu#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/editor#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/empty-state#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/file-upload#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/flag#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/flow#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/form#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/header#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/icons#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/kbd#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/label#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/language-picker#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/layout#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/nav#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/number-input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/otp-input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/pagination#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/phone-input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/popover#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/progress#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/radio-group#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/scroll-area#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/segmented-control#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/select#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/separator#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/sidebar#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/skeleton#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/slider#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/spinner#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/stepper#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/switch#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/table#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tabs#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tag-input#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/text#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/textarea#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/timeline#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/toast#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/toggle#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tooltip#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/tree-view#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/virtari-utilities#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/visually-hidden#cli-v0.1.2",
-        "IamMrTrick/virtari-ui/yoopta-editor#cli-v0.1.2"
+        "IamMrTrick/virtari-ui/accordion#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/alert#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/alert-dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/avatar#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/badge#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/bottom-nav#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/breadcrumb#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/button-group#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/card#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/carousel#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/checkbox#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/chip#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/code#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/collapsible#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/color-picker#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/command#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/copy-button#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/data-table#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/date-picker#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/dialog#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/drawer#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/dropdown-menu#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/editor#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/empty-state#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/fieldset#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/file-upload#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/flag#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/flow#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/form#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/header#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/icons#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/kbd#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/label#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/language-picker#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/layout#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/nav#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/number-input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/otp-input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/pagination#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/phone-input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/popover#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/progress#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/radio-group#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/scroll-area#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/segmented-control#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/select#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/separator#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/sidebar#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/skeleton#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/slider#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/spinner#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/stepper#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/switch#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/table#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tabs#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tag-input#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/text#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/textarea#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/timeline#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/toast#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/toggle#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tooltip#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/tree-view#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-base#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-license#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/virtari-utilities#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/visually-hidden#cli-v0.1.3",
+        "IamMrTrick/virtari-ui/yoopta-editor#cli-v0.1.3"
       ]
     }
   ]

@@ -338,7 +338,7 @@ export function NavKbd({ className, ref, ...rest }: NavKbdProps);
 Source: `packages/react-nav/src/NavItem.tsx`
 
 ```tsx
-export interface NavChevronProps extends HTMLAttributes<SVGElement> {}
+export type NavChevronProps = HTMLAttributes<SVGElement>;
 ```
 
 Source: `packages/react-nav/src/NavItem.tsx`

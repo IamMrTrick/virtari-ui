@@ -73,7 +73,7 @@ export function SourceInstallationPage() {
 
     <Section title={text("Use the shadcn CLI", "استفاده با CLI خود shadcn")}>
       <p className="docs-prose">{text("The public registry also follows shadcn's GitHub registry protocol. Pinning the release tag keeps installation reproducible.", "رجیستری عمومی با پروتکل GitHub رجیستری shadcn هم سازگار است. پین‌کردن تگ انتشار، نصب را قابل‌بازتولید نگه می‌دارد.")}</p>
-      <CodeBlock renderer="static" language="shell" code="pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.2" />
+      <CodeBlock renderer="static" language="shell" code="pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.3" />
       <Button asChild variant="soft" rightSection={<IconArrowRight className="docs-directional-icon" size={16}/>}><a href={href("button")}>{text("Open component documentation", "مشاهدهٔ مستندات کامپوننت‌ها")}</a></Button>
     </Section>
   </>;

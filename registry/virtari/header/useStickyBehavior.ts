@@ -64,8 +64,10 @@ export function useStickyBehavior({
   smartThreshold = 4,
   collapseAt,
 }: Options) {
-  const [hidden, setHidden] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [smartHidden, setSmartHidden] = useState(false);
+  const [collapseState, setCollapseState] = useState(false);
+  const hidden = mode === "smart" && smartHidden;
+  const collapsed = mode === "collapse" && collapseState;
 
   // Mirror the state into a ref so the scroll closure can early-out when the
   // row is in a transformed / zero-height state — otherwise re-measuring
@@ -77,8 +79,6 @@ export function useStickyBehavior({
 
   useEffect(() => {
     if (mode === "none" || mode === "always") {
-      setHidden(false);
-      setCollapsed(false);
       return;
     }
 
@@ -105,15 +105,15 @@ export function useStickyBehavior({
 
       if (mode === "smart") {
         if (y <= rowBottomDoc) {
-          setHidden(false);
+          setSmartHidden(false);
         } else if (delta > smartThreshold) {
-          setHidden(true);
+          setSmartHidden(true);
         } else if (delta < -smartThreshold) {
-          setHidden(false);
+          setSmartHidden(false);
         }
       } else if (mode === "collapse") {
         const trigger = collapseAt ?? rowBottomDoc;
-        setCollapsed(y > trigger);
+        setCollapseState(y > trigger);
       }
     };
 
