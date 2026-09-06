@@ -1,7 +1,9 @@
 import { existsSync } from "node:fs";
+import { execFile } from "node:child_process";
 import { mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -13,6 +15,12 @@ const githubRegistry = "Virtari-Packages/virtari-design-system";
 const cliManifest = JSON.parse(await readFile(path.join(root, "packages", "cli", "package.json"), "utf8"));
 const registryRef = `cli-v${cliManifest.version}`;
 const sourceExtensions = new Set([".ts", ".tsx", ".js", ".jsx", ".css", ".json", ".svg"]);
+const execFileAsync = promisify(execFile);
+const sourceGenerators = [
+  ["react-flag", "build-flags.mjs"],
+  ["react-language-picker", "build-languages.mjs"],
+  ["react-phone-input", "build-countries.mjs"],
+];
 
 function registryAddress(item) {
   return `${githubRegistry}/${item}#${registryRef}`;
@@ -135,6 +143,16 @@ async function discoverPackages() {
     });
   }
   return infos;
+}
+
+async function generatePackageSources() {
+  for (const [packageDirectory, script] of sourceGenerators) {
+    const cwd = path.join(packagesRoot, packageDirectory);
+    await execFileAsync(process.execPath, [path.join(cwd, "scripts", script)], {
+      cwd,
+      maxBuffer: 16 * 1024 * 1024,
+    });
+  }
 }
 
 function rewriteImports(content, importer, packageByName) {
@@ -267,6 +285,7 @@ function itemDescription(info) {
 }
 
 async function createOutput() {
+  await generatePackageSources();
   const infos = await discoverPackages();
   const packageByName = new Map(infos.map((info) => [info.manifest.name, info]));
   const output = new Map();
