@@ -1,0 +1,11 @@
+@layer design-system.components {
+  .vds-cluster {
+    --cluster-gap: var(--vds-space-3, 0.75rem);
+  }
+
+  .vds-cluster[data-gap="xs"] { --cluster-gap: var(--vds-space-1, 0.25rem); }
+  .vds-cluster[data-gap="sm"] { --cluster-gap: var(--vds-space-2, 0.5rem); }
+  .vds-cluster[data-gap="md"] { --cluster-gap: var(--vds-space-3, 0.75rem); }
+  .vds-cluster[data-gap="lg"] { --cluster-gap: var(--vds-space-4, 1rem); }
+  .vds-cluster[data-gap="xl"] { --cluster-gap: var(--vds-space-6, 1.5rem); }
+}

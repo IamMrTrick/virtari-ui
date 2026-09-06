@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   LanguageLabel,
@@ -128,7 +129,7 @@ export function LanguagePickerPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { LanguagePicker, LanguageLabel } from "@virtari-packages/react-language-picker";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { LanguagePicker, LanguageLabel } from "@virtari-packages/react-language-picker";
 
 <LanguagePicker
   value={locale}
@@ -150,7 +151,7 @@ export function LanguagePickerPage() {
 />
 
 // Standalone label; single line by default, two lines with showNative
-<LanguageLabel locale="fa" showNative />`}</pre>
+<LanguageLabel locale="fa" showNative />`} />
       </Section>
     </>
   );

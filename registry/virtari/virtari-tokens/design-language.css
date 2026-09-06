@@ -1,0 +1,21 @@
+@layer tokens {
+  :root {
+    /* Relationship spacing, distinct from component dimensions. Keep labels,
+       icons, groups, and sections on the same hierarchy across surfaces. */
+    --vds-gap-icon-compact: var(--vds-space-1);
+    --vds-gap-icon: var(--vds-space-2);
+    --vds-gap-related: var(--vds-space-3);
+    --vds-gap-group: var(--vds-space-4);
+    --vds-gap-section: var(--vds-space-6);
+    --vds-inset-control: var(--vds-space-3);
+    --vds-inset-surface: var(--vds-space-6);
+    --vds-state-hover-opacity: 0.08;
+    --vds-state-pressed-opacity: 0.12;
+    --vds-state-focus-opacity: 0.12;
+    --vds-elevation-flat: var(--vds-shadow-none);
+    --vds-elevation-resting: var(--vds-shadow-xs);
+    --vds-elevation-raised: var(--vds-shadow-sm);
+    --vds-elevation-floating: var(--vds-shadow-lg);
+    --vds-elevation-modal: var(--vds-shadow-xl);
+  }
+}

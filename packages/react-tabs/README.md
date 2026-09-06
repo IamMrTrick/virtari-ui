@@ -72,16 +72,26 @@ import "@virtari-packages/tokens";
 
 Override any `--vds-*` custom property at `:root` (or a subtree) to retheme.
 
+Segmented tracks use the field-shell radius, with inner corners reduced by
+the track padding. In pill mode, horizontal tracks become capsules; vertical
+stacks retain a finite field radius so the outer curve does not cut into the
+first and last labels. Boxed tabs use the compact `--vds-radius-tabs-boxed`
+role. Underline/line edges remain square, while the explicit `pills` variant
+always uses a capsule.
+
 ## Accessibility & RTL
 
 All components use logical CSS properties (`margin-inline`, `padding-block`, …) and `:dir(rtl)` overrides where logical props cannot express the rule. Layouts flip automatically when the host document sets `dir="rtl"`.
 
+Direction resolves from the explicit `dir` prop, then `DirectionProvider`,
+then the DOM ancestor. Runtime direction changes also reposition the indicator.
+
 ## Links
 
-- [Repository](https://github.com/IamMrTrick/virtari-design-system)
-- [Issues](https://github.com/IamMrTrick/virtari-design-system/issues)
+- [Repository](https://github.com/Virtari-Packages/virtari-design-system)
+- [Issues](https://github.com/Virtari-Packages/virtari-design-system/issues)
 - [Changelog](./CHANGELOG.md)
 
 ## License
 
-Proprietary. See [LICENSE](./LICENSE).
+[MIT](./LICENSE) © 2026 Virtari.

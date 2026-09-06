@@ -1,17 +1,17 @@
 {
   "whatIs": {
-    "title": "\u0648\u06cc\u0631\u062a\u0627\u0631\u06cc \u062f\u06cc\u200c\u0627\u0633 \u0686\u06cc\u0633\u062a\u061f",
-    "body": "\u062f\u06cc\u0632\u0627\u06cc\u0646 \u0633\u06cc\u0633\u062a\u0645 \u0648\u06cc\u0631\u062a\u0627\u0631\u06cc \u06cc\u06a9 \u06a9\u062a\u0627\u0628\u062e\u0627\u0646\u0647\u0654 \u06a9\u0627\u0645\u067e\u0648\u0646\u0646\u062a \u067e\u06a9\u06cc\u062c\u200c\u0645\u062d\u0648\u0631 \u0627\u0633\u062a \u06a9\u0647 \u0628\u0631 \u067e\u0627\u06cc\u0647\u0654 <1>React</1>\u060c <2>\u067e\u0631\u06cc\u0645\u06cc\u062a\u06cc\u0648\u0647\u0627\u06cc \u0647\u062f\u0644\u0633 \u0627\u062e\u062a\u0635\u0627\u0635\u06cc \u062e\u0648\u062f\u0645\u0627\u0646</2> \u0648 <3>CSS \u0648\u0646\u06cc\u0644\u0627\u06cc \u062e\u0627\u0644\u0635</3> \u0628\u0627 \u0627\u0633\u062a\u0627\u0646\u062f\u0627\u0631\u062f\u0647\u0627\u06cc \u06f2\u06f0\u06f2\u06f6 \u0633\u0627\u062e\u062a\u0647 \u0634\u062f\u0647. \u0647\u0631 \u06a9\u0627\u0645\u067e\u0648\u0646\u0646\u062a \u06cc\u06a9 \u067e\u06a9\u06cc\u062c \u0645\u0633\u062a\u0642\u0644 npm \u0632\u06cc\u0631 \u0627\u0633\u06a9\u0648\u067e <4>@virtari</4> \u0627\u0633\u062a."
+    "title": "ویرتاری دی‌اس چیست؟",
+    "body": "دیزاین سیستم ویرتاری یک کتابخانهٔ کامپوننت پکیج‌محور است که بر پایهٔ <1>React</1>، <2>پریمیتیوهای هدلس اختصاصی خودمان</2> و <3>CSS ونیلای خالص</3> با استانداردهای ۲۰۲۶ ساخته شده. هر کامپوننت یک پکیج مستقل npm زیر اسکوپ <4>@virtari-packages</4> است."
   },
   "cssFeatures": {
-    "title": "\u0648\u06cc\u0698\u06af\u06cc\u200c\u0647\u0627\u06cc CSS"
+    "title": "ویژگی‌های CSS"
   },
   "quickStart": {
-    "title": "\u0634\u0631\u0648\u0639 \u0633\u0631\u06cc\u0639",
-    "snippet": "# \u0646\u0635\u0628 \u067e\u0627\u06cc\u0647 + \u06cc\u06a9 \u06a9\u0627\u0645\u067e\u0648\u0646\u0646\u062a\npnpm add @virtari-packages/core @virtari-packages/tokens @virtari-packages/react-button\n\n# \u06cc\u06a9\u200c\u0628\u0627\u0631 CSS \u0631\u0627 \u062f\u0631 \u0631\u06cc\u0634\u0647\u0654 \u0627\u067e \u0627\u06cc\u0645\u067e\u0648\u0631\u062a \u06a9\u0646\u06cc\u062f\n@import \"@virtari-packages/core\";\n@import \"@virtari-packages/tokens\";\n@import \"@virtari-packages/react-button/styles\";\n\n# \u0627\u0633\u062a\u0641\u0627\u062f\u0647\nimport { Button } from \"@virtari-packages/react-button\";\n<Button variant=\"outline\">\u06a9\u0644\u06cc\u06a9 \u06a9\u0646</Button>"
+    "title": "شروع سریع",
+    "description": "از یک اپلیکیشن React 18 یا 19 با پشتیبانی از ایمپورت CSS شروع کنید. این پکیج‌ها در رجیستری خصوصی GitHub Packages منتشر می‌شوند؛ پیش از نصب، اسکوپ @virtari-packages را برای npm.pkg.github.com تنظیم کنید و با حساب دارای دسترسی به پکیج‌ها احراز هویت کنید. استایل‌های core، سپس tokens و بعد کامپوننت را یک‌بار در ریشهٔ اپ ایمپورت کنید."
   },
   "architecture": {
-    "title": "\u0645\u0639\u0645\u0627\u0631\u06cc",
-    "snippet": "@virtari-packages/tokens       \u2192 \u062a\u0648\u06a9\u0646\u200c\u0647\u0627\u06cc \u062f\u06cc\u0632\u0627\u06cc\u0646 (\u0648\u06cc\u0698\u06af\u06cc\u200c\u0647\u0627\u06cc \u0633\u0641\u0627\u0631\u0634\u06cc CSS)\n@virtari-packages/core         \u2192 \u062a\u0631\u062a\u06cc\u0628 @layer\u060c \u0631\u06cc\u0633\u062a\u060c \u0627\u0633\u062a\u0627\u06cc\u0644\u200c\u0647\u0627\u06cc \u067e\u0627\u06cc\u0647\n@virtari-packages/react-*      \u2192 \u06cc\u06a9 \u067e\u06a9\u06cc\u062c \u0628\u0647 \u0627\u0632\u0627\u06cc \u0647\u0631 \u06a9\u0627\u0645\u067e\u0648\u0646\u0646\u062a"
+    "title": "معماری",
+    "snippet": "@virtari-packages/tokens       → توکن‌های دیزاین (ویژگی‌های سفارشی CSS)\n@virtari-packages/core         → ترتیب @layer، ریست، استایل‌های پایه\n@virtari-packages/react-*      → یک پکیج به ازای هر کامپوننت"
   }
 }

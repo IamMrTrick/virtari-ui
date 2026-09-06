@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Spinner } from "@virtari-packages/react-spinner";
 import type { SpinnerVariant, SpinnerColor, SpinnerSize } from "@virtari-packages/react-spinner";
 import { Section, Row, Stack } from "../components";
@@ -242,7 +243,7 @@ export function SpinnerPage() {
 
       {/* ── Usage ── */}
       <Section title="Usage">
-        <pre className="docs-code">{`import { Spinner } from "@virtari-packages/react-spinner";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Spinner } from "@virtari-packages/react-spinner";
 
 // Default (ring, md, primary)
 <Spinner />
@@ -268,19 +269,19 @@ export function SpinnerPage() {
 <Spinner speed="fast" />
 
 // Custom label for screen readers
-<Spinner label="Uploading file…" />`}</pre>
+<Spinner label="Uploading file…" />`} />
       </Section>
 
       {/* ── Token overrides ── */}
       <Section title="Token overrides" description="Customise via CSS custom properties on any ancestor.">
-        <pre className="docs-code">{`/* Override spinner tokens for a specific context */
+        <VirtariCodeBlock renderer="static" language="css" code={`/* Override spinner tokens for a specific context */
 .my-dark-card .vds-spinner {
   --spinner-color:       #ffffff;
   --spinner-track-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Import standalone tokens for brand overrides */
-@import "@virtari-packages/react-spinner/tokens";`}</pre>
+@import "@virtari-packages/react-spinner/tokens";`} />
       </Section>
     </>
   );

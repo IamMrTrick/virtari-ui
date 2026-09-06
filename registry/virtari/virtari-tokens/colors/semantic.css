@@ -1,0 +1,12 @@
+/*
+ * Color semantic entry — re-exports the split structure.
+ *
+ *   semantic/background.css   bg, surface, scrim, shadow/highlight tints, color-scheme
+ *   semantic/text.css         text, link, placeholder, inverse, selection, on-solid
+ *   semantic/icon.css         icon domain
+ *   semantic/border.css       border (neutral + per-intent), focus, divider
+ *   semantic/interactive.css  ring, skeleton, adaptive hover/active overlays
+ *   semantic/status.css       on-{intent}, {intent}-solid/bg/text + hover/active
+ *   semantic/data-viz.css     chart-*-muted, chart-*-strong (color-mix-derived)
+ */
+@import "./semantic/index.css";

@@ -4,6 +4,7 @@ export type {
   CodeBlockVariant,
   CodeBlockSize,
   CodeBlockDiff,
+  CodeBlockRenderer,
 } from "./CodeBlock";
 
 export { CodeEditor } from "./CodeEditor";

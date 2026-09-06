@@ -1,0 +1,28 @@
+@import "./Text.tokens.css";
+
+@layer design-system.components {
+  .vds-text {
+    margin: 0;
+
+    font-family: var(--text-font-family);
+    font-size: var(--text-font-size);
+    line-height: var(--text-line-height);
+    font-weight: var(--text-font-weight);
+    letter-spacing: var(--text-letter-spacing);
+    color: var(--text-color);
+    text-align: var(--text-align);
+  }
+
+  /* Truncate — single line with ellipsis */
+  .vds-text[data-truncate="true"] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-inline-size: 0;
+  }
+
+  /* Balance / pretty wrap — opt-in for headlines and pull quotes */
+  .vds-text[data-wrap="balance"] { text-wrap: balance; }
+  .vds-text[data-wrap="pretty"]  { text-wrap: pretty; }
+  .vds-text[data-wrap="nowrap"]  { white-space: nowrap; }
+}

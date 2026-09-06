@@ -2,16 +2,16 @@
   "name": "@virtari-packages/react-tree-view",
   "version": "0.4.0",
   "description": "Virtari tree view — hierarchical data display with keyboard navigation, selection, and expand/collapse.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-tree-view#readme",
+  "homepage": "https://github.com/Virtari-Packages/virtari-design-system/tree/main/packages/react-tree-view#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
     "directory": "packages/react-tree-view"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
   },
   "keywords": [
     "virtari",

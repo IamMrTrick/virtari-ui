@@ -1,3 +1,4 @@
+import { InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { Section } from "../components";
 
 const SIZES = [
@@ -27,7 +28,7 @@ export function TypographyPage() {
         <div className="docs-type-scale">
           {SIZES.map((size) => (
             <div key={size.label} className="docs-type-row">
-              <code className="docs-type-token">{size.label}</code>
+              <VirtariInlineCode className="docs-type-token">{size.label}</VirtariInlineCode>
               <span
                 className="docs-type-sample"
                 style={{ fontSize: `var(${size.token})` }}
@@ -44,7 +45,7 @@ export function TypographyPage() {
         <div className="docs-type-scale">
           {WEIGHTS.map((w) => (
             <div key={w.label} className="docs-type-row">
-              <code className="docs-type-token">{w.label}</code>
+              <VirtariInlineCode className="docs-type-token">{w.label}</VirtariInlineCode>
               <span
                 className="docs-type-sample"
                 style={{
@@ -63,7 +64,7 @@ export function TypographyPage() {
       <Section title="Font Families">
         <div className="docs-type-scale">
           <div className="docs-type-row">
-            <code className="docs-type-token">sans</code>
+            <VirtariInlineCode className="docs-type-token">sans</VirtariInlineCode>
             <span
               className="docs-type-sample"
               style={{ fontFamily: "var(--vds-font-sans)", fontSize: "var(--vds-text-lg)" }}
@@ -72,7 +73,7 @@ export function TypographyPage() {
             </span>
           </div>
           <div className="docs-type-row">
-            <code className="docs-type-token">mono</code>
+            <VirtariInlineCode className="docs-type-token">mono</VirtariInlineCode>
             <span
               className="docs-type-sample"
               style={{ fontFamily: "var(--vds-font-mono)", fontSize: "var(--vds-text-lg)" }}

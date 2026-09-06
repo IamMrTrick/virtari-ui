@@ -71,7 +71,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
   const {
     value, defaultValue, onChange, onBlur, onKeyDown, min, max, step = 1,
     precision, clampOnBlur = true, size, inputSize, stepper = "stacked",
-    disabled = false, readOnly = false, invalid = false, className,
+    disabled = false, readOnly = false, invalid, className,
     wheelEnabled = false, wheelSnap = false, typingPulse = false,
     inputMode = "decimal", ...props
   } = allProps;
@@ -82,6 +82,8 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
   // A genuinely different external value still wins immediately.
   const text = controlled && !Object.is(value, parsedDraft) ? String(value ?? "") : draft;
   const current = parseNumber(text);
+  const ariaInvalid = props["aria-invalid"];
+  const resolvedInvalid = invalid ?? (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const inputRef = useRef<HTMLInputElement>(null);
   const mergedRef = useComposedRefs(inputRef, ref);
   const lastKeyAt = useRef(0);
@@ -150,7 +152,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
   const field = <input
     {...props} key="field" ref={mergedRef} type="text" inputMode={inputMode} role="spinbutton"
     aria-valuenow={current} aria-valuemin={min} aria-valuemax={max}
-    aria-invalid={invalid || props["aria-invalid"] || undefined}
+    aria-invalid={invalid !== undefined ? invalid : ariaInvalid}
     disabled={disabled} readOnly={readOnly} value={text}
     onChange={(event) => {
       if (disabled || readOnly) return;
@@ -175,7 +177,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
     onClick={() => stepBy(direction)}
   >{icon}</button>;
   return <div className={cn("vds-number-input", className)} data-size={size ?? inputSize ?? "md"}
-    data-stepper={stepper} data-disabled={disabled || undefined} data-invalid={invalid || undefined}
+    data-stepper={stepper} data-disabled={disabled || undefined} data-invalid={resolvedInvalid || undefined}
     data-readonly={readOnly || undefined} data-wheel={wheelEnabled || undefined}>
     {stepper === "inline" ? button(-1, "dec", <IconMinus aria-hidden />) : null}
     {field}

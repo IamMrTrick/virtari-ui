@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Fieldset, FieldsetLegend, FieldsetDescription } from "@virtari-packages/react-fieldset";
 import "@virtari-packages/react-fieldset/styles";
 import "@virtari-packages/react-fieldset/tokens";
@@ -66,7 +67,7 @@ export function FieldsetPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Fieldset, FieldsetLegend, FieldsetDescription } from "@virtari-packages/react-fieldset";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Fieldset, FieldsetLegend, FieldsetDescription } from "@virtari-packages/react-fieldset";
 import "@virtari-packages/react-fieldset/styles";
 
 <Fieldset>
@@ -79,7 +80,7 @@ import "@virtari-packages/react-fieldset/styles";
 <Fieldset invalid>...</Fieldset>
 
 // Disabled — cascades to all children
-<Fieldset disabled>...</Fieldset>`}</pre>
+<Fieldset disabled>...</Fieldset>`} />
       </Section>
     </>
   );

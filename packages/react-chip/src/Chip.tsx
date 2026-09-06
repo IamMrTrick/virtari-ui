@@ -1,5 +1,5 @@
-import { cn } from "@virtari-packages/utils";
-import type { Ref } from "react";
+import { cn, controlText } from "@virtari-packages/utils";
+import { cloneElement, isValidElement, type ReactNode, type Ref } from "react";
 import { Slot } from "@virtari-packages/primitives/slot";
 
 /* ── Types ── */
@@ -35,6 +35,7 @@ export function Chip({
   asChild = false,
   className,
   ref,
+  children,
   ...props
 }: ChipProps) {
   const Comp = asChild ? Slot : "span";
@@ -49,7 +50,9 @@ export function Chip({
       data-interactive={interactive ? "true" : undefined}
       aria-disabled={disabled || undefined}
       {...props}
-    />
+    >{asChild && isValidElement<{children?: ReactNode}>(children)
+      ? cloneElement(children, {}, controlText(children.props.children))
+      : asChild ? children : controlText(children)}</Comp>
   );
 }
 
@@ -84,13 +87,13 @@ export interface ChipLabelProps extends React.HTMLAttributes<HTMLSpanElement> {
   ref?: Ref<HTMLSpanElement>;
 }
 
-export function ChipLabel({ className, ref, ...props }: ChipLabelProps) {
+export function ChipLabel({ className, ref, children, ...props }: ChipLabelProps) {
   return (
     <span
       ref={ref}
       className={cn("vds-chip-label", className)}
       {...props}
-    />
+    >{controlText(children)}</span>
   );
 }
 

@@ -1,0 +1,66 @@
+@import "./Icon.tokens.css";
+
+@layer design-system.components {
+  .vds-icon {
+    display: inline-block;
+    flex-shrink: 0;
+    color: currentColor;
+    stroke-width: var(--vds-icon-stroke);
+    vertical-align: middle;
+  }
+
+  .vds-icon[data-size="xs"] {
+    width: var(--vds-icon-size-xs);
+    height: var(--vds-icon-size-xs);
+  }
+  .vds-icon[data-size="sm"] {
+    width: var(--vds-icon-size-sm);
+    height: var(--vds-icon-size-sm);
+  }
+  .vds-icon[data-size="md"] {
+    width: var(--vds-icon-size-md);
+    height: var(--vds-icon-size-md);
+  }
+  .vds-icon[data-size="lg"] {
+    width: var(--vds-icon-size-lg);
+    height: var(--vds-icon-size-lg);
+  }
+  .vds-icon[data-size="xl"] {
+    width: var(--vds-icon-size-xl);
+    height: var(--vds-icon-size-xl);
+  }
+
+  /* ── Colors ──
+   * Sourced from the `--vds-color-icon-*` semantic family (tokens →
+   * colors/semantic/icon.css), which exists precisely so icons can be
+   * themed independently of body text. The neutral steps track the text
+   * scale by default, so this is visually identical to reading
+   * `--vds-color-text-*` while opting the component into the icon layer.
+   * `currentColor` stays as the standalone fallback. */
+  .vds-icon[data-color="muted"] {
+    color: var(--vds-color-icon-muted, currentColor);
+  }
+  .vds-icon[data-color="subtle"] {
+    color: var(--vds-color-icon-subtle, currentColor);
+  }
+  .vds-icon[data-color="primary"] {
+    color: var(--vds-color-icon-primary, currentColor);
+  }
+  /* No `icon-secondary` role exists; the agreed value for "secondary" is the
+   * neutral solid step (neutral-9), which `icon-subtle` already resolves to. */
+  .vds-icon[data-color="secondary"] {
+    color: var(--vds-color-icon-subtle, currentColor);
+  }
+  .vds-icon[data-color="success"] {
+    color: var(--vds-color-icon-success, currentColor);
+  }
+  .vds-icon[data-color="warning"] {
+    color: var(--vds-color-icon-warning, currentColor);
+  }
+  .vds-icon[data-color="danger"] {
+    color: var(--vds-color-icon-danger, currentColor);
+  }
+  .vds-icon[data-color="info"] {
+    color: var(--vds-color-icon-info, currentColor);
+  }
+}

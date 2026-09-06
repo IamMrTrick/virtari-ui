@@ -1,0 +1,32 @@
+@layer tokens {
+  :root {
+    /*
+     * ── Per-component Layout Tokens ──
+     * These let a consumer theme a single layout primitive
+     * without touching the global semantic tokens.
+     * Keep them aliased onto semantics by default —
+     * override per brand or per page as needed.
+     */
+
+    /* Container */
+    --vds-container-width-default: var(--vds-container-width);
+    --vds-container-gutter-default: var(--vds-container-gutter);
+
+    /* Section */
+    --vds-section-padding-block-default:  var(--vds-section-padding-block);
+    --vds-section-padding-inline-default: var(--vds-section-padding-inline);
+    --vds-section-gap-default:            var(--vds-section-gap);
+
+    /* Row */
+    --vds-row-gap-default:     var(--vds-row-gap);
+    --vds-row-col-gap-default: var(--vds-row-col-gap);
+    --vds-row-row-gap-default: var(--vds-row-row-gap);
+    --vds-row-cols-default:    var(--vds-row-cols);
+    --vds-row-min-col-default: var(--vds-row-min-col);
+
+    /* Sidebar */
+    --vds-sidebar-width-default: var(--vds-sidebar-width);
+    --vds-sidebar-rail-default:  var(--vds-sidebar-rail);
+    --vds-sidebar-gap-default:   var(--vds-sidebar-gap);
+  }
+}

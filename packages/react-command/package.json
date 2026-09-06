@@ -2,16 +2,16 @@
   "name": "@virtari-packages/react-command",
   "version": "0.3.0",
   "description": "Virtari command palette — cmdk wrapper with grouped results, keyboard shortcuts, and Dialog container.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-command#readme",
+  "homepage": "https://github.com/Virtari-Packages/virtari-design-system/tree/main/packages/react-command#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
     "directory": "packages/react-command"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
   },
   "keywords": [
     "virtari",

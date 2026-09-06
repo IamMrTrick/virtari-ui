@@ -1,0 +1,274 @@
+@import "./Table.tokens.css";
+
+@layer design-system.components {
+  /* ─────────────────────────────────────────────────────────────────────────
+   * Root — scroll container with outer frame.
+   * The <table> element itself is nested inside; horizontal overflow on small
+   * viewports scrolls here, so the sticky-header trick works out of the box.
+   * ──────────────────────────────────────────────────────────────────────── */
+  .vds-table {
+    position: relative;
+    inline-size: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    background-color: var(--table-bg);
+    color: var(--table-cell-color);
+
+    border: var(--table-border-width) solid var(--table-border-color);
+    border-radius: var(--table-radius);
+
+    font-family: var(--table-font-family);
+    font-size: var(--table-font-size);
+    font-weight: var(--table-font-weight);
+    line-height: var(--table-line-height);
+
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Contain the scrolled area visually inside the rounded corners.
+   * `overflow-x: auto` already clips, but keep radii consistent. */
+  .vds-table[data-variant="surface"],
+  .vds-table:not([data-variant]) {
+    isolation: isolate;
+  }
+
+  /* The real <table>. */
+  .vds-table__element {
+    inline-size: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    caption-side: bottom;
+  }
+
+  /* Fixed layout — opt-in for column-width precision. */
+  .vds-table[data-layout="fixed"] .vds-table__element {
+    table-layout: fixed;
+  }
+
+  /* ── Caption ── */
+  .vds-table__caption {
+    padding: var(--table-caption-padding);
+    color: var(--table-caption-color);
+    font-size: var(--table-caption-font-size);
+    text-align: start;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * Section groupings — thead / tbody / tfoot.
+   * ──────────────────────────────────────────────────────────────────────── */
+  .vds-table__thead {
+    background-color: var(--table-header-bg);
+  }
+  .vds-table__tfoot {
+    background-color: var(--table-footer-bg);
+    color: var(--table-footer-color);
+  }
+
+  /* Sticky header — only kicks in when the root is a scroll container.
+   * `z-index` keeps it above sticky columns of tbody rows. */
+  .vds-table[data-sticky-header="true"] .vds-table__thead .vds-table__th {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    background-color: var(--table-header-bg);
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * Rows — dividers, hover, selection.
+   * Dividers use border-block-end on every row except the last child of
+   * its section (so thead/tbody/tfoot each terminate cleanly).
+   * ──────────────────────────────────────────────────────────────────────── */
+  .vds-table__tr {
+    background-color: var(--table-row-bg);
+    transition: background-color var(--table-transition-duration) var(--table-transition-easing);
+  }
+
+  /* Divider lines — painted on cells (not the row) so they survive inside
+   * `border-collapse: separate`. */
+  .vds-table__thead .vds-table__th,
+  .vds-table__tbody .vds-table__td,
+  .vds-table__tbody .vds-table__th {
+    border-block-end: var(--table-border-width) solid var(--table-row-divider-color);
+  }
+  .vds-table__tbody .vds-table__tr:last-child > .vds-table__td,
+  .vds-table__tbody .vds-table__tr:last-child > .vds-table__th {
+    border-block-end: 0;
+  }
+  .vds-table__tfoot .vds-table__td,
+  .vds-table__tfoot .vds-table__th {
+    border-block-start: var(--table-border-width) solid var(--table-row-divider-color);
+  }
+
+  /* Hoverable rows — opt-in via attribute on root. */
+  .vds-table[data-hoverable="true"] .vds-table__tbody .vds-table__tr:hover {
+    background-color: var(--table-row-bg-hover);
+  }
+
+  /* Selected row — left stripe + tinted bg. */
+  .vds-table__tr[aria-selected="true"] {
+    background-color: var(--table-row-bg-selected);
+  }
+  .vds-table[data-hoverable="true"]
+    .vds-table__tbody
+    .vds-table__tr[aria-selected="true"]:hover {
+    background-color: var(--table-row-bg-selected-hover);
+  }
+  .vds-table__tr[aria-selected="true"] > :first-child {
+    box-shadow: inset 3px 0 0 0 var(--table-accent-color);
+  }
+  /* Flip the stripe in RTL. */
+  [dir="rtl"] .vds-table__tr[aria-selected="true"] > :first-child {
+    box-shadow: inset -3px 0 0 0 var(--table-accent-color);
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * Cells — th + td.
+   * ──────────────────────────────────────────────────────────────────────── */
+  .vds-table__th,
+  .vds-table__td {
+    padding-block: var(--table-cell-padding-block);
+    padding-inline: var(--table-cell-padding-inline);
+    text-align: start;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  /* Header cell typography. */
+  .vds-table__th {
+    block-size: var(--table-header-row-height);
+    color: var(--table-header-color);
+    font-size: var(--table-header-font-size);
+    font-weight: var(--table-header-font-weight);
+    letter-spacing: var(--table-header-letter-spacing);
+    text-transform: var(--table-header-text-transform);
+  }
+
+  /* Body row cells — track row height for consistency. */
+  .vds-table__tbody .vds-table__td,
+  .vds-table__tbody .vds-table__th {
+    block-size: var(--table-row-height);
+  }
+  .vds-table__tfoot .vds-table__td,
+  .vds-table__tfoot .vds-table__th {
+    block-size: var(--table-footer-row-height);
+  }
+
+  /* Alignment (RTL-safe via start/center/end). */
+  .vds-table__th[data-align="start"],
+  .vds-table__td[data-align="start"]   { text-align: start; }
+  .vds-table__th[data-align="center"],
+  .vds-table__td[data-align="center"]  { text-align: center; }
+  .vds-table__th[data-align="end"],
+  .vds-table__td[data-align="end"]     { text-align: end; }
+
+  /* Numeric cells — right-aligned tabular figures. */
+  .vds-table__td[data-numeric="true"],
+  .vds-table__th[data-numeric="true"] {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Wrap-friendly cells. */
+  .vds-table__td[data-wrap="true"],
+  .vds-table__th[data-wrap="true"] {
+    white-space: normal;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * Sortable header — button-like affordance with ascending/descending state.
+   * Uses aria-sort for a11y; the indicator is painted via pseudo-elements.
+   * ──────────────────────────────────────────────────────────────────────── */
+  .vds-table__th[data-sortable="true"] {
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .vds-table__th[data-sortable="true"]:hover {
+    color: var(--table-cell-color);
+  }
+  .vds-table__th[data-sortable="true"]:focus-visible {
+    outline: var(--table-focus-ring-width) solid var(--table-focus-ring-color);
+    outline-offset: var(--table-focus-ring-offset);
+  }
+
+  .vds-table__sort-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline-start: var(--vds-space-1-5, 0.375rem);
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    opacity: 0.5;
+    transition: opacity var(--table-transition-duration) var(--table-transition-easing),
+                color var(--table-transition-duration) var(--table-transition-easing);
+  }
+  .vds-table__th[aria-sort="ascending"] .vds-table__sort-indicator,
+  .vds-table__th[aria-sort="descending"] .vds-table__sort-indicator {
+    opacity: 1;
+    color: var(--table-accent-color);
+  }
+  .vds-table__sort-indicator > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * Sticky columns — inset to the scroll container's start/end edge.
+   * The cell must paint its own background so rows behind don't bleed through.
+   * ──────────────────────────────────────────────────────────────────────── */
+  .vds-table__th[data-sticky="start"],
+  .vds-table__td[data-sticky="start"] {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 1;
+    background-color: var(--table-bg);
+  }
+  .vds-table__th[data-sticky="end"],
+  .vds-table__td[data-sticky="end"] {
+    position: sticky;
+    inset-inline-end: 0;
+    z-index: 1;
+    background-color: var(--table-bg);
+  }
+  /* Headers keep their tinted bg under sticky. */
+  .vds-table__thead .vds-table__th[data-sticky="start"],
+  .vds-table__thead .vds-table__th[data-sticky="end"] {
+    background-color: var(--table-header-bg);
+    z-index: 3;
+  }
+  /* Selected rows keep their selected tint under sticky. */
+  .vds-table__tr[aria-selected="true"] > .vds-table__td[data-sticky="start"],
+  .vds-table__tr[aria-selected="true"] > .vds-table__td[data-sticky="end"],
+  .vds-table__tr[aria-selected="true"] > .vds-table__th[data-sticky="start"],
+  .vds-table__tr[aria-selected="true"] > .vds-table__th[data-sticky="end"] {
+    background-color: var(--table-row-bg-selected);
+  }
+  /* Striped rows keep zebra under sticky. */
+  .vds-table[data-rows="striped"]
+    .vds-table__tbody
+    .vds-table__tr:nth-child(even)
+    > [data-sticky] {
+    background-color: var(--table-row-bg-alt);
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * Loading / empty states — consumers render their own content, we just
+   * provide a paint-level hook for soft disabled feel.
+   * ──────────────────────────────────────────────────────────────────────── */
+  .vds-table[data-loading="true"] .vds-table__tbody {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * Reduced motion — strip hover transitions.
+   * ──────────────────────────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-table__tr,
+    .vds-table__sort-indicator {
+      transition: none;
+    }
+  }
+}

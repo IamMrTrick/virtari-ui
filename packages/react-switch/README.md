@@ -38,8 +38,34 @@ yarn add @virtari-packages/react-switch
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari-packages/react-switch";
+import { Switch } from "@virtari-packages/react-switch";
+
+<label htmlFor="updates">Email updates</label>
+<Switch id="updates" name="updates" defaultChecked />
 ```
+
+Use `checked` / `onCheckedChange` for controlled state or `defaultChecked` for
+uncontrolled state. The callback receives a boolean. A switch renders its track
+and thumb; provide a stable visible label or an accessible name.
+
+`size` accepts `sm`, `md` (default), or `lg`. The small 18px track is intended for
+compact layouts, so provide a larger labeled target for touch interfaces. Track
+and thumb remain fully rounded in every radius mode to preserve their geometry.
+
+Dragging is enabled by default. Set `dragEnabled={false}` for native click and
+keyboard activation only. Consumer pointer handlers compose with dragging;
+preventing the pointer event's default cancels that drag step. A tap follows
+`onClick` and honors `preventDefault()`. A completed drag commits through
+`onCheckedChange` and suppresses the following pointer click. Space and Enter
+toggle the focused switch.
+
+`name`, `value`, `required`, `disabled`, and `form` reach native form behavior.
+Reset restores the initial uncontrolled state, including external forms; a
+canceled reset preserves the current value. Controlled consumers receive the
+initial state as a reset request and decide whether to accept it. The submitted
+value remains consistent when they decline. Associate supporting or error text
+with `aria-describedby`; use `aria-invalid` when a surrounding validation flow
+needs to identify an invalid setting.
 
 ### Import styles
 
@@ -65,10 +91,10 @@ All components use logical CSS properties (`margin-inline`, `padding-block`, …
 
 ## Links
 
-- [Repository](https://github.com/IamMrTrick/virtari-design-system)
-- [Issues](https://github.com/IamMrTrick/virtari-design-system/issues)
+- [Repository](https://github.com/Virtari-Packages/virtari-design-system)
+- [Issues](https://github.com/Virtari-Packages/virtari-design-system/issues)
 - [Changelog](./CHANGELOG.md)
 
 ## License
 
-Proprietary. See [LICENSE](./LICENSE).
+[MIT](./LICENSE) © 2026 Virtari.

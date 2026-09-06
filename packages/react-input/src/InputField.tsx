@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import {
   Field,
   composeFieldDescribedBy,
+  hasFieldContent,
   type FieldProps,
 } from "@virtari-packages/react-fieldset";
 import {
@@ -56,7 +57,7 @@ function resolveTextValue(value: unknown) {
 }
 
 function defaultCounterFormatter(current: number, maxLength?: number) {
-  return maxLength ? `${current}/${maxLength}` : current;
+  return maxLength !== undefined ? `${current}/${maxLength}` : current;
 }
 
 function defaultStrengthFormatter(score: number) {
@@ -101,19 +102,11 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(function
   const mergedRef = useComposedRefs(localRef, ref);
   const generatedId = useId();
   const controlId = id ?? `vds-input-field-${generatedId}`;
-  const descriptionId = description
+  const descriptionId = hasFieldContent(description)
     ? `${controlId}-description`
     : undefined;
-  const errorId = error ? `${controlId}-error` : undefined;
-  const hasCounter = counter !== undefined || showCounter;
-  const counterId = hasCounter ? `${controlId}-counter` : undefined;
-  const describedBy = composeFieldDescribedBy(
-    ariaDescribedBy,
-    descriptionId,
-    errorId,
-    counterId,
-  );
-  const resolvedInvalid = invalid ?? isInvalid(ariaInvalid);
+  const errorId = hasFieldContent(error) ? `${controlId}-error` : undefined;
+  const resolvedInvalid = invalid ?? (ariaInvalid !== undefined ? isInvalid(ariaInvalid) : hasFieldContent(error));
   const [revealed, setRevealed] = useState(false);
   const [pwAnim, setPwAnim] = useState<"reveal" | "hide" | null>(null);
   const [uncontrolledValue, setUncontrolledValue] = useState(
@@ -128,6 +121,14 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(function
   const resolvedCounter =
     counter ??
     (showCounter ? counterFormatter(currentLength, maxLength) : undefined);
+  const counterId = hasFieldContent(resolvedCounter) ? `${controlId}-counter` : undefined;
+  const describedBy = composeFieldDescribedBy(
+    ariaDescribedBy,
+    descriptionId,
+    errorId,
+    counterId,
+  );
+
   const canReveal = revealable && type === "password";
   const resolvedType = canReveal && revealed ? "text" : type;
   const strengthScore =
@@ -205,7 +206,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(function
           disabled={disabled}
           maxLength={maxLength}
           aria-describedby={describedBy}
-          aria-invalid={resolvedInvalid || undefined}
+          aria-invalid={invalid !== undefined ? invalid : ariaInvalid ?? (resolvedInvalid || undefined)}
           className={inputClassName}
           style={inputStyle}
         />

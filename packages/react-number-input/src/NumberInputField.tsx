@@ -1,6 +1,7 @@
 import {
   Field,
   composeFieldDescribedBy,
+  hasFieldContent,
   type FieldProps,
 } from "@virtari-packages/react-fieldset";
 import { cn } from "@virtari-packages/utils";
@@ -62,18 +63,18 @@ export function NumberInputField({
 }: NumberInputFieldProps) {
   const generatedId = useId();
   const controlId = id ?? `vds-number-input-field-${generatedId}`;
-  const descriptionId = description
+  const descriptionId = hasFieldContent(description)
     ? `${controlId}-description`
     : undefined;
-  const errorId = error ? `${controlId}-error` : undefined;
-  const counterId = counter ? `${controlId}-counter` : undefined;
+  const errorId = hasFieldContent(error) ? `${controlId}-error` : undefined;
+  const counterId = hasFieldContent(counter) ? `${controlId}-counter` : undefined;
   const describedBy = composeFieldDescribedBy(
     ariaDescribedBy,
     descriptionId,
     errorId,
     counterId,
   );
-  const resolvedInvalid = invalid ?? isInvalid(ariaInvalid);
+  const resolvedInvalid = invalid ?? (ariaInvalid !== undefined ? isInvalid(ariaInvalid) : hasFieldContent(error));
 
   return (
     <Field
@@ -102,9 +103,9 @@ export function NumberInputField({
         id={controlId}
         required={required}
         disabled={disabled}
-        invalid={resolvedInvalid}
+        invalid={invalid}
         aria-describedby={describedBy}
-        aria-invalid={resolvedInvalid || undefined}
+        aria-invalid={invalid !== undefined ? invalid : ariaInvalid ?? (resolvedInvalid || undefined)}
         className={numberInputClassName}
         style={numberInputStyle}
       />

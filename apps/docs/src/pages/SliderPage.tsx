@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Slider } from "@virtari-packages/react-slider";
 import { Section, Row } from "../components";
 
@@ -23,7 +24,7 @@ export function SliderPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Slider } from "@virtari-packages/react-slider";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Slider } from "@virtari-packages/react-slider";
 
 // Basic
 <Slider defaultValue={[50]} max={100} step={1} />
@@ -32,7 +33,7 @@ export function SliderPage() {
 <Slider defaultValue={[25, 75]} max={100} step={1} />
 
 // Controlled
-<Slider value={value} onValueChange={setValue} />`}</pre>
+<Slider value={value} onValueChange={setValue} />`} />
       </Section>
     </>
   );

@@ -1,0 +1,190 @@
+@import "./Sidebar.tokens.css";
+
+@layer design-system.components {
+  /* ── Root <aside> ── */
+  .vds-sidebar {
+    position: sticky;
+    inset-block-start: var(--sidebar-sticky-offset);
+    z-index: var(--sidebar-z);
+
+    flex: none;
+    display: flex;
+    flex-direction: column;
+
+    inline-size: var(--sidebar-inline-size);
+    block-size: var(--sidebar-block-size);
+    min-block-size: 0;
+
+    background-color: var(--sidebar-background);
+    color: var(--sidebar-text-color);
+
+    /* Side-specific border (inline-end in `start`, inline-start in `end`) */
+    border-inline-end: var(--sidebar-border-inline);
+
+    transition:
+      inline-size var(--sidebar-transition-duration) var(--sidebar-transition-easing),
+      padding-inline var(--sidebar-transition-duration) var(--sidebar-transition-easing);
+    will-change: inline-size;
+    overflow: hidden;
+  }
+
+  .vds-sidebar[data-side="end"] {
+    border-inline-end: 0;
+    border-inline-start: var(--sidebar-border-inline);
+  }
+
+  /* ── Header — branding / logo area ──
+   * Content-driven height. If you need to align visually with a page
+   * <Header> row, override `--sidebar-header-min-block-size` on the
+   * sidebar root (or a wrapping chrome element):
+   *   <VdsSidebar style={{ "--sidebar-header-min-block-size": "5rem" }}>
+   */
+  .vds-sidebar__header {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--sidebar-cluster-gap);
+    min-block-size: var(--sidebar-header-min-block-size, 0);
+  }
+
+  /* ── Body — main scrollable nav area ── */
+  .vds-sidebar__body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sidebar-section-gap);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* ── Footer — pinned to bottom ── */
+  .vds-sidebar__footer {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--sidebar-cluster-gap);
+    min-block-size: var(--sidebar-footer-min-block-size, 0);
+  }
+
+  /* ── Slot geometry — the container owns the edges and the seams ──
+   *
+   * Previously header, body and footer each applied the full
+   * `--sidebar-padding-block` on both edges, so every internal seam came out
+   * at twice the outer inset. Now a slot carries no block padding of its own:
+   * the aside pads the leading edge of the first slot, the trailing edge of
+   * the last, and puts one named `--sidebar-slot-gap` between any two
+   * adjacent slots. Separators sit in that same gutter, split evenly.
+   * ───────────────────────────────────────────── */
+  .vds-sidebar
+    > :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer) {
+    padding-inline: var(--sidebar-padding-inline);
+    padding-block: 0;
+  }
+
+  .vds-sidebar
+    > :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer):not(
+      :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer) ~ *
+    ) {
+    padding-block-start: var(--sidebar-padding-block);
+  }
+
+  .vds-sidebar
+    > :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer):not(
+      :has(~ :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer))
+    ) {
+    padding-block-end: var(--sidebar-padding-block);
+  }
+
+  .vds-sidebar
+    > :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer)
+    + :where(.vds-sidebar__header, .vds-sidebar__body, .vds-sidebar__footer) {
+    padding-block-start: var(--sidebar-slot-gap);
+  }
+
+  /* ── Separator ── */
+  .vds-sidebar__separator {
+    flex: none;
+    block-size: 1px;
+    margin-inline: var(--sidebar-padding-inline);
+    margin-block: var(--sidebar-separator-gap);
+    background-color: var(--sidebar-border-color);
+    border: 0;
+  }
+
+  /* ── Trigger (collapse toggle button) ── */
+  .vds-sidebar-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+
+    inline-size: var(--sidebar-trigger-size);
+    block-size: var(--sidebar-trigger-size);
+    padding: 0;
+
+    background-color: transparent;
+    color: inherit;
+    border: 0;
+    border-radius: var(--sidebar-trigger-radius);
+    cursor: pointer;
+    appearance: none;
+
+    transition:
+      background-color var(--sidebar-transition-duration) var(--sidebar-transition-easing),
+      color var(--sidebar-transition-duration) var(--sidebar-transition-easing);
+  }
+
+  .vds-sidebar-trigger:hover {
+    background-color: var(--vds-color-surface-hover, color-mix(in oklch, currentColor 8%, transparent));
+  }
+  .vds-sidebar-trigger:active {
+    background-color: var(--vds-color-surface-active, color-mix(in oklch, currentColor 14%, transparent));
+  }
+  /* Fallbacks are load-bearing: <SidebarTrigger> may be rendered outside the
+     <Sidebar> (in a page header), where the aside's tokens don't inherit. */
+  .vds-sidebar-trigger:focus-visible {
+    outline: var(--sidebar-focus-ring-width, var(--vds-focus-ring-width, 2px)) solid
+      var(--sidebar-focus-ring-color, var(--vds-color-ring, currentColor));
+    outline-offset: var(--sidebar-focus-ring-offset, var(--vds-focus-ring-offset, 2px));
+  }
+
+  /* Rotation only applies to the built-in chevron icon. Custom children
+     (e.g. directional Tabler icons like IconLayoutSidebarLeftCollapse vs
+     IconLayoutSidebarLeftExpand) carry their own visual direction, so we
+     don't spin them. */
+  .vds-sidebar-trigger__chevron {
+    transition: transform var(--sidebar-transition-duration) var(--sidebar-transition-easing);
+  }
+  .vds-sidebar-trigger[data-collapsed="true"] .vds-sidebar-trigger__chevron {
+    transform: rotate(180deg);
+  }
+  /* RTL sidebar on end-side: reverse the chevron */
+  .vds-sidebar[data-side="end"] .vds-sidebar-trigger[data-collapsed="true"] .vds-sidebar-trigger__chevron,
+  [dir="rtl"] .vds-sidebar-trigger[data-collapsed="true"] .vds-sidebar-trigger__chevron {
+    transform: rotate(0deg);
+  }
+  [dir="rtl"] .vds-sidebar-trigger__chevron,
+  .vds-sidebar[data-side="end"] .vds-sidebar-trigger__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ── When collapsed: center subpart content (icons) ── */
+  .vds-sidebar[data-collapsed="true"] .vds-sidebar__header,
+  .vds-sidebar[data-collapsed="true"] .vds-sidebar__footer {
+    justify-content: center;
+  }
+
+  /* Rail-mode behaviour of @virtari-packages/react-nav is owned by the Nav
+   * component itself — pass `collapsed={sidebarCollapsed}` to <Nav> and
+   * it handles labels, badges, chevrons, and submenu mode natively. */
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-sidebar,
+    .vds-sidebar-trigger,
+    .vds-sidebar-trigger__chevron {
+      transition: none;
+    }
+  }
+}

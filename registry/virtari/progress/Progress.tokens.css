@@ -1,0 +1,39 @@
+@layer design-system.components {
+  .vds-progress {
+    /* Layout */
+    --progress-height: var(--vds-space-2, 0.5rem);
+    --progress-radius: var(--vds-radius-full, 9999px);
+
+    /* Track */
+    --progress-track-bg: var(--vds-color-bg-muted);
+
+    /* Fill */
+    --progress-fill-color: var(--vds-color-primary-solid);
+    --progress-fill-color-end: var(--vds-color-primary-solid-hover);
+
+    /* Motion */
+    --progress-transition-duration: var(--vds-duration-slow, 300ms);
+    --progress-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+    --progress-animation-duration: 1.6s;
+    --progress-stripe-size: 1.25rem;
+    --progress-glow-spread: 8px;
+  }
+
+  /* ── Colors ── */
+  .vds-progress[data-color="success"]  { --progress-fill-color: var(--vds-color-success-solid); --progress-fill-color-end: var(--vds-color-success-solid-hover); }
+  .vds-progress[data-color="warning"]  { --progress-fill-color: var(--vds-color-warning-solid); --progress-fill-color-end: var(--vds-color-warning-solid-hover); }
+  .vds-progress[data-color="danger"]   { --progress-fill-color: var(--vds-color-danger-solid);  --progress-fill-color-end: var(--vds-color-danger-solid-hover);  }
+  .vds-progress[data-color="info"]     { --progress-fill-color: var(--vds-color-info-solid);    --progress-fill-color-end: var(--vds-color-info-solid-hover);    }
+  .vds-progress[data-color="accent"]   { --progress-fill-color: var(--vds-color-accent-solid);  --progress-fill-color-end: var(--vds-color-accent-solid-hover);  }
+  .vds-progress[data-color="contrast"] { --progress-fill-color: var(--vds-color-text);          --progress-fill-color-end: var(--vds-color-text-muted);          }
+
+  /* ── Sizes ──
+   * `md` has no block of its own: it is the base above, and <Progress>
+   * defaults `size` to "md" so an unsized instance resolves identically to
+   * an explicitly-sized one — including the `[data-size="md"]` rule in
+   * Progress.css that hides the inline label on the thin tracks. */
+  .vds-progress[data-size="xs"] { --progress-height: var(--vds-space-1,     0.25rem); }
+  .vds-progress[data-size="sm"] { --progress-height: var(--vds-space-1-5,   0.375rem); }
+  .vds-progress[data-size="lg"] { --progress-height: var(--vds-space-3,     0.75rem); }
+  .vds-progress[data-size="xl"] { --progress-height: var(--vds-space-4,     1rem); }
+}

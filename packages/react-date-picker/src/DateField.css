@@ -45,9 +45,11 @@
     gap: var(--date-field-gap);
     inline-size: 100%;
     min-inline-size: 0;
+    box-sizing: border-box;
     block-size: var(--date-field-height);
     padding-inline: var(--date-field-padding-inline);
     background: var(--date-field-bg);
+    box-shadow: var(--date-field-shadow);
     border: var(--date-field-border-width) solid var(--date-field-border-color);
     border-radius: var(--date-field-radius);
     color: var(--date-field-text-color);
@@ -76,7 +78,7 @@
   .vds-date-range-picker-group:focus-within {
     border-color: var(--date-field-focus-border-color);
     outline: none;
-    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    box-shadow: 0 0 0 4px var(--date-field-focus-alpha), 0 0 12px 2px var(--date-field-focus-soft-alpha);
     @media (forced-colors: active) {
       outline: 2px solid Highlight;
       outline-offset: 2px;
@@ -466,7 +468,7 @@
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
     scroll-padding-block: calc((var(--time-picker-wheel-height) - var(--time-picker-wheel-item-height)) / 2);
-    border-radius: var(--vds-radius-2, 0.25rem);
+    border-radius: var(--vds-radius-date-segment, 0.25rem);
     scrollbar-width: none;
     touch-action: pan-y;
     cursor: grab;

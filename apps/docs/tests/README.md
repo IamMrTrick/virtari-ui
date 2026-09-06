@@ -28,3 +28,24 @@ The input/change simulations do not invoke a real saved-password manager. Test p
 - Rich editors expose document values through their APIs; they are not native password fields. Consumers serialize their document state explicitly. Yoopta value updates replace external documents; normal echoed edits retain the mounted editor view.
 
 Type-check the test page with `pnpm --filter @virtari-packages/docs exec tsc --noEmit --project tsconfig.tests.json`.
+
+## Form geometry
+
+Open `/tests/form-geometry.html`. The fixture automatically checks seven sizes, LTR/RTL, and three font stacks for balanced padding, fitting line boxes, icon centering/gaps, password action placement, and country/phone separation. It also serves as a visual specimen. Geometry assertions check boxes and spacing, not subjective optical glyph alignment.
+
+## Design language regressions
+
+- `/tests/radius-system.html`: 445 checks for shared shape roles, bounded checkbox/keycap geometry, three sizes, LTR/RTL, nested/live modes and invariance across theme/surface styles.
+- `/tests/tabs-radius.html`: 1004 tab/segment geometry checks plus 30 direction checks, including live ancestor changes, explicit/provider precedence and boxed/vertical RTL edges. Also exercises published standalone SegmentedControl styles.
+- `/tests/radius-secondary.html`: 128 checks for nested Flow roles, TimeWheel and nonnegative Editor lengths.
+- `/tests/platform-shortcuts.html`: run the shortcut checks; 38 assertions for platform labels, ARIA names, actual hotkey hooks, IME/repeat/handled-event guards, cleanup and RTL keycap composition. Mac platform inputs are simulated.
+- `/tests/command-focus.html`: run the focus checks; 8 assertions for hotkey/input caret restoration, button restoration and consumer autofocus overrides in a controlled CommandDialog.
+- `/tests/control-geometry.html`: 48 line-box, padding and enlarged-text checks across action controls.
+- `/tests/surface-contrast.html`: 39 text/surface pairs in light, dark and OLED, with a 4.5:1 minimum. This checks the default palette, not arbitrary consumer overrides.
+- `/tests/segmented-keyboard.html`: run the keyboard checks for LTR/RTL selection, disabled-item skipping, looping and consumer event forwarding.
+- `/tests/drawer-release.html`: run the release checks for lost mouseup recovery and drag cleanup.
+- `/tests/scroll-smart.html`: 22 checks; run with the pointer left on the Run button. Checks idle/activity visibility, native scrolling, viewport refs/events, fitting content, rounded track containment, width stability, keyboard entry/exit and live inherited/explicit direction. Follow with real Tab and Page Down to verify native keyboard scrolling.
+- `/tests/field-surfaces.html`: 1471 assertions for shared fields, alpha-composited text contrast, three appearance styles, default/strong tones and nested light/dark/OLED themes.
+- `/tests/button-composition.html`: 169 checks for mixed icon/text spacing, section slots, icon-only geometry, linked/loading/disabled composition, refs and event handlers across eight sizes and both directions.
+- `/tests/card-radius.html`: 36 checks for nested surface tones and radii, scoped radius modes, live padding changes and transformed ancestors.
+- `/tests/stack-spacing.html`: 64 checks for mixed fields, hidden native form controls, recursive layouts and independently spaced nested Stacks in LTR/RTL.

@@ -44,6 +44,9 @@ export default defineConfig({
     // fails on workspace packages when new consumer files add imports. Order
     // matters: more specific subpaths must appear BEFORE the bare package name.
     alias: [
+      { find: /^@virtari-packages\/primitives\/switch$/, replacement: fileURLToPath(new URL("../../packages/primitives/src/switch/index.ts", import.meta.url)) },
+      { find: /^@virtari-packages\/primitives\/checkbox$/, replacement: fileURLToPath(new URL("../../packages/primitives/src/checkbox/index.ts", import.meta.url)) },
+      { find: /^@virtari-packages\/primitives\/radio-group$/, replacement: fileURLToPath(new URL("../../packages/primitives/src/radio-group/index.ts", import.meta.url)) },
       { find: /^attr-accept$/, replacement: fileURLToPath(new URL("./src/shims/attrAccept.ts", import.meta.url)) },
       { find: /^prop-types$/, replacement: fileURLToPath(new URL("./src/shims/propTypes.ts", import.meta.url)) },
       { find: /^file-selector$/, replacement: fileURLToPath(new URL("../../node_modules/.pnpm/file-selector@2.1.2/node_modules/file-selector/dist/es2015/index.js", import.meta.url)) },
@@ -260,15 +263,16 @@ export default defineConfig({
       { find: "@virtari-packages/react-tooltip/styles", replacement: fileURLToPath(new URL("../../packages/react-tooltip/src/Tooltip.css", import.meta.url)) },
       { find: "@virtari-packages/react-tooltip/tokens", replacement: fileURLToPath(new URL("../../packages/react-tooltip/src/Tooltip.tokens.css", import.meta.url)) },
       { find: "@virtari-packages/react-tooltip", replacement: fileURLToPath(new URL("../../packages/react-tooltip/src/index.ts", import.meta.url)) },
-      { find: "@virtari-packages/react-layout", replacement: fileURLToPath(new URL("../../packages/react-layout/dist/index.js", import.meta.url)) },
-      { find: "@virtari-packages/react-header", replacement: fileURLToPath(new URL("../../packages/react-header/dist/index.js", import.meta.url)) },
-      { find: "@virtari-packages/react-nav", replacement: fileURLToPath(new URL("../../packages/react-nav/dist/index.js", import.meta.url)) },
-      { find: "@virtari-packages/react-sidebar", replacement: fileURLToPath(new URL("../../packages/react-sidebar/dist/index.js", import.meta.url)) },
+      { find: "@virtari-packages/react-layout", replacement: fileURLToPath(new URL("../../packages/react-layout/src/index.ts", import.meta.url)) },
+      { find: "@virtari-packages/react-header", replacement: fileURLToPath(new URL("../../packages/react-header/src/index.ts", import.meta.url)) },
+      { find: "@virtari-packages/react-nav", replacement: fileURLToPath(new URL("../../packages/react-nav/src/index.ts", import.meta.url)) },
+      { find: "@virtari-packages/react-sidebar", replacement: fileURLToPath(new URL("../../packages/react-sidebar/src/index.ts", import.meta.url)) },
       { find: "@virtari-packages/utils", replacement: fileURLToPath(new URL("../../packages/utils/dist/index.js", import.meta.url)) },
     ],
     conditions: ["style", "import", "module", "browser", "default"],
   },
   optimizeDeps: {
+    exclude: ["@virtari-packages/primitives/switch", "@virtari-packages/primitives/checkbox", "@virtari-packages/primitives/radio-group"],
     // Stop Vite from auto-re-scanning when a consumer file is edited. The
     // re-scan sporadically bails on our workspace packages' subpath exports
     // (e.g. "@virtari-packages/react-data-table/styles") which throws a
@@ -286,7 +290,6 @@ export default defineConfig({
       "@virtari-packages/primitives/accordion",
       "@virtari-packages/primitives/alert-dialog",
       "@virtari-packages/primitives/avatar",
-      "@virtari-packages/primitives/checkbox",
       "@virtari-packages/primitives/collapsible",
       "@virtari-packages/primitives/dialog",
       "@virtari-packages/primitives/direction",
@@ -294,13 +297,11 @@ export default defineConfig({
       "@virtari-packages/primitives/label",
       "@virtari-packages/primitives/popover",
       "@virtari-packages/primitives/progress",
-      "@virtari-packages/primitives/radio-group",
       "@virtari-packages/primitives/scroll-area",
       "@virtari-packages/primitives/select",
       "@virtari-packages/primitives/separator",
       "@virtari-packages/primitives/slider",
       "@virtari-packages/primitives/slot",
-      "@virtari-packages/primitives/switch",
       "@virtari-packages/primitives/tabs",
       "@virtari-packages/primitives/toast",
       "@virtari-packages/primitives/toggle",

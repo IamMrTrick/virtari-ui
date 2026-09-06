@@ -1,0 +1,110 @@
+# Virtari source registry
+
+Virtari's primary distribution model installs readable React and CSS source into
+the consumer repository. The existing package builds remain available during
+migration, but a source installation has no runtime dependency on
+`@virtari-packages/*`.
+
+## Consumer workflow
+
+```bash
+pnpm dlx virtari@latest init
+pnpm dlx virtari@latest add button input dialog
+```
+
+`init` creates `virtari.json`, installs the shared foundation under
+`src/virtari`, and records provenance in `.virtari/installed.json`. `add`
+resolves only the requested components and their transitive source dependencies.
+It also adds required third-party packages to `package.json`.
+
+Headless primitives are registry items at submodule granularity. A button pulls
+the slot and ref-composition source it uses; it does not install dialog,
+positioning, scroll-lock, or the rest of the primitive package.
+
+Import the base stylesheet once from the application entry point:
+
+```ts
+import "./virtari/styles/index.css";
+```
+
+Then import the local component source:
+
+```tsx
+import { Button } from "./virtari/components/button";
+```
+
+The default target can be changed before installation:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.0/virtari.schema.json",
+  "target": "src/design-system",
+  "registry": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.0/registry.json",
+  "install": true
+}
+```
+
+All generated internal imports are relative, so moving the whole target tree does
+not require an alias or a Virtari package at runtime.
+
+## Safe customization and updates
+
+Installed files are application source. Teams may change markup, props, tokens,
+motion, and styles directly. The CLI stores content hashes only to explain update
+drift; it does not control the installed code.
+
+```bash
+pnpm dlx virtari@latest diff button
+pnpm dlx virtari@latest add button --dry-run
+pnpm dlx virtari@latest add button --overwrite
+pnpm dlx virtari@latest doctor
+```
+
+An ordinary `add` never replaces a changed file. `--overwrite` is explicit and
+should follow review of `diff`. File targets are confined to the project, writes
+are atomic, and the registry cannot invoke arbitrary post-install hooks. Package
+manager installation is optional with `--no-install`.
+
+## shadcn compatibility
+
+The root `registry.json` follows the public shadcn source-registry schema. A
+consumer can use the standard shadcn CLI without installing the Virtari CLI:
+
+```bash
+pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.0
+```
+
+Registry dependencies use full same-repository GitHub addresses because bare
+names refer to shadcn's built-in registry. Tagged release commands should pin the
+GitHub item address to the release tag for reproducible installs.
+
+## Repository ownership
+
+Package source under `packages/*/src` is authoritative. `pnpm registry:build`
+creates the transformed files under `registry/` and the root manifest.
+Generated registry files are never edited by hand.
+
+```bash
+pnpm registry:build
+pnpm registry:check
+pnpm registry:test
+```
+
+CI checks deterministic generation, every relative import, third-party
+dependency declarations, target confinement, conflict protection, update diffs,
+and removal of internal package imports.
+
+## Scope and limits
+
+Source ownership removes Virtari's component API ceiling: consumers can change
+the actual implementation instead of waiting for a prop. It does not remove the
+contracts of React, browsers, accessibility, or third-party behavior packages.
+The registry therefore keeps dependency declarations explicit and installs only
+what a selected component needs.
+
+The repository, generated registry, and CLI use the MIT License. Consumers may
+copy, modify, merge, publish, and redistribute installed source while retaining
+the license notice. Every registry item installs that notice at
+`src/virtari/LICENSE`. The release workflow verifies that package manifests and
+license files remain consistent before publishing through npm trusted
+publishing with OIDC.

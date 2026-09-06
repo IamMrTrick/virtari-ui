@@ -385,7 +385,7 @@
     --input-height: 2rem;
     --input-font-size: var(--vds-text-xs, 0.75rem);
     /* Block-flush inside the wrap, so the only gap is the wrap's 1px border. */
-    --input-radius: calc(var(--vds-editor-toolbar-radius) - 1px);
+    --input-radius: max(0px, calc(var(--vds-editor-toolbar-radius) - 1px));
     flex: 1 1 auto;
     min-inline-size: 0;
     inline-size: 100%;
@@ -486,14 +486,14 @@
     --tabs-list-padding-inline: var(--vds-editor-mode-list-padding);
     --tabs-list-padding-block: var(--vds-editor-mode-list-padding);
     --tabs-indicator-color: var(--vds-editor-bg);
-    --tabs-indicator-radius: calc(
+    --tabs-indicator-radius: max(0px, calc(
       var(--vds-editor-toolbar-radius) - var(--vds-editor-mode-list-padding)
-    );
+    ));
     --tabs-trigger-height: 2rem;
     --tabs-trigger-padding-inline: var(--vds-space-2-5, 0.625rem);
-    --tabs-trigger-radius: calc(
+    --tabs-trigger-radius: max(0px, calc(
       var(--vds-editor-toolbar-radius) - var(--vds-editor-mode-list-padding)
-    );
+    ));
     --tabs-trigger-bg-hover: transparent;
     --tabs-trigger-bg-active: var(--vds-editor-bg);
     --tabs-trigger-color-active: var(--vds-editor-text);
@@ -516,7 +516,7 @@
   .vds-editor-color-panel {
     --vds-editor-border: var(--vds-color-border, #d4d4d8);
     --vds-editor-border-strong: var(--vds-color-border-strong, #a1a1aa);
-    --vds-editor-bg: var(--vds-color-surface, #ffffff);
+    --vds-editor-bg: var(--vds-field-bg, var(--vds-color-surface, #ffffff));
     --vds-editor-bg-muted: var(--vds-color-surface-raised, #f5f7fb);
     --vds-editor-text: var(--vds-color-text, #111827);
     --vds-editor-text-muted: var(--vds-color-text-muted, #475569);
@@ -1340,7 +1340,7 @@
   .vds-editor-media-dialog {
     --vds-editor-border: var(--vds-color-border, #d4d4d8);
     --vds-editor-border-strong: var(--vds-color-border-strong, #a1a1aa);
-    --vds-editor-bg: var(--vds-color-surface, #ffffff);
+    --vds-editor-bg: var(--vds-field-bg, var(--vds-color-surface, #ffffff));
     --vds-editor-bg-muted: var(--vds-color-surface-raised, #f5f7fb);
     --vds-editor-text: var(--vds-color-text, #111827);
     --vds-editor-text-muted: var(--vds-color-text-muted, #475569);

@@ -1,0 +1,19 @@
+@layer tokens {
+  :root {
+    /* ─── Transition presets ───
+     *
+     * Ready-to-use duration + easing pairs.
+     * Usage: transition: color var(--vds-transition-base), background-color var(--vds-transition-base);
+     *
+     * These read from --vds-duration-* so prefers-reduced-motion collapses
+     * them to 0ms automatically (defined in motion.css).
+     */
+    --vds-transition-fastest: var(--vds-duration-fastest) var(--vds-ease-out);
+    --vds-transition-fast:    var(--vds-duration-fast)    var(--vds-ease-out);
+    --vds-transition-base:    var(--vds-duration-normal)  var(--vds-ease-out);
+    --vds-transition-slow:    var(--vds-duration-slow)    var(--vds-ease-out);
+    --vds-transition-spring:  var(--vds-duration-slow)    var(--vds-ease-spring);
+    --vds-transition-bounce:  var(--vds-duration-slow)    var(--vds-ease-bounce);
+    --vds-transition-ios:     var(--vds-duration-slow)    var(--vds-ease-ios);
+  }
+}

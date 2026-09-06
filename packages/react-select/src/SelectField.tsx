@@ -1,6 +1,7 @@
 import {
   Field,
   composeFieldDescribedBy,
+  hasFieldContent,
   type FieldProps,
 } from "@virtari-packages/react-fieldset";
 import { cn } from "@virtari-packages/utils";
@@ -39,17 +40,21 @@ export function SelectField({
   className,
   children,
   controlId,
-  invalid = false,
+  invalid,
   ref,
   ...props
 }: SelectFieldProps) {
   const generatedId = useId();
   const resolvedControlId = controlId ?? `vds-select-field-${generatedId}`;
-  const descriptionId = description
+  const ariaInvalid = props["aria-invalid"];
+  const resolvedInvalid = invalid ?? (ariaInvalid !== undefined
+    ? ariaInvalid !== false && ariaInvalid !== "false"
+    : hasFieldContent(error));
+  const descriptionId = hasFieldContent(description)
     ? `${resolvedControlId}-description`
     : undefined;
-  const errorId = error ? `${resolvedControlId}-error` : undefined;
-  const counterId = counter ? `${resolvedControlId}-counter` : undefined;
+  const errorId = hasFieldContent(error) ? `${resolvedControlId}-error` : undefined;
+  const counterId = hasFieldContent(counter) ? `${resolvedControlId}-counter` : undefined;
   const describedBy = composeFieldDescribedBy(
     descriptionId,
     errorId,
@@ -60,7 +65,7 @@ export function SelectField({
       ? children({
           controlId: resolvedControlId,
           describedBy,
-          invalid,
+          invalid: resolvedInvalid,
         })
       : children;
 
@@ -73,7 +78,7 @@ export function SelectField({
       description={description}
       error={error}
       counter={counter}
-      invalid={invalid}
+      invalid={resolvedInvalid}
       controlId={resolvedControlId}
       descriptionId={descriptionId}
       errorId={errorId}

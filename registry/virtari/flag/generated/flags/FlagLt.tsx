@@ -1,0 +1,37 @@
+// AUTO-GENERATED. DO NOT EDIT. Source: flag-icons/flags/4x3/lt.svg
+import type { FC } from "react";
+import { cn } from "../../../../lib/utils";
+import type { FlagCoreProps } from "../../Flag";
+
+const FlagLt: FC<FlagCoreProps> = ({
+  size,
+  rounded = true,
+  title,
+  className,
+  style,
+  ...rest
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 640 480"
+    className={cn("vds-flag", className)}
+    data-size={typeof size === "string" ? size : undefined}
+    data-rounded={rounded === false ? undefined : rounded === "full" ? "full" : ""}
+    data-code="lt"
+    role={title ? "img" : undefined}
+    aria-hidden={title ? undefined : true}
+    aria-label={title}
+    focusable="false"
+    style={typeof size === "number" ? { inlineSize: size, ...style } : style}
+    {...rest}
+  >
+    {title ? <title>{title}</title> : null}
+    <g fillRule="evenodd" strokeWidth="1pt" transform="scale(.64143 .96773)">
+    <rect width="1063" height="708.7" fill="#006a44" rx="0" ry="0" transform="scale(.93865 .69686)"/>
+    <rect width="1063" height="236.2" y="475.6" fill="#c1272d" rx="0" ry="0" transform="scale(.93865 .69686)"/>
+    <path fill="#fdb913" d="M0 0h997.8v164.6H0z"/>
+  </g>
+  </svg>
+);
+
+export default FlagLt;

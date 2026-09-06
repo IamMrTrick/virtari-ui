@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import {
   Stack,
   Cluster,
@@ -33,13 +34,13 @@ export function CompositionPage() {
           <Box>Second</Box>
           <Box>Third</Box>
         </Stack>
-        <pre className="docs-code">{`import { Stack } from "@virtari-packages/react-layout";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Stack } from "@virtari-packages/react-layout";
 
 <Stack gap="md">
   <Card />
   <Card />
   <Card />
-</Stack>`}</pre>
+</Stack>`} />
       </Section>
 
       <Section
@@ -56,11 +57,11 @@ export function CompositionPage() {
           <Box>Tag G</Box>
           <Box>Tag H</Box>
         </Cluster>
-        <pre className="docs-code">{`<Cluster gap="sm" align="center">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Cluster gap="sm" align="center">
   <Tag>One</Tag>
   <Tag>Two</Tag>
   <Tag>Three</Tag>
-</Cluster>`}</pre>
+</Cluster>`} />
       </Section>
 
       <Section
@@ -75,9 +76,9 @@ export function CompositionPage() {
           <Box>Item 5</Box>
           <Box>Item 6</Box>
         </Grid>
-        <pre className="docs-code">{`<Grid minItemWidth="16rem" gap="md">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Grid minItemWidth="16rem" gap="md">
   {items.map((i) => <Card key={i.id} {...i} />)}
-</Grid>`}</pre>
+</Grid>`} />
       </Section>
 
       <Section
@@ -88,10 +89,10 @@ export function CompositionPage() {
           <Box>Sidebar</Box>
           <Box>Main content — resize the window and watch the layout switch to stacked when the main area can't keep 65% of the row.</Box>
         </LayoutSidebar>
-        <pre className="docs-code">{`<Sidebar sideWidth="16rem" contentMin="60%" gap="md">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Sidebar sideWidth="16rem" contentMin="60%" gap="md">
   <Nav />
   <Main />
-</Sidebar>`}</pre>
+</Sidebar>`} />
       </Section>
 
       <Section
@@ -101,17 +102,17 @@ export function CompositionPage() {
         <Center maxWidth="md" gutter="md">
           <Box>
             This content is centered and limited to a comfortable reading width.
-            Change the <code>maxWidth</code> prop to "sm" / "lg" / "xl" to
+            Change the <VirtariInlineCode>maxWidth</VirtariInlineCode> prop to "sm" / "lg" / "xl" to
             resize.
           </Box>
         </Center>
-        <pre className="docs-code">{`<Center maxWidth="md" gutter="md">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Center maxWidth="md" gutter="md">
   <article>...</article>
-</Center>`}</pre>
+</Center>`} />
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="css" code={`import {
   Stack,
   Cluster,
   Grid,
@@ -120,7 +121,7 @@ export function CompositionPage() {
 } from "@virtari-packages/react-layout";
 
 // Add styles once at app root:
-// @import "@virtari-packages/react-layout/styles";`}</pre>
+// @import "@virtari-packages/react-layout/styles";`} />
       </Section>
     </>
   );

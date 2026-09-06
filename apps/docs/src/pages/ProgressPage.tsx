@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Progress } from "@virtari-packages/react-progress";
 import { Section } from "../components";
 
@@ -117,7 +118,7 @@ export function ProgressPage() {
 
       {/* ── Usage ── */}
       <Section title="Usage">
-        <pre className="docs-code">{`import { Progress } from "@virtari-packages/react-progress";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Progress } from "@virtari-packages/react-progress";
 
 // Basic
 <Progress value={60} />
@@ -143,7 +144,7 @@ export function ProgressPage() {
 <Progress />
 
 // Custom color
-<Progress value={60} color="#f472b6" />`}</pre>
+<Progress value={60} color="#f472b6" />`} />
       </Section>
     </>
   );

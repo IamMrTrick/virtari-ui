@@ -98,10 +98,26 @@ All components use logical CSS properties (`margin-inline`, `padding-block`, …
 
 ## Links
 
-- [Repository](https://github.com/IamMrTrick/virtari-design-system)
-- [Issues](https://github.com/IamMrTrick/virtari-design-system/issues)
+- [Repository](https://github.com/Virtari-Packages/virtari-design-system)
+- [Issues](https://github.com/Virtari-Packages/virtari-design-system/issues)
 - [Changelog](./CHANGELOG.md)
 
 ## License
 
-Proprietary. See [LICENSE](./LICENSE).
+[MIT](./LICENSE) © 2026 Virtari.
+
+## Icon and action geometry
+
+Use the component slots instead of positioning icons with page CSS:
+
+```tsx
+<InputWrapper>
+  <InputIcon side="start"><SearchIcon /></InputIcon>
+  <Input size="md" aria-label="Search" />
+  <InputIcon side="end"><ShortcutIcon /></InputIcon>
+</InputWrapper>
+```
+
+`side` is logical and follows the wrapper's writing direction. When omitted, the first or last child supplies the placement for existing compositions. `InputIcon` is decorative and does not intercept pointer events; use `PasswordInput` for the built-in reveal action, or an accessible button for an interactive action.
+
+The wrapper derives outer inset, icon size, and icon-to-text gap from the direct Input child's `size`. Customize `--input-slot-inset`, `--input-icon-size`, and `--input-icon-gap` on the wrapper when necessary. Native input padding reserves the complete slot width. Native fields keep a unitless line height and symmetric block padding; there is no default per-font pixel translation. Fonts have different glyph metrics, so geometrically centered line boxes do not guarantee identical optical centering for every font.

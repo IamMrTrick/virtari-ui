@@ -1,11 +1,9 @@
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { cn, useHotkey } from "@virtari-packages/utils";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogOverlay,
-  DialogPortal,
   DialogTitle,
 } from "@virtari-packages/react-dialog";
 import type { DialogContentProps } from "@virtari-packages/react-dialog";
@@ -42,8 +40,13 @@ export function CommandDialog({
   size = "md",
   className,
   children,
+  onOpenAutoFocus,
+  onCloseAutoFocus,
   ...contentProps
 }: CommandDialogProps) {
+  // CommandDialog is controlled and has no DialogTrigger for the primitive to
+  // restore. Preserve the actual opener, including an input using the hotkey.
+  const openerRef = useRef<HTMLElement | null>(null);
   useHotkey(
     typeof hotkey === "string" || Array.isArray(hotkey) ? hotkey : "",
     () => onOpenChange(!open),
@@ -51,12 +54,24 @@ export function CommandDialog({
   );
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogPortal>
-        <DialogOverlay />
         <DialogContent
           size={size}
           className={cn("vds-command-dialog", className)}
           {...contentProps}
+          onOpenAutoFocus={(event) => {
+            const ownerDocument = (event.target as HTMLElement | null)?.ownerDocument ?? document;
+            openerRef.current = ownerDocument.activeElement as HTMLElement | null;
+            onOpenAutoFocus?.(event);
+          }}
+          onCloseAutoFocus={(event) => {
+            onCloseAutoFocus?.(event);
+            const opener = openerRef.current;
+            openerRef.current = null;
+            if (!event.defaultPrevented && opener?.isConnected) {
+              event.preventDefault();
+              opener.focus({ preventScroll: true });
+            }
+          }}
         >
           <DialogTitle className={hideTitle ? "vds-sr-only" : undefined}>
             {title}
@@ -72,7 +87,6 @@ export function CommandDialog({
             {children}
           </CommandRoot>
         </DialogContent>
-      </DialogPortal>
     </Dialog>
   );
 }

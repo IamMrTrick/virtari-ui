@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { cn, useComposedRefs } from "@virtari-packages/utils";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { Ref } from "react";
 
 export type TextareaSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
@@ -13,7 +13,7 @@ export interface TextareaProps
   inputSize?: TextareaSize;
   /**
    * Each printable keystroke fires a brief ring-burst animation.
-   * Intensity scales with typing speed. Default: false.
+   * Respects reduced motion and read-only controls. Default: false.
    */
   typingPulse?: boolean;
   ref?: Ref<HTMLTextAreaElement>;
@@ -32,7 +32,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   ...props
 }, ref) {
   const localRef = useRef<HTMLTextAreaElement>(null);
-  const lastKeyAt = useRef(0);
   const lastPulseAt = useRef(0);
 
   const mergedRef = useComposedRefs(localRef, ref);
@@ -43,19 +42,18 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
     if (!el) return;
     const onEnd = () => el.classList.remove("vds-textarea--pulse");
     el.addEventListener("animationend", onEnd);
-    return () => el.removeEventListener("animationend", onEnd);
+    return () => {
+      el.removeEventListener("animationend", onEnd);
+      el.classList.remove("vds-textarea--pulse");
+    };
   }, [typingPulse]);
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
     onKeyDown?.(e);
-    if (e.defaultPrevented || e.nativeEvent.isComposing || !typingPulse || !isPrintable(e)) return;
+    if (e.defaultPrevented || e.nativeEvent.isComposing || !typingPulse || !isPrintable(e) || e.currentTarget.readOnly || e.currentTarget.disabled) return;
     const el = localRef.current;
     if (!el) return;
     const now = Date.now();
-    const gap = now - lastKeyAt.current;
-    lastKeyAt.current = now;
-    const intensity = Math.max(0.2, Math.min(1, 1 - (gap - 40) / 380));
-    el.style.setProperty("--_ti", String(intensity));
     if (now - lastPulseAt.current >= 80) {
       lastPulseAt.current = now;
       el.classList.remove("vds-textarea--pulse");

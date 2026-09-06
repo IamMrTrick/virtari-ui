@@ -2,10 +2,11 @@ import { forwardRef } from "react";
 import {
   Field,
   composeFieldDescribedBy,
+  hasFieldContent,
   type FieldProps,
 } from "@virtari-packages/react-fieldset";
-import { cn } from "@virtari-packages/utils";
-import { useId, useState } from "react";
+import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
+import { useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, Ref } from "react";
 import {
   PasswordInput,
@@ -56,7 +57,7 @@ function resolveTextValue(value: unknown) {
 }
 
 function defaultCounterFormatter(current: number, maxLength?: number) {
-  return maxLength ? `${current}/${maxLength}` : current;
+  return maxLength !== undefined ? `${current}/${maxLength}` : current;
 }
 
 export const PasswordInputField = forwardRef<HTMLInputElement, PasswordInputFieldProps>(function PasswordInputField({
@@ -91,25 +92,20 @@ export const PasswordInputField = forwardRef<HTMLInputElement, PasswordInputFiel
   "aria-invalid": ariaInvalid,
   ...props
 }, ref) {
+  const localRef = useRef<HTMLInputElement>(null);
+  const mergedRef = useComposedRefs(localRef, ref);
   const generatedId = useId();
   const controlId = id ?? `vds-password-input-field-${generatedId}`;
-  const descriptionId = description
+  const descriptionId = hasFieldContent(description)
     ? `${controlId}-description`
     : undefined;
-  const errorId = error ? `${controlId}-error` : undefined;
-  const hasCounter = counter !== undefined || showCounter;
-  const counterId = hasCounter ? `${controlId}-counter` : undefined;
+  const errorId = hasFieldContent(error) ? `${controlId}-error` : undefined;
   const strengthId = `${controlId}-strength`;
-  const describedBy = composeFieldDescribedBy(
-    ariaDescribedBy,
-    descriptionId,
-    errorId,
-    counterId,
-  );
-  const resolvedInvalid = invalid ?? isInvalid(ariaInvalid);
+  const resolvedInvalid = invalid ?? (ariaInvalid !== undefined ? isInvalid(ariaInvalid) : hasFieldContent(error));
   const [uncontrolledValue, setUncontrolledValue] = useState(
     resolveTextValue(defaultValue),
   );
+  useFormReset(localRef, () => setUncontrolledValue(resolveTextValue(defaultValue)), props.form);
   const isControlled = value !== undefined;
   const currentValue = isControlled
     ? resolveTextValue(value)
@@ -119,6 +115,14 @@ export const PasswordInputField = forwardRef<HTMLInputElement, PasswordInputFiel
     (showCounter
       ? counterFormatter(currentValue.length, maxLength)
       : undefined);
+  const counterId = hasFieldContent(resolvedCounter) ? `${controlId}-counter` : undefined;
+  const describedBy = composeFieldDescribedBy(
+    ariaDescribedBy,
+    descriptionId,
+    errorId,
+    counterId,
+  );
+
 
   return (
     <Field
@@ -143,7 +147,7 @@ export const PasswordInputField = forwardRef<HTMLInputElement, PasswordInputFiel
     >
       <PasswordInput
         {...props}
-        ref={ref}
+        ref={mergedRef}
         id={controlId}
         value={value}
         defaultValue={defaultValue}
@@ -155,7 +159,7 @@ export const PasswordInputField = forwardRef<HTMLInputElement, PasswordInputFiel
         disabled={disabled}
         maxLength={maxLength}
         aria-describedby={describedBy}
-        aria-invalid={resolvedInvalid || undefined}
+        aria-invalid={invalid !== undefined ? invalid : ariaInvalid ?? (resolvedInvalid || undefined)}
         className={inputClassName}
         style={inputStyle}
         rootClassName={passwordRootClassName}

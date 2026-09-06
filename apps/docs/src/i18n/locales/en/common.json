@@ -19,6 +19,7 @@
     "close": "Close"
   },
   "groups": {
+    "utilities": "Utilities & reference",
     "overview": "Overview",
     "foundations": "Foundations",
     "formControls": "Form Controls",

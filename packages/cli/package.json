@@ -1,0 +1,43 @@
+{
+  "name": "virtari",
+  "version": "0.1.0",
+  "description": "Install editable Virtari design-system source into React projects.",
+  "homepage": "https://github.com/Virtari-Packages/virtari-design-system#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
+  },
+  "type": "module",
+  "bin": {
+    "virtari": "./bin/virtari.mjs"
+  },
+  "files": [
+    "bin",
+    "README.md"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.10"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "node --check bin/virtari.mjs",
+    "typecheck": "node --check bin/virtari.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "keywords": [
+    "virtari",
+    "design-system",
+    "react",
+    "components",
+    "registry",
+    "source"
+  ]
+}

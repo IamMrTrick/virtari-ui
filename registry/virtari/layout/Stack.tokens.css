@@ -1,0 +1,11 @@
+@layer design-system.components {
+  .vds-stack {
+    --stack-gap: var(--vds-space-4, 1rem);
+  }
+
+  .vds-stack[data-gap="xs"] { --stack-gap: var(--vds-space-1, 0.25rem); }
+  .vds-stack[data-gap="sm"] { --stack-gap: var(--vds-space-2, 0.5rem); }
+  .vds-stack[data-gap="md"] { --stack-gap: var(--vds-space-4, 1rem); }
+  .vds-stack[data-gap="lg"] { --stack-gap: var(--vds-space-6, 1.5rem); }
+  .vds-stack[data-gap="xl"] { --stack-gap: var(--vds-space-8, 2rem); }
+}

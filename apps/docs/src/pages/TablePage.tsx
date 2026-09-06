@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useMemo, useState } from "react";
 import {
   Table,
@@ -276,7 +277,7 @@ function InvoiceTable(props: {
           {INVOICES.map((inv) => (
             <TableRow key={inv.id}>
               <TableCell>
-                <code style={{ fontSize: "0.8125em" }}>{inv.id}</code>
+                <VirtariInlineCode style={{ fontSize: "0.8125em" }}>{inv.id}</VirtariInlineCode>
               </TableCell>
               <TableCell wrap>
                 <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
@@ -307,7 +308,7 @@ function VariantsSection() {
         {VARIANTS.map((v) => (
           <div key={v}>
             <p style={{ margin: "0 0 var(--vds-space-2)", fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text-muted)" }}>
-              <code>variant=&quot;{v}&quot;</code>
+              <VirtariInlineCode>variant=&quot;{v}&quot;</VirtariInlineCode>
             </p>
             <InvoiceTable variant={v} hoverable />
           </div>
@@ -329,7 +330,7 @@ function RowStylesSection() {
         {ROW_STYLES.map((r) => (
           <div key={r}>
             <p style={{ margin: "0 0 var(--vds-space-2)", fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text-muted)" }}>
-              <code>rows=&quot;{r}&quot;</code>
+              <VirtariInlineCode>rows=&quot;{r}&quot;</VirtariInlineCode>
             </p>
             <InvoiceTable rows={r} hoverable />
           </div>
@@ -351,7 +352,7 @@ function SizesSection() {
         {SIZES.map((s) => (
           <div key={s}>
             <p style={{ margin: "0 0 var(--vds-space-2)", fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text-muted)" }}>
-              <code>size=&quot;{s}&quot;</code>
+              <VirtariInlineCode>size=&quot;{s}&quot;</VirtariInlineCode>
             </p>
             <InvoiceTable size={s} hoverable />
           </div>
@@ -373,7 +374,7 @@ function DensitySection() {
         {DENSITIES.map((d) => (
           <div key={d}>
             <p style={{ margin: "0 0 var(--vds-space-2)", fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text-muted)" }}>
-              <code>density=&quot;{d}&quot;</code>
+              <VirtariInlineCode>density=&quot;{d}&quot;</VirtariInlineCode>
             </p>
             <InvoiceTable density={d} hoverable />
           </div>
@@ -410,7 +411,7 @@ function SelectionSection() {
               onClick={() => setSelectedId(inv.id)}
               style={{ cursor: "pointer" }}
             >
-              <TableCell><code style={{ fontSize: "0.8125em" }}>{inv.id}</code></TableCell>
+              <TableCell><VirtariInlineCode style={{ fontSize: "0.8125em" }}>{inv.id}</VirtariInlineCode></TableCell>
               <TableCell>{inv.customer}</TableCell>
               <TableCell><StatusChip s={inv.status} /></TableCell>
               <TableCell numeric>{money(inv.amount)}</TableCell>
@@ -419,7 +420,7 @@ function SelectionSection() {
         </TableBody>
       </Table>
       <p style={{ marginBlockStart: "var(--vds-space-3)", fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text-muted)" }}>
-        Click any row to select. The accent stripe color follows the table&rsquo;s <code>color</code> prop.
+        Click any row to select. The accent stripe color follows the table&rsquo;s <VirtariInlineCode>color</VirtariInlineCode> prop.
       </p>
     </Section>
   );
@@ -476,7 +477,7 @@ function SortableSection() {
         <TableBody>
           {sorted.map((inv) => (
             <TableRow key={inv.id}>
-              <TableCell><code style={{ fontSize: "0.8125em" }}>{inv.id}</code></TableCell>
+              <TableCell><VirtariInlineCode style={{ fontSize: "0.8125em" }}>{inv.id}</VirtariInlineCode></TableCell>
               <TableCell>{inv.customer}</TableCell>
               <TableCell><StatusChip s={inv.status} /></TableCell>
               <TableCell numeric>{money(inv.amount)}</TableCell>
@@ -516,7 +517,7 @@ function StickyHeaderSection() {
           <TableBody>
             {many.map((inv) => (
               <TableRow key={inv.id}>
-                <TableCell><code style={{ fontSize: "0.8125em" }}>{inv.id}</code></TableCell>
+                <TableCell><VirtariInlineCode style={{ fontSize: "0.8125em" }}>{inv.id}</VirtariInlineCode></TableCell>
                 <TableCell>{inv.customer}</TableCell>
                 <TableCell><StatusChip s={inv.status} /></TableCell>
                 <TableCell numeric>{money(inv.amount)}</TableCell>
@@ -650,7 +651,7 @@ function FooterCaptionSection() {
         <TableBody>
           {INVOICES.slice(0, 4).map((inv) => (
             <TableRow key={inv.id}>
-              <TableCell><code style={{ fontSize: "0.8125em" }}>{inv.id}</code></TableCell>
+              <TableCell><VirtariInlineCode style={{ fontSize: "0.8125em" }}>{inv.id}</VirtariInlineCode></TableCell>
               <TableCell>{inv.customer}</TableCell>
               <TableCell numeric>{money(inv.amount)}</TableCell>
             </TableRow>
@@ -694,7 +695,7 @@ function LoadingSection() {
           <TableBody>
             {INVOICES.slice(0, 3).map((inv) => (
               <TableRow key={inv.id}>
-                <TableCell><code style={{ fontSize: "0.8125em" }}>{inv.id}</code></TableCell>
+                <TableCell><VirtariInlineCode style={{ fontSize: "0.8125em" }}>{inv.id}</VirtariInlineCode></TableCell>
                 <TableCell>{inv.customer}</TableCell>
                 <TableCell numeric>{money(inv.amount)}</TableCell>
               </TableRow>
@@ -726,19 +727,19 @@ function RTLSection() {
           </TableHeader>
           <TableBody>
             <TableRow selected>
-              <TableCell><code style={{ fontSize: "0.8125em" }}>INV-1021</code></TableCell>
+              <TableCell><VirtariInlineCode style={{ fontSize: "0.8125em" }}>INV-1021</VirtariInlineCode></TableCell>
               <TableCell>آدا لاولیس</TableCell>
               <TableCell><Badge size="sm" color="success" variant="soft">پرداخت‌شده</Badge></TableCell>
               <TableCell numeric>۱٬۲۴۰٫۰۰</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><code style={{ fontSize: "0.8125em" }}>INV-1022</code></TableCell>
+              <TableCell><VirtariInlineCode style={{ fontSize: "0.8125em" }}>INV-1022</VirtariInlineCode></TableCell>
               <TableCell>گریس هاپر</TableCell>
               <TableCell><Badge size="sm" color="warning" variant="soft">در انتظار</Badge></TableCell>
               <TableCell numeric>۷۸۰٫۵۰</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><code style={{ fontSize: "0.8125em" }}>INV-1023</code></TableCell>
+              <TableCell><VirtariInlineCode style={{ fontSize: "0.8125em" }}>INV-1023</VirtariInlineCode></TableCell>
               <TableCell>آلن تورینگ</TableCell>
               <TableCell><Badge size="sm" color="danger" variant="soft">سررسید گذشته</Badge></TableCell>
               <TableCell numeric>۲٬۴۶۰٫۰۰</TableCell>
@@ -797,9 +798,9 @@ function ApiSection() {
             <TableBody>
               {rows.map((r) => (
                 <TableRow key={r.prop}>
-                  <TableCell><code>{r.prop}</code></TableCell>
-                  <TableCell wrap><code style={{ fontSize: "0.8125em" }}>{r.type}</code></TableCell>
-                  <TableCell><code>{r.def}</code></TableCell>
+                  <TableCell><VirtariInlineCode>{r.prop}</VirtariInlineCode></TableCell>
+                  <TableCell wrap><VirtariInlineCode style={{ fontSize: "0.8125em" }}>{r.type}</VirtariInlineCode></TableCell>
+                  <TableCell><VirtariInlineCode>{r.def}</VirtariInlineCode></TableCell>
                   <TableCell wrap>{r.desc}</TableCell>
                 </TableRow>
               ))}
@@ -820,8 +821,8 @@ function ApiSection() {
             <TableBody>
               {cellProps.map((r) => (
                 <TableRow key={r.prop}>
-                  <TableCell><code>{r.prop}</code></TableCell>
-                  <TableCell wrap><code style={{ fontSize: "0.8125em" }}>{r.type}</code></TableCell>
+                  <TableCell><VirtariInlineCode>{r.prop}</VirtariInlineCode></TableCell>
+                  <TableCell wrap><VirtariInlineCode style={{ fontSize: "0.8125em" }}>{r.type}</VirtariInlineCode></TableCell>
                   <TableCell wrap>{r.desc}</TableCell>
                 </TableRow>
               ))}
@@ -842,8 +843,8 @@ function ApiSection() {
             <TableBody>
               {headProps.map((r) => (
                 <TableRow key={r.prop}>
-                  <TableCell><code>{r.prop}</code></TableCell>
-                  <TableCell wrap><code style={{ fontSize: "0.8125em" }}>{r.type}</code></TableCell>
+                  <TableCell><VirtariInlineCode>{r.prop}</VirtariInlineCode></TableCell>
+                  <TableCell wrap><VirtariInlineCode style={{ fontSize: "0.8125em" }}>{r.type}</VirtariInlineCode></TableCell>
                   <TableCell wrap>{r.desc}</TableCell>
                 </TableRow>
               ))}
@@ -860,7 +861,7 @@ function ApiSection() {
 function UsageSection() {
   return (
     <Section title="Usage">
-      <pre className="docs-code">{`import {
+      <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Table, TableHeader, TableBody, TableFooter,
   TableRow, TableHead, TableCell, TableCaption,
 } from "@virtari-packages/react-table";
@@ -887,7 +888,7 @@ function UsageSection() {
       <TableCell numeric>$1,240.00</TableCell>
     </TableRow>
   </TableFooter>
-</Table>`}</pre>
+</Table>`} />
     </Section>
   );
 }

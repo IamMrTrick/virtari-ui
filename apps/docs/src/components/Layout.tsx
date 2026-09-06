@@ -4,18 +4,24 @@ import { Header, HeaderMain, HeaderStart, HeaderEnd } from "@virtari-packages/re
 import { Main, Stack, Cluster, Grid } from "@virtari-packages/react-layout";
 import { Heading } from "@virtari-packages/react-text";
 import { Button } from "@virtari-packages/react-button";
-import { Kbd } from "@virtari-packages/react-kbd";
+import { ScrollArea } from "@virtari-packages/react-scroll-area";
+import { KbdShortcut } from "@virtari-packages/react-kbd";
+import { ariaKeyShortcuts, useKeyboardPlatform } from "@virtari-packages/utils";
 import { Nav, NavList, NavItem } from "@virtari-packages/react-nav";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari-packages/react-collapsible";
+import { Card, CardContent } from "@virtari-packages/react-card";
 import { CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem, CommandEmpty } from "@virtari-packages/react-command";
 import { IconMenu2, IconSettings, IconSearch, IconArrowLeft, IconArrowRight, IconCopy, IconSun, IconMoon } from "@virtari-packages/react-icons";
 import { toast } from "@virtari-packages/react-toast";
 import { SettingsDrawer } from "./SettingsDrawer";
-import { NAV_ITEMS } from "./Sidebar";
-import type { RadiusMode, Direction } from "../App";
+import { Logo } from "./branding/Logo";
+import { NAV_ITEMS, DOC_PATHS, getPageIcon } from "./navigation";
+import type { RadiusMode, Direction, SurfaceStyle } from "../App";
 import type { Locale } from "../i18n";
 
 type Props = {
   dark: boolean; onToggleDark: (v: boolean) => void;
+  surfaceStyle: SurfaceStyle; onSurfaceStyleChange: (v: SurfaceStyle) => void;
   radius: RadiusMode; onRadiusChange: (v: RadiusMode) => void;
   direction: Direction; onDirectionChange: (v: Direction) => void;
   locale: Locale; onLocaleChange: (v: Locale) => void;
@@ -26,16 +32,17 @@ type Props = {
 };
 
 export function Layout(p: Props) {
+  const keyboardPlatform = useKeyboardPlatform();
   const { t } = useTranslation();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [sections, setSections] = useState<HTMLElement[]>([]);
   const [activeSection, setActiveSection] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
-  const mainRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
   const fa = p.locale === "fa";
   const label = (en: string, persian: string) => fa ? persian : en;
-  const paths = NAV_ITEMS.flatMap(group => group.items);
+  const paths = DOC_PATHS;
   const pageIndex = paths.indexOf(p.activePage);
   const previous = paths[pageIndex - 1];
   const next = paths[pageIndex + 1];
@@ -88,7 +95,10 @@ export function Layout(p: Props) {
       <HeaderMain blockSize="var(--docs-header-height)" background="none" gutter="md" width="full" contained={false}>
         <HeaderStart>
           <Button variant="ghost" color="contrast" className="docs-mobile-menu" aria-label={t("layout.toggleSidebar")} onClick={p.onToggleSidebar}><IconMenu2 size={20}/></Button>
-          <a href={p.hrefFor("introduction")} className="docs-wordmark" aria-label={t("brand.homeLabel")}><span className="docs-brand-symbol" aria-hidden="true">V</span><span>Virtari</span></a>
+          <a href={p.hrefFor("introduction")} className="docs-wordmark" aria-label={t("brand.homeLabel")}>
+            <Logo height={32} className="docs-brand-wordmark" />
+            <Logo variant="mark" height={28} className="docs-brand-mark" />
+          </a>
           <Nav className="docs-top-nav" orientation="horizontal" size="sm" variant="filled" aria-label={label("Explore documentation", "مرور مستندات")}>
             <NavList>
               <NavItem href={p.hrefFor("introduction")} label={label("Docs", "مستندات")} />
@@ -98,7 +108,7 @@ export function Layout(p: Props) {
           </Nav>
         </HeaderStart>
         <HeaderEnd>
-          <Button variant="soft" color="contrast" className="docs-search-trigger" onClick={() => setSearchOpen(true)} aria-label={label("Search documentation", "جست‌وجوی مستندات")}><IconSearch size={16}/><span className="docs-search-label">{label("Search documentation…", "جست‌وجوی مستندات…")}</span><Kbd>⌘ K</Kbd></Button>
+          <Button variant="soft" color="contrast" className="docs-search-trigger" onClick={() => setSearchOpen(true)} aria-label={label("Search documentation", "جست‌وجوی مستندات")} aria-keyshortcuts={ariaKeyShortcuts("mod+k", keyboardPlatform)}><IconSearch size={16}/><span className="docs-search-label">{label("Search documentation…", "جست‌وجوی مستندات…")}</span><KbdShortcut combo="mod+k" /></Button>
           <Button variant="ghost" color="contrast" aria-label={label(p.dark ? "Switch to light theme" : "Switch to dark theme", p.dark ? "حالت روشن" : "حالت تیره")} onClick={() => p.onToggleDark(!p.dark)}>{p.dark ? <IconSun size={18}/> : <IconMoon size={18}/>}</Button>
           <Button variant="ghost" color="contrast" onClick={() => setSettingsOpen(true)} aria-label={t("settings.open")} aria-expanded={settingsOpen}><IconSettings size={18}/></Button>
         </HeaderEnd>
@@ -107,7 +117,8 @@ export function Layout(p: Props) {
 
     <Grid className="docs-workspace">
       {p.sidebar}
-      <Main contained={false} className="docs-main" ref={mainRef}>
+      <Main contained={false} className="docs-main">
+        <ScrollArea className="docs-main-scroll" viewportRef={mainRef} viewportProps={{ role: "region", "aria-label": p.title }}>
         <div className="docs-article">
           <Cluster className="docs-page-toolbar">
             <span className="docs-eyebrow">{label("Documentation", "مستندات")} <span aria-hidden="true">/</span> {p.title}</span>
@@ -118,7 +129,7 @@ export function Layout(p: Props) {
             </Cluster>
           </Cluster>
           <Stack className="docs-page-intro" gap="sm"><Heading level={1} size="8" tracking="tight">{p.title}</Heading><p>{p.description}</p></Stack>
-          {sections.length > 0 && <details className="docs-mobile-toc"><summary>{label("On this page", "در این صفحه")}</summary>{sectionLinks}</details>}
+          {sections.length > 0 && <Collapsible className="docs-mobile-toc"><CollapsibleTrigger asChild><Button color="contrast" variant="soft" size="sm">{label("On this page", "در این صفحه")}</Button></CollapsibleTrigger><CollapsibleContent>{sectionLinks}</CollapsibleContent></Collapsible>}
           <div className="docs-content" ref={contentRef} key={p.activePage}>{p.children}</div>
           <Cluster className="docs-page-pagination">
             {previous ? <Button asChild variant="outline" color="contrast"><a href={p.hrefFor(previous)}><IconArrowLeft className="docs-directional-icon" size={16}/>{pageLabel(previous)}</a></Button> : <span/>}
@@ -126,18 +137,21 @@ export function Layout(p: Props) {
           </Cluster>
           <p className="docs-colophon">{label("Built with Virtari components. Designed to work together.", "ساخته‌شده با کامپوننت‌های ویرتاری؛ طراحی‌شده برای کار در کنار هم.")}</p>
         </div>
+        </ScrollArea>
       </Main>
       <aside className="docs-outline" aria-label={label("Page contents", "فهرست صفحه")}>
+        <ScrollArea className="docs-outline-scroll" viewportProps={{ "aria-label": label("Page contents", "فهرست صفحه"), role: "region" }}><div className="docs-outline-content">
         <p className="docs-outline-title">{label("On this page", "در این صفحه")}</p>
         {sectionLinks}
-        <Stack className="docs-outline-note" gap="sm"><strong>{label("Make it yours", "با سلیقهٔ خودتان")}</strong><p>{label("Explore themes, radius, and direction with your design tokens.", "تم، گردی گوشه‌ها و جهت صفحه را با توکن‌های خودتان تنظیم کنید.")}</p><Button color="contrast" variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>{label("Customize", "شخصی‌سازی")}</Button></Stack>
+        <Card className="docs-outline-note" variant="soft" size="sm"><CardContent><Stack gap="sm"><strong>{label("Your expression. One system.", "بیان شما، یک سیستم.")}</strong><p>{label("A shared foundation for color, shape, and motion. Make it feel like you.", "مبنایی مشترک برای رنگ، فرم و حرکت؛ با حس و هویت شما.")}</p><Button variant="soft" size="sm" onClick={() => setSettingsOpen(true)}>{label("Personalize", "شخصی‌سازی")}</Button></Stack></CardContent></Card>
+        </div></ScrollArea>
       </aside>
     </Grid>
 
     <CommandDialog open={searchOpen} onOpenChange={setSearchOpen} hotkey="mod+k" title={label("Search documentation", "جست‌وجوی مستندات")} description={label("Find a component or guide.", "یک کامپوننت یا راهنما پیدا کنید.")}>
       <CommandInput placeholder={label("Search components and guides…", "جست‌وجوی کامپوننت‌ها و راهنماها…")} />
-      <CommandList><CommandEmpty>{label("No pages found.", "صفحه‌ای پیدا نشد.")}</CommandEmpty>{NAV_ITEMS.map(group => <CommandGroup key={group.groupKey} heading={t(group.groupKey)}>{group.items.map(path => <CommandItem key={path} value={`${pageLabel(path)} ${path}`} onSelect={() => {p.onNavigate(path); setSearchOpen(false);}}>{pageLabel(path)}</CommandItem>)}</CommandGroup>)}</CommandList>
+      <CommandList><CommandEmpty>{label("No pages found.", "صفحه‌ای پیدا نشد.")}</CommandEmpty>{NAV_ITEMS.map(group => <CommandGroup key={group.groupKey} heading={t(group.groupKey)}>{group.items.map(path => <CommandItem key={path} leftSection={getPageIcon(path)} value={`${pageLabel(path)} ${path}`} onSelect={() => {p.onNavigate(path); setSearchOpen(false);}}>{pageLabel(path)}</CommandItem>)}</CommandGroup>)}</CommandList>
     </CommandDialog>
-    <SettingsDrawer open={settingsOpen} onOpenChange={setSettingsOpen} dark={p.dark} onDarkChange={p.onToggleDark} radius={p.radius} onRadiusChange={p.onRadiusChange} direction={p.direction} onDirectionChange={p.onDirectionChange} locale={p.locale} onLocaleChange={p.onLocaleChange} microInteractions={p.microInteractions} onMicroInteractionsChange={p.onMicroInteractionsChange}/>
+    <SettingsDrawer surfaceStyle={p.surfaceStyle} onSurfaceStyleChange={p.onSurfaceStyleChange} open={settingsOpen} onOpenChange={setSettingsOpen} dark={p.dark} onDarkChange={p.onToggleDark} radius={p.radius} onRadiusChange={p.onRadiusChange} direction={p.direction} onDirectionChange={p.onDirectionChange} locale={p.locale} onLocaleChange={p.onLocaleChange} microInteractions={p.microInteractions} onMicroInteractionsChange={p.onMicroInteractionsChange}/>
   </>;
 }

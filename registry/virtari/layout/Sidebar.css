@@ -1,0 +1,29 @@
+@import "./Sidebar.tokens.css";
+
+@layer design-system.components {
+  /*
+   * See Sidebar.tokens.css — selectors target `.vds-split` specifically
+   * so the app-chrome sidebar in @virtari-packages/react-sidebar (`.vds-sidebar`)
+   * isn't affected by these flex-basis rules.
+   */
+  .vds-split {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--split-gap);
+  }
+
+  .vds-split > :first-child {
+    flex-basis: var(--split-side-width);
+    flex-grow: 1;
+  }
+
+  .vds-split > :last-child {
+    flex-basis: 0;
+    flex-grow: 999;
+    min-inline-size: var(--split-content-min);
+  }
+
+  .vds-split[data-side="end"] {
+    flex-direction: row-reverse;
+  }
+}

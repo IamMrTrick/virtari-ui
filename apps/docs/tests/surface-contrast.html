@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Surface contrast regression</title></head><body><h1>Surface contrast regression</h1><pre id="report">Running</pre><div id="sample">Sample</div><script type="module">
+import '@virtari-packages/tokens';
+const sample=document.querySelector('#sample');
+const canvas=document.createElement('canvas'); canvas.width=canvas.height=1;
+const ctx=canvas.getContext('2d',{willReadFrequently:true});
+function luminance(color){ctx.clearRect(0,0,1,1);ctx.fillStyle=color;ctx.fillRect(0,0,1,1);const rgb=[...ctx.getImageData(0,0,1,1).data].slice(0,3).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4});return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;}
+const surfaces=['bg','surface-container-low','surface-container','surface-container-high','surface-field','surface-overlay'];
+const pairs=surfaces.flatMap(bg=>['text','on-surface-variant'].map(fg=>[bg,fg]));
+pairs.push(['primary-container','on-primary-container']);
+const results=[];
+for(const theme of ['light','dark','dark-oled']){
+ document.documentElement.dataset.theme=theme;
+ for(const [bg,fg] of pairs){sample.style.backgroundColor=`var(--vds-color-${bg})`;sample.style.color=`var(--vds-color-${fg})`;const css=getComputedStyle(sample);const a=luminance(css.backgroundColor),b=luminance(css.color),ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);results.push(`${ratio>=4.5?'PASS':'FAIL'} ${theme} ${fg} on ${bg}: ${ratio.toFixed(2)}:1`);}
+}
+document.documentElement.dataset.theme='light';
+document.querySelector('#report').textContent=results.join('\n');
+</script></body></html>

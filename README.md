@@ -3,9 +3,9 @@
 # Virtari Design System
 
 A production-grade, multi-brand React + CSS design system.
-Token-driven, accessibility-first, RTL-safe, and shipped as independent packages through **GitHub Packages** (private).
+Token-driven, accessibility-first, RTL-safe, and available as editable project source through a shadcn-compatible registry.
 
-[![License: Proprietary](https://img.shields.io/badge/license-Proprietary-lightgrey.svg)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![pnpm](https://img.shields.io/badge/pnpm-10-f69220.svg)](https://pnpm.io/)
 [![Changesets](https://img.shields.io/badge/versioning-changesets-5b9dd9.svg)](https://github.com/changesets/changesets)
 
@@ -19,8 +19,9 @@ Token-driven, accessibility-first, RTL-safe, and shipped as independent packages
 - **Logical & RTL-safe.** Layouts use `margin-inline` / `padding-block` / `inset-*` and `:dir(rtl)` adjustments, so the same markup flips correctly in Arabic, Hebrew, or Persian.
 - **Composable CSS layers.** Styles sit in the `design-system.components` cascade layer, so consumer apps can always override without `!important`.
 - **Accessible by default.** Built on `@virtari-packages/primitives` — our own headless behaviour layer — plus React Aria and strict semantic HTML. Focus management, ARIA wiring, and keyboard support are non-optional.
-- **No framework lock-in.** Packages ship ESM + CJS + CSS. Use them in Next.js, Remix, Vite, Astro, or any React host.
-- **Atomic, independent releases.** Each component is its own package — import only what you use. Versioned with [Changesets](https://github.com/changesets/changesets) and published privately to GitHub Packages.
+- **Own the implementation.** The CLI installs normal React and CSS source in the application. Change markup, behavior, tokens, or motion without waiting for another library prop.
+- **Open registry protocol.** The same source items work through the Virtari CLI and the standard shadcn GitHub registry flow.
+- **Selective installs.** Each component resolves only its transitive Virtari source and third-party dependencies. Existing ESM + CJS packages remain available during migration.
 
 ## Package map
 
@@ -30,15 +31,40 @@ Token-driven, accessibility-first, RTL-safe, and shipped as independent packages
 | `@virtari-packages/core` | 1 | Reset + global primitives. |
 | `@virtari-packages/utilities` | 1 | Utility classes (spacing, sizing, z-index) built from tokens. |
 | `@virtari-packages/utils` | 1 | Shared internal helpers for component packages. |
-| `@virtari-packages/react-*` | 44 | Individual React components (button, select, data-table, date-picker, …). |
+| `@virtari-packages/react-*` | 67 | Individual React components (button, select, data-table, date-picker, …). |
+| `virtari` | 1 | Source installer, updater, diff and project health CLI. |
 
 Full list: [`packages/`](./packages). Each package has its own README with install and usage.
 
 ---
 
-## Installing in a consumer project
+## Source-owned installation
 
-Virtari is private — packages live on **GitHub Packages**, not the public npm registry. Every consuming project needs two things:
+```bash
+pnpm dlx virtari@latest init
+pnpm dlx virtari@latest add button input dialog
+```
+
+Import the installed foundation once, then import local components:
+
+```tsx
+import "./virtari/styles/index.css";
+import { Button } from "./virtari/components/button";
+```
+
+The installed tree contains no `@virtari-packages/*` runtime imports. Existing
+consumer edits are protected; use `virtari diff button` and `--dry-run` before
+an explicit `--overwrite` update. See the [source registry contract](./docs/source-registry.md).
+
+The registry can also be consumed with the official shadcn CLI:
+
+```bash
+pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.0
+```
+
+## Legacy package installation
+
+The existing packages remain private on **GitHub Packages** during migration. Every package-based consumer needs two things:
 
 ### 1. A `.npmrc` at the project root
 
@@ -120,11 +146,14 @@ virtari-design-system/
 ├── apps/
 │   └── docs/                  # Vite demo app (every component lives here)
 ├── packages/
+│   ├── cli/                   # source installer and update tooling
 │   ├── tokens/                # CSS custom properties
 │   ├── core/                  # reset + global layers
 │   ├── utilities/             # utility classes
 │   ├── utils/                 # internal helpers
 │   └── react-<name>/          # one package per component
+├── registry/                  # generated, installable source files
+├── registry.json              # shadcn-compatible source registry
 ├── scripts/                   # repo maintenance (metadata, docs sync)
 ├── .changeset/                # pending version/publish intents
 └── .github/workflows/         # CI + release automation
@@ -156,6 +185,10 @@ No npm token is required — the built-in `GITHUB_TOKEN` (with `packages: write`
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full flow.
 
+The source registry and CLI are released under MIT, so installed component
+source can be used, modified, merged, and redistributed with the required
+license notice. Registry installs place the notice at `src/virtari/LICENSE`.
+
 ## License
 
-Proprietary. See [LICENSE](./LICENSE). Unauthorized redistribution is prohibited.
+[MIT](./LICENSE) © 2026 Virtari.

@@ -1,0 +1,190 @@
+import { forwardRef } from "react";
+import { cn, useComposedRefs } from "../../lib/utils";
+import { useRef, type ReactNode, type Ref } from "react";
+import { useDateField, useDateSegment } from "@react-aria/datepicker";
+import {
+  useDateFieldState,
+  type DateFieldState,
+  type DateSegment,
+} from "@react-stately/datepicker";
+import { useLocale } from "@react-aria/i18n";
+import { createCalendar, resolveLocale, type CalendarSystem, type DateValue } from "./date-utils";
+import type { DatePickerSize, DatePickerAppearance } from "./context";
+
+export interface DateFieldProps {
+  value?: DateValue | null;
+  defaultValue?: DateValue | null;
+  onChange?: (value: DateValue | null) => void;
+  minValue?: DateValue;
+  maxValue?: DateValue;
+  placeholderValue?: DateValue;
+  isDisabled?: boolean;
+  isReadOnly?: boolean;
+  isRequired?: boolean;
+  isInvalid?: boolean;
+  granularity?: "day" | "hour" | "minute" | "second";
+  hourCycle?: 12 | 24;
+  hideTimeZone?: boolean;
+  label?: ReactNode;
+  description?: ReactNode;
+  errorMessage?: ReactNode;
+  "aria-label"?: string;
+  name?: string;
+  autoFocus?: boolean;
+  form?: string;
+  validationBehavior?: "native" | "aria";
+
+  /* ── Visual ── */
+  size?: DatePickerSize;
+  appearance?: DatePickerAppearance;
+  /** Shorthand for isInvalid plus error styling. */
+  invalid?: boolean;
+  calendar?: CalendarSystem;
+  locale?: string;
+  className?: string;
+  ref?: Ref<HTMLDivElement>;
+}
+
+export const DateField = forwardRef<HTMLDivElement, DateFieldProps>(function DateField({
+  size = "md",
+  appearance = "soft",
+  invalid,
+  calendar,
+  locale,
+  label,
+  description,
+  errorMessage,
+  className,
+  ...props
+}, ref) {
+  const { locale: detectedLocale, direction } = useLocale();
+  const usedLocale = resolveLocale(locale ?? detectedLocale, calendar);
+  const state = useDateFieldState({
+    ...props,
+    isInvalid: invalid ?? props.isInvalid,
+    locale: usedLocale,
+    createCalendar,
+  });
+  const localRef = useRef<HTMLDivElement>(null);
+  const nativeInputRef = useRef<HTMLInputElement>(null);
+  const mergedRef = useComposedRefs(localRef, ref);
+  const { labelProps, fieldProps, inputProps, descriptionProps, errorMessageProps } =
+    useDateField({ ...props, inputRef: nativeInputRef, label, isInvalid: invalid ?? props.isInvalid }, state, localRef);
+
+  const isInvalid = invalid ?? state.isInvalid;
+
+  return (
+    <div
+      className={cn("vds-date-field", className)}
+      data-size={size}
+      data-appearance={appearance}
+      data-invalid={isInvalid ? "true" : undefined}
+      data-disabled={props.isDisabled ? "true" : undefined}
+      data-readonly={props.isReadOnly ? "true" : undefined}
+      data-dir={direction}
+    >
+      <input {...inputProps} ref={nativeInputRef} form={props.form} />
+      {label ? (
+        <span {...labelProps} className="vds-date-field-label">
+          {label}
+        </span>
+      ) : null}
+      <div
+        {...fieldProps}
+        ref={mergedRef}
+        className="vds-date-field-group"
+      >
+        {state.segments.map((segment, i) => (
+          <FieldSegment key={i} segment={segment} state={state} />
+        ))}
+      </div>
+      {description ? (
+        <span {...descriptionProps} className="vds-date-field-description">
+          {description}
+        </span>
+      ) : null}
+      <span
+        {...errorMessageProps}
+        role={isInvalid && errorMessage ? "alert" : undefined}
+        aria-hidden={isInvalid && errorMessage ? undefined : true}
+        data-visible={isInvalid && errorMessage ? "" : undefined}
+        data-empty={isInvalid && errorMessage ? undefined : ""}
+        className="vds-date-field-error"
+      >
+        <span className="vds-date-field-error-body">{errorMessage}</span>
+      </span>
+    </div>
+  );
+});
+
+/* ──────────────────────────────────────────────────────────── *
+ * FieldSegment — exported so DatePicker can reuse it
+ * ──────────────────────────────────────────────────────────── */
+
+interface FieldSegmentProps {
+  segment: DateSegment;
+  state: DateFieldState;
+}
+
+export function FieldSegment({ segment, state }: FieldSegmentProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { segmentProps } = useDateSegment(segment, state, ref);
+
+  return (
+    <div
+      {...segmentProps}
+      ref={ref}
+      className="vds-date-field-segment"
+      data-type={segment.type}
+      data-placeholder={segment.isPlaceholder ? "true" : undefined}
+    >
+      {padSegmentText(segment)}
+    </div>
+  );
+}
+
+interface StaticFieldSegmentsProps {
+  segments: DateSegment[];
+  className?: string;
+}
+
+export function StaticFieldSegments({ segments, className }: StaticFieldSegmentsProps) {
+  return (
+    <div className={cn("vds-static-field-segments", className)} aria-hidden="true">
+      {segments.map((segment, index) => (
+        <span
+          key={`${segment.type}-${index}`}
+          className="vds-static-field-segment"
+          data-type={segment.type}
+          data-placeholder={segment.isPlaceholder ? "true" : undefined}
+        >
+          {padSegmentText(segment)}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/** Pads single-digit numeric segments with a leading zero so the field
+ *  always reads "07/03/2026" rather than "7/3/2026". Placeholder segments
+ *  (the "dd" / "mm" / "hh" hints) are left untouched. */
+function padSegmentText(segment: DateSegment): string {
+  if (segment.isPlaceholder) return segment.text;
+  if (!PADDABLE_SEGMENT_TYPES.has(segment.type)) return segment.text;
+  if (segment.text.length === 1 && /^\d$/.test(segment.text)) {
+    return `0${segment.text}`;
+  }
+  return segment.text;
+}
+
+/** Re-exported so TimeField can apply the same zero-padding to its own
+ *  segments without duplicating the rule. */
+export const padTimeSegmentText = padSegmentText;
+
+const PADDABLE_SEGMENT_TYPES = new Set<DateSegment["type"]>([
+  "day",
+  "month",
+  "hour",
+  "minute",
+  "second",
+]);

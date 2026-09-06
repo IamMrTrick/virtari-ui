@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Semantic color contrast</title>
+<style>body{font:16px/1.5 sans-serif;padding:24px;background:var(--vds-color-bg);color:var(--vds-color-text)}pre{white-space:pre-wrap}section{padding:16px;margin-block:16px;background:var(--vds-color-bg);color:var(--vds-color-text)}.samples{display:flex;flex-wrap:wrap;gap:8px}.sample{padding:8px;max-width:250px}</style></head>
+<body><h1>Semantic color contrast</h1><p id="summary">Measuring…</p><pre id="failures"></pre><details><summary>All measured pairs</summary><pre id="results"></pre></details><main id="samples"></main>
+<script type="module">
+import '@virtari-packages/core';
+import '@virtari-packages/tokens';
+const themes=['light','dark','dark-oled'];
+const surfaces=['bg','bg-subtle','bg-muted','surface-container-low','surface-container','surface-container-high','surface-field','surface-overlay','surface-hover','surface-active','surface-selected'];
+const text=['text','text-muted','text-subtle','text-placeholder','text-link','text-link-hover','text-link-visited','on-surface-variant'];
+const intents=['primary','success','warning','danger','info','accent'];
+const pairs=surfaces.flatMap(bg=>text.map(fg=>[fg,bg]));
+for(const intent of intents){
+  for(const bg of [...surfaces,...['bg-subtle','bg','bg-hover','bg-active'].map(role=>`${intent}-${role}`)]){
+    pairs.push([`${intent}-text`,bg],[`${intent}-text-muted`,bg]);
+  }
+  for(const state of ['solid','solid-hover','solid-active']) pairs.push([`on-${intent}`,`${intent}-${state}`]);
+}
+pairs.push(['on-primary-container','primary-container'],['text-inverse','bg-inverse'],['text-inverse','surface-inverse']);
+const canvas=document.createElement('canvas');canvas.width=canvas.height=1;
+const ctx=canvas.getContext('2d',{willReadFrequently:true});
+function luminance(color){ctx.clearRect(0,0,1,1);ctx.fillStyle=color;ctx.fillRect(0,0,1,1);return [...ctx.getImageData(0,0,1,1).data].slice(0,3).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);}
+const results=[];
+for(const parent of themes){
+ const host=document.createElement('div');host.dataset.theme=parent;document.querySelector('#samples').append(host);
+ for(const theme of themes){
+  const scope=document.createElement('section');scope.dataset.theme=theme;host.append(scope);
+  const title=document.createElement('h2');title.textContent=`${theme} inside ${parent}`;scope.append(title);
+  const examples=document.createElement('div');examples.className='samples';scope.append(examples);
+  const probe=document.createElement('span');scope.append(probe);
+  for(const [fg,bg] of pairs){
+   probe.style.color=`var(--vds-color-${fg})`;probe.style.backgroundColor=`var(--vds-color-${bg})`;
+   const css=getComputedStyle(probe),a=luminance(css.color),b=luminance(css.backgroundColor),ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+   results.push(`${ratio>=4.5?'PASS':'FAIL'} ${theme} inside ${parent}: ${fg} / ${bg}: ${ratio.toFixed(2)}:1`);
+  }
+  probe.remove();
+  for(const intent of intents){const sample=document.createElement('span');sample.className='sample';sample.style.color=`var(--vds-color-${intent}-text-muted)`;sample.style.backgroundColor=`var(--vds-color-${intent}-bg-active)`;sample.textContent=`${intent}: secondary text / متن`;examples.append(sample);}
+ }
+}
+const failures=results.filter(line=>line.startsWith('FAIL'));
+document.querySelector('#summary').textContent=`${results.length-failures.length} passed; ${failures.length} failed. Ordinary text threshold: 4.5:1.`;
+document.querySelector('#failures').textContent=failures.join('\n');
+document.querySelector('#results').textContent=results.join('\n');
+</script></body></html>

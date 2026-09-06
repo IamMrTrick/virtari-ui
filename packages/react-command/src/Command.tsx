@@ -1,10 +1,8 @@
 import { forwardRef } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { Command as CommandPrimitive } from "cmdk";
-import { cn } from "@virtari-packages/utils";
-import { Kbd } from "@virtari-packages/react-kbd";
-
-import { formatCombo } from "./shortcut";
+import { cn, controlText } from "@virtari-packages/utils";
+import { KbdShortcut } from "@virtari-packages/react-kbd";
 
 /* ────────────────────────────────────────────────────────────
  * Root
@@ -104,7 +102,6 @@ export const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
     },
     ref,
   ) {
-    const shortcutParts = shortcut ? formatCombo(shortcut) : null;
     return (
       <CommandPrimitive.Item
         ref={ref}
@@ -116,15 +113,13 @@ export const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
             {leftSection}
           </span>
         ) : null}
-        <span className="vds-command-item-label">{children}</span>
+        <span className="vds-command-item-label">{controlText(children)}</span>
         {rightSection ? (
           <span className="vds-command-item-right">{rightSection}</span>
         ) : null}
-        {shortcutParts ? (
+        {shortcut ? (
           <span className="vds-command-item-shortcut" aria-hidden="true">
-            {shortcutParts.map((p, i) => (
-              <Kbd key={`${p}-${i}`}>{p}</Kbd>
-            ))}
+            <KbdShortcut combo={shortcut} />
           </span>
         ) : null}
       </CommandPrimitive.Item>

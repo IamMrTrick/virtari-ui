@@ -1,0 +1,5 @@
+@custom-media --vds-sm (width >= 640px);
+@custom-media --vds-md (width >= 768px);
+@custom-media --vds-lg (width >= 1024px);
+@custom-media --vds-xl (width >= 1280px);
+@custom-media --vds-2xl (width >= 1536px);

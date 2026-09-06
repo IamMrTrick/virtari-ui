@@ -1,0 +1,242 @@
+{
+  "packages": [
+    {
+      "id": "react-accordion",
+      "category": "overlays",
+      "description": "Single or multiple disclosure groups, semantic heading triggers, and a data-driven FAQ wrapper.",
+      "guidance": [
+        "Compose Accordion > AccordionItem(value) > AccordionTrigger + AccordionContent. Root type is required: single uses a string value; multiple uses string arrays. In single mode pass collapsible to allow all items to close.",
+        "Set root variant, size, color, iconType, iconPosition and headingLevel; triggers inherit indicator and heading settings and can override them individually. AccordionTrigger already renders a heading around its button; choose headingLevel to fit the document outline.",
+        "Variants are plain, bordered, separated, filled, ghost and contained; size is sm/md/lg. Keep component variants separate from the global surface style and radius policy.",
+        "FAQAccordion accepts items with stable id, question, rich answer and plain answerText; defaultOpen is an array even when allowMultiple is false. It is an uncontrolled convenience wrapper; use Accordion for controlled values.",
+        "FAQAccordion emits FAQPage JSON-LD by default. Set structuredData={false} when the host page already supplies it, or when answerText/question values are untrusted until script-safe serialization is implemented. JSON-LD output alone does not guarantee search rich results."
+      ],
+      "pitfalls": [
+        "Do not insert a second button inside AccordionTrigger; use its text and decorative content slots within the existing trigger button.",
+        "Do not invent controlled value/onValueChange props on FAQAccordion; these belong to the lower-level Accordion.",
+        "FAQAccordion currently injects JSON.stringify output directly into a script element. Strings containing a closing script tag require escaping; disabling structuredData avoids that output for untrusted content."
+      ],
+      "related": ["react-collapsible", "react-text", "react-icons"]
+    },
+    {
+      "id": "react-alert-dialog",
+      "category": "overlays",
+      "description": "Explicit confirmation dialog with alertdialog semantics, cancel-first focus and shared Dialog appearance.",
+      "guidance": [
+        "Compose AlertDialog, optional AlertDialogTrigger asChild, and AlertDialogContent containing Title, Description, Body and Footer as needed. Content already creates its portal and overlay.",
+        "Use AlertDialogAction asChild and AlertDialogCancel asChild around Virtari Button elements. These wrappers supply behavior without their own button appearance; Cancel is the primitive's initial focus target.",
+        "Import both @virtari-packages/react-dialog/styles and @virtari-packages/react-alert-dialog/styles. The alert package stylesheet is intentionally a no-op; appearance comes from the shared vds-dialog classes.",
+        "Content supports sm/md/lg/xl/full, animation, intent, backdrop, responsive and container. It defaults intent to destructive. For non-destructive confirmations choose the appropriate intent explicitly.",
+        "Root supports controlled open/onOpenChange. Outside interactions are prevented by the underlying alert primitive. Escape is not blocked by current implementation; if the workflow explicitly requires this, preventDefault in onEscapeKeyDown and provide an explicit Cancel action."
+      ],
+      "pitfalls": [
+        "Do not rely on the source header comment claiming Escape is disabled; the underlying primitive does not implement that default.",
+        "Do not add a second AlertDialogPortal/Overlay around AlertDialogContent, and do not pass Dialog-only showCloseButton or preventCloseOnOutsideClick props.",
+        "Do not present toast.confirm as a modal replacement for a decision that must block the workflow."
+      ],
+      "related": ["react-dialog", "react-button", "react-toast"]
+    },
+    {
+      "id": "react-collapsible",
+      "category": "overlays",
+      "description": "Minimal single disclosure with primitive open state, trigger semantics and animated content.",
+      "guidance": [
+        "Compose Collapsible > CollapsibleTrigger + CollapsibleContent. Use open/onOpenChange for controlled state or defaultOpen for an initial value.",
+        "CollapsibleTrigger is the primitive trigger; compose it asChild with one actual button to retain existing Virtari Button styling and avoid nested buttons.",
+        "CollapsibleContent forwards the primitive props and ref and only adds vds-collapsible-content. The stylesheet clips overflow and animates block size using --vds-collapsible-content-height and shared motion tokens.",
+        "Use Accordion when several related disclosures need item values and group keyboard navigation; Collapsible does not add that group model."
+      ],
+      "pitfalls": [
+        "No size, color, variant or heading API is added by this package; use composition rather than inventing unsupported props.",
+        "Account for overflow clipping when placing focus rings or floating content inside the animated content wrapper."
+      ],
+      "related": ["react-accordion", "react-button", "react-nav"]
+    },
+    {
+      "id": "react-dialog",
+      "category": "overlays",
+      "description": "Accessible modal or nonmodal dialog with internally portaled content, shared sections and explicit dismissal controls.",
+      "guidance": [
+        "Compose Dialog > DialogTrigger asChild and DialogContent. Content creates DialogPortal and DialogOverlay itself; place Header, Title, Description, Body and Footer inside it without a second portal/overlay pair.",
+        "Root is the dialog primitive and accepts open/defaultOpen/onOpenChange and modal. Preserve DialogTitle and meaningful DialogDescription; visually hide a title with the system screen-reader utility if necessary.",
+        "Use showCloseButton and closeButtonLabel for the built-in close icon, or DialogClose asChild around a Button for another closing action. Supply accessible labels in the application's language.",
+        "Content separates size sm/md/lg/xl/full, animation scale/fade/slide-up/slide-down/zoom/bounce/none, intent, backdrop and responsive. responsive enables full viewport treatment on narrow screens; container chooses the portal destination.",
+        "Use preventCloseOnOutsideClick and preventCloseOnEscape only when the workflow needs them. Consumer onEscapeKeyDown/onPointerDownOutside/onInteractOutside handlers run first and may prevent the default behavior.",
+        "Keep section padding on DialogHeader, DialogBody and DialogFooter. Content is a radius host; use system nested-surface guidance for cards within it rather than independent corner constants."
+      ],
+      "pitfalls": [
+        "Adding a DialogOverlay outside DialogContent duplicates the backdrop because Content owns an overlay already.",
+        "Replacing title/description primitives with visually similar plain text loses the primitive's accessible naming relationships.",
+        "Preventing all dismissal paths requires a visible, keyboard-accessible completion or cancel action."
+      ],
+      "related": ["react-alert-dialog", "react-drawer", "react-command", "react-button", "react-card"]
+    },
+    {
+      "id": "react-drawer",
+      "category": "overlays",
+      "description": "Edge drawer with named snap states, minimized stages, floating offsets and guarded pointer/touch dragging.",
+      "guidance": [
+        "Compose Drawer, DrawerTrigger asChild, DrawerContent, DrawerHandle, DrawerHeader/Title/Description, DrawerBody and DrawerFooter. DrawerContent already portals and renders DrawerOverlay; section components own their padding and DrawerBody supplies the tracked scroll region.",
+        "Drawer direction is top/bottom/left/right; horizontal docking and gestures mirror with computed RTL direction. sizeMode is adaptive/full/fixed; fixed size accepts pixels, a CSS length string, or a viewport-info callback.",
+        "Floating mode is selected with offset, not a float prop. A positive resolved offset sets data-floating and applies edge clearance and rounded corners. offset can be one declared size or a directional map.",
+        "Use either snapPoints or openStates with stable id and numeric size; named openStates take precedence. Snap values between zero and one are fractions of the measured drawer size; larger values are pixels. activeOpenState/onActiveOpenStateChange or activeSnapPoint/onActiveSnapPointChange control the chosen stage.",
+        "Root open/onOpenChange controls visibility independently of the active stage. minimizedState/minimizedSize adds a minimized stage that becomes nonmodal. snapBehavior defaults to staged; closest selects the other supported snapping policy.",
+        "stretch defaults true and extends the anchored size on overdrag without scaling child content. scaleBackground is a separate opt-in effect and defaults false. Preserve the library transform/drag lifecycle rather than layering a consumer scale animation on the same content node.",
+        "Use dragHandleOnly for restricted dragging and data-vds-drawer-no-drag on custom interactive surfaces. Keep a DrawerHandle mounted when dragHandleOnly is enabled. Existing handlers end mouse/pointer sessions on release, pointer cancellation/lost capture, blur, or a move with no primary button pressed.",
+        "preventAutoFocus defaults true: the content receives initial focus instead of an input, avoiding automatic keyboard opening. Set false for primitive autofocus, or use Content onOpenAutoFocus to implement a deliberate focus target. dismissible=false prevents built-in close requests, Escape and outside dismissal."
+      ],
+      "pitfalls": [
+        "DrawerHandle is aria-hidden visual drag affordance, not a keyboard slider. Provide explicit reachable controls for state changes needed without dragging.",
+        "Do not interpret a snap fraction as a viewport percentage: it is relative to the measured drawer size.",
+        "Do not overwrite the content transform or spread custom pointer handlers that bypass the composed lifecycle; this can reintroduce stuck dragging or unanchored scaling.",
+        "With dismissible=false, a DrawerClose request is blocked by the same root guard; a controlled owner must deliberately change open when its workflow completes."
+      ],
+      "related": ["react-dialog", "react-button", "react-scroll-area", "react-form"]
+    },
+    {
+      "id": "react-dropdown-menu",
+      "category": "overlays",
+      "description": "Portaled action menu with primitive keyboard navigation, item selection and direction-aware placement.",
+      "guidance": [
+        "Compose DropdownMenu > DropdownMenuTrigger asChild + DropdownMenuContent containing DropdownMenuItem, Group, Label and Separator. Content creates its own portal and defaults sideOffset to 4.",
+        "Use item onSelect for actions so keyboard activation follows the same path as pointer activation. Preserve the primitive's disabled and focus behavior rather than replacing menu items with unrelated clickable divs.",
+        "Root forwards open/defaultOpen/onOpenChange and modal to the underlying primitive; explicit dir takes precedence over the auto document direction supplied through DirectionProvider.",
+        "Use DropdownMenuLabel for noninteractive section labels and Separator between action groups. Provide a named trigger and use asChild when the trigger is already a Virtari Button."
+      ],
+      "pitfalls": [
+        "The public package exports only Root, Trigger, Content, Item, Separator, Label and Group. It does not export checkbox/radio menu items or submenu wrappers; do not invent shadcn-style Sub or CheckboxItem imports.",
+        "Content owns the portal; do not import a nonexistent DropdownMenuPortal wrapper from this package.",
+        "A menu is an action collection; use Select for a form value and Popover for arbitrary interactive content."
+      ],
+      "related": ["react-button", "react-select", "react-popover", "react-command"]
+    },
+    {
+      "id": "react-popover",
+      "category": "overlays",
+      "description": "Anchored interactive surface with primitive focus/dismissal behavior and bounded content width.",
+      "guidance": [
+        "Compose Popover > PopoverTrigger asChild + PopoverContent; PopoverClose and PopoverAnchor are also exported. Content already supplies the portal.",
+        "Content size sets a maximum width, not a fixed width: sm 16rem, md 20rem, lg 24rem, xl 32rem. Defaults are size md, sideOffset 4 and align center.",
+        "Root accepts primitive controlled or uncontrolled open state and modal behavior; dir explicitly overrides the document direction passed into the primitive DirectionProvider.",
+        "Use primitive content positioning and interaction callbacks for placement/focus control. Name the trigger and ensure interactive content has a clear dismissal path."
+      ],
+      "pitfalls": [
+        "Popover has no exported PopoverPortal or PopoverArrow wrapper. Do not generate unavailable imports by analogy with another library.",
+        "Do not use Tooltip for content containing actions or form fields; Popover is the interactive surface available here.",
+        "Portal content can leave a locally themed DOM ancestor; verify its theme in the actual portal location instead of assuming all local CSS variables travel with React context."
+      ],
+      "related": ["react-tooltip", "react-dialog", "react-button", "react-form"]
+    },
+    {
+      "id": "react-tooltip",
+      "category": "overlays",
+      "description": "Provider-scoped supplemental labels with portaled placement, color variants and an optional arrow.",
+      "guidance": [
+        "Wrap the relevant subtree in TooltipProvider, then compose Tooltip > TooltipTrigger asChild + TooltipContent. The provider defaults delayDuration to 300 and skipDelayDuration to 200 milliseconds.",
+        "TooltipContent already portals, defaults sideOffset to 6 and collisionPadding to 8, and accepts size sm/md/lg plus variant default/inverted/info/success/warning/danger.",
+        "Set arrow={true} for the built-in arrow; TooltipArrow is also exported for deliberate manual composition. Do not render both arrow mechanisms simultaneously.",
+        "Pass provider dir when an explicit direction is needed; otherwise document direction is forwarded through DirectionProvider. Keep trigger accessible naming independent of whether the tooltip is currently visible."
+      ],
+      "pitfalls": [
+        "Do not put essential instructions, actions or form fields only in a tooltip. It is supplemental content and has no interactive dialog structure.",
+        "TooltipTrigger asChild needs one focusable trigger. A natively disabled button cannot receive keyboard focus; retain a separately accessible explanation when disabled-state information is needed.",
+        "No TooltipPortal wrapper is exported; TooltipContent owns that concern."
+      ],
+      "related": ["react-popover", "react-button", "react-kbd"]
+    },
+    {
+      "id": "react-command",
+      "category": "overlays",
+      "description": "cmdk-based searchable command collection with optional controlled dialog and platform-aware shortcut hints.",
+      "guidance": [
+        "Compose CommandRoot with CommandInput and CommandList; put CommandGroup, CommandItem, CommandEmpty and optional Loading/Separator inside. Equivalent namespaced exports are Command.Root/Input/List/Group/Item/Empty/Loading/Separator.",
+        "CommandDialog is controlled: provide open and onOpenChange. It adds CommandRoot internally, so put Input/List children directly inside the dialog rather than nesting another Root.",
+        "No global hotkey is bound by default. Opt in with hotkey='mod+k' (or a string array); this toggle is allowed while an input is focused. Match any displayed key hint with the actual binding.",
+        "CommandItem shortcut is display-only, rendered by KbdShortcut for the current platform. Bind the real action with the exported useHotkey if a global keyboard action is intended; use item onSelect for palette activation.",
+        "Use item leftSection/rightSection for aligned supporting content. leftSection is aria-hidden, so put the action's accessible text in children. Native cmdk value/filter/shouldFilter and input value/onValueChange behavior are inherited rather than replaced.",
+        "CommandDialog supplies a hidden accessible title by default and restores focus to the actual opener on close. Consumer autofocus handlers can prevent its restoration. Its default md width is the command-specific 40rem ceiling; other sizes use the Dialog ramp.",
+        "Import react-command/styles plus react-dialog/styles for CommandDialog and react-kbd/styles for shortcut badges; component CSS is not auto-imported by JavaScript."
+      ],
+      "pitfalls": [
+        "A shortcut label does not register a handler; avoid duplicate bindings between CommandDialog hotkey and a separate useHotkey for the same toggle.",
+        "DialogContent owns the portal and backdrop used by CommandDialog. Do not add a second DialogPortal or DialogOverlay around it.",
+        "Command is the namespaced object, not a JSX root component. Use Command.Root or CommandRoot."
+      ],
+      "related": ["react-dialog", "react-kbd", "react-icons", "utils"]
+    },
+    {
+      "id": "react-toast",
+      "category": "overlays",
+      "description": "Shared-store notifications with one Toaster renderer, action helpers, promise states and low-level toast primitives.",
+      "guidance": [
+        "Mount one Toaster at the application shell and import react-toast/styles. Call toast({title, description, type, ...options}) or toast.success/error/warning/info/message(title, description?, options?). The named helpers take description as the second argument and options as the third.",
+        "Retain returned IDs to dismiss or update a particular notification. toast.dismiss() with no ID removes all notifications; toastStore.update(id, patch) changes an existing one.",
+        "toast.loading defaults duration to zero. toast.promise accepts a Promise or promise factory plus loading/success/error messages, updates the same notification, and returns a Promise that still rejects on failure; handle that rejection in application logic.",
+        "Use action/actions, toast.withAction/withActions, undo or confirm for explicit notification actions. Action configuration supports label, onClick, variant and closeOnClick. Keep meaningful visible text in action labels.",
+        "Toaster defaults position top-right, duration 4000ms, visibleToasts 3 and F8 viewport hotkey. Set label and closeLabel for localization. timerMode is parallel/sequential; pauseMode is hover/press, with hover also pausing for focus according to the documented API.",
+        "Choose either the high-level shared Toaster/store path or compose ToastProvider, ToastViewport, ToastRoot, Title, Description, Action and Close for a custom low-level flow. These are distinct state/composition paths."
+      ],
+      "pitfalls": [
+        "Multiple Toaster instances share one global store and modify its duration/cap settings; they do not create independent notification channels.",
+        "toast.confirm is a notification action helper and does not provide AlertDialog focus trapping or blocking confirmation semantics.",
+        "The current Toaster listens globally for Escape and dismisses the latest dismissible toast. Test coexistence with an open dialog so the same Escape does not unexpectedly dismiss unrelated UI."
+      ],
+      "related": ["react-alert", "react-alert-dialog", "react-button", "react-spinner"]
+    },
+    {
+      "id": "react-button",
+      "category": "actions",
+      "description": "Intent/appearance-separated action button with shared size roles, aligned slots, loading state and polymorphic composition.",
+      "guidance": [
+        "Import Button from @virtari-packages/react-button and its /styles once. color chooses intent (primary/success/warning/danger/info/accent/contrast); variant chooses solid/outline/ghost/soft/link. Default is primary solid md.",
+        "Use leftSection and rightSection for supporting icons or elements and children for the label. The component creates aligned content, label and section wrappers; avoid consumer vertical offsets that fight the shared geometry.",
+        "Use iconOnly plus aria-label for opaque custom icon components when auto-detection is insufficient. An icon-only shape is not an accessible name; name every icon action.",
+        "Set type='button' for non-submit actions inside forms and type='submit' for the actual submit action. Button forwards native attributes and does not supply a default type.",
+        "loading disables interaction, adds a spinner, sets busy state and emits a polite loading status. Supply loadingText in the application language. Preserve the visible label to retain stable button geometry.",
+        "Use asChild with one element such as an anchor for navigation while retaining button appearance. Disabled/loading slotted children get aria-disabled, blocked click capture, and are removed from tab order; a slotted native button also receives disabled.",
+        "Size is 2xs/xs/sm/md/lg/xl/2xl/3xl. Choose touch-appropriate control sizes deliberately; do not infer all platform target-size compliance solely from a token name. effect and animation require additional /styles/effects and /styles/animations imports."
+      ],
+      "pitfalls": [
+        "variant='destructive' is a deprecated compatibility alias for solid plus danger; use color='danger' and an explicit variant in new code.",
+        "Do not put a button inside a Button or use asChild with multiple siblings; use a single semantic root.",
+        "A loading Button renders a sibling screen-reader status node. Account for that when using a parent layout that assumes every direct child is a visual control."
+      ],
+      "related": ["react-button-group", "react-icons", "react-form", "react-tooltip"]
+    },
+    {
+      "id": "react-button-group",
+      "category": "actions",
+      "description": "Shared-context row or column of buttons with optional attached corners and equal-width layout.",
+      "guidance": [
+        "Compose ButtonGroup with Button children and import both react-button/styles and react-button-group/styles. The group is layout-only; buttons retain their own visual tokens and interaction semantics.",
+        "Group color, variant, size and disabled values provide defaults to descendant Buttons. A child's explicit prop wins, including disabled={false}; group disabled is inheritance rather than a non-overridable fieldset lock.",
+        "orientation is horizontal by default or vertical. attached removes the gap, collapses inner corner radii and joins borders; fullWidth stretches children to equal flex shares.",
+        "The wrapper renders role='group'. Supply aria-label or aria-labelledby when users need a group name, and use ordinary Button labels for each action.",
+        "Use SegmentedControl or Tabs for a single selected value/panel relationship. ButtonGroup has no selected value, roving focus or tab semantics."
+      ],
+      "pitfalls": [
+        "Do not model attached actions as tabs just because their corners visually join.",
+        "Do not assume disabled on the group creates native disabled containment; individual child overrides remain possible.",
+        "Avoid manual corner values on inner buttons; attached geometry relies on the shared group and button radius roles."
+      ],
+      "related": ["react-button", "react-segmented-control", "react-tabs"]
+    },
+    {
+      "id": "react-copy-button",
+      "category": "actions",
+      "description": "Clipboard action with native button semantics, built-in icons and a temporary copied label.",
+      "guidance": [
+        "Import CopyButton from @virtari-packages/react-copy-button and its /styles. Pass required text; optional label renders beside the icon and copiedLabel replaces it during success feedback.",
+        "Use copyButtonSize, not size: supported values are 2xs/xs/sm/md/lg. variant is ghost/outline/soft and defaults ghost; feedbackMs defaults 2000 milliseconds.",
+        "The component defaults type='button', forwards its native ref and supports an explicit native type. Localize label, copyLabel, copiedLabel and errorLabel; success/failure feedback is announced in a status region.",
+        "Clipboard copying uses navigator.clipboard.writeText and requires an available, permitted Clipboard API environment. Success feedback is set only after the write succeeds."
+      ],
+      "pitfalls": [
+        "A consumer onClick runs before copying; preventDefault cancels the clipboard action. Use onCopied and onCopyError to observe the actual result rather than assuming onClick means success.",
+        "Clipboard access depends on the host browser and permissions. Failure uses errorLabel; do not claim guaranteed copying. Empty strings are valid clipboard content.",
+        "Changing text or unmounting invalidates pending feedback and callbacks. A stale asynchronous write may still finish in the browser, but it cannot update the new button state."
+      ],
+      "related": ["react-button", "react-code", "react-toast"]
+    }
+  ]
+}

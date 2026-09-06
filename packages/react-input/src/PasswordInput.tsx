@@ -7,7 +7,6 @@ import {
 } from "@virtari-packages/react-icons";
 import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
 import {
-  useCallback,
   useEffect,
   useId,
   useMemo,
@@ -265,7 +264,6 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(fu
     if (!isRevealedControlled) setInternalRevealed(next);
     onRevealedChange?.(next);
     setPwAnim(next ? "reveal" : "hide");
-    requestAnimationFrame(() => localRef.current?.focus());
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

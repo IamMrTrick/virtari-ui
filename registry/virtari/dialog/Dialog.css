@@ -1,0 +1,422 @@
+@import "./Dialog.tokens.css";
+
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Overlay — full-viewport backdrop
+   * ───────────────────────────────────────────── */
+  .vds-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--vds-z-overlay, 1300);
+    background-color: var(--dialog-overlay-bg);
+    backdrop-filter: blur(var(--dialog-overlay-blur));
+    -webkit-backdrop-filter: blur(var(--dialog-overlay-blur));
+    animation: vds-dialog-fade-in var(--dialog-overlay-enter-duration) var(--dialog-overlay-enter-ease);
+
+    &[data-state="closed"] {
+      animation: vds-dialog-fade-out var(--dialog-overlay-exit-duration) var(--dialog-overlay-exit-ease);
+    }
+  }
+
+  .vds-dialog-overlay[data-backdrop="none"] {
+    pointer-events: none;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Content — centered modal surface
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content {
+    position: fixed;
+    z-index: var(--vds-z-modal, 1400);
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    translate: -50% -50%;
+
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    /* `inline-size` is what actually sizes the surface. Without it the
+       fixed-position box is shrink-to-fit and every `data-size` collapses
+       to the same content-driven width. */
+    inline-size: var(--dialog-width);
+    max-inline-size: var(--dialog-max-width);
+    max-block-size: var(--dialog-max-height);
+
+    background-color: var(--dialog-surface);
+    border: var(--dialog-border-width) solid var(--dialog-border-color);
+    border-radius: var(--dialog-radius);
+    box-shadow: var(--dialog-shadow);
+
+    overflow: hidden;
+    container-type: inline-size;
+
+    /*
+     * Concentricity host (packages/tokens/src/radii/nesting.css).
+     * A surface that fills the dialog edge to edge — the command palette,
+     * a full-bleed media band, a sticky sub-header — reads
+     * --vds-radius-flush and lands parallel to the dialog corner instead
+     * of relying on the overflow clip. All three are declared, including
+     * the zero: a host that omits one inherits it from an outer host and
+     * subtracts the wrong distance.
+     *
+     * -p is 0 because the slot layout puts the inline padding on the
+     * slots, not on this box. The simple (slot-less) layout below, which
+     * does pad this box, overrides it.
+     */
+    --vds-radius-host-r: var(--dialog-radius);
+    --vds-radius-host-b: var(--dialog-border-width);
+    --vds-radius-host-p: 0px;
+
+    animation: var(--dialog-enter-animation) var(--dialog-enter-duration) var(--dialog-enter-ease);
+
+    &[data-state="closed"] {
+      animation: var(--dialog-exit-animation) var(--dialog-exit-duration) var(--dialog-exit-ease);
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  /* Full-screen anchoring */
+  .vds-dialog-content[data-size="full"] {
+    inset: 0;
+    translate: 0 0;
+  }
+
+  @media (max-width: 40rem) {
+    .vds-dialog-content[data-responsive] {
+      inset: 0;
+      translate: 0 0;
+    }
+  }
+
+  /* Intent accent — colored strip along the top edge */
+  .vds-dialog-content::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: var(--dialog-intent-accent-height);
+    background-color: var(--dialog-intent-accent-color);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Simple layout — when neither Header nor Body
+   * is used, apply padding + gap directly to the
+   * flex children so the quick-start markup
+   * (just Title/Description/Footer) still has
+   * comfortable spacing.
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content:not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body)) {
+    gap: var(--dialog-gap);
+    padding-block: var(--dialog-padding-block);
+    padding-inline: var(--dialog-padding-inline);
+
+    /* Here the padding really is on this box, so a direct child is inset
+       by it. */
+    --vds-radius-host-p: var(--dialog-padding-inline);
+  }
+
+  /* In that quick-start markup the content box already carries the padding,
+     so a lone Footer must not add its own on top of it. */
+  .vds-dialog-content:not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body))
+    > .vds-dialog-footer {
+    padding-block: 0;
+    padding-inline: 0;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Slot geometry — the container owns the edges
+   * and the seams.
+   *
+   * A slot never zeroes its own leading edge. Each
+   * slot ships with no block padding at all; the
+   * content box assigns the leading edge to the
+   * first slot, the trailing edge to the last, and
+   * one named gap (--dialog-slot-gap) between any
+   * two adjacent slots. A slot that draws its own
+   * boundary (bordered header, dividing footer)
+   * additionally pads the inside of that boundary,
+   * so the rule never sits flush against text.
+   *
+   * The close icon renders after the slots, so the
+   * first/last selectors match on slot siblings
+   * rather than :first-child / :last-child.
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer) {
+    padding-inline: var(--dialog-padding-inline);
+    padding-block: 0;
+  }
+
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer):not(
+      :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer) ~ *
+    ) {
+    padding-block-start: var(--dialog-padding-block);
+  }
+
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer):not(
+      :has(~ :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer))
+    ) {
+    padding-block-end: var(--dialog-padding-block);
+  }
+
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer)
+    + :where(.vds-dialog-header, .vds-dialog-body, .vds-dialog-footer) {
+    padding-block-start: var(--dialog-slot-gap);
+  }
+
+  /* Slots that precede a divider pad the inside of it. */
+  .vds-dialog-content
+    > :where(.vds-dialog-header, .vds-dialog-body):has(+ .vds-dialog-footer) {
+    padding-block-end: var(--dialog-slot-gap);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Header — sticky top section
+   * ───────────────────────────────────────────── */
+  .vds-dialog-header {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--dialog-header-gap);
+  }
+
+  .vds-dialog-header[data-variant="bordered"] {
+    border-block-end: var(--dialog-section-border);
+  }
+
+  .vds-dialog-content
+    > .vds-dialog-header[data-variant="bordered"]:has(
+      ~ :where(.vds-dialog-body, .vds-dialog-footer)
+    ) {
+    padding-block-end: var(--dialog-slot-gap);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Body — scrollable main region
+   * ───────────────────────────────────────────── */
+  .vds-dialog-body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    color: var(--vds-color-text, #111827);
+    font-size: var(--dialog-description-font-size);
+    line-height: var(--dialog-description-line-height);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Footer — sticky actions area
+   * ───────────────────────────────────────────── */
+  .vds-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--dialog-footer-gap);
+  }
+
+  .vds-dialog-body + .vds-dialog-footer,
+  .vds-dialog-header + .vds-dialog-footer {
+    border-block-start: var(--dialog-section-border);
+  }
+
+  @container (inline-size < 20rem) {
+    .vds-dialog-footer {
+      flex-direction: column-reverse;
+
+      & > * {
+        inline-size: 100%;
+      }
+    }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Title & Description typography
+   * ───────────────────────────────────────────── */
+  .vds-dialog-title {
+    margin: 0;
+    font-family: var(--dialog-title-font-family);
+    font-size: var(--dialog-title-font-size);
+    font-weight: var(--dialog-title-font-weight);
+    line-height: var(--dialog-title-line-height);
+    color: var(--dialog-title-color);
+  }
+
+  .vds-dialog-description {
+    margin: 0;
+    font-size: var(--dialog-description-font-size);
+    line-height: var(--dialog-description-line-height);
+    color: var(--dialog-description-color);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Close icon — absolute-positioned X button
+   * ───────────────────────────────────────────── */
+  .vds-dialog-close-icon {
+    position: absolute;
+    inset-block-start: var(--dialog-close-inset);
+    inset-inline-end: var(--dialog-close-inset);
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    inline-size: var(--dialog-close-size);
+    block-size: var(--dialog-close-size);
+    padding: 0;
+
+    background: transparent;
+    color: var(--dialog-close-color);
+    border: 0;
+    border-radius: var(--dialog-close-radius);
+    cursor: pointer;
+
+    transition:
+      background-color var(--vds-duration-fast, 100ms) var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      color var(--vds-duration-fast, 100ms) var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-dialog-close-icon:hover {
+    background-color: var(--dialog-close-bg-hover);
+    color: var(--dialog-close-color-hover);
+  }
+
+  .vds-dialog-close-icon:active {
+    background-color: var(--dialog-close-bg-active);
+  }
+
+  .vds-dialog-close-icon:focus-visible {
+    outline: var(--dialog-focus-ring-width) solid var(--dialog-focus-ring-color);
+    outline-offset: var(--dialog-focus-ring-offset);
+  }
+
+  .vds-dialog-close-icon > svg {
+    inline-size: var(--dialog-close-icon-size);
+    block-size: var(--dialog-close-icon-size);
+  }
+
+  /* When a close icon is rendered, pad the header (or simple content)
+     so the title never collides with it. */
+  .vds-dialog-content:has(> .vds-dialog-close-icon) .vds-dialog-header,
+  .vds-dialog-content:has(> .vds-dialog-close-icon):not(:has(> .vds-dialog-header)):not(:has(> .vds-dialog-body)) {
+    padding-inline-end: calc(
+      var(--dialog-close-inset) + var(--dialog-close-size) +
+        var(--vds-cluster-gap, var(--vds-space-2, 0.5rem))
+    );
+  }
+
+  /* ─────────────────────────────────────────────
+   * Keyframes — local to Dialog. motion.css
+   * keyframes use `translate: x y` that would
+   * conflict with our -50% -50% centering, so we
+   * define dialog-specific variants that animate
+   * around the centered transform.
+   * ───────────────────────────────────────────── */
+
+  /* Scale */
+  @keyframes vds-dialog-scale-in {
+    from { opacity: 0; scale: 0.95; }
+    to   { opacity: 1; scale: 1; }
+  }
+  @keyframes vds-dialog-scale-out {
+    from { opacity: 1; scale: 1; }
+    to   { opacity: 0; scale: 0.95; }
+  }
+
+  /* Fade */
+  @keyframes vds-dialog-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes vds-dialog-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  /* Slide — up = enters from bottom edge */
+  @keyframes vds-dialog-slide-in-up {
+    from { opacity: 0; translate: -50% calc(-50% + 1.5rem); }
+    to   { opacity: 1; translate: -50% -50%; }
+  }
+  @keyframes vds-dialog-slide-out-down {
+    from { opacity: 1; translate: -50% -50%; }
+    to   { opacity: 0; translate: -50% calc(-50% + 1.5rem); }
+  }
+
+  /* Slide — down = enters from top edge */
+  @keyframes vds-dialog-slide-in-down {
+    from { opacity: 0; translate: -50% calc(-50% - 1.5rem); }
+    to   { opacity: 1; translate: -50% -50%; }
+  }
+  @keyframes vds-dialog-slide-out-up {
+    from { opacity: 1; translate: -50% -50%; }
+    to   { opacity: 0; translate: -50% calc(-50% - 1.5rem); }
+  }
+
+  /* Zoom — larger motion than scale */
+  @keyframes vds-dialog-zoom-in {
+    from { opacity: 0; scale: 0.8; }
+    to   { opacity: 1; scale: 1; }
+  }
+  @keyframes vds-dialog-zoom-out {
+    from { opacity: 1; scale: 1; }
+    to   { opacity: 0; scale: 0.8; }
+  }
+
+  /* Bounce — enter overshoots past 1, exit overshoots past 1 briefly
+     then collapses. Pure reverse of the entry motion. */
+  @keyframes vds-dialog-bounce-in {
+    0%   { opacity: 0; scale: 0.3; }
+    60%  { opacity: 1; scale: 1.05; }
+    100% { opacity: 1; scale: 1; }
+  }
+  @keyframes vds-dialog-bounce-out {
+    0%   { opacity: 1; scale: 1; }
+    40%  { opacity: 1; scale: 1.05; }
+    100% { opacity: 0; scale: 0.3; }
+  }
+
+  /* ─────────────────────────────────────────────
+   * Full-screen / responsive anchoring uses
+   * translate: 0 0, so slide keyframes (which
+   * assume -50% center) would drift. Force fade
+   * for those variants.
+   * ───────────────────────────────────────────── */
+  .vds-dialog-content[data-size="full"] {
+    animation-name: vds-dialog-fade-in;
+  }
+  .vds-dialog-content[data-size="full"][data-state="closed"] {
+    animation-name: vds-dialog-fade-out;
+  }
+
+  @media (max-width: 40rem) {
+    .vds-dialog-content[data-responsive] {
+      animation-name: vds-dialog-slide-in-up-full;
+    }
+    .vds-dialog-content[data-responsive][data-state="closed"] {
+      animation-name: vds-dialog-slide-out-down-full;
+    }
+  }
+
+  /* Full-anchored slide variants for responsive mode: drawer-like
+     entry from the bottom of the viewport. */
+  @keyframes vds-dialog-slide-in-up-full {
+    from { opacity: 0; translate: 0 1rem; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+  @keyframes vds-dialog-slide-out-down-full {
+    from { opacity: 1; translate: 0 0; }
+    to   { opacity: 0; translate: 0 1rem; }
+  }
+}

@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   Badge,
@@ -14,6 +15,8 @@ import {
   SelectItem,
 } from "@virtari-packages/react-select";
 import { Switch } from "@virtari-packages/react-switch";
+import { Input } from "@virtari-packages/react-input";
+import { Button } from "@virtari-packages/react-button";
 import {
   Row as LayoutRow,
   Stack as LayoutStack,
@@ -124,7 +127,7 @@ function Caption({ children }: { children: React.ReactNode }) {
 
 function Th({ children }: { children: React.ReactNode }) {
   return (
-    <th style={{ padding: "var(--vds-space-2) var(--vds-space-3)", fontWeight: "var(--vds-font-weight-medium)" }}>
+    <th scope="col" style={{ padding: "var(--vds-space-2) var(--vds-space-3)", fontWeight: "var(--vds-font-weight-medium)" }}>
       {children}
     </th>
   );
@@ -160,10 +163,10 @@ const SIZES: BadgeSize[] = ["xs", "sm", "md", "lg"];
 const SHAPES: BadgeShape[] = ["pill", "square"];
 
 const SIZE_SPEC: Record<BadgeSize, { height: string; font: string; hint: string }> = {
-  xs: { height: "18px", font: "10px",   hint: "Table cells, dense metadata, inline markers." },
-  sm: { height: "20px", font: "11px",   hint: "Nav counters, form hints." },
-  md: { height: "22px", font: "12px",   hint: "Default — body-level status chips." },
-  lg: { height: "26px", font: "14px",   hint: "Prominent labels, hero metadata." },
+  xs: { height: "20px", font: "10px",   hint: "Table cells, dense metadata, inline markers." },
+  sm: { height: "20px", font: "12px",   hint: "Nav counters, form hints." },
+  md: { height: "24px", font: "12px",   hint: "Default — body-level status chips." },
+  lg: { height: "28px", font: "14px",   hint: "Prominent labels, hero metadata." },
 };
 
 function colorHint(c: BadgeColor): string {
@@ -204,6 +207,7 @@ export function BadgePage() {
       <RemovableSection />
       <InteractiveSection />
       <AsChildSection />
+      <LongLabelSection />
       <CompositionSection />
       <ApiSection />
       <AccessibilitySection />
@@ -277,27 +281,18 @@ function PlaygroundSection() {
         </Field>
 
         <Field label="Label">
-          <input
+          <Input
             type="text"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            style={{
-              font: "inherit",
-              height: "var(--vds-size-md)",
-              padding: "0 var(--vds-space-3)",
-              borderRadius: "var(--vds-radius-element)",
-              border: "1px solid var(--vds-color-border)",
-              background: "var(--vds-color-bg)",
-              color: "var(--vds-color-text)",
-            }}
           />
         </Field>
 
         <LayoutStack gap="sm">
           <SwitchRow title="Dot" checked={dot} onCheckedChange={setDot} />
           <SwitchRow title="Left icon" hint="Ignored when dot is on" checked={leftIcon} onCheckedChange={setLeftIcon} />
-          <SwitchRow title="Removable" checked={removable} onCheckedChange={setRemovable} />
-          <SwitchRow title="Interactive" hint="Clickable chip" checked={interactive} onCheckedChange={setInteractive} />
+          <SwitchRow title="Removable" checked={removable} onCheckedChange={(value) => { setRemovable(value); if (value) setInteractive(false); }} />
+          <SwitchRow title="Interactive" hint="Native button; separate from removal" checked={interactive} onCheckedChange={(value) => { setInteractive(value); if (value) setRemovable(false); }} />
         </LayoutStack>
       </LayoutRow>
 
@@ -320,9 +315,10 @@ function PlaygroundSection() {
           dot={dot}
           leftSection={!dot && leftIcon ? <IconStar {...DEMO_ICON} /> : undefined}
           onRemove={removable ? () => toast.info("Removed") : undefined}
-          onClick={interactive ? () => toast.info(`Clicked ${label}`) : undefined}
+          removeLabel={`Remove ${label || "badge"}`}
+          asChild={interactive}
         >
-          {label || "\u00A0"}
+          {interactive ? <button type="button" onClick={() => toast.info(`Clicked ${label}`)}>{label || "Badge"}</button> : label || "\u00A0"}
         </Badge>
       </div>
     </Section>
@@ -346,11 +342,11 @@ function VariantsSection() {
         ))}
       </Grid>
 
-      <pre className="docs-code">{`<Badge variant="soft">Default</Badge>
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Badge variant="soft">Default</Badge>
 <Badge variant="solid">Emphasis</Badge>
 <Badge variant="outline">Bordered</Badge>
 <Badge variant="subtle">Quiet</Badge>
-<Badge variant="soft-outline">Chip</Badge>`}</pre>
+<Badge variant="soft-outline">Chip</Badge>`} />
     </Section>
   );
 }
@@ -372,13 +368,13 @@ function ColorsSection() {
         ))}
       </Grid>
 
-      <pre className="docs-code">{`<Badge color="primary">Featured</Badge>
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Badge color="primary">Featured</Badge>
 <Badge color="success">Active</Badge>
 <Badge color="warning">Review</Badge>
 <Badge color="danger">Blocked</Badge>
 <Badge color="info">Beta</Badge>
 <Badge color="accent">New</Badge>
-<Badge color="neutral">Draft</Badge>`}</pre>
+<Badge color="neutral">Draft</Badge>`} />
     </Section>
   );
 }
@@ -387,7 +383,7 @@ function ColorMatrixSection() {
   return (
     <Section
       title="Color × Variant matrix"
-      description="Every color supports every variant. Scan this grid in both themes to verify contrast."
+      description="Every color supports every variant. Compare light, dark and OLED themes on your chosen surface."
     >
       <div
         style={{
@@ -404,7 +400,7 @@ function ColorMatrixSection() {
           }}
         >
           <thead>
-            <tr style={{ background: "var(--vds-color-bg-subtle)", textAlign: "left" }}>
+            <tr style={{ background: "var(--vds-color-bg-subtle)", textAlign: "start" }}>
               <Th>Color</Th>
               {VARIANTS.map((v) => <Th key={v}>{v}</Th>)}
             </tr>
@@ -412,7 +408,7 @@ function ColorMatrixSection() {
           <tbody>
             {COLORS.map((c) => (
               <tr key={c} style={{ borderTop: "1px solid var(--vds-color-border-muted)" }}>
-                <Td><code>{c}</code></Td>
+                <Td><VirtariInlineCode>{c}</VirtariInlineCode></Td>
                 {VARIANTS.map((v) => (
                   <Td key={v}>
                     <Badge color={c} variant={v}>Label</Badge>
@@ -431,7 +427,7 @@ function SizesSection() {
   return (
     <Section
       title="Sizes"
-      description="Four size presets from 18px (xs) to 26px (lg). md is the default at 22px — reads well inline next to body text (14–16px)."
+      description="Four size presets with minimum heights from 20px (xs) to 28px (lg). md defaults to 24px. Long labels grow vertically; compact sizes are intended for metadata, so choose comfortable targets for actions."
     >
       <Row>
         {SIZES.map((s) => (
@@ -464,9 +460,9 @@ function SizesSection() {
           }}
         >
           <thead>
-            <tr style={{ background: "var(--vds-color-bg-subtle)", textAlign: "left" }}>
+            <tr style={{ background: "var(--vds-color-bg-subtle)", textAlign: "start" }}>
               <Th>Size</Th>
-              <Th>Height</Th>
+              <Th>Minimum height</Th>
               <Th>Font size</Th>
               <Th>When to use</Th>
             </tr>
@@ -476,7 +472,7 @@ function SizesSection() {
               const spec = SIZE_SPEC[s];
               return (
                 <tr key={s} style={{ borderTop: "1px solid var(--vds-color-border-muted)" }}>
-                  <Td><code>{s}</code></Td>
+                  <Td><VirtariInlineCode>{s}</VirtariInlineCode></Td>
                   <Td>{spec.height}</Td>
                   <Td>{spec.font}</Td>
                   <Td style={{ color: "var(--vds-color-text-muted)" }}>{spec.hint}</Td>
@@ -494,7 +490,7 @@ function ShapesSection() {
   return (
     <Section
       title="Shape"
-      description="Pill (the default — badge radius token, fully rounded) or square (element radius — matches Button/Input corners, good for tag-like labels)."
+      description="Pill uses the fully rounded badge radius. Square uses the scoped navigation-item radius for compact tag-like labels."
     >
       <Row>
         <Badge>pill (default)</Badge>
@@ -504,7 +500,7 @@ function ShapesSection() {
       </Row>
 
       <Caption>
-        Pill intentionally stays fully rounded across global <code>data-radius</code> modes; square follows the finite control radius scale.
+        Pill intentionally stays fully rounded across global <VirtariInlineCode>data-radius</VirtariInlineCode> modes; square follows the finite control radius scale.
       </Caption>
     </Section>
   );
@@ -536,8 +532,8 @@ function DotSection() {
         </span>
       </Row>
 
-      <pre className="docs-code">{`<Badge dot color="success">Online</Badge>
-<Badge dotOnly color="danger" aria-label="Offline" />`}</pre>
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Badge dot color="success">Online</Badge>
+<Badge dotOnly color="danger" aria-label="Offline" />`} />
     </Section>
   );
 }
@@ -556,14 +552,14 @@ function IconsSection() {
         <Badge color="neutral" leftSection={<IconGitBranch {...DEMO_ICON} />}>feature/auth</Badge>
       </Row>
 
-      <pre className="docs-code">{`<Badge leftSection={<CheckIcon />}>Verified</Badge>
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Badge leftSection={<CheckIcon />}>Verified</Badge>
 <Badge
   color="accent"
   variant="solid"
   leftSection={<SparkleIcon />}
 >
   Pro
-</Badge>`}</pre>
+</Badge>`} />
     </Section>
   );
 }
@@ -585,31 +581,23 @@ function RemovableSection() {
           </Badge>
         ))}
         {tags.length === 0 && (
-          <button
+          <Button
             type="button"
+            variant="outline"
+            color="contrast"
             onClick={() => setTags(["design", "typescript", "css", "a11y", "rtl"])}
-            style={{
-              font: "inherit",
-              fontSize: "var(--vds-text-sm)",
-              padding: "var(--vds-space-1) var(--vds-space-3)",
-              borderRadius: "var(--vds-radius-element)",
-              border: "1px dashed var(--vds-color-border)",
-              background: "transparent",
-              color: "var(--vds-color-text-muted)",
-              cursor: "pointer",
-            }}
           >
             Reset tags
-          </button>
+          </Button>
         )}
       </Row>
 
-      <pre className="docs-code">{`<Badge
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Badge
   onRemove={() => removeTag(tag)}
   removeLabel={\`Remove \${tag}\`}
 >
   {tag}
-</Badge>`}</pre>
+</Badge>`} />
     </Section>
   );
 }
@@ -618,17 +606,17 @@ function InteractiveSection() {
   return (
     <Section
       title="Interactive"
-      description="Attach onClick to turn the badge into a clickable filter chip — hover state and focus ring wire up automatically. For navigation links, prefer asChild with an <a>."
+      description="Use asChild with a native button for actions: Enter, Space, focus and disabled behavior remain native. Use an anchor for navigation. A bare span with onClick only receives pointer styling."
     >
       <Row>
-        <Badge color="primary" variant="soft-outline" onClick={() => toast.info("Filtered: Design")}>
-          Design
+        <Badge color="primary" variant="soft-outline" asChild>
+          <button type="button" onClick={() => toast.info("Filtered: Design")}>Design</button>
         </Badge>
-        <Badge color="success" variant="soft-outline" onClick={() => toast.info("Filtered: Engineering")}>
-          Engineering
+        <Badge color="success" variant="soft-outline" asChild>
+          <button type="button" onClick={() => toast.info("Filtered: Engineering")}>Engineering</button>
         </Badge>
-        <Badge color="warning" variant="soft-outline" onClick={() => toast.info("Filtered: Ops")}>
-          Ops
+        <Badge color="warning" variant="soft-outline" asChild>
+          <button type="button" disabled>Ops unavailable</button>
         </Badge>
       </Row>
     </Section>
@@ -653,16 +641,25 @@ function AsChildSection() {
         </Badge>
       </Row>
 
-      <pre className="docs-code">{`<Badge asChild>
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Badge asChild>
   <a href="/changelog">Latest release</a>
 </Badge>
 
 // React Router
 <Badge asChild variant="outline">
   <RouterLink to="/settings">Beta settings</RouterLink>
-</Badge>`}</pre>
+</Badge>`} />
     </Section>
   );
+}
+
+function LongLabelSection() {
+  return <Section title="Long labels and RTL" description="Labels wrap inside their available width. Leading and trailing slots stay centered and retain their size in either direction.">
+    <LayoutRow mode="flex" wrap gap="md">
+      <div style={{ width: "14rem", maxWidth: "100%" }}><Badge leftSection={<IconGitBranch {...DEMO_ICON} />}>feature/a-long-branch-name-with-unbroken-metadata</Badge></div>
+      <div dir="rtl" lang="fa" style={{ width: "14rem", maxWidth: "100%" }}><Badge color="success" leftSection={<IconCheck {...DEMO_ICON} />}>تغییرات پروژه برای بررسی و تأیید آماده است</Badge></div>
+    </LayoutRow>
+  </Section>;
 }
 
 function CompositionSection() {
@@ -710,7 +707,7 @@ function ApiSection() {
       title="API reference"
       description="Color and variant are orthogonal. All props extend native span attributes."
     >
-      <pre className="docs-code">{`import { Badge } from "@virtari-packages/react-badge";
+      <VirtariCodeBlock renderer="static" language="tsx" code={`import { Badge } from "@virtari-packages/react-badge";
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   color?:   "primary" | "success" | "warning" | "danger"
@@ -725,7 +722,7 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   onRemove?:     (e: MouseEvent<HTMLButtonElement>) => void;
   removeLabel?:  string;            // aria-label for close (default "Remove")
   asChild?:      boolean;           // polymorphic via Slot
-}`}</pre>
+}`} />
     </Section>
   );
 }
@@ -738,28 +735,27 @@ function AccessibilitySection() {
     >
       <ul className="docs-prose" style={{ paddingInlineStart: "1.25em" }}>
         <li>
-          <strong>dotOnly</strong> must receive an <code>aria-label</code>. A bare dot has no text
+          <strong>dotOnly</strong> must receive an <VirtariInlineCode>aria-label</VirtariInlineCode>. A bare dot has no text
           content — screen readers otherwise have nothing to announce.
         </li>
         <li>
-          <strong>onRemove</strong> renders a real <code>{`<button>`}</code> with <code>aria-label</code>{" "}
-          (default "Remove", overridable via <code>removeLabel</code>). Click events stop
-          propagating so the parent badge's <code>onClick</code> still fires on the rest of the chip.
+          <strong>onRemove</strong> renders a real <VirtariInlineCode>{`<button>`}</VirtariInlineCode> with <VirtariInlineCode>aria-label</VirtariInlineCode>{" "}
+          (default "Remove", overridable via <VirtariInlineCode>removeLabel</VirtariInlineCode>). Click events stop
+          propagating so the parent badge's <VirtariInlineCode>onClick</VirtariInlineCode> still fires on the rest of the chip.
         </li>
         <li>
-          <strong>onClick</strong> wires up hover + focus ring automatically via{" "}
-          <code>data-interactive</code>. For routing, prefer <code>asChild</code> with an{" "}
-          <code>{`<a>`}</code> so assistive tech announces it as a link.
+          <strong>Actions</strong> use <VirtariInlineCode>asChild</VirtariInlineCode> with a native button for keyboard behavior. Do not nest a removal button inside a button or link. For routing, use <VirtariInlineCode>asChild</VirtariInlineCode> with an{" "}
+          <VirtariInlineCode>{`<a>`}</VirtariInlineCode> so assistive tech announces it as a link.
         </li>
         <li>
           <strong>Color-only meaning</strong> — never rely on hue alone to convey status. Pair
-          color with either a <code>dot</code> + label or a leading icon so color-blind users have
+          color with either a <VirtariInlineCode>dot</VirtariInlineCode> + label or a leading icon so color-blind users have
           a second channel.
         </li>
         <li>
           <strong>Contrast</strong> — every variant × color pair is token-driven. Soft uses{" "}
-          <code>*-bg</code> + <code>*-text</code> pairs from the color system; solid uses{" "}
-          <code>on-*</code> text to guarantee ≥ 4.5:1 against the filled hue.
+          <VirtariInlineCode>*-bg</VirtariInlineCode> + <VirtariInlineCode>*-text</VirtariInlineCode> pairs from the color system; solid uses{" "}
+          <VirtariInlineCode>on-*</VirtariInlineCode> text. Recheck contrast when overriding the theme or placing transparent variants on custom backgrounds.
         </li>
       </ul>
     </Section>

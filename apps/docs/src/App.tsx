@@ -6,6 +6,8 @@ import { SUPPORTED_LOCALES, isLocale, DEFAULT_LOCALE, type Locale } from "./i18n
 import {
   PAGE_META,
   IntroductionPage,
+  DesignGuidelinesPage,
+  BrandingPage,
   ButtonPage,
   ButtonGroupPage,
   BadgePage,
@@ -58,6 +60,8 @@ import {
   NavPage,
   SidebarPage,
   UtilitiesPage,
+  TokensReferencePage,
+  AiIntegrationPage,
   RTLPage,
   IconsPage,
   HeadingPage,
@@ -82,6 +86,8 @@ import {
 
 const PAGES: Record<string, () => React.JSX.Element> = {
   introduction: IntroductionPage,
+  guidelines: DesignGuidelinesPage,
+  brand: BrandingPage,
   sizing: SizingPage,
   colors: ColorsPage,
   typography: TypographyPage,
@@ -135,6 +141,8 @@ const PAGES: Record<string, () => React.JSX.Element> = {
   "data-table-orders": DataTableOrdersPage,
   table: TablePage,
   utilities: UtilitiesPage,
+  "tokens-reference": TokensReferencePage,
+  "ai-integration": AiIntegrationPage,
   rtl: RTLPage,
   icons: IconsPage,
   heading: HeadingPage,
@@ -201,6 +209,7 @@ function writeHash(locale: Locale, page: string) {
 
 export type RadiusMode = "sharp" | "soft" | "round" | "pill";
 export type Direction = "ltr" | "rtl";
+export type SurfaceStyle = "bordered" | "tonal" | "elevated";
 
 const SETTINGS_KEY = "virtari.docs.settings";
 const RADIUS_MODES: RadiusMode[] = ["sharp", "soft", "round", "pill"];
@@ -211,6 +220,7 @@ type Settings = {
   direction: Direction;
   locale: Locale;
   microInteractions: boolean;
+  surfaceStyle: SurfaceStyle;
 };
 
 const DEFAULT_SETTINGS: Settings = {
@@ -219,6 +229,7 @@ const DEFAULT_SETTINGS: Settings = {
   direction: "ltr",
   locale: DEFAULT_LOCALE,
   microInteractions: true,
+  surfaceStyle: "tonal",
 };
 
 function readSettings(): Settings {
@@ -228,6 +239,7 @@ function readSettings(): Settings {
     const parsed = JSON.parse(raw) as Partial<Settings>;
     return {
       dark: typeof parsed.dark === "boolean" ? parsed.dark : DEFAULT_SETTINGS.dark,
+      surfaceStyle: ["bordered", "tonal", "elevated"].includes(parsed.surfaceStyle ?? "") ? parsed.surfaceStyle! : DEFAULT_SETTINGS.surfaceStyle,
       radius: RADIUS_MODES.includes(parsed.radius as RadiusMode)
         ? (parsed.radius as RadiusMode)
         : DEFAULT_SETTINGS.radius,
@@ -254,6 +266,7 @@ export default function App() {
   const saved = readSettings();
   const [dark, setDark] = useState(() => saved.dark);
   const [radius, setRadius] = useState<RadiusMode>(() => saved.radius);
+  const [surfaceStyle, setSurfaceStyle] = useState<SurfaceStyle>(() => saved.surfaceStyle);
   const [direction, setDirection] = useState<Direction>(() => saved.direction);
   const [locale, setLocaleState] = useState<Locale>(() => saved.locale);
   const [microInteractions, setMicroInteractions] = useState(() => saved.microInteractions);
@@ -295,6 +308,7 @@ export default function App() {
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute("data-theme", dark ? "dark" : "light");
+    root.setAttribute("data-surface-style", surfaceStyle);
     if (radius !== "soft") root.setAttribute("data-radius", radius);
     else root.removeAttribute("data-radius");
     root.setAttribute("dir", direction);
@@ -304,12 +318,12 @@ export default function App() {
     try {
       window.localStorage.setItem(
         SETTINGS_KEY,
-        JSON.stringify({ dark, radius, direction, locale, microInteractions }),
+        JSON.stringify({ dark, radius, direction, locale, microInteractions, surfaceStyle }),
       );
     } catch {
       /* storage disabled — ignore */
     }
-  }, [dark, radius, direction, locale, microInteractions]);
+  }, [dark, radius, direction, locale, microInteractions, surfaceStyle]);
 
   function handleNavigate(page: string) {
     writeHash(locale, page);
@@ -329,6 +343,7 @@ export default function App() {
   return (
     <div
       data-theme={dark ? "dark" : "light"}
+      data-surface-style={surfaceStyle}
       data-radius={radius !== "soft" ? radius : undefined}
       data-vds-drawer-wrapper
       className="docs-app"
@@ -348,6 +363,8 @@ export default function App() {
         dark={dark}
         onToggleDark={setDark}
         radius={radius}
+        surfaceStyle={surfaceStyle}
+        onSurfaceStyleChange={setSurfaceStyle}
         onRadiusChange={setRadius}
         direction={direction}
         onDirectionChange={setDirection}

@@ -1,0 +1,12 @@
+@layer design-system.components {
+  .vds-grid {
+    --grid-min-item-width: 16rem;
+    --grid-gap: var(--vds-space-4, 1rem);
+  }
+
+  .vds-grid[data-gap="xs"] { --grid-gap: var(--vds-space-1, 0.25rem); }
+  .vds-grid[data-gap="sm"] { --grid-gap: var(--vds-space-2, 0.5rem); }
+  .vds-grid[data-gap="md"] { --grid-gap: var(--vds-space-4, 1rem); }
+  .vds-grid[data-gap="lg"] { --grid-gap: var(--vds-space-6, 1.5rem); }
+  .vds-grid[data-gap="xl"] { --grid-gap: var(--vds-space-8, 2rem); }
+}

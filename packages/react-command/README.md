@@ -100,6 +100,7 @@ function Palette() {
 ```
 
 - `hotkey="mod+k"` auto-binds `Cmd+K` on macOS and `Ctrl+K` elsewhere. Pass `hotkey={false}` (or omit) to own toggling yourself.
+- On close, `CommandDialog` returns focus to the element that opened it, including an input used to invoke the hotkey. Consumer `onOpenAutoFocus` and `onCloseAutoFocus` handlers can override focus by calling `event.preventDefault()`.
 - `Command.Item` accepts `leftSection`, `rightSection`, and `shortcut` (rendered via `<Kbd>` using platform-aware symbols on macOS).
 
 ### Async search
@@ -150,10 +151,10 @@ Defines `--vds-command-*` tokens for background, border, input, list max-height,
 
 ## Links
 
-- [Repository](https://github.com/IamMrTrick/virtari-design-system)
-- [Issues](https://github.com/IamMrTrick/virtari-design-system/issues)
+- [Repository](https://github.com/Virtari-Packages/virtari-design-system)
+- [Issues](https://github.com/Virtari-Packages/virtari-design-system/issues)
 - [Changelog](./CHANGELOG.md)
 
 ## License
 
-Proprietary. See [LICENSE](./LICENSE).
+[MIT](./LICENSE) © 2026 Virtari.

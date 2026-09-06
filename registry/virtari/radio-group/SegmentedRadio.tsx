@@ -1,0 +1,68 @@
+import { cn } from "../../lib/utils";
+import type { ComponentRef, Ref } from "react";
+import * as RadioGroupPrimitive from "../../lib/primitives/radio-group";
+import { useRadioDirection } from "./useRadioDirection";
+
+export type SegmentedRadioSize = "sm" | "md" | "lg";
+
+type PrimitiveRootProps = React.ComponentPropsWithoutRef<
+  typeof RadioGroupPrimitive.Root
+>;
+
+export interface SegmentedRadioProps extends PrimitiveRootProps {
+  size?: SegmentedRadioSize;
+  error?: boolean;
+  ref?: Ref<ComponentRef<typeof RadioGroupPrimitive.Root>>;
+}
+
+export function SegmentedRadio({
+  size = "md",
+  error = false,
+  className,
+  orientation = "horizontal",
+  dir,
+  disabled,
+  ref,
+  ...props
+}: SegmentedRadioProps) {
+  const { direction, composedRef } = useRadioDirection(dir, ref);
+  return (
+    <RadioGroupPrimitive.Root
+      ref={composedRef}
+      dir={direction}
+      orientation={orientation}
+      disabled={disabled}
+      aria-invalid={error || undefined}
+      data-size={size}
+      data-error={error ? "" : undefined}
+      data-disabled={disabled ? "" : undefined}
+      /* The track draws the corner the items have to be concentric with; see
+         the host block in SegmentedRadio.css. */
+      data-radius-host=""
+      className={cn("vds-segmented-radio", className)}
+      {...props}
+    />
+  );
+}
+
+export interface SegmentedRadioItemProps
+  extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
+  ref?: Ref<ComponentRef<typeof RadioGroupPrimitive.Item>>;
+}
+
+export function SegmentedRadioItem({
+  className,
+  ref,
+  children,
+  ...props
+}: SegmentedRadioItemProps) {
+  return (
+    <RadioGroupPrimitive.Item
+      ref={ref}
+      className={cn("vds-segmented-radio-item", className)}
+      {...props}
+    >
+      {children}
+    </RadioGroupPrimitive.Item>
+  );
+}

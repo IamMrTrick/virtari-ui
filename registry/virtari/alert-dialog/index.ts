@@ -1,0 +1,32 @@
+import "./AlertDialog.css";
+export {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "./AlertDialog";
+
+export type {
+  AlertDialogOverlayProps,
+  AlertDialogContentProps,
+  AlertDialogHeaderProps,
+  AlertDialogBodyProps,
+  AlertDialogFooterProps,
+  AlertDialogTitleProps,
+  AlertDialogDescriptionProps,
+  AlertDialogActionProps,
+  AlertDialogCancelProps,
+  AlertDialogSize,
+  AlertDialogAnimation,
+  AlertDialogIntent,
+  AlertDialogBackdrop,
+  AlertDialogHeaderVariant,
+} from "./AlertDialog";

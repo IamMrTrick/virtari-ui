@@ -1,4 +1,6 @@
-import { cn } from "@virtari-packages/utils";
+import { cn, useComposedRefs } from "@virtari-packages/utils";
+import { useRef } from "react";
+import { useNestedCardRadius } from "./useNestedCardRadius";
 import type { Ref } from "react";
 
 export type CardVariant = "surface" | "outline" | "soft" | "ghost";
@@ -19,9 +21,12 @@ export function Card({
   ref,
   ...props
 }: CardProps) {
+  const localRef = useRef<HTMLDivElement>(null);
+  const composedRef = useComposedRefs(ref, localRef);
+  useNestedCardRadius(localRef);
   return (
     <div
-      ref={ref}
+      ref={composedRef}
       className={cn("vds-card", className)}
       data-radius-host=""
       data-variant={variant !== "surface" ? variant : undefined}

@@ -1,0 +1,95 @@
+# Discovery index
+
+These paths are relative to the skill bundle root (ai/skills in a repository checkout). Select matching skills in your host; this index does not require every skill to be loaded or installed.
+
+## Packages
+
+- `virtari-cli/SKILL.md` — Source-first CLI that installs editable Virtari React and CSS files with transitive dependencies, conflict protection, diffing, and health checks.
+- `virtari-core/SKILL.md` — Global CSS reset, cascade ordering, base typography, focus, native scrolling and visually hidden helpers.
+- `virtari-primitives/SKILL.md` — Headless React behavior primitives underlying Virtari components, exposed through explicit package subpaths.
+- `virtari-react-accordion/SKILL.md` — Single or multiple disclosure groups, semantic heading triggers, and a data-driven FAQ wrapper.
+- `virtari-react-alert/SKILL.md` — Compose inline information, success, warning and error messages with icon, title, description and optional dismissal.
+- `virtari-react-alert-dialog/SKILL.md` — Explicit confirmation dialog with alertdialog semantics, cancel-first focus and shared Dialog appearance.
+- `virtari-react-avatar/SKILL.md` — Show an image or required text fallback with stable optional identity colors and five sizes.
+- `virtari-react-badge/SKILL.md` — Show compact status labels, counts, presence dots and removable tags with independent intent and appearance.
+- `virtari-react-bottom-nav/SKILL.md` — Mobile navigation landmark with route-aware items, notification badges, optional FAB and safe-area positioning.
+- `virtari-react-breadcrumb/SKILL.md` — Breadcrumb landmark supporting compound links and current-page content, array-driven collapsing and optional structured data.
+- `virtari-react-button/SKILL.md` — Intent/appearance-separated action button with shared size roles, aligned slots, loading state and polymorphic composition.
+- `virtari-react-button-group/SKILL.md` — Shared-context row or column of buttons with optional attached corners and equal-width layout.
+- `virtari-react-card/SKILL.md` — Compose themed surfaces with separate header, content and footer spacing and geometry-aware nested card radii.
+- `virtari-react-carousel/SKILL.md` — Swiper-backed carousel with Virtari navigation, pagination, effects and horizontal or vertical tracks.
+- `virtari-react-checkbox/SKILL.md` — Independent selection controls, labeled fields, cards, groups and pill choices.
+- `virtari-react-chip/SKILL.md` — Compose compact labels, identity chips and removable selections using explicit icon, label and remove slots.
+- `virtari-react-code/SKILL.md` — Render inline code, read-only code blocks and controlled CodeMirror editors with Virtari styling.
+- `virtari-react-collapsible/SKILL.md` — Minimal single disclosure with primitive open state, trigger semantics and animated content.
+- `virtari-react-color-picker/SKILL.md` — Solid/gradient color editing with serialization utilities and configurable picker chrome.
+- `virtari-react-command/SKILL.md` — cmdk-based searchable command collection with optional controlled dialog and platform-aware shortcut hints.
+- `virtari-react-copy-button/SKILL.md` — Clipboard action with native button semantics, built-in icons and a temporary copied label.
+- `virtari-react-data-table/SKILL.md` — Composable TanStack table with controlled state, server requests, virtualization, editing, filters, alternate views and optional drag-and-drop.
+- `virtari-react-date-picker/SKILL.md` — Internationalized date/time fields, calendars and adaptive single/range picker overlays.
+- `virtari-react-dialog/SKILL.md` — Accessible modal or nonmodal dialog with internally portaled content, shared sections and explicit dismissal controls.
+- `virtari-react-drawer/SKILL.md` — Edge drawer with named snap states, minimized stages, floating offsets and guarded pointer/touch dragging.
+- `virtari-react-dropdown-menu/SKILL.md` — Portaled action menu with primitive keyboard navigation, item selection and direction-aware placement.
+- `virtari-react-editor/SKILL.md` — Lexical rich-text editor with a composable core, optional productivity chrome, source modes and field integration.
+- `virtari-react-empty-state/SKILL.md` — Compose empty or no-results views with a decorative illustration, clear title, description and recovery actions.
+- `virtari-react-fieldset/SKILL.md` — Native field grouping and reusable label/control/help/error/counter layout.
+- `virtari-react-file-upload/SKILL.md` — File selection/dropzone composition, previews and application-driven upload progress.
+- `virtari-react-flag/SKILL.md` — Render supported country and region SVG flags through static named imports or lazy code-based selection.
+- `virtari-react-flow/SKILL.md` — React Flow canvas wrapper, node shells, badge edges, simple layered layout and browser persistence helpers.
+- `virtari-react-form/SKILL.md` — React Hook Form context and accessible field composition adapters.
+- `virtari-react-header/SKILL.md` — Application header composed from coordinated top/main/bottom rows and start/center/end sections.
+- `virtari-react-icons/SKILL.md` — Use the exported Tabler icon set through a Virtari wrapper with token sizes, semantic colors and accessible labeling.
+- `virtari-react-input/SKILL.md` — Native text controls, field composition, password reveal and password-strength feedback.
+- `virtari-react-kbd/SKILL.md` — Display semantic keycaps and platform-aware keyboard shortcut labels without binding keyboard events.
+- `virtari-react-label/SKILL.md` — Styled label primitive for direct control association.
+- `virtari-react-language-picker/SKILL.md` — Locale selection from the language catalog with popover or confirmable drawer presentation.
+- `virtari-react-layout/SKILL.md` — Semantic page regions and composable Stack, Cluster, Grid, split Sidebar and Center arrangements.
+- `virtari-react-nav/SKILL.md` — Site-navigation disclosure system with semantic links, inline submenus, floating submenus and collapsed rail presentation.
+- `virtari-react-number-input/SKILL.md` — Numeric draft editing with explicit stepping, range limits and field composition.
+- `virtari-react-otp-input/SKILL.md` — Segmented one-time-code entry with paste, autofill hints and digit normalization.
+- `virtari-react-pagination/SKILL.md` — Controlled zero-based pagination with page buttons, page-size selection, range information and compound or default layouts.
+- `virtari-react-phone-input/SKILL.md` — Country-aware telephone entry, normalized digits and canonical E.164 submission.
+- `virtari-react-popover/SKILL.md` — Anchored interactive surface with primitive focus/dismissal behavior and bounded content width.
+- `virtari-react-progress/SKILL.md` — Show determinate or indeterminate progress with tokenized tracks, optional percentages and restrained animation.
+- `virtari-react-radio-group/SKILL.md` — Exclusive choices presented as radios, fields, cards, segmented controls or pills.
+- `virtari-react-scroll-area/SKILL.md` — Native scrolling viewport with styled smart-hiding scrollbars, optional edge masks, arrows, drag, infinite-scroll sentinel and marquee.
+- `virtari-react-segmented-control/SKILL.md` — Single-value segmented radio control sharing the Tabs segmented track and nested-radius styling.
+- `virtari-react-select/SKILL.md` — Single-choice Select and searchable, multiple, asynchronous or virtualized Combobox compositions.
+- `virtari-react-separator/SKILL.md` — Separate adjacent regions with decorative or semantic horizontal and vertical rules and optional horizontal labels.
+- `virtari-react-sidebar/SKILL.md` — Application sidebar shell with independent header/body/footer regions, logical placement and controlled or internal collapse state.
+- `virtari-react-skeleton/SKILL.md` — Reserve loading geometry using rectangular or circular placeholders sized to the forthcoming content.
+- `virtari-react-slider/SKILL.md` — Primitive-backed numeric slider with automatic thumb rendering and direction support.
+- `virtari-react-spinner/SKILL.md` — Display accessible indeterminate activity with six visual variants, token sizes and localized status text.
+- `virtari-react-stepper/SKILL.md` — Ordered progress-step display with automatic step statuses, optional error overrides and coordinated indicators/connectors.
+- `virtari-react-switch/SKILL.md` — Binary switch with primitive form semantics and optional drag interaction.
+- `virtari-react-table/SKILL.md` — Native semantic table primitives with independent frame, row treatment, density, sorting indicators and sticky columns.
+- `virtari-react-tabs/SKILL.md` — Accessible tablist and panel composition with shared visual variants, direction-aware indicators and optional responsive/swipe layouts.
+- `virtari-react-tag-input/SKILL.md` — Controlled tag-list entry with chips, delimiters and repeated form values.
+- `virtari-react-text/SKILL.md` — Apply shared typography while keeping text element semantics and heading levels separate from visual size.
+- `virtari-react-textarea/SKILL.md` — Native multiline text input and a labeled field wrapper with linked metadata.
+- `virtari-react-timeline/SKILL.md` — Compose ordered event histories with indicators, connectors, status tones, timestamps and optional content cards.
+- `virtari-react-toast/SKILL.md` — Shared-store notifications with one Toaster renderer, action helpers, promise states and low-level toast primitives.
+- `virtari-react-toggle/SKILL.md` — A persistent pressed-state action button.
+- `virtari-react-tooltip/SKILL.md` — Provider-scoped supplemental labels with portaled placement, color variants and an optional arrow.
+- `virtari-react-tree-view/SKILL.md` — Hierarchical item display with controlled expansion and optional single/multiple selection; current keyboard behavior is limited.
+- `virtari-react-visually-hidden/SKILL.md` — Keep short accessible text in the accessibility tree while visually hiding it with the shared core utility.
+- `virtari-react-yoopta-editor/SKILL.md` — Yoopta block editor with Virtari chrome and plugins, distinct document state and extension exports.
+- `virtari-tokens/SKILL.md` — CSS design tokens with theme, surface, radius, spacing, layout, typography and motion roles.
+- `virtari-utilities/SKILL.md` — Finite generated vds-u-* CSS classes for layout, spacing, sizing, positioning, overflow and z-index.
+- `virtari-utils/SKILL.md` — JavaScript and React helpers for class joining, refs, native reset, direction and platform-aware shortcuts.
+
+## Foundations
+
+- `virtari-foundation-foundation-imports/SKILL.md` — The actual package exports and stylesheet dependency order that every integration needs.
+- `virtari-foundation-colors/SKILL.md` — Use semantic purpose rather than reconstructing palettes or guessing theme behavior.
+- `virtari-foundation-surface-styles/SKILL.md` — One scoped appearance contract for quiet borders, tonal fills, shadows and stronger tinted fields.
+- `virtari-foundation-sizing/SKILL.md` — Separate control height, overlay width and spacing scales.
+- `virtari-foundation-spacing/SKILL.md` — Primitive distances plus semantic interior and page-layout relationships.
+- `virtari-foundation-shape/SKILL.md` — Stable component families with deliberate differences and bounded nested geometry.
+- `virtari-foundation-typography/SKILL.md` — Shared font, text-size and line-box roles without universal optical-offset assumptions.
+- `virtari-foundation-motion/SKILL.md` — Reusable duration/easing pairs with reduced-motion behavior and explicit effect roles.
+- `virtari-foundation-layout-utilities/SKILL.md` — Semantic page primitives and small reusable arrangements instead of repeated bespoke wrappers.
+- `virtari-foundation-css-utilities/SKILL.md` — Finite generated token-backed utilities, grouped independently from React helpers.
+- `virtari-foundation-stacking-focus-scroll/SKILL.md` — Shared interaction infrastructure beyond component-specific visuals.
+- `virtari-foundation-js-utils/SKILL.md` — Shared class, ref, native-form, direction and keyboard behavior with explicit contracts.
+- `virtari-foundation-source-registry/SKILL.md` — Use Virtari as editable project source through its CLI or the shadcn-compatible GitHub registry.

@@ -1,5 +1,5 @@
 import { cn } from "@virtari-packages/utils";
-import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+import { useId, type ComponentPropsWithoutRef, type ReactNode, type Ref } from "react";
 import { Checkbox, type CheckboxProps } from "./Checkbox";
 import { useCheckboxGroupContext } from "./context";
 
@@ -42,6 +42,7 @@ export function CheckboxCard({
   ...checkboxProps
 }: CheckboxCardProps) {
   const group = useCheckboxGroupContext();
+  const textId = useId();
   const resolvedError = error ?? group?.error ?? false;
   const resolvedDisabled = disabled ?? group?.disabled ?? false;
   const resolvedLayout: CheckboxCardLayout =
@@ -64,6 +65,8 @@ export function CheckboxCard({
         error={resolvedError}
         disabled={resolvedDisabled}
         {...checkboxProps}
+        aria-labelledby={checkboxProps["aria-labelledby"] ?? (checkboxProps["aria-label"] ? undefined : `${textId}-label`)}
+        aria-describedby={[checkboxProps["aria-describedby"], description ? `${textId}-description` : undefined, badge ? `${textId}-badge` : undefined, trailing && resolvedLayout === "row" ? `${textId}-trailing` : undefined].filter(Boolean).join(" ") || undefined}
       />
 
       {resolvedLayout === "icon-grid" ? (
@@ -74,14 +77,14 @@ export function CheckboxCard({
             </span>
           ) : null}
           <span className="vds-checkbox-card-text">
-            <span className="vds-checkbox-card-label">{label}</span>
+            <span id={`${textId}-label`} className="vds-checkbox-card-label">{label}</span>
             {description ? (
-              <span className="vds-checkbox-card-description">
+              <span id={`${textId}-description`} className="vds-checkbox-card-description">
                 {description}
               </span>
             ) : null}
             {badge ? (
-              <span className="vds-checkbox-card-badge">{badge}</span>
+              <span id={`${textId}-badge`} className="vds-checkbox-card-badge">{badge}</span>
             ) : null}
           </span>
         </div>
@@ -89,18 +92,18 @@ export function CheckboxCard({
         <div className="vds-checkbox-card-body">
           <span className="vds-checkbox-card-text">
             <span className="vds-checkbox-card-label-row">
-              <span className="vds-checkbox-card-label">{label}</span>
+              <span id={`${textId}-label`} className="vds-checkbox-card-label">{label}</span>
               {trailing ? (
-                <span className="vds-checkbox-card-trailing">{trailing}</span>
+                <span id={`${textId}-trailing`} className="vds-checkbox-card-trailing">{trailing}</span>
               ) : null}
             </span>
             {description ? (
-              <span className="vds-checkbox-card-description">
+              <span id={`${textId}-description`} className="vds-checkbox-card-description">
                 {description}
               </span>
             ) : null}
             {badge ? (
-              <span className="vds-checkbox-card-badge">{badge}</span>
+              <span id={`${textId}-badge`} className="vds-checkbox-card-badge">{badge}</span>
             ) : null}
           </span>
         </div>

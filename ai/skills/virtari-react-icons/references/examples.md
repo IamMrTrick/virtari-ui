@@ -1,0 +1,146 @@
+# Existing examples
+
+- [IconsPage.tsx](examples/IconsPage.tsx.md)
+
+All documentation sections importing this package (some demonstrate another package):
+
+- `badge/1` — Live playground; source `apps/docs/src/pages/BadgePage.tsx` lines 232–324.
+- `badge/2` — Variants; source `apps/docs/src/pages/BadgePage.tsx` lines 330–350.
+- `badge/3` — Colors; source `apps/docs/src/pages/BadgePage.tsx` lines 356–378.
+- `badge/4` — Color × Variant matrix; source `apps/docs/src/pages/BadgePage.tsx` lines 384–422.
+- `badge/5` — Sizes; source `apps/docs/src/pages/BadgePage.tsx` lines 428–485.
+- `badge/6` — Shape; source `apps/docs/src/pages/BadgePage.tsx` lines 491–505.
+- `badge/7` — Status dot; source `apps/docs/src/pages/BadgePage.tsx` lines 511–537.
+- `badge/8` — Icons — leading and trailing; source `apps/docs/src/pages/BadgePage.tsx` lines 543–563.
+- `badge/9` — Removable chips; source `apps/docs/src/pages/BadgePage.tsx` lines 573–601.
+- `badge/10` — Interactive; source `apps/docs/src/pages/BadgePage.tsx` lines 607–622.
+- `badge/11` — Polymorphic via asChild; source `apps/docs/src/pages/BadgePage.tsx` lines 628–652.
+- `badge/12` — Long labels and RTL; source `apps/docs/src/pages/BadgePage.tsx` lines 657–662.
+- `badge/13` — Composition patterns; source `apps/docs/src/pages/BadgePage.tsx` lines 667–700.
+- `badge/14` — API reference; source `apps/docs/src/pages/BadgePage.tsx` lines 706–726.
+- `badge/15` — Accessibility; source `apps/docs/src/pages/BadgePage.tsx` lines 732–761.
+- `bottom-nav/1` — Overview; source `apps/docs/src/pages/BottomNavPage.tsx` lines 157–164.
+- `bottom-nav/2` — Variants; source `apps/docs/src/pages/BottomNavPage.tsx` lines 166–185.
+- `bottom-nav/3` — Sizes; source `apps/docs/src/pages/BottomNavPage.tsx` lines 187–201.
+- `bottom-nav/4` — Badges; source `apps/docs/src/pages/BottomNavPage.tsx` lines 203–210.
+- `bottom-nav/5` — Centre FAB; source `apps/docs/src/pages/BottomNavPage.tsx` lines 212–240.
+- `bottom-nav/6` — Floating + elevated; source `apps/docs/src/pages/BottomNavPage.tsx` lines 242–264.
+- `bottom-nav/7` — RTL; source `apps/docs/src/pages/BottomNavPage.tsx` lines 266–275.
+- `bottom-nav/8` — Playground; source `apps/docs/src/pages/BottomNavPage.tsx` lines 277–351.
+- `bottom-nav/9` — Usage; source `apps/docs/src/pages/BottomNavPage.tsx` lines 353–368.
+- `branding/1` — {label("One identity, every surface", "یک هویت روی همهٔ سطوح")}; source `apps/docs/src/pages/BrandingPage.tsx` lines 21–35.
+- `branding/2` — {label("Loading with continuity", "لودینگ با هویت مشترک")}; source `apps/docs/src/pages/BrandingPage.tsx` lines 36–43.
+- `branding/3` — {label("App icons", "آیکون‌های برنامه")}; source `apps/docs/src/pages/BrandingPage.tsx` lines 44–52.
+- `button-group/1` — Size alignment with Button, Input, Tabs; source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 64–98.
+- `button-group/2` — Sizes — full ramp; source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 100–122.
+- `button-group/3` — Variants — attached; source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 124–146.
+- `button-group/4` — Colors — attached; source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 148–170.
+- `button-group/5` — Attached vs spaced; source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 172–196.
+- `button-group/6` — Orientation — vertical; source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 198–209.
+- `button-group/7` — Full width; source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 211–223.
+- `button-group/8` — Pressed state — single selection (aria-pressed); source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 225–272.
+- `button-group/9` — Pressed state — multi selection; source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 274–307.
+- `button-group/10` — Prop precedence; source `apps/docs/src/pages/ButtonGroupPage.tsx` lines 309–322.
+- `button/1` — Live playground; source `apps/docs/src/pages/ButtonPage.tsx` lines 214–316.
+- `button/2` — Variants; source `apps/docs/src/pages/ButtonPage.tsx` lines 322–354.
+- `button/3` — Colors; source `apps/docs/src/pages/ButtonPage.tsx` lines 360–380.
+- `button/4` — Color × Variant matrix; source `apps/docs/src/pages/ButtonPage.tsx` lines 399–425.
+- `button/5` — Sizes; source `apps/docs/src/pages/ButtonPage.tsx` lines 431–472.
+- `button/6` — Icons — left and right sections; source `apps/docs/src/pages/ButtonPage.tsx` lines 478–499.
+- `button/7` — Icon-only buttons; source `apps/docs/src/pages/ButtonPage.tsx` lines 505–526.
+- `button/8` — Loading state; source `apps/docs/src/pages/ButtonPage.tsx` lines 545–584.
+- `button/9` — Disabled; source `apps/docs/src/pages/ButtonPage.tsx` lines 590–605.
+- `button/10` — Full width; source `apps/docs/src/pages/ButtonPage.tsx` lines 611–632.
+- `button/11` — Visual effects; source `apps/docs/src/pages/ButtonPage.tsx` lines 638–714.
+- `button/12` — Attention animations; source `apps/docs/src/pages/ButtonPage.tsx` lines 723–754.
+- `button/13` — Polymorphic via asChild; source `apps/docs/src/pages/ButtonPage.tsx` lines 760–790.
+- `button/14` — API reference; source `apps/docs/src/pages/ButtonPage.tsx` lines 796–821.
+- `button/15` — Accessibility; source `apps/docs/src/pages/ButtonPage.tsx` lines 827–856.
+- `checkbox/1` — States; source `apps/docs/src/pages/CheckboxPage.tsx` lines 298–313.
+- `checkbox/2` — Sizes; source `apps/docs/src/pages/CheckboxPage.tsx` lines 315–348.
+- `checkbox/3` — Nested Checkbox (Parent-Child); source `apps/docs/src/pages/CheckboxPage.tsx` lines 350–358.
+- `checkbox/4` — Checkbox Group — Vertical; source `apps/docs/src/pages/CheckboxPage.tsx` lines 360–427.
+- `checkbox/5` — Checkbox Cards; source `apps/docs/src/pages/CheckboxPage.tsx` lines 429–532.
+- `checkbox/6` — Checkbox Cards — Icon Grid; source `apps/docs/src/pages/CheckboxPage.tsx` lines 534–589.
+- `checkbox/7` — Pill Checkbox; source `apps/docs/src/pages/CheckboxPage.tsx` lines 591–674.
+- `checkbox/8` — Usage; source `apps/docs/src/pages/CheckboxPage.tsx` lines 676–724.
+- `chip/1` — Variants; source `apps/docs/src/pages/ChipPage.tsx` lines 223–235.
+- `chip/2` — Appearances; source `apps/docs/src/pages/ChipPage.tsx` lines 238–295.
+- `chip/3` — Sizes; source `apps/docs/src/pages/ChipPage.tsx` lines 298–313.
+- `chip/4` — With leading icon; source `apps/docs/src/pages/ChipPage.tsx` lines 316–352.
+- `chip/5` — With avatar; source `apps/docs/src/pages/ChipPage.tsx` lines 355–390.
+- `chip/6` — Removable; source `apps/docs/src/pages/ChipPage.tsx` lines 393–414.
+- `chip/7` — Interactive (button / link); source `apps/docs/src/pages/ChipPage.tsx` lines 417–444.
+- `chip/8` — Disabled; source `apps/docs/src/pages/ChipPage.tsx` lines 447–463.
+- `chip/9` — Example — Category filter; source `apps/docs/src/pages/ChipPage.tsx` lines 466–471.
+- `chip/10` — Example — Toggleable filters; source `apps/docs/src/pages/ChipPage.tsx` lines 474–485.
+- `chip/11` — Example — Tag input; source `apps/docs/src/pages/ChipPage.tsx` lines 488–493.
+- `chip/12` — Example — Active filters bar; source `apps/docs/src/pages/ChipPage.tsx` lines 496–501.
+- `chip/13` — Example — Product card meta; source `apps/docs/src/pages/ChipPage.tsx` lines 504–616.
+- `chip/14` — Example — Event metadata; source `apps/docs/src/pages/ChipPage.tsx` lines 619–643.
+- `chip/15` — Usage; source `apps/docs/src/pages/ChipPage.tsx` lines 646–670.
+- `command/1` — Overview; source `apps/docs/src/pages/CommandPage.tsx` lines 273–280.
+- `command/2` — Inline palette; source `apps/docs/src/pages/CommandPage.tsx` lines 282–287.
+- `command/3` — CommandDialog with a keyboard shortcut; source `apps/docs/src/pages/CommandPage.tsx` lines 289–294.
+- `command/4` — Async search; source `apps/docs/src/pages/CommandPage.tsx` lines 296–301.
+- `command/5` — Usage; source `apps/docs/src/pages/CommandPage.tsx` lines 303–328.
+- `data-table-users/page` — data-table-users page; source `apps/docs/src/pages/DataTableUsersPage.tsx` lines 1–1553.
+- `file-upload/1` — Overview; source `apps/docs/src/pages/FileUploadPage.tsx` lines 253–260.
+- `file-upload/2` — Button trigger; source `apps/docs/src/pages/FileUploadPage.tsx` lines 262–267.
+- `file-upload/3` — Single image — avatar picker; source `apps/docs/src/pages/FileUploadPage.tsx` lines 269–274.
+- `file-upload/4` — Multi-file; source `apps/docs/src/pages/FileUploadPage.tsx` lines 276–281.
+- `file-upload/5` — Validation & rejections; source `apps/docs/src/pages/FileUploadPage.tsx` lines 283–288.
+- `file-upload/6` — Usage; source `apps/docs/src/pages/FileUploadPage.tsx` lines 290–331.
+- `input/1` — Field composition; source `apps/docs/src/pages/InputPage.tsx` lines 23–28.
+- `input/2` — Sizes; source `apps/docs/src/pages/InputPage.tsx` lines 29–31.
+- `input/3` — Icons and affixes; source `apps/docs/src/pages/InputPage.tsx` lines 32–39.
+- `input/4` — Surfaces and states; source `apps/docs/src/pages/InputPage.tsx` lines 40–47.
+- `input/5` — Password; source `apps/docs/src/pages/InputPage.tsx` lines 48–53.
+- `input/6` — Optional typing feedback; source `apps/docs/src/pages/InputPage.tsx` lines 54–54.
+- `input/7` — Usage; source `apps/docs/src/pages/InputPage.tsx` lines 55–83.
+- `introduction/1` — {label("Principles in practice", "اصول در عمل")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 33–40.
+- `introduction/2` — {label("Three surface styles, one system", "سه سبک سطح، یک سیستم")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 41–44.
+- `introduction/3` — {label("Fields on colored surfaces", "ورودی‌ها روی سطوح رنگی")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 45–54.
+- `introduction/4` — {t("whatIs.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 55–69.
+- `introduction/5` — {t("cssFeatures.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 71–85.
+- `introduction/6` — {t("quickStart.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 87–90.
+- `introduction/7` — {t("architecture.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 92–94.
+- `nav/1` — One nav, many shapes; source `apps/docs/src/pages/NavPage.tsx` lines 168–196.
+- `nav/2` — Icons — icon, label, badge, kbd; source `apps/docs/src/pages/NavPage.tsx` lines 206–256.
+- `nav/3` — Sidebar — declarative API; source `apps/docs/src/pages/NavPage.tsx` lines 266–324.
+- `nav/4` — Sidebar — compound API; source `apps/docs/src/pages/NavPage.tsx` lines 334–396.
+- `nav/5` — Groups & separators; source `apps/docs/src/pages/NavPage.tsx` lines 406–440.
+- `nav/6` — Collapsed rail — minimize the sidebar; source `apps/docs/src/pages/NavPage.tsx` lines 452–537.
+- `nav/7` — Nested — arbitrary depth; source `apps/docs/src/pages/NavPage.tsx` lines 547–598.
+- `nav/8` — Menubar — horizontal with popover submenus; source `apps/docs/src/pages/NavPage.tsx` lines 641–678.
+- `nav/9` — Mega menu — multi-column dropdown; source `apps/docs/src/pages/NavPage.tsx` lines 688–772.
+- `nav/10` — Variants — ten hover decorations; source `apps/docs/src/pages/NavPage.tsx` lines 809–897.
+- `nav/11` — Tree lines — file-tree style nesting; source `apps/docs/src/pages/NavPage.tsx` lines 907–975.
+- `nav/12` — Sizes — sm, md, lg; source `apps/docs/src/pages/NavPage.tsx` lines 987–1020.
+- `nav/13` — States — active, disabled; source `apps/docs/src/pages/NavPage.tsx` lines 1030–1070.
+- `nav/14` — currentPath — auto aria-current; source `apps/docs/src/pages/NavPage.tsx` lines 1083–1123.
+- `nav/15` — API; source `apps/docs/src/pages/NavPage.tsx` lines 1133–1189.
+- `nav/16` — Accessibility; source `apps/docs/src/pages/NavPage.tsx` lines 1199–1233.
+- `radio-group/1` — States; source `apps/docs/src/pages/RadioGroupPage.tsx` lines 305–319.
+- `radio-group/2` — Radio Group — Vertical; source `apps/docs/src/pages/RadioGroupPage.tsx` lines 321–371.
+- `radio-group/3` — Radio Group — Horizontal; source `apps/docs/src/pages/RadioGroupPage.tsx` lines 373–436.
+- `radio-group/4` — Radio Cards; source `apps/docs/src/pages/RadioGroupPage.tsx` lines 438–483.
+- `radio-group/5` — Radio Cards — Icon Grid; source `apps/docs/src/pages/RadioGroupPage.tsx` lines 485–544.
+- `radio-group/6` — Segmented Radio (Button Group); source `apps/docs/src/pages/RadioGroupPage.tsx` lines 546–593.
+- `radio-group/7` — Pill Radio; source `apps/docs/src/pages/RadioGroupPage.tsx` lines 595–629.
+- `radio-group/8` — Rich Content Cards; source `apps/docs/src/pages/RadioGroupPage.tsx` lines 631–737.
+- `radio-group/9` — Segmented Control; source `apps/docs/src/pages/RadioGroupPage.tsx` lines 739–787.
+- `radio-group/10` — Usage; source `apps/docs/src/pages/RadioGroupPage.tsx` lines 789–832.
+- `sidebar/1` — Structure; source `apps/docs/src/pages/SidebarPage.tsx` lines 451–491.
+- `sidebar/2` — Basic — collapse + filter search; source `apps/docs/src/pages/SidebarPage.tsx` lines 514–557.
+- `sidebar/3` — Submenu + dropdown behaviour; source `apps/docs/src/pages/SidebarPage.tsx` lines 565–600.
+- `sidebar/4` — Modes — full-height vs below-header; source `apps/docs/src/pages/SidebarPage.tsx` lines 609–693.
+- `sidebar/5` — Sizes; source `apps/docs/src/pages/SidebarPage.tsx` lines 703–737.
+- `sidebar/6` — Side — logical anchoring; source `apps/docs/src/pages/SidebarPage.tsx` lines 766–805.
+- `sidebar/7` — Backgrounds; source `apps/docs/src/pages/SidebarPage.tsx` lines 815–853.
+- `sidebar/8` — External trigger; source `apps/docs/src/pages/SidebarPage.tsx` lines 862–913.
+- `sidebar/9` — App shell — Header + Sidebar + scrollable content; source `apps/docs/src/pages/SidebarPage.tsx` lines 922–1006.
+- `sidebar/10` — API; source `apps/docs/src/pages/SidebarPage.tsx` lines 1014–1055.
+- `sidebar/11` — Accessibility; source `apps/docs/src/pages/SidebarPage.tsx` lines 1061–1102.
+
+MCP: `get_record({collection:"examples",id:"<example ID>"})`; then `read_source` for full page context. A section fragment may reference imports, state, helper components, assets, docs CSS or shared page scaffolding.

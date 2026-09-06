@@ -1,0 +1,27 @@
+@layer tokens {
+  :root {
+    /* ─── Blur scale ───
+     * Use as: filter: var(--vds-blur-md);
+     */
+    --vds-blur-none: blur(0px);
+    --vds-blur-xs:   blur(2px);
+    --vds-blur-sm:   blur(4px);
+    --vds-blur-md:   blur(8px);
+    --vds-blur-lg:   blur(12px);
+    --vds-blur-xl:   blur(16px);
+    --vds-blur-2xl:  blur(24px);
+    --vds-blur-3xl:  blur(40px);
+
+    /* ─── Backdrop-filter scale ───
+     * Use as: backdrop-filter: var(--vds-backdrop-md);
+     * Frosted-glass effect — pair with a semi-transparent background.
+     */
+    --vds-backdrop-none: blur(0px);
+    --vds-backdrop-xs:   blur(2px);
+    --vds-backdrop-sm:   blur(4px);
+    --vds-backdrop-md:   blur(8px);
+    --vds-backdrop-lg:   blur(12px);
+    --vds-backdrop-xl:   blur(20px);
+    --vds-backdrop-2xl:  blur(32px);
+  }
+}

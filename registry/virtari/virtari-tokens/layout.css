@@ -1,0 +1,15 @@
+/*
+ * Layout — three-tier architecture.
+ *
+ * primitives.css   Raw scales. Change to shift the whole system.
+ * semantic.css     Purpose-named aliases (container-width, section-padding-block…).
+ * components.css   Per-component tokens — override a single primitive without touching semantics.
+ *
+ * Components in @virtari-packages/react-layout should consume:
+ *   • a component token (--vds-section-padding-block-default, --vds-container-width-default …) as the default, or
+ *   • the semantic token (--vds-section-padding-block, --vds-row-gap …) when the per-component indirection isn't needed.
+ * Never consume the primitives directly.
+ */
+@import "./layout/primitives.css";
+@import "./layout/semantic.css";
+@import "./layout/components.css";

@@ -38,8 +38,35 @@ yarn add @virtari-packages/react-scroll-area
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari-packages/react-scroll-area";
+import { useRef } from "react";
+import { ScrollArea } from "@virtari-packages/react-scroll-area";
+
+function Document() {
+  const viewport = useRef<HTMLDivElement>(null);
+  return (
+    <ScrollArea
+      style={{ height: 400, borderRadius: 24 }}
+      viewportRef={viewport}
+      viewportProps={{ role: "region", "aria-label": "Document" }}
+    >
+      {/* Long content. The viewport preserves native wheel, touch and keyboard scroll. */}
+    </ScrollArea>
+  );
+}
 ```
+
+The default `type="smart"` displays an overflowing scrollbar during scrolling,
+pointer hover, or focus within the area. It fades after `scrollHideDelay` (900 ms)
+when those interactions stop. `type="auto"`, `"always"`, `"hover"`, and `"scroll"`
+retain the primitive's behavior. Tracks never reserve layout space. High contrast
+mode keeps smart tracks visible; reduced motion removes the fade.
+
+Use `viewportRef` to read or restore native scroll position, and `viewportProps`
+for viewport labels and events. The viewport is keyboard focusable by default;
+pass `viewportProps={{ tabIndex: -1 }}` when an existing focusable child already
+provides the appropriate keyboard entry point. `hideScrollbar` remains an
+explicit opt-out. Set `--scroll-area-track-inset` to keep a track clear of large
+rounded corners; it defaults to 4 px.
 
 ### Import styles
 
@@ -65,10 +92,10 @@ All components use logical CSS properties (`margin-inline`, `padding-block`, …
 
 ## Links
 
-- [Repository](https://github.com/IamMrTrick/virtari-design-system)
-- [Issues](https://github.com/IamMrTrick/virtari-design-system/issues)
+- [Repository](https://github.com/Virtari-Packages/virtari-design-system)
+- [Issues](https://github.com/Virtari-Packages/virtari-design-system/issues)
 - [Changelog](./CHANGELOG.md)
 
 ## License
 
-Proprietary. See [LICENSE](./LICENSE).
+[MIT](./LICENSE) © 2026 Virtari.

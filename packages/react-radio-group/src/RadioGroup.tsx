@@ -7,6 +7,7 @@ import {
   type Ref,
 } from "react";
 import * as RadioGroupPrimitive from "@virtari-packages/primitives/radio-group";
+import { useRadioDirection } from "./useRadioDirection";
 import { IconAlertCircle } from "@virtari-packages/react-icons";
 import {
   RadioGroupContext,
@@ -44,13 +45,18 @@ export function RadioGroup({
   size = "md",
   disabled = false,
   orientation = "vertical",
+  dir,
   name,
   className,
   children,
   ref,
   id: idProp,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
+  "aria-describedby": ariaDescribedBy,
   ...rest
 }: RadioGroupProps) {
+  const { direction, composedRef } = useRadioDirection(dir, ref);
   const reactId = useId();
   const groupId = idProp ?? `vds-radio-group-${reactId}`;
   const labelId = `${groupId}-label`;
@@ -60,7 +66,7 @@ export function RadioGroup({
   const hasError = Boolean(error);
 
   const describedBy =
-    [description ? descriptionId : null, hasError ? errorId : null]
+    [ariaDescribedBy, description ? descriptionId : null, hasError ? errorId : null]
       .filter(Boolean)
       .join(" ") || undefined;
 
@@ -72,13 +78,15 @@ export function RadioGroup({
   return (
     <RadioGroupContext.Provider value={contextValue}>
       <RadioGroupPrimitive.Root
-        ref={ref}
+        ref={composedRef}
+        dir={direction}
         id={groupId}
         name={name}
         disabled={disabled}
         orientation={orientation}
         required={required}
-        aria-labelledby={label ? labelId : undefined}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy ?? (ariaLabel ? undefined : label ? labelId : undefined)}
         aria-describedby={describedBy}
         aria-invalid={hasError || undefined}
         data-error={hasError ? "" : undefined}

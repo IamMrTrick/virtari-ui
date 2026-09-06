@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useRef, useState } from "react";
 import { Button } from "@virtari-packages/react-button";
 import { Checkbox } from "@virtari-packages/react-checkbox";
@@ -144,11 +145,11 @@ function OverviewSection() {
         </p>
         <ul>
           <li>5 sizes · 7 animation presets · 6 backdrop styles · 5 intent accents</li>
-          <li>Built-in close button with <code>showCloseButton</code></li>
-          <li>Compound slots: <code>DialogHeader</code>, <code>DialogBody</code>, <code>DialogFooter</code></li>
-          <li>Responsive full-screen below 40rem with <code>responsive</code></li>
-          <li>Prevent dismissal via <code>preventCloseOnEscape</code> / <code>preventCloseOnOutsideClick</code></li>
-          <li>Honours <code>prefers-reduced-motion</code> via motion tokens</li>
+          <li>Built-in close button with <VirtariInlineCode>showCloseButton</VirtariInlineCode></li>
+          <li>Compound slots: <VirtariInlineCode>DialogHeader</VirtariInlineCode>, <VirtariInlineCode>DialogBody</VirtariInlineCode>, <VirtariInlineCode>DialogFooter</VirtariInlineCode></li>
+          <li>Responsive full-screen below 40rem with <VirtariInlineCode>responsive</VirtariInlineCode></li>
+          <li>Prevent dismissal via <VirtariInlineCode>preventCloseOnEscape</VirtariInlineCode> / <VirtariInlineCode>preventCloseOnOutsideClick</VirtariInlineCode></li>
+          <li>Honours <VirtariInlineCode>prefers-reduced-motion</VirtariInlineCode> via motion tokens</li>
         </ul>
       </div>
     </Section>
@@ -194,7 +195,7 @@ function AnatomySection() {
       title="Anatomy"
       description="The full set of compound components. Use DialogHeader + DialogBody + DialogFooter for scrollable content; Title/Description/Footer alone is fine for short messages."
     >
-      <pre className="docs-code">{`<Dialog>                             // Root — controls open state
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Dialog>                             // Root — controls open state
   <DialogTrigger />                  // Button that opens the dialog
   <DialogContent>                    // Modal surface + internal overlay + portal
     <DialogHeader>                   // Sticky top — optional
@@ -207,7 +208,7 @@ function AnatomySection() {
     </DialogFooter>
     <DialogCloseIcon />              // Absolute X button (or use showCloseButton prop)
   </DialogContent>
-</Dialog>`}</pre>
+</Dialog>`} />
     </Section>
   );
 }
@@ -287,8 +288,8 @@ function AnimationsSection() {
               </DialogHeader>
               <DialogBody>
                 <Caption>
-                  Tokens behind this preset: <code>--dialog-enter-animation</code>,{" "}
-                  <code>--dialog-enter-ease</code>, <code>--dialog-enter-duration</code>.
+                  Tokens behind this preset: <VirtariInlineCode>--dialog-enter-animation</VirtariInlineCode>,{" "}
+                  <VirtariInlineCode>--dialog-enter-ease</VirtariInlineCode>, <VirtariInlineCode>--dialog-enter-duration</VirtariInlineCode>.
                 </Caption>
               </DialogBody>
               <DialogFooter>
@@ -424,7 +425,7 @@ function CloseButtonSection() {
             <DialogHeader>
               <DialogTitle>Manual placement</DialogTitle>
               <DialogDescription>
-                Use <code>&lt;DialogCloseIcon&gt;</code> yourself when you need a custom icon or slot.
+                Use <VirtariInlineCode>&lt;DialogCloseIcon&gt;</VirtariInlineCode> yourself when you need a custom icon or slot.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
@@ -824,13 +825,13 @@ function AccessibilitySection() {
       <div className="docs-prose">
         <ul>
           <li>
-            <strong>Labeling.</strong> Always render a <code>DialogTitle</code> or
-            pass <code>aria-label</code>/<code>aria-labelledby</code> on <code>DialogContent</code>.
+            <strong>Labeling.</strong> Always render a <VirtariInlineCode>DialogTitle</VirtariInlineCode> or
+            pass <VirtariInlineCode>aria-label</VirtariInlineCode>/<VirtariInlineCode>aria-labelledby</VirtariInlineCode> on <VirtariInlineCode>DialogContent</VirtariInlineCode>.
             A development-mode warning fires if neither is present.
           </li>
           <li>
-            <strong>Description.</strong> <code>DialogDescription</code> wires up
-            <code> aria-describedby</code> automatically.
+            <strong>Description.</strong> <VirtariInlineCode>DialogDescription</VirtariInlineCode> wires up
+            <VirtariInlineCode> aria-describedby</VirtariInlineCode> automatically.
           </li>
           <li>
             <strong>Focus trap.</strong> Tab/Shift+Tab cycles within the dialog.
@@ -839,18 +840,18 @@ function AccessibilitySection() {
           </li>
           <li>
             <strong>Scroll lock.</strong> Body scrolling is disabled while the
-            dialog is open via <code>react-remove-scroll</code>.
+            dialog is open via <VirtariInlineCode>react-remove-scroll</VirtariInlineCode>.
           </li>
           <li>
             <strong>Dismissal.</strong> Escape, outside-click, and any{" "}
-            <code>DialogClose</code> element dismiss by default. Use
-            <code> preventCloseOnEscape</code> / <code>preventCloseOnOutsideClick</code>
+            <VirtariInlineCode>DialogClose</VirtariInlineCode> element dismiss by default. Use
+            <VirtariInlineCode> preventCloseOnEscape</VirtariInlineCode> / <VirtariInlineCode>preventCloseOnOutsideClick</VirtariInlineCode>
             when you need to guard unsaved work.
           </li>
           <li>
             <strong>Motion.</strong> Every animation reads durations from
-            <code> --vds-duration-*</code> which collapse to 0ms under
-            <code> prefers-reduced-motion: reduce</code>.
+            <VirtariInlineCode> --vds-duration-*</VirtariInlineCode> which collapse to 0ms under
+            <VirtariInlineCode> prefers-reduced-motion: reduce</VirtariInlineCode>.
           </li>
         </ul>
       </div>
@@ -866,12 +867,12 @@ function InstallationSection() {
       title="Installation"
       description="The package ships ESM + CJS with a separate CSS file. Import styles once at your app root."
     >
-      <pre className="docs-code">{`pnpm add @virtari-packages/react-dialog
+      <VirtariCodeBlock renderer="static" language="shell" code={`pnpm add @virtari-packages/react-dialog
 
 // app root
 import "@virtari-packages/react-dialog/styles";
 // (tokens auto-imported via Dialog.css — or bring them yourself)
-import "@virtari-packages/react-dialog/tokens";`}</pre>
+import "@virtari-packages/react-dialog/tokens";`} />
     </Section>
   );
 }
@@ -884,7 +885,7 @@ function ApiReferenceSection() {
       title="API reference"
       description="Full prop surface for each compound component."
     >
-      <pre className="docs-code">{`interface DialogContentProps extends DialogPrimitive.ContentProps {
+      <VirtariCodeBlock renderer="static" language="tsx" code={`interface DialogContentProps extends DialogPrimitive.ContentProps {
   size?: "sm" | "md" | "lg" | "xl" | "full";             // default "md"
   animation?: "scale" | "fade" | "slide-up" | "slide-down"
             | "zoom" | "bounce" | "none";                 // default "scale"
@@ -912,7 +913,7 @@ interface DialogBodyProps     extends HTMLAttributes<HTMLDivElement> {}
 interface DialogFooterProps   extends HTMLAttributes<HTMLDivElement> {}
 interface DialogTitleProps       extends DialogPrimitive.TitleProps {}
 interface DialogDescriptionProps extends DialogPrimitive.DescriptionProps {}
-interface DialogCloseIconProps extends ButtonHTMLAttributes<HTMLButtonElement> {}`}</pre>
+interface DialogCloseIconProps extends ButtonHTMLAttributes<HTMLButtonElement> {}`} />
     </Section>
   );
 }

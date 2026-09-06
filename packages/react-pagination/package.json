@@ -2,16 +2,16 @@
   "name": "@virtari-packages/react-pagination",
   "version": "0.3.0",
   "description": "Virtari pagination — headless, controlled React component with page numbers, ellipsis, and page-size select.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/IamMrTrick/virtari-design-system/tree/main/packages/react-pagination#readme",
+  "homepage": "https://github.com/Virtari-Packages/virtari-design-system/tree/main/packages/react-pagination#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-design-system.git",
+    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
     "directory": "packages/react-pagination"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-design-system/issues"
+    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
   },
   "keywords": [
     "virtari",

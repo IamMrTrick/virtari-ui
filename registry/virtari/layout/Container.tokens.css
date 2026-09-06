@@ -1,0 +1,31 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Base tokens
+   * ───────────────────────────────────────────── */
+  .vds-container {
+    --container-width:  var(--vds-container-width-default, 80rem);
+    --container-gutter: var(--vds-container-gutter-default, 1.5rem);
+  }
+
+  /* ─────────────────────────────────────────────
+   * Width presets
+   * ───────────────────────────────────────────── */
+  .vds-container[data-width="xs"]    { --container-width: var(--vds-container-width-xs, 20rem); }
+  .vds-container[data-width="sm"]    { --container-width: var(--vds-container-width-sm, 40rem); }
+  .vds-container[data-width="md"]    { --container-width: var(--vds-container-width-md, 48rem); }
+  .vds-container[data-width="lg"]    { --container-width: var(--vds-container-width-lg, 64rem); }
+  .vds-container[data-width="xl"]    { --container-width: var(--vds-container-width-xl, 80rem); }
+  .vds-container[data-width="2xl"]   { --container-width: var(--vds-container-width-2xl, 96rem); }
+  .vds-container[data-width="prose"] { --container-width: var(--vds-container-width-prose, 65ch); }
+  .vds-container[data-width="full"]  { --container-width: var(--vds-container-width-full, 100%); }
+
+  /* ─────────────────────────────────────────────
+   * Gutter presets
+   * ───────────────────────────────────────────── */
+  .vds-container[data-gutter="none"] { --container-gutter: 0; }
+  .vds-container[data-gutter="xs"]   { --container-gutter: var(--vds-section-gutter-xs, 0.75rem); }
+  .vds-container[data-gutter="sm"]   { --container-gutter: var(--vds-section-gutter-sm, 1rem); }
+  .vds-container[data-gutter="md"]   { --container-gutter: var(--vds-section-gutter-md, 1.5rem); }
+  .vds-container[data-gutter="lg"]   { --container-gutter: var(--vds-section-gutter-lg, 2rem); }
+  .vds-container[data-gutter="xl"]   { --container-gutter: var(--vds-section-gutter-xl, 3rem); }
+}

@@ -1,0 +1,80 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Base component tokens
+   *    Section is a two-element primitive:
+   *      .vds-section          — outer wall-to-wall band (background, block padding)
+   *      .vds-section__inner   — inner container (max-width, inline padding, row stack)
+   * ───────────────────────────────────────────── */
+  .vds-section {
+    /* Outer */
+    --section-padding-block: var(--vds-section-padding-block-default, 4rem);
+    --section-background: transparent;
+    --section-min-block-size: auto;
+
+    /* Inner */
+    --section-container-width: var(--vds-container-width-default, 80rem);
+    --section-padding-inline:  var(--vds-section-padding-inline-default, 1.5rem);
+    --section-align:           center;           /* start | center | end */
+    --section-gap:             var(--vds-section-gap-default, 2rem);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 2. Padding (block) presets — vertical rhythm of the section
+   * ───────────────────────────────────────────── */
+  .vds-section[data-padding="none"] { --section-padding-block: var(--vds-section-padding-none, 0); }
+  .vds-section[data-padding="xs"]   { --section-padding-block: var(--vds-section-padding-xs, 1rem); }
+  .vds-section[data-padding="sm"]   { --section-padding-block: var(--vds-section-padding-sm, 2rem); }
+  .vds-section[data-padding="md"]   { --section-padding-block: var(--vds-section-padding-md, 3rem); }
+  .vds-section[data-padding="lg"]   { --section-padding-block: var(--vds-section-padding-lg, 4rem); }
+  .vds-section[data-padding="xl"]   { --section-padding-block: var(--vds-section-padding-xl, 6rem); }
+  .vds-section[data-padding="2xl"]  { --section-padding-block: var(--vds-section-padding-2xl, 8rem); }
+  .vds-section[data-padding="3xl"]  { --section-padding-block: var(--vds-section-padding-3xl, 10rem); }
+
+  /* ─────────────────────────────────────────────
+   * 3. Gutter (inline) presets — horizontal padding of the inner container
+   * ───────────────────────────────────────────── */
+  .vds-section[data-gutter="none"] { --section-padding-inline: var(--vds-section-gutter-none, 0); }
+  .vds-section[data-gutter="xs"]   { --section-padding-inline: var(--vds-section-gutter-xs, 0.75rem); }
+  .vds-section[data-gutter="sm"]   { --section-padding-inline: var(--vds-section-gutter-sm, 1rem); }
+  .vds-section[data-gutter="md"]   { --section-padding-inline: var(--vds-section-gutter-md, 1.5rem); }
+  .vds-section[data-gutter="lg"]   { --section-padding-inline: var(--vds-section-gutter-lg, 2rem); }
+  .vds-section[data-gutter="xl"]   { --section-padding-inline: var(--vds-section-gutter-xl, 3rem); }
+
+  /* ─────────────────────────────────────────────
+   * 4. Container width presets (applies when contained)
+   * ───────────────────────────────────────────── */
+  .vds-section[data-width="xs"]    { --section-container-width: var(--vds-container-width-xs, 20rem); }
+  .vds-section[data-width="sm"]    { --section-container-width: var(--vds-container-width-sm, 40rem); }
+  .vds-section[data-width="md"]    { --section-container-width: var(--vds-container-width-md, 48rem); }
+  .vds-section[data-width="lg"]    { --section-container-width: var(--vds-container-width-lg, 64rem); }
+  .vds-section[data-width="xl"]    { --section-container-width: var(--vds-container-width-xl, 80rem); }
+  .vds-section[data-width="2xl"]   { --section-container-width: var(--vds-container-width-2xl, 96rem); }
+  .vds-section[data-width="prose"] { --section-container-width: var(--vds-container-width-prose, 65ch); }
+  .vds-section[data-width="full"]  { --section-container-width: var(--vds-container-width-full, 100%); }
+
+  /* ─────────────────────────────────────────────
+   * 5. Background presets — mapped to surface tokens
+   * ───────────────────────────────────────────── */
+  .vds-section[data-background="subtle"]   { --section-background: var(--vds-color-bg-subtle, #f9fafb); }
+  .vds-section[data-background="muted"]    { --section-background: var(--vds-color-bg-muted, #f3f4f6); }
+  .vds-section[data-background="emphasis"] {
+    --section-background: var(--vds-color-bg-emphasis, var(--vds-color-text, #111827));
+    color: var(--vds-color-on-emphasis, var(--vds-color-surface, #ffffff));
+  }
+
+  /* ─────────────────────────────────────────────
+   * 6. Gap (between Rows inside the section)
+   * ───────────────────────────────────────────── */
+  .vds-section[data-gap="none"] { --section-gap: 0; }
+  .vds-section[data-gap="xs"]   { --section-gap: var(--vds-space-2, 0.5rem); }
+  .vds-section[data-gap="sm"]   { --section-gap: var(--vds-space-4, 1rem); }
+  .vds-section[data-gap="md"]   { --section-gap: var(--vds-space-6, 1.5rem); }
+  .vds-section[data-gap="lg"]   { --section-gap: var(--vds-space-8, 2rem); }
+  .vds-section[data-gap="xl"]   { --section-gap: var(--vds-space-12, 3rem); }
+  .vds-section[data-gap="2xl"]  { --section-gap: var(--vds-space-16, 4rem); }
+
+  /* ─────────────────────────────────────────────
+   * 7. Full-height
+   * ───────────────────────────────────────────── */
+  .vds-section[data-full-height="true"] { --section-min-block-size: 100svh; }
+}

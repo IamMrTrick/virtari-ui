@@ -1,0 +1,16 @@
+/*
+ * Brand registry.
+ *
+ * Each brand file overrides primitive hues under a [data-brand="..."]
+ * scope. The semantic layer is unchanged — components don't need to know
+ * which brand is active.
+ *
+ * To add a new brand:
+ *   1. Copy _template.css to {your-brand}.css
+ *   2. Fill in the OKLCH overrides
+ *   3. Add an @import for it below
+ *   4. Set <html data-brand="{your-brand}"> at runtime
+ *
+ * Order matters: later imports win in the cascade if scopes collide.
+ */
+@import "./virtari.css";

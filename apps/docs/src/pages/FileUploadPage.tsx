@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   FileUpload,
@@ -254,7 +255,7 @@ export function FileUploadPage() {
         description="Compound dropzone + file list built on react-dropzone. Root manages state (files, rejections, drag feedback); parts compose freely — Dropzone, Trigger (asChild to Button), List, Item (Name/Size/Remove/Progress), Preview (images auto, escape hatch for others). Controlled or uncontrolled."
       >
         <p style={{ margin: 0, color: "var(--vds-color-text-muted, #6b7280)" }}>
-          The package is upload-agnostic — it handles selection and validation. You own the XHR/fetch and pass per-item <code>progress</code> values to <code>FileUpload.Item.Progress</code>.
+          The package is upload-agnostic — it handles selection and validation. You own the XHR/fetch and pass per-item <VirtariInlineCode>progress</VirtariInlineCode> values to <VirtariInlineCode>FileUpload.Item.Progress</VirtariInlineCode>.
         </p>
       </Section>
 
@@ -287,7 +288,7 @@ export function FileUploadPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`// Plain input — simplest form
+        <VirtariCodeBlock renderer="static" language="tsx" code={`// Plain input — simplest form
 import { FileUpload } from "@virtari-packages/react-file-upload";
 import "@virtari-packages/react-file-upload/styles";
 
@@ -326,7 +327,7 @@ const [files, setFiles] = useState<File[]>([]);
       </FileUpload.Item>
     ))}
   </FileUpload.List>
-</FileUpload.Root>`}</pre>
+</FileUpload.Root>`} />
       </Section>
     </>
   );

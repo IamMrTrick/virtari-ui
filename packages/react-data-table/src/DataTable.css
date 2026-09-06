@@ -12,7 +12,7 @@
     font-size: var(--data-table-font-size);
     line-height: var(--data-table-line-height);
     background-color: var(--data-table-bg);
-    border: var(--data-table-border-width) solid var(--data-table-border-color);
+    border: var(--data-table-border-width) solid var(--vds-surface-border, var(--data-table-border-color));
     border-radius: var(--data-table-radius);
     overflow: clip;
     position: relative;

@@ -1,0 +1,117 @@
+# Existing examples
+
+- [LayoutPage.tsx](examples/LayoutPage.tsx.md)
+
+All documentation sections importing this package (some demonstrate another package):
+
+- `ai-integration/1` — {text("One reference, three ways to read it", "یک مرجع، سه راه برای خواندن")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 15–23.
+- `ai-integration/2` — {text("Install focused skills", "نصب اسکیل‌های موضوعی")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 24–28.
+- `ai-integration/3` — {text("Connect a local MCP server", "اتصال سرور محلی MCP")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 29–35.
+- `ai-integration/4` — {text("Agent reading workflow", "روش مطالعه برای ایجنت")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 36–42.
+- `ai-integration/5` — {text("Keep knowledge current", "به‌روز نگه‌داشتن دانش")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 43–46.
+- `badge/1` — Live playground; source `apps/docs/src/pages/BadgePage.tsx` lines 232–324.
+- `badge/2` — Variants; source `apps/docs/src/pages/BadgePage.tsx` lines 330–350.
+- `badge/3` — Colors; source `apps/docs/src/pages/BadgePage.tsx` lines 356–378.
+- `badge/4` — Color × Variant matrix; source `apps/docs/src/pages/BadgePage.tsx` lines 384–422.
+- `badge/5` — Sizes; source `apps/docs/src/pages/BadgePage.tsx` lines 428–485.
+- `badge/6` — Shape; source `apps/docs/src/pages/BadgePage.tsx` lines 491–505.
+- `badge/7` — Status dot; source `apps/docs/src/pages/BadgePage.tsx` lines 511–537.
+- `badge/8` — Icons — leading and trailing; source `apps/docs/src/pages/BadgePage.tsx` lines 543–563.
+- `badge/9` — Removable chips; source `apps/docs/src/pages/BadgePage.tsx` lines 573–601.
+- `badge/10` — Interactive; source `apps/docs/src/pages/BadgePage.tsx` lines 607–622.
+- `badge/11` — Polymorphic via asChild; source `apps/docs/src/pages/BadgePage.tsx` lines 628–652.
+- `badge/12` — Long labels and RTL; source `apps/docs/src/pages/BadgePage.tsx` lines 657–662.
+- `badge/13` — Composition patterns; source `apps/docs/src/pages/BadgePage.tsx` lines 667–700.
+- `badge/14` — API reference; source `apps/docs/src/pages/BadgePage.tsx` lines 706–726.
+- `badge/15` — Accessibility; source `apps/docs/src/pages/BadgePage.tsx` lines 732–761.
+- `branding/1` — {label("One identity, every surface", "یک هویت روی همهٔ سطوح")}; source `apps/docs/src/pages/BrandingPage.tsx` lines 21–35.
+- `branding/2` — {label("Loading with continuity", "لودینگ با هویت مشترک")}; source `apps/docs/src/pages/BrandingPage.tsx` lines 36–43.
+- `branding/3` — {label("App icons", "آیکون‌های برنامه")}; source `apps/docs/src/pages/BrandingPage.tsx` lines 44–52.
+- `button/1` — Live playground; source `apps/docs/src/pages/ButtonPage.tsx` lines 214–316.
+- `button/2` — Variants; source `apps/docs/src/pages/ButtonPage.tsx` lines 322–354.
+- `button/3` — Colors; source `apps/docs/src/pages/ButtonPage.tsx` lines 360–380.
+- `button/4` — Color × Variant matrix; source `apps/docs/src/pages/ButtonPage.tsx` lines 399–425.
+- `button/5` — Sizes; source `apps/docs/src/pages/ButtonPage.tsx` lines 431–472.
+- `button/6` — Icons — left and right sections; source `apps/docs/src/pages/ButtonPage.tsx` lines 478–499.
+- `button/7` — Icon-only buttons; source `apps/docs/src/pages/ButtonPage.tsx` lines 505–526.
+- `button/8` — Loading state; source `apps/docs/src/pages/ButtonPage.tsx` lines 545–584.
+- `button/9` — Disabled; source `apps/docs/src/pages/ButtonPage.tsx` lines 590–605.
+- `button/10` — Full width; source `apps/docs/src/pages/ButtonPage.tsx` lines 611–632.
+- `button/11` — Visual effects; source `apps/docs/src/pages/ButtonPage.tsx` lines 638–714.
+- `button/12` — Attention animations; source `apps/docs/src/pages/ButtonPage.tsx` lines 723–754.
+- `button/13` — Polymorphic via asChild; source `apps/docs/src/pages/ButtonPage.tsx` lines 760–790.
+- `button/14` — API reference; source `apps/docs/src/pages/ButtonPage.tsx` lines 796–821.
+- `button/15` — Accessibility; source `apps/docs/src/pages/ButtonPage.tsx` lines 827–856.
+- `code/1` — Overview; source `apps/docs/src/pages/CodePage.tsx` lines 235–260.
+- `code/2` — Languages; source `apps/docs/src/pages/CodePage.tsx` lines 263–286.
+- `code/3` — Sizes; source `apps/docs/src/pages/CodePage.tsx` lines 289–305.
+- `code/4` — Variants; source `apps/docs/src/pages/CodePage.tsx` lines 308–325.
+- `code/5` — Line numbers & line highlighting; source `apps/docs/src/pages/CodePage.tsx` lines 328–340.
+- `code/6` — Unified diff; source `apps/docs/src/pages/CodePage.tsx` lines 343–355.
+- `code/7` — Filename header & copy button; source `apps/docs/src/pages/CodePage.tsx` lines 358–370.
+- `code/8` — Word wrap; source `apps/docs/src/pages/CodePage.tsx` lines 373–387.
+- `code/9` — Max height; source `apps/docs/src/pages/CodePage.tsx` lines 390–403.
+- `code/10` — Live editor; source `apps/docs/src/pages/CodePage.tsx` lines 406–450.
+- `code/11` — Inline code; source `apps/docs/src/pages/CodePage.tsx` lines 453–463.
+- `code/12` — In context — embedded inside a Card; source `apps/docs/src/pages/CodePage.tsx` lines 466–483.
+- `colors/1` — {copy("Color catalog", "فهرست رنگ‌ها")}; source `apps/docs/src/pages/ColorsPage.tsx` lines 43–62.
+- `composition/1` — Stack; source `apps/docs/src/pages/CompositionPage.tsx` lines 28–44.
+- `composition/2` — Cluster; source `apps/docs/src/pages/CompositionPage.tsx` lines 46–65.
+- `composition/3` — Grid; source `apps/docs/src/pages/CompositionPage.tsx` lines 67–82.
+- `composition/4` — Sidebar; source `apps/docs/src/pages/CompositionPage.tsx` lines 84–96.
+- `composition/5` — Center; source `apps/docs/src/pages/CompositionPage.tsx` lines 98–112.
+- `composition/6` — Usage; source `apps/docs/src/pages/CompositionPage.tsx` lines 114–125.
+- `design-guidelines/1` — {copy("Make every field understandable", "هر فیلد را قابل‌فهم کنید")}; source `apps/docs/src/pages/DesignGuidelinesPage.tsx` lines 61–69.
+- `design-guidelines/2` — {copy("Give actions a clear hierarchy", "به اقدام‌ها سلسله‌مراتب بدهید")}; source `apps/docs/src/pages/DesignGuidelinesPage.tsx` lines 70–77.
+- `design-guidelines/3` — {copy("Make keyboard use predictable", "کار با کیبورد را پیش‌بینی‌پذیر کنید")}; source `apps/docs/src/pages/DesignGuidelinesPage.tsx` lines 78–88.
+- `design-guidelines/4` — {copy("Compose patterns, not copies", "الگوها را ترکیب کنید، کپی نسازید")}; source `apps/docs/src/pages/DesignGuidelinesPage.tsx` lines 89–91.
+- `design-guidelines/5` — {copy("Design the complete state", "حالت کامل را طراحی کنید")}; source `apps/docs/src/pages/DesignGuidelinesPage.tsx` lines 92–101.
+- `input/1` — Field composition; source `apps/docs/src/pages/InputPage.tsx` lines 23–28.
+- `input/2` — Sizes; source `apps/docs/src/pages/InputPage.tsx` lines 29–31.
+- `input/3` — Icons and affixes; source `apps/docs/src/pages/InputPage.tsx` lines 32–39.
+- `input/4` — Surfaces and states; source `apps/docs/src/pages/InputPage.tsx` lines 40–47.
+- `input/5` — Password; source `apps/docs/src/pages/InputPage.tsx` lines 48–53.
+- `input/6` — Optional typing feedback; source `apps/docs/src/pages/InputPage.tsx` lines 54–54.
+- `input/7` — Usage; source `apps/docs/src/pages/InputPage.tsx` lines 55–83.
+- `introduction/1` — {label("Principles in practice", "اصول در عمل")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 33–40.
+- `introduction/2` — {label("Three surface styles, one system", "سه سبک سطح، یک سیستم")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 41–44.
+- `introduction/3` — {label("Fields on colored surfaces", "ورودی‌ها روی سطوح رنگی")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 45–54.
+- `introduction/4` — {t("whatIs.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 55–69.
+- `introduction/5` — {t("cssFeatures.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 71–85.
+- `introduction/6` — {t("quickStart.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 87–90.
+- `introduction/7` — {t("architecture.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 92–94.
+- `layout/1` — Why these primitives?; source `apps/docs/src/pages/LayoutPage.tsx` lines 37–57.
+- `layout/2` — Main — the page's single landmark; source `apps/docs/src/pages/LayoutPage.tsx` lines 59–121.
+- `layout/3` — Section — vertical rhythm band; source `apps/docs/src/pages/LayoutPage.tsx` lines 123–152.
+- `layout/4` — Row — grid by default; source `apps/docs/src/pages/LayoutPage.tsx` lines 154–172.
+- `layout/5` — Row — responsive spans; source `apps/docs/src/pages/LayoutPage.tsx` lines 174–187.
+- `layout/6` — Row — autoFit for card galleries; source `apps/docs/src/pages/LayoutPage.tsx` lines 189–205.
+- `layout/7` — Row — flex mode; source `apps/docs/src/pages/LayoutPage.tsx` lines 207–222.
+- `layout/8` — Container — standalone max-width; source `apps/docs/src/pages/LayoutPage.tsx` lines 224–235.
+- `layout/9` — Token architecture; source `apps/docs/src/pages/LayoutPage.tsx` lines 237–260.
+- `layout/10` — API; source `apps/docs/src/pages/LayoutPage.tsx` lines 262–317.
+- `table/1` — Live playground; source `apps/docs/src/pages/TablePage.tsx` lines 168–246.
+- `table/2` — Variants; source `apps/docs/src/pages/TablePage.tsx` lines 303–317.
+- `table/3` — Row styles; source `apps/docs/src/pages/TablePage.tsx` lines 325–339.
+- `table/4` — Sizes; source `apps/docs/src/pages/TablePage.tsx` lines 347–361.
+- `table/5` — Density; source `apps/docs/src/pages/TablePage.tsx` lines 369–383.
+- `table/6` — Selection & hover; source `apps/docs/src/pages/TablePage.tsx` lines 393–425.
+- `table/7` — Sortable headers; source `apps/docs/src/pages/TablePage.tsx` lines 463–489.
+- `table/8` — Sticky header; source `apps/docs/src/pages/TablePage.tsx` lines 502–533.
+- `table/9` — Sticky columns; source `apps/docs/src/pages/TablePage.tsx` lines 550–582.
+- `table/10` — Alignment & numeric cells; source `apps/docs/src/pages/TablePage.tsx` lines 590–630.
+- `table/11` — Footer & caption; source `apps/docs/src/pages/TablePage.tsx` lines 638–669.
+- `table/12` — Loading state; source `apps/docs/src/pages/TablePage.tsx` lines 679–706.
+- `table/13` — RTL-safe by default; source `apps/docs/src/pages/TablePage.tsx` lines 714–750.
+- `table/14` — API; source `apps/docs/src/pages/TablePage.tsx` lines 785–855.
+- `table/15` — Usage; source `apps/docs/src/pages/TablePage.tsx` lines 863–892.
+- `tokens-reference/1` — {text("Every definition, with its scope", "هر تعریف، همراه با محدودهٔ اثر")}; source `apps/docs/src/pages/TokensReferencePage.tsx` lines 25–29.
+- `tokens-reference/2` — {text("Token reference", "مرجع توکن‌ها")}; source `apps/docs/src/pages/TokensReferencePage.tsx` lines 30–54.
+- `utilities/1` — {text("Use the actual class, with its exact value", "نام واقعی کلاس و مقدار دقیق آن")}; source `apps/docs/src/pages/UtilitiesPage.tsx` lines 31–35.
+- `utilities/2` — {text("Utility catalog", "فهرست یوتیلیتی‌ها")}; source `apps/docs/src/pages/UtilitiesPage.tsx` lines 36–60.
+- `utilities/3` — {text("Responsive layout example", "نمونهٔ چیدمان واکنش‌گرا")}; source `apps/docs/src/pages/UtilitiesPage.tsx` lines 61–66.
+- `utilities/4` — {text("Flex, gap and padding", "فلکس، فاصله و پدینگ")}; source `apps/docs/src/pages/UtilitiesPage.tsx` lines 67–73.
+- `utilities/5` — {text("Logical spacing and direction", "فاصله‌گذاری منطقی و جهت متن")}; source `apps/docs/src/pages/UtilitiesPage.tsx` lines 74–85.
+- `utilities/6` — {text("Utility layer overrides", "اولویت لایهٔ یوتیلیتی")}; source `apps/docs/src/pages/UtilitiesPage.tsx` lines 86–92.
+
+MCP: `get_record({collection:"examples",id:"<example ID>"})`; then `read_source` for full page context. A section fragment may reference imports, state, helper components, assets, docs CSS or shared page scaffolding.

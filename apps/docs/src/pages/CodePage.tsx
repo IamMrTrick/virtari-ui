@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import {
   CodeBlock,
   CodeEditor,
@@ -15,7 +15,10 @@ import {
   SelectItem,
 } from "@virtari-packages/react-select";
 import { Switch } from "@virtari-packages/react-switch";
-import { Card } from "@virtari-packages/react-card";
+import { Card, CardHeader, CardTitle, CardDescription } from "@virtari-packages/react-card";
+import { Field } from "@virtari-packages/react-fieldset";
+import { Stack } from "@virtari-packages/react-layout";
+import { Text } from "@virtari-packages/react-text";
 import { Section, Row } from "../components";
 
 /* ─────────────────────────────── Sample code snippets ─────────────────────────────── */
@@ -29,28 +32,26 @@ export function StatusBadge({ status }: { status: "active" | "draft" }) {
 }
 `;
 
-const CSS_SNIPPET = `@layer design-system.components {
-  .vds-card {
-    --card-padding: var(--vds-space-4);
-    --card-radius: var(--vds-radius-card);
-    background: var(--vds-color-surface);
-    border-radius: var(--card-radius);
-    padding: var(--card-padding);
-  }
+const CSS_SNIPPET = `@import "@virtari-packages/core";
+@import "@virtari-packages/tokens";
+@import "@virtari-packages/react-code/styles";
+
+/* Optional application scope; package defaults already supply the surface. */
+.source-preview {
+  --vds-code-font-size: var(--vds-text-sm);
+  --vds-code-padding-inline: var(--vds-space-4);
 }
 `;
 
-const HTML_SNIPPET = `<button class="vds-button" data-variant="solid" data-size="md">
-  <span class="vds-button-icon" aria-hidden="true">
-    <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7" /></svg>
-  </span>
-  Save changes
-</button>
+const HTML_SNIPPET = `<!-- Semantic application content. Use Virtari React packages for controls. -->
+<main aria-labelledby="page-title">
+  <h1 id="page-title">Project source</h1>
+  <p>Review the example, then copy the complete source.</p>
+</main>
 `;
 
 const JSON_SNIPPET = `{
   "name": "@virtari-packages/react-code",
-  "version": "0.1.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
@@ -63,7 +64,7 @@ const MD_SNIPPET = `# Virtari Code
 
 > One-stop component for **viewing**, **editing**, and **inline** code.
 
-- 15 preloaded grammars
+- Preloaded language grammars
 - Token-driven theming
 - Lazy-loadable extras
 
@@ -81,7 +82,8 @@ class Token:
     weight: float
 
 def average_weight(tokens: Iterable[Token]) -> float:
-    return sum(t.weight for t in tokens) / max(len(list(tokens)), 1)
+    values = list(tokens)
+    return sum(t.weight for t in values) / max(len(values), 1)
 `;
 
 const GO_SNIPPET = `package main
@@ -151,7 +153,8 @@ const longLine = "This is an intentionally extremely long single line of code th
 export function Demo() {
   return (
     <CodeBlock
-      language="typescript"
+          renderer="static"
+      language="tsx"
       code={longLine}
       wrap={false}
     />
@@ -170,8 +173,12 @@ console.log(add(2, 3));
 `;
 
 const LANGUAGE_OPTIONS: { value: CodeLanguage; label: string; sample: string }[] = [
-  { value: "typescript", label: "TypeScript", sample: TS_SNIPPET },
-  { value: "javascript", label: "JavaScript", sample: TS_SNIPPET.replace(/: \w+/g, "") },
+  { value: "tsx", label: "TypeScript + JSX", sample: TS_SNIPPET },
+  { value: "jsx", label: "JavaScript + JSX", sample: `import { Button } from "@virtari-packages/react-button";
+
+export function SaveAction() {
+  return <Button type="button">Save changes</Button>;
+}` },
   { value: "css", label: "CSS", sample: CSS_SNIPPET },
   { value: "html", label: "HTML", sample: HTML_SNIPPET },
   { value: "json", label: "JSON", sample: JSON_SNIPPET },
@@ -188,23 +195,6 @@ const SIZES: CodeBlockSize[] = ["sm", "md", "lg"];
 
 /* ─────────────────────────────── Local helpers ─────────────────────────────── */
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--vds-space-1-5)",
-        fontSize: "var(--vds-text-sm)",
-        color: "var(--vds-color-text)",
-      }}
-    >
-      <span style={{ fontWeight: "var(--vds-font-weight-medium)" }}>{label}</span>
-      {children}
-    </label>
-  );
-}
-
 function SwitchRow({
   title,
   hint,
@@ -216,35 +206,17 @@ function SwitchRow({
   checked: boolean;
   onCheckedChange: (v: boolean) => void;
 }) {
-  return (
-    <label
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: "var(--vds-space-4)",
-        fontSize: "var(--vds-text-sm)",
-        cursor: "pointer",
-      }}
-    >
-      <span style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <span style={{ fontWeight: "var(--vds-font-weight-medium)" }}>{title}</span>
-        {hint && (
-          <span style={{ fontSize: "var(--vds-text-xs)", color: "var(--vds-color-text-muted)" }}>
-            {hint}
-          </span>
-        )}
-      </span>
-      <Switch checked={checked} onCheckedChange={onCheckedChange} />
-    </label>
-  );
+  const id = useId();
+  return <Field label={title} description={hint} controlId={id}>
+    <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
+  </Field>;
 }
 
 /* ─────────────────────────────── Page ─────────────────────────────── */
 
 export function CodePage() {
   /* Languages gallery picker */
-  const [galleryLang, setGalleryLang] = useState<CodeLanguage>("typescript");
+  const [galleryLang, setGalleryLang] = useState<CodeLanguage>("tsx");
   const gallerySample = useMemo(
     () => LANGUAGE_OPTIONS.find((o) => o.value === galleryLang)?.sample ?? TS_SNIPPET,
     [galleryLang],
@@ -252,7 +224,7 @@ export function CodePage() {
 
   /* Live editor controls */
   const [editorValue, setEditorValue] = useState(EDITOR_INITIAL);
-  const [editorLang, setEditorLang] = useState<CodeLanguage>("typescript");
+  const [editorLang, setEditorLang] = useState<CodeLanguage>("tsx");
   const [editorReadOnly, setEditorReadOnly] = useState(false);
   const [editorWrap, setEditorWrap] = useState(false);
   const [editorLineNumbers, setEditorLineNumbers] = useState(true);
@@ -262,10 +234,11 @@ export function CodePage() {
       {/* ─────────────── 1. Overview ─────────────── */}
       <Section
         title="Overview"
-        description="Three components in one package — CodeBlock for read-only viewing, CodeEditor for live editing, InlineCode for prose. All powered by CodeMirror 6 (MIT) with token-driven theming so colors, radius, spacing, and typography stay in sync with the rest of the design system."
+        description="Three components in one package — CodeBlock for read-only viewing, CodeEditor for live editing, InlineCode for prose. Static blocks share the editor syntax palette without mounting editable surfaces. Choose renderer=editor for a virtualized read-only viewer of very large files."
       >
         <CodeBlock
-          language="typescript"
+          renderer="static"
+          language="tsx"
           filename="App.tsx"
           showLineNumbers
           code={`import {
@@ -275,12 +248,13 @@ export function CodePage() {
 } from "@virtari-packages/react-code";
 
 // Read-only viewer
-<CodeBlock language="typescript" code={snippet} />
+<CodeBlock renderer="static" language="tsx" code={snippet} />
 
 // Live editor
 <CodeEditor value={value} onValueChange={setValue} language="javascript" />
 
-// Inline snippet — use the <InlineCode>asChild</InlineCode> prop
+// Inline code renders a semantic code element
+<InlineCode>name</InlineCode>
 `}
         />
       </Section>
@@ -288,12 +262,12 @@ export function CodePage() {
       {/* ─────────────── 2. Languages gallery ─────────────── */}
       <Section
         title="Languages"
-        description="15 grammars are preloaded out of the box. Switch between them to see syntax tokens map to Virtari intent palette."
+        description="JavaScript, TypeScript, JSX/TSX, CSS, HTML, JSON, Markdown, Python, Go, Rust, SQL, YAML and XML have preloaded syntax support. Shell and unknown languages remain readable plain text."
       >
         <Row>
-          <Field label="Language">
+          <Field label="Language" controlId="code-gallery-language">
             <Select value={galleryLang} onValueChange={(v) => setGalleryLang(v as CodeLanguage)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger id="code-gallery-language"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {LANGUAGE_OPTIONS.map((o) => (
                   <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
@@ -303,6 +277,7 @@ export function CodePage() {
           </Field>
         </Row>
         <CodeBlock
+          renderer="static"
           language={galleryLang}
           filename={`example.${galleryLang}`}
           showLineNumbers
@@ -315,17 +290,18 @@ export function CodePage() {
         title="Sizes"
         description="Three size presets adjust font size, padding, and line height proportionally."
       >
-        <div style={{ display: "grid", gap: "var(--vds-space-4)" }}>
+        <Stack gap="md">
           {SIZES.map((size) => (
             <CodeBlock
+          renderer="static"
               key={size}
               size={size}
-              language="typescript"
+              language="tsx"
               filename={`Size: ${size}`}
               code={TS_SNIPPET}
             />
           ))}
-        </div>
+        </Stack>
       </Section>
 
       {/* ─────────────── 4. Variants ─────────────── */}
@@ -333,18 +309,19 @@ export function CodePage() {
         title="Variants"
         description="`card` — full chrome with border. `minimal` — chromeless, transparent background. `embedded` — no radius, drop into nested containers."
       >
-        <div style={{ display: "grid", gap: "var(--vds-space-4)" }}>
+        <Stack gap="md">
           {VARIANTS.map((variant) => (
             <CodeBlock
+          renderer="static"
               key={variant}
               variant={variant}
-              language="typescript"
+              language="tsx"
               filename={variant === "card" ? "Card variant" : variant === "minimal" ? "Minimal variant" : "Embedded variant"}
               code={TS_SNIPPET}
               copyable={variant !== "minimal"}
             />
           ))}
-        </div>
+        </Stack>
       </Section>
 
       {/* ─────────────── 5. Line numbers + highlighting ─────────────── */}
@@ -353,7 +330,8 @@ export function CodePage() {
         description="Toggle the gutter and pass a list of 1-indexed line numbers to highlight."
       >
         <CodeBlock
-          language="typescript"
+          renderer="static"
+          language="tsx"
           filename="Highlight lines 3, 5, 6"
           showLineNumbers
           highlightLines={[3, 5, 6]}
@@ -367,7 +345,8 @@ export function CodePage() {
         description="Lines beginning with + are tinted with success-soft and prefixed with a green marker; lines beginning with - get danger-soft and a red marker."
       >
         <CodeBlock
-          language="typescript"
+          renderer="static"
+          language="tsx"
           filename="changes.diff"
           showLineNumbers
           diff="unified"
@@ -382,6 +361,7 @@ export function CodePage() {
       >
         <Row>
           <CodeBlock
+          renderer="static"
             language="json"
             filename="package.json"
             code={JSON_SNIPPET}
@@ -395,14 +375,14 @@ export function CodePage() {
         description="When `wrap` is on, long lines break visually instead of triggering horizontal scroll."
       >
         <Row>
-          <Field label="Wrap demo (off)">
-            <CodeBlock language="typescript" code={LONG_SNIPPET} wrap={false} />
-          </Field>
+          <Stack gap="sm"><Text size="2">Wrap demo (off)</Text>
+            <CodeBlock renderer="static" language="tsx" code={LONG_SNIPPET} wrap={false} />
+          </Stack>
         </Row>
         <Row>
-          <Field label="Wrap demo (on)">
-            <CodeBlock language="typescript" code={LONG_SNIPPET} wrap />
-          </Field>
+          <Stack gap="sm"><Text size="2">Wrap demo (on)</Text>
+            <CodeBlock renderer="static" language="tsx" code={LONG_SNIPPET} wrap />
+          </Stack>
         </Row>
       </Section>
 
@@ -412,6 +392,7 @@ export function CodePage() {
         description="Caps the body and adds a vertical scrollbar styled to match the design system."
       >
         <CodeBlock
+          renderer="static"
           language="javascript"
           filename="long-file.js"
           showLineNumbers
@@ -427,9 +408,9 @@ export function CodePage() {
         description="Controlled <CodeEditor> with full CM6 features: history (Cmd/Ctrl+Z), multi-cursor (Alt+Click), search panel (Cmd/Ctrl+F), bracket matching, autocomplete."
       >
         <Row>
-          <Field label="Language">
+          <Field label="Language" controlId="code-editor-language">
             <Select value={editorLang} onValueChange={(v) => setEditorLang(v as CodeLanguage)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger id="code-editor-language"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {LANGUAGE_OPTIONS.map((o) => (
                   <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
@@ -455,6 +436,7 @@ export function CodePage() {
           />
         </Row>
         <CodeEditor
+          editorLabel="Live source playground"
           value={editorValue}
           onValueChange={setEditorValue}
           language={editorLang}
@@ -472,13 +454,12 @@ export function CodePage() {
         title="Inline code"
         description="Drop short snippets into prose. Three color variants: neutral (default), primary, accent."
       >
-        <p style={{ fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text)", lineHeight: 1.7, maxInlineSize: "60ch" }}>
-          Use the <InlineCode>asChild</InlineCode> prop to render any
-          component as a polymorphic slot. To highlight an important
+        <Text as="p" size="2">
+          Use <InlineCode>InlineCode</InlineCode> for short identifiers in prose. To highlight an important
           identifier inline, choose <InlineCode color="primary">color=&quot;primary&quot;</InlineCode>;
           for a warmer accent, use <InlineCode color="accent">color=&quot;accent&quot;</InlineCode>.
           The component renders a semantic <InlineCode>&lt;code&gt;</InlineCode> element with no JS overhead.
-        </p>
+        </Text>
       </Section>
 
       {/* ─────────────── 12. In context ─────────────── */}
@@ -487,15 +468,12 @@ export function CodePage() {
         description="The `embedded` variant strips border-radius so a code block can drop cleanly inside a surface that already has rounded corners."
       >
         <Card>
-          <div style={{ padding: "var(--vds-space-4)", display: "flex", flexDirection: "column", gap: "var(--vds-space-3)" }}>
-            <h3 style={{ margin: 0, fontSize: "var(--vds-text-base)", fontWeight: "var(--vds-font-weight-semibold)" }}>
-              How to use it
-            </h3>
-            <p style={{ margin: 0, fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text-muted)" }}>
-              Install the package and import the styles once at app root.
-            </p>
-          </div>
+          <CardHeader>
+            <CardTitle>How to use it</CardTitle>
+            <CardDescription>Import core, tokens and the exported package styles at the application root.</CardDescription>
+          </CardHeader>
           <CodeBlock
+          renderer="static"
             language="bash"
             variant="embedded"
             code={`pnpm add @virtari-packages/react-code\n# then import in your global CSS:\n# @import "@virtari-packages/react-code/styles";`}

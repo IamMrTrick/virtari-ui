@@ -32,3 +32,18 @@ jobs:
 
       - name: Typecheck
         run: pnpm run typecheck
+
+      - name: Verify license and source comments
+        run: pnpm license:check && pnpm comments:check
+
+      - name: Verify AI knowledge snapshot and skills
+        run: pnpm ai:check && pnpm ai:test
+
+      - name: Verify MCP transport
+        run: pnpm mcp:build && pnpm mcp:test
+
+      - name: Verify source registry and CLI
+        run: pnpm registry:check && pnpm registry:test
+
+      - name: Verify documentation
+        run: pnpm --filter @virtari-packages/docs exec tsc --noEmit && pnpm --filter @virtari-packages/docs exec vite build

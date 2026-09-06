@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import {
   TooltipProvider,
   Tooltip,
@@ -131,7 +132,7 @@ export function TooltipPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   TooltipProvider,
   Tooltip,
   TooltipTrigger,
@@ -147,7 +148,7 @@ export function TooltipPage() {
       Tooltip text
     </TooltipContent>
   </Tooltip>
-</TooltipProvider>`}</pre>
+</TooltipProvider>`} />
       </Section>
     </TooltipProvider>
   );

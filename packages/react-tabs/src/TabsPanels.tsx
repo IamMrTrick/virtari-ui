@@ -260,6 +260,10 @@ export function TabsPanels({
             className="vds-tabs-panels-slide"
             data-index={idx}
             data-active={idx === activeIndex ? "true" : undefined}
+            // Set the native property because React 18 does not serialize
+            // the boolean inert attribute (React 19 does).
+            ref={(node) => { if (node) node.inert = idx !== activeIndex; }}
+            aria-hidden={idx !== activeIndex ? true : undefined}
           >
             {slide}
           </div>

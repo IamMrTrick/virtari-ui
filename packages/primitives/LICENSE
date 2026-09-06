@@ -1,12 +1,6 @@
 MIT License
 
 Copyright (c) 2026 Virtari
-Copyright (c) 2022 WorkOS
-
-This package is a maintained fork. Portions of this software are derived from
-Radix Primitives (https://github.com/radix-ui/primitives), which is distributed
-under the MIT License and is Copyright (c) 2022 WorkOS. Those portions have been
-modified by Virtari.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

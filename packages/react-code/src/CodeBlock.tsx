@@ -1,22 +1,31 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref } from "react";
+import { useEffect, useMemo, useRef, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref } from "react";
 import CodeMirror, { type ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { EditorState, type Extension } from "@codemirror/state";
-import type { LanguageSupport } from "@codemirror/language";
 import { cn } from "@virtari-packages/utils";
 import { CopyButton } from "@virtari-packages/react-copy-button";
 
 import { vdsCodeTheme } from "./theme";
-import { resolveLanguage, type CodeLanguage } from "./languages";
+import type { CodeLanguage } from "./languages";
+import { useCodeLanguage } from "./useCodeLanguage";
 import { highlightLinesField, setHighlightedLines, diffLinesField } from "./extensions";
+import { StaticCode } from "./StaticCode";
 
 export type CodeBlockVariant = "card" | "minimal" | "embedded";
 export type CodeBlockSize = "sm" | "md" | "lg";
 export type CodeBlockDiff = "none" | "unified";
+export type CodeBlockRenderer = "static" | "editor";
 
 export interface CodeBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /** Source code to render. Required. */
   code: string;
+  /** Static semantic HTML for short documentation snippets; editor preserves the virtualized viewer. */
+  renderer?: CodeBlockRenderer;
+  /** Accessible name for the focusable source region. */
+  codeLabel?: string;
+  copyLabel?: string;
+  copiedLabel?: string;
+  copyErrorLabel?: string;
   /** Language id (e.g. "typescript", "css", "json"). Lazy-loaded if not preloaded. */
   language?: CodeLanguage;
   /** Optional filename label rendered in the header. */
@@ -52,6 +61,11 @@ function normalizeMaxHeight(input: string | number | undefined): string | undefi
 
 export function CodeBlock({
   code,
+  renderer = "editor",
+  codeLabel,
+  copyLabel,
+  copiedLabel,
+  copyErrorLabel,
   language = "plaintext",
   filename,
   filenameIcon,
@@ -70,29 +84,7 @@ export function CodeBlock({
   ...props
 }: CodeBlockProps) {
   const cmRef = useRef<ReactCodeMirrorRef>(null);
-  const [resolvedLang, setResolvedLang] = useState<LanguageSupport | LanguageSupport[] | null>(() => {
-    const initial = resolveLanguage(language);
-    return initial && !(initial instanceof Promise) ? initial : null;
-  });
-
-  /* Resolve lazy language grammars. Plaintext flashes briefly until ready. */
-  useEffect(() => {
-    const result = resolveLanguage(language);
-    if (!result) {
-      setResolvedLang(null);
-      return;
-    }
-    if (result instanceof Promise) {
-      let cancelled = false;
-      result.then((lang) => {
-        if (!cancelled) setResolvedLang(lang ?? null);
-      });
-      return () => {
-        cancelled = true;
-      };
-    }
-    setResolvedLang(result);
-  }, [language]);
+  const resolvedLang = useCodeLanguage(language);
 
   /* Build the CM6 extension set. Memoized on the inputs that matter. */
   const extensions = useMemo<Extension[]>(() => {
@@ -100,22 +92,21 @@ export function CodeBlock({
       vdsCodeTheme,
       EditorView.editable.of(false),
       EditorState.readOnly.of(true),
-      EditorView.contentAttributes.of({ tabIndex: "0" }),
+      EditorView.contentAttributes.of({ tabIndex: "0", "aria-label": codeLabel ?? filename ?? "Code example", dir: "ltr" }),
     ];
     if (wrap) list.push(EditorView.lineWrapping);
-    if (highlightLines && highlightLines.length > 0) list.push(highlightLinesField);
+    list.push(highlightLinesField);
     if (diff === "unified") list.push(diffLinesField);
     if (resolvedLang) list.push(...(Array.isArray(resolvedLang) ? resolvedLang : [resolvedLang]));
     return list;
-  }, [wrap, highlightLines, diff, resolvedLang]);
+  }, [wrap, highlightLines, diff, resolvedLang, codeLabel, filename]);
 
   /* Push the highlightLines effect whenever the array changes. */
   useEffect(() => {
     const view = cmRef.current?.view;
     if (!view) return;
-    if (!highlightLines || highlightLines.length === 0) return;
-    view.dispatch({ effects: setHighlightedLines.of(highlightLines) });
-  }, [highlightLines]);
+    view.dispatch({ effects: setHighlightedLines.of(highlightLines ?? []) });
+  }, [highlightLines, renderer]);
 
   const showHeader = Boolean(filename) || copyable;
   const normalizedMaxHeight = normalizeMaxHeight(maxHeight);
@@ -129,6 +120,7 @@ export function CodeBlock({
       data-variant={variant !== "card" ? variant : undefined}
       data-size={size !== "md" ? size : undefined}
       data-readonly="true"
+      data-renderer={renderer}
       data-wrap={wrap || undefined}
       style={style}
       {...props}
@@ -144,7 +136,7 @@ export function CodeBlock({
           </div>
           {copyable && (
             <div className="vds-code-header-actions">
-              <CopyButton text={code} variant="ghost" copyButtonSize="2xs" />
+              <CopyButton text={code} variant="ghost" copyButtonSize="xs" copyLabel={copyLabel} copiedLabel={copiedLabel} errorLabel={copyErrorLabel} />
             </div>
           )}
         </div>
@@ -155,8 +147,10 @@ export function CodeBlock({
         data-max-height={normalizedMaxHeight ? "" : undefined}
         style={bodyStyle}
       >
-        <CodeMirror
+        {renderer === "static" ? <StaticCode code={code} language={resolvedLang} showLineNumbers={showLineNumbers}
+          highlightLines={highlightLines} diff={diff} label={codeLabel ?? filename ?? "Code example"} /> : <CodeMirror
           ref={cmRef}
+          onCreateEditor={(view) => view.dispatch({ effects: setHighlightedLines.of(highlightLines ?? []) })}
           value={code}
           theme="none"
           extensions={extensions}
@@ -178,7 +172,7 @@ export function CodeBlock({
           }}
           editable={false}
           readOnly
-        />
+        />}
       </div>
 
       {caption && <div className="vds-code-caption">{caption}</div>}

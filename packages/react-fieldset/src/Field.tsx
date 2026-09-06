@@ -44,8 +44,9 @@ export interface FieldProps
   ref?: Ref<HTMLDivElement>;
 }
 
-function hasContent(value: ReactNode | undefined) {
-  return value !== undefined && value !== null && value !== false;
+export function hasFieldContent(value: ReactNode | undefined): boolean {
+  if (Array.isArray(value)) return value.some(hasFieldContent);
+  return value !== undefined && value !== null && typeof value !== "boolean" && value !== "";
 }
 
 export function composeFieldDescribedBy(
@@ -93,7 +94,7 @@ function renderMetaRow(
   };
 
   return (
-    <div className="vds-field-meta-row" data-kind={kind}>
+    <div key={kind} className="vds-field-meta-row" data-kind={kind}>
       {renderItems(startItems, "start")}
       {renderItems(endItems, "end")}
     </div>
@@ -132,7 +133,7 @@ export function Field({
   } = labelProps ?? {};
   const divLabelProps = restLabelProps as HTMLAttributes<HTMLDivElement>;
   const labelClassName = cn("vds-field-label", labelPropsClassName);
-  const descriptionItem = hasContent(description)
+  const descriptionItem = hasFieldContent(description)
     ? {
         align: descriptionAlign,
         content: description,
@@ -140,7 +141,7 @@ export function Field({
         kind: "description" as const,
       }
     : null;
-  const errorItem = hasContent(error)
+  const errorItem = hasFieldContent(error)
     ? {
         align: errorAlign,
         content: error,
@@ -148,7 +149,7 @@ export function Field({
         kind: "error" as const,
       }
     : null;
-  const counterItem = hasContent(counter)
+  const counterItem = hasFieldContent(counter)
     ? {
         align: counterAlign,
         content: counter,

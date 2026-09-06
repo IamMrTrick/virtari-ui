@@ -1,0 +1,5 @@
+/* TimeField layout is defined alongside DateField in DateField.css
+ * — same selector group (.vds-time-field-*). This file re-exports
+ * the combined rules so consumers can import time-field styles alone.
+ */
+@import "./DateField.css";

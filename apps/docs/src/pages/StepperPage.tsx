@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState, type ComponentType, type CSSProperties } from "react";
 import {
   IconAlertTriangle,
@@ -192,7 +193,7 @@ export function StepperPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Stepper, StepperStep } from "@virtari-packages/react-stepper";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Stepper, StepperStep } from "@virtari-packages/react-stepper";
 import "@virtari-packages/react-stepper/styles";
 
 <Stepper
@@ -207,11 +208,11 @@ import "@virtari-packages/react-stepper/styles";
   <StepperStep label="Account" description="Verify identity" />
   <StepperStep label="Profile" description="Complete details" />
   <StepperStep label="Launch" />
-</Stepper>`}</pre>
+</Stepper>`} />
       </Section>
 
       <Section title="Props">
-        <pre className="docs-code">{`interface StepperProps {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`interface StepperProps {
   activeStep: number;
   orientation?: "horizontal" | "vertical";
   size?: "sm" | "md" | "lg";
@@ -226,7 +227,7 @@ interface StepperStepProps {
   description?: string;
   indicator?: React.ReactNode;
   status?: "complete" | "active" | "pending" | "error";
-}`}</pre>
+}`} />
       </Section>
     </>
   );

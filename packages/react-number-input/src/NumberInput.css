@@ -21,13 +21,16 @@
 
 @layer design-system.components {
   .vds-number-input {
+    box-shadow: var(--vds-field-shadow, none);
+    box-sizing: border-box;
+    min-inline-size: 0;
     display: flex;
     align-items: stretch;
     inline-size: 100%;
-    block-size: var(--_ni-height);
-    border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
+    min-block-size: var(--_ni-height);
+    border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
     border-radius: var(--_ni-radius);
-    background-color: var(--vds-color-surface);
+    background-color: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface)));
     overflow: hidden;
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
@@ -85,13 +88,13 @@
       & .vds-number-input__step--dec {
         border-inline-end: 1px solid var(--vds-color-border-muted);
         inline-size: var(--_ni-height);
-        flex-shrink: 0;
+        flex: 0 0 auto;
       }
 
       & .vds-number-input__step--inc {
         border-inline-start: 1px solid var(--vds-color-border-muted);
         inline-size: var(--_ni-height);
-        flex-shrink: 0;
+        flex: 0 0 auto;
       }
     }
 
@@ -116,6 +119,10 @@
 
 @layer design-system.components {
   .vds-number-input__field {
+    box-sizing: border-box;
+    margin: 0;
+    padding-block: 0;
+    line-height: var(--vds-control-line-height, 1.5);
     flex: 1;
     min-inline-size: 0;
     border: none;
@@ -125,7 +132,7 @@
     font-size: var(--_ni-font-size);
     font-family: var(--vds-font-sans);
     color: var(--vds-color-text);
-    block-size: 100%;
+    min-block-size: calc(var(--_ni-height) - 2px);
     -webkit-touch-callout: default;
     -webkit-user-select: text;
     user-select: text;
@@ -145,7 +152,6 @@
   .vds-number-input__steppers {
     display: flex;
     flex-direction: column;
-    block-size: 100%;
     border-inline-start: 1px solid var(--vds-color-border-muted);
     flex-shrink: 0;
   }
@@ -181,6 +187,8 @@
     & > svg {
       inline-size: var(--_ni-stepper-icon);
       block-size: var(--_ni-stepper-icon);
+      flex-shrink: 0;
+      pointer-events: none;
     }
 
     &:hover:not(:disabled) {
@@ -223,5 +231,22 @@
         animation: ni-step-up-press 140ms var(--vds-ease-out) forwards;
       }
     }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-number-input__step {
+      transition: none;
+    }
+
+    .vds-number-input .vds-number-input__step:active:not(:disabled) > svg,
+    .vds-number-input__field.vds-field--pulse {
+      animation: none;
+    }
+  }
+}
+
+@layer design-system.components {
+  .vds-number-input:hover:not(:disabled):not([data-disabled]):not([aria-invalid="true"]):not([data-invalid]):not(:focus-within) {
+    border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
   }
 }

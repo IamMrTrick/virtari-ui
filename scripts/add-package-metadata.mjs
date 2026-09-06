@@ -17,9 +17,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const PACKAGES_DIR = path.join(ROOT, "packages");
 
-const REPO_URL = "https://github.com/IamMrTrick/virtari-design-system";
+const REPO_URL = "https://github.com/Virtari-Packages/virtari-design-system";
 const AUTHOR = "Virtari";
-const LICENSE = "UNLICENSED";
+const LICENSE = "MIT";
 const GH_REGISTRY = "https://npm.pkg.github.com";
 
 /** Per-package short descriptions. Any package not listed falls back to auto. */

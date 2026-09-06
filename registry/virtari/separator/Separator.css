@@ -1,0 +1,43 @@
+@layer design-system.components {
+  .vds-separator {
+    flex-shrink: 0;
+    background-color: var(--vds-color-border-muted);
+
+    &[data-orientation="horizontal"] {
+      inline-size: 100%;
+      block-size: 1px;
+    }
+
+    &[data-orientation="vertical"] {
+      inline-size: 1px;
+      block-size: 100%;
+    }
+  }
+
+  /* ── Separator with label ──
+   * Written as a compound selector so it outranks
+   * `.vds-separator[data-orientation="horizontal"]` above, which the labeled
+   * element also matches. At a single class it lost the specificity contest
+   * on `block-size` and the labeled row collapsed to the 1px rule height. */
+  .vds-separator.vds-separator--labeled {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-3);
+    background-color: transparent;
+    block-size: auto;
+  }
+
+  .vds-separator__line {
+    flex: 1;
+    block-size: 1px;
+    background-color: var(--vds-color-border-muted);
+  }
+
+  .vds-separator__label {
+    font-size: var(--vds-text-xs);
+    color: var(--vds-color-text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-family: var(--vds-font-sans);
+  }
+}

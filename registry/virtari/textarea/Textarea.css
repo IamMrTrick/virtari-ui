@@ -1,0 +1,172 @@
+@import "../fieldset/Fieldset.css";
+
+@keyframes vds-textarea-typing-pulse {
+  0% {
+    box-shadow: 0 0 0 4px var(--_textarea-ring), 0 0 12px 2px var(--_textarea-glow);
+  }
+  35% {
+    box-shadow: 0 0 0 4px var(--_textarea-ring), 0 0 12px 2px var(--_textarea-glow), 0 0 0 6px var(--_textarea-burst);
+  }
+  100% {
+    box-shadow: 0 0 0 4px var(--_textarea-ring), 0 0 12px 2px var(--_textarea-glow);
+  }
+}
+
+@layer design-system.components {
+  .vds-textarea {
+    --_textarea-ring: var(--vds-color-primary-a4);
+    --_textarea-glow: var(--vds-color-primary-a2);
+    --_textarea-burst: var(--vds-color-primary-a3);
+    box-shadow: var(--vds-field-shadow, none);
+    /* ── Public config ── */
+    --textarea-padding-inline: var(--vds-space-3);
+    --textarea-padding-block: var(--vds-space-2);
+    --textarea-font-size: var(--vds-text-sm);
+    --textarea-radius: var(--vds-radius-textarea);
+    /* Roughly three rows at the matching font size — scales with data-size. */
+    --textarea-min-block-size: var(--vds-space-20);
+
+    /*
+     * ── Legacy private aliases ──
+     * Kept for the iOS auto-zoom guard in @virtari-packages/core and for any
+     * package already overriding --_textarea-*. New code sets --textarea-*.
+     */
+    --_textarea-px: var(--textarea-padding-inline);
+    --_textarea-py: var(--textarea-padding-block);
+    --_textarea-font-size: var(--textarea-font-size);
+    --_textarea-radius: var(--textarea-radius);
+
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    line-height: var(--vds-leading-normal, 1.5);
+    display: block;
+    inline-size: 100%;
+    min-block-size: var(--textarea-min-block-size);
+    resize: vertical;
+    font-family: var(--vds-font-sans);
+    border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
+    background-color: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface)));
+    color: var(--vds-color-text);
+    -webkit-touch-callout: default;
+    -webkit-user-select: text;
+    user-select: text;
+    transition:
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow 180ms ease-out;
+
+    padding-inline: var(--_textarea-px);
+    padding-block: var(--_textarea-py);
+    font-size: var(--_textarea-font-size);
+    border-radius: var(--_textarea-radius);
+
+    &::placeholder {
+      color: var(--vds-color-text-placeholder, var(--vds-color-neutral-11));
+    }
+
+    &:focus-visible {
+      border-color: var(--vds-color-primary-9);
+      outline: none;
+      box-shadow: 0 0 0 4px var(--_textarea-ring), 0 0 12px 2px var(--_textarea-glow);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
+    }
+
+    &.vds-textarea--pulse:focus-visible {
+      animation: vds-textarea-typing-pulse 140ms var(--vds-ease-out) forwards;
+    }
+
+    &:disabled {
+      opacity: var(--vds-opacity-disabled, 0.5);
+      cursor: not-allowed;
+    }
+
+    &[aria-invalid]:not([aria-invalid="false"]) {
+      --_textarea-ring: var(--vds-color-danger-a4);
+      --_textarea-glow: var(--vds-color-danger-a2);
+      --_textarea-burst: var(--vds-color-danger-a3);
+      border-color: var(--vds-color-danger-9);
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+
+        @media (forced-colors: active) {
+          outline: 2px solid Highlight;
+          outline-offset: 2px;
+          box-shadow: none;
+        }
+      }
+
+      transition: box-shadow 180ms ease-out;
+
+      @media (prefers-reduced-motion: reduce) {
+        transition-duration: 0s;
+      }
+    }
+
+    /* ── Sizes ── */
+
+    &[data-size="2xs"] {
+      --textarea-padding-inline: var(--vds-space-1-5);
+      --textarea-padding-block: var(--vds-space-1);
+      --textarea-font-size: var(--vds-text-xs);
+      --textarea-min-block-size: var(--vds-space-12);
+    }
+
+    &[data-size="xs"] {
+      --textarea-padding-inline: var(--vds-space-2);
+      --textarea-padding-block: var(--vds-space-1);
+      --textarea-font-size: var(--vds-text-xs);
+      --textarea-min-block-size: var(--vds-space-14);
+    }
+
+    &[data-size="sm"] {
+      --textarea-padding-inline: var(--vds-space-2-5);
+      --textarea-padding-block: var(--vds-space-1-5);
+      --textarea-font-size: var(--vds-text-sm);
+      --textarea-min-block-size: var(--vds-space-16);
+    }
+
+    /* md uses defaults above */
+
+    &[data-size="lg"] {
+      --textarea-padding-inline: var(--vds-space-4);
+      --textarea-padding-block: var(--vds-space-3);
+      --textarea-font-size: var(--vds-text-base);
+      --textarea-min-block-size: var(--vds-space-24);
+    }
+
+    &[data-size="xl"] {
+      --textarea-padding-inline: var(--vds-space-5);
+      --textarea-padding-block: var(--vds-space-3-5);
+      --textarea-font-size: var(--vds-text-lg);
+      --textarea-min-block-size: var(--vds-space-28);
+    }
+
+    &[data-size="2xl"] {
+      --textarea-padding-inline: var(--vds-space-6);
+      --textarea-padding-block: var(--vds-space-4);
+      --textarea-font-size: var(--vds-text-xl);
+      --textarea-min-block-size: var(--vds-space-32);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+}
+
+[data-vds-no-micro] .vds-textarea--pulse { animation: none; }
+@media (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .vds-textarea--pulse { animation: none; }
+}
+
+@layer design-system.components {
+  .vds-textarea:hover:not(:disabled):not([data-disabled]):not([aria-invalid]:not([aria-invalid="false"])):not([data-invalid]):not(:focus-within) {
+    border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
+  }
+}

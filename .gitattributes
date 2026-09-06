@@ -1,0 +1,9 @@
+# Generated knowledge remains versioned and reviewable; authoring/source is primary.
+ai/catalog.json linguist-generated=true
+ai/sources.json linguist-generated=true
+ai/generated-files.json linguist-generated=true
+ai/dependencies/** linguist-generated=true
+ai/skills/** linguist-generated=true
+apps/docs/public/ai/** linguist-generated=true
+apps/docs/public/llms.txt linguist-generated=true
+apps/docs/src/data/generated*.json linguist-generated=true

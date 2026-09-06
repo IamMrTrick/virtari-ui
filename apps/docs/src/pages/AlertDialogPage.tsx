@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   AlertDialog,
@@ -70,18 +71,18 @@ function OverviewSection() {
     >
       <div className="docs-prose">
         <p>
-          Use <code>AlertDialog</code> for commit-or-cancel flows that the user
+          Use <VirtariInlineCode>AlertDialog</VirtariInlineCode> for commit-or-cancel flows that the user
           must explicitly resolve: destructive deletes, irreversible
           publishing, leaving with unsaved work. Use the regular{" "}
-          <code>Dialog</code> for everything else.
+          <VirtariInlineCode>Dialog</VirtariInlineCode> for everything else.
         </p>
         <p>
-          The two components share the same <code>vds-dialog-*</code> CSS and
-          the same <code>size</code> / <code>animation</code> /{" "}
-          <code>backdrop</code> / <code>intent</code> / <code>responsive</code>{" "}
+          The two components share the same <VirtariInlineCode>vds-dialog-*</VirtariInlineCode> CSS and
+          the same <VirtariInlineCode>size</VirtariInlineCode> / <VirtariInlineCode>animation</VirtariInlineCode> /{" "}
+          <VirtariInlineCode>backdrop</VirtariInlineCode> / <VirtariInlineCode>intent</VirtariInlineCode> / <VirtariInlineCode>responsive</VirtariInlineCode>{" "}
           API — there is no separate visual style to learn. AlertDialog just
-          defaults <code>intent</code> to <code>&ldquo;destructive&rdquo;</code>{" "}
-          and uses <code>role=&ldquo;alertdialog&rdquo;</code> under
+          defaults <VirtariInlineCode>intent</VirtariInlineCode> to <VirtariInlineCode>&ldquo;destructive&rdquo;</VirtariInlineCode>{" "}
+          and uses <VirtariInlineCode>role=&ldquo;alertdialog&rdquo;</VirtariInlineCode> under
           the hood.
         </p>
       </div>
@@ -226,8 +227,8 @@ function BackdropsSection() {
               <AlertDialogHeader>
                 <AlertDialogTitle>Backdrop &ldquo;{backdrop}&rdquo;</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Use <code>blur</code> or <code>blur-strong</code> for premium
-                  feel; <code>default</code> for maximum contrast.
+                  Use <VirtariInlineCode>blur</VirtariInlineCode> or <VirtariInlineCode>blur-strong</VirtariInlineCode> for premium
+                  feel; <VirtariInlineCode>default</VirtariInlineCode> for maximum contrast.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -364,8 +365,8 @@ function DifferencesSection() {
           <tbody>
             <tr>
               <td style={td}>Role</td>
-              <td style={td}><code>dialog</code></td>
-              <td style={td}><code>alertdialog</code></td>
+              <td style={td}><VirtariInlineCode>dialog</VirtariInlineCode></td>
+              <td style={td}><VirtariInlineCode>alertdialog</VirtariInlineCode></td>
             </tr>
             <tr>
               <td style={td}>Escape closes</td>
@@ -379,13 +380,13 @@ function DifferencesSection() {
             </tr>
             <tr>
               <td style={td}>Built-in X button</td>
-              <td style={td}><code>showCloseButton</code></td>
+              <td style={td}><VirtariInlineCode>showCloseButton</VirtariInlineCode></td>
               <td style={td}>— (resolve via Action/Cancel)</td>
             </tr>
             <tr>
               <td style={td}>Default intent</td>
-              <td style={td}><code>&ldquo;default&rdquo;</code></td>
-              <td style={td}><code>&ldquo;destructive&rdquo;</code></td>
+              <td style={td}><VirtariInlineCode>&ldquo;default&rdquo;</VirtariInlineCode></td>
+              <td style={td}><VirtariInlineCode>&ldquo;destructive&rdquo;</VirtariInlineCode></td>
             </tr>
             <tr>
               <td style={td}>Size / animation / backdrop / responsive</td>
@@ -418,7 +419,7 @@ function UsageSection() {
       title="Usage"
       description="Import styles for both Dialog and AlertDialog — they share the same stylesheet."
     >
-      <pre className="docs-code">{`// app root
+      <VirtariCodeBlock renderer="static" language="tsx" code={`// app root
 import "@virtari-packages/react-dialog/styles";
 import "@virtari-packages/react-alert-dialog/styles";
 
@@ -442,7 +443,7 @@ import {
       <AlertDialogAction asChild><Button variant="destructive">Delete</Button></AlertDialogAction>
     </AlertDialogFooter>
   </AlertDialogContent>
-</AlertDialog>`}</pre>
+</AlertDialog>`} />
     </Section>
   );
 }

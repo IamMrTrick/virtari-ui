@@ -1,3 +1,5 @@
+export { DesignGuidelinesPage } from "./DesignGuidelinesPage";
+export { BrandingPage } from "./BrandingPage";
 export { IntroductionPage } from "./IntroductionPage";
 export { ButtonPage } from "./ButtonPage";
 export { ButtonGroupPage } from "./ButtonGroupPage";
@@ -51,6 +53,8 @@ export { DataTableProductsPage } from "./DataTableProductsPage";
 export { DataTableOrdersPage } from "./DataTableOrdersPage";
 export { TablePage } from "./TablePage";
 export { UtilitiesPage } from "./UtilitiesPage";
+export { TokensReferencePage } from "./TokensReferencePage";
+export { AiIntegrationPage } from "./AiIntegrationPage";
 export { RTLPage } from "./RTLPage";
 export { IconsPage } from "./IconsPage";
 export { HeadingPage } from "./HeadingPage";
@@ -73,11 +77,15 @@ export { CarouselPage } from "./CarouselPage";
 export { FlowPage } from "./FlowPage";
 
 export const PAGE_META: Record<string, { title: string; description: string }> = {
+  "tokens-reference": { title: "Token reference", description: "Every source variable, expression and scoped definition, searchable by category." },
+  "ai-integration": { title: "AI integration", description: "Focused Agent Skills, a local MCP server and source-backed examples." },
+  guidelines: { title: "Design guidelines", description: "Practical patterns for understandable forms, clear actions and predictable keyboard use." },
+  brand: { title: "Brand", description: "Virtari marks, app icons and loading states." },
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },
   sizing: { title: "Sizing", description: "Unified size system, height ramp, WCAG compliance." },
   colors: { title: "Colors", description: "OKLCH color palette and semantic token reference." },
   typography: { title: "Typography", description: "Font scale, weights, and font family tokens." },
-  button: { title: "Button", description: "6 variants, 7 sizes, loading, icons, animations." },
+  button: { title: "Button", description: "Five appearance variants, eight sizes, icon slots, loading and deliberate motion options." },
   "button-group": {
     title: "Button Group",
     description:
@@ -98,7 +106,7 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     description:
       "One-time code input with SMS autofill hints, paste distribution, digit normalization, and keyboard navigation.",
   },
-  textarea: { title: "Textarea", description: "Multi-line text input with auto-resize." },
+  textarea: { title: "Textarea", description: "Native multiline text input with labeled fields and character counters." },
   editor: {
     title: "Rich Text Editor",
     description:
@@ -313,7 +321,7 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   code: {
     title: "Code",
     description:
-      "CodeMirror 6 wrapped with Virtari tokens — read-only viewer, live editor, and inline snippet. 15 preloaded languages, line numbers, line highlight, diff view, copy button, autocomplete, multi-cursor, and search.",
+      "Read-only code, a live editor, and inline snippets with shared syntax colors, line highlighting, diff cues, and clipboard feedback.",
   },
   carousel: {
     title: "Carousel",

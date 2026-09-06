@@ -1,0 +1,331 @@
+{
+  "packages": [
+    {
+      "id": "react-input",
+      "category": "forms",
+      "description": "Native text controls, field composition, password reveal and password-strength feedback.",
+      "guidance": [
+        "Use Input for an existing labeled composition; use InputField or PasswordInputField for label, description, error and counter wiring. Their ref targets the native input; className/style style the field wrapper, while inputClassName/inputStyle style the input.",
+        "Input accepts native input attributes and event-shaped onChange. Keep id, name, type and autoComplete stable for browser autofill; choose current-password for sign-in and new-password for registration. Use value with onChange, or defaultValue for native uncontrolled input.",
+        "Use size 2xs, xs, sm, md, lg, xl or 2xl (md default); inputSize is only a deprecated alias. Use inherited data-surface-style and data-field-tone=strong for a contrasting field on a tinted host instead of inventing an appearance prop.",
+        "Compose decorative icons with InputWrapper and InputIcon side=start/end; use InputGroup plus InputAddon for affixes. InputIcon is aria-hidden: an interactive action needs its own named button outside that decorative slot.",
+        "PasswordInput exposes controlled/uncontrolled reveal state independently from the text value. Configure strengthOptions, requirements and translated showPasswordLabel/hidePasswordLabel for the product; showStrengthMeter defaults to true and can be disabled for sign-in.",
+        "InputField and PasswordInputField give explicit invalid priority, then preserve explicit aria-invalid (including grammar/spelling and false), otherwise infer invalid from rendered error content. Zero is valid metadata; absent/empty metadata and null counter formatters create no description IDs; maxLength=0 is displayed. PasswordInputField synchronizes its uncontrolled counter after an uncancelled native form reset; reveal retains button focus."
+      ],
+      "pitfalls": [
+        "Do not remount an input, rewrite its key, prevent paste or enable typingPulse merely to implement focus feedback; typingPulse is opt-in and defaults to false.",
+        "Password strength is local feedback, not server validation or a guarantee of password safety. A placeholder does not replace a persistent label.",
+        "Input has no appearance/variant prop; native size is deliberately replaced by the design-system size union."
+      ],
+      "related": ["react-fieldset", "react-form", "react-label", "react-button", "tokens"]
+    },
+    {
+      "id": "react-textarea",
+      "category": "forms",
+      "description": "Native multiline text input and a labeled field wrapper with linked metadata.",
+      "guidance": [
+        "Textarea forwards native textarea attributes, onChange events and an HTMLTextAreaElement ref. Use value/onChange or defaultValue and retain native rows, maxLength, name, form, required and readOnly behavior.",
+        "Use TextareaField for label, description, error, showCounter and counterFormatter. className/style target the wrapper; textareaClassName/textareaStyle target the native control.",
+        "Use the shared seven-step size ramp from 2xs to 2xl (md default); inputSize is deprecated. Size controls field geometry, while rows controls initial multiline capacity.",
+        "Inherit data-surface-style and data-field-tone for surface separation. Leave typingPulse false unless explicitly desired; it is suppressed for readOnly and reduced motion.",
+        "TextareaField gives explicit invalid priority, then preserves native aria-invalid values, otherwise infers invalid from rendered error content. Zero is valid metadata; empty metadata and null counter formatters do not create dangling IDs; maxLength=0 remains visible."
+      ],
+      "pitfalls": [
+        "There is no autosize, variant or appearance prop in TextareaProps; implement additional behavior explicitly rather than borrowing another library's API.",
+        "Do not intercept Enter as a submit action by default in a multiline editor, or replace visible help/error text with color alone."
+      ],
+      "related": ["react-input", "react-fieldset", "react-form", "tokens"]
+    },
+    {
+      "id": "react-select",
+      "category": "forms",
+      "description": "Single-choice Select and searchable, multiple, asynchronous or virtualized Combobox compositions.",
+      "guidance": [
+        "Compose Select with SelectTrigger, SelectValue, SelectContent and SelectItem; group options with SelectGroup/SelectLabel. Selection belongs on Select via value/defaultValue/onValueChange; visual size and appearance belong on SelectTrigger.",
+        "SelectTrigger supports size 2xs through 2xl and appearance soft, outline, ghost or filled. loading communicates aria-busy; clearable requires an onClear handler that updates selection.",
+        "Use SelectField's render function and apply controlId, describedBy and invalid to the actual trigger. Passing plain children does not automatically clone and wire them.",
+        "Use Combobox with items containing stable value and label strings; compose ComboboxTrigger, ComboboxContent, ComboboxInput, ComboboxList and ComboboxOptions or explicit ComboboxItem children. Set multiple for string-array values; single mode uses strings.",
+        "For asynchronous search supply onSearchChange, loading and updated items; external search is application-owned. Set virtualized for the built-in virtualized options rendering. name/form support serialized selection; validate required selection at the application layer where the API lacks a required prop.",
+        "Select resolves document direction and accepts explicit dir. Preserve the components' active-descendant, listbox and focus handling rather than adding independent key handlers that compete with them.",
+        "Non-searchable Combobox supports keyboard navigation and commit from its focused trigger. Virtual rows measure wrapped content; put disabled state in item data because unmounted rows cannot register item-only props. Give triggers persistent accessible names and retain selected item metadata when replacing async results.",
+        "SelectField links rendered metadata (including zero) and infers invalid from error unless explicitly overridden. Forward its render-prop IDs and invalid to the actual trigger. SelectTrigger preserves native aria-invalid values when invalid is absent."
+      ],
+      "pitfalls": [
+        "Do not pass native event handlers as onValueChange or assume SelectRoot accepts the trigger's appearance/size props.",
+        "Combobox fetching, request cancellation and server-side validation are not built in. Keep empty results distinct from loading and errors.",
+        "A render-prop SelectField is the safe route for linked labels/errors; a wrapper label alone cannot label an unconnected trigger."
+      ],
+      "related": ["react-fieldset", "react-form", "react-popover", "react-scroll-area", "tokens"]
+    },
+    {
+      "id": "react-number-input",
+      "category": "forms",
+      "description": "Numeric draft editing with explicit stepping, range limits and field composition.",
+      "guidance": [
+        "NumberInput uses number or undefined values and onChange(number | undefined), not a native change event. It preserves intermediate drafts such as '-' and '1.' while typing; controlled mode is selected by the presence of the value prop, including value=undefined.",
+        "Use min/max/step and precision deliberately. step defaults to 1; clampOnBlur defaults to true. The rendered input is type=text with role=spinbutton and inputMode=decimal, so application validation must enforce numeric constraints on submission.",
+        "Choose stepper=stacked for trailing chevrons or inline for minus/plus on logical sides. ArrowUp/ArrowDown perform stepping; wheelEnabled is false by default and only operates while focused.",
+        "Use NumberInputField for label/help/error wiring, size 2xs through 2xl for geometry, and the native input ref for focus. name/form and other supported native attributes reach the text input; reset is explicitly handled through useFormReset.",
+        "NumberInputField uses rendered metadata, including zero, to create description IDs. Explicit invalid takes precedence over aria-invalid; otherwise an error infers invalid. Native grammar/spelling values are preserved when invalid is absent."
+      ],
+      "pitfalls": [
+        "Do not bind this component with an onChange handler that reads event.target.value. An empty numeric field is undefined, not automatically zero.",
+        "This parser accepts ASCII decimal/exponent syntax, not locale-formatted grouping or Persian digits. Do not promise locale number parsing.",
+        "Native number-input min/max constraint validation is not provided by its text input; blur clamping is not a replacement for validation."
+      ],
+      "related": ["react-fieldset", "react-input", "react-form", "utils"]
+    },
+    {
+      "id": "react-otp-input",
+      "category": "forms",
+      "description": "Segmented one-time-code entry with paste, autofill hints and digit normalization.",
+      "guidance": [
+        "Use OtpInput with string value/defaultValue and onChange; length defaults to 6 and type is numeric, alphanumeric or alphabetic. onComplete reports a filled code so the application can decide the next step.",
+        "Provide a translated group label. autoComplete defaults to one-time-code on the first slot; normalizeDigits defaults to true for Persian/Arabic digits. Preserve full-code paste and the built-in slot focus handling.",
+        "Use size sm, md or lg, mask for obscured slots, and required for native slot requirements. name adds a hidden serialized code input; form associates the component with an external form.",
+        "The ref targets the root div, not an individual input. Use autoFocus only when entering the code is clearly the current task; selectOnFocus is true by default and automatic focus respects false.",
+        "Root keyboard and paste handlers run before internal handling and may preventDefault to cancel it. Explicit invalid takes precedence over aria-invalid; native slot metadata includes linked errors. Code order remains LTR inside RTL forms, and slots wrap within narrow containers."
+      ],
+      "pitfalls": [
+        "A completed code is not an authenticated code; expiration, retry limits and verification remain server/application responsibilities.",
+        "Do not spread Input's seven-size union onto OtpInput: it supports only sm/md/lg. Its type describes character filtering rather than a native input type.",
+        "Mask uses browser-dependent visual text security on text inputs, not password semantics. Slot label prefixes are customizable but their appended character-position phrase is currently English. Real SMS retrieval and mobile autofill depend on the consuming browser."
+      ],
+      "related": ["react-fieldset", "react-form", "utils", "tokens"]
+    },
+    {
+      "id": "react-phone-input",
+      "category": "forms",
+      "description": "Country-aware telephone entry, normalized digits and canonical E.164 submission.",
+      "guidance": [
+        "Use PhoneInput with string value/defaultValue; onChange returns PhoneInputValue containing country, national, e164 and isValid. Set defaultCountry when a national number has no explicit country and preferredCountries for frequently used choices.",
+        "name creates a hidden E.164 input for submission; the visible input is tel with tel-national autocomplete. The forwarded ref targets that visible input, and native form/reset association is supported.",
+        "Use locale en/fa/ar for country names and normalizeDigits (true by default) for Persian/Arabic digits. Give the visible number a real label; label customizes the country trigger's accessible label, not a rendered field label.",
+        "Use size 2xs through 2xl and PhoneInputCountrySelect for separate country composition. Exported usePhoneInput, toE164, isValidPhone, normalizeDigits and country maps support custom presentation with the same parsing data.",
+        "Use onValidityChange for validation feedback and treat canonical E.164 and display national text as distinct values. readOnly also disables country changes."
+      ],
+      "pitfalls": [
+        "onChange does not return a React event or a plain string. Do not submit the localized display string when the server expects E.164.",
+        "Country-change announcements currently include English text even with locale=fa/ar. invalid references a generated error id; supply a valid aria-errormessage or linked external error when composing an error message."
+      ],
+      "related": ["react-select", "react-input", "react-fieldset", "react-flag", "react-form"]
+    },
+    {
+      "id": "react-tag-input",
+      "category": "forms",
+      "description": "Controlled tag-list entry with chips, delimiters and repeated form values.",
+      "guidance": [
+        "TagInput requires value:string[] and onChange(tags). Enter and delimiters (comma by default) commit trimmed tags; paste also splits lines. Backspace in an empty draft removes the last tag.",
+        "Configure maxTags, allowDuplicates (false by default) and validate. A validation result must be true to accept the tag; false or a string rejects it. Render explanatory validation feedback in your enclosing Field.",
+        "name serializes one hidden input per committed tag; read values with FormData.getAll(name). The visible draft is not a submitted tag until committed. Native form reset restores the initial tag array through onChange.",
+        "Use size sm/md/lg and a persistent label tied to id. The ref targets the editable input; disabled/readOnly prevent additions/removals and required applies while the tag array is empty."
+      ],
+      "pitfalls": [
+        "There is no defaultValue array API for tags. Do not use defaultValue to initialize the tag list or expect a rejected validate string to render automatically.",
+        "An uncommitted draft does not appear in the hidden inputs. Make the commit interaction clear before submission."
+      ],
+      "related": ["react-chip", "react-fieldset", "react-form", "utils"]
+    },
+    {
+      "id": "react-date-picker",
+      "category": "forms",
+      "description": "Internationalized date/time fields, calendars and adaptive single/range picker overlays.",
+      "guidance": [
+        "Choose DateField or TimeField for segmented entry, Calendar or RangeCalendar for standalone selection, and DatePicker or DateRangePicker for field-plus-overlay composition. Public values use @internationalized/date DateValue types rather than JavaScript Date or arbitrary strings.",
+        "Use re-exported CalendarDate, CalendarDateTime, ZonedDateTime, Time and parseDate/parseTime helpers to construct the correct value. Keep timezone and calendar conversion explicit instead of formatting a locale string and parsing it back.",
+        "Pickers accept value/defaultValue/onChange plus minValue/maxValue/isDateUnavailable. Use isDisabled/isReadOnly/isRequired/isInvalid, label/description/errorMessage, name/form and validationBehavior according to the actual picker interface.",
+        "Use size 2xs through 2xl and appearance soft/outline/ghost/filled. Set calendar and locale deliberately; I18nProvider/useLocale and the exported calendar engine support internationalized composition.",
+        "overlayMode is auto, popover, drawer or dialog; mobilePresentation selects drawer/dialog and mobileSizeMode selects content/full. Use presets render props for values that must update picker state, and showTimePicker/granularity/hourCycle for time-bearing values."
+      ],
+      "pitfalls": [
+        "Do not pass Input-style disabled/required props to interfaces that expose isDisabled/isRequired. The picker ref is a root div, not a native text input.",
+        "A date-only CalendarDate has no timezone or time; do not silently convert it to a timestamp. Check each exported component's interface because time/range/standalone APIs differ."
+      ],
+      "related": ["react-popover", "react-drawer", "react-dialog", "react-form", "tokens"]
+    },
+    {
+      "id": "react-form",
+      "category": "forms",
+      "description": "React Hook Form context and accessible field composition adapters.",
+      "guidance": [
+        "Form is an alias for react-hook-form FormProvider. Render a real form element inside it and wire methods.handleSubmit; provide the methods returned by useForm.",
+        "Compose FormField (Controller adapter) with FormItem, FormLabel, FormControl, FormDescription and FormMessage. useFormField requires both FormField and FormItem contexts and subscribes to the field's validation state.",
+        "FormControl slots exactly one actual control and injects id, aria-describedby and aria-invalid. For Select put it around SelectTrigger; for custom composite controls ensure the slotted child forwards those attributes/ref to its focusable target.",
+        "Adapt each component's value contract explicitly: Input uses onChange events, Checkbox/Switch use checked/onCheckedChange, Select uses value/onValueChange and NumberInput uses number-or-undefined onChange.",
+        "FormItem supports vertical/horizontal orientation. Use FormMessage for the linked validation text and include FormDescription when using the default description wiring."
+      ],
+      "pitfalls": [
+        "Form does not emit HTML form markup or implement validation rules itself. Schema libraries and server validation are application choices.",
+        "Do not wrap multiple controls or a non-forwarding layout div in FormControl; the generated id must reach the element the label and error actually describe.",
+        "FormControl assembles its own described-by ids. Preserve additional external description ids deliberately when overriding that attribute."
+      ],
+      "related": ["react-input", "react-fieldset", "react-label", "react-select", "react-checkbox"]
+    },
+    {
+      "id": "react-fieldset",
+      "category": "forms",
+      "description": "Native field grouping and reusable label/control/help/error/counter layout.",
+      "guidance": [
+        "Use Fieldset with FieldsetLegend and FieldsetDescription to group related controls using native fieldset semantics; native disabled applies to descendant form controls.",
+        "Use Field when composing a custom control and supply controlId matching its id. Provide descriptionId/errorId/counterId and apply composeFieldDescribedBy(...) to the control for deduplicated ARIA references.",
+        "Field does not clone children. Forward invalid, required and disabled to the actual control as well as the presentation wrapper, or use InputField/TextareaField/NumberInputField/SelectField adapters that perform the relevant wiring.",
+        "Use metaLayout=stacked or inline, logical descriptionAlign/errorAlign/counterAlign=start/end, and afterControl for content that belongs between the control and metadata. Keep spacing in the shared field styles.",
+        "Use hasFieldContent when deciding whether to assign metadata IDs: numeric zero is content, while null, undefined, booleans, empty strings and arrays containing only absent values are not. Match the control references to Field's rendered metadata."
+      ],
+      "pitfalls": [
+        "Field is a div-based composition, not a native fieldset or validation engine. A required star and data-disabled style do not implement native validity or disable a child.",
+        "Rendering an error row alone does not link it to a control; wire ids and aria-describedby together."
+      ],
+      "related": ["react-input", "react-textarea", "react-number-input", "react-select", "react-form"]
+    },
+    {
+      "id": "react-label",
+      "category": "forms",
+      "description": "Styled label primitive for direct control association.",
+      "guidance": [
+        "Use Label with htmlFor matching the actual control id, or use the labeled Field/Form adapters for complete metadata wiring.",
+        "Label forwards primitive label props and ref. It supplies the shared label class, not its own sizing, error-message or required-state API."
+      ],
+      "pitfalls": [
+        "Do not invent size, variant or required props to request field features. Use Field or FormLabel in their intended composition.",
+        "A label around a layout group is not a substitute for a fieldset legend or individual labels."
+      ],
+      "related": ["react-fieldset", "react-form", "react-input", "react-checkbox"]
+    },
+    {
+      "id": "react-checkbox",
+      "category": "forms",
+      "description": "Independent selection controls, labeled fields, cards, groups and pill choices.",
+      "guidance": [
+        "Checkbox uses checked/defaultChecked/onCheckedChange from the checkbox primitive, including indeterminate state. Use CheckboxField for label/description or CheckboxCard for row/icon-grid selectable cards.",
+        "CheckboxGroup supplies group label, description, error, required indication and orientation. Descendants inherit disabled/error/name, with item overrides; each checkbox owns its selection state and should receive a distinct submission value.",
+        "Use PillCheckbox with PillCheckboxItem for multiple independent pill choices. State belongs on each item, not a root value array. Provide an accessible name for the group and each choice.",
+        "Checkbox and pill sizes are sm/md/lg. Keep indicator geometry and radii in the shared tokens rather than replacing the checkbox with a styled div.",
+        "Fields/cards associate supplementary text as descriptions and preserve consumer names. Pills wrap long text and display selection marks. Native uncontrolled reset respects cancellation and explicit external form association."
+      ],
+      "pitfalls": [
+        "CheckboxGroup.required is group ARIA/visual guidance, not an at-least-one selection validator. Implement that rule explicitly and show the group error.",
+        "Bare checkbox indicators are compact; use their labeled field/card compositions or adequate surrounding target spacing instead of assuming the small visible square supplies a large touch target.",
+        "Use a checkbox for independent choices; an exclusive set belongs in RadioGroup, and an immediate on/off setting may belong in Switch."
+      ],
+      "related": ["react-fieldset", "react-form", "react-radio-group", "react-switch", "tokens"]
+    },
+    {
+      "id": "react-radio-group",
+      "category": "forms",
+      "description": "Exclusive choices presented as radios, fields, cards, segmented controls or pills.",
+      "guidance": [
+        "RadioGroup owns value/defaultValue/onValueChange, name and required. Give every RadioGroupItem, RadioField or RadioCard a stable distinct value.",
+        "RadioGroup supplies label, description and error plus inherited size/disabled/error. RadioCard supports row and icon-grid layouts; RadioField supplies the labeled item presentation.",
+        "Use SegmentedRadio/SegmentedRadioItem or PillRadio/PillRadioItem for the same exclusive selection semantics in compact presentations. Their state remains root-owned radio state, not independent pressed buttons.",
+        "Use sm/md/lg sizes and the primitive orientation/direction behavior; preserve keyboard roving focus and arrow-key selection. RadioGroup, SegmentedRadio and PillRadio resolve explicit dir, then DirectionProvider, then inherited DOM direction.",
+        "Give every group a name. Field/card option titles form their names while helper text remains separately associated. Uncontrolled native reset restores the initial selection or empty state and respects cancellation/external form ownership. Controlled reset remains application-owned; resetting to empty does not emit the string-only onValueChange callback."
+      ],
+      "pitfalls": [
+        "SegmentedRadio is for choosing a value. If selection changes a navigable content panel, use the Tabs package and its tab/panel semantics instead.",
+        "Do not flatten option values into labels or force every item into the Tab sequence; retain the primitive's group keyboard behavior."
+      ],
+      "related": ["react-checkbox", "react-tabs", "react-form", "react-fieldset", "tokens"]
+    },
+    {
+      "id": "react-switch",
+      "category": "forms",
+      "description": "Binary switch with primitive form semantics and optional drag interaction.",
+      "guidance": [
+        "Use checked/onCheckedChange or defaultChecked for boolean state. Name the switch with Label/htmlFor or aria-label and keep its label stable while state changes.",
+        "Use size sm/md/lg. dragEnabled defaults to true; set it false when only standard click/keyboard toggling is desired. Primitive name/value/required/disabled props remain available.",
+        "Use Switch for a binary setting whose effect is clear; communicate pending/save/error state in the surrounding UI when a server mutation is required.",
+        "Pointer handlers compose consumer first and preventDefault cancels internal handling. Taps honor native onClick cancellation; completed drags commit onCheckedChange and suppress the following pointer click.",
+        "Native and external form resets restore the initial uncontrolled state unless canceled. Controlled consumers may decline reset; hidden form serialization remains aligned with their current checked prop."
+      ],
+      "pitfalls": [
+        "The callback receives a boolean, not a native input event. Do not apply Toggle's pressed/onPressedChange API.",
+        "Do not assume a visual switch label is rendered by this component. Supply an associated label or explicit accessible name."
+      ],
+      "related": ["react-label", "react-form", "react-checkbox", "react-toggle", "tokens"]
+    },
+    {
+      "id": "react-slider",
+      "category": "forms",
+      "description": "Primitive-backed numeric slider with automatic thumb rendering and direction support.",
+      "guidance": [
+        "Pass explicit value/defaultValue number arrays: one element for a single thumb, two for a range. Use onValueChange for continuous updates and the primitive onValueCommit for work that should wait until interaction completes.",
+        "Configure min/max/step/minStepsBetweenThumbs; defaults are min=0, max=100 and minStepsBetweenThumbs=1. The wrapper renders thumbs from the supplied array.",
+        "Direction is inherited through useDirection and DirectionProvider, with explicit dir winning. Retain the primitive keyboard behavior and provide visible labels, current values and meaningful accessible naming.",
+        "Use the primitive name for form participation. There is no package size prop or public custom-thumb composition in this wrapper; read the primitive contract before requiring per-thumb customization."
+      ],
+      "pitfalls": [
+        "Do not pass a scalar numeric value. Omitting both value and defaultValue makes the wrapper render two thumbs, so always initialize the intended thumb count.",
+        "A root label may be insufficient for distinguishable range endpoints. Verify accessible names for each thumb in the product before claiming complete range accessibility."
+      ],
+      "related": ["react-number-input", "react-fieldset", "react-form", "utils", "tokens"]
+    },
+    {
+      "id": "react-toggle",
+      "category": "forms",
+      "description": "A persistent pressed-state action button.",
+      "guidance": [
+        "Use pressed/defaultPressed/onPressedChange for state and supply a stable visible or accessible name. This is a pressed button, not a checkbox input.",
+        "Use variant=default or outline and the shared size ramp 2xs through 2xl (md default). Preserve the shared spacing/radius classes instead of adding per-instance geometry.",
+        "Use Toggle for a formatting or mode action such as bold. Use RadioGroup for exclusive form values and Switch for binary settings; a group of independent Toggle controls requires explicit group labeling and application-owned state."
+      ],
+      "pitfalls": [
+        "Do not expect checked/onCheckedChange or automatic native form serialization of pressed state. Add explicit state serialization if the product requires it.",
+        "Do not use appearance=soft or button variants on Toggle; its exported variant union is only default/outline."
+      ],
+      "related": ["react-button", "react-radio-group", "react-switch", "tokens"]
+    },
+    {
+      "id": "react-file-upload",
+      "category": "forms",
+      "description": "File selection/dropzone composition, previews and application-driven upload progress.",
+      "guidance": [
+        "Compose FileUpload.Root, Dropzone, Trigger, List, Item and Preview. Item exposes Name, Size, Remove and Progress subcomponents through the namespace; provide each Item its File object.",
+        "Use files/defaultFiles/onFilesChange for selection state, accept as a react-dropzone MIME-to-extension map, minSize/maxSize in bytes, maxFiles and multiple (false by default). Handle onReject with user-visible actionable feedback.",
+        "Include the keyboard-operable Trigger: dropzone keyboard handling is intentionally disabled. Use the Dropzone render state for drag acceptance/rejection feedback without relying on color alone.",
+        "FileUpload.Input is a separate styled native file input with an accept string, native onChange event, name/form and input ref; it is not the dropzone root's controlled files adapter.",
+        "Perform upload requests, cancellation, retries and persistence in the application. Pass measured progress to Item/progress; Preview manages its temporary object URL lifecycle."
+      ],
+      "pitfalls": [
+        "The package selects files; it does not upload them. Root.accept and Input.accept intentionally have different shapes.",
+        "Root does not expose native form serialization or reset for its File[] state; build FormData from selected files and reset state explicitly.",
+        "Item.Remove does not automatically consume the root disabled state; pass disabled when removal must also be locked."
+      ],
+      "related": ["react-form", "react-progress", "react-button", "react-fieldset", "tokens"]
+    },
+    {
+      "id": "react-color-picker",
+      "category": "forms",
+      "description": "Solid/gradient color editing with serialization utilities and configurable picker chrome.",
+      "guidance": [
+        "ColorPicker accepts a CSS color/gradient string or ColorPickerValue via value/defaultValue. onValueChange returns both serialized CSS and ColorPickerChangeDetail; preserve the structured detail when further editing needs stop/type information.",
+        "Use mode=solid, gradient or both, allowedTypes for subtype restrictions, allowAlpha and swatches for product constraints. format/defaultFormat and view/defaultView have their own change callbacks independent from color state.",
+        "Use appearance=card, flat or floating for container chrome. These values differ from Select/DatePicker appearances and are not global surface modes.",
+        "Use exported parseColorPickerValue/serializeColorPickerValue/createColorPickerValue and gradient-stop utilities for programmatic edits instead of manipulating serialized gradient strings with ad-hoc splitting.",
+        "Eyedropper capability is environment-dependent; retain the manual color-entry path. Explicitly serialize the selected CSS value when placing this editor in a form."
+      ],
+      "pitfalls": [
+        "The root is a div editor with no native name/form value serialization or generic size prop. Do not pass Input's API to it.",
+        "Picking a color does not guarantee a compliant foreground/background contrast pair; assess its actual intended surface and text role."
+      ],
+      "related": ["react-input", "react-slider", "react-tabs", "react-fieldset", "tokens"]
+    },
+    {
+      "id": "react-language-picker",
+      "category": "forms",
+      "description": "Locale selection from the language catalog with popover or confirmable drawer presentation.",
+      "guidance": [
+        "Use value/defaultValue/onChange with locale-tag strings. Restrict locales to translations the application actually supports; preferredLocales pins choices without defining a translation backend.",
+        "Use uiLocale=en/fa/ar for picker meta copy and showNativeName for native-script subtitles. Changing the selected locale does not automatically update application messages, routing, document lang or dir: apply those in your integration.",
+        "Use overlay=popover or drawer; drawerDirection and translated drawerTitle/drawerDescription/cancelLabel/applyLabel configure drawer presentation. Preserve its apply/cancel interaction when embedding it in settings.",
+        "Size and appearance use Combobox's seven-size ramp and soft/outline/ghost/filled union. LanguageLabel, LanguagePickerOption, languages/languagesByLocale and localeToFlag support consistent language presentation elsewhere.",
+        "The ref targets a root div. If selection belongs in a submitted form, add explicit serialization in application state; the public interface does not expose name/form props."
+      ],
+      "pitfalls": [
+        "A country flag is only a display convention and is not a unique language identifier. Store locale tags, not flag codes or localized labels.",
+        "Do not assume the complete language catalog means the application has translations for every listed locale. uiLocale controls picker copy, not the selected content language."
+      ],
+      "related": ["react-select", "react-drawer", "react-flag", "react-form", "tokens"]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+@layer design-system.components {
+  .vds-slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    block-size: var(--vds-space-5);
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+
+    &[data-disabled] {
+      cursor: not-allowed;
+      opacity: var(--vds-opacity-disabled, 0.5);
+    }
+  }
+
+  .vds-slider-track {
+    position: relative;
+    flex-grow: 1;
+    block-size: var(--vds-space-1);
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-color-bg-muted);
+    overflow: hidden;
+  }
+
+  .vds-slider-range {
+    position: absolute;
+    block-size: 100%;
+    background-color: var(--vds-color-primary-9);
+    border-radius: inherit;
+
+    .vds-slider[data-disabled] & {
+      background-color: var(--vds-color-neutral-8, #9ca3af);
+    }
+  }
+
+  .vds-slider-thumb {
+    display: block;
+    inline-size: var(--vds-space-5);
+    block-size: var(--vds-space-5);
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-color-white);
+    border: 2px solid var(--vds-color-primary-9);
+    box-shadow: var(--vds-shadow-sm);
+    transition:
+      box-shadow 180ms ease-out,
+      scale var(--vds-duration-fast) var(--vds-ease-out);
+
+    &:hover {
+      scale: 1.1;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
+    }
+
+    .vds-slider[data-disabled] & {
+      cursor: not-allowed;
+      border-color: var(--vds-color-neutral-8, #9ca3af);
+    }
+
+    .vds-slider[data-disabled] &:hover {
+      scale: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { cn } from "@virtari-packages/utils";
-import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+import { useId, type ComponentPropsWithoutRef, type ReactNode, type Ref } from "react";
 import { Checkbox, type CheckboxProps } from "./Checkbox";
 import { useCheckboxGroupContext } from "./context";
 
@@ -25,6 +25,7 @@ export function CheckboxField({
   ...checkboxProps
 }: CheckboxFieldProps) {
   const group = useCheckboxGroupContext();
+  const textId = useId();
   const resolvedError = error ?? group?.error ?? false;
   const resolvedDisabled = disabled ?? group?.disabled ?? false;
   const resolvedSize = checkboxProps.size ?? "md";
@@ -47,13 +48,15 @@ export function CheckboxField({
         disabled={resolvedDisabled}
         className={className}
         {...checkboxProps}
+        aria-labelledby={checkboxProps["aria-labelledby"] ?? (checkboxProps["aria-label"] ? undefined : `${textId}-label`)}
+        aria-describedby={[checkboxProps["aria-describedby"], description ? `${textId}-description` : undefined].filter(Boolean).join(" ") || undefined}
       />
       <span className="vds-checkbox-field-text">
         <span className="vds-checkbox-field-main">
-          <span className="vds-checkbox-field-label">{label}</span>
+          <span id={`${textId}-label`} className="vds-checkbox-field-label">{label}</span>
         </span>
         {description ? (
-          <span className="vds-checkbox-field-description">{description}</span>
+          <span id={`${textId}-description`} className="vds-checkbox-field-description">{description}</span>
         ) : null}
       </span>
     </label>
