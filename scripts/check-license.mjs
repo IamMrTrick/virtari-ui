@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const packagesDir = path.join(root, "packages");
 const writeMode = process.argv.includes("--write");
-const canonicalRepository = "git+https://github.com/IamMrTrick/virtari-ui.git";
+const canonicalRepository = "git+https://github.com/itstheilya/virtari-ui.git";
 const staleRepository = /IamMrTrick\/virtari-design-system/g;
 const rootLicense = fs.readFileSync(path.join(root, "LICENSE"), "utf8");
 const brandLicensePath = path.join(root, "BRAND_ASSETS_LICENSE.md");
@@ -37,17 +37,17 @@ for (const manifestPath of manifestPaths) {
   manifest.license = "MIT";
 
   if (typeof manifest.repository === "string") {
-    manifest.repository = manifest.repository.replace(staleRepository, "IamMrTrick/virtari-ui");
+    manifest.repository = manifest.repository.replace(staleRepository, "itstheilya/virtari-ui");
   } else if (manifest.repository?.url) {
-    manifest.repository.url = manifest.repository.url.replace(staleRepository, "IamMrTrick/virtari-ui");
+    manifest.repository.url = manifest.repository.url.replace(staleRepository, "itstheilya/virtari-ui");
   }
   if (typeof manifest.homepage === "string") {
-    manifest.homepage = manifest.homepage.replace(staleRepository, "IamMrTrick/virtari-ui");
+    manifest.homepage = manifest.homepage.replace(staleRepository, "itstheilya/virtari-ui");
   }
   if (typeof manifest.bugs === "string") {
-    manifest.bugs = manifest.bugs.replace(staleRepository, "IamMrTrick/virtari-ui");
+    manifest.bugs = manifest.bugs.replace(staleRepository, "itstheilya/virtari-ui");
   } else if (manifest.bugs?.url) {
-    manifest.bugs.url = manifest.bugs.url.replace(staleRepository, "IamMrTrick/virtari-ui");
+    manifest.bugs.url = manifest.bugs.url.replace(staleRepository, "itstheilya/virtari-ui");
   }
 
   const expected = `${JSON.stringify(manifest, null, 2)}\n`;
@@ -75,7 +75,7 @@ const maintainedTextFiles = [
   ...packageDirs.map((dir) => path.relative(root, path.join(dir, "README.md"))).filter((file) => fs.existsSync(path.join(root, file))),
 ];
 const replacements = [
-  [/IamMrTrick\/virtari-design-system/g, "IamMrTrick/virtari-ui"],
+  [/IamMrTrick\/virtari-design-system/g, "itstheilya/virtari-ui"],
   [/Proprietary\. See \[LICENSE\]\(\.\/LICENSE\)\./g, "[MIT](./LICENSE) © 2026 Virtari."],
   [/License: Proprietary \(UNLICENSED on npm\)\. Internal use only\./g, "License: MIT."],
   [/This is proprietary software\. By contributing you assign copyright of your contributions to the project owner, under the terms of the repository's \[LICENSE\]\(\.\/LICENSE\)\./g, "Contributions are accepted under the repository's [MIT License](./LICENSE)."],

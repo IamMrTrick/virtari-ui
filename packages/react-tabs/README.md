@@ -88,8 +88,8 @@ then the DOM ancestor. Runtime direction changes also reposition the indicator.
 
 ## Links
 
-- [Repository](https://github.com/IamMrTrick/virtari-ui)
-- [Issues](https://github.com/IamMrTrick/virtari-ui/issues)
+- [Repository](https://github.com/itstheilya/virtari-ui)
+- [Issues](https://github.com/itstheilya/virtari-ui/issues)
 - [Changelog](./CHANGELOG.md)
 
 ## License

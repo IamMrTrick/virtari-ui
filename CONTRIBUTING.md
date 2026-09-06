@@ -12,7 +12,7 @@ Thanks for working on Virtari. This guide covers the day-to-day workflow, conven
 ## Getting started
 
 ```bash
-git clone https://github.com/IamMrTrick/virtari-ui.git
+git clone https://github.com/itstheilya/virtari-ui.git
 cd virtari-design-system
 pnpm install
 pnpm run build

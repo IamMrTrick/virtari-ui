@@ -4,14 +4,14 @@
   "description": "Virtari headless primitives — accessible, unstyled React behaviour layer (focus management, positioning, keyboard navigation) powering @virtari-packages/react-*.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/primitives#readme",
+  "homepage": "https://github.com/itstheilya/virtari-ui/tree/main/packages/primitives#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
+    "url": "git+https://github.com/itstheilya/virtari-ui.git",
     "directory": "packages/primitives"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
+    "url": "https://github.com/itstheilya/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

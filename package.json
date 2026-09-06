@@ -53,13 +53,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-ui.git"
+    "url": "git+https://github.com/itstheilya/virtari-ui.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
+    "url": "https://github.com/itstheilya/virtari-ui/issues"
   },
-  "homepage": "https://github.com/IamMrTrick/virtari-ui#readme"
+  "homepage": "https://github.com/itstheilya/virtari-ui#readme"
 }

@@ -4,14 +4,14 @@
   "description": "Virtari bottom navigation — mobile-first tab bar with Material 3 / iOS / Floating / Underline variants, FAB, badges, safe-area insets, auto-hide, and animated indicator.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/react-bottom-nav#readme",
+  "homepage": "https://github.com/itstheilya/virtari-ui/tree/main/packages/react-bottom-nav#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
+    "url": "git+https://github.com/itstheilya/virtari-ui.git",
     "directory": "packages/react-bottom-nav"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
+    "url": "https://github.com/itstheilya/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

@@ -11,7 +11,7 @@ const packagesRoot = path.join(root, "packages");
 const generatedRoot = path.join(root, "registry", "virtari");
 const registryPath = path.join(root, "registry.json");
 const checkOnly = process.argv.includes("--check");
-const githubRegistry = "IamMrTrick/virtari-ui";
+const githubRegistry = "itstheilya/virtari-ui";
 const cliManifest = JSON.parse(await readFile(path.join(root, "packages", "cli", "package.json"), "utf8"));
 const registryRef = `cli-v${cliManifest.version}`;
 const sourceExtensions = new Set([".ts", ".tsx", ".js", ".jsx", ".css", ".json", ".svg"]);
@@ -384,7 +384,7 @@ async function createOutput() {
   const registry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "virtari",
-    homepage: "https://github.com/IamMrTrick/virtari-ui",
+    homepage: "https://github.com/itstheilya/virtari-ui",
     items,
   };
   output.set("registry.json", `${JSON.stringify(registry, null, 2)}\n`);

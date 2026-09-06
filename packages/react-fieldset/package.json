@@ -4,14 +4,14 @@
   "description": "Virtari fieldset — semantic form section grouping with legend and description slots.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/react-fieldset#readme",
+  "homepage": "https://github.com/itstheilya/virtari-ui/tree/main/packages/react-fieldset#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
+    "url": "git+https://github.com/itstheilya/virtari-ui.git",
     "directory": "packages/react-fieldset"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
+    "url": "https://github.com/itstheilya/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

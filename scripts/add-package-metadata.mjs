@@ -17,7 +17,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const PACKAGES_DIR = path.join(ROOT, "packages");
 
-const REPO_URL = "https://github.com/IamMrTrick/virtari-ui";
+const REPO_URL = "https://github.com/itstheilya/virtari-ui";
 const AUTHOR = "Virtari";
 const LICENSE = "MIT";
 const GH_REGISTRY = "https://npm.pkg.github.com";

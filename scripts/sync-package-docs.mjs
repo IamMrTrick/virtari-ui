@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, "..");
 const PACKAGES_DIR = path.join(ROOT, "packages");
 const ROOT_LICENSE = path.join(ROOT, "LICENSE");
 
-const REPO_URL = "https://github.com/IamMrTrick/virtari-ui";
+const REPO_URL = "https://github.com/itstheilya/virtari-ui";
 const REGISTRY = "https://npm.pkg.github.com";
 
 /** Directory names under packages/ whose READMEs you do not want auto-regenerated. */

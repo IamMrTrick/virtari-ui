@@ -2,14 +2,14 @@
   "name": "virtari",
   "version": "0.1.5",
   "description": "Install editable Virtari design-system source into React projects.",
-  "homepage": "https://github.com/IamMrTrick/virtari-ui#readme",
+  "homepage": "https://github.com/itstheilya/virtari-ui#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
+    "url": "git+https://github.com/itstheilya/virtari-ui.git",
     "directory": "packages/cli"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
+    "url": "https://github.com/itstheilya/virtari-ui/issues"
   },
   "type": "module",
   "bin": {

@@ -4,14 +4,14 @@
   "description": "Virtari segmented control — standalone toggle button group with radio semantics and keyboard navigation.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/react-segmented-control#readme",
+  "homepage": "https://github.com/itstheilya/virtari-ui/tree/main/packages/react-segmented-control#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
+    "url": "git+https://github.com/itstheilya/virtari-ui.git",
     "directory": "packages/react-segmented-control"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
+    "url": "https://github.com/itstheilya/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

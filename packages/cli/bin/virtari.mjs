@@ -9,7 +9,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const CLI_MANIFEST = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
-const DEFAULT_REGISTRY = `https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v${CLI_MANIFEST.version}/registry.json`;
+const DEFAULT_REGISTRY = `https://raw.githubusercontent.com/itstheilya/virtari-ui/cli-v${CLI_MANIFEST.version}/registry.json`;
 const CONFIG_NAME = "virtari.json";
 const TRACKING_PATH = ".virtari/installed.json";
 const SOURCE_PREFIX = "src/virtari";
@@ -411,7 +411,7 @@ async function commandInit(options) {
   let config = await readConfig(options.cwd, false);
   if (!config) {
     config = {
-      $schema: `https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v${CLI_MANIFEST.version}/virtari.schema.json`,
+      $schema: `https://raw.githubusercontent.com/itstheilya/virtari-ui/cli-v${CLI_MANIFEST.version}/virtari.schema.json`,
       target: options.target ?? SOURCE_PREFIX,
       registry: options.registry ?? DEFAULT_REGISTRY,
       install: true,

@@ -346,7 +346,7 @@ Check https://github.com/orgs/Virtari-Packages/packages for the current publishe
 
 ## 12. Useful links
 
-- Repo: https://github.com/IamMrTrick/virtari-ui
+- Repo: https://github.com/itstheilya/virtari-ui
 - Published packages: https://github.com/orgs/Virtari-Packages/packages
 - Demo app (source): `apps/docs/` in the repo — every component has a live example page
 - License: MIT.

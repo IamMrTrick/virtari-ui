@@ -4,14 +4,14 @@
   "description": "Design tokens (colors, spacing, typography, radii, shadows, motion) as CSS variables.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/tokens#readme",
+  "homepage": "https://github.com/itstheilya/virtari-ui/tree/main/packages/tokens#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
+    "url": "git+https://github.com/itstheilya/virtari-ui.git",
     "directory": "packages/tokens"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
+    "url": "https://github.com/itstheilya/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

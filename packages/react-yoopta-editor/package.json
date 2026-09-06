@@ -4,14 +4,14 @@
   "description": "Virtari block editor - Yoopta-Editor wrapped with Virtari design tokens and primitives.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/react-yoopta-editor#readme",
+  "homepage": "https://github.com/itstheilya/virtari-ui/tree/main/packages/react-yoopta-editor#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
+    "url": "git+https://github.com/itstheilya/virtari-ui.git",
     "directory": "packages/react-yoopta-editor"
   },
   "bugs": {
-    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
+    "url": "https://github.com/itstheilya/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

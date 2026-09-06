@@ -21,7 +21,7 @@ try {
 } catch {
   failures.push("The generated router skill is missing from packages/cli/skills.");
 }
-if (manifest.repository?.url !== "git+https://github.com/IamMrTrick/virtari-ui.git") failures.push("The npm repository URL must exactly identify the publishing GitHub repository.");
+if (manifest.repository?.url !== "git+https://github.com/itstheilya/virtari-ui.git") failures.push("The npm repository URL must exactly identify the publishing GitHub repository.");
 const tag = process.env.GITHUB_REF_NAME;
 if (tag?.startsWith("cli-v") && tag !== `cli-v${manifest.version}`) failures.push(`Tag ${tag} does not match CLI version ${manifest.version}.`);
 

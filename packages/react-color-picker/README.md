@@ -56,8 +56,8 @@ import "@virtari-packages/tokens";
 
 ## Links
 
-- [Repository](https://github.com/IamMrTrick/virtari-ui)
-- [Issues](https://github.com/IamMrTrick/virtari-ui/issues)
+- [Repository](https://github.com/itstheilya/virtari-ui)
+- [Issues](https://github.com/itstheilya/virtari-ui/issues)
 
 ## License
 
