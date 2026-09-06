@@ -9,6 +9,7 @@ const canonicalRepository = "git+https://github.com/Virtari-Packages/virtari-des
 const staleRepository = /IamMrTrick\/virtari-design-system/g;
 const rootLicense = fs.readFileSync(path.join(root, "LICENSE"), "utf8");
 const failures = [];
+const normalizeEol = (value) => value.replace(/\r\n/g, "\n");
 
 if (!/^MIT License\r?\n/.test(rootLicense) || !rootLicense.includes("Permission is hereby granted")) {
   failures.push("The root LICENSE is not the canonical MIT license.");
@@ -41,15 +42,17 @@ for (const manifestPath of manifestPaths) {
   }
 
   const expected = `${JSON.stringify(manifest, null, 2)}\n`;
-  if (writeMode && original !== expected) fs.writeFileSync(manifestPath, expected);
-  if (!writeMode && original !== expected) failures.push(`${path.relative(root, manifestPath)} has stale license or repository metadata.`);
+  const matches = normalizeEol(original) === expected;
+  if (writeMode && !matches) fs.writeFileSync(manifestPath, expected);
+  if (!writeMode && !matches) failures.push(`${path.relative(root, manifestPath)} has stale license or repository metadata.`);
 }
 
 for (const dir of packageDirs) {
   const licensePath = path.join(dir, "LICENSE");
   const current = fs.existsSync(licensePath) ? fs.readFileSync(licensePath, "utf8") : "";
-  if (writeMode && current !== rootLicense) fs.writeFileSync(licensePath, rootLicense);
-  if (!writeMode && current !== rootLicense) failures.push(`${path.relative(root, licensePath)} must match the root MIT license.`);
+  const matches = normalizeEol(current) === normalizeEol(rootLicense);
+  if (writeMode && !matches) fs.writeFileSync(licensePath, rootLicense);
+  if (!writeMode && !matches) failures.push(`${path.relative(root, licensePath)} must match the root MIT license.`);
 }
 
 const maintainedTextFiles = [

@@ -13,7 +13,7 @@
   },
   "type": "module",
   "bin": {
-    "virtari": "./bin/virtari.mjs"
+    "virtari": "bin/virtari.mjs"
   },
   "files": [
     "bin",
