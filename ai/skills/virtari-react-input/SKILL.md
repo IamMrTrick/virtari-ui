@@ -22,12 +22,12 @@ Use the existing package and its composition API. Verify the installed version a
 - Use size 2xs, xs, sm, md, lg, xl or 2xl (md default); inputSize is only a deprecated alias. Use inherited data-surface-style and data-field-tone=strong for a contrasting field on a tinted host instead of inventing an appearance prop.
 - Compose decorative icons with InputWrapper and InputIcon side=start/end; use InputGroup plus InputAddon for affixes. InputIcon is aria-hidden: an interactive action needs its own named button outside that decorative slot.
 - PasswordInput exposes controlled/uncontrolled reveal state independently from the text value. Configure strengthOptions, requirements and translated showPasswordLabel/hidePasswordLabel for the product; showStrengthMeter defaults to true and can be disabled for sign-in.
+- InputField and PasswordInputField give explicit invalid priority, then preserve explicit aria-invalid (including grammar/spelling and false), otherwise infer invalid from rendered error content. Zero is valid metadata; absent/empty metadata and null counter formatters create no description IDs; maxLength=0 is displayed. PasswordInputField synchronizes its uncontrolled counter after an uncancelled native form reset; reveal retains button focus.
 
 ## Known limits and mistakes to avoid
 
 - Do not remount an input, rewrite its key, prevent paste or enable typingPulse merely to implement focus feedback; typingPulse is opt-in and defaults to false.
 - Password strength is local feedback, not server validation or a guarantee of password safety. A placeholder does not replace a persistent label.
 - Input has no appearance/variant prop; native size is deliberately replaced by the design-system size union.
-- PasswordInputField's uncontrolled showCounter state is updated by onChange but does not subscribe to native form reset. If using a reset button, disable that counter or control/reset the value explicitly; do not claim its counter automatically resets.
 
 Related package IDs: `react-fieldset`, `react-form`, `react-label`, `react-button`, `tokens`. Discover their focused skills from the catalog; do not load all packages at once.

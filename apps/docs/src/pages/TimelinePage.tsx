@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import type { ComponentType, CSSProperties, ReactNode } from "react";
 import {
   IconArrowsExchange,
@@ -587,7 +588,7 @@ export function TimelinePage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Timeline,
   TimelineItem,
   TimelineIndicator,
@@ -624,7 +625,7 @@ import "@virtari-packages/react-timeline/styles";
       <TimelineDescription>Milestone details stay token-driven.</TimelineDescription>
     </TimelineContent>
   </TimelineItem>
-</Timeline>`}</pre>
+</Timeline>`} />
       </Section>
     </>
   );

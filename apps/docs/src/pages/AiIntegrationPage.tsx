@@ -1,3 +1,4 @@
+import { InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { Stack } from "@virtari-packages/react-layout";
 import { Section } from "../components";
 import { ReferenceCode, useReferenceLanguage } from "../components/KnowledgeReference";
@@ -34,9 +35,9 @@ export function AiIntegrationPage() {
     </Section>
     <Section title={text("Agent reading workflow", "روش مطالعه برای ایجنت")}>
       <ol className="docs-reference-links">
-        <li><code>list_records</code> — {text("choose packages, sections, tokens, utilities, examples or sources; search and follow nextOffset.", "مجموعهٔ packages، sections، tokens، utilities، examples یا sources را انتخاب، جست‌وجو و nextOffset را دنبال کنید.")}</li>
-        <li><code>get_record</code> — {text("read an exact ID, its API references, guidance and limitations.", "شناسهٔ دقیق، ارجاع API، راهنما و محدودیت‌های آن را بخوانید.")}</li>
-        <li><code>read_source</code> — {text("read the source ID in bounded chunks until you have its imports and complete example context.", "منبع را با شناسهٔ آن در بخش‌های محدود بخوانید تا importها و متن کامل نمونه در دسترس باشد.")}</li>
+        <li><VirtariInlineCode>list_records</VirtariInlineCode> — {text("choose packages, sections, tokens, utilities, examples or sources; search and follow nextOffset.", "مجموعهٔ packages، sections، tokens، utilities، examples یا sources را انتخاب، جست‌وجو و nextOffset را دنبال کنید.")}</li>
+        <li><VirtariInlineCode>get_record</VirtariInlineCode> — {text("read an exact ID, its API references, guidance and limitations.", "شناسهٔ دقیق، ارجاع API، راهنما و محدودیت‌های آن را بخوانید.")}</li>
+        <li><VirtariInlineCode>read_source</VirtariInlineCode> — {text("read the source ID in bounded chunks until you have its imports and complete example context.", "منبع را با شناسهٔ آن در بخش‌های محدود بخوانید تا importها و متن کامل نمونه در دسترس باشد.")}</li>
       </ol>
     </Section>
     <Section title={text("Keep knowledge current", "به‌روز نگه‌داشتن دانش")}>

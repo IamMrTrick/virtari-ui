@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   Flag,
@@ -109,7 +110,7 @@ export function FlagPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`// Named import (best tree-shaking; use when code is known at build time)
+        <VirtariCodeBlock renderer="static" language="tsx" code={`// Named import (best tree-shaking; use when code is known at build time)
 import { FlagIr, FlagUs } from "@virtari-packages/react-flag";
 <FlagIr size="lg" />
 
@@ -117,7 +118,7 @@ import { FlagIr, FlagUs } from "@virtari-packages/react-flag";
 import { Flag } from "@virtari-packages/react-flag";
 <Flag code="gb-eng" size="md" rounded="full" title="England" />
 
-// Sizes: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | number`}</pre>
+// Sizes: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | number`} />
       </Section>
 
       <Section title="License">

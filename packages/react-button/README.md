@@ -47,6 +47,12 @@ import { Button } from "@virtari-packages/react-button";
 
 Labels and icon sections share the same centered content layout, including `asChild` links and loading states. `iconOnly` explicitly chooses square geometry; set it to `false` when a named custom child renders visible text. Single native SVGs and accessible-named single opaque icons retain automatic detection.
 
+Long labels wrap within the available width and increase the minimum button height. Leading/trailing icons retain their size, and symmetric block padding keeps multiline content away from the edges. `fullWidth` fills the containing layout; use a short action label where possible. Link variants remain inline at every size: size adjusts their type and icon size, without adding control padding.
+
+Solid states use paired solid-background and on-solid-text roles. Outline, ghost, soft and link labels use text roles, which remain readable on the standard light, dark and OLED surfaces. Custom brand colors and backgrounds require their own contrast checks.
+
+Decorative effects are optional: shine, raised, candy and glass apply to solid buttons; outline-glow applies to outline buttons. Glass needs a dark supporting background, and gradient/highlight effects need contrast verification in their actual placement. Prefer the plain variants for ordinary form and navigation actions.
+
 ### Import styles
 
 ```ts

@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import { Textarea, TextareaField } from "@virtari-packages/react-textarea";
 import { Switch } from "@virtari-packages/react-switch";
@@ -14,9 +15,10 @@ function TextareaTypingPulseDemo() {
         </span>
       </label>
       <Textarea
+        aria-label="Typing pulse example"
         typingPulse={pulse}
         rows={4}
-        placeholder="Type here — tap fast to see a strong pulse, slow for a gentle one…"
+        placeholder="Type here to try the optional focus-ring pulse…"
       />
     </div>
   );
@@ -30,7 +32,7 @@ export function TextareaPage() {
     <>
       <Section title="Basic" description="A standard textarea.">
         <div style={{ maxInlineSize: "24rem" }}>
-          <Textarea placeholder="Type your message here..." />
+          <TextareaField label="Message" placeholder="Type your message here..." />
         </div>
       </Section>
 
@@ -47,6 +49,7 @@ export function TextareaPage() {
             onChange={(event) => setBio(event.target.value)}
             description="Give reviewers enough context before they open the full brief."
             error={bio.length > 0 && bio.length < 20 ? "Write at least 20 characters" : undefined}
+            invalid={bio.length > 0 && bio.length < 20}
             showCounter
             maxLength={180}
           />
@@ -57,7 +60,7 @@ export function TextareaPage() {
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
             description="Only visible to operators."
-            counter="Autosaves every 30 seconds"
+            counter="Private draft"
             metaLayout="inline"
             descriptionAlign="end"
             counterAlign="start"
@@ -65,42 +68,43 @@ export function TextareaPage() {
         </div>
       </Section>
 
-      <Section title="Sizes" description="Different textarea sizes.">
+      <Section title="Sizes" description="Size changes padding, text and minimum height. Rows sets the initial multiline capacity above that minimum; the control can be resized vertically.">
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-3)", maxInlineSize: "24rem" }}>
-          <Textarea placeholder="Small textarea" rows={2} />
-          <Textarea placeholder="Medium textarea (default)" rows={4} />
-          <Textarea placeholder="Large textarea" rows={8} />
+          {(["2xs", "xs", "sm", "md", "lg", "xl", "2xl"] as const).map((size) => (
+            <TextareaField key={size} label={`Size ${size}`} size={size} rows={3} placeholder="Three rows of text" />
+          ))}
         </div>
       </Section>
 
       <Section
         title="Typing Pulse"
-        description="Each keystroke fires a ring burst proportional to typing speed. Toggle the switch below to try it."
+        description="Printable keys briefly pulse the focus ring. This is off by default and respects reduced motion. Toggle the switch below to try it."
       >
         <TextareaTypingPulseDemo />
       </Section>
 
       <Section title="Disabled" description="A disabled textarea.">
         <div style={{ maxInlineSize: "24rem" }}>
-          <Textarea placeholder="This textarea is disabled" disabled />
+          <TextareaField label="Archived message" defaultValue="This conversation is archived." disabled />
         </div>
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Textarea, TextareaField } from "@virtari-packages/react-textarea";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Textarea, TextareaField } from "@virtari-packages/react-textarea";
 
-<Textarea placeholder="Enter text..." rows={6} />
+<Textarea aria-label="Message" placeholder="Enter text..." rows={6} />
 
 <TextareaField
   label="Summary"
   description="Shown under the control by default."
   error="Too short"
+  invalid
   showCounter
   maxLength={180}
   metaLayout="inline"
   descriptionAlign="end"
   errorAlign="start"
-/>`}</pre>
+/>`} />
       </Section>
     </>
   );

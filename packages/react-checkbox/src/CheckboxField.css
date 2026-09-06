@@ -2,6 +2,8 @@
   .vds-checkbox-field {
     --checkbox-field-control-size: 1.125rem;
     display: inline-flex;
+    min-inline-size: 0;
+    min-block-size: 24px;
     align-items: center;
     gap: var(--checkbox-field-gap);
     cursor: pointer;
@@ -41,6 +43,7 @@
   }
 
   .vds-checkbox-field-text {
+    overflow-wrap: anywhere;
     display: flex;
     flex-direction: column;
     gap: var(--checkbox-field-label-gap);

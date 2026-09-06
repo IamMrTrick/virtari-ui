@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/AccordionPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import {
   Accordion,
   AccordionItem,
@@ -228,7 +229,7 @@ export function AccordionPage() {
             defaultOpen={["install"]}
           />
         </div>
-        <pre className="docs-code">{`import { FAQAccordion, type FAQItem } from "@virtari-packages/react-accordion";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { FAQAccordion, type FAQItem } from "@virtari-packages/react-accordion";
 
 const items: FAQItem[] = [
   {
@@ -244,12 +245,12 @@ const items: FAQItem[] = [
   variant="contained"
   iconType="plus-minus"
   headingLevel="h3"
-/>`}</pre>
+/>`} />
       </Section>
 
       {/* ─── Usage ─── */}
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Accordion, AccordionItem, AccordionTrigger, AccordionContent,
 } from "@virtari-packages/react-accordion";
 
@@ -267,7 +268,7 @@ const items: FAQItem[] = [
     <AccordionTrigger>Title</AccordionTrigger>
     <AccordionContent>Content here.</AccordionContent>
   </AccordionItem>
-</Accordion>`}</pre>
+</Accordion>`} />
       </Section>
     </>
   );

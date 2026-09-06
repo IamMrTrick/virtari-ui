@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/AvatarPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Avatar } from "@virtari-packages/react-avatar";
 import { Section, Row } from "../components";
 
@@ -92,7 +93,7 @@ export function AvatarPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Avatar } from "@virtari-packages/react-avatar";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Avatar } from "@virtari-packages/react-avatar";
 
 // Default \u2014 neutral surface background
 <Avatar fallback="JD" />
@@ -106,7 +107,7 @@ export function AvatarPage() {
   fallback="JD"
   color="auto"
   colorKey="john.doe@example.com"
-/>`}</pre>
+/>`} />
       </Section>
     </>
   );

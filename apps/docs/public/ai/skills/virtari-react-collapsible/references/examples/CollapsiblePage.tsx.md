@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/CollapsiblePage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   Collapsible,
@@ -61,7 +62,7 @@ export function CollapsiblePage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari-packages/react-collapsible";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari-packages/react-collapsible";
 
 <Collapsible>
   <CollapsibleTrigger asChild>
@@ -70,7 +71,7 @@ export function CollapsiblePage() {
   <CollapsibleContent>
     Hidden content here.
   </CollapsibleContent>
-</Collapsible>`}</pre>
+</Collapsible>`} />
       </Section>
     </>
   );

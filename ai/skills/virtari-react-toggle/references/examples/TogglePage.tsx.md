@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/TogglePage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Toggle } from "@virtari-packages/react-toggle";
 import { Section, Row } from "../components";
 
@@ -37,7 +38,7 @@ export function TogglePage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Toggle } from "@virtari-packages/react-toggle";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Toggle } from "@virtari-packages/react-toggle";
 
 <Toggle
   pressed={bold}
@@ -46,7 +47,7 @@ export function TogglePage() {
   size="lg"
 >
   B
-</Toggle>`}</pre>
+</Toggle>`} />
       </Section>
     </>
   );

@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   EmptyState,
@@ -85,7 +86,7 @@ export function EmptyStatePage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   EmptyState,
   EmptyStateIcon,
   EmptyStateTitle,
@@ -104,7 +105,7 @@ import "@virtari-packages/react-empty-state/styles";
     <Button variant="outline">Clear filters</Button>
     <Button>New item</Button>
   </EmptyStateActions>
-</EmptyState>`}</pre>
+</EmptyState>`} />
       </Section>
 
       <Section title="Props">

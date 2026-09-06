@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/SeparatorPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Separator } from "@virtari-packages/react-separator";
 import { Section, Row } from "../components";
 
@@ -38,7 +39,7 @@ export function SeparatorPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Separator } from "@virtari-packages/react-separator";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Separator } from "@virtari-packages/react-separator";
 
 // Horizontal (default)
 <Separator />
@@ -47,7 +48,7 @@ export function SeparatorPage() {
 <Separator orientation="vertical" />
 
 // Decorative (aria-hidden)
-<Separator decorative />`}</pre>
+<Separator decorative />`} />
       </Section>
     </>
   );

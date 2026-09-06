@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/TagInputPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import { TagInput } from "@virtari-packages/react-tag-input";
 import "@virtari-packages/react-tag-input/styles";
@@ -96,7 +97,7 @@ export function TagInputPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { TagInput } from "@virtari-packages/react-tag-input";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { TagInput } from "@virtari-packages/react-tag-input";
 import "@virtari-packages/react-tag-input/styles";
 
 const [tags, setTags] = useState(["react", "design"]);
@@ -111,7 +112,7 @@ const [tags, setTags] = useState(["react", "design"]);
   size="md"
   invalid={false}
   disabled={false}
-/>`}</pre>
+/>`} />
       </Section>
     </>
   );

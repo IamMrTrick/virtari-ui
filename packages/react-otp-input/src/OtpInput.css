@@ -6,16 +6,13 @@
     flex-wrap: wrap;
     gap: var(--_otp-gap);
     align-items: center;
-    inline-size: max-content;
+    inline-size: fit-content;
+    min-inline-size: 0;
     max-inline-size: 100%;
     direction: ltr;
 
     &[aria-disabled="true"] {
       opacity: var(--vds-opacity-disabled, 0.5);
-      pointer-events: none;
-    }
-
-    &[data-readonly] {
       pointer-events: none;
     }
   }
@@ -27,7 +24,9 @@
     padding: 0;
     line-height: var(--vds-control-line-height, 1.5);
     inline-size: var(--_otp-slot-size);
-    block-size: var(--_otp-slot-size);
+    min-block-size: var(--_otp-slot-size);
+    min-inline-size: 0;
+    flex: 0 0 var(--_otp-slot-size);
     text-align: center;
     font-size: var(--_otp-font-size);
     font-weight: var(--vds-font-semibold);

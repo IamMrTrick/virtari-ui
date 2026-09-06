@@ -28,6 +28,7 @@ Use CSS entry points only if they appear in this map. Foundation CSS packages ex
 - `CodeBlockVariant` (type) from `@virtari-packages/react-code`; source: `packages/react-code/src/index.ts`.
 - `CodeBlockSize` (type) from `@virtari-packages/react-code`; source: `packages/react-code/src/index.ts`.
 - `CodeBlockDiff` (type) from `@virtari-packages/react-code`; source: `packages/react-code/src/index.ts`.
+- `CodeBlockRenderer` (type) from `@virtari-packages/react-code`; source: `packages/react-code/src/index.ts`.
 - `CodeEditor` (export) from `@virtari-packages/react-code`; source: `packages/react-code/src/index.ts`.
 - `CodeEditorProps` (type) from `@virtari-packages/react-code`; source: `packages/react-code/src/index.ts`.
 - `InlineCode` (export) from `@virtari-packages/react-code`; source: `packages/react-code/src/index.ts`.
@@ -65,9 +66,22 @@ export type CodeBlockDiff = "none" | "unified";
 Source: `packages/react-code/src/CodeBlock.tsx`
 
 ```tsx
+export type CodeBlockRenderer = "static" | "editor";
+```
+
+Source: `packages/react-code/src/CodeBlock.tsx`
+
+```tsx
 export interface CodeBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /** Source code to render. Required. */
   code: string;
+  /** Static semantic HTML for short documentation snippets; editor preserves the virtualized viewer. */
+  renderer?: CodeBlockRenderer;
+  /** Accessible name for the focusable source region. */
+  codeLabel?: string;
+  copyLabel?: string;
+  copiedLabel?: string;
+  copyErrorLabel?: string;
   /** Language id (e.g. "typescript", "css", "json"). Lazy-loaded if not preloaded. */
   language?: CodeLanguage;
   /** Optional filename label rendered in the header. */
@@ -102,6 +116,11 @@ Source: `packages/react-code/src/CodeBlock.tsx`
 ```tsx
 export function CodeBlock({
   code,
+  renderer = "editor",
+  codeLabel,
+  copyLabel,
+  copiedLabel,
+  copyErrorLabel,
   language = "plaintext",
   filename,
   filenameIcon,
@@ -127,6 +146,11 @@ Source: `packages/react-code/src/CodeEditor.tsx`
 export interface CodeEditorProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "onChange"> {
   /** Controlled code value. */
   value: string;
+  /** Accessible name applied to the editable source, not only its wrapper. */
+  editorLabel?: string;
+  copyLabel?: string;
+  copiedLabel?: string;
+  copyErrorLabel?: string;
   /** Called on every keystroke with the new value. */
   onValueChange: (next: string) => void;
   /** Language id. Lazy-loaded if not preloaded. */
@@ -172,6 +196,10 @@ Source: `packages/react-code/src/CodeEditor.tsx`
 ```tsx
 export function CodeEditor({
   value,
+  editorLabel,
+  copyLabel,
+  copiedLabel,
+  copyErrorLabel,
   onValueChange,
   language = "plaintext",
   placeholder,
@@ -263,6 +291,25 @@ export function resolveLanguage(
 ): LanguageSupport | LanguageSupport[] | Promise<LanguageSupport | LanguageSupport[]> | null;
 ```
 
+Source: `packages/react-code/src/StaticCode.tsx`
+
+```tsx
+export function StaticCode({ code, language, showLineNumbers, highlightLines, diff, label }: {
+  code: string;
+  language: LanguageSupport | LanguageSupport[] | null;
+  showLineNumbers: boolean;
+  highlightLines?: number[];
+  diff: "none" | "unified";
+  label: string;
+});
+```
+
+Source: `packages/react-code/src/useCodeLanguage.ts`
+
+```tsx
+export function useCodeLanguage(language: CodeLanguage): ResolvedLanguage;
+```
+
 ## Source files
 
 - `packages/react-code/src/Code.css`
@@ -273,5 +320,7 @@ export function resolveLanguage(
 - `packages/react-code/src/index.ts`
 - `packages/react-code/src/InlineCode.tsx`
 - `packages/react-code/src/languages.ts`
+- `packages/react-code/src/StaticCode.tsx`
 - `packages/react-code/src/theme.ts`
+- `packages/react-code/src/useCodeLanguage.ts`
 - `packages/react-code/package.json`

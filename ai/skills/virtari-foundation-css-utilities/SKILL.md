@@ -13,6 +13,7 @@ Finite generated token-backed utilities, grouped independently from React helper
 - Widths/heights use inline-size/block-size. Supported fractions are 1/2, 1/3, 2/3, 1/4 and 3/4. Author vds-u-w-1/2 in markup; escaping belongs to the emitted CSS selector.
 - Use sm:, md:, lg:, xl: or 2xl: prefixes before the whole class, such as md:vds-u-grid-cols-3. Minimum widths are 640, 768, 1024, 1280 and 1536px, compiled from custom media at build time.
 - Grid utilities support 1–12 columns, 1–6 rows and spans; auto-fit/auto-fill use a 16rem minimum capped to available width.
+- vds-u-flex sets display only. Composed Card defaults to column direction; add vds-u-flex-row when demonstrating a horizontal flex row, plus wrapping when required by the content.
 - Core separately provides vds-sr-only, vds-visually-hidden and vds-not-sr-only. These are not part of the vds-u-* generator and must not be mistaken for display:none.
 
 ## Pitfalls

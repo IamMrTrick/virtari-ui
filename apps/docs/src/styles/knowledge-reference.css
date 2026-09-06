@@ -8,9 +8,6 @@
 .docs-reference-meta, .docs-reference-muted { color: var(--vds-color-text-muted); font-size: var(--vds-text-xs); line-height: 1.6; overflow-wrap: anywhere; }
 .docs-reference-meta { display: grid; gap: var(--vds-space-1); }
 .docs-reference-meta code { white-space: pre-wrap; }
-.docs-reference-code-heading { justify-content: space-between; font-size: var(--vds-text-xs); color: var(--vds-color-text-muted); }
-.docs-reference-code-group { min-inline-size: 0; }
-.docs-reference-code { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; max-inline-size: 100%; text-align: start; }
 .docs-reference-pagination { justify-content: center; font-size: var(--vds-text-sm); }
 .docs-reference-link { color: var(--vds-color-primary-text); text-underline-offset: 0.2em; overflow-wrap: anywhere; }
 .docs-reference-links { padding-inline-start: var(--vds-space-5); display: grid; gap: var(--vds-space-3); }

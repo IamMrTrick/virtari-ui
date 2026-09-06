@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/PhoneInputPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import { PhoneInput, type PhoneInputValue } from "@virtari-packages/react-phone-input";
 import { Section, Row, Stack } from "../components";
@@ -44,7 +45,7 @@ export function PhoneInputPage() {
               preferredCountries={["us", "gb", "ir", "de", "fr"]}
             />
           </div>
-          <pre className="docs-code">{JSON.stringify(ctrl, null, 2)}</pre>
+          <VirtariCodeBlock renderer="static" language="json" code={JSON.stringify(ctrl, null, 2)} />
         </Stack>
       </Section>
 
@@ -91,7 +92,7 @@ export function PhoneInputPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { PhoneInput } from "@virtari-packages/react-phone-input";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { PhoneInput } from "@virtari-packages/react-phone-input";
 
 <PhoneInput
   defaultCountry="ir"
@@ -102,7 +103,7 @@ export function PhoneInputPage() {
   size="md"                  // 2xs | xs | sm | md | lg | xl | 2xl
   invalid={hasError}
   locale="fa"                // country-name language in the popover
-/>`}</pre>
+/>`} />
       </Section>
     </>
   );

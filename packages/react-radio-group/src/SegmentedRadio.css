@@ -1,6 +1,8 @@
 @layer design-system.components {
   .vds-segmented-radio {
-    display: inline-flex;
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
     align-items: stretch;
     padding: var(--segmented-padding);
     background-color: var(--segmented-track-bg);
@@ -8,6 +10,7 @@
       var(--segmented-track-border-color);
     border-radius: var(--segmented-radius);
     min-inline-size: 0;
+    max-inline-size: 100%;
 
     /* ── Radius nesting host ──
        The track is the element that draws the corner, so it publishes its
@@ -27,6 +30,7 @@
   }
 
   .vds-segmented-radio[data-orientation="vertical"] {
+    grid-auto-flow: row;
     flex-direction: column;
     align-items: stretch;
   }
@@ -38,10 +42,10 @@
     justify-content: center;
     gap: var(--vds-space-2, 0.5rem);
     min-inline-size: 0;
-    block-size: var(--segmented-item-height);
+    max-inline-size: 100%;
+    min-block-size: var(--segmented-item-height);
     padding-inline: var(--segmented-item-padding-inline);
-    padding-block-start: var(--vds-control-optical-offset, 0px);
-    padding-block-end: 0;
+    padding-block: var(--vds-gap-icon-compact, 0.25rem);
     font-family: inherit;
     font-size: var(--segmented-item-font-size);
     font-weight: var(--segmented-item-font-weight);
@@ -52,14 +56,14 @@
     /* Concentric with the track — see the host declaration above. */
     border-radius: var(--vds-radius-inset);
     cursor: pointer;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
     transition:
       background-color var(--segmented-transition-duration)
         var(--segmented-transition-easing),
       color var(--segmented-transition-duration)
         var(--segmented-transition-easing),
       box-shadow 180ms ease-out;
-    flex: 1;
     @media (prefers-reduced-motion: reduce) {
       transition-duration: 0s;
     }
@@ -80,7 +84,8 @@
   /* ── Focus ring ── */
   .vds-segmented-radio-item:focus-visible {
     z-index: 1;
-    outline: none;
+    outline: var(--segmented-focus-ring-width) solid var(--segmented-focus-ring-color);
+    outline-offset: var(--segmented-focus-ring-offset);
     box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
     @media (forced-colors: active) {
       outline: 2px solid Highlight;
@@ -97,6 +102,7 @@
 
   /* ── Error — entire segmented group shows danger state ── */
   .vds-segmented-radio[data-error] {
+    --segmented-focus-ring-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
     border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
   }
 
@@ -108,7 +114,8 @@
   }
 
   .vds-segmented-radio[data-error] .vds-segmented-radio-item:focus-visible {
-    outline: none;
+    outline: var(--segmented-focus-ring-width) solid var(--segmented-focus-ring-color);
+    outline-offset: var(--segmented-focus-ring-offset);
     box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
     @media (forced-colors: active) {
       outline: 2px solid Highlight;

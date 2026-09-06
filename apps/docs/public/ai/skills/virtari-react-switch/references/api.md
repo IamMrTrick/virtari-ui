@@ -56,6 +56,11 @@ export function Switch({
   onCheckedChange,
   disabled,
   dragEnabled = true,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerCancel,
+  onLostPointerCapture,
   ref,
   ...props
 }: SwitchProps);

@@ -4,6 +4,11 @@
   .vds-copy-button {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    --_copy-btn-min-size: max(1.5rem, calc(max(var(--_copy-btn-icon-size), var(--_copy-btn-font-size) * 1.4) + var(--_copy-btn-padding) * 2));
+    min-inline-size: var(--_copy-btn-min-size);
+    min-block-size: var(--_copy-btn-min-size);
+    line-height: 1.4;
     gap: var(--_copy-btn-gap);
     padding: var(--_copy-btn-padding);
     border-radius: var(--_copy-btn-radius);
@@ -60,6 +65,7 @@
     &[data-copied] {
       color: var(--vds-color-success-text);
     }
+    &[data-error] { color: var(--vds-color-danger-text); }
   }
 
   .vds-copy-button__icon {
@@ -77,6 +83,17 @@
   }
 
   .vds-copy-button__label {
-    line-height: 1;
+    line-height: inherit;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
   }
+  .vds-copy-button__status {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  @media (prefers-reduced-motion: reduce) { .vds-copy-button { transition: none; } }
 }

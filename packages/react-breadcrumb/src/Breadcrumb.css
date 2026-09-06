@@ -3,6 +3,7 @@
 @layer design-system.components {
   .vds-breadcrumb {
     display: block;
+    min-inline-size: 0;
     color: var(--breadcrumb-link-color);
     font-family: var(--breadcrumb-font-family);
     font-size: var(--breadcrumb-font-size);
@@ -24,6 +25,7 @@
     display: inline-flex;
     align-items: center;
     min-inline-size: 0;
+    max-inline-size: 100%;
   }
 
   .vds-breadcrumb__link,
@@ -31,6 +33,7 @@
     display: inline-flex;
     align-items: center;
     min-inline-size: 0;
+    min-block-size: 1.5rem;
     max-inline-size: var(--breadcrumb-item-max-inline-size);
     padding-inline: var(--breadcrumb-item-padding-inline);
     padding-block: var(--breadcrumb-item-padding-block);
@@ -81,9 +84,10 @@
   }
 
   .vds-breadcrumb__label {
-    display: inline-flex;
-    align-items: center;
+    display: block;
     min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
     line-height: var(--breadcrumb-line-height);
     transform: translateY(var(--breadcrumb-label-offset));
     white-space: inherit;
@@ -94,6 +98,7 @@
     align-items: center;
     justify-content: center;
     flex: none;
+    pointer-events: none;
     line-height: 1;
     transform: translateY(var(--breadcrumb-icon-offset));
   }
@@ -143,8 +148,8 @@
     line-height: 1;
   }
 
-  :dir(rtl) .vds-breadcrumb[data-separator="chevron"] .vds-breadcrumb__separator > svg,
-  :dir(rtl) .vds-breadcrumb[data-separator="arrow"] .vds-breadcrumb__separator > svg {
+  .vds-breadcrumb__separator[data-preset="chevron"]:dir(rtl) > svg,
+  .vds-breadcrumb__separator[data-preset="arrow"]:dir(rtl) > svg {
     transform: scaleX(-1);
   }
 
@@ -157,6 +162,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    min-inline-size: 1.5rem;
+    min-block-size: 1.5rem;
     padding-inline: var(--breadcrumb-item-padding-inline);
     padding-block: var(--breadcrumb-item-padding-block);
     background-color: transparent;
@@ -197,5 +204,9 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-breadcrumb { --breadcrumb-transition-duration: 0ms; }
   }
 }

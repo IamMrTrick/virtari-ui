@@ -67,6 +67,13 @@
 
 ```css
 @layer base {
+  /* Center font cap/baseline metrics, not the font's asymmetric leading.
+     Browsers without text-box support retain their normal line boxes. */
+  .vds-control-text {
+    display: block;
+    min-inline-size: 0;
+    text-box: trim-both cap alphabetic;
+  }
   html {
     font-family: var(--vds-font-sans);
   }

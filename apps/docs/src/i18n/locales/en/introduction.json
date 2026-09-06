@@ -1,17 +1,17 @@
 {
   "whatIs": {
     "title": "What is Virtari DS?",
-    "body": "Virtari Design System is a package-based component library built on <1>React</1>, <2>our own headless primitives</2>, and <3>pure vanilla CSS</3> using 2026 standards. Every component is its own publishable npm package under the <4>@virtari</4> scope."
+    "body": "Virtari Design System is a package-based component library built on <1>React</1>, <2>our own headless primitives</2>, and <3>pure vanilla CSS</3> using 2026 standards. Every component is its own publishable npm package under the <4>@virtari-packages</4> scope."
   },
   "cssFeatures": {
     "title": "CSS Features"
   },
   "quickStart": {
     "title": "Quick Start",
-    "snippet": "# Install foundation + a component\npnpm add @virtari-packages/core @virtari-packages/tokens @virtari-packages/react-button\n\n# Import CSS once in your app root\n@import \"@virtari-packages/core\";\n@import \"@virtari-packages/tokens\";\n@import \"@virtari-packages/react-button/styles\";\n\n# Use it\nimport { Button } from \"@virtari-packages/react-button\";\n<Button variant=\"outline\">Click me</Button>"
+    "description": "Start with an existing React 18 or 19 application that supports CSS imports. These packages use the restricted GitHub Packages registry; configure @virtari-packages for npm.pkg.github.com and authenticate with an account that has package access before installing. Import core, tokens, then component styles once in your app root."
   },
   "architecture": {
     "title": "Architecture",
-    "snippet": "@virtari-packages/tokens       \u2192 Design tokens (CSS custom properties)\n@virtari-packages/core         \u2192 @layer order, reset, base styles\n@virtari-packages/react-*      \u2192 One package per component"
+    "snippet": "@virtari-packages/tokens       → Design tokens (CSS custom properties)\n@virtari-packages/core         → @layer order, reset, base styles\n@virtari-packages/react-*      → One package per component"
   }
 }

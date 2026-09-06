@@ -55,11 +55,24 @@ const Switch = React.forwardRef<SwitchElement, SwitchProps>(
       onChange: onCheckedChange,
       caller: SWITCH_NAME,
     });
+    const initialCheckedRef = React.useRef(checked);
+    React.useEffect(() => {
+      const owner = button?.form;
+      if (!owner) return;
+      const reset = (event: Event) => {
+        queueMicrotask(() => {
+          if (!event.defaultPrevented) setChecked(initialCheckedRef.current);
+        });
+      };
+      owner.addEventListener('reset', reset);
+      return () => owner.removeEventListener('reset', reset);
+    }, [button, form, setChecked]);
 
     return (
       <SwitchProvider scope={__scopeSwitch} checked={checked} disabled={disabled}>
         <Primitive.button
           type="button"
+          form={form}
           role="switch"
           aria-checked={checked}
           aria-required={required}
@@ -158,6 +171,22 @@ const SwitchBubbleInput = React.forwardRef<HTMLInputElement, SwitchBubbleInputPr
     const composedRefs = useComposedRefs(ref, forwardedRef);
     const prevChecked = usePrevious(checked);
     const controlSize = useSize(control);
+    const initialCheckedRef = React.useRef(checked);
+
+    React.useEffect(() => {
+      const input = ref.current;
+      const owner = input?.form;
+      if (!input || !owner) return;
+      const reset = (event: Event) => {
+        queueMicrotask(() => {
+          // A controlled consumer can decline the reset request. Keep the
+          // submitted value consistent even when no React render follows.
+          if (!event.defaultPrevented) input.checked = checked;
+        });
+      };
+      owner.addEventListener('reset', reset);
+      return () => owner.removeEventListener('reset', reset);
+    }, [checked, props.form, control]);
 
     // Bubble checked change to parents (e.g form change event)
     React.useEffect(() => {
@@ -181,7 +210,7 @@ const SwitchBubbleInput = React.forwardRef<HTMLInputElement, SwitchBubbleInputPr
       <input
         type="checkbox"
         aria-hidden
-        defaultChecked={checked}
+        defaultChecked={initialCheckedRef.current}
         {...props}
         tabIndex={-1}
         ref={composedRefs}

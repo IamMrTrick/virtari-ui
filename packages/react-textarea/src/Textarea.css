@@ -1,23 +1,22 @@
 @import "../../react-fieldset/src/Fieldset.css";
 
-@keyframes vds-typing-pulse {
+@keyframes vds-textarea-typing-pulse {
   0% {
-    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    box-shadow: 0 0 0 4px var(--_textarea-ring), 0 0 12px 2px var(--_textarea-glow);
   }
   35% {
-    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2), 0 0 0 6px var(--vds-color-primary-a3);
+    box-shadow: 0 0 0 4px var(--_textarea-ring), 0 0 12px 2px var(--_textarea-glow), 0 0 0 6px var(--_textarea-burst);
   }
   100% {
-    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    box-shadow: 0 0 0 4px var(--_textarea-ring), 0 0 12px 2px var(--_textarea-glow);
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  @keyframes vds-typing-pulse { 0%, 100% { box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); } }
 }
 
 @layer design-system.components {
   .vds-textarea {
+    --_textarea-ring: var(--vds-color-primary-a4);
+    --_textarea-glow: var(--vds-color-primary-a2);
+    --_textarea-burst: var(--vds-color-primary-a3);
     box-shadow: var(--vds-field-shadow, none);
     /* ── Public config ── */
     --textarea-padding-inline: var(--vds-space-3);
@@ -68,7 +67,7 @@
     &:focus-visible {
       border-color: var(--vds-color-primary-9);
       outline: none;
-      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      box-shadow: 0 0 0 4px var(--_textarea-ring), 0 0 12px 2px var(--_textarea-glow);
       @media (forced-colors: active) {
         outline: 2px solid Highlight;
         outline-offset: 2px;
@@ -76,8 +75,8 @@
       }
     }
 
-    &.vds-textarea--pulse {
-      animation: vds-typing-pulse 140ms var(--vds-ease-out) forwards;
+    &.vds-textarea--pulse:focus-visible {
+      animation: vds-textarea-typing-pulse 140ms var(--vds-ease-out) forwards;
     }
 
     &:disabled {
@@ -85,7 +84,10 @@
       cursor: not-allowed;
     }
 
-    &[aria-invalid="true"] {
+    &[aria-invalid]:not([aria-invalid="false"]) {
+      --_textarea-ring: var(--vds-color-danger-a4);
+      --_textarea-glow: var(--vds-color-danger-a2);
+      --_textarea-burst: var(--vds-color-danger-a3);
       border-color: var(--vds-color-danger-9);
 
       &:focus-visible {
@@ -159,9 +161,12 @@
 }
 
 [data-vds-no-micro] .vds-textarea--pulse { animation: none; }
+@media (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .vds-textarea--pulse { animation: none; }
+}
 
 @layer design-system.components {
-  .vds-textarea:hover:not(:disabled):not([data-disabled]):not([aria-invalid="true"]):not([data-invalid]):not(:focus-within) {
+  .vds-textarea:hover:not(:disabled):not([data-disabled]):not([aria-invalid]:not([aria-invalid="false"])):not([data-invalid]):not(:focus-within) {
     border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
   }
 }

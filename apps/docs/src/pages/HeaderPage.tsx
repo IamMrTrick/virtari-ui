@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useState, type ReactNode } from "react";
 import {
   Header,
@@ -148,7 +149,7 @@ export function HeaderPage() {
         title="Structure"
         description="Header is the semantic landmark for a page's banner. It composes up to three rows (top / main / bottom), each with three sections (start / center / end). Sticky stacking is coordinated automatically — each sticky row measures its own height and offsets the next sticky row below it."
       >
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Header, HeaderTop, HeaderMain, HeaderBottom,
   HeaderStart, HeaderCenter, HeaderEnd,
 } from "@virtari-packages/react-header";
@@ -169,7 +170,7 @@ export function HeaderPage() {
     <HeaderStart>Breadcrumb</HeaderStart>
     <HeaderEnd>Filters</HeaderEnd>
   </HeaderBottom>
-</Header>`}</pre>
+</Header>`} />
       </Section>
 
       <Section
@@ -491,7 +492,7 @@ export function HeaderPage() {
         title="API"
         description="Typed, ref-forwarding, with data-* attributes exposed for CSS overrides."
       >
-        <pre className="docs-code">{`interface HeaderProps extends HTMLAttributes<HTMLElement> {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`interface HeaderProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;              // default "header"
   stickyOffset?: string;          // external top offset, any CSS length
 }
@@ -520,14 +521,14 @@ interface HeaderSectionProps extends HTMLAttributes<HTMLElement> {
 
 // Shortcuts (pre-configured slot / side):
 HeaderTop, HeaderMain, HeaderBottom   // omit \`slot\`
-HeaderStart, HeaderCenter, HeaderEnd  // omit \`side\``}</pre>
+HeaderStart, HeaderCenter, HeaderEnd  // omit \`side\``} />
 
         <div className="docs-prose">
           Sticky mode legend:{" "}
           <strong>
             {STICKY_MODES.map((m, i) => (
               <span key={m}>
-                <code>{m}</code>
+                <VirtariInlineCode>{m}</VirtariInlineCode>
                 {i < STICKY_MODES.length - 1 ? " · " : ""}
               </span>
             ))}
@@ -541,29 +542,29 @@ HeaderStart, HeaderCenter, HeaderEnd  // omit \`side\``}</pre>
       >
         <ul className="docs-prose" style={{ paddingInlineStart: "1.25em" }}>
           <li>
-            Root is <code>&lt;header&gt;</code> — the banner landmark.
+            Root is <VirtariInlineCode>&lt;header&gt;</VirtariInlineCode> — the banner landmark.
             Implicitly announced by screen readers when a direct descendant of{" "}
-            <code>&lt;body&gt;</code>.
+            <VirtariInlineCode>&lt;body&gt;</VirtariInlineCode>.
           </li>
           <li>
-            Swap <code>as=&quot;nav&quot;</code> on the row or section that
+            Swap <VirtariInlineCode>as=&quot;nav&quot;</VirtariInlineCode> on the row or section that
             contains navigation — and always provide an{" "}
-            <code>aria-label</code> when a page has more than one nav
+            <VirtariInlineCode>aria-label</VirtariInlineCode> when a page has more than one nav
             landmark.
           </li>
           <li>
             Row ordering follows source order. Write{" "}
-            <code>HeaderTop → HeaderMain → HeaderBottom</code> to get the
+            <VirtariInlineCode>HeaderTop → HeaderMain → HeaderBottom</VirtariInlineCode> to get the
             correct visual and sticky-stack order.
           </li>
           <li>
-            <code>sticky=&quot;smart&quot;</code> sets{" "}
-            <code>pointer-events: none</code> while hidden so hidden rows
+            <VirtariInlineCode>sticky=&quot;smart&quot;</VirtariInlineCode> sets{" "}
+            <VirtariInlineCode>pointer-events: none</VirtariInlineCode> while hidden so hidden rows
             can&apos;t receive clicks through the transform.
           </li>
           <li>
             All transitions respect{" "}
-            <code>prefers-reduced-motion: reduce</code>.
+            <VirtariInlineCode>prefers-reduced-motion: reduce</VirtariInlineCode>.
           </li>
         </ul>
       </Section>

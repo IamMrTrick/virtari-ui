@@ -1,5 +1,5 @@
 import { Stack as VdsStack, Cluster, type StackProps, type ClusterProps } from "@virtari-packages/react-layout";
-import { Heading } from "@virtari-packages/react-text";
+import { Heading, Text } from "@virtari-packages/react-text";
 
 export function Section({
   title,
@@ -13,7 +13,7 @@ export function Section({
   return (
     <VdsStack as="section" className="docs-section" gap="md">
       <Heading level={2} size="5" className="docs-section-title">{title}</Heading>
-      {description && <p className="docs-section-description">{description}</p>}
+      {description && <Text as="p" size="2" tone="muted" leading="relaxed" className="docs-section-description">{description}</Text>}
       {children}
     </VdsStack>
   );

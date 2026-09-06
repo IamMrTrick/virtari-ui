@@ -1,6 +1,7 @@
 import { cn } from "@virtari-packages/utils";
 import type { ComponentRef, Ref } from "react";
 import * as RadioGroupPrimitive from "@virtari-packages/primitives/radio-group";
+import { useRadioDirection } from "./useRadioDirection";
 
 export type SegmentedRadioSize = "sm" | "md" | "lg";
 
@@ -19,13 +20,16 @@ export function SegmentedRadio({
   error = false,
   className,
   orientation = "horizontal",
+  dir,
   disabled,
   ref,
   ...props
 }: SegmentedRadioProps) {
+  const { direction, composedRef } = useRadioDirection(dir, ref);
   return (
     <RadioGroupPrimitive.Root
-      ref={ref}
+      ref={composedRef}
+      dir={direction}
       orientation={orientation}
       disabled={disabled}
       aria-invalid={error || undefined}

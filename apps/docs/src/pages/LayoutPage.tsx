@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import {
   Section as VSection,
   Row,
@@ -37,7 +38,7 @@ export function LayoutPage() {
         title="Why these primitives?"
         description="Main → Section → Row → Col is the semantic hierarchy for a production page. Main is the page's single landmark. Section owns vertical rhythm and content width. Row owns the horizontal slot. Col owns the cell. Together they replace ad-hoc div + inline flex/grid markup."
       >
-        <pre className="docs-code">{`import { Main, Section, Row, Col, Container } from "@virtari-packages/react-layout";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Main, Section, Row, Col, Container } from "@virtari-packages/react-layout";
 
 <Main>
   <Section padding="lg" width="xl" gap="lg">
@@ -52,14 +53,14 @@ export function LayoutPage() {
       {cards.map(c => <Col key={c.id}><Card {...c} /></Col>)}
     </Row>
   </Section>
-</Main>`}</pre>
+</Main>`} />
       </Section>
 
       <Section
         title="Main — the page's single landmark"
         description="The <main> element is the dominant content of the page — HTML spec says exactly one non-hidden <main> per document. Our <Main> renders it with the right defaults: id='main' so a skip-link can target it, tabIndex=-1 so JS can focus it, and padding/gutter set to 'none' because <Main> is typically a landmark wrapping self-padded <Section>s."
       >
-        <pre className="docs-code">{`{/* Shell: header + sidebar + main */}
+        <VirtariCodeBlock renderer="static" language="tsx" code={`{/* Shell: header + sidebar + main */}
 <body>
   <a href="#main" className="skip-link">Skip to main content</a>
   <Header>…</Header>
@@ -76,7 +77,7 @@ export function LayoutPage() {
 <Main padding="lg" gutter="md" width="xl" gap="lg">
   <h1>Dashboard</h1>
   <Card>…</Card>
-</Main>`}</pre>
+</Main>`} />
 
         {/*
          * This docs page itself renders inside the app shell's <main>, so we
@@ -98,22 +99,22 @@ export function LayoutPage() {
 
         <ul className="docs-prose" style={{ paddingInlineStart: "1.25em", marginBlockStart: "var(--vds-space-3)" }}>
           <li>
-            Render <strong>exactly one</strong> <code>&lt;Main&gt;</code> per
+            Render <strong>exactly one</strong> <VirtariInlineCode>&lt;Main&gt;</VirtariInlineCode> per
             page (browsers and screen readers treat additional ones as an error).
           </li>
           <li>
-            The default <code>id=&quot;main&quot;</code> pairs with a skip-link:{" "}
-            <code>&lt;a href=&quot;#main&quot;&gt;Skip to content&lt;/a&gt;</code>.
+            The default <VirtariInlineCode>id=&quot;main&quot;</VirtariInlineCode> pairs with a skip-link:{" "}
+            <VirtariInlineCode>&lt;a href=&quot;#main&quot;&gt;Skip to content&lt;/a&gt;</VirtariInlineCode>.
           </li>
           <li>
-            <code>tabIndex=&quot;-1&quot;</code> lets JS focus the region
+            <VirtariInlineCode>tabIndex=&quot;-1&quot;</VirtariInlineCode> lets JS focus the region
             without adding it to the tab order — needed for single-page-app
             route transitions that re-focus the main content.
           </li>
           <li>
-            Default padding / gutter are <code>&quot;none&quot;</code> because{" "}
-            <code>&lt;Main&gt;</code> is usually a thin landmark wrapping
-            self-padded <code>&lt;Section&gt;</code>s. Override when you want
+            Default padding / gutter are <VirtariInlineCode>&quot;none&quot;</VirtariInlineCode> because{" "}
+            <VirtariInlineCode>&lt;Main&gt;</VirtariInlineCode> is usually a thin landmark wrapping
+            self-padded <VirtariInlineCode>&lt;Section&gt;</VirtariInlineCode>s. Override when you want
             Main to own the padding directly.
           </li>
         </ul>
@@ -135,7 +136,7 @@ export function LayoutPage() {
           <Box>Direct children flow vertically with `gap="md"`</Box>
         </VSection>
 
-        <pre className="docs-code">{`<Section
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Section
   padding="lg"          // xs | sm | md | lg | xl | 2xl | 3xl
   gutter="md"           // xs | sm | md | lg | xl
   width="lg"            // xs | sm | md | lg | xl | 2xl | prose | full
@@ -147,7 +148,7 @@ export function LayoutPage() {
 >
   <h2>…</h2>
   <Row>…</Row>
-</Section>`}</pre>
+</Section>`} />
       </Section>
 
       <Section
@@ -164,10 +165,10 @@ export function LayoutPage() {
           <Col span={6}><Box>6</Box></Col>
         </Row>
 
-        <pre className="docs-code">{`<Row cols={12} gap="md">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Row cols={12} gap="md">
   <Col span={8}><Main /></Col>
   <Col span={4}><Aside /></Col>
-</Row>`}</pre>
+</Row>`} />
       </Section>
 
       <Section
@@ -180,9 +181,9 @@ export function LayoutPage() {
           <Col span={12} spanMd={12} spanLg={4}><Box>12 → md:12 → lg:4</Box></Col>
         </Row>
 
-        <pre className="docs-code">{`<Col span={12} spanMd={6} spanLg={4}>
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Col span={12} spanMd={6} spanLg={4}>
   <Card />
-</Col>`}</pre>
+</Col>`} />
       </Section>
 
       <Section
@@ -198,9 +199,9 @@ export function LayoutPage() {
           <Col><Box>Card 6</Box></Col>
         </Row>
 
-        <pre className="docs-code">{`<Row autoFit minColWidth="14rem" gap="md">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Row autoFit minColWidth="14rem" gap="md">
   {products.map(p => <Col key={p.id}><ProductCard {...p} /></Col>)}
-</Row>`}</pre>
+</Row>`} />
       </Section>
 
       <Section
@@ -215,9 +216,9 @@ export function LayoutPage() {
           <Box>Tag E</Box>
         </Row>
 
-        <pre className="docs-code">{`<Row mode="flex" gap="sm" wrap>
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Row mode="flex" gap="sm" wrap>
   {tags.map(t => <Tag key={t} />)}
-</Row>`}</pre>
+</Row>`} />
       </Section>
 
       <Section
@@ -228,16 +229,16 @@ export function LayoutPage() {
           <Box>Centered, max-inline-size: var(--vds-container-width-md)</Box>
         </Container>
 
-        <pre className="docs-code">{`<Container width="md" gutter="md">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Container width="md" gutter="md">
   <Article />
-</Container>`}</pre>
+</Container>`} />
       </Section>
 
       <Section
         title="Token architecture"
         description="All defaults flow from @virtari-packages/tokens/layout — a three-tier system mirroring the radii & color tiers."
       >
-        <pre className="docs-code">{`/* packages/tokens/src/layout/primitives.css */
+        <VirtariCodeBlock renderer="static" language="tsx" code={`/* packages/tokens/src/layout/primitives.css */
 --vds-container-width-xs ... -2xl, -prose, -full
 --vds-section-padding-xs ... -3xl
 --vds-section-gutter-xs ... -xl
@@ -255,14 +256,14 @@ export function LayoutPage() {
 --vds-container-width-default       → semantic
 --vds-section-padding-block-default → semantic
 --vds-row-gap-default               → semantic
-...`}</pre>
+...`} />
       </Section>
 
       <Section
         title="API"
         description="Every prop is typed. Components forward ref and extra HTML props."
       >
-        <pre className="docs-code">{`interface SectionProps extends HTMLAttributes<HTMLElement> {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`interface SectionProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;              // default "section"
   padding?: "none"|"xs"|"sm"|"md"|"lg"|"xl"|"2xl"|"3xl";
   gutter?: "none"|"xs"|"sm"|"md"|"lg"|"xl";
@@ -312,7 +313,7 @@ interface ContainerProps extends HTMLAttributes<HTMLElement> {
   maxInlineSize?: string;
   gutter?: ContainerGutter;
   center?: boolean;              // default true
-}`}</pre>
+}`} />
       </Section>
     </>
   );

@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/UtilitiesPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useMemo, useState } from "react";
 import { Button } from "@virtari-packages/react-button";
 import { Card } from "@virtari-packages/react-card";
@@ -49,14 +50,14 @@ export function UtilitiesPage() {
       </Cluster>
       <div className="docs-reference-results">
         {visible.map(item => <Card key={item.id} className="docs-reference-entry"><Stack gap="sm">
-          <h3 dir="ltr"><code>{item.className}</code></h3>
+          <h3 dir="ltr"><VirtariInlineCode>{item.className}</VirtariInlineCode></h3>
           <div className="docs-reference-meta">
             <span>{text("Category", "دسته")}: {item.category} · {item.breakpoint || text("Base", "پایه")}</span>
-            {item.condition && <code dir="ltr">{item.condition}</code>}
+            {item.condition && <VirtariInlineCode dir="ltr">{item.condition}</VirtariInlineCode>}
             <span dir="ltr">{item.sourceId}</span>
           </div>
           <ReferenceCode label={text("Class name", "نام کلاس")} code={item.className} />
-          <pre className="docs-code docs-reference-code" dir="ltr"><code>{item.declarations.map(declaration => `${declaration.property}: ${declaration.value};`).join("\n")}</code></pre>
+          <VirtariCodeBlock renderer="static" language="css" code={item.declarations.map(declaration => `${declaration.property}: ${declaration.value};`).join("\n")} />
         </Stack></Card>)}
       </div>
       {!filtered.length && <p className="docs-prose">{text("No matches. Try a shorter query or reset the filters.", "نتیجه‌ای پیدا نشد. عبارت کوتاه‌تری بنویسید یا فیلترها را پاک کنید.")}</p>}
@@ -70,8 +71,8 @@ export function UtilitiesPage() {
     </Section>
     <Section title={text("Flex, gap and padding", "فلکس، فاصله و پدینگ")}
       description={text("The gap changes from step 2 to step 6 at the md breakpoint. Resize the viewport to inspect it.", "فاصله در نقطهٔ شکست md از مرحلهٔ ۲ به ۶ تغییر می‌کند. برای بررسی، اندازهٔ صفحه را تغییر دهید.")}>
-      <ReferenceCode label="className" code="vds-u-flex vds-u-gap-2 md:vds-u-gap-6 vds-u-p-4" />
-      <Card className="vds-u-flex vds-u-gap-2 md:vds-u-gap-6 vds-u-p-4">
+      <ReferenceCode label="className" code="vds-u-flex vds-u-flex-row vds-u-flex-wrap vds-u-gap-2 md:vds-u-gap-6 vds-u-p-4" />
+      <Card className="vds-u-flex vds-u-flex-row vds-u-flex-wrap vds-u-gap-2 md:vds-u-gap-6 vds-u-p-4">
         <Button>{text("One", "یک")}</Button><Button variant="outline">{text("Two", "دو")}</Button><Button variant="ghost">{text("Three", "سه")}</Button>
       </Card>
     </Section>
@@ -81,16 +82,17 @@ export function UtilitiesPage() {
         <Button size="sm" variant={rtl ? "outline" : "solid"} aria-pressed={!rtl} onClick={() => setRtl(false)}>LTR</Button>
         <Button size="sm" variant={rtl ? "solid" : "outline"} aria-pressed={rtl} onClick={() => setRtl(true)}>RTL</Button>
       </Cluster>
-      <Card dir={rtl ? "rtl" : "ltr"} className="vds-u-flex vds-u-items-center vds-u-gap-3 vds-u-p-4">
-        <Card className="vds-u-mis-auto vds-u-p-3"><code>vds-u-mis-auto</code></Card>
+      <ReferenceCode label="className" code="vds-u-flex vds-u-flex-row vds-u-items-center vds-u-gap-3 vds-u-p-4" />
+      <Card dir={rtl ? "rtl" : "ltr"} className="vds-u-flex vds-u-flex-row vds-u-items-center vds-u-gap-3 vds-u-p-4">
+        <Card className="vds-u-mis-auto vds-u-p-3"><VirtariInlineCode>vds-u-mis-auto</VirtariInlineCode></Card>
         <span>{text("Follows", "بعدی")}</span>
       </Card>
     </Section>
     <Section title={text("Utility layer overrides", "اولویت لایهٔ یوتیلیتی")}
       description={text("The utilities layer follows components. vds-u-p-0 can remove a Card's default padding without !important. Each slot still owns its own padding.", "لایهٔ یوتیلیتی پس از کامپوننت‌ها قرار دارد. vds-u-p-0 می‌تواند پدینگ پیش‌فرض کارت را بدون !important حذف کند. هر بخش داخلی همچنان پدینگ خودش را دارد.")}>
       <Stack gap="md">
-        <Card><code>{'<Card>Default padding</Card>'}</code></Card>
-        <Card className="vds-u-p-0"><code>{'<Card className="vds-u-p-0">No padding</Card>'}</code></Card>
+        <Card><VirtariInlineCode>{'<Card>Default padding</Card>'}</VirtariInlineCode></Card>
+        <Card className="vds-u-p-0"><VirtariInlineCode>{'<Card className="vds-u-p-0">No padding</Card>'}</VirtariInlineCode></Card>
       </Stack>
     </Section>
   </Stack>;

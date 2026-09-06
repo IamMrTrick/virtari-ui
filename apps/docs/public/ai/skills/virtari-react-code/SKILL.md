@@ -17,10 +17,10 @@ Use the existing package and its composition API. Verify the installed version a
 
 ## Integration rules
 
-- Use InlineCode for short code within prose, CodeBlock code=string for read-only examples, and CodeEditor value/onValueChange for editable code. CodeEditor is controlled and its ref points to the wrapper div.
+- Use InlineCode for short code within prose, CodeBlock code=string renderer=static for lightweight read-only examples, and CodeEditor value/onValueChange for editable code. CodeBlock retains renderer=editor as its compatible default and virtualizes very large files; static renders the full source as semantic pre/code without an EditorView. CodeEditor is controlled and its ref points to the wrapper div.
 - CodeBlock and CodeEditor share card/minimal/embedded variants and sm/md/lg sizes. Use embedded for a flush region with no radius; card and minimal follow the code radius contract.
 - CodeBlock highlightLines uses one-based line numbers; diff=unified colors lines beginning with plus or minus without computing a diff. wrap controls long-line wrapping; maxHeight accepts pixels as a number or a CSS string.
-- For CodeEditor use minLines/maxLines, tabSize and insertSpaces for editing geometry; append CodeMirror extensions via extensions when needed. Wrapper HTML attributes are not automatically attributes of the internal editor; provide internal labeling through an EditorView.contentAttributes extension when necessary.
+- For CodeEditor use minLines/maxLines, tabSize and insertSpaces for editing geometry; append CodeMirror extensions via extensions when needed. editorLabel labels the editable source; CodeBlock codeLabel names its focusable source region. Both expose copyLabel/copiedLabel/copyErrorLabel for localized clipboard feedback. Code.css includes the copy control styles.
 - Read KNOWN_LANGUAGES and resolveLanguage for actual language support. Unknown languages render as plain text; bash/shell/sh currently resolve to empty extensions. CodeBlock copyable defaults true and copies the original code string.
 
 ## Known limits and mistakes to avoid

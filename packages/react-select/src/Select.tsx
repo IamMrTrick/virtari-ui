@@ -58,6 +58,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
   size = "md",
   appearance = "soft",
   invalid,
+  "aria-invalid": ariaInvalid,
   loading,
   clearable,
   onClear,
@@ -76,7 +77,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
       className={cn("vds-select-trigger", className)}
       data-size={size}
       data-appearance={appearance}
-      aria-invalid={invalid || undefined}
+      aria-invalid={invalid ?? ariaInvalid}
       aria-busy={loading || undefined}
       {...props}
     >
@@ -135,6 +136,7 @@ export const SelectContent = forwardRef<ComponentRef<typeof SelectPrimitive.Cont
         ref={ref}
         className={cn("vds-select-content", className)}
         data-size={size}
+        data-position={position}
         position={position}
         sideOffset={4}
         {...props}
@@ -160,7 +162,7 @@ export const SelectItem = forwardRef<ComponentRef<typeof SelectPrimitive.Item>, 
       className={cn("vds-select-item", className)}
       {...props}
     >
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      <SelectPrimitive.ItemText className="vds-select-item-label">{children}</SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator className="vds-select-item-indicator">
         <IconCheck size={12} stroke={2} aria-hidden focusable={false} />
       </SelectPrimitive.ItemIndicator>

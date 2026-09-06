@@ -82,10 +82,10 @@ export function resolveLanguage(
   const key = id.toLowerCase();
   if (key === "plaintext" || key === "text" || key === "txt") return null;
 
-  const preload = PRELOADED[key];
+  const preload = Object.hasOwn(PRELOADED, key) ? PRELOADED[key] : undefined;
   if (preload) return preload();
 
-  const lazy = LAZY[key];
+  const lazy = Object.hasOwn(LAZY, key) ? LAZY[key] : undefined;
   if (lazy) return lazy();
 
   return null;

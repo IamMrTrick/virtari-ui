@@ -82,7 +82,9 @@
   }
 
   /* ── Focus ring ── */
-  .vds-checkbox:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  .vds-checkbox:focus-visible {
+    outline: var(--checkbox-focus-ring-width) solid var(--checkbox-focus-ring-color);
+    outline-offset: var(--checkbox-focus-ring-offset);
 
     @media (forced-colors: active) { outline: 2px solid Highlight; outline-offset: 2px; box-shadow: none;
     }
@@ -131,6 +133,21 @@
     display: flex;
     animation: vds-indeterminate-slide-in 300ms var(--vds-ease-spring);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vds-checkbox:active:not(:disabled) { scale: 1; transition: none; }
+  .vds-checkbox[data-state], .vds-checkbox .vds-checkbox-glyph { animation: none; }
+}
+
+@media (forced-colors: active) {
+  .vds-checkbox[data-state="checked"], .vds-checkbox[data-state="indeterminate"] {
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+  .vds-checkbox:disabled { border-color: GrayText; }
 }
 
 [data-vds-no-micro] .vds-checkbox:active                                               { scale: 1; transition: none; }

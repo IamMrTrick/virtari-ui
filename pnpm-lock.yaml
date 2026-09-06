@@ -123,6 +123,9 @@ importers:
       '@virtari-packages/react-command':
         specifier: workspace:*
         version: link:../../packages/react-command
+      '@virtari-packages/react-copy-button':
+        specifier: workspace:*
+        version: link:../../packages/react-copy-button
       '@virtari-packages/react-data-table':
         specifier: workspace:*
         version: link:../../packages/react-data-table

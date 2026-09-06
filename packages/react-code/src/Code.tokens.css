@@ -20,12 +20,13 @@
     --vds-code-gutter-padding-inline: var(--vds-space-3, 0.75rem);
 
     /* ── Surfaces ── */
-    --vds-code-bg: var(--vds-color-bg-subtle, #f8f8f8);
+    --vds-code-bg: var(--vds-color-surface-container, var(--vds-color-bg-subtle, #f8f8f8));
     --vds-code-text: var(--vds-color-text, #171717);
-    --vds-code-border: var(--vds-color-border-subtle, #e5e5e5);
+    --vds-code-border: var(--vds-surface-border, var(--vds-color-border-subtle, #e5e5e5));
+    --vds-code-shadow: var(--vds-surface-shadow, none);
 
     /* ── Header / chrome ── */
-    --vds-code-header-bg: var(--vds-color-bg-muted, #f3f3f3);
+    --vds-code-header-bg: var(--vds-color-neutral-a2, #f3f3f3);
     --vds-code-header-text: var(--vds-color-text-muted, #525252);
     --vds-code-header-border: var(--vds-code-border);
     --vds-code-header-padding-block: var(--vds-space-2, 0.5rem);
@@ -37,7 +38,7 @@
 
     /* ── Gutter (line numbers) ── */
     --vds-code-gutter-bg: transparent;
-    --vds-code-gutter-text: var(--vds-color-text-subtle, #a3a3a3);
+    --vds-code-gutter-text: var(--vds-color-text-muted, #525252);
     --vds-code-gutter-active-bg: transparent;
     --vds-code-gutter-active-text: var(--vds-color-text, #171717);
 
@@ -71,9 +72,8 @@
     --vds-code-scrollbar-thumb-hover: var(--vds-color-border-subtle, #a3a3a3);
 
     /* =====================================================================
-     * 2. Syntax palette — mapped to Virtari intent palette steps.
-     *    Each token references step 9 (solid) or step 11 (text) so they
-     *    automatically flip in dark mode via the global mode switch.
+     * 2. Syntax palette — mapped to readable semantic text roles.
+     *    Theme scopes resolve their own foreground/background pairs.
      * ===================================================================== */
     --vds-code-token-keyword:     var(--vds-color-primary-text, #3730a3);
     --vds-code-token-control:     var(--vds-color-primary-text, #3730a3);
@@ -82,12 +82,12 @@
     --vds-code-token-number:      var(--vds-color-warning-text, #78350f);
     --vds-code-token-bool:        var(--vds-color-warning-text, #78350f);
     --vds-code-token-null:        var(--vds-color-warning-text, #78350f);
-    --vds-code-token-comment:     var(--vds-color-text-subtle, #a3a3a3);
+    --vds-code-token-comment:     var(--vds-color-text-muted, #525252);
     --vds-code-token-doc:         var(--vds-color-text-muted, #525252);
     --vds-code-token-function:    var(--vds-color-info-text, #155e75);
     --vds-code-token-method:      var(--vds-color-info-text, #155e75);
     --vds-code-token-operator:    var(--vds-color-text-muted, #525252);
-    --vds-code-token-punctuation: var(--vds-color-text-subtle, #a3a3a3);
+    --vds-code-token-punctuation: var(--vds-color-text-muted, #525252);
     --vds-code-token-bracket:     var(--vds-color-text-muted, #525252);
     --vds-code-token-tag:         var(--vds-color-danger-text, #991b1b);
     --vds-code-token-attribute:   var(--vds-color-warning-text, #78350f);
@@ -116,6 +116,7 @@
    * <length>-typed nesting channel (--vds-radius-host-b / -r), and a unitless
    * zero is a <number> there — invalid at computed-value time. */
   .vds-code[data-variant="minimal"] {
+    --vds-code-shadow: none;
     --vds-code-bg: transparent;
     --vds-code-border-width: 0px;
     --vds-code-padding-block: 0px;
@@ -125,6 +126,7 @@
   }
 
   .vds-code[data-variant="embedded"] {
+    --vds-code-shadow: none;
     --vds-code-radius: 0px;
     --vds-code-border-width: 0px;
   }
@@ -167,7 +169,7 @@
 
     --vds-code-inline-bg: var(--vds-color-bg-muted, #f3f3f3);
     --vds-code-inline-text: var(--vds-color-text, #171717);
-    --vds-code-inline-border: var(--vds-color-border-subtle, #e5e5e5);
+    --vds-code-inline-border: var(--vds-surface-border, var(--vds-color-border-subtle, #e5e5e5));
   }
 
   .vds-code-inline[data-color="primary"] {

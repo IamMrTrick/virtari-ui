@@ -19,6 +19,8 @@ export function Checkbox({
   size = "md",
   error,
   disabled,
+  name,
+  "aria-describedby": describedBy,
   className,
   ref,
   ...props
@@ -34,6 +36,8 @@ export function Checkbox({
       data-size={size}
       data-error={resolvedError ? "" : undefined}
       disabled={resolvedDisabled}
+      name={name ?? group?.name}
+      aria-describedby={[group?.describedBy, describedBy].filter(Boolean).join(" ") || undefined}
       aria-invalid={resolvedError || undefined}
       {...props}
     >

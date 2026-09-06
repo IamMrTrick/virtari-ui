@@ -442,7 +442,7 @@
     display: inline-block;
     min-inline-size: 0;
     flex: 1 1 auto;
-    overflow: hidden;
+    overflow: clip visible;
     text-overflow: ellipsis;
   }
 

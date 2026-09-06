@@ -18,10 +18,12 @@
     align-items: center;
     justify-content: center;
     gap: var(--vds-space-1-5, 0.375rem);
-    block-size: var(--pill-checkbox-item-height);
+    min-block-size: var(--pill-checkbox-item-height);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    box-sizing: border-box;
     padding-inline: var(--pill-checkbox-item-padding-inline);
-    padding-block-start: var(--vds-control-optical-offset, 0px);
-    padding-block-end: 0;
+    padding-block: var(--vds-space-1, 0.25rem);
     font-family: inherit;
     font-size: var(--pill-checkbox-item-font-size);
     font-weight: var(--pill-checkbox-item-font-weight);
@@ -32,7 +34,8 @@
       var(--pill-checkbox-item-border-color);
     border-radius: var(--pill-checkbox-item-radius);
     cursor: pointer;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
     transition:
       background-color var(--pill-checkbox-transition-duration)
         var(--pill-checkbox-transition-easing),
@@ -61,8 +64,8 @@
 
   /* ── Focus ring ── */
   .vds-pill-checkbox-item:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    outline: var(--pill-checkbox-focus-ring-width) solid var(--pill-checkbox-focus-ring-color);
+    outline-offset: var(--pill-checkbox-focus-ring-offset);
     @media (forced-colors: active) {
       outline: 2px solid Highlight;
       outline-offset: 2px;
@@ -86,12 +89,28 @@
   }
 
   .vds-pill-checkbox[data-error] .vds-pill-checkbox-item:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+    outline-color: var(--vds-color-danger-solid);
     @media (forced-colors: active) {
       outline: 2px solid Highlight;
       outline-offset: 2px;
       box-shadow: none;
     }
   }
+
+  .vds-pill-checkbox-label { min-inline-size: 0; }
+  .vds-pill-checkbox-indicator {
+    display: inline-flex;
+    inline-size: 1em;
+    block-size: 1em;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+  }
+  .vds-pill-checkbox-indicator svg { inline-size: 100%; block-size: 100%; }
+  .vds-pill-checkbox-mixed { display: none; }
+  .vds-pill-checkbox-item[data-state="checked"] .vds-pill-checkbox-indicator,
+  .vds-pill-checkbox-item[data-state="indeterminate"] .vds-pill-checkbox-indicator { visibility: visible; }
+  .vds-pill-checkbox-item[data-state="indeterminate"] .vds-pill-checkbox-check { display: none; }
+  .vds-pill-checkbox-item[data-state="indeterminate"] .vds-pill-checkbox-mixed { display: block; }
 }

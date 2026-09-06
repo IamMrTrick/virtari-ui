@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useMemo, useState } from "react";
 import {
   Toaster,
@@ -441,12 +442,12 @@ function VariantsSection() {
         </Button>
       </Grid>
 
-      <pre className="docs-code">{`toast.success("Saved", "Your profile is up to date.");
+      <VirtariCodeBlock renderer="static" language="tsx" code={`toast.success("Saved", "Your profile is up to date.");
 toast.error("Couldn't save", "Server returned 500.");
 toast.warning("Unsaved changes");
 toast.info("New version available");
 toast.loading("Uploading…");       // persists until dismissed
-toast.message("Neutral message");  // no colored icon`}</pre>
+toast.message("Neutral message");  // no colored icon`} />
     </Section>
   );
 }
@@ -639,7 +640,7 @@ function ActionsSection() {
         </Button>
       </Grid>
 
-      <pre className="docs-code">{`toast.withActions("New comment", "Jordan left a note on PR #42.", {
+      <VirtariCodeBlock renderer="static" language="tsx" code={`toast.withActions("New comment", "Jordan left a note on PR #42.", {
   primary: {
     label: "Review",
     variant: "primary",    // primary | secondary | ghost | danger | success
@@ -650,7 +651,7 @@ function ActionsSection() {
     variant: "ghost",
     onClick: () => {},
   },
-});`}</pre>
+});`} />
     </Section>
   );
 }
@@ -677,14 +678,14 @@ function PromiseSection() {
         </Button>
       </Row>
 
-      <pre className="docs-code">{`toast.promise(api.upload(file), {
+      <VirtariCodeBlock renderer="static" language="tsx" code={`toast.promise(api.upload(file), {
   loading: "Uploading…",
   success: (res) => \`Uploaded \${res.name}\`,
   error: (err) => \`Failed — \${err.message}\`,
   // optional long forms
   description: "We'll notify you when it's done.",
   successDescription: "Share link copied to clipboard.",
-});`}</pre>
+});`} />
     </Section>
   );
 }
@@ -728,7 +729,7 @@ function UndoConfirmSection() {
         </Button>
       </Row>
 
-      <pre className="docs-code">{`toast.undo(
+      <VirtariCodeBlock renderer="static" language="tsx" code={`toast.undo(
   "Message archived",
   "You can restore it within 5 seconds.",
   () => restore(messageId),
@@ -744,7 +745,7 @@ toast.confirm(
     cancelLabel: "Keep editing",
     confirmVariant: "danger",
   },
-);`}</pre>
+);`} />
     </Section>
   );
 }
@@ -915,18 +916,18 @@ function TimerModeSection({ timerMode, setTimerMode }: TimerModeSectionProps) {
       >
         <li>
           <strong>parallel</strong> (default) — every toast counts down from
-          its own <code>createdAt</code>, independent of stack position. Older
+          its own <VirtariInlineCode>createdAt</VirtariInlineCode>, independent of stack position. Older
           stacked toasts can auto-dismiss while you're reading the newest.
         </li>
         <li>
           <strong>sequential</strong> — only the newest visible toast counts
           down. The ones behind it wait with their timer paused; when the
           newest dismisses, the next becomes active and its timer resets to a
-          full <code>duration</code>. Useful when every message must be seen.
+          full <VirtariInlineCode>duration</VirtariInlineCode>. Useful when every message must be seen.
         </li>
       </ul>
 
-      <pre className="docs-code">{`<Toaster timerMode="sequential" duration={3000} />`}</pre>
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Toaster timerMode="sequential" duration={3000} />`} />
     </Section>
   );
 }
@@ -964,7 +965,7 @@ function HookSection() {
         </Button>
       </Row>
 
-      <pre className="docs-code">{`import { useToast } from "@virtari-packages/react-toast";
+      <VirtariCodeBlock renderer="static" language="tsx" code={`import { useToast } from "@virtari-packages/react-toast";
 
 function Header() {
   const { toasts, toast, dismiss, dismissAll } = useToast();
@@ -974,7 +975,7 @@ function Header() {
       <Button onClick={() => toast.info("Hi!")}>Notify</Button>
     </div>
   );
-}`}</pre>
+}`} />
     </Section>
   );
 }
@@ -985,7 +986,7 @@ function ImperativeApiSection() {
       title="Imperative API — full reference"
       description="Call these from anywhere — services, event handlers, zustand actions, etc. No React context required."
     >
-      <pre className="docs-code">{`import { toast } from "@virtari-packages/react-toast";
+      <VirtariCodeBlock renderer="static" language="tsx" code={`import { toast } from "@virtari-packages/react-toast";
 
 // Type shortcuts
 toast(options);                 // generic
@@ -1019,7 +1020,7 @@ type ToastOptions = {
   duration?: number;                // ms; 0 = persist
   dismissible?: boolean;            // default true
   icon?: ReactNode | false;         // override or suppress
-};`}</pre>
+};`} />
     </Section>
   );
 }
@@ -1071,7 +1072,7 @@ function LowLevelSection() {
         <ToastViewport className="vds-toaster vds-toaster--bottom-right" />
       </ToastProvider>
 
-      <pre className="docs-code">{`import {
+      <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   ToastProvider, ToastViewport,
   ToastRoot, ToastTitle, ToastDescription,
   ToastAction, ToastClose,
@@ -1085,7 +1086,7 @@ function LowLevelSection() {
     <ToastClose />
   </ToastRoot>
   <ToastViewport />
-</ToastProvider>`}</pre>
+</ToastProvider>`} />
     </Section>
   );
 }
@@ -1099,8 +1100,8 @@ function AccessibilitySection() {
       <ul className="docs-prose" style={{ paddingInlineStart: "1.25em" }}>
         <li>
           <strong>Screen readers</strong> — each toast is announced via a polite
-          <code> aria-live </code> region (assertive for warnings/errors via
-          the <code>type</code> prop). The announcer dedupes rapid-fire updates.
+          <VirtariInlineCode> aria-live </VirtariInlineCode> region (assertive for warnings/errors via
+          the <VirtariInlineCode>type</VirtariInlineCode> prop). The announcer dedupes rapid-fire updates.
         </li>
         <li>
           <strong>Keyboard</strong> — press <kbd>F8</kbd> to move focus into the
@@ -1114,20 +1115,20 @@ function AccessibilitySection() {
         <li>
           <strong>Swipe to dismiss</strong> — swipe direction adapts to the
           Toaster position (right-anchored stacks swipe right, etc.) with a
-          configurable <code>swipeThreshold</code>.
+          configurable <VirtariInlineCode>swipeThreshold</VirtariInlineCode>.
         </li>
         <li>
           <strong>Reduced motion</strong> — when{" "}
-          <code>prefers-reduced-motion: reduce</code> is set, all entrance /
+          <VirtariInlineCode>prefers-reduced-motion: reduce</VirtariInlineCode> is set, all entrance /
           exit animations and transitions are disabled.
         </li>
         <li>
-          <strong>RTL</strong> — pass <code>dir="rtl"</code> to the Toaster to
+          <strong>RTL</strong> — pass <VirtariInlineCode>dir="rtl"</VirtariInlineCode> to the Toaster to
           mirror positions and swipe direction.
         </li>
       </ul>
 
-      <pre className="docs-code">{`<Toaster
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Toaster
   position="top-right"
   duration={4000}
   visibleToasts={3}
@@ -1137,7 +1138,7 @@ function AccessibilitySection() {
   maxToasts={8}
   dir="ltr"                      // or "rtl"
   closeLabel="Close notification"
-/>`}</pre>
+/>`} />
     </Section>
   );
 }

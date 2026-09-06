@@ -20,7 +20,8 @@ Use the existing package and its composition API. Verify the installed version a
 - RadioGroup owns value/defaultValue/onValueChange, name and required. Give every RadioGroupItem, RadioField or RadioCard a stable distinct value.
 - RadioGroup supplies label, description and error plus inherited size/disabled/error. RadioCard supports row and icon-grid layouts; RadioField supplies the labeled item presentation.
 - Use SegmentedRadio/SegmentedRadioItem or PillRadio/PillRadioItem for the same exclusive selection semantics in compact presentations. Their state remains root-owned radio state, not independent pressed buttons.
-- Use sm/md/lg sizes and the primitive orientation/direction behavior; preserve keyboard roving focus and arrow-key selection.
+- Use sm/md/lg sizes and the primitive orientation/direction behavior; preserve keyboard roving focus and arrow-key selection. RadioGroup, SegmentedRadio and PillRadio resolve explicit dir, then DirectionProvider, then inherited DOM direction.
+- Give every group a name. Field/card option titles form their names while helper text remains separately associated. Uncontrolled native reset restores the initial selection or empty state and respects cancellation/external form ownership. Controlled reset remains application-owned; resetting to empty does not emit the string-only onValueChange callback.
 
 ## Known limits and mistakes to avoid
 

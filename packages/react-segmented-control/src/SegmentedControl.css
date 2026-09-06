@@ -6,6 +6,9 @@
   /* Outer RadioGroup wrapper — inline by default, block when full-width */
   .vds-segmented-control {
     display: inline-block;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    vertical-align: middle;
   }
 
   .vds-segmented-control[data-full-width="true"] {
@@ -16,7 +19,7 @@
   .vds-segmented-control .vds-tabs-list[data-orientation="vertical"] {
     flex-direction: column;
     align-items: stretch;
-    max-inline-size: none;
+    max-inline-size: 100%;
     overflow-x: visible;
     overflow-y: visible;
   }

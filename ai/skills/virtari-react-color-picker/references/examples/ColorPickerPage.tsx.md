@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/ColorPickerPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import { ColorPicker } from "@virtari-packages/react-color-picker";
 import "@virtari-packages/react-color-picker/styles";
@@ -82,9 +83,7 @@ function PreviewCard({
           </div>
         </div>
       </div>
-      <pre className="docs-code" style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
-        {value}
-      </pre>
+      <VirtariCodeBlock renderer="static" language="tsx" code={value} wrap />
     </div>
   );
 }
@@ -288,7 +287,7 @@ export function ColorPickerPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { ColorPicker } from "@virtari-packages/react-color-picker";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { ColorPicker } from "@virtari-packages/react-color-picker";
 import "@virtari-packages/react-color-picker/styles";
 
 const [value, setValue] = useState(
@@ -311,7 +310,7 @@ const [value, setValue] = useState(
   onValueChange={setValue}
   allowedTypes={["solid"]}
   allowAlpha={false}
-/>;`}</pre>
+/>;`} />
       </Section>
     </>
   );

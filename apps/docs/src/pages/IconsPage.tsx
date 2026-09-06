@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import {
   useDeferredValue,
   useEffect,
@@ -214,7 +215,7 @@ export function IconsPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { IconCheck } from "@virtari-packages/react-icons";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { IconCheck } from "@virtari-packages/react-icons";
 
 // Direct (tree-shakable, simplest)
 <IconCheck size={20} stroke={1.5} />
@@ -227,7 +228,7 @@ import { Icon, IconCheck } from "@virtari-packages/react-icons";
 import { IconProvider } from "@virtari-packages/react-icons";
 <IconProvider size="md" stroke={1.5}>
   {/* every <Icon> below inherits these defaults */}
-</IconProvider>`}</pre>
+</IconProvider>`} />
       </Section>
     </>
   );

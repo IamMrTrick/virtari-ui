@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   Collapsible,
@@ -56,7 +57,7 @@ export function CollapsiblePage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari-packages/react-collapsible";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari-packages/react-collapsible";
 
 <Collapsible>
   <CollapsibleTrigger asChild>
@@ -65,7 +66,7 @@ export function CollapsiblePage() {
   <CollapsibleContent>
     Hidden content here.
   </CollapsibleContent>
-</Collapsible>`}</pre>
+</Collapsible>`} />
       </Section>
     </>
   );

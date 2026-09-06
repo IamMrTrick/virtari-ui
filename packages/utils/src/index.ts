@@ -1,4 +1,5 @@
 export { cn } from "./cn";
+export { controlText } from "./controlText";
 export { getKeyboardPlatform, useKeyboardPlatform, formatCombo, ariaKeyShortcuts, shortcutLabel, type KeyboardPlatform } from "./keyboard";
 export { useComposedRefs } from "./useComposedRefs";
 export { useFormReset } from "./useFormReset";

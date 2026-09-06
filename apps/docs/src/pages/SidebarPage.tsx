@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useState, type ReactNode, type CSSProperties } from "react";
 import {
   Sidebar,
@@ -116,7 +117,7 @@ function ContentArea({ children }: { children?: ReactNode }) {
             Main content
           </h3>
           <p style={{ margin: 0 }}>
-            The sidebar is a separate <code>&lt;aside&gt;</code> landmark.
+            The sidebar is a separate <VirtariInlineCode>&lt;aside&gt;</VirtariInlineCode> landmark.
             Toggle the rail and try the search filter on the left.
           </p>
         </>
@@ -451,7 +452,7 @@ export function SidebarPage() {
         title="Structure"
         description="Sidebar is the app-chrome navigation rail — <aside> landmark that pairs with Header in two layout modes. Compose SidebarHeader / SidebarBody / SidebarFooter with @virtari-packages/react-nav inside. The sidebar's collapsed state is forwarded to Nav, which owns the rail-mode rendering (icons only, submenus become popovers)."
       >
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Sidebar, SidebarHeader, SidebarBody,
   SidebarFooter, SidebarSeparator, SidebarTrigger,
   useSidebarOptional,
@@ -486,7 +487,7 @@ function NavTree() {
   <SidebarFooter>
     <Avatar fallback="VX" size="sm" /> <UserMeta />
   </SidebarFooter>
-</Sidebar>`}</pre>
+</Sidebar>`} />
       </Section>
 
       <BasicDemo />
@@ -590,8 +591,8 @@ function SubmenuDemo() {
           </h3>
           <p style={{ margin: 0 }}>
             Submenu items (Alpha launch / Beta campaign / Gamma rollout)
-            update <code>active</code> on click via{" "}
-            <code>e.preventDefault()</code> + <code>onSelect</code>. Archive is
+            update <VirtariInlineCode>active</VirtariInlineCode> on click via{" "}
+            <VirtariInlineCode>e.preventDefault()</VirtariInlineCode> + <VirtariInlineCode>onSelect</VirtariInlineCode>. Archive is
             a nested submenu example for the collapsed rail popover.
           </p>
         </ContentArea>
@@ -1014,7 +1015,7 @@ function ApiSection() {
       title="API"
       description="Typed, ref-forwarding. Sub-parts mirror semantic tags (<header> / <div> / <footer> / <hr>)."
     >
-      <pre className="docs-code">{`interface SidebarProps extends HTMLAttributes<HTMLElement> {
+      <VirtariCodeBlock renderer="static" language="tsx" code={`interface SidebarProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;              // default "aside"
   mode?: "full-height" | "below-header";   // default "full-height"
   side?: "start" | "end";        // logical
@@ -1050,7 +1051,7 @@ function useSidebar(): {
   setCollapsed: (c: boolean) => void;
   collapsible: boolean;
   side: "start" | "end";
-};`}</pre>
+};`} />
     </Section>
   );
 }
@@ -1063,39 +1064,39 @@ function AccessibilitySection() {
     >
       <ul className="docs-prose" style={{ paddingInlineStart: "1.25em" }}>
         <li>
-          Root is <code>&lt;aside&gt;</code> — the complementary landmark.
-          Pass <code>aria-label</code> so multiple asides can be told apart.
+          Root is <VirtariInlineCode>&lt;aside&gt;</VirtariInlineCode> — the complementary landmark.
+          Pass <VirtariInlineCode>aria-label</VirtariInlineCode> so multiple asides can be told apart.
         </li>
         <li>
-          Put <code>@virtari-packages/react-nav</code> inside{" "}
-          <code>&lt;SidebarBody&gt;</code> — Nav renders its own{" "}
-          <code>&lt;nav&gt;</code> landmark, and NavLink auto-applies{" "}
-          <code>aria-current=&quot;page&quot;</code>.
+          Put <VirtariInlineCode>@virtari-packages/react-nav</VirtariInlineCode> inside{" "}
+          <VirtariInlineCode>&lt;SidebarBody&gt;</VirtariInlineCode> — Nav renders its own{" "}
+          <VirtariInlineCode>&lt;nav&gt;</VirtariInlineCode> landmark, and NavLink auto-applies{" "}
+          <VirtariInlineCode>aria-current=&quot;page&quot;</VirtariInlineCode>.
         </li>
         <li>
-          Forward <code>collapsed</code> from{" "}
-          <code>useSidebar()</code> into <code>&lt;Nav collapsed&gt;</code> so
+          Forward <VirtariInlineCode>collapsed</VirtariInlineCode> from{" "}
+          <VirtariInlineCode>useSidebar()</VirtariInlineCode> into <VirtariInlineCode>&lt;Nav collapsed&gt;</VirtariInlineCode> so
           rail-mode behaviour (labels sr-only, popover submenus) stays native
           to Nav.
         </li>
         <li>
-          <code>&lt;SidebarTrigger&gt;</code> auto-wires{" "}
-          <code>aria-expanded</code> and switches its aria-label between{" "}
-          <code>expandLabel</code> / <code>collapseLabel</code>.
+          <VirtariInlineCode>&lt;SidebarTrigger&gt;</VirtariInlineCode> auto-wires{" "}
+          <VirtariInlineCode>aria-expanded</VirtariInlineCode> and switches its aria-label between{" "}
+          <VirtariInlineCode>expandLabel</VirtariInlineCode> / <VirtariInlineCode>collapseLabel</VirtariInlineCode>.
         </li>
         <li>
-          The filter input carries <code>aria-label</code> and uses{" "}
-          <code>type=&quot;search&quot;</code> — the browser exposes a native
+          The filter input carries <VirtariInlineCode>aria-label</VirtariInlineCode> and uses{" "}
+          <VirtariInlineCode>type=&quot;search&quot;</VirtariInlineCode> — the browser exposes a native
           clear button when text is entered.
         </li>
         <li>
           Mobile: wrap Sidebar inside{" "}
-          <code>@virtari-packages/react-drawer</code> and toggle via{" "}
-          <code>useSidebar()</code> — the Sidebar itself is desktop-first.
+          <VirtariInlineCode>@virtari-packages/react-drawer</VirtariInlineCode> and toggle via{" "}
+          <VirtariInlineCode>useSidebar()</VirtariInlineCode> — the Sidebar itself is desktop-first.
         </li>
         <li>
           All transitions respect{" "}
-          <code>prefers-reduced-motion: reduce</code>.
+          <VirtariInlineCode>prefers-reduced-motion: reduce</VirtariInlineCode>.
         </li>
       </ul>
     </Section>

@@ -20,10 +20,12 @@ Use the existing package and its composition API. Verify the installed version a
 - Use checked/onCheckedChange or defaultChecked for boolean state. Name the switch with Label/htmlFor or aria-label and keep its label stable while state changes.
 - Use size sm/md/lg. dragEnabled defaults to true; set it false when only standard click/keyboard toggling is desired. Primitive name/value/required/disabled props remain available.
 - Use Switch for a binary setting whose effect is clear; communicate pending/save/error state in the surrounding UI when a server mutation is required.
+- Pointer handlers compose consumer first and preventDefault cancels internal handling. Taps honor native onClick cancellation; completed drags commit onCheckedChange and suppress the following pointer click.
+- Native and external form resets restore the initial uncontrolled state unless canceled. Controlled consumers may decline reset; hidden form serialization remains aligned with their current checked prop.
 
 ## Known limits and mistakes to avoid
 
 - The callback receives a boolean, not a native input event. Do not apply Toggle's pressed/onPressedChange API.
-- Avoid overriding drag pointer handlers without deliberate composition. Do not assume a visual switch label is rendered by this component.
+- Do not assume a visual switch label is rendered by this component. Supply an associated label or explicit accessible name.
 
 Related package IDs: `react-label`, `react-form`, `react-checkbox`, `react-toggle`, `tokens`. Discover their focused skills from the catalog; do not load all packages at once.

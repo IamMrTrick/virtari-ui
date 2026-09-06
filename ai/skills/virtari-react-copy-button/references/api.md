@@ -57,24 +57,14 @@ export interface CopyButtonProps
   label?: string;
   /** Label shown while in the "copied" state. */
   copiedLabel?: string;
+  /** Accessible idle label when no visible label is supplied. */
+  copyLabel?: string;
+  /** Visible/announced feedback when clipboard access fails. */
+  errorLabel?: string;
+  onCopied?: () => void;
+  onCopyError?: (error: unknown) => void;
   ref?: Ref<HTMLButtonElement>;
 }
-```
-
-Source: `packages/react-copy-button/src/CopyButton.tsx`
-
-```tsx
-export function CopyButton({
-  text,
-  feedbackMs = 2000,
-  variant = "ghost",
-  copyButtonSize = "sm",
-  label,
-  copiedLabel = "Copied",
-  className,
-  ref,
-  ...props
-}: CopyButtonProps);
 ```
 
 ## Source files

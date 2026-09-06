@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/LabelPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Label } from "@virtari-packages/react-label";
 import { Input } from "@virtari-packages/react-input";
 import { Checkbox } from "@virtari-packages/react-checkbox";
@@ -35,11 +36,11 @@ export function LabelPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Label } from "@virtari-packages/react-label";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Label } from "@virtari-packages/react-label";
 import { Input } from "@virtari-packages/react-input";
 
 <Label htmlFor="email">Email</Label>
-<Input id="email" type="email" />`}</pre>
+<Input id="email" type="email" />`} />
       </Section>
     </>
   );

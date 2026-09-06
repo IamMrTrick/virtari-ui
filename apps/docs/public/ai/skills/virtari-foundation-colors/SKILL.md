@@ -13,6 +13,7 @@ Use semantic purpose rather than reconstructing palettes or guessing theme behav
 - Twelve-step neutral roles progress from canvas and surfaces (1–5), through boundaries (6–8), solids (9–10), to text (11–12). Dark raised surfaces use lighter steps.
 - Use alpha tokens for overlays on existing color; assess the composited foreground/background, especially on tinted or translucent hosts.
 - A brand customization belongs in the primitive hue layer. Use the template as a starting point and validate both themes plus nested scopes.
+- Supporting text roles prioritize readability: neutral text-subtle shares neutral-11 with text-muted, intent text-muted follows its readable text role, and light warning text uses warning-12. Use type weight and spacing for hierarchy rather than reducing text opacity.
 
 ## Pitfalls
 

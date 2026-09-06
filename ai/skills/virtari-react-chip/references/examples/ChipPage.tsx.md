@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/ChipPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import { Chip, ChipIcon, ChipLabel, ChipRemove } from "@virtari-packages/react-chip";
 import { Avatar } from "@virtari-packages/react-avatar";
@@ -648,7 +649,7 @@ export function ChipPage() {
 
       {/* ─── Usage ────────────────────────────────────────── */}
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Chip,
   ChipIcon,
   ChipLabel,
@@ -670,7 +671,7 @@ export function ChipPage() {
   <button type="button" onClick={toggle} aria-pressed={on}>
     <ChipLabel>Free shipping</ChipLabel>
   </button>
-</Chip>`}</pre>
+</Chip>`} />
       </Section>
     </>
   );

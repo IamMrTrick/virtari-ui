@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/EditorPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import {
   startTransition,
   useDeferredValue,
@@ -85,16 +86,7 @@ function OutputPanel({
       }}
     >
       <strong>{title}</strong>
-      <pre
-        className="docs-code"
-        style={{
-          margin: 0,
-          maxBlockSize: "18rem",
-          overflow: "auto",
-        }}
-      >
-        {value || "-"}
-      </pre>
+      <VirtariCodeBlock renderer="static" language="tsx" code={value || "-"} maxHeight={"18rem"} />
     </div>
   );
 }
@@ -134,7 +126,7 @@ export function EditorPage() {
           '`preset="core"` gives you the lean Lexical shell. `preset="pro"` layers the Virtari toolbar, insert menu, floating selection bar, draggable block handles, slash menu, markdown/html source switching, tables, auto-links, markdown shortcuts, and serialization hooks on top.'
         }
       >
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Editor
 } from "@virtari-packages/react-editor";
 import {
@@ -153,7 +145,7 @@ import {
   <div className="vds-editor">
     <EditorSurface aria-label="Core editor" />
   </div>
-</EditorComposer>`}</pre>
+</EditorComposer>`} />
       </Section>
 
       <Section

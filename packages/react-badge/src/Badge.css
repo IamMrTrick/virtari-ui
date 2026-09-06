@@ -10,6 +10,8 @@
     vertical-align: middle;
 
     box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
     min-block-size: var(--badge-height);
     padding-block: 0;
     padding-inline: var(--badge-padding-inline);
@@ -25,7 +27,8 @@
     line-height: var(--badge-line-height);
     letter-spacing: var(--badge-letter-spacing);
 
-    white-space: nowrap;
+    white-space: normal;
+    text-decoration: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 
@@ -36,11 +39,13 @@
   }
 
   /* ── Interactive state (button/anchor render) ── */
-  .vds-badge[data-interactive="true"] {
+  .vds-badge[data-interactive="true"],
+  .vds-badge:is(a[href], button:enabled) {
     cursor: pointer;
   }
 
-  .vds-badge[data-interactive="true"]:hover {
+  .vds-badge[data-interactive="true"]:not(:disabled):hover,
+  .vds-badge:is(a[href], button:enabled):hover {
     background-color: var(--badge-bg-hover);
   }
 
@@ -51,6 +56,11 @@
   }
 
   /* ── Sections (leading/trailing icon slots) ── */
+  .vds-badge-label {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
   .vds-badge-section {
     display: inline-flex;
     align-items: center;
@@ -79,6 +89,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     inline-size: var(--badge-icon-size);
     block-size: var(--badge-icon-size);
     margin-inline-start: calc(var(--badge-gap) / 2);
@@ -111,6 +122,7 @@
 
   /* ── Dot-only mode ── */
   .vds-badge[data-dot-only="true"] {
+    flex-shrink: 0;
     inline-size: var(--badge-dot-size);
     block-size: var(--badge-dot-size);
     background-color: var(--badge-color-solid);
@@ -118,5 +130,22 @@
   }
   .vds-badge[data-dot-only="true"] > .vds-badge-dot {
     display: none;
+  }
+
+  .vds-badge:disabled {
+    cursor: not-allowed;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-badge,
+    .vds-badge-close { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .vds-badge { border-color: CanvasText; }
+    .vds-badge:disabled { color: GrayText; border-color: GrayText; opacity: 1; }
+    .vds-badge-dot,
+    .vds-badge[data-dot-only="true"] { background-color: CanvasText; forced-color-adjust: none; }
   }
 }

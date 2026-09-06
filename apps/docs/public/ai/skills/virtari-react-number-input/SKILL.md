@@ -21,6 +21,7 @@ Use the existing package and its composition API. Verify the installed version a
 - Use min/max/step and precision deliberately. step defaults to 1; clampOnBlur defaults to true. The rendered input is type=text with role=spinbutton and inputMode=decimal, so application validation must enforce numeric constraints on submission.
 - Choose stepper=stacked for trailing chevrons or inline for minus/plus on logical sides. ArrowUp/ArrowDown perform stepping; wheelEnabled is false by default and only operates while focused.
 - Use NumberInputField for label/help/error wiring, size 2xs through 2xl for geometry, and the native input ref for focus. name/form and other supported native attributes reach the text input; reset is explicitly handled through useFormReset.
+- NumberInputField uses rendered metadata, including zero, to create description IDs. Explicit invalid takes precedence over aria-invalid; otherwise an error infers invalid. Native grammar/spelling values are preserved when invalid is absent.
 
 ## Known limits and mistakes to avoid
 

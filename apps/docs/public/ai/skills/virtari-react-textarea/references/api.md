@@ -47,7 +47,7 @@ export interface TextareaProps
   inputSize?: TextareaSize;
   /**
    * Each printable keystroke fires a brief ring-burst animation.
-   * Intensity scales with typing speed. Default: false.
+   * Respects reduced motion and read-only controls. Default: false.
    */
   typingPulse?: boolean;
   ref?: Ref<HTMLTextAreaElement>;

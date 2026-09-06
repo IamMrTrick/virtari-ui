@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/ScrollAreaPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useCallback, useState } from "react";
 import { ScrollArea } from "@virtari-packages/react-scroll-area";
 import { Section } from "../components";
@@ -190,7 +191,7 @@ export function ScrollAreaPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { ScrollArea } from "@virtari-packages/react-scroll-area";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { ScrollArea } from "@virtari-packages/react-scroll-area";
 
 <ScrollArea
   orientation="horizontal"
@@ -211,7 +212,7 @@ export function ScrollAreaPage() {
 // Marquee
 <ScrollArea orientation="horizontal" marquee marqueeDuration={20}>
   {logos}
-</ScrollArea>`}</pre>
+</ScrollArea>`} />
       </Section>
     </>
   );

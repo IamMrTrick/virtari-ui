@@ -22,6 +22,7 @@ Use the existing package and its composition API. Verify the installed version a
 - Set size=sm/md/lg, orientation=horizontal/vertical and fullWidth on the root. Use the item's icon prop for the dedicated decorative icon slot and an accessible text label.
 - Direction resolves explicit dir, primitive DirectionProvider, then inherited DOM direction. Keep behavioral direction and surrounding layout direction aligned.
 - Import this package's styles entry; it includes the shared Tabs styling. Preserve the generated track's data-radius-host and let the shared track/item radius roles derive nested corners.
+- Full-width labels wrap within equal columns and controls grow from minimum heights. Non-full-width horizontal tracks can scroll within their parent; long labels do not require per-label positioning overrides.
 
 ## Known limits and mistakes to avoid
 

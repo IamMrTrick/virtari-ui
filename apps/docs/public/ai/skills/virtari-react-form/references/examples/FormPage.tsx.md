@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/FormPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -136,9 +137,7 @@ function SignupForm() {
         </div>
       </form>
       {submitted ? (
-        <pre className="docs-code" style={{ marginBlockStart: "var(--vds-space-4, 1rem)" }}>
-          {JSON.stringify(submitted, null, 2)}
-        </pre>
+        <VirtariCodeBlock renderer="static" language="json" code={JSON.stringify(submitted, null, 2)} />
       ) : null}
     </Form>
   );
@@ -224,9 +223,7 @@ function ProfileForm() {
         <Button type="submit">Save</Button>
       </form>
       {submitted ? (
-        <pre className="docs-code" style={{ marginBlockStart: "var(--vds-space-4, 1rem)" }}>
-          {JSON.stringify(submitted, null, 2)}
-        </pre>
+        <VirtariCodeBlock renderer="static" language="json" code={JSON.stringify(submitted, null, 2)} />
       ) : null}
     </Form>
   );
@@ -240,7 +237,7 @@ export function FormPage() {
         description="React Hook Form + zod wrapper. <Form> aliases FormProvider. <FormField> wraps Controller and publishes context. <FormItem> generates stable ids; <FormLabel>, <FormControl>, <FormDescription>, and <FormMessage> read those ids and wire aria-describedby / aria-invalid automatically."
       >
         <p style={{ margin: 0, color: "var(--vds-color-text-muted, #6b7280)" }}>
-          Install peer deps: <code>react-hook-form</code>, <code>zod</code>, <code>@hookform/resolvers</code>. Styles are minimal — just layout gap and error tone.
+          Install peer deps: <VirtariInlineCode>react-hook-form</VirtariInlineCode>, <VirtariInlineCode>zod</VirtariInlineCode>, <VirtariInlineCode>@hookform/resolvers</VirtariInlineCode>. Styles are minimal — just layout gap and error tone.
         </p>
       </Section>
 
@@ -260,7 +257,7 @@ export function FormPage() {
 
       <Section
         title="Usage">
-        <pre className="docs-code">{`import { useForm } from "react-hook-form";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -300,7 +297,7 @@ function MyForm() {
       </form>
     </Form>
   );
-}`}</pre>
+}`} />
       </Section>
     </>
   );

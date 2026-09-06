@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useState, type ReactNode } from "react";
 import {
   Nav,
@@ -168,7 +169,7 @@ function IntroSection() {
       title="One nav, many shapes"
       description="Nav is the W3C-pattern navigation primitive — a nav landmark containing a list of links with disclosure buttons for expandable sections. The same component composes a sidebar, a menubar, a mega menu, or a multi-level tree. Orientation and submenu presentation are the only things that change."
     >
-      <pre className="docs-code">{`import { Nav, NavList, NavItem, NavSubmenu } from "@virtari-packages/react-nav";
+      <VirtariCodeBlock renderer="static" language="tsx" code={`import { Nav, NavList, NavItem, NavSubmenu } from "@virtari-packages/react-nav";
 
 // Sidebar — vertical, inline submenus
 <Nav orientation="vertical" currentPath={pathname}>
@@ -191,7 +192,7 @@ function IntroSection() {
 // Menubar — horizontal, popover submenus
 <Nav orientation="horizontal">
   <NavList>{/* same items, same API */}</NavList>
-</Nav>`}</pre>
+</Nav>`} />
     </Section>
   );
 }
@@ -241,7 +242,7 @@ function IconsSection() {
         </Nav>
       </SidebarFrame>
 
-      <pre className="docs-code">{`<NavItem href="/inbox"
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<NavItem href="/inbox"
   label="Inbox"
   icon={<IconMail />}
   badge={<Badge tone="info" size="sm">12</Badge>}
@@ -251,7 +252,7 @@ function IconsSection() {
   label="Search"
   icon={<IconSearch />}
   kbd={formatCombo("mod+k").join(" ")}
-/>`}</pre>
+/>`} />
     </Section>
   );
 }
@@ -380,7 +381,7 @@ function CompoundSidebar() {
         </Nav>
       </SidebarFrame>
 
-      <pre className="docs-code">{`<NavItem>
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<NavItem>
   <NavTrigger>
     <NavIcon><IconBox /></NavIcon>
     <NavLabel>Inventory</NavLabel>
@@ -391,7 +392,7 @@ function CompoundSidebar() {
       <NavItem><NavLink href="/inventory/products">Products</NavLink></NavItem>
     </NavList>
   </NavSubmenu>
-</NavItem>`}</pre>
+</NavItem>`} />
     </Section>
   );
 }
@@ -464,7 +465,7 @@ function CollapsedSection() {
           {collapsed ? "Expand" : "Collapse"}
         </Button>
         <span style={{ fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text-muted)" }}>
-          <code>collapsed={String(collapsed)}</code>
+          <VirtariInlineCode>collapsed={String(collapsed)}</VirtariInlineCode>
         </span>
       </div>
 
@@ -477,7 +478,7 @@ function CollapsedSection() {
             <p style={{ margin: 0 }}>Main content area. Toggle the rail with the button above. Notice:</p>
             <ul style={{ paddingInlineStart: "1.25em", marginBlockStart: "var(--vds-space-2)" }}>
               <li>Labels stay sr-only — screen readers still announce them.</li>
-              <li><code>title</code> attribute shows the label on mouse hover.</li>
+              <li><VirtariInlineCode>title</VirtariInlineCode> attribute shows the label on mouse hover.</li>
               <li>Items with submenus switch from inline accordion to popover.</li>
               <li>Popover anchors to the icon and flips / shifts via Floating UI.</li>
               <li>Collapsed-rail popovers show the parent label as an internal heading.</li>
@@ -962,7 +963,7 @@ function TreeSection() {
         </Nav>
       </SidebarFrame>
 
-      <pre className="docs-code">{`<Nav orientation="vertical" tree>
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<Nav orientation="vertical" tree>
   <NavList>
     <NavItem label="src" icon={<IconFolder/>} submenu={
       <NavSubmenu>
@@ -970,7 +971,7 @@ function TreeSection() {
       </NavSubmenu>
     }/>
   </NavList>
-</Nav>`}</pre>
+</Nav>`} />
     </Section>
   );
 }
@@ -1063,9 +1064,9 @@ function StatesSection() {
         </Nav>
       </SidebarFrame>
 
-      <pre className="docs-code">{`<NavItem href="/home" label="Home" active />
+      <VirtariCodeBlock renderer="static" language="tsx" code={`<NavItem href="/home" label="Home" active />
 <NavItem href="/billing" label="Billing" disabled />
-<NavItem label="Beta" badge={<Badge variant="outline">beta</Badge>} />`}</pre>
+<NavItem label="Beta" badge={<Badge variant="outline">beta</Badge>} />`} />
     </Section>
   );
 }
@@ -1133,7 +1134,7 @@ function ApiSection() {
       title="API"
       description="Every prop typed. Refs forwarded. Extra HTML props spread onto the root element."
     >
-      <pre className="docs-code">{`interface NavProps extends HTMLAttributes<HTMLElement> {
+      <VirtariCodeBlock renderer="static" language="tsx" code={`interface NavProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;                             // default "nav"
   orientation?: "vertical" | "horizontal";      // default "vertical"
   submenu?: "inline" | "popover";               // default: inline (vert) / popover (horiz)
@@ -1184,7 +1185,7 @@ NavList, NavGroup, NavSeparator
 
 // Submenu containers:
 NavSubmenu                                      // list-based
-NavMega + NavMegaSection                        // free-form, multi-column`}</pre>
+NavMega + NavMegaSection                        // free-form, multi-column`} />
     </Section>
   );
 }
@@ -1201,33 +1202,33 @@ function AccessibilitySection() {
     >
       <ul className="docs-prose" style={{ paddingInlineStart: "1.25em" }}>
         <li>
-          Root is <code>&lt;nav&gt;</code> — the navigation landmark — with{" "}
-          <code>aria-label</code> (defaults to <em>Navigation</em>, override when the page has more than one nav landmark).
+          Root is <VirtariInlineCode>&lt;nav&gt;</VirtariInlineCode> — the navigation landmark — with{" "}
+          <VirtariInlineCode>aria-label</VirtariInlineCode> (defaults to <em>Navigation</em>, override when the page has more than one nav landmark).
         </li>
         <li>
-          List is a native <code>&lt;ul&gt;</code> with <code>&lt;li&gt;</code> items. No{" "}
-          <code>role="menu"</code> / <code>"menubar"</code> — those roles are reserved for app-style menus (File / Edit / View) and confuse screen readers when applied to site navigation.
+          List is a native <VirtariInlineCode>&lt;ul&gt;</VirtariInlineCode> with <VirtariInlineCode>&lt;li&gt;</VirtariInlineCode> items. No{" "}
+          <VirtariInlineCode>role="menu"</VirtariInlineCode> / <VirtariInlineCode>"menubar"</VirtariInlineCode> — those roles are reserved for app-style menus (File / Edit / View) and confuse screen readers when applied to site navigation.
         </li>
         <li>
-          <code>NavTrigger</code> renders a real <code>&lt;button&gt;</code> with{" "}
-          <code>aria-expanded</code> and <code>aria-controls</code> pointing to the submenu id — the standard disclosure pattern. Works with Enter / Space / Tab out of the box.
+          <VirtariInlineCode>NavTrigger</VirtariInlineCode> renders a real <VirtariInlineCode>&lt;button&gt;</VirtariInlineCode> with{" "}
+          <VirtariInlineCode>aria-expanded</VirtariInlineCode> and <VirtariInlineCode>aria-controls</VirtariInlineCode> pointing to the submenu id — the standard disclosure pattern. Works with Enter / Space / Tab out of the box.
         </li>
         <li>
-          <code>NavLink</code> receives <code>aria-current="page"</code> when its{" "}
-          <code>href</code> matches <code>currentPath</code>, so assistive tech announces the user's location.
+          <VirtariInlineCode>NavLink</VirtariInlineCode> receives <VirtariInlineCode>aria-current="page"</VirtariInlineCode> when its{" "}
+          <VirtariInlineCode>href</VirtariInlineCode> matches <VirtariInlineCode>currentPath</VirtariInlineCode>, so assistive tech announces the user's location.
         </li>
         <li>
-          Popover submenus use <code>@floating-ui/react</code> + <code>FloatingFocusManager</code> — Escape closes and returns focus to the trigger; outside click dismisses; focus is never trapped (unlike modals).
+          Popover submenus use <VirtariInlineCode>@floating-ui/react</VirtariInlineCode> + <VirtariInlineCode>FloatingFocusManager</VirtariInlineCode> — Escape closes and returns focus to the trigger; outside click dismisses; focus is never trapped (unlike modals).
         </li>
         <li>
-          <code>NavGroup</code> renders <code>role="group" aria-labelledby</code> so screen readers announce the group name when entering its list.
+          <VirtariInlineCode>NavGroup</VirtariInlineCode> renders <VirtariInlineCode>role="group" aria-labelledby</VirtariInlineCode> so screen readers announce the group name when entering its list.
         </li>
         <li>
-          Disabled state sets <code>aria-disabled="true"</code> and removes <code>href</code> — activation is cleanly blocked without hiding the element from AT.
+          Disabled state sets <VirtariInlineCode>aria-disabled="true"</VirtariInlineCode> and removes <VirtariInlineCode>href</VirtariInlineCode> — activation is cleanly blocked without hiding the element from AT.
         </li>
-        <li>Icons are <code>aria-hidden="true"</code>; the label is the accessible name.</li>
-        <li>In collapsed rail mode, labels become visually-hidden but remain in the a11y tree; items additionally carry a <code>title</code> for hover hints.</li>
-        <li>All transitions respect <code>prefers-reduced-motion: reduce</code>.</li>
+        <li>Icons are <VirtariInlineCode>aria-hidden="true"</VirtariInlineCode>; the label is the accessible name.</li>
+        <li>In collapsed rail mode, labels become visually-hidden but remain in the a11y tree; items additionally carry a <VirtariInlineCode>title</VirtariInlineCode> for hover hints.</li>
+        <li>All transitions respect <VirtariInlineCode>prefers-reduced-motion: reduce</VirtariInlineCode>.</li>
       </ul>
     </Section>
   );

@@ -132,6 +132,7 @@ export function useSwitchDrag(config: SwitchDragConfig): SwitchDragBinding {
   configRef.current = config;
 
   const onNativeClick = useCallback((event: MouseEvent) => {
+    if (event.detail === 0) return;
     if (performance.now() >= suppressClickUntilRef.current) return;
     suppressClickUntilRef.current = 0;
     event.stopPropagation();
@@ -171,12 +172,23 @@ export function useSwitchDrag(config: SwitchDragConfig): SwitchDragBinding {
     };
   }, [cleanupVisuals, onNativeClick]);
 
+  useEffect(() => {
+    if (config.enabled) return;
+    const session = sessionRef.current;
+    sessionRef.current = null;
+    if (session) {
+      const root = rootElRef.current;
+      if (root?.hasPointerCapture(session.pointerId)) root.releasePointerCapture(session.pointerId);
+    }
+    cleanupVisuals();
+  }, [config.enabled, cleanupVisuals]);
+
   const handlers = useMemo(() => {
     const onPointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
       const { enabled, getChecked } = configRef.current;
-      if (!enabled) return;
+      if (!enabled || event.defaultPrevented) return;
       if (sessionRef.current) return;
-      if (event.button !== 0 && event.pointerType === "mouse") return;
+      if (event.button !== 0) return;
 
       const root = rootElRef.current;
       const thumb = thumbElRef.current;
@@ -214,6 +226,11 @@ export function useSwitchDrag(config: SwitchDragConfig): SwitchDragBinding {
     const onPointerMove = (event: React.PointerEvent<HTMLButtonElement>) => {
       const session = sessionRef.current;
       if (!session || session.pointerId !== event.pointerId) return;
+      if (event.defaultPrevented || !configRef.current.enabled) {
+        sessionRef.current = null;
+        finish(session, true);
+        return;
+      }
 
       const deltaX = event.clientX - session.startX;
 
@@ -250,29 +267,19 @@ export function useSwitchDrag(config: SwitchDragConfig): SwitchDragBinding {
       releaseCapture(session);
 
       if (cancelled) {
-        // Pointer capture lost (blur, OS gesture, etc.) — do nothing. Leave
-        // suppression untouched so future interactions work normally.
+        // A canceled drag must not turn into a toggle if a click follows it.
+        if (session.dragging) suppressClickUntilRef.current = performance.now() + CLICK_SUPPRESSION_TTL_MS;
         cleanupVisuals();
         return;
       }
-
-      // Always swallow the browser-synthesized click that follows pointerup —
-      // we handle toggling ourselves below, so a subsequent click would
-      // double-toggle. Keyboard-triggered clicks never reach this code path
-      // because they don't go through pointerdown/pointerup.
-      suppressClickUntilRef.current = performance.now() + CLICK_SUPPRESSION_TTL_MS;
 
       if (!session.dragging) {
-        // Tap: no drag engaged. Toggle directly instead of relying on the
-        // native click (which some browsers skip if the pointer moved even
-        // a few pixels — below our drag threshold but above their click
-        // threshold, producing a "dead" tap).
-        flushSync(() => {
-          configRef.current.onCommit(!session.startChecked);
-        });
+        // A tap follows the primitive's native click path, preserving consumer
+        // cancellation, label activation, and native form event propagation.
         cleanupVisuals();
         return;
       }
+      suppressClickUntilRef.current = performance.now() + CLICK_SUPPRESSION_TTL_MS;
 
       const velocity = computeVelocity(session.samples);
       const thumb = thumbElRef.current;
@@ -295,7 +302,7 @@ export function useSwitchDrag(config: SwitchDragConfig): SwitchDragBinding {
       const session = sessionRef.current;
       if (!session || session.pointerId !== event.pointerId) return;
       sessionRef.current = null;
-      finish(session, false);
+      finish(session, event.defaultPrevented || !configRef.current.enabled);
     };
 
     const onPointerCancel = (event: React.PointerEvent<HTMLButtonElement>) => {

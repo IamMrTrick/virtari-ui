@@ -186,6 +186,18 @@
     border-radius: var(--vds-drawer-radius);
   }
 
+  /* Outside handles need visible overflow. Give the painted end slots the
+     shell corners so their backgrounds do not square off floating sheets. */
+  .vds-drawer-content[data-indicator="outside"] > :is(.vds-drawer-header, .vds-drawer-body, .vds-drawer-footer):first-child {
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+  }
+
+  .vds-drawer-content[data-indicator="outside"] > :is(.vds-drawer-header, .vds-drawer-body, .vds-drawer-footer):last-child {
+    border-end-start-radius: inherit;
+    border-end-end-radius: inherit;
+  }
+
   .vds-drawer-content[data-floating][data-direction="bottom"],
   .vds-drawer-content[data-floating][data-direction="top"] {
     inset-inline: var(--vds-drawer-edge-offset);
@@ -430,6 +442,23 @@
   .vds-drawer-handle[data-placement="outside"][data-direction="right"] {
     inset-inline-start: 0;
     transform: translate(calc(-100% - var(--drawer-handle-offset)), -50%);
+  }
+
+  /* Logical docking mirrors in RTL; physical translations must mirror too. */
+  .vds-drawer-handle:dir(rtl)[data-placement="outside"][data-direction="bottom"] {
+    transform: translate(50%, calc(-100% - var(--drawer-handle-offset)));
+  }
+
+  .vds-drawer-handle:dir(rtl)[data-placement="outside"][data-direction="top"] {
+    transform: translate(50%, calc(100% + var(--drawer-handle-offset)));
+  }
+
+  .vds-drawer-handle:dir(rtl)[data-placement="outside"][data-direction="left"] {
+    transform: translate(calc(-100% - var(--drawer-handle-offset)), -50%);
+  }
+
+  .vds-drawer-handle:dir(rtl)[data-placement="outside"][data-direction="right"] {
+    transform: translate(calc(100% + var(--drawer-handle-offset)), -50%);
   }
 
   .vds-drawer-handle-bar {

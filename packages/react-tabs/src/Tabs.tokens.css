@@ -79,7 +79,8 @@
     /* Focus ring */
     --tabs-trigger-focus-ring-color: var(--vds-color-ring, #6366f1);
     --tabs-trigger-focus-ring-width: 2px;
-    --tabs-trigger-focus-ring-offset: 2px;
+    /* Draw inside the item so a scrollable list cannot clip keyboard focus. */
+    --tabs-trigger-focus-ring-offset: -2px;
 
     /* Motion */
     --tabs-trigger-transition-duration: var(--vds-duration-fast, 100ms);

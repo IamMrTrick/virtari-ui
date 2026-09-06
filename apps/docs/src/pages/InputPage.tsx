@@ -1,215 +1,85 @@
 import { useState } from "react";
-import {
-  Input,
-  InputField,
-  PasswordInputField,
-} from "@virtari-packages/react-input";
+import { Input, InputField, InputWrapper, InputIcon, InputGroup, InputAddon, PasswordInputField, type InputSize } from "@virtari-packages/react-input";
+import { IconSearch, IconMail } from "@virtari-packages/react-icons";
+import { CodeBlock } from "@virtari-packages/react-code";
+import { Label } from "@virtari-packages/react-label";
+import { Stack, Cluster } from "@virtari-packages/react-layout";
 import { Switch } from "@virtari-packages/react-switch";
-import { Section, Row, Stack } from "../components";
+import { Section } from "../components";
 
-function isValidEmail(value: string) {
-  return /\S+@\S+\.\S+/.test(value);
-}
-
+const sizes: InputSize[] = ["2xs", "xs", "sm", "md", "lg", "xl", "2xl"];
 function TypingPulseDemo() {
   const [pulse, setPulse] = useState(false);
-  return (
-    <div style={{ display: "grid", gap: "var(--vds-space-4)", maxInlineSize: "28rem" }}>
-      <label style={{ display: "flex", alignItems: "center", gap: "var(--vds-space-2)" }}>
-        <Switch checked={pulse} onCheckedChange={setPulse} aria-label="Enable typing pulse" />
-        <span style={{ fontSize: "var(--vds-text-sm)", color: "var(--vds-color-text-muted)" }}>
-          Typing pulse {pulse ? "on" : "off"}
-        </span>
-      </label>
-      <Input typingPulse={pulse} placeholder="Type here — fast for stronger pulse…" />
-      <Input typingPulse={pulse} inputSize="lg" placeholder="Large — type fast vs slow" />
-      <Input typingPulse={pulse} type="password" placeholder="Password field" />
-    </div>
-  );
+  return <Stack gap="md">
+    <Cluster gap="sm"><Switch id="input-typing-pulse" checked={pulse} onCheckedChange={setPulse} /><Label htmlFor="input-typing-pulse">Enable optional typing pulse</Label></Cluster>
+    <InputField label="Try typing" typingPulse={pulse} placeholder="Type at your own pace" description="Focus and typing keep the same native input mounted." />
+  </Stack>;
 }
-
 export function InputPage() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("virtari");
   const [password, setPassword] = useState("");
+  return <>
+    <Section title="Field composition" description="InputField owns label, helper, error and counter spacing. An error also marks the native input invalid. Use persistent labels; placeholders are optional examples.">
+      <Stack gap="lg">
+        <InputField label="Email" name="email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={event => setEmail(event.target.value)} description="We'll send a confirmation link." error={email && !/\S+@\S+\.\S+/.test(email) ? "Enter a valid email address." : undefined} />
+        <InputField label="Public handle" name="username" autoComplete="username" value={username} onChange={event => setUsername(event.target.value)} description="Visible on your profile." error={username.length < 4 ? "Use at least four characters." : undefined} showCounter maxLength={24} metaLayout="inline" />
+      </Stack>
+    </Section>
+    <Section title="Sizes" description="Seven control sizes use the same height scale as Button and Select. Compact sizes suit dense desktop layouts; choose larger targets and adequate separation for touch.">
+      <Stack gap="md">{sizes.map(size => <InputField key={size} label={`Size ${size}`} size={size} placeholder="Enter a value" />)}</Stack>
+    </Section>
+    <Section title="Icons and affixes" description="Decorative icons reserve their width plus a text gap. Logical start/end slots follow RTL automatically. Use InputAddon for text affixes; interactive actions need their own named button outside the hidden icon slot.">
+      <Stack gap="lg">
+        <Stack gap="xs"><Label htmlFor="input-search">Search</Label><InputWrapper><InputIcon side="start"><IconSearch /></InputIcon><Input id="input-search" type="search" placeholder="Search projects" /></InputWrapper></Stack>
+        <Stack gap="xs"><Label htmlFor="input-icon-email">Contact email</Label><InputWrapper><Input id="input-icon-email" type="email" name="contactEmail" autoComplete="email" placeholder="you@example.com" /><InputIcon side="end"><IconMail /></InputIcon></InputWrapper></Stack>
+        <Stack gap="xs"><Label htmlFor="input-site">Website name</Label><InputGroup><InputAddon>https://</InputAddon><Input id="input-site" name="website" placeholder="example" /><InputAddon side="end">.com</InputAddon></InputGroup></Stack>
+        <Stack gap="xs" dir="rtl"><Label htmlFor="input-rtl">جستجوی پروژه</Label><InputWrapper><InputIcon side="start"><IconSearch /></InputIcon><Input id="input-rtl" placeholder="نام پروژه را وارد کنید" /></InputWrapper></Stack>
+      </Stack>
+    </Section>
+    <Section title="Surfaces and states" description="Fields inherit bordered, tonal or elevated appearance. data-field-tone=strong adds the next alpha layer while retaining the host color. Invalid, read-only and disabled are distinct states.">
+      <Stack gap="lg">
+        {(["bordered", "tonal", "elevated"] as const).map(surface => <Stack key={surface} gap="sm" data-surface-style={surface}><InputField label={`${surface} field`} placeholder="Default field tone" /><InputField label={`${surface} · stronger tone`} data-field-tone="strong" placeholder="Stronger field tone" /></Stack>)}
+        <InputField label="Project name" defaultValue="" error="Enter a project name to continue." required />
+        <InputField label="Read-only reference" value="VDS-2048" readOnly description="You can focus and copy this value." />
+        <InputField label="Unavailable field" defaultValue="Not editable" disabled />
+      </Stack>
+    </Section>
+    <Section title="Password" description="Use current-password without strength feedback for sign-in. For a new password, optional local strength feedback explains requirements; it does not replace server validation.">
+      <Stack gap="lg">
+        <PasswordInputField label="Sign-in password" name="currentPassword" autoComplete="current-password" showStrengthMeter={false} />
+        <PasswordInputField label="New password" name="newPassword" autoComplete="new-password" value={password} onChange={event => setPassword(event.target.value)} showCounter maxLength={64} showRequirements requirementsLabel="Password requirements" strengthLabel="Password strength" strengthOptions={{ userInputs: [username, email] }} />
+      </Stack>
+    </Section>
+    <Section title="Optional typing feedback" description="Typing pulse is off by default and respects reduced motion. It is visual feedback only; it must never be required to use a field."><TypingPulseDemo /></Section>
+    <Section title="Usage" description="Import the exported package styles after core and tokens. Use size for the control size; inputSize remains a deprecated compatibility alias.">
+      <CodeBlock renderer="static" language="tsx" filename="AccountFields.tsx" code={`import "@virtari-packages/core";
+import "@virtari-packages/tokens";
+import "@virtari-packages/react-input/styles";
+import "@virtari-packages/react-layout/styles";
+import { InputField, PasswordInputField } from "@virtari-packages/react-input";
+import { Stack } from "@virtari-packages/react-layout";
 
+export function AccountFields() {
   return (
-    <>
-      <Section title="All Sizes" description="7 sizes sharing the same height ramp as Button, Select, and Toggle.">
-        <Stack>
-          <Row>
-            <span className="docs-size-label">2xs</span>
-            <Input inputSize="2xs" placeholder="24px - WCAG AA minimum" />
-          </Row>
-          <Row>
-            <span className="docs-size-label">xs</span>
-            <Input inputSize="xs" placeholder="28px - Tables, toolbars" />
-          </Row>
-          <Row>
-            <span className="docs-size-label">sm</span>
-            <Input inputSize="sm" placeholder="32px - Secondary forms" />
-          </Row>
-          <Row>
-            <span className="docs-size-label">md</span>
-            <Input placeholder="40px - Default" />
-          </Row>
-          <Row>
-            <span className="docs-size-label">lg</span>
-            <Input inputSize="lg" placeholder="44px - WCAG AAA + Apple HIG" />
-          </Row>
-          <Row>
-            <span className="docs-size-label">xl</span>
-            <Input inputSize="xl" placeholder="52px - Hero sections" />
-          </Row>
-          <Row>
-            <span className="docs-size-label">2xl</span>
-            <Input inputSize="2xl" placeholder="64px - Landing pages" />
-          </Row>
-        </Stack>
-      </Section>
-
-      <Section
-        title="Field API"
-        description="Label, description, error, and counter now live on a shared Field primitive. Keep them stacked or split them between start and end."
-      >
-        <div style={{ display: "grid", gap: "var(--vds-space-4)", maxInlineSize: "34rem" }}>
-          <InputField
-            label="Email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            description="We'll send a confirmation link."
-            error={email && !isValidEmail(email) ? "Enter a valid email address" : undefined}
-            metaLayout="stacked"
-          />
-
-          <InputField
-            label="Public handle"
-            placeholder="virtari"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            description="Visible on your profile card."
-            error={username.length < 4 ? "Minimum 4 characters" : undefined}
-            showCounter
-            maxLength={24}
-            metaLayout="inline"
-            descriptionAlign="end"
-            errorAlign="start"
-            counterAlign="end"
-          />
-        </div>
-      </Section>
-
-      <Section
-        title="Password"
-        description="PasswordInputField ships with reveal, progress, compact checks, and configurable metrics."
-      >
-        <div style={{ display: "grid", gap: "var(--vds-space-6)", maxInlineSize: "34rem" }}>
-          <PasswordInputField
-            label="Professional password"
-            placeholder="Create a strong password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            showCounter
-            maxLength={64}
-            showRequirements
-            requirementsLabel="Your password must include"
-            strengthLabel="Password Strength"
-            strengthStandard="standard"
-            strengthOptions={{ userInputs: [username, email] }}
-          />
-
-          <InputField
-            label="Compatible InputField path"
-            type="password"
-            placeholder="Create a strong password"
-            revealable
-            showStrengthMeter
-          />
-
-          <PasswordInputField
-            label="Metric disabled"
-            placeholder="No strength UI"
-            showStrengthMeter={false}
-          />
-
-          <PasswordInputField
-            label="Disabled"
-            placeholder="Disabled state"
-            disabled
-          />
-        </div>
-      </Section>
-
-      <Section
-        title="Typing Pulse"
-        description="When enabled, each printable keystroke fires a brief ring burst. Pulse intensity scales with typing speed — rapid typing produces a stronger glow."
-      >
-        <TypingPulseDemo />
-      </Section>
-
-      <Section title="States">
-        <Stack>
-          <Input placeholder="Normal" />
-          <Input placeholder="Invalid" aria-invalid="true" />
-          <Input placeholder="Disabled" disabled />
-        </Stack>
-      </Section>
-
-      <Section title="Usage">
-        <pre className="docs-code">{`import {
-  Input,
-  InputField,
-  PasswordInputField,
-  analyzePasswordStrength,
-} from "@virtari-packages/react-input";
-
-<Input inputSize="lg" placeholder="Enter email..." />
-
-<InputField
-  label="Email"
-  description="We'll send a confirmation link."
-  error="Enter a valid email address"
-  metaLayout="inline"         // "stacked" | "inline"
-  descriptionAlign="end"      // "start" | "end"
-  errorAlign="start"
-  showCounter
-  maxLength={64}
-/>
-
-<InputField
-  type="password"
-  revealable
-  showStrengthMeter
-/>
-
-const analysis = analyzePasswordStrength(password, {
-  standard: "standard",
-  userInputs: [email, username],
-});
-
-<PasswordInputField
-  label="Password"
-  value={password}
-  onChange={(event) => setPassword(event.target.value)}
-  showCounter
-  maxLength={64}
-  showRequirements
-  requirementsLabel="Your password must include"
-  strengthLabel="Password Strength"
-  strengthStandard="standard"
-  strengthOptions={{ userInputs: [email, username] }}
-/>
-
-<PasswordInputField strengthStandard="basic" minLength={8} />
-<PasswordInputField strengthStandard="strict" strongLength={20} />
-
-<PasswordInputField
-  label="No metric"
-  showStrengthMeter={false}
-/>`}</pre>
-      </Section>
-    </>
+    <Stack gap="lg">
+      <InputField
+        label="Email"
+        name="email"
+        type="email"
+        autoComplete="email"
+        size="lg"
+        description="Use the email associated with your account."
+      />
+      <PasswordInputField
+        label="Password"
+        name="password"
+        autoComplete="current-password"
+        showStrengthMeter={false}
+      />
+    </Stack>
   );
+}`} />
+    </Section>
+  </>;
 }

@@ -23,6 +23,8 @@ Use the existing package and its composition API. Verify the installed version a
 - Use Combobox with items containing stable value and label strings; compose ComboboxTrigger, ComboboxContent, ComboboxInput, ComboboxList and ComboboxOptions or explicit ComboboxItem children. Set multiple for string-array values; single mode uses strings.
 - For asynchronous search supply onSearchChange, loading and updated items; external search is application-owned. Set virtualized for the built-in virtualized options rendering. name/form support serialized selection; validate required selection at the application layer where the API lacks a required prop.
 - Select resolves document direction and accepts explicit dir. Preserve the components' active-descendant, listbox and focus handling rather than adding independent key handlers that compete with them.
+- Non-searchable Combobox supports keyboard navigation and commit from its focused trigger. Virtual rows measure wrapped content; put disabled state in item data because unmounted rows cannot register item-only props. Give triggers persistent accessible names and retain selected item metadata when replacing async results.
+- SelectField links rendered metadata (including zero) and infers invalid from error unless explicitly overridden. Forward its render-prop IDs and invalid to the actual trigger. SelectTrigger preserves native aria-invalid values when invalid is absent.
 
 ## Known limits and mistakes to avoid
 

@@ -56,6 +56,10 @@ export function RadioCard({
 
   const reactId = useId();
   const inputId = idProp ?? `vds-radio-card-${reactId}`;
+  const labelId = `${inputId}-label`;
+  const descriptionId = `${inputId}-description`;
+  const { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy,
+    "aria-describedby": ariaDescribedBy, ...restRadioProps } = radioProps;
 
   const { className: labelClassName, ...restLabelProps } = labelProps ?? {};
 
@@ -70,10 +74,10 @@ export function RadioCard({
           ) : null}
           <span className="vds-radio-card-text">
             {label ? (
-              <span className="vds-radio-card-label">{label}</span>
+              <span id={labelId} className="vds-radio-card-label">{label}</span>
             ) : null}
             {description ? (
-              <span className="vds-radio-card-description">{description}</span>
+              <span id={descriptionId} className="vds-radio-card-description">{description}</span>
             ) : null}
             {badge ? (
               <span className="vds-radio-card-badge">{badge}</span>
@@ -88,14 +92,14 @@ export function RadioCard({
         <span className="vds-radio-card-text">
           <span className="vds-radio-card-label-row">
             {label ? (
-              <span className="vds-radio-card-label">{label}</span>
+              <span id={labelId} className="vds-radio-card-label">{label}</span>
             ) : null}
             {trailing ? (
               <span className="vds-radio-card-trailing">{trailing}</span>
             ) : null}
           </span>
           {description ? (
-            <span className="vds-radio-card-description">{description}</span>
+            <span id={descriptionId} className="vds-radio-card-description">{description}</span>
           ) : null}
           {badge ? (
             <span className="vds-radio-card-badge">{badge}</span>
@@ -121,7 +125,10 @@ export function RadioCard({
         className={cn("vds-radio-card-input", className)}
         error={resolvedError}
         disabled={resolvedDisabled}
-        {...radioProps}
+        {...restRadioProps}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy ?? (ariaLabel || children || !label ? undefined : labelId)}
+        aria-describedby={[ariaDescribedBy, !children && description ? descriptionId : null].filter(Boolean).join(" ") || undefined}
       />
 
       {children ? (

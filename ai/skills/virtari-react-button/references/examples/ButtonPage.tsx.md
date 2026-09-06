@@ -19,6 +19,12 @@ import {
   SelectContent,
   SelectItem,
 } from "@virtari-packages/react-select";
+import { Input } from "@virtari-packages/react-input";
+import { Field as FieldContainer } from "@virtari-packages/react-fieldset";
+import { Label } from "@virtari-packages/react-label";
+import { Text } from "@virtari-packages/react-text";
+import { CodeBlock, InlineCode } from "@virtari-packages/react-code";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@virtari-packages/react-table";
 import { Switch } from "@virtari-packages/react-switch";
 import {
   Row as LayoutRow,
@@ -75,28 +81,9 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--vds-space-1-5)",
-        fontSize: "var(--vds-text-sm)",
-        color: "var(--vds-color-text)",
-      }}
-    >
-      <span style={{ fontWeight: "var(--vds-font-weight-medium)" }}>{label}</span>
+    <FieldContainer label={label} description={hint} controlId={`button-playground-${label.toLowerCase()}`}>
       {children}
-      {hint && (
-        <span
-          style={{
-            fontSize: "var(--vds-text-xs)",
-            color: "var(--vds-color-text-muted)",
-          }}
-        >
-          {hint}
-        </span>
-      )}
-    </label>
+    </FieldContainer>
   );
 }
 
@@ -112,7 +99,7 @@ function SwitchRow({
   onCheckedChange: (v: boolean) => void;
 }) {
   return (
-    <label
+    <Label
       style={{
         display: "flex",
         alignItems: "center",
@@ -136,7 +123,7 @@ function SwitchRow({
         )}
       </span>
       <Switch checked={checked} onCheckedChange={onCheckedChange} />
-    </label>
+    </Label>
   );
 }
 
@@ -156,25 +143,7 @@ function Grid({
 
 function Caption({ children }: { children: React.ReactNode }) {
   return (
-    <span style={{ fontSize: "var(--vds-text-xs)", color: "var(--vds-color-text-muted)" }}>
-      {children}
-    </span>
-  );
-}
-
-function Th({ children }: { children: React.ReactNode }) {
-  return (
-    <th style={{ padding: "var(--vds-space-2) var(--vds-space-3)", fontWeight: "var(--vds-font-weight-medium)" }}>
-      {children}
-    </th>
-  );
-}
-
-function Td({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
-  return (
-    <td style={{ padding: "var(--vds-space-2) var(--vds-space-3)", ...style }}>
-      {children}
-    </td>
+    <Text as="span" size="1" tone="muted">{children}</Text>
   );
 }
 
@@ -264,7 +233,7 @@ function PlaygroundSection() {
       >
         <Field label="Color">
           <Select value={color} onValueChange={(v) => setColor(v as ButtonColor)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger id="button-playground-color"><SelectValue /></SelectTrigger>
             <SelectContent>
               {COLORS.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
             </SelectContent>
@@ -273,7 +242,7 @@ function PlaygroundSection() {
 
         <Field label="Variant">
           <Select value={variant} onValueChange={(v) => setVariant(v as ButtonVariant)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger id="button-playground-variant"><SelectValue /></SelectTrigger>
             <SelectContent>
               {VARIANTS.map((v) => <SelectItem key={v} value={v}>{v}</SelectItem>)}
             </SelectContent>
@@ -282,7 +251,7 @@ function PlaygroundSection() {
 
         <Field label="Size">
           <Select value={size} onValueChange={(v) => setSize(v as ButtonSize)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger id="button-playground-size"><SelectValue /></SelectTrigger>
             <SelectContent>
               {SIZES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
             </SelectContent>
@@ -291,7 +260,7 @@ function PlaygroundSection() {
 
         <Field label="Effect" hint="Requires @virtari-packages/react-button/styles/effects.">
           <Select value={effect} onValueChange={(v) => setEffect(v as ButtonEffect | "none")}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger id="button-playground-effect"><SelectValue /></SelectTrigger>
             <SelectContent>
               {EFFECTS.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}
             </SelectContent>
@@ -300,7 +269,7 @@ function PlaygroundSection() {
 
         <Field label="Animation" hint="Requires @virtari-packages/react-button/styles/animations.">
           <Select value={animation} onValueChange={(v) => setAnimation(v as ButtonAnimation | "none")}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger id="button-playground-animation"><SelectValue /></SelectTrigger>
             <SelectContent>
               {ANIMATIONS.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}
             </SelectContent>
@@ -308,20 +277,7 @@ function PlaygroundSection() {
         </Field>
 
         <Field label="Label">
-          <input
-            type="text"
-            value={label}
-            onChange={(e) => setLabel(e.target.value)}
-            style={{
-              font: "inherit",
-              height: "var(--vds-size-md)",
-              padding: "0 var(--vds-space-3)",
-              borderRadius: "var(--vds-radius-element)",
-              border: "1px solid var(--vds-color-border)",
-              background: "var(--vds-color-bg)",
-              color: "var(--vds-color-text)",
-            }}
-          />
+          <Input id="button-playground-label" type="text" value={label} onChange={(event) => setLabel(event.target.value)} />
         </Field>
 
         <LayoutStack gap="sm">
@@ -395,11 +351,11 @@ function VariantsSection() {
         </LayoutStack>
       </Grid>
 
-      <pre className="docs-code">{`<Button variant="solid">Save</Button>
+      <CodeBlock renderer="static" language="tsx" code={`<Button variant="solid">Save</Button>
 <Button variant="outline">Cancel</Button>
 <Button variant="ghost">Dismiss</Button>
 <Button variant="soft">Draft</Button>
-<Button variant="link">Learn more</Button>`}</pre>
+<Button variant="link">Learn more</Button>`} />
     </Section>
   );
 }
@@ -408,7 +364,7 @@ function ColorsSection() {
   return (
     <Section
       title="Colors"
-      description="Eight intent palettes — orthogonal to variant. Pick color for meaning, variant for weight. contrast renders black on light mode and white on dark mode for maximum pop."
+      description="Seven intent palettes — orthogonal to variant. Pick color for meaning, variant for weight. contrast renders black on light mode and white on dark mode for maximum pop."
     >
       <Grid minCol="10rem">
         {COLORS.map((c) => (
@@ -419,13 +375,13 @@ function ColorsSection() {
         ))}
       </Grid>
 
-      <pre className="docs-code">{`<Button color="primary">Save</Button>        // default brand action
+      <CodeBlock renderer="static" language="tsx" code={`<Button color="primary">Save</Button>        // default brand action
 <Button color="success">Publish</Button>
 <Button color="warning">Override</Button>
 <Button color="danger">Delete</Button>        // destructive
 <Button color="info">Preview</Button>
 <Button color="accent">Upgrade</Button>       // highlight / secondary CTA
-<Button color="contrast">Contact sales</Button> // black↔white per theme`}</pre>
+<Button color="contrast">Contact sales</Button> // black↔white per theme`} />
     </Section>
   );
 }
@@ -447,44 +403,30 @@ function ColorMatrixSection() {
   return (
     <Section
       title="Color × Variant matrix"
-      description="Every color supports every variant. This grid is the source of truth — eyeball it in both themes to spot inconsistencies."
+      description="Every color supports every variant. Compare the live variants in light, dark and OLED themes. Text roles and filled-surface roles are distinct."
     >
-      <div
-        style={{
-          overflowX: "auto",
-          border: "1px solid var(--vds-color-border-muted)",
-          borderRadius: "var(--vds-radius-surface)",
-        }}
-      >
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontSize: "var(--vds-text-sm)",
-          }}
-        >
-          <thead>
-            <tr style={{ background: "var(--vds-color-bg-subtle)", textAlign: "left" }}>
-              <Th>Color</Th>
-              {VARIANTS.map((v) => <Th key={v}>{v}</Th>)}
-            </tr>
-          </thead>
-          <tbody>
+      <Table size="sm" headerCase="sentence">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Color</TableHead>
+              {VARIANTS.map((v) => <TableHead key={v}>{v}</TableHead>)}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {COLORS.map((c) => (
-              <tr key={c} style={{ borderTop: "1px solid var(--vds-color-border-muted)" }}>
-                <Td><code>{c}</code></Td>
+              <TableRow key={c}>
+                <TableCell><InlineCode>{c}</InlineCode></TableCell>
                 {VARIANTS.map((v) => (
-                  <Td key={v}>
+                  <TableCell key={v}>
                     <Button color={c} variant={v} size="sm">
                       {v === "link" ? c : "Action"}
                     </Button>
-                  </Td>
+                  </TableCell>
                 ))}
-              </tr>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
     </Section>
   );
 }
@@ -493,7 +435,7 @@ function SizesSection() {
   return (
     <Section
       title="Sizes"
-      description="Eight size presets from 24px (2xs) to 64px (3xl). md is the default (36px) — aligns with industry standards. Pick larger for touch or hero placement."
+      description="Eight size presets from 24px (2xs) to 64px (3xl). md is the default (36px). Heights are minimums: long labels wrap and increase height. Prefer xl or larger for touch, and check both target dimensions and surrounding spacing."
     >
       <Row>
         {SIZES.map((s) => (
@@ -503,49 +445,35 @@ function SizesSection() {
         ))}
       </Row>
 
-      <div
-        style={{
-          overflowX: "auto",
-          border: "1px solid var(--vds-color-border-muted)",
-          borderRadius: "var(--vds-radius-surface)",
-        }}
-      >
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontSize: "var(--vds-text-sm)",
-          }}
-        >
-          <thead>
-            <tr style={{ background: "var(--vds-color-bg-subtle)", textAlign: "left" }}>
-              <Th>Size</Th>
-              <Th>Height</Th>
-              <Th>WCAG AA (24)</Th>
-              <Th>WCAG AAA (44)</Th>
-              <Th>Apple HIG</Th>
-              <Th>Material</Th>
-              <Th>When to use</Th>
-            </tr>
-          </thead>
-          <tbody>
+      <Table size="sm" headerCase="sentence">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Size</TableHead>
+              <TableHead>Height</TableHead>
+              <TableHead>≥24px height</TableHead>
+              <TableHead>≥44px height</TableHead>
+
+
+              <TableHead>When to use</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {SIZES.map((s) => {
               const spec = SIZE_SPEC[s];
               return (
-                <tr key={s} style={{ borderTop: "1px solid var(--vds-color-border-muted)" }}>
-                  <Td><code>{s}</code></Td>
-                  <Td>{spec.height}</Td>
-                  <Td>{spec.wcagAA ? "✓" : "—"}</Td>
-                  <Td>{spec.wcagAAA ? "✓" : "—"}</Td>
-                  <Td>{spec.apple ? "✓" : "—"}</Td>
-                  <Td>{spec.material ? "✓" : "—"}</Td>
-                  <Td style={{ color: "var(--vds-color-text-muted)" }}>{spec.hint}</Td>
-                </tr>
+                <TableRow key={s}>
+                  <TableCell><InlineCode>{s}</InlineCode></TableCell>
+                  <TableCell>{spec.height}</TableCell>
+                  <TableCell>{spec.wcagAA ? "✓" : "—"}</TableCell>
+                  <TableCell>{spec.wcagAAA ? "✓" : "—"}</TableCell>
+
+
+                  <TableCell style={{ color: "var(--vds-color-text-muted)" }}>{spec.hint}</TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
     </Section>
   );
 }
@@ -565,14 +493,14 @@ function IconsSection() {
         <Button color="danger" leftSection={<IconTrash />}>Delete</Button>
       </Row>
 
-      <pre className="docs-code">{`<Button leftSection={<PlusIcon />}>Create</Button>
+      <CodeBlock renderer="static" language="tsx" code={`<Button leftSection={<PlusIcon />}>Create</Button>
 <Button rightSection={<ArrowIcon />}>Continue</Button>
 <Button
   leftSection={<DownloadIcon />}
   rightSection={<ArrowIcon />}
 >
   Export report
-</Button>`}</pre>
+</Button>`} />
     </Section>
   );
 }
@@ -597,9 +525,9 @@ function IconOnlySection() {
         <Button iconOnly color="contrast" aria-label="Add"><IconPlus /></Button>
       </Row>
 
-      <pre className="docs-code">{`// Square, padding collapses automatically
+      <CodeBlock renderer="static" language="tsx" code={`// Square, padding collapses automatically
 <Button iconOnly aria-label="Search"><SearchIcon /></Button>
-<Button iconOnly size="lg" variant="outline" aria-label="Add"><PlusIcon /></Button>`}</pre>
+<Button iconOnly size="lg" variant="outline" aria-label="Add"><PlusIcon /></Button>`} />
     </Section>
   );
 }
@@ -633,7 +561,7 @@ function LoadingSection() {
 
       <Row>
         <Button onClick={handleSave} loading={loading}>
-          {loading ? "Saving…" : "Click to save"}
+          Save changes
         </Button>
         <Button
           variant="outline"
@@ -641,11 +569,11 @@ function LoadingSection() {
           loading={progress}
           loadingText="Deploying to production"
         >
-          {progress ? "Deploying…" : "Deploy"}
+          Deploy
         </Button>
       </Row>
 
-      <pre className="docs-code">{`const [loading, setLoading] = useState(false);
+      <CodeBlock renderer="static" language="tsx" code={`const [loading, setLoading] = useState(false);
 
 <Button
   onClick={async () => {
@@ -656,8 +584,8 @@ function LoadingSection() {
   loading={loading}
   loadingText="Saving your profile"
 >
-  {loading ? "Saving…" : "Save"}
-</Button>`}</pre>
+  Save
+</Button>`} />
     </Section>
   );
 }
@@ -693,6 +621,8 @@ function FullWidthSection() {
         <Button fullWidth size="xl">Sign in</Button>
         <Button fullWidth size="xl" variant="outline">Continue with Google</Button>
         <Button fullWidth size="xl" variant="ghost">Use SSO</Button>
+        <Button fullWidth variant="soft" leftSection={<IconDownload />}>Download the complete report and supporting documents</Button>
+        <Button fullWidth dir="rtl" variant="outline" rightSection={<IconArrow />}>ذخیرهٔ تغییرات و ادامهٔ تنظیمات حساب کاربری</Button>
       </LayoutStack>
 
       <LayoutRow cols={2} gap="sm" style={{ maxInlineSize: "24rem" }}>
@@ -700,10 +630,10 @@ function FullWidthSection() {
         <Col><Button fullWidth>Save changes</Button></Col>
       </LayoutRow>
 
-      <pre className="docs-code">{`<div className="form-actions">
+      <CodeBlock renderer="static" language="tsx" code={`<div className="form-actions">
   <Button fullWidth variant="outline">Cancel</Button>
   <Button fullWidth>Save changes</Button>
-</div>`}</pre>
+</div>`} />
     </Section>
   );
 }
@@ -712,15 +642,15 @@ function EffectsSection() {
   return (
     <Section
       title="Visual effects"
-      description="Decorative layers for hero moments. Opt-in per build — import @virtari-packages/react-button/styles/effects to unlock. The raised 3D shadow is now hue-neutral (no color bleed in dark mode)."
+      description="Decorative layers for hero moments. Opt-in per build — import @virtari-packages/react-button/styles/effects to unlock. Shine, raised, candy and glass apply to solid buttons; outline-glow applies to outline. Test decorative effects against the actual surrounding surface."
     >
       <Row>
         <Button effect="shine">Shine</Button>
         <Button effect="shine" color="danger">Shine danger</Button>
-        <Button effect="shine" size="lg" variant="soft">Shine soft</Button>
+        <Button effect="shine" size="lg">Shine large</Button>
       </Row>
       <Caption>
-        <strong>shine</strong> — a white highlight sweeps across on hover. Hue-agnostic; works on any color.
+        <strong>shine</strong> — a white highlight sweeps across a solid surface on hover. Check text contrast when using custom colors.
       </Caption>
 
       <Row>
@@ -777,7 +707,7 @@ function EffectsSection() {
         <strong>glass</strong> — frosted translucent surface with backdrop blur. Requires a dark or textured background to read.
       </Caption>
 
-      <pre className="docs-code">{`// vite.config.ts / layout.tsx
+      <CodeBlock renderer="static" language="tsx" code={`// vite.config.ts / layout.tsx
 import "@virtari-packages/react-button/styles/effects";
 
 <Button effect="shine">Shine</Button>
@@ -785,7 +715,7 @@ import "@virtari-packages/react-button/styles/effects";
 <Button effect="candy" color="danger">Candy</Button>
 <Button effect="glow" color="danger">Glow</Button>
 <Button effect="glass">Glass</Button>             // use on dark bg
-<Button effect="outline-glow" variant="outline">Outline</Button>`}</pre>
+<Button effect="outline-glow" variant="outline">Outline</Button>`} />
     </Section>
   );
 }
@@ -817,7 +747,7 @@ function AnimationsSection() {
         <li><strong>jiggle</strong> — one-shot playful wiggle. Affirm a delete / confirm interaction.</li>
       </ul>
 
-      <pre className="docs-code">{`import "@virtari-packages/react-button/styles/animations";
+      <CodeBlock renderer="static" language="tsx" code={`import "@virtari-packages/react-button/styles/animations";
 
 <Button animation="pulse">Try me</Button>
 <Button animation="bounce">Tour</Button>
@@ -825,7 +755,7 @@ function AnimationsSection() {
 // One-shot: re-key to replay
 <Button key={invalidCount} animation="shake">
   Submit
-</Button>`}</pre>
+</Button>`} />
     </Section>
   );
 }
@@ -848,7 +778,7 @@ function AsChildSection() {
         </Button>
       </Row>
 
-      <pre className="docs-code">{`<Button asChild>
+      <CodeBlock renderer="static" language="tsx" code={`<Button asChild>
   <a href="/pricing">See pricing</a>
 </Button>
 
@@ -861,7 +791,7 @@ import Link from "next/link";
 // React Router
 <Button asChild>
   <RouterLink to="/settings">Settings</RouterLink>
-</Button>`}</pre>
+</Button>`} />
     </Section>
   );
 }
@@ -872,7 +802,8 @@ function ApiSection() {
       title="API reference"
       description="Color and variant are orthogonal. All props extend native button attributes."
     >
-      <pre className="docs-code">{`import { Button } from "@virtari-packages/react-button";
+      <CodeBlock renderer="static" language="tsx" code={`import { Button } from "@virtari-packages/react-button";
+import "@virtari-packages/react-button/styles";
 // opt-in layers:
 import "@virtari-packages/react-button/styles/effects";
 import "@virtari-packages/react-button/styles/animations";
@@ -889,9 +820,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   rightSection?: ReactNode;
   iconOnly?:   boolean;
   fullWidth?:   boolean;
-  effect?:      "shine" | "raised" | "glow" | "glass" | "outline-glow";
+  effect?:      "shine" | "raised" | "glow" | "glass" | "outline-glow" | "candy";
   animation?:   "pulse" | "bounce" | "shake" | "jiggle";
-}`}</pre>
+}`} />
     </Section>
   );
 }
@@ -904,27 +835,27 @@ function AccessibilitySection() {
     >
       <ul className="docs-prose" style={{ paddingInlineStart: "1.25em" }}>
         <li>
-          <strong>Icon-only buttons</strong> must receive an <code>aria-label</code>. The auto
+          <strong>Icon-only buttons</strong> must receive an <InlineCode>aria-label</InlineCode>. The auto
           square styling does not provide an accessible name.
         </li>
         <li>
-          <strong>Loading</strong> sets <code>aria-disabled</code> and renders a polite{" "}
-          <code>role="status"</code> region announcing <code>loadingText</code>.
+          <strong>Loading</strong> sets <InlineCode>aria-disabled</InlineCode> and renders a polite{" "}
+          <InlineCode>role="status"</InlineCode> region announcing <InlineCode>loadingText</InlineCode>.
         </li>
         <li>
-          <strong>Disabled</strong> also sets <code>aria-disabled</code>. Prefer disabling with
+          <strong>Disabled</strong> also sets <InlineCode>aria-disabled</InlineCode>. Prefer disabling with
           intent — a disabled primary button with no explanation is a dead end for keyboard users.
         </li>
         <li>
-          <strong>Focus</strong> — a 2px ring appears on <code>:focus-visible</code> only.
+          <strong>Focus</strong> — a 2px ring appears on <InlineCode>:focus-visible</InlineCode> only.
         </li>
         <li>
-          <strong>Contrast</strong> color — ensures ≥ 7:1 AAA contrast against either theme's canvas
-          by using near-pure black / near-pure white.
+          <strong>Contrast</strong> color uses paired neutral foreground and background roles.
+          Custom colors, nested surfaces and decorative effects need their own contrast check.
         </li>
         <li>
-          <strong>Reduced motion</strong> — all <code>animation</code> values are disabled under{" "}
-          <code>prefers-reduced-motion: reduce</code>.
+          <strong>Reduced motion</strong> — all <InlineCode>animation</InlineCode> values are disabled under{" "}
+          <InlineCode>prefers-reduced-motion: reduce</InlineCode>.
         </li>
       </ul>
     </Section>

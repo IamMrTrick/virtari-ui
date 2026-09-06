@@ -21,6 +21,7 @@ Use the existing package and its composition API. Verify the installed version a
 - Use Field when composing a custom control and supply controlId matching its id. Provide descriptionId/errorId/counterId and apply composeFieldDescribedBy(...) to the control for deduplicated ARIA references.
 - Field does not clone children. Forward invalid, required and disabled to the actual control as well as the presentation wrapper, or use InputField/TextareaField/NumberInputField/SelectField adapters that perform the relevant wiring.
 - Use metaLayout=stacked or inline, logical descriptionAlign/errorAlign/counterAlign=start/end, and afterControl for content that belongs between the control and metadata. Keep spacing in the shared field styles.
+- Use hasFieldContent when deciding whether to assign metadata IDs: numeric zero is content, while null, undefined, booleans, empty strings and arrays containing only absent values are not. Match the control references to Field's rendered metadata.
 
 ## Known limits and mistakes to avoid
 

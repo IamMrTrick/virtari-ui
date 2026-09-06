@@ -44,17 +44,18 @@ export function useTabsAutoScroll(
         el.scrollTo({ top: Math.max(0, Math.min(center, max)), behavior });
       } else {
         if (el.scrollWidth <= el.clientWidth) return;
-        const start = active.offsetLeft;
-        const end = start + active.offsetWidth;
-        const viewStart = el.scrollLeft;
-        const viewEnd = viewStart + el.clientWidth;
-        if (start >= viewStart && end <= viewEnd) {
+        const itemRect = active.getBoundingClientRect();
+        const listRect = el.getBoundingClientRect();
+        if (itemRect.left >= listRect.left && itemRect.right <= listRect.right) {
           isFirst = false;
           return;
         }
-        const center = start + active.offsetWidth / 2 - el.clientWidth / 2;
+        // scrollLeft is negative in RTL. Physical viewport deltas work in
+        // either direction, unlike clamping every position to positive LTR.
+        const center = el.scrollLeft + (itemRect.left + itemRect.right - listRect.left - listRect.right) / 2;
         const max = el.scrollWidth - el.clientWidth;
-        el.scrollTo({ left: Math.max(0, Math.min(center, max)), behavior });
+        const rtl = getComputedStyle(el).direction === "rtl";
+        el.scrollTo({ left: rtl ? Math.max(-max, Math.min(center, 0)) : Math.max(0, Math.min(center, max)), behavior });
       }
 
       isFirst = false;
@@ -69,15 +70,19 @@ export function useTabsAutoScroll(
     const mo = new MutationObserver(schedule);
     mo.observe(list, {
       attributes: true,
-      attributeFilter: ["data-state", "data-orientation"],
+      attributeFilter: ["data-state", "data-orientation", "dir"],
       subtree: true,
     });
+
+    const ro = new ResizeObserver(schedule);
+    ro.observe(list);
 
     schedule();
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
       mo.disconnect();
+      ro.disconnect();
     };
   }, [listRef, enabled]);
 }

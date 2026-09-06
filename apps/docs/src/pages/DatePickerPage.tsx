@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   DatePicker,
@@ -407,7 +408,7 @@ export function DatePickerPage() {
             }}
           >
             <span className="docs-hint">Selected</span>
-            <code>{calDate ? calDate.toString() : "—"}</code>
+            <VirtariInlineCode>{calDate ? calDate.toString() : "—"}</VirtariInlineCode>
           </div>
         </Row>
       </Section>
@@ -432,18 +433,18 @@ export function DatePickerPage() {
             }}
           >
             <span className="docs-hint">Range</span>
-            <code>
+            <VirtariInlineCode>
               {calRange
                 ? `${calRange.start.toString()} → ${calRange.end.toString()}`
                 : "—"}
-            </code>
+            </VirtariInlineCode>
           </div>
         </Row>
       </Section>
 
       {/* ══════ Usage ══════ */}
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   DatePicker,
   DateRangePicker,
   DateField,
@@ -469,7 +470,7 @@ export function DatePickerPage() {
     minValue={today(getLocalTimeZone())}
     isDateUnavailable={(d) => isWeekend(d, "en-US")}
   />
-</I18nProvider>`}</pre>
+</I18nProvider>`} />
       </Section>
     </>
   );

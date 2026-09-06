@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/TooltipPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import {
   TooltipProvider,
   Tooltip,
@@ -136,7 +137,7 @@ export function TooltipPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   TooltipProvider,
   Tooltip,
   TooltipTrigger,
@@ -152,7 +153,7 @@ export function TooltipPage() {
       Tooltip text
     </TooltipContent>
   </Tooltip>
-</TooltipProvider>`}</pre>
+</TooltipProvider>`} />
       </Section>
     </TooltipProvider>
   );

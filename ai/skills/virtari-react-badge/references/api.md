@@ -84,7 +84,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
   /** Size preset. */
   size?: BadgeSize;
-  /** Corner shape. `pill` (default) uses the badge radius token; `square` uses element radius. */
+  /** Corner shape. `pill` uses the badge radius token; `square` uses navigation-item radius. */
   shape?: BadgeShape;
   /** Show a leading colored dot (overrides `leftSection`). */
   dot?: boolean;
@@ -121,6 +121,7 @@ export function Badge({
   asChild = false,
   className,
   children,
+  onClick,
   ref,
   ...props
 }: BadgeProps);

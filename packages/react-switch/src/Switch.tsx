@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import type { ComponentRef, Ref } from "react";
 import * as SwitchPrimitive from "@virtari-packages/primitives/switch";
-import { cn } from "@virtari-packages/utils";
+import { cn, useComposedRefs } from "@virtari-packages/utils";
 import { useSwitchDrag } from "./useSwitchDrag";
 
 export type SwitchSize = "sm" | "md" | "lg";
@@ -21,6 +21,11 @@ export function Switch({
   onCheckedChange,
   disabled,
   dragEnabled = true,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerCancel,
+  onLostPointerCapture,
   ref,
   ...props
 }: SwitchProps) {
@@ -42,14 +47,7 @@ export function Switch({
     onCommit: handleCheckedChange,
   });
 
-  const setRootRef = useCallback(
-    (node: HTMLButtonElement | null) => {
-      drag.rootRef(node);
-      if (typeof ref === "function") ref(node);
-      else if (ref) (ref as React.MutableRefObject<HTMLButtonElement | null>).current = node;
-    },
-    [drag, ref],
-  );
+  const setRootRef = useComposedRefs(drag.rootRef, ref);
 
   return (
     <SwitchPrimitive.Root
@@ -59,8 +57,12 @@ export function Switch({
       checked={currentChecked}
       onCheckedChange={handleCheckedChange}
       disabled={disabled}
-      {...drag.handlers}
       {...props}
+      onPointerDown={(event) => { onPointerDown?.(event); drag.handlers.onPointerDown(event); }}
+      onPointerMove={(event) => { onPointerMove?.(event); drag.handlers.onPointerMove(event); }}
+      onPointerUp={(event) => { onPointerUp?.(event); drag.handlers.onPointerUp(event); }}
+      onPointerCancel={(event) => { onPointerCancel?.(event); drag.handlers.onPointerCancel(event); }}
+      onLostPointerCapture={(event) => { onLostPointerCapture?.(event); drag.handlers.onLostPointerCapture(event); }}
     >
       <SwitchPrimitive.Thumb ref={drag.thumbRef} className="vds-switch-thumb" />
     </SwitchPrimitive.Root>

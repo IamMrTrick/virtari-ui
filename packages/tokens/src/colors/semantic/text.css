@@ -7,7 +7,7 @@
    *
    *   text              = body copy             (neutral-12)
    *   text-muted        = secondary copy        (neutral-11)
-   *   text-subtle       = low-contrast copy     (neutral-9)
+   *   text-subtle       = supporting copy       (neutral-11)
    *   text-disabled     = disabled copy         (neutral-8)
    *   text-placeholder  = form placeholders     (neutral-11)
    *   text-inverse      = text on bg-inverse    (neutral-1)
@@ -21,7 +21,8 @@
     /* ─── Core scale ─── */
     --vds-color-text:          var(--vds-color-neutral-12);
     --vds-color-text-muted:    var(--vds-color-neutral-11);
-    --vds-color-text-subtle:   var(--vds-color-neutral-9);
+    /* Supporting copy remains ordinary readable text on tonal surfaces. */
+    --vds-color-text-subtle:   var(--vds-color-neutral-11);
     --vds-color-text-disabled: var(--vds-color-neutral-8);
 
     /* ─── Form placeholders ───

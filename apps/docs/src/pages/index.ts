@@ -85,7 +85,7 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   sizing: { title: "Sizing", description: "Unified size system, height ramp, WCAG compliance." },
   colors: { title: "Colors", description: "OKLCH color palette and semantic token reference." },
   typography: { title: "Typography", description: "Font scale, weights, and font family tokens." },
-  button: { title: "Button", description: "6 variants, 7 sizes, loading, icons, animations." },
+  button: { title: "Button", description: "Five appearance variants, eight sizes, icon slots, loading and deliberate motion options." },
   "button-group": {
     title: "Button Group",
     description:
@@ -106,7 +106,7 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
     description:
       "One-time code input with SMS autofill hints, paste distribution, digit normalization, and keyboard navigation.",
   },
-  textarea: { title: "Textarea", description: "Multi-line text input with auto-resize." },
+  textarea: { title: "Textarea", description: "Native multiline text input with labeled fields and character counters." },
   editor: {
     title: "Rich Text Editor",
     description:
@@ -321,7 +321,7 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   code: {
     title: "Code",
     description:
-      "CodeMirror 6 wrapped with Virtari tokens — read-only viewer, live editor, and inline snippet. 15 preloaded languages, line numbers, line highlight, diff view, copy button, autocomplete, multi-cursor, and search.",
+      "Read-only code, a live editor, and inline snippets with shared syntax colors, line highlighting, diff cues, and clipboard feedback.",
   },
   carousel: {
     title: "Carousel",

@@ -2,13 +2,14 @@
   .vds-radio-field {
     --radio-field-control-size: 1.125rem;
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--radio-field-gap);
     cursor: pointer;
     color: var(--radio-field-label-color);
     font-family: inherit;
     line-height: var(--vds-control-line-height, 1.5);
     min-inline-size: 0;
+    overflow-wrap: anywhere;
   }
 
   .vds-radio-field[data-size="sm"] {
@@ -34,7 +35,7 @@
   }
 
   .vds-radio-field > .vds-radio-item {
-    margin-block-start: 0;
+    margin-block-start: var(--radio-field-align-block-start);
     flex-shrink: 0;
   }
 
@@ -47,6 +48,7 @@
     flex-direction: column;
     gap: var(--radio-field-label-gap);
     min-inline-size: 0;
+    overflow-wrap: anywhere;
   }
 
   .vds-radio-field-main {
@@ -65,8 +67,8 @@
   }
 
   .vds-radio-field-label {
-    display: inline-flex;
-    align-items: center;
+    display: block;
+    min-inline-size: 0;
     font-size: var(--radio-field-font-size);
     font-weight: var(--radio-field-label-font-weight);
     color: var(--radio-field-label-color);

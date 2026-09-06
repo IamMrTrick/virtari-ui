@@ -3,7 +3,8 @@
 Source ID: `apps/docs/src/pages/CardPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
-import type { CSSProperties } from "react";
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
+import { useState, type CSSProperties } from "react";
 import {
   Card,
   CardHeader,
@@ -13,48 +14,14 @@ import {
   CardFooter,
 } from "@virtari-packages/react-card";
 import { Button } from "@virtari-packages/react-button";
+import { InputField } from "@virtari-packages/react-input";
+import { Badge } from "@virtari-packages/react-badge";
 import { Section } from "../components";
 
 const gridStyle: CSSProperties = {
   display: "grid",
   gap: "var(--vds-space-4)",
-  gridTemplateColumns: "repeat(auto-fit, minmax(16rem, 1fr))",
-};
-
-const fieldStyle: CSSProperties = {
-  display: "grid",
-  gap: "var(--vds-space-2)",
-  fontSize: "var(--vds-text-sm)",
-};
-
-const labelStyle: CSSProperties = {
-  fontWeight: 600,
-  color: "var(--vds-color-text)",
-};
-
-const inputStyle: CSSProperties = {
-  inlineSize: "100%",
-  minBlockSize: "2.75rem",
-  paddingInline: "var(--vds-space-3)",
-  paddingBlock: "var(--vds-space-2-5)",
-  border: "1px solid var(--vds-color-border-muted)",
-  borderRadius: "var(--vds-radius-element)",
-  background: "var(--vds-color-surface)",
-  color: "var(--vds-color-text)",
-};
-
-const badgeStyle: CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  inlineSize: "fit-content",
-  minBlockSize: "1.5rem",
-  paddingInline: "var(--vds-space-2)",
-  borderRadius: "999px",
-  background: "var(--vds-color-primary-bg)",
-  color: "var(--vds-color-primary-text)",
-  fontSize: "var(--vds-text-xs)",
-  fontWeight: 600,
+  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 16rem), 1fr))",
 };
 
 const metricStyle: CSSProperties = {
@@ -80,16 +47,17 @@ const pricingListStyle: CSSProperties = {
 };
 
 export function CardPage() {
+  const [saved, setSaved] = useState(false);
   return (
     <>
       <Section
         title="Structured Form"
-        description="A production-style card with clear hierarchy, adaptive spacing, and a footer action row."
+        description="A labeled form with slot-owned spacing and native submit/reset behavior. Saving updates this local preview only."
       >
-        <div style={{ maxInlineSize: "30rem" }}>
+        <form style={{ maxInlineSize: "30rem" }} onSubmit={(event) => { event.preventDefault(); setSaved(true); }} onReset={() => setSaved(false)} onChange={() => setSaved(false)}>
           <Card>
             <CardHeader>
-              <span style={badgeStyle}>Workspace</span>
+              <Badge style={{ alignSelf: "flex-start" }}>Workspace</Badge>
               <CardTitle>Create deployment target</CardTitle>
               <CardDescription>
                 Configure a reusable environment for preview, staging, or
@@ -97,25 +65,17 @@ export function CardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent style={{ display: "grid", gap: "var(--vds-space-3)" }}>
-              <label style={fieldStyle}>
-                <span style={labelStyle}>Project name</span>
-                <input type="text" placeholder="Virtari Console" style={inputStyle} />
-              </label>
-              <label style={fieldStyle}>
-                <span style={labelStyle}>Region</span>
-                <input type="text" placeholder="Frankfurt (eu-central-1)" style={inputStyle} />
-              </label>
-              <label style={fieldStyle}>
-                <span style={labelStyle}>Domain</span>
-                <input type="text" placeholder="app.virtari.io" style={inputStyle} />
-              </label>
+              <InputField label="Project name" name="project" placeholder="Virtari Console" required />
+              <InputField label="Region" name="region" placeholder="Frankfurt (eu-central-1)" />
+              <InputField label="Domain" name="domain" placeholder="app.virtari.io" autoCapitalize="none" spellCheck={false} />
             </CardContent>
             <CardFooter style={{ justifyContent: "flex-end" }}>
-              <Button variant="ghost">Cancel</Button>
-              <Button>Save target</Button>
+              <Button type="reset" variant="ghost">Reset</Button>
+              <Button type="submit">Save target</Button>
             </CardFooter>
           </Card>
-        </div>
+          <p role="status" style={{ ...mutedTextStyle, minBlockSize: "1.5em", marginBlockStart: "var(--vds-space-2)" }}>{saved ? "Deployment target saved in this preview." : ""}</p>
+        </form>
       </Section>
 
       <Section
@@ -130,11 +90,11 @@ export function CardPage() {
             background: "var(--vds-color-bg-subtle)",
           }}
         >
-          <Card interactive style={{ minInlineSize: 0 }}>
+          <Card style={{ minInlineSize: 0 }}>
             <CardHeader>
               <CardTitle>Surface</CardTitle>
               <CardDescription>
-                Default elevated card for forms, dashboards, and settings.
+                Default surface follows the current bordered, tonal, or elevated style.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -143,7 +103,7 @@ export function CardPage() {
             </CardContent>
           </Card>
 
-          <Card variant="outline" interactive style={{ minInlineSize: 0 }}>
+          <Card variant="outline" style={{ minInlineSize: 0 }}>
             <CardHeader>
               <CardTitle>Outline</CardTitle>
               <CardDescription>
@@ -156,7 +116,7 @@ export function CardPage() {
             </CardContent>
           </Card>
 
-          <Card variant="soft" interactive style={{ minInlineSize: 0 }}>
+          <Card variant="soft" style={{ minInlineSize: 0 }}>
             <CardHeader>
               <CardTitle>Soft</CardTitle>
               <CardDescription>
@@ -169,7 +129,7 @@ export function CardPage() {
             </CardContent>
           </Card>
 
-          <Card variant="ghost" interactive style={{ minInlineSize: 0 }}>
+          <Card variant="ghost" style={{ minInlineSize: 0 }}>
             <CardHeader>
               <CardTitle>Ghost</CardTitle>
               <CardDescription>
@@ -186,12 +146,12 @@ export function CardPage() {
 
       <Section
         title="Adaptive Sizes"
-        description="Standalone content cards now keep top padding correctly, and the padding scale shrinks on mobile instead of feeling oversized."
+        description="Header, content, and footer slots own their padding. Content-only cards keep both outer insets, and sizes adapt to the viewport."
       >
         <div style={gridStyle}>
           <Card size="sm">
             <CardContent>
-              <span style={badgeStyle}>SM</span>
+              <Badge style={{ alignSelf: "flex-start" }}>SM</Badge>
               <p style={{ ...metricStyle, marginBlockStart: "var(--vds-space-3)" }}>
                 Ready
               </p>
@@ -203,7 +163,7 @@ export function CardPage() {
 
           <Card>
             <CardContent>
-              <span style={badgeStyle}>MD</span>
+              <Badge style={{ alignSelf: "flex-start" }}>MD</Badge>
               <p style={{ ...metricStyle, marginBlockStart: "var(--vds-space-3)" }}>
                 Synced
               </p>
@@ -215,7 +175,7 @@ export function CardPage() {
 
           <Card size="lg">
             <CardContent>
-              <span style={badgeStyle}>LG</span>
+              <Badge style={{ alignSelf: "flex-start" }}>LG</Badge>
               <p style={{ ...metricStyle, marginBlockStart: "var(--vds-space-3)" }}>
                 Featured
               </p>
@@ -229,7 +189,7 @@ export function CardPage() {
 
       <Section
         title="Pricing Layout"
-        description="The same API now supports richer card compositions without custom structural hacks."
+        description="Header, content, and footer compose plan summaries. These sample actions do not start a purchase."
       >
         <div style={gridStyle}>
           <Card variant="outline">
@@ -255,9 +215,9 @@ export function CardPage() {
             </CardFooter>
           </Card>
 
-          <Card variant="surface" interactive>
+          <Card variant="surface">
             <CardHeader>
-              <span style={badgeStyle}>Most used</span>
+              <Badge style={{ alignSelf: "flex-start" }}>Most used</Badge>
               <CardTitle>Team</CardTitle>
               <CardDescription>
                 Best fit for product squads shipping every week.
@@ -308,8 +268,26 @@ export function CardPage() {
         </div>
       </Section>
 
-      <Section title="Usage">
-        <pre className="docs-code">{`import {
+      <Section
+        title="Nested surfaces"
+        description="A nested Card follows the actual parent corner and inset, including through a content slot. Change the page's radius and surface settings to compare the shared modes."
+      >
+        <Card style={{ maxInlineSize: "30rem" }}>
+          <CardHeader>
+            <CardTitle>Workspace overview</CardTitle>
+            <CardDescription>Each slot owns its padding; the root contains the surface.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Card size="sm">
+              <CardHeader><CardTitle>Preview environment</CardTitle></CardHeader>
+              <CardContent>deployment_preview_environment_with_a_long_identifier_0123456789</CardContent>
+            </Card>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <Section title="Usage" description="Card remains a div. The interactive prop adds hover and focus styling only; use a native link or button for an action, and keep the surrounding heading order appropriate for CardTitle's h3.">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Card,
   CardHeader,
   CardTitle,
@@ -317,8 +295,13 @@ export function CardPage() {
   CardContent,
   CardFooter,
 } from "@virtari-packages/react-card";
+import { Button } from "@virtari-packages/react-button";
+import "@virtari-packages/core";
+import "@virtari-packages/tokens";
+import "@virtari-packages/react-card/styles";
+import "@virtari-packages/react-button/styles";
 
-<Card variant="outline" size="sm" interactive>
+<Card variant="outline" size="sm">
   <CardHeader>
     <CardTitle>Repository health</CardTitle>
     <CardDescription>Weekly design system report.</CardDescription>
@@ -333,7 +316,7 @@ export function CardPage() {
 
 <Card size="lg">
   <CardContent>Standalone content keeps top and bottom padding.</CardContent>
-</Card>`}</pre>
+</Card>`} />
       </Section>
     </>
   );

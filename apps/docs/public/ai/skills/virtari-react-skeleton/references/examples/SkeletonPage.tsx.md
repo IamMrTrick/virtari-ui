@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/SkeletonPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Skeleton } from "@virtari-packages/react-skeleton";
 import { Section, Row } from "../components";
 
@@ -30,7 +31,7 @@ export function SkeletonPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Skeleton } from "@virtari-packages/react-skeleton";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Skeleton } from "@virtari-packages/react-skeleton";
 
 // Text line
 <Skeleton style={{ height: "1rem", width: "75%" }} />
@@ -39,7 +40,7 @@ export function SkeletonPage() {
 <Skeleton style={{ height: 40, width: 40, borderRadius: "50%" }} />
 
 // Rectangle (image placeholder)
-<Skeleton style={{ height: 200, width: "100%" }} />`}</pre>
+<Skeleton style={{ height: 200, width: "100%" }} />`} />
       </Section>
     </>
   );

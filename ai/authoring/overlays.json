@@ -228,13 +228,13 @@
       "guidance": [
         "Import CopyButton from @virtari-packages/react-copy-button and its /styles. Pass required text; optional label renders beside the icon and copiedLabel replaces it during success feedback.",
         "Use copyButtonSize, not size: supported values are 2xs/xs/sm/md/lg. variant is ghost/outline/soft and defaults ghost; feedbackMs defaults 2000 milliseconds.",
-        "The component supplies type='button' and an accessible label that changes on successful copying. Localize label/copiedLabel for the application language and keep native disabled/ref attributes when needed.",
+        "The component defaults type='button', forwards its native ref and supports an explicit native type. Localize label, copyLabel, copiedLabel and errorLabel; success/failure feedback is announced in a status region.",
         "Clipboard copying uses navigator.clipboard.writeText and requires an available, permitted Clipboard API environment. Success feedback is set only after the write succeeds."
       ],
       "pitfalls": [
-        "Current props spreading places a consumer onClick after the built-in handler, so supplying onClick replaces copying rather than composing with it. Do not add an onClick merely to observe copy success.",
-        "Clipboard failure is currently silent and there are no onCopy/onError callbacks. Do not claim guaranteed copying or announce success independently of the actual result.",
-        "Empty text is ignored; the component does not write an empty clipboard value."
+        "A consumer onClick runs before copying; preventDefault cancels the clipboard action. Use onCopied and onCopyError to observe the actual result rather than assuming onClick means success.",
+        "Clipboard access depends on the host browser and permissions. Failure uses errorLabel; do not claim guaranteed copying. Empty strings are valid clipboard content.",
+        "Changing text or unmounting invalidates pending feedback and callbacks. A stale asynchronous write may still finish in the browser, but it cannot update the new button state."
       ],
       "related": ["react-button", "react-code", "react-toast"]
     }

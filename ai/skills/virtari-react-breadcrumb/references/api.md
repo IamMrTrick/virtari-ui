@@ -75,7 +75,7 @@ Source: `packages/react-breadcrumb/src/Breadcrumb.tsx`
 export interface BreadcrumbItemData {
   /** Visible label. Strings are also used by the JSON-LD `name` field. */
   label: ReactNode;
-  /** Omit `href` to render the item as the current page (`<span aria-current="page">`). */
+  /** Ancestor link destination. The final item is the current page; other items without href are plain text. */
   href?: string;
   /** Optional leading icon (Tabler icon component). */
   icon?: TablerIcon;
@@ -99,7 +99,7 @@ export interface BreadcrumbProps
   maxItems?: number;
   /** Items to keep visible at the start before the ellipsis. Default: 1. */
   itemsBeforeCollapse?: number;
-  /** Items to keep visible at the end after the ellipsis. Default: 1. */
+  /** Items to keep visible at the end after the ellipsis. Default/minimum: 1, preserving the current page. */
   itemsAfterCollapse?: number;
   /** Inject a `<script type="application/ld+json">` with schema.org BreadcrumbList. Requires `items`. */
   seo?: boolean;

@@ -31,6 +31,7 @@ Use CSS entry points only if they appear in this map. Foundation CSS packages ex
 - `FieldsetDescriptionProps` (type) from `@virtari-packages/react-fieldset`; source: `packages/react-fieldset/src/index.ts`.
 - `Field` (export) from `@virtari-packages/react-fieldset`; source: `packages/react-fieldset/src/index.ts`.
 - `composeFieldDescribedBy` (export) from `@virtari-packages/react-fieldset`; source: `packages/react-fieldset/src/index.ts`.
+- `hasFieldContent` (export) from `@virtari-packages/react-fieldset`; source: `packages/react-fieldset/src/index.ts`.
 - `FieldProps` (type) from `@virtari-packages/react-fieldset`; source: `packages/react-fieldset/src/index.ts`.
 - `FieldMetaAlign` (type) from `@virtari-packages/react-fieldset`; source: `packages/react-fieldset/src/index.ts`.
 - `FieldMetaLayout` (type) from `@virtari-packages/react-fieldset`; source: `packages/react-fieldset/src/index.ts`.
@@ -77,6 +78,12 @@ export interface FieldProps
   metaClassName?: string;
   ref?: Ref<HTMLDivElement>;
 }
+```
+
+Source: `packages/react-fieldset/src/Field.tsx`
+
+```tsx
+export function hasFieldContent(value: ReactNode | undefined): boolean;
 ```
 
 Source: `packages/react-fieldset/src/Field.tsx`

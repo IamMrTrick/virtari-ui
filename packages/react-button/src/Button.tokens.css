@@ -9,7 +9,7 @@
     /* ── Layout ── */
     --button-height: var(--vds-size-md, 2.25rem);
     --button-padding-inline: var(--vds-space-4, 1rem);
-    --button-padding-block: 0;
+    --button-padding-block: max(0.125rem, calc((var(--button-height) - 1lh - 2 * var(--button-border-width)) / 2));
     --button-optical-offset: var(--vds-control-optical-offset, 0px);
     --button-gap: var(--vds-gap-icon, 0.5rem);
     --button-border-width: 1px;
@@ -78,20 +78,15 @@
      * Rendering tokens (the ones Button.css actually paints with).
      * Defaults to solid variant — variants override these below.
      *
-     * SOLID variant uses a NEUTRAL state overlay on hover/active instead
-     * of swapping the background between palette steps. Swapping steps
-     * (e.g. 9 → 10 → 11) can cause a perceptual hue shift for any highly
-     * chromatic brand color — at the sRGB gamut edge, a small chroma move
-     * reads as a hue move (indigo → purple, teal → blue, etc.). The
-     * overlay is neutral-a (black-alpha in light, white-alpha in dark),
-     * so it darkens/lightens the base uniformly WITHOUT touching hue —
-     * works for every primary color and brand theme.
+     * Solid states consume the dedicated background roles, paired with
+     * on-solid ink. A generic white hover overlay in dark mode reduces
+     * contrast under white labels, so it cannot serve this filled surface.
      * ===================================================================== */
     --button-bg:             var(--button-color-solid);
-    --button-bg-hover:       var(--button-color-solid);
-    --button-bg-active:      var(--button-color-solid);
-    --button-overlay-hover:  var(--vds-color-hover, transparent);
-    --button-overlay-active: var(--vds-color-pressed, transparent);
+    --button-bg-hover:       var(--button-color-solid-hover);
+    --button-bg-active:      var(--button-color-solid-active);
+    --button-overlay-hover:  transparent;
+    --button-overlay-active: transparent;
     --button-text:         var(--button-color-on-solid);
     --button-text-hover:   var(--button-color-on-solid);
     --button-text-active:  var(--button-color-on-solid);
@@ -261,12 +256,18 @@
     --button-bg-active:     transparent;
     --button-overlay-hover:  transparent;
     --button-overlay-active: transparent;
-    --button-text:          var(--button-color-solid);
-    --button-text-hover:    var(--button-color-solid-hover);
-    --button-text-active:   var(--button-color-solid-active);
+    --button-text:          var(--button-color-text);
+    --button-text-hover:    var(--button-color-text);
+    --button-text-active:   var(--button-color-text);
     --button-border:        transparent;
     --button-border-hover:  transparent;
     --button-border-active: transparent;
+  }
+
+  /* Step 11 warning ink loses contrast on the stronger pressed tint.
+   * Keep the stronger palette ink scoped to this filled interaction. */
+  .vds-button[data-color="warning"]:is([data-variant="outline"], [data-variant="ghost"], [data-variant="soft"]) {
+    --button-text-active: var(--vds-color-warning-12, var(--button-color-text));
   }
 
   /* =========================================================================
@@ -331,6 +332,14 @@
     --button-font-size:      var(--vds-text-xl, 1.25rem);
     --button-gap:            var(--vds-space-3, 0.75rem);
     --button-icon-size:      1.5rem;
+  }
+
+  /* Link size changes typography, not inline-action padding or height. */
+  .vds-button[data-variant="link"][data-size] {
+    --button-height: auto;
+    --button-padding-inline: 0;
+    --button-padding-block: 0;
+    --button-min-width: 0;
   }
 
   /* =========================================================================

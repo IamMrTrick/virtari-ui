@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import {
   Field,
   composeFieldDescribedBy,
+  hasFieldContent,
   type FieldProps,
 } from "@virtari-packages/react-fieldset";
 import { cn, useComposedRefs, useFormReset } from "@virtari-packages/utils";
@@ -46,7 +47,7 @@ function resolveTextValue(value: unknown) {
 }
 
 function defaultCounterFormatter(current: number, maxLength?: number) {
-  return maxLength ? `${current}/${maxLength}` : current;
+  return maxLength !== undefined ? `${current}/${maxLength}` : current;
 }
 
 export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>(function TextareaField({
@@ -81,19 +82,11 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
   const mergedRef = useComposedRefs(localRef, ref);
   const generatedId = useId();
   const controlId = id ?? `vds-textarea-field-${generatedId}`;
-  const descriptionId = description
+  const descriptionId = hasFieldContent(description)
     ? `${controlId}-description`
     : undefined;
-  const errorId = error ? `${controlId}-error` : undefined;
-  const hasCounter = counter !== undefined || showCounter;
-  const counterId = hasCounter ? `${controlId}-counter` : undefined;
-  const describedBy = composeFieldDescribedBy(
-    ariaDescribedBy,
-    descriptionId,
-    errorId,
-    counterId,
-  );
-  const resolvedInvalid = invalid ?? isInvalid(ariaInvalid);
+  const errorId = hasFieldContent(error) ? `${controlId}-error` : undefined;
+  const resolvedInvalid = invalid ?? (ariaInvalid !== undefined ? isInvalid(ariaInvalid) : hasFieldContent(error));
   const [uncontrolledValue, setUncontrolledValue] = useState(
     resolveTextValue(defaultValue),
   );
@@ -107,6 +100,13 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
     (showCounter
       ? counterFormatter(currentValue.length, maxLength)
       : undefined);
+  const counterId = hasFieldContent(resolvedCounter) ? `${controlId}-counter` : undefined;
+  const describedBy = composeFieldDescribedBy(
+    ariaDescribedBy,
+    descriptionId,
+    errorId,
+    counterId,
+  );
 
   return (
     <Field
@@ -143,7 +143,7 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
         disabled={disabled}
         maxLength={maxLength}
         aria-describedby={describedBy}
-        aria-invalid={resolvedInvalid || undefined}
+        aria-invalid={invalid !== undefined ? invalid : ariaInvalid ?? (resolvedInvalid || undefined)}
         className={textareaClassName}
         style={textareaStyle}
       />

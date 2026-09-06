@@ -33,6 +33,7 @@
     "@virtari-packages/react-collapsible": "workspace:*",
     "@virtari-packages/react-color-picker": "workspace:*",
     "@virtari-packages/react-command": "workspace:*",
+    "@virtari-packages/react-copy-button": "workspace:*",
     "@virtari-packages/react-data-table": "workspace:*",
     "@virtari-packages/react-date-picker": "workspace:*",
     "@virtari-packages/react-dialog": "workspace:*",

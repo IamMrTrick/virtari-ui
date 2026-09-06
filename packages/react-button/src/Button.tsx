@@ -1,4 +1,4 @@
-import { cn } from "@virtari-packages/utils";
+import { cn, controlText } from "@virtari-packages/utils";
 import {
   Children,
   cloneElement,
@@ -33,18 +33,10 @@ export type ButtonVariant =
 /**
  * Button size presets.
  *
- * | Size | Height | WCAG AA (24px) | WCAG AAA (44px) | Apple HIG | Google MD |
- * |------|--------|----------------|-----------------|-----------|-----------|
- * | 2xs  | 24px   | ⚠ minimum      | ✗               | ✗         | ✗         |
- * | xs   | 28px   | ✓              | ✗               | ✗         | ✗         |
- * | sm   | 32px   | ✓              | ✗               | ✗         | ✗         |
- * | md   | 36px   | ✓              | ✗               | ✗         | ✗         |
- * | lg   | 40px   | ✓              | ✗               | ✗         | ✗         |
- * | xl   | 44px   | ✓              | ✓               | ✓ (44pt)  | ✗         |
- * | 2xl  | 52px   | ✓              | ✓               | ✓         | ✓         |
- * | 3xl  | 64px   | ✓              | ✓               | ✓         | ✓         |
- *
- * For touch-primary interfaces, prefer `xl`+ to meet AAA and platform guidelines.
+ * Minimum heights: 2xs 24px, xs 28px, sm 32px, md 36px, lg 40px,
+ * xl 44px, 2xl 52px, 3xl 64px with the default root font size.
+ * Prefer xl+ for touch interfaces. Height alone does not establish target
+ * size compliance: width, spacing, context and inline-link exceptions matter.
  */
 export type ButtonSize = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 
@@ -148,7 +140,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         )}
         {contentChildren != null ? (
           <span className="vds-button-label">
-            {contentChildren}
+            {controlText(contentChildren)}
           </span>
         ) : null}
         {rightSection && (

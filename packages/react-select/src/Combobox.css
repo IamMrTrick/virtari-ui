@@ -13,10 +13,8 @@
     inline-size: 100%;
     min-block-size: var(--combobox-trigger-min-block-size);
     padding-inline: var(--combobox-trigger-padding-inline);
-    padding-block-start: calc(
-      var(--combobox-trigger-padding-block) + var(--combobox-trigger-optical-offset)
-    );
-    padding-block-end: var(--combobox-trigger-padding-block);
+    padding-block: var(--combobox-trigger-padding-block);
+    text-align: start;
 
     font-family: var(--combobox-trigger-font-family);
     font-size: var(--combobox-trigger-font-size);
@@ -149,8 +147,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    inline-size: 1rem;
-    block-size: 1rem;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
     padding: 0;
     margin: 0;
     background: transparent;
@@ -204,11 +202,13 @@
 
   /* ── Content (popover) ── */
   .vds-combobox-content {
+    box-sizing: border-box;
     z-index: var(--combobox-content-z-index);
-    min-inline-size: var(--combobox-content-min-inline-size);
+    min-inline-size: min(var(--combobox-content-min-inline-size), calc(100vw - 1rem));
     /* Match trigger width when wider */
     inline-size: var(--vds-popover-trigger-width, auto);
-    max-inline-size: min(90vw, 32rem);
+    max-inline-size: min(var(--vds-popover-content-available-width, 100vw), calc(100vw - 1rem), 32rem);
+    max-block-size: var(--vds-popover-content-available-height, 80vh);
     background-color: var(--combobox-content-bg);
     border: var(--combobox-content-border-width) solid var(--combobox-content-border-color);
     border-radius: var(--combobox-content-radius);
@@ -269,7 +269,8 @@
     flex: 1 1 auto;
     min-block-size: 0;
     padding: var(--combobox-content-padding);
-    overflow: hidden;  /* ComboboxOptions owns the scroll */
+    overflow: auto;
+    overscroll-behavior: contain;
   }
 
   .vds-combobox-options {
@@ -288,6 +289,7 @@
     border-radius: var(--combobox-item-radius);
 
     font-size: var(--combobox-item-font-size);
+    line-height: var(--vds-control-line-height, 1.5);
     color: var(--combobox-item-text-color);
     background-color: var(--combobox-item-bg);
 
@@ -312,9 +314,7 @@
 
   .vds-combobox-item-label {
     min-inline-size: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
     flex: 1 1 auto;
   }
 
@@ -382,6 +382,11 @@
     margin-block: var(--combobox-separator-margin-block);
     background-color: var(--combobox-separator-color);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vds-combobox-content, .vds-combobox-spinner > svg, .vds-combobox-loading-spinner > svg { animation: none !important; }
+  .vds-combobox-trigger:active { scale: 1 !important; }
 }
 
 [data-vds-no-micro] .vds-combobox-trigger:active { scale: 1; transition: none; }

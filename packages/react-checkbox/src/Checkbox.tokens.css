@@ -9,7 +9,7 @@
     /* ── Geometry ── */
     --checkbox-size: 1.125rem;
     --checkbox-icon-size: 0.75rem;
-    --checkbox-indicator-offset: var(--vds-control-indicator-offset, 0.0625rem);
+    --checkbox-indicator-offset: 0px;
     /* A small checkbox must remain distinguishable from a circular radio,
      * even when the global role requests a radius larger than half its size. */
     --checkbox-radius: min(var(--vds-radius-checkbox, 0.375rem), calc(var(--checkbox-size) / 4));

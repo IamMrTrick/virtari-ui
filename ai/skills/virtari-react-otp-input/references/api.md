@@ -56,7 +56,7 @@ export interface OtpInputProps
   /** Called when all slots are filled. */
   onComplete?: (value: string) => void;
   type?: OtpInputType;
-  /** Render slots as password fields. */
+  /** Visually obscure slots where the browser supports text-security. */
   mask?: boolean;
   /** Control size. Canonical name, shared with every other sized control. */
   size?: OtpInputSize;

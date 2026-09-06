@@ -191,7 +191,7 @@
 
   /* One slot contract: outer inset + icon + text gap, mirrored by logical edges.
      Geometry is inherited by siblings; the native input keeps its own identity. */
-  :is(.vds-input-wrapper, .vds-input-field-control) {
+  :is(.vds-input-wrapper, .vds-input-field-control, .vds-input-group) {
     --input-slot-inset: var(--vds-space-3);
     --input-slot-font-size: var(--vds-text-sm);
     --input-icon-size: 1.125rem;
@@ -290,8 +290,10 @@
     display: flex;
     align-items: stretch;
     inline-size: 100%;
+    min-inline-size: 0;
 
     & > .vds-input {
+      --input-radius: inherit;
       flex: 1;
       min-inline-size: 0;
       border-radius: 0;
@@ -332,8 +334,8 @@
     line-height: var(--vds-control-line-height, 1.5);
     display: inline-flex;
     align-items: center;
-    padding-inline: var(--vds-space-3);
-    font-size: var(--vds-text-sm);
+    padding-inline: var(--input-slot-inset, var(--vds-space-3));
+    font-size: var(--input-slot-font-size, var(--vds-text-sm));
     color: var(--vds-color-text-muted);
     background-color: var(--vds-color-surface-raised);
     border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
@@ -520,6 +522,7 @@
 
   .vds-password-strength {
     --_password-strength-color: var(--vds-color-border-strong, var(--vds-color-border));
+    --_password-strength-text: var(--vds-color-text-muted);
 
     display: grid;
     gap: var(--vds-space-3);
@@ -533,29 +536,34 @@
   }
 
   .vds-password-strength[data-color="danger"] {
+    --_password-strength-text: var(--vds-color-danger-text);
     --_password-strength-color: var(--vds-color-danger-solid, var(--vds-color-danger-8, #dc2626));
   }
 
   .vds-password-strength[data-color="warning"] {
+    --_password-strength-text: var(--vds-color-warning-text);
     --_password-strength-color: var(--vds-color-warning-solid, var(--vds-color-warning-8, #f59e0b));
   }
 
   .vds-password-strength[data-color="primary"] {
+    --_password-strength-text: var(--vds-color-primary-text);
     --_password-strength-color: var(--vds-color-primary-solid, var(--vds-color-primary-8, #2563eb));
   }
 
   .vds-password-strength[data-color="success"] {
+    --_password-strength-text: var(--vds-color-success-text);
     --_password-strength-color: var(--vds-color-success-solid, var(--vds-color-success-8, #16a34a));
   }
 
   .vds-password-strength-header {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: var(--vds-space-2);
     min-inline-size: 0;
     font-size: var(--vds-text-xs);
-    line-height: var(--vds-leading-tight, 1.25);
+    line-height: var(--vds-leading-normal, 1.5);
   }
 
   .vds-password-strength-title {
@@ -564,10 +572,10 @@
   }
 
   .vds-password-strength-value {
-    flex: none;
-    color: var(--_password-strength-color);
+    min-inline-size: 0;
+    color: var(--_password-strength-text);
     font-weight: var(--vds-font-weight-semibold, 600);
-    white-space: nowrap;
+    overflow-wrap: anywhere;
   }
 
   .vds-password-strength-meter {
@@ -651,8 +659,9 @@
   .vds-password-strength-feedback {
     margin: 0;
     color: var(--vds-color-text-muted);
-    font-size: 0.6875rem;
-    line-height: 1.2;
+    font-size: var(--vds-text-xs);
+    line-height: var(--vds-leading-normal, 1.5);
+    overflow-wrap: anywhere;
   }
 }
 

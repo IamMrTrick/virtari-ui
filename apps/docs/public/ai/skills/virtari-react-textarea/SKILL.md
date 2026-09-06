@@ -20,7 +20,8 @@ Use the existing package and its composition API. Verify the installed version a
 - Textarea forwards native textarea attributes, onChange events and an HTMLTextAreaElement ref. Use value/onChange or defaultValue and retain native rows, maxLength, name, form, required and readOnly behavior.
 - Use TextareaField for label, description, error, showCounter and counterFormatter. className/style target the wrapper; textareaClassName/textareaStyle target the native control.
 - Use the shared seven-step size ramp from 2xs to 2xl (md default); inputSize is deprecated. Size controls field geometry, while rows controls initial multiline capacity.
-- Inherit data-surface-style and data-field-tone for surface separation. Leave typingPulse false unless explicitly desired.
+- Inherit data-surface-style and data-field-tone for surface separation. Leave typingPulse false unless explicitly desired; it is suppressed for readOnly and reduced motion.
+- TextareaField gives explicit invalid priority, then preserves native aria-invalid values, otherwise infers invalid from rendered error content. Zero is valid metadata; empty metadata and null counter formatters do not create dangling IDs; maxLength=0 remains visible.
 
 ## Known limits and mistakes to avoid
 

@@ -22,6 +22,7 @@ Use CSS entry points only if they appear in this map. Foundation CSS packages ex
 ## Public symbols
 
 - `cn` (export) from `@virtari-packages/utils`; source: `packages/utils/src/index.ts`.
+- `controlText` (export) from `@virtari-packages/utils`; source: `packages/utils/src/index.ts`.
 - `getKeyboardPlatform` (export) from `@virtari-packages/utils`; source: `packages/utils/src/index.ts`.
 - `useKeyboardPlatform` (export) from `@virtari-packages/utils`; source: `packages/utils/src/index.ts`.
 - `formatCombo` (export) from `@virtari-packages/utils`; source: `packages/utils/src/index.ts`.
@@ -44,6 +45,12 @@ Source: `packages/utils/src/cn.ts`
 
 ```tsx
 export function cn(...classes: (string | undefined | null | false)[]): string;
+```
+
+Source: `packages/utils/src/controlText.ts`
+
+```tsx
+export function controlText(children: ReactNode): ReactNode;
 ```
 
 Source: `packages/utils/src/keyboard.ts`
@@ -164,6 +171,7 @@ export function useHotkey(
 ## Source files
 
 - `packages/utils/src/cn.ts`
+- `packages/utils/src/controlText.ts`
 - `packages/utils/src/index.ts`
 - `packages/utils/src/keyboard.ts`
 - `packages/utils/src/keyboardPlatform.ts`

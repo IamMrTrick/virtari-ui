@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import {
   RadioGroup,
   RadioGroupItem,
@@ -46,8 +47,8 @@ const StatesMatrixStyles = () => (
       border-color: var(--radio-card-border-color-hover) !important;
     }
     .rb-card-force-focus.vds-radio-card {
-      outline: var(--radio-card-focus-ring-width) solid var(--radio-card-focus-ring-color) !important;
-      outline-offset: var(--radio-card-focus-ring-offset) !important;
+      outline: var(--vds-focus-ring-width) solid var(--vds-color-ring) !important;
+      outline-offset: var(--vds-focus-ring-offset) !important;
       border-color: var(--radio-card-border-color-hover) !important;
     }
   `}</style>
@@ -106,7 +107,8 @@ const cardFrame: React.CSSProperties = {
   borderRadius: "var(--vds-radius-card)",
   background: "var(--vds-color-surface)",
   flex: 1,
-  minWidth: "18rem",
+  minInlineSize: "min(18rem, 100%)",
+  maxInlineSize: "100%",
 };
 
 /* -------------------------------------------------------------
@@ -510,7 +512,7 @@ export function RadioGroupPage() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(10rem, 100%), 1fr))",
                 gap: "var(--vds-space-3)",
                 inlineSize: "100%",
               }}
@@ -652,11 +654,11 @@ export function RadioGroupPage() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(22rem, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(22rem, 100%), 1fr))",
                 gap: "var(--vds-space-3)",
               }}
             >
-              <RadioCard value="us-east">
+              <RadioCard value="us-east" aria-label="US East (Virginia)">
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)", minInlineSize: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "var(--vds-space-2)" }}>
                     <span style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-semibold)" }}>
@@ -683,7 +685,7 @@ export function RadioGroupPage() {
                 </div>
               </RadioCard>
 
-              <RadioCard value="eu-west">
+              <RadioCard value="eu-west" aria-label="EU West (Ireland)">
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)", minInlineSize: 0 }}>
                   <span style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-semibold)" }}>
                     EU West (Ireland)
@@ -698,7 +700,7 @@ export function RadioGroupPage() {
                 </div>
               </RadioCard>
 
-              <RadioCard value="ap-southeast">
+              <RadioCard value="ap-southeast" aria-label="AP Southeast (Singapore)">
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)", minInlineSize: 0 }}>
                   <span style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-semibold)" }}>
                     AP Southeast (Singapore)
@@ -713,7 +715,7 @@ export function RadioGroupPage() {
                 </div>
               </RadioCard>
 
-              <RadioCard value="sa-east" disabled>
+              <RadioCard value="sa-east" aria-label="SA East region" disabled>
                 <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-1)", minInlineSize: 0 }}>
                   <span style={{ fontSize: "var(--vds-text-sm)", fontWeight: "var(--vds-font-weight-semibold)" }}>
                     SA East (São Paulo)
@@ -785,7 +787,7 @@ export function RadioGroupPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   RadioGroup,
   RadioField,
   RadioCard,
@@ -809,24 +811,24 @@ export function RadioGroupPage() {
 </RadioGroup>
 
 // Cards (auto icon-grid when icon is provided)
-<RadioGroup defaultValue="personal">
+<RadioGroup defaultValue="personal" aria-label="Workspace type">
   <RadioCard value="personal" icon={<IconUser />} label="Personal" description="For individual use" />
   <RadioCard value="team" icon={<IconUsers />} label="Team" description="For small teams" />
 </RadioGroup>
 
 // Segmented toolbar
-<SegmentedRadio size="md" defaultValue="weekly">
+<SegmentedRadio size="md" defaultValue="weekly" aria-label="Reporting range">
   <SegmentedRadioItem value="daily">Daily</SegmentedRadioItem>
   <SegmentedRadioItem value="weekly">Weekly</SegmentedRadioItem>
   <SegmentedRadioItem value="monthly">Monthly</SegmentedRadioItem>
 </SegmentedRadio>
 
 // Pill filter
-<PillRadio defaultValue="all">
+<PillRadio defaultValue="all" aria-label="Category">
   <PillRadioItem value="all">All</PillRadioItem>
   <PillRadioItem value="design">Design</PillRadioItem>
   <PillRadioItem value="dev">Development</PillRadioItem>
-</PillRadio>`}</pre>
+</PillRadio>`} />
       </Section>
     </>
   );

@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@virtari-packages/react-button";
-import { IconCopy } from "@virtari-packages/react-icons";
-import { Stack, Cluster } from "@virtari-packages/react-layout";
+import { CodeBlock, type CodeLanguage } from "@virtari-packages/react-code";
+import { Cluster } from "@virtari-packages/react-layout";
 import { Select, SelectField, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@virtari-packages/react-select";
 import "../styles/knowledge-reference.css";
 
@@ -38,18 +37,10 @@ export function ReferencePagination({ page, count, onChange }: {
   </Cluster>;
 }
 
-export function ReferenceCode({ code, label }: { code: string; label: string }) {
-  const [status, setStatus] = useState("");
+export function ReferenceCode({ code, label, language }: { code: string; label: string; language?: CodeLanguage }) {
   const { text } = useReferenceLanguage();
-  return <Stack gap="xs" className="docs-reference-code-group">
-    <Cluster className="docs-reference-code-heading" gap="sm">
-      <span>{label}</span>
-      <Button variant="ghost" color="contrast" size="xs" aria-label={`${text("Copy", "کپی")} ${label}`} onClick={async () => {
-        try { await navigator.clipboard.writeText(code); setStatus(text("Copied", "کپی شد")); }
-        catch { setStatus(text("Clipboard unavailable. Select and copy the text below.", "کپی خودکار ممکن نیست. متن زیر را انتخاب و کپی کنید.")); }
-      }}><IconCopy size={14} aria-hidden />{text("Copy", "کپی")}</Button>
-    </Cluster>
-    <pre className="docs-code docs-reference-code" dir="ltr"><code>{code}</code></pre>
-    {status && <span className="docs-reference-muted" role="status">{status}</span>}
-  </Stack>;
+  const resolvedLanguage = language ?? (code.trim().startsWith("{") ? "json" : code.startsWith("pnpm") ? "shell" : code.includes("@import") || code.includes("--vds-") ? "css" : "plaintext");
+  return <CodeBlock renderer="static" code={code} filename={label} language={resolvedLanguage} wrap size="sm"
+    copyLabel={`${text("Copy", "کپی")} ${label}`} copiedLabel={text("Copied", "کپی شد")}
+    copyErrorLabel={text("Copy failed; select and copy the code manually", "کپی ممکن نشد؛ متن کد را انتخاب و کپی کنید")} />;
 }

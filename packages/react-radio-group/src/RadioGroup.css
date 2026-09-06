@@ -75,7 +75,7 @@
   }
 
   /* ── Focus ring ── */
-  .vds-radio-item:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  .vds-radio-item:focus-visible { outline: var(--radio-focus-ring-width) solid var(--radio-focus-ring-color); outline-offset: var(--radio-focus-ring-offset); box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
 
     @media (forced-colors: active) { outline: 2px solid Highlight; outline-offset: 2px; box-shadow: none;
     }
@@ -138,7 +138,8 @@
     font-size: var(--radio-group-label-font-size);
     font-weight: var(--radio-group-label-font-weight);
     color: var(--radio-group-label-color);
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
+    overflow-wrap: anywhere;
   }
 
   .vds-radio-group-required {
@@ -149,7 +150,8 @@
   .vds-radio-group-description {
     font-size: var(--radio-group-description-font-size);
     color: var(--radio-group-description-color);
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
+    overflow-wrap: anywhere;
   }
 
   .vds-radio-group-items {
@@ -159,7 +161,7 @@
     min-inline-size: 0;
   }
 
-  .vds-radio-group[data-orientation="horizontal"] .vds-radio-group-items {
+  .vds-radio-group[data-orientation="horizontal"] > .vds-radio-group-items {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -182,6 +184,7 @@
   }
 
   .vds-radio-group-error[data-visible] {
+    margin-block-start: var(--radio-group-gap);
     grid-template-rows: 1fr;
   }
 
@@ -229,3 +232,11 @@
 [data-vds-no-micro] .vds-radio-item:active             { scale: 1; transition: none; }
 [data-vds-no-micro] .vds-radio-item[data-state="checked"] { animation: none; }
 [data-vds-no-micro] .vds-radio-dot                        { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vds-radio-item, .vds-radio-item:active:not(:disabled), .vds-radio-item[data-state="checked"], .vds-radio-dot, .vds-radio-card, .vds-radio-group-error, .vds-radio-group-error-body {
+    animation: none;
+    transition: none;
+    scale: 1;
+  }
+}

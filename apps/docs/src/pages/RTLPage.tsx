@@ -1,3 +1,4 @@
+import { InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { Section, Row, Stack } from "../components";
 import { Button } from "@virtari-packages/react-button";
 import { Input } from "@virtari-packages/react-input";
@@ -76,11 +77,11 @@ export function RTLPage() {
         description="Virtari ships with full RTL support. Toggle the Dir switch in the header to flip the whole docs app, or inspect individual components side-by-side below."
       >
         <p className="docs-prose">
-          The default font stack is <code>Vazirmatn</code> (Google Fonts) with{" "}
-          <code>Inter</code> as Latin fallback and system sans as last resort. All components use
-          logical CSS properties (<code>padding-inline</code>, <code>inset-inline-start</code>,{" "}
-          <code>border-start-start-radius</code>, etc.) so margins, padding, and anchors
-          automatically swap sides when <code>dir="rtl"</code> is applied.
+          The default font stack is <VirtariInlineCode>Vazirmatn</VirtariInlineCode> (Google Fonts) with{" "}
+          <VirtariInlineCode>Inter</VirtariInlineCode> as Latin fallback and system sans as last resort. All components use
+          logical CSS properties (<VirtariInlineCode>padding-inline</VirtariInlineCode>, <VirtariInlineCode>inset-inline-start</VirtariInlineCode>,{" "}
+          <VirtariInlineCode>border-start-start-radius</VirtariInlineCode>, etc.) so margins, padding, and anchors
+          automatically swap sides when <VirtariInlineCode>dir="rtl"</VirtariInlineCode> is applied.
         </p>
       </Section>
 
@@ -101,7 +102,7 @@ export function RTLPage() {
                 borderBlockEnd: "1px solid var(--vds-color-border-muted)",
               }}
             >
-              <code
+              <VirtariInlineCode
                 style={{
                   fontFamily: "var(--vds-font-mono)",
                   fontSize: "var(--vds-text-xs)",
@@ -109,7 +110,7 @@ export function RTLPage() {
                 }}
               >
                 {w.label}
-              </code>
+              </VirtariInlineCode>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <span style={{ fontWeight: w.value, fontSize: "var(--vds-text-lg)" }} dir="rtl">
                   {SAMPLE_FA}
@@ -210,26 +211,26 @@ export function RTLPage() {
       >
         <ul className="docs-prose">
           <li>
-            <strong>Spinner</strong> — <code>border-right-color</code> →{" "}
-            <code>border-inline-end-color</code>.
+            <strong>Spinner</strong> — <VirtariInlineCode>border-right-color</VirtariInlineCode> →{" "}
+            <VirtariInlineCode>border-inline-end-color</VirtariInlineCode>.
           </li>
           <li>
-            <strong>Drawer</strong> — <code>:dir(rtl)</code> overrides swap{" "}
-            <code>transform-origin</code> and slide-transform sign for{" "}
-            <code>data-direction="left|right"</code>.
+            <strong>Drawer</strong> — <VirtariInlineCode>:dir(rtl)</VirtariInlineCode> overrides swap{" "}
+            <VirtariInlineCode>transform-origin</VirtariInlineCode> and slide-transform sign for{" "}
+            <VirtariInlineCode>data-direction="left|right"</VirtariInlineCode>.
           </li>
           <li>
-            <strong>Toast</strong> — <code>[dir="rtl"]</code> selectors normalized to{" "}
-            <code>:dir(rtl)</code>. Slide-in keyframe already had an RTL variant.
+            <strong>Toast</strong> — <VirtariInlineCode>[dir="rtl"]</VirtariInlineCode> selectors normalized to{" "}
+            <VirtariInlineCode>:dir(rtl)</VirtariInlineCode>. Slide-in keyframe already had an RTL variant.
           </li>
           <li>
-            <strong>Tabs</strong> — horizontal indicator uses physical <code>left</code> anchor
-            paired with physical <code>translateX</code> (offsetLeft-based). Vertical uses logical
+            <strong>Tabs</strong> — horizontal indicator uses physical <VirtariInlineCode>left</VirtariInlineCode> anchor
+            paired with physical <VirtariInlineCode>translateX</VirtariInlineCode> (offsetLeft-based). Vertical uses logical
             axis and is direction-agnostic.
           </li>
           <li>
-            <strong>Data Table</strong> — resize guideline uses physical <code>left</code> anchor
-            paired with physical <code>translateX</code>. Keyboard arrow adjust already reads
+            <strong>Data Table</strong> — resize guideline uses physical <VirtariInlineCode>left</VirtariInlineCode> anchor
+            paired with physical <VirtariInlineCode>translateX</VirtariInlineCode>. Keyboard arrow adjust already reads
             computed direction.
           </li>
         </ul>

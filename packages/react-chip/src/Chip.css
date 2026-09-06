@@ -93,7 +93,9 @@
 
   /* ── Label (optional wrapper) ── */
   .vds-chip-label {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 1lh;
     min-inline-size: 0;
     overflow: hidden;
     text-overflow: ellipsis;

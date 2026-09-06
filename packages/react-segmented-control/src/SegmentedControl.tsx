@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { cn, useComposedRefs, useDirection } from "@virtari-packages/utils";
+import { cn, controlText, useComposedRefs, useDirection } from "@virtari-packages/utils";
 import { useDirection as usePrimitiveDirection } from "@virtari-packages/primitives/direction";
 import * as RadioGroupPrimitive from "@virtari-packages/primitives/radio-group";
 import type { ComponentRef, Ref, ReactNode } from "react";
@@ -106,7 +106,7 @@ export function SegmentedControlItem({
             {icon}
           </span>
         )}
-        {children}
+        {controlText(children)}
       </span>
     </RadioGroupPrimitive.Item>
   );

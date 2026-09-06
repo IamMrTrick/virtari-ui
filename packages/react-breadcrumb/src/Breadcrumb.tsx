@@ -43,7 +43,7 @@ export type BreadcrumbSeparatorPreset = "chevron" | "slash" | "dot" | "arrow";
 export interface BreadcrumbItemData {
   /** Visible label. Strings are also used by the JSON-LD `name` field. */
   label: ReactNode;
-  /** Omit `href` to render the item as the current page (`<span aria-current="page">`). */
+  /** Ancestor link destination. The final item is the current page; other items without href are plain text. */
   href?: string;
   /** Optional leading icon (Tabler icon component). */
   icon?: TablerIcon;
@@ -96,7 +96,7 @@ export interface BreadcrumbProps
   maxItems?: number;
   /** Items to keep visible at the start before the ellipsis. Default: 1. */
   itemsBeforeCollapse?: number;
-  /** Items to keep visible at the end after the ellipsis. Default: 1. */
+  /** Items to keep visible at the end after the ellipsis. Default/minimum: 1, preserving the current page. */
   itemsAfterCollapse?: number;
   /** Inject a `<script type="application/ld+json">` with schema.org BreadcrumbList. Requires `items`. */
   seo?: boolean;
@@ -159,9 +159,8 @@ export function Breadcrumb({
         {jsonLd ? (
           <script
             type="application/ld+json"
-            // The payload is derived from typed BreadcrumbItemData shaped by the consumer.
-            // JSON.stringify escapes characters that matter for HTML embedding.
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            // HTML parses script end tags before JSON, including during SSR.
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
           />
         ) : null}
       </nav>
@@ -270,8 +269,6 @@ export function BreadcrumbPage({
   return (
     <span
       ref={ref}
-      role="link"
-      aria-disabled="true"
       aria-current="page"
       className={cn("vds-breadcrumb__page", className)}
       {...props}
@@ -486,7 +483,11 @@ interface CollapseConfig {
 }
 
 function renderItemsArray(items: BreadcrumbItemData[], cfg: CollapseConfig) {
-  const { maxItems, itemsBeforeCollapse, itemsAfterCollapse } = cfg;
+  const { maxItems } = cfg;
+  const itemsBeforeCollapse = Number.isFinite(cfg.itemsBeforeCollapse)
+    ? Math.max(0, Math.floor(cfg.itemsBeforeCollapse)) : 1;
+  const itemsAfterCollapse = Number.isFinite(cfg.itemsAfterCollapse)
+    ? Math.max(1, Math.floor(cfg.itemsAfterCollapse)) : 1;
 
   /* No collapse: render all items. */
   const shouldCollapse =
@@ -540,10 +541,18 @@ function renderItem(it: BreadcrumbItemData, isLast: boolean) {
     </>
   );
 
-  if (!it.href || isLast) {
+  if (isLast) {
     return (
       <BreadcrumbItem>
         <BreadcrumbPage>{content}</BreadcrumbPage>
+      </BreadcrumbItem>
+    );
+  }
+
+  if (!it.href) {
+    return (
+      <BreadcrumbItem>
+        <span className="vds-breadcrumb__page">{renderBreadcrumbInlineContent(content)}</span>
       </BreadcrumbItem>
     );
   }

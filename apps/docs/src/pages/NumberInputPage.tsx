@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   NumberInput,
@@ -24,7 +25,7 @@ function TypingPulseDemo() {
         min={-999}
         max={999}
         typingPulse={pulse}
-        description="Type a number — fast for a stronger bounce, slow for a subtle one."
+        description="Type a number — fast for a stronger ring pulse, slow for a subtle one."
       />
       <NumberInputField
         label="Inline stepper"
@@ -111,7 +112,8 @@ export function NumberInputPage() {
             <Row key={size}>
               <span className="docs-size-label">{size}</span>
               <NumberInput
-                inputSize={size}
+                size={size}
+                aria-label={`${size} stacked quantity`}
                 value={quantity}
                 onChange={setQuantity}
                 min={0}
@@ -131,7 +133,8 @@ export function NumberInputPage() {
             <Row key={size}>
               <span className="docs-size-label">{size}</span>
               <NumberInput
-                inputSize={size}
+                size={size}
+                aria-label={`${size} inline quantity`}
                 stepper="inline"
                 value={quantity}
                 onChange={setQuantity}
@@ -157,6 +160,7 @@ export function NumberInputPage() {
             counter="1-50 seats"
             description="Used to price the workspace subscription."
             error={quantity !== undefined && quantity < 1 ? "At least one seat is required" : undefined}
+            invalid={quantity !== undefined && quantity < 1}
           />
 
           <NumberInputField
@@ -169,6 +173,7 @@ export function NumberInputPage() {
             counter="0-100%"
             description="Approvals above 50% are reviewed manually."
             error={discount !== undefined && discount > 50 ? "Manager approval required above 50%" : undefined}
+            invalid={discount !== undefined && discount > 50}
             metaLayout="inline"
             descriptionAlign="end"
             errorAlign="start"
@@ -193,6 +198,7 @@ export function NumberInputPage() {
 
           <div style={{ maxInlineSize: "16rem" }}>
             <NumberInput
+              aria-label="Monthly budget without field wrapper"
               value={price}
               onChange={setPrice}
               min={0}
@@ -206,7 +212,7 @@ export function NumberInputPage() {
 
       <Section
         title="Typing Pulse"
-        description="Each keystroke fires a scale bounce proportional to typing speed. Throttled so rapid typing stays smooth."
+        description="Each keystroke fires a brief ring pulse proportional to typing speed. Reduced motion disables the animation."
       >
         <TypingPulseDemo />
       </Section>
@@ -218,8 +224,17 @@ export function NumberInputPage() {
         <WheelDemo />
       </Section>
 
-      <Section title="Usage">
-        <pre className="docs-code">{`import { NumberInput, NumberInputField } from "@virtari-packages/react-number-input";
+      <Section title="States" description="Use inline controls for larger step targets. Compact stacked steppers also support ArrowUp and ArrowDown on the input.">
+        <div style={{ display: "grid", gap: "var(--vds-gap-group)", maxInlineSize: "32rem" }}>
+          <NumberInputField label="Optional quantity" placeholder="Enter a quantity" min={0} />
+          <NumberInputField label="Unavailable quantity" defaultValue={12} disabled />
+          <NumberInputField label="Invalid quantity" defaultValue={-1} min={0} invalid error="Enter zero or a positive quantity." />
+          <NumberInputField label="Fixed quantity" defaultValue={12} readOnly stepper="inline" />
+        </div>
+      </Section>
+
+      <Section title="Usage" description="The text input accepts ASCII numeric drafts. Validate numeric constraints on submission; min/max and blur clamping do not provide native number-input constraint validation.">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { NumberInput, NumberInputField } from "@virtari-packages/react-number-input";
 
 // stacked (default)
 <NumberInput value={qty} onChange={setQty} min={0} max={99} step={1} />
@@ -240,10 +255,11 @@ export function NumberInputPage() {
   label="Seats"
   description="Used for billing."
   error="At least one seat is required"
+  invalid
   counter="1-50 seats"
   metaLayout="inline"
   descriptionAlign="end"
-/>`}</pre>
+/>`} />
       </Section>
     </>
   );

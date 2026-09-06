@@ -16,6 +16,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useId,
   type ChangeEvent,
   type KeyboardEvent,
   type MouseEvent,
@@ -88,12 +89,13 @@ export function Combobox<T extends ComboboxItemData = ComboboxItemData>({
  * ───────────────────────────────────────────── */
 
 interface ComboboxChipListProps {
+  disabled: boolean;
   items: ReadonlyArray<ComboboxItemData>;
   chipSize: ChipSize;
   onRemove: (value: string) => void;
 }
 
-function ComboboxChipList({ items, chipSize, onRemove }: ComboboxChipListProps) {
+function ComboboxChipList({ items, chipSize, onRemove, disabled }: ComboboxChipListProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const measureRef = useRef<HTMLDivElement | null>(null);
   const [visibleCount, setVisibleCount] = useState(items.length);
@@ -161,7 +163,7 @@ function ComboboxChipList({ items, chipSize, onRemove }: ComboboxChipListProps) 
           <Chip key={item.value} size={chipSize} appearance="soft">
             <ChipLabel>{item.label}</ChipLabel>
             <ChipRemove
-              tabIndex={-1}
+              disabled={disabled}
               aria-label={`Remove ${item.label}`}
               onPointerDown={(e) => e.preventDefault()}
               onClick={(e) => {
@@ -228,6 +230,10 @@ export const ComboboxTrigger = forwardRef<HTMLDivElement, ComboboxTriggerProps>(
     listId,
     triggerRef,
     inputRef,
+    searchable,
+    handleInputKeyDown,
+    highlightedIndex,
+    getItemId,
   } = useComboboxContext();
   const { size, appearance } = useComboboxVisual();
 
@@ -252,6 +258,11 @@ export const ComboboxTrigger = forwardRef<HTMLDivElement, ComboboxTriggerProps>(
     if (disabled) return;
     onKeyDown?.(e);
     if (e.defaultPrevented) return;
+    if (e.target !== e.currentTarget) return;
+    if (!searchable && open) {
+      handleInputKeyDown(e);
+      return;
+    }
     if (
       e.key === "Enter" ||
       e.key === " " ||
@@ -275,6 +286,7 @@ export const ComboboxTrigger = forwardRef<HTMLDivElement, ComboboxTriggerProps>(
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listId}
+        aria-activedescendant={!searchable && open && highlightedIndex >= 0 ? getItemId(highlightedIndex) : undefined}
         aria-disabled={disabled || undefined}
         aria-invalid={invalid || undefined}
         aria-busy={loading || undefined}
@@ -293,9 +305,13 @@ export const ComboboxTrigger = forwardRef<HTMLDivElement, ComboboxTriggerProps>(
               <span className="vds-combobox-trigger-placeholder">{placeholder}</span>
             ) : (
               <ComboboxChipList
+                disabled={disabled}
                 items={selectedItems}
                 chipSize={chipSize}
-                onRemove={removeValue}
+                onRemove={(value) => {
+                  removeValue(value);
+                  triggerRef.current?.focus();
+                }}
               />
             )
           ) : selectedItems[0] ? (
@@ -310,13 +326,13 @@ export const ComboboxTrigger = forwardRef<HTMLDivElement, ComboboxTriggerProps>(
           {clearable && hasValue && !disabled ? (
             <button
               type="button"
-              tabIndex={-1}
               className="vds-combobox-clear"
               aria-label="Clear selection"
               onPointerDown={(e) => e.preventDefault()}
               onClick={(e) => {
                 e.stopPropagation();
                 clearValue();
+                triggerRef.current?.focus();
               }}
             >
               <svg viewBox="0 0 12 12" fill="none" aria-hidden="true">
@@ -410,6 +426,9 @@ export const ComboboxContent = forwardRef<HTMLDivElement, ComboboxContentProps>(
           if (searchable) {
             e.preventDefault();
             inputRef.current?.focus();
+          } else {
+            e.preventDefault();
+            triggerRef.current?.focus();
           }
         }}
         onInteractOutside={(e) => {
@@ -494,6 +513,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(fu
         role="combobox"
         aria-expanded={true}
         aria-autocomplete="list"
+        aria-label={placeholder}
         aria-controls={listId}
         aria-activedescendant={activeId}
         autoComplete="off"
@@ -523,12 +543,13 @@ export interface ComboboxListProps extends React.HTMLAttributes<HTMLDivElement> 
 }
 
 export const ComboboxList = forwardRef<HTMLDivElement, ComboboxListProps>(function ComboboxList({ className, children, ...props }, ref) {
-  const { listId } = useComboboxContext();
+  const { listId, multiple } = useComboboxContext();
   return (
     <div
       ref={ref}
       id={listId}
       role="listbox"
+      aria-multiselectable={multiple || undefined}
       className={cn("vds-combobox-list", className)}
       {...props}
     >
@@ -620,6 +641,8 @@ function VirtualOptions({
           return (
             <div
               key={item.value}
+              ref={virtualizer.measureElement}
+              data-index={v.index}
               data-virtual-row
               style={{
                 position: "absolute",
@@ -658,6 +681,7 @@ export const ComboboxItem = forwardRef<HTMLDivElement, ComboboxItemProps>(functi
   onSelect,
   onClick,
   onMouseMove,
+  onPointerDown,
   ...props
 }, ref) {
   const {
@@ -667,7 +691,12 @@ export const ComboboxItem = forwardRef<HTMLDivElement, ComboboxItemProps>(functi
     isSelected,
     toggleValue,
     getItemId,
+    virtualized,
+    setItemDisabled,
   } = useComboboxContext();
+
+  const itemRef = useRef<HTMLDivElement>(null);
+  const mergedRef = useComposedRefs(itemRef, ref);
 
   const index = useMemo(
     () => filteredItems.findIndex((it) => it.value === value),
@@ -676,25 +705,46 @@ export const ComboboxItem = forwardRef<HTMLDivElement, ComboboxItemProps>(functi
 
   const highlighted = index >= 0 && index === highlightedIndex;
   const selected = isSelected(value);
+  const itemDisabled = disabled || filteredItems[index]?.disabled;
+
+  useEffect(() => {
+    if (!disabled) return;
+    setItemDisabled(value, true);
+    return () => setItemDisabled(value, false);
+  }, [value, disabled, setItemDisabled]);
+
+  useEffect(() => {
+    if (!highlighted || virtualized) return;
+    const item = itemRef.current;
+    const scroller = item?.closest<HTMLElement>('.vds-combobox-options') ?? item?.closest<HTMLElement>('.vds-combobox-list');
+    if (!item || !scroller) return;
+    const row = item.getBoundingClientRect();
+    const viewport = scroller.getBoundingClientRect();
+    if (row.top < viewport.top) scroller.scrollTop -= viewport.top - row.top;
+    else if (row.bottom > viewport.bottom) scroller.scrollTop += row.bottom - viewport.bottom;
+  }, [highlighted, virtualized]);
 
   return (
     <div
-      ref={ref}
+      ref={mergedRef}
       id={index >= 0 ? getItemId(index) : undefined}
       role="option"
       aria-selected={selected}
-      aria-disabled={disabled || undefined}
+      aria-disabled={itemDisabled || undefined}
       className={cn("vds-combobox-item", className)}
       data-highlighted={highlighted ? "true" : undefined}
-      onPointerDown={(e) => e.preventDefault()}
+      onPointerDown={(e) => {
+        onPointerDown?.(e);
+        if (!e.defaultPrevented) e.preventDefault();
+      }}
       onMouseMove={(e) => {
         onMouseMove?.(e);
-        if (disabled || index < 0) return;
+        if (e.defaultPrevented || itemDisabled || index < 0) return;
         if (highlightedIndex !== index) setHighlightedIndex(index);
       }}
       onClick={(e) => {
         onClick?.(e);
-        if (e.defaultPrevented || disabled) return;
+        if (e.defaultPrevented || itemDisabled) return;
         toggleValue(value);
         onSelect?.(value);
       }}
@@ -739,14 +789,16 @@ export const ComboboxGroup = forwardRef<HTMLDivElement, ComboboxGroupProps>(func
   children,
   ...props
 }, ref) {
+  const headingId = useId();
   return (
     <div
       ref={ref}
       role="group"
+      aria-labelledby={heading ? headingId : undefined}
       className={cn("vds-combobox-group", className)}
       {...props}
     >
-      {heading ? <div className="vds-combobox-group-heading">{heading}</div> : null}
+      {heading ? <div id={headingId} className="vds-combobox-group-heading">{heading}</div> : null}
       {children}
     </div>
   );

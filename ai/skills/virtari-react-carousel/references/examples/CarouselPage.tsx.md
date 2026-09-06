@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/CarouselPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useRef, useState, type CSSProperties } from "react";
 import {
   Carousel,
@@ -515,7 +516,7 @@ export function CarouselPage() {
 
       {/* ───────────────── Usage ───────────────── */}
       <Section title="Usage">
-        <pre className="docs-code">{`import { Carousel, CarouselSlide } from "@virtari-packages/react-carousel";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Carousel, CarouselSlide } from "@virtari-packages/react-carousel";
 import "@virtari-packages/react-carousel/styles";
 
 <Carousel
@@ -530,7 +531,7 @@ import "@virtari-packages/react-carousel/styles";
   breakpoints={{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
 >
   <CarouselSlide>...</CarouselSlide>
-</Carousel>`}</pre>
+</Carousel>`} />
       </Section>
     </>
   );

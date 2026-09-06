@@ -111,3 +111,7 @@
     opacity: 1;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .vds-checkbox-group-error, .vds-checkbox-group-error-body { transition: none; transform: none; }
+}

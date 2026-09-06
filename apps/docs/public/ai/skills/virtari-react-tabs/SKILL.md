@@ -23,6 +23,8 @@ Use the existing package and its composition API. Verify the installed version a
 - collapseAt is a container-width threshold in pixels that changes a vertical root to horizontal. Root swipeable only acts in horizontal orientation; it is separate from the carousel-style TabsPanels feature.
 - Use TabsPanels with direct TabsContent children in trigger order for carousel panels. mountStrategy=all keeps every panel mounted; adjacent limits mounting to the active panel and its neighbors. touchOnly defaults true.
 - Direction resolves explicit dir, DirectionProvider, then DOM inheritance. Segmented track and item/indicator radii share the system's shape roles and inset geometry; preserve data-radius-host and token-derived styles.
+- Full-width triggers wrap and grow from minimum heights with stable icon slots. Non-full-width and boxed tracks scroll internally; focus draws inside the trigger to remain visible. Auto-scroll respects RTL coordinates.
+- TabsPanels marks inactive mounted slides inert and aria-hidden. This protects keyboard/assistive-technology exposure while retaining their React state; custom forceMount animations outside TabsPanels need their own exposure handling.
 
 ## Known limits and mistakes to avoid
 

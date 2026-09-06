@@ -4,6 +4,7 @@ export interface CheckboxGroupContextValue {
   disabled?: boolean;
   error?: boolean;
   name?: string;
+  describedBy?: string;
 }
 
 export const CheckboxGroupContext = createContext<CheckboxGroupContextValue | null>(null);

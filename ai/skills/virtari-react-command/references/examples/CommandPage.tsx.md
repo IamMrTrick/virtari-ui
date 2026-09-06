@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/CommandPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useEffect, useState } from "react";
 import {
   Command,
@@ -85,7 +86,7 @@ function InlineCommand() {
         </Command.Root>
       </div>
       <p style={{ margin: 0, color: "var(--vds-color-text-muted, #6b7280)" }}>
-        Last selected: <code>{selected ?? "—"}</code>
+        Last selected: <VirtariInlineCode>{selected ?? "—"}</VirtariInlineCode>
       </p>
     </Stack>
   );
@@ -174,7 +175,7 @@ function DialogCommand() {
       </CommandDialog>
 
       <p style={{ margin: 0, color: "var(--vds-color-text-muted, #6b7280)" }}>
-        Last selected: <code>{last ?? "—"}</code>
+        Last selected: <VirtariInlineCode>{last ?? "—"}</VirtariInlineCode>
       </p>
     </Stack>
   );
@@ -265,7 +266,7 @@ function AsyncCommand() {
         </Command.Root>
       </div>
       <p style={{ margin: 0, color: "var(--vds-color-text-muted, #6b7280)" }}>
-        Last selected: <code>{selected ?? "—"}</code>
+        Last selected: <VirtariInlineCode>{selected ?? "—"}</VirtariInlineCode>
       </p>
     </Stack>
   );
@@ -279,7 +280,7 @@ export function CommandPage() {
         description="cmdk wrapper with tokens, RTL, keyboard-shortcut rendering (via Kbd), and an optional Dialog container. Keyboard nav, grouping, empty/loading states, and filter behavior all come from cmdk."
       >
         <p style={{ margin: 0, color: "var(--vds-color-text-muted, #6b7280)" }}>
-          The <code>useHotkey</code> hook powers the optional <code>hotkey</code> prop on <code>CommandDialog</code> and is re-exported for ad-hoc keybindings. It lives in <code>@virtari-packages/utils</code>.
+          The <VirtariInlineCode>useHotkey</VirtariInlineCode> hook powers the optional <VirtariInlineCode>hotkey</VirtariInlineCode> prop on <VirtariInlineCode>CommandDialog</VirtariInlineCode> and is re-exported for ad-hoc keybindings. It lives in <VirtariInlineCode>@virtari-packages/utils</VirtariInlineCode>.
         </p>
       </Section>
 
@@ -305,7 +306,7 @@ export function CommandPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Command, CommandDialog } from "@virtari-packages/react-command";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Command, CommandDialog } from "@virtari-packages/react-command";
 import "@virtari-packages/react-command/styles";
 import "@virtari-packages/react-dialog/styles";
 
@@ -328,7 +329,7 @@ import "@virtari-packages/react-dialog/styles";
   <Command.List>
     {/* groups + items */}
   </Command.List>
-</CommandDialog>`}</pre>
+</CommandDialog>`} />
       </Section>
     </>
   );

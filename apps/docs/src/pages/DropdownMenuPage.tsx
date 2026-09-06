@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -49,7 +50,7 @@ export function DropdownMenuPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
 } from "@virtari-packages/react-dropdown-menu";
@@ -64,7 +65,7 @@ export function DropdownMenuPage() {
     <DropdownMenuItem>Item 1</DropdownMenuItem>
     <DropdownMenuItem>Item 2</DropdownMenuItem>
   </DropdownMenuContent>
-</DropdownMenu>`}</pre>
+</DropdownMenu>`} />
       </Section>
     </>
   );

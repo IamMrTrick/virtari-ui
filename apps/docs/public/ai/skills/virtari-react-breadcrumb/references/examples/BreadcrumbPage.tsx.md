@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/BreadcrumbPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useMemo, useState, type CSSProperties } from "react";
 import {
   Breadcrumb,
@@ -61,8 +62,8 @@ const stackStyle: CSSProperties = {
 };
 
 const rowStyle: CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "minmax(8rem, max-content) 1fr",
+  display: "flex",
+  flexWrap: "wrap",
   alignItems: "center",
   gap: "1rem",
 };
@@ -169,7 +170,7 @@ export function BreadcrumbPage() {
 
       <Section
         title="Overflow collapse"
-        description="When items > maxItems, the middle collapses into an Ellipsis dropdown menu. itemsBeforeCollapse / itemsAfterCollapse decide which items stay visible at each end."
+        description="When items > maxItems, the middle collapses into an Ellipsis dropdown menu. Use Enter or Arrow Down to open it, arrow keys to navigate, and Escape to return to the trigger. The final current-page item always stays visible."
       >
         <div style={stackStyle}>
           <div style={rowStyle}>
@@ -239,9 +240,7 @@ export function BreadcrumbPage() {
             }}
           />
           {seoPayload ? (
-            <pre className="docs-code">
-              {JSON.stringify(JSON.parse(seoPayload), null, 2)}
-            </pre>
+            <VirtariCodeBlock renderer="static" language="json" code={JSON.stringify(JSON.parse(seoPayload), null, 2)} />
           ) : null}
         </div>
       </Section>
@@ -250,7 +249,7 @@ export function BreadcrumbPage() {
         title="Compound usage"
         description="Full markup control. Use this when you need to wire each item to a custom routing component (e.g. <NextLink>) via asChild."
       >
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
@@ -272,14 +271,14 @@ export function BreadcrumbPage() {
     <BreadcrumbSeparator />
     <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
   </BreadcrumbList>
-</Breadcrumb>`}</pre>
+</Breadcrumb>`} />
       </Section>
 
       <Section
         title="Array helper"
         description="One-liner API. Internally renders the same primitives — JSON-LD, collapse, and separators all work identically."
       >
-        <pre className="docs-code">{`<Breadcrumb
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Breadcrumb
   items={[
     { label: "Home", href: "/", icon: IconHome },
     { label: "Docs", href: "/docs" },
@@ -290,7 +289,7 @@ export function BreadcrumbPage() {
   maxItems={4}
   seo
   seoBaseUrl="https://virtari.dev"
-/>`}</pre>
+/>`} />
       </Section>
     </>
   );

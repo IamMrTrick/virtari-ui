@@ -1,6 +1,12 @@
 {
-  "tokens-reference": { "title": "Token reference", "description": "Every source variable, expression and scoped definition, searchable by category." },
-  "ai-integration": { "title": "AI integration", "description": "Focused Agent Skills, a local MCP server and source-backed examples." },
+  "tokens-reference": {
+    "title": "Token reference",
+    "description": "Every source variable, expression and scoped definition, searchable by category."
+  },
+  "ai-integration": {
+    "title": "AI integration",
+    "description": "Focused Agent Skills, a local MCP server and source-backed examples."
+  },
   "introduction": {
     "title": "Introduction",
     "description": "Overview of the Virtari Design System."
@@ -19,19 +25,19 @@
   },
   "button": {
     "title": "Button",
-    "description": "6 variants, 7 sizes, loading, icons, animations."
+    "description": "Five appearance variants, eight sizes, icon slots, loading and deliberate motion options."
   },
   "button-group": {
     "title": "Button Group",
-    "description": "Segmented row of buttons sharing one color \u00d7 variant \u00d7 size via context. Attached or spaced, horizontal or vertical, with RTL-correct collapsed radii."
+    "description": "Segmented row of buttons sharing one color × variant × size via context. Attached or spaced, horizontal or vertical, with RTL-correct collapsed radii."
   },
   "badge": {
     "title": "Badge",
-    "description": "7 colors \u00d7 5 variants \u00d7 4 sizes \u2014 pill or square, optional dot, icons, removable chip, and asChild routing."
+    "description": "7 colors × 5 variants × 4 sizes — pill or square, optional dot, icons, removable chip, and asChild routing."
   },
   "input": {
     "title": "Input",
-    "description": "Text input \u2014 7 sizes aligned with Button."
+    "description": "Text input — 7 sizes aligned with Button."
   },
   "number-input": {
     "title": "Number Input",
@@ -43,7 +49,7 @@
   },
   "textarea": {
     "title": "Textarea",
-    "description": "Multi-line text input with auto-resize."
+    "description": "Native multiline text input with labeled fields and character counters."
   },
   "editor": {
     "title": "Rich Text Editor",
@@ -51,11 +57,11 @@
   },
   "yoopta-editor": {
     "title": "Block Editor (Yoopta)",
-    "description": "Notion-style block editor wrapped with Virtari tokens \u2014 slash menu, floating toolbar, drag-and-drop blocks, 20 plugins (paragraph, headings, lists, callout, code, table, image, video, embed, math, mention, emoji, accordion, tabs, steps, carousel, TOC)."
+    "description": "Notion-style block editor wrapped with Virtari tokens — slash menu, floating toolbar, drag-and-drop blocks, 20 plugins (paragraph, headings, lists, callout, code, table, image, video, embed, math, mention, emoji, accordion, tabs, steps, carousel, TOC)."
   },
   "code": {
     "title": "Code",
-    "description": "CodeMirror 6 wrapped with Virtari tokens \u2014 read-only viewer, live editor, and inline snippet. 15 preloaded languages, line numbers, line highlight, diff view, copy button, autocomplete, multi-cursor, and search."
+    "description": "Read-only code, a live editor, and inline snippets with shared syntax colors, line highlighting, diff cues, and clipboard feedback."
   },
   "select": {
     "title": "Select",
@@ -147,7 +153,7 @@
   },
   "carousel": {
     "title": "Carousel",
-    "description": "Swiper.js wrapped with Virtari tokens \u2014 7 colors, 5 nav variants, 4 sizes, navigation, pagination (bullets / bars / fraction / progressbar), autoplay, scrollbar, lazy, zoom, parallax, thumbs, virtual, grid, effects (fade / cube / coverflow / flip / cards / creative), full RTL, and reduced-motion safe."
+    "description": "Swiper.js wrapped with Virtari tokens — 7 colors, 5 nav variants, 4 sizes, navigation, pagination (bullets / bars / fraction / progressbar), autoplay, scrollbar, lazy, zoom, parallax, thumbs, virtual, grid, effects (fade / cube / coverflow / flip / cards / creative), full RTL, and reduced-motion safe."
   },
   "card": {
     "title": "Card",
@@ -167,47 +173,47 @@
   },
   "chip": {
     "title": "Chip",
-    "description": "Compact pill for tags, filters, and metadata \u2014 6 variants, 3 appearances, 3 sizes, with icon/avatar slot and removable action."
+    "description": "Compact pill for tags, filters, and metadata — 6 variants, 3 appearances, 3 sizes, with icon/avatar slot and removable action."
   },
   "heading": {
     "title": "Heading",
-    "description": "Semantic h1\u2013h6 with decoupled visual size \u2014 9-step display scale, weight, tone, and balance/truncate wrap."
+    "description": "Semantic h1–h6 with decoupled visual size — 9-step display scale, weight, tone, and balance/truncate wrap."
   },
   "text": {
     "title": "Text",
-    "description": "Paragraph and inline copy \u2014 9-step size scale, semantic tones, alignment, leading override, and truncate."
+    "description": "Paragraph and inline copy — 9-step size scale, semantic tones, alignment, leading override, and truncate."
   },
   "composition": {
     "title": "Composition",
-    "description": "Layout primitives \u2014 Stack, Cluster, Grid, Sidebar, Center."
+    "description": "Layout primitives — Stack, Cluster, Grid, Sidebar, Center."
   },
   "utilities": {
     "title": "Utilities",
-    "description": "Opt-in CSS utility classes for spacing, flex, grid, sizing, position, and z-index \u2014 all token-driven, logical-property-first, with sm/md/lg/xl/2xl responsive variants."
+    "description": "Opt-in CSS utility classes for spacing, flex, grid, sizing, position, and z-index — all token-driven, logical-property-first, with sm/md/lg/xl/2xl responsive variants."
   },
   "icons": {
     "title": "Icons",
-    "description": "Tabler Icons (MIT) \u2014 outline + filled, re-exported from @virtari-packages/react-icons. Searchable, copyable, with live size and stroke controls."
+    "description": "Tabler Icons (MIT) — outline + filled, re-exported from @virtari-packages/react-icons. Searchable, copyable, with live size and stroke controls."
   },
   "rtl": {
     "title": "RTL",
-    "description": "Right-to-left support and Vazirmatn typography \u2014 every component audited for logical properties and direction-aware animations."
+    "description": "Right-to-left support and Vazirmatn typography — every component audited for logical properties and direction-aware animations."
   },
   "layout": {
     "title": "Page Layout",
-    "description": "Section \u2192 Row \u2192 Col \u2014 semantic page-structure primitives tied to the Layout token system."
+    "description": "Section → Row → Col — semantic page-structure primitives tied to the Layout token system."
   },
   "header": {
     "title": "Header",
-    "description": "Three-row header primitive \u2014 top / main / bottom. Per-row sticky modes (always / smart / collapse), transparent, center, and coordinated offset stacking."
+    "description": "Three-row header primitive — top / main / bottom. Per-row sticky modes (always / smart / collapse), transparent, center, and coordinated offset stacking."
   },
   "nav": {
     "title": "Navigation",
-    "description": "One Nav, many shapes \u2014 sidebar, menubar, mega menu. W3C disclosure pattern, inline or popover submenus via Floating UI, auto aria-current, four variants."
+    "description": "One Nav, many shapes — sidebar, menubar, mega menu. W3C disclosure pattern, inline or popover submenus via Floating UI, auto aria-current, four variants."
   },
   "sidebar": {
     "title": "Sidebar",
-    "description": "App-chrome sidebar \u2014 full-height or below-header modes, rail collapse, controlled / uncontrolled state, context-wired trigger, and full RTL via logical properties."
+    "description": "App-chrome sidebar — full-height or below-header modes, rail collapse, controlled / uncontrolled state, context-wired trigger, and full RTL via logical properties."
   },
   "breadcrumb": {
     "title": "Breadcrumb",
@@ -215,67 +221,67 @@
   },
   "date-picker": {
     "title": "Date Picker",
-    "description": "Date, range, time, and calendar primitives \u2014 Persian, Islamic, Gregorian + full RTL."
+    "description": "Date, range, time, and calendar primitives — Persian, Islamic, Gregorian + full RTL."
   },
   "data-table": {
     "title": "Data Table",
-    "description": "Excel-like resize, virtualization (10k+ rows), pinning, grouping, inline edit, server-side \u2014 built on TanStack."
+    "description": "Excel-like resize, virtualization (10k+ rows), pinning, grouping, inline edit, server-side — built on TanStack."
   },
   "data-table-users": {
-    "title": "Users \u2014 Data Table showcase",
-    "description": "Production-grade users table \u2014 view switch, search, filter bar + drawer, customize columns, bulk actions, refresh, export, add \u2014 composed entirely from the design-system primitives."
+    "title": "Users — Data Table showcase",
+    "description": "Production-grade users table — view switch, search, filter bar + drawer, customize columns, bulk actions, refresh, export, add — composed entirely from the design-system primitives."
   },
   "data-table-products": {
-    "title": "Products \u2014 Data Table showcase",
-    "description": "Product catalog showcase \u2014 per-column filters, category grouping, bulk archive, customize columns, and table/board view modes."
+    "title": "Products — Data Table showcase",
+    "description": "Product catalog showcase — per-column filters, category grouping, bulk archive, customize columns, and table/board view modes."
   },
   "data-table-orders": {
-    "title": "Orders \u2014 Data Table showcase",
-    "description": "Server-side orders showcase \u2014 simulated latency, date-range filter drawer, grouping by status, bulk refund/cancel, and export."
+    "title": "Orders — Data Table showcase",
+    "description": "Server-side orders showcase — simulated latency, date-range filter drawer, grouping by status, bulk refund/cancel, and export."
   },
   "table": {
     "title": "Table",
-    "description": "Semantic HTML table \u2014 4 variants, 3 row styles, 3 sizes, density, sortable headers, sticky header/columns, selection, and full RTL."
+    "description": "Semantic HTML table — 4 variants, 3 row styles, 3 sizes, density, sortable headers, sticky header/columns, selection, and full RTL."
   },
   "flag": {
     "title": "Flag",
-    "description": "271 country flags vendored from flag-icons (MIT) \u2014 tree-shakable named components plus a dynamic <Flag code>. Includes sub-regions like gb-eng and es-ct."
+    "description": "271 country flags vendored from flag-icons (MIT) — tree-shakable named components plus a dynamic <Flag code>. Includes sub-regions like gb-eng and es-ct."
   },
   "phone-input": {
     "title": "Phone Input",
-    "description": "Tel input with country picker, dial-code prefix, format-as-you-type, Persian/Arabic digit normalization, full ARIA, and autofill hints \u2014 composed on top of <Input> + <Combobox>."
+    "description": "Tel input with country picker, dial-code prefix, format-as-you-type, Persian/Arabic digit normalization, full ARIA, and autofill hints — composed on top of <Input> + <Combobox>."
   },
   "language-picker": {
     "title": "Language Picker",
-    "description": "Locale selector with flag \u00b7 native \u00b7 English display. 240 languages with curated BCP-47 \u2192 flag mapping for accurate header switchers."
+    "description": "Locale selector with flag · native · English display. 240 languages with curated BCP-47 → flag mapping for accurate header switchers."
   },
   "bottom-nav": {
     "title": "Bottom Navigation",
-    "description": "Mobile-first tab bar \u2014 material / iOS / floating / underline variants, centre FAB, badges, safe-area insets, auto-hide on scroll, and an animated sliding indicator. All CSS-variable driven with full RTL."
+    "description": "Mobile-first tab bar — material / iOS / floating / underline variants, centre FAB, badges, safe-area insets, auto-hide on scroll, and an animated sliding indicator. All CSS-variable driven with full RTL."
   },
   "pagination": {
     "title": "Pagination",
-    "description": "Headless, controlled pagination \u2014 compound parts (Root / Info / PageSize / Prev / Pages / Next) with ellipsis windowing, three sizes, RTL-aware chevrons, and a drop-in adapter for DataTable."
+    "description": "Headless, controlled pagination — compound parts (Root / Info / PageSize / Prev / Pages / Next) with ellipsis windowing, three sizes, RTL-aware chevrons, and a drop-in adapter for DataTable."
   },
   "form": {
     "title": "Form",
-    "description": "react-hook-form + zod wrapper \u2014 Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage. Auto-wires id + aria-describedby + aria-invalid across any input in the system."
+    "description": "react-hook-form + zod wrapper — Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage. Auto-wires id + aria-describedby + aria-invalid across any input in the system."
   },
   "file-upload": {
     "title": "File Upload",
-    "description": "Compound dropzone + file list built on react-dropzone \u2014 drag/drop, click-to-browse, image previews with URL cleanup, per-item progress, validation (MIME / size / count), and Controller-friendly for react-form."
+    "description": "Compound dropzone + file list built on react-dropzone — drag/drop, click-to-browse, image previews with URL cleanup, per-item progress, validation (MIME / size / count), and Controller-friendly for react-form."
   },
   "command": {
     "title": "Command Palette",
-    "description": "cmdk wrapper \u2014 inline palette or Cmd+K dialog, grouped results, keyboard shortcuts rendered via Kbd, async search, and full RTL. Bundles the useHotkey hook from @virtari-packages/utils."
+    "description": "cmdk wrapper — inline palette or Cmd+K dialog, grouped results, keyboard shortcuts rendered via Kbd, async search, and full RTL. Bundles the useHotkey hook from @virtari-packages/utils."
   },
   "empty-state": {
     "title": "Empty State",
-    "description": "Zero-data messaging pattern \u2014 icon, title, description, and actions slots. Two orientations, three sizes, fully composable."
+    "description": "Zero-data messaging pattern — icon, title, description, and actions slots. Two orientations, three sizes, fully composable."
   },
   "fieldset": {
     "title": "Fieldset",
-    "description": "Semantic form section grouping \u2014 native fieldset + legend with token-driven border, invalid and disabled cascade states."
+    "description": "Semantic form section grouping — native fieldset + legend with token-driven border, invalid and disabled cascade states."
   },
   "stepper": {
     "title": "Stepper",
@@ -283,15 +289,15 @@
   },
   "timeline": {
     "title": "Timeline",
-    "description": "Sequential event display \u2014 compound indicator, connector, content, and time slots. Grid-based layout with RTL support."
+    "description": "Sequential event display — compound indicator, connector, content, and time slots. Grid-based layout with RTL support."
   },
   "flow": {
     "title": "React Flow",
-    "description": "Workflow builder primitives \u2014 token-aware React Flow surface, custom node shell, layered layout helpers, labeled edges, and save/restore utilities."
+    "description": "Workflow builder primitives — token-aware React Flow surface, custom node shell, layered layout helpers, labeled edges, and save/restore utilities."
   },
   "tag-input": {
     "title": "Tag Input",
-    "description": "Multi-value text input \u2014 Enter or comma to add, Backspace to remove, max-tags limit, custom validation, and chip rendering."
+    "description": "Multi-value text input — Enter or comma to add, Backspace to remove, max-tags limit, custom validation, and chip rendering."
   },
   "guidelines": {
     "title": "Design guidelines",

@@ -191,7 +191,7 @@ for (const p of packages) {
   }
   const exampleLinks = primaryPages.map(s => {const dest=`examples/${path.posix.basename(s)}.md`; emit(`${dir}/references/${dest}`,`# Original documentation page\n\nSource ID: \`${s}\`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.\n\n${fence(sources[s],'tsx')}\n`); return `- [${path.posix.basename(s)}](${dest})`;});
   emit(`${dir}/references/examples.md`,`# Existing examples\n\n${exampleLinks.join('\n') || 'No dedicated page matches this package. Use the catalog-linked examples below and retrieve their full source via MCP or the repository.'}\n\nAll documentation sections importing this package (some demonstrate another package):\n\n${bullet(examples.filter(e=>e.packageIds.includes(p.id)).map(e=>`\`${e.id}\` — ${e.title}; source \`${e.sourceId}\` lines ${e.startLine}–${e.endLine}.`))}\n\nMCP: \`get_record({collection:"examples",id:"<example ID>"})\`; then \`read_source\` for full page context. A section fragment may reference imports, state, helper components, assets, docs CSS or shared page scaffolding.\n`);
-  const designDocs=['docs/design-language.md','docs/surface-styles.md','docs/nested-surfaces.md','docs/radius-audit.md'].filter(exists);
+  const designDocs=['docs/design-language.md','docs/surface-styles.md','docs/nested-surfaces.md','docs/radius-audit.md','docs/component-quality.md'].filter(exists);
   emit(`${dir}/references/design.md`,`# Shared design contracts\n\nRead only the contract relevant to your change:\n\n${designDocs.map(s=>`- [${path.posix.basename(s)}](${path.posix.basename(s)})`).join('\n')}\n`);
   for(const s of designDocs) emit(`${dir}/references/${path.posix.basename(s)}`,read(s));
 }

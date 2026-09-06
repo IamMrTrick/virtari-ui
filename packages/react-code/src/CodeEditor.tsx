@@ -1,20 +1,25 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref } from "react";
+import { useMemo, useRef, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref } from "react";
 import CodeMirror, { type ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { EditorState, type Extension } from "@codemirror/state";
-import type { LanguageSupport } from "@codemirror/language";
 import { indentUnit } from "@codemirror/language";
 import { cn } from "@virtari-packages/utils";
 import { CopyButton } from "@virtari-packages/react-copy-button";
 
 import { vdsCodeTheme } from "./theme";
-import { resolveLanguage, type CodeLanguage } from "./languages";
+import type { CodeLanguage } from "./languages";
+import { useCodeLanguage } from "./useCodeLanguage";
 import { autoGrowTheme } from "./extensions";
 import type { CodeBlockSize, CodeBlockVariant } from "./CodeBlock";
 
 export interface CodeEditorProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "onChange"> {
   /** Controlled code value. */
   value: string;
+  /** Accessible name applied to the editable source, not only its wrapper. */
+  editorLabel?: string;
+  copyLabel?: string;
+  copiedLabel?: string;
+  copyErrorLabel?: string;
   /** Called on every keystroke with the new value. */
   onValueChange: (next: string) => void;
   /** Language id. Lazy-loaded if not preloaded. */
@@ -56,6 +61,10 @@ export interface CodeEditorProps extends Omit<HTMLAttributes<HTMLDivElement>, "c
 
 export function CodeEditor({
   value,
+  editorLabel,
+  copyLabel,
+  copiedLabel,
+  copyErrorLabel,
   onValueChange,
   language = "plaintext",
   placeholder,
@@ -80,34 +89,13 @@ export function CodeEditor({
   ...props
 }: CodeEditorProps) {
   const cmRef = useRef<ReactCodeMirrorRef>(null);
-  const [resolvedLang, setResolvedLang] = useState<LanguageSupport | LanguageSupport[] | null>(() => {
-    const initial = resolveLanguage(language);
-    return initial && !(initial instanceof Promise) ? initial : null;
-  });
-
-  /* Resolve lazy language grammars. */
-  useEffect(() => {
-    const result = resolveLanguage(language);
-    if (!result) {
-      setResolvedLang(null);
-      return;
-    }
-    if (result instanceof Promise) {
-      let cancelled = false;
-      result.then((lang) => {
-        if (!cancelled) setResolvedLang(lang ?? null);
-      });
-      return () => {
-        cancelled = true;
-      };
-    }
-    setResolvedLang(result);
-  }, [language]);
+  const resolvedLang = useCodeLanguage(language);
 
   /* Build extension list. */
   const extensions = useMemo<Extension[]>(() => {
     const list: Extension[] = [
       vdsCodeTheme,
+      EditorView.contentAttributes.of({ "aria-label": editorLabel ?? props["aria-label"] ?? filename ?? "Code editor", dir: "ltr" }),
       EditorState.tabSize.of(tabSize),
       indentUnit.of(insertSpaces ? " ".repeat(tabSize) : "\t"),
     ];
@@ -121,7 +109,7 @@ export function CodeEditor({
     if (resolvedLang) list.push(...(Array.isArray(resolvedLang) ? resolvedLang : [resolvedLang]));
     if (userExtensions && userExtensions.length > 0) list.push(...userExtensions);
     return list;
-  }, [tabSize, insertSpaces, wrap, readOnly, minLines, maxLines, resolvedLang, userExtensions]);
+  }, [tabSize, insertSpaces, wrap, readOnly, minLines, maxLines, resolvedLang, userExtensions, editorLabel, filename, props["aria-label"]]);
 
   const showHeader = Boolean(filename) || copyable;
   const wrapperStyle: CSSProperties | undefined = style;
@@ -149,7 +137,7 @@ export function CodeEditor({
           </div>
           {copyable && (
             <div className="vds-code-header-actions">
-              <CopyButton text={value} variant="ghost" copyButtonSize="2xs" />
+              <CopyButton text={value} variant="ghost" copyButtonSize="xs" copyLabel={copyLabel} copiedLabel={copiedLabel} errorLabel={copyErrorLabel} />
             </div>
           )}
         </div>

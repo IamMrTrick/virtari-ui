@@ -76,6 +76,14 @@
       cursor: not-allowed;
     }
 
+    @media (forced-colors: active) {
+      forced-color-adjust: none;
+      background-color: Canvas;
+      border-color: ButtonText;
+      &[data-state="checked"] { background-color: Highlight; border-color: Highlight; }
+      &:disabled { border-color: GrayText; }
+    }
+
     /* ── Sizes ── */
 
     &[data-size="sm"] {
@@ -110,6 +118,14 @@
     transition: translate var(--vds-duration-normal) var(--vds-ease-spring);
     translate: var(--_switch-thumb-translate) -50%;
     pointer-events: none;
+
+    @media (prefers-reduced-motion: reduce) { transition: none; }
+    @media (forced-colors: active) {
+      background-color: ButtonText;
+      box-shadow: none;
+      .vds-switch[data-state="checked"] > & { background-color: HighlightText; }
+      .vds-switch:disabled > & { background-color: GrayText; }
+    }
 
     .vds-switch[data-state="checked"] > & {
       translate: var(--_switch-thumb-checked-translate) -50%;

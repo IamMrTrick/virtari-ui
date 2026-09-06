@@ -21,6 +21,7 @@ Use the existing package and its composition API. Verify the installed version a
 - Use leftSection and rightSection for controlled icon spacing. dot replaces leftSection; onRemove replaces rightSection. dotOnly suppresses label and both sections.
 - Use shape=pill for the badge role or shape=square for the navigation-item radius role. Square does not mean a guaranteed zero radius; it follows the active theme.
 - Give removable badges a contextual, localized removeLabel. The remove button stops click propagation before invoking onRemove. Provide an accessible name or adjacent explanation for meaningful dot-only status.
+- Long badge text wraps and section icons retain their geometry. asChild retains the supplied element even in dotOnly mode and honors its prevented click; use an actual button or link for keyboard interaction.
 
 ## Known limits and mistakes to avoid
 

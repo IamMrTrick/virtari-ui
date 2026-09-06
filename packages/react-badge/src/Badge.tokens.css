@@ -171,7 +171,7 @@
 
   /* =========================================================================
    * 4. Sizes — redefine layout-only tokens.
-   *    4 slots: xs(18) · sm(20) · md(22) · lg(26). md is the default.
+   *    4 minimum heights: xs(20) · sm(20) · md(24) · lg(28). md is the default.
    * ========================================================================= */
 
   .vds-badge[data-size="xs"] {
@@ -192,7 +192,7 @@
     --badge-dot-size:       0.3125rem;
   }
 
-  /* md — default, inherits base tokens (22px) */
+  /* md — default, inherits base tokens (24px) */
 
   .vds-badge[data-size="lg"] {
     --badge-height:         1.75rem; /* 28px */

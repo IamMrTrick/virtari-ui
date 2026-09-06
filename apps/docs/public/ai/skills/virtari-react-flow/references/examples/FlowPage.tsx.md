@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/FlowPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import {
   IconBrain,
   IconDeviceFloppy,
@@ -790,12 +791,12 @@ import "@virtari-packages/react-flow/styles";`,
           <div style={heroCopyStyle}>
             <h3 style={heroTitleStyle}>What ships in the package</h3>
             <ul style={listStyle}>
-              <li>Token-aware <code>FlowCanvas</code> wrapper with sensible defaults for grid, markers, zoom bounds, and controls.</li>
+              <li>Token-aware <VirtariInlineCode>FlowCanvas</VirtariInlineCode> wrapper with sensible defaults for grid, markers, zoom bounds, and controls.</li>
               <li>Reusable node primitives so app teams can compose real custom nodes with Virtari buttons, badges, inputs, and stats.</li>
               <li>Labeled edges, deterministic layered layout, and a persistence hook for save/restore without custom glue code.</li>
             </ul>
           </div>
-          <pre className="docs-code" style={heroCodeStyle}>{nodeShellCode}</pre>
+          <VirtariCodeBlock renderer="static" language="tsx" code={nodeShellCode} />
         </div>
       </Section>
 

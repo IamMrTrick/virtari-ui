@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/PopoverPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Popover, PopoverTrigger, PopoverContent } from "@virtari-packages/react-popover";
 import { Button } from "@virtari-packages/react-button";
 import { Section, Row } from "../components";
@@ -60,7 +61,7 @@ export function PopoverPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Popover, PopoverTrigger, PopoverContent } from "@virtari-packages/react-popover";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Popover, PopoverTrigger, PopoverContent } from "@virtari-packages/react-popover";
 
 <Popover>
   <PopoverTrigger asChild>
@@ -69,7 +70,7 @@ export function PopoverPage() {
   <PopoverContent side="bottom">
     <p>Popover content here</p>
   </PopoverContent>
-</Popover>`}</pre>
+</Popover>`} />
       </Section>
     </>
   );

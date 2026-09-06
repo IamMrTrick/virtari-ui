@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/PaginationPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useMemo, useState } from "react";
 import {
   Pagination,
@@ -97,7 +98,7 @@ export function PaginationPage() {
             onPageChange={setP2}
             onPageSizeChange={setPs2}
           />
-          <pre className="docs-code">{JSON.stringify({ page: p2, pageSize: ps2 }, null, 2)}</pre>
+          <VirtariCodeBlock renderer="static" language="json" code={JSON.stringify({ page: p2, pageSize: ps2 }, null, 2)} />
         </Stack>
       </Section>
 
@@ -158,12 +159,12 @@ export function PaginationPage() {
         description="When paginating a DataTable, use <DataTable.Pagination /> — it reads TanStack state out of DataTable context and renders this package under the hood. See the Data Table page for a live example."
       >
         <p style={{ margin: 0, color: "var(--vds-color-text-muted, #6b7280)" }}>
-          Import <code>DataTablePagination</code> from <code>@virtari-packages/react-data-table</code>, or use the namespace form <code>&lt;DataTable.Pagination /&gt;</code>.
+          Import <VirtariInlineCode>DataTablePagination</VirtariInlineCode> from <VirtariInlineCode>@virtari-packages/react-data-table</VirtariInlineCode>, or use the namespace form <VirtariInlineCode>&lt;DataTable.Pagination /&gt;</VirtariInlineCode>.
         </p>
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Pagination } from "@virtari-packages/react-pagination";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Pagination } from "@virtari-packages/react-pagination";
 import "@virtari-packages/react-pagination/styles";
 
 function MyList() {
@@ -188,7 +189,7 @@ function MyList() {
   <Pagination.Prev />
   <Pagination.Pages />
   <Pagination.Next />
-</Pagination.Root>`}</pre>
+</Pagination.Root>`} />
       </Section>
     </>
   );

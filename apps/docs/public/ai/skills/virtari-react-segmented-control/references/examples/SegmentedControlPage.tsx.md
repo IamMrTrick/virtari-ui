@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/SegmentedControlPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import { SegmentedControl, SegmentedControlItem } from "@virtari-packages/react-segmented-control";
 import "@virtari-packages/react-segmented-control/styles";
@@ -12,13 +13,13 @@ import { Section, Row } from "../components";
 export function SegmentedControlPage() {
   const [view, setView] = useState("list");
   const [period, setPeriod] = useState("week");
-  const [size, setSize] = useState("md");
+
 
   return (
     <>
       <Section title="Default" description="Pick one option from a grouped set.">
         <Row>
-          <SegmentedControl value={view} onValueChange={setView}>
+          <SegmentedControl aria-label="View preference" value={view} onValueChange={setView}>
             <SegmentedControlItem value="list">List</SegmentedControlItem>
             <SegmentedControlItem value="grid">Grid</SegmentedControlItem>
             <SegmentedControlItem value="board">Board</SegmentedControlItem>
@@ -33,7 +34,7 @@ export function SegmentedControlPage() {
         {(["sm", "md", "lg"] as const).map((s) => (
           <Row key={s} style={{ alignItems: "center" }}>
             <span style={{ fontSize: "var(--vds-text-xs)", color: "var(--vds-color-text-muted)", minWidth: "2rem" }}>{s}</span>
-            <SegmentedControl value={period} onValueChange={setPeriod} size={s}>
+            <SegmentedControl aria-label="Reporting period" value={period} onValueChange={setPeriod} size={s}>
               <SegmentedControlItem value="day">Day</SegmentedControlItem>
               <SegmentedControlItem value="week">Week</SegmentedControlItem>
               <SegmentedControlItem value="month">Month</SegmentedControlItem>
@@ -43,8 +44,8 @@ export function SegmentedControlPage() {
         ))}
       </Section>
 
-      <Section title="Full width" description="Expands to fill parent via fullWidth.">
-        <SegmentedControl value={view} onValueChange={setView} fullWidth>
+      <Section title="Full width" description="Items share the available width. Long labels wrap and the track grows to fit.">
+        <SegmentedControl aria-label="View preference" value={view} onValueChange={setView} fullWidth>
           <SegmentedControlItem value="list">List</SegmentedControlItem>
           <SegmentedControlItem value="grid">Grid</SegmentedControlItem>
           <SegmentedControlItem value="board">Board</SegmentedControlItem>
@@ -53,7 +54,7 @@ export function SegmentedControlPage() {
 
       <Section title="With icons" description="Leading icon before label text.">
         <Row>
-          <SegmentedControl value={view} onValueChange={setView}>
+          <SegmentedControl aria-label="View preference" value={view} onValueChange={setView}>
             <SegmentedControlItem value="list" icon={
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
             }>List</SegmentedControlItem>
@@ -67,14 +68,23 @@ export function SegmentedControlPage() {
         </Row>
       </Section>
 
+      <Section title="Long labels" description="Full-width labels wrap inside a narrow container. Direction follows the surrounding language.">
+        <div style={{ maxInlineSize: "24rem" }} dir="rtl">
+          <SegmentedControl aria-label="بازه گزارش" defaultValue="recent" fullWidth>
+            <SegmentedControlItem value="recent">گزارش‌های اخیر</SegmentedControlItem>
+            <SegmentedControlItem value="all">همه گزارش‌های سالانه</SegmentedControlItem>
+          </SegmentedControl>
+        </div>
+      </Section>
+
       <Section title="Disabled" description="Entire control or individual items.">
         <Row>
-          <SegmentedControl value="week" onValueChange={() => {}} disabled>
+          <SegmentedControl aria-label="Reporting period" defaultValue="week" disabled>
             <SegmentedControlItem value="day">Day</SegmentedControlItem>
             <SegmentedControlItem value="week">Week</SegmentedControlItem>
             <SegmentedControlItem value="month">Month</SegmentedControlItem>
           </SegmentedControl>
-          <SegmentedControl value="week" onValueChange={() => {}}>
+          <SegmentedControl aria-label="Reporting period" defaultValue="week">
             <SegmentedControlItem value="day" disabled>Day</SegmentedControlItem>
             <SegmentedControlItem value="week">Week</SegmentedControlItem>
             <SegmentedControlItem value="month">Month</SegmentedControlItem>
@@ -83,16 +93,16 @@ export function SegmentedControlPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { SegmentedControl, SegmentedControlItem } from "@virtari-packages/react-segmented-control";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { SegmentedControl, SegmentedControlItem } from "@virtari-packages/react-segmented-control";
 import "@virtari-packages/react-segmented-control/styles";
 
 const [view, setView] = useState("list");
 
-<SegmentedControl value={view} onValueChange={setView} size="md">
+<SegmentedControl aria-label="View preference" value={view} onValueChange={setView} size="md">
   <SegmentedControlItem value="list">List</SegmentedControlItem>
   <SegmentedControlItem value="grid">Grid</SegmentedControlItem>
   <SegmentedControlItem value="board">Board</SegmentedControlItem>
-</SegmentedControl>`}</pre>
+</SegmentedControl>`} />
       </Section>
     </>
   );

@@ -18,14 +18,15 @@ Use the existing package and its composition API. Verify the installed version a
 ## Integration rules
 
 - Checkbox uses checked/defaultChecked/onCheckedChange from the checkbox primitive, including indeterminate state. Use CheckboxField for label/description or CheckboxCard for row/icon-grid selectable cards.
-- CheckboxGroup supplies group label, description, error, required indication and orientation. Descendants inherit disabled/error; each checkbox still owns its selection state and should receive its own submission name/value explicitly.
+- CheckboxGroup supplies group label, description, error, required indication and orientation. Descendants inherit disabled/error/name, with item overrides; each checkbox owns its selection state and should receive a distinct submission value.
 - Use PillCheckbox with PillCheckboxItem for multiple independent pill choices. State belongs on each item, not a root value array. Provide an accessible name for the group and each choice.
 - Checkbox and pill sizes are sm/md/lg. Keep indicator geometry and radii in the shared tokens rather than replacing the checkbox with a styled div.
+- Fields/cards associate supplementary text as descriptions and preserve consumer names. Pills wrap long text and display selection marks. Native uncontrolled reset respects cancellation and explicit external form association.
 
 ## Known limits and mistakes to avoid
 
 - CheckboxGroup.required is group ARIA/visual guidance, not an at-least-one selection validator. Implement that rule explicitly and show the group error.
-- The group's name is stored in context but current Checkbox/PillCheckboxItem do not consume it. Pass name directly to items for native submission.
+- Bare checkbox indicators are compact; use their labeled field/card compositions or adequate surrounding target spacing instead of assuming the small visible square supplies a large touch target.
 - Use a checkbox for independent choices; an exclusive set belongs in RadioGroup, and an immediate on/off setting may belong in Switch.
 
 Related package IDs: `react-fieldset`, `react-form`, `react-radio-group`, `react-switch`, `tokens`. Discover their focused skills from the catalog; do not load all packages at once.

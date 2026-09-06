@@ -48,6 +48,7 @@ export interface ComboboxContextValue {
 
   /* data */
   filteredItems: ComboboxItemData[];
+  setItemDisabled: (value: string, disabled: boolean) => void;
   selectedItems: ComboboxItemData[];
 
   /* selection */
@@ -81,7 +82,7 @@ export interface ComboboxContextValue {
   getItemId: (index: number) => string;
 
   /* keyboard */
-  handleInputKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+  handleInputKeyDown: (e: KeyboardEvent<HTMLElement>) => void;
 }
 
 const ComboboxContext = createContext<ComboboxContextValue | null>(null);
@@ -193,11 +194,21 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
   }, [searchQuery, externalSearch, onSearchChange]);
 
   /* ── filtered items ── */
+  const [disabledItems, setDisabledItems] = useState<Set<string>>(() => new Set());
+  const setItemDisabled = useCallback((value: string, itemDisabled: boolean) => {
+    setDisabledItems((current) => {
+      if (current.has(value) === itemDisabled) return current;
+      const next = new Set(current);
+      if (itemDisabled) next.add(value); else next.delete(value);
+      return next;
+    });
+  }, []);
   const filteredItems = useMemo<ComboboxItemData[]>(() => {
-    if (externalSearch || !searchable || !searchQuery) return items;
+    const resolvedItems = items.map((item) => disabledItems.has(item.value) ? { ...item, disabled: true } : item);
+    if (externalSearch || !searchable || !searchQuery) return resolvedItems;
     const fn = (filter ?? defaultFilter) as ComboboxFilter;
-    return items.filter((it) => fn(it, searchQuery));
-  }, [items, searchQuery, searchable, externalSearch, filter]);
+    return resolvedItems.filter((it) => fn(it, searchQuery));
+  }, [items, searchQuery, searchable, externalSearch, filter, disabledItems]);
 
   /* ── selection helpers ── */
   const valueArr = useMemo(
@@ -209,6 +220,7 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
 
   const toggleValue = useCallback(
     (v: string) => {
+      if (disabled || disabledItems.has(v) || items.find((item) => item.value === v)?.disabled) return;
       if (multiple) {
         const next = valueArr.includes(v)
           ? valueArr.filter((x) => x !== v)
@@ -220,7 +232,7 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
         setSearchQuery("");
       }
     },
-    [multiple, valueArr, commitValue, setOpen],
+    [multiple, valueArr, commitValue, setOpen, disabled, items, disabledItems],
   );
 
   const removeValue = useCallback(
@@ -250,10 +262,10 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
   useEffect(() => {
     setHighlightedIndex((i) => {
       if (filteredItems.length === 0) return -1;
-      if (i < 0 || i >= filteredItems.length) return 0;
+      if (i < 0 || i >= filteredItems.length || filteredItems[i]?.disabled) return firstEnabled(filteredItems, 0, 1);
       return i;
     });
-  }, [filteredItems.length]);
+  }, [filteredItems]);
 
   /* When opening, highlight first selected item (if any) else first */
   useEffect(() => {
@@ -262,8 +274,8 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
       setHighlightedIndex(-1);
       return;
     }
-    const firstSelected = filteredItems.findIndex((it) => valueArr.includes(it.value));
-    setHighlightedIndex(firstSelected >= 0 ? firstSelected : 0);
+    const firstSelected = filteredItems.findIndex((it) => !it.disabled && valueArr.includes(it.value));
+    setHighlightedIndex(firstSelected >= 0 ? firstSelected : firstEnabled(filteredItems, 0, 1));
     // Intentional: only run on open transition
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -295,7 +307,7 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
 
   /* ── keyboard ── */
   const handleInputKeyDown = useCallback(
-    (e: KeyboardEvent<HTMLInputElement>) => {
+    (e: KeyboardEvent<HTMLElement>) => {
       if (e.defaultPrevented || e.nativeEvent.isComposing || disabled) return;
       switch (e.key) {
         case "ArrowDown":
@@ -382,6 +394,7 @@ export function useCombobox<T extends ComboboxItemData = ComboboxItemData>(
     emptyMessage,
 
     filteredItems,
+    setItemDisabled,
     selectedItems,
 
     value,
@@ -423,5 +436,5 @@ function firstEnabled(items: ComboboxItemData[], from: number, dir: 1 | -1): num
     if (!items[i]?.disabled) return i;
     i = (i + dir + count) % count;
   }
-  return from;
+  return -1;
 }

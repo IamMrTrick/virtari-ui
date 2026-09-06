@@ -40,7 +40,8 @@
         "Use color for primary/success/warning/danger/info/accent/neutral intent and variant for soft/solid/outline/subtle/soft-outline appearance. Default is primary soft at size md; sizes are xs/sm/md/lg.",
         "Use leftSection and rightSection for controlled icon spacing. dot replaces leftSection; onRemove replaces rightSection. dotOnly suppresses label and both sections.",
         "Use shape=pill for the badge role or shape=square for the navigation-item radius role. Square does not mean a guaranteed zero radius; it follows the active theme.",
-        "Give removable badges a contextual, localized removeLabel. The remove button stops click propagation before invoking onRemove. Provide an accessible name or adjacent explanation for meaningful dot-only status."
+        "Give removable badges a contextual, localized removeLabel. The remove button stops click propagation before invoking onRemove. Provide an accessible name or adjacent explanation for meaningful dot-only status.",
+        "Long badge text wraps and section icons retain their geometry. asChild retains the supplied element even in dotOnly mode and honors its prevented click; use an actual button or link for keyboard interaction."
       ],
       "pitfalls": [
         "Deprecated variants default/secondary map to neutral soft, and destructive maps to danger soft; use the explicit current color and variant API.",
@@ -56,7 +57,8 @@
         "Compose CardHeader, CardTitle, CardDescription, CardContent and CardFooter. The root is the surface shell; use section slots for padding rather than adding duplicate root padding.",
         "Choose surface/outline/soft/ghost variants and sm/md/lg sizes. Defaults are surface and md. Surface styling and geometry follow shared tokens and the active surface/radius theme.",
         "Use Card for nested cards. It measures the nearest ancestor .vds-card and the actual inset, observes relevant geometry/theme changes, and computes a child radius capped by its parent with a small-radius floor.",
-        "CardTitle is h3. Keep semantic heading order correct in the surrounding page. Use links or buttons within the card for actions."
+        "CardTitle is h3. Keep semantic heading order correct in the surrounding page. Use links or buttons within the card for actions.",
+        "Long body identifiers can wrap within narrow cards. Interactive hover movement respects reduced motion; decorative interactivity does not add action semantics."
       ],
       "pitfalls": [
         "interactive changes presentation only; Card remains a div without automatic keyboard activation, navigation, role or tab stop.",
@@ -85,10 +87,10 @@
       "category": "display",
       "description": "Render inline code, read-only code blocks and controlled CodeMirror editors with Virtari styling.",
       "guidance": [
-        "Use InlineCode for short code within prose, CodeBlock code=string for read-only examples, and CodeEditor value/onValueChange for editable code. CodeEditor is controlled and its ref points to the wrapper div.",
+        "Use InlineCode for short code within prose, CodeBlock code=string renderer=static for lightweight read-only examples, and CodeEditor value/onValueChange for editable code. CodeBlock retains renderer=editor as its compatible default and virtualizes very large files; static renders the full source as semantic pre/code without an EditorView. CodeEditor is controlled and its ref points to the wrapper div.",
         "CodeBlock and CodeEditor share card/minimal/embedded variants and sm/md/lg sizes. Use embedded for a flush region with no radius; card and minimal follow the code radius contract.",
         "CodeBlock highlightLines uses one-based line numbers; diff=unified colors lines beginning with plus or minus without computing a diff. wrap controls long-line wrapping; maxHeight accepts pixels as a number or a CSS string.",
-        "For CodeEditor use minLines/maxLines, tabSize and insertSpaces for editing geometry; append CodeMirror extensions via extensions when needed. Wrapper HTML attributes are not automatically attributes of the internal editor; provide internal labeling through an EditorView.contentAttributes extension when necessary.",
+        "For CodeEditor use minLines/maxLines, tabSize and insertSpaces for editing geometry; append CodeMirror extensions via extensions when needed. editorLabel labels the editable source; CodeBlock codeLabel names its focusable source region. Both expose copyLabel/copiedLabel/copyErrorLabel for localized clipboard feedback. Code.css includes the copy control styles.",
         "Read KNOWN_LANGUAGES and resolveLanguage for actual language support. Unknown languages render as plain text; bash/shell/sh currently resolve to empty extensions. CodeBlock copyable defaults true and copies the original code string."
       ],
       "pitfalls": [

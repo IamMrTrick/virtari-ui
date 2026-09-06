@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useEffect, useMemo, useState } from "react";
 import { Avatar } from "@virtari-packages/react-avatar";
 import { Badge } from "@virtari-packages/react-badge";
@@ -199,10 +200,12 @@ function DemoDrawer({
   description = "Drag the handle or dismiss with Cancel.",
   body,
   scaleBackground = true,
+  dismissible = true,
   ...drawerProps
 }: DemoDrawerProps) {
+  const [open, setOpen] = useState(false);
   return (
-    <Drawer scaleBackground={scaleBackground} {...drawerProps}>
+    <Drawer open={open} onOpenChange={setOpen} dismissible={dismissible} scaleBackground={scaleBackground} {...drawerProps}>
       <DrawerTrigger asChild>
         <Button variant="outline">{label}</Button>
       </DrawerTrigger>
@@ -221,12 +224,10 @@ function DemoDrawer({
           )}
         </DrawerBody>
         <DrawerFooter>
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-          <DrawerClose asChild>
-            <Button>Done</Button>
-          </DrawerClose>
+          {dismissible ? <>
+            <DrawerClose asChild><Button variant="outline">Cancel</Button></DrawerClose>
+            <DrawerClose asChild><Button>Done</Button></DrawerClose>
+          </> : <Button onClick={() => setOpen(false)}>Done</Button>}
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
@@ -1281,9 +1282,7 @@ function Playground() {
         </DrawerContent>
       </Drawer>
 
-      <pre className="docs-code">
-        {buildPlaygroundCode({ direction, sizeMode, indicator, headerVariant })}
-      </pre>
+      <VirtariCodeBlock renderer="static" language="tsx" code={buildPlaygroundCode({ direction, sizeMode, indicator, headerVariant })} />
     </>
   );
 }
@@ -1291,6 +1290,8 @@ function Playground() {
 /* ─────────────────────────────── Page ─────────────────────────────── */
 
 export function DrawerPage() {
+  const [stage, setStage] = useState<string | null>("comfortable");
+  const [lane, setLane] = useState<string | null>("full");
   return (
     <>
       <Section
@@ -1349,7 +1350,7 @@ export function DrawerPage() {
         title="Anatomy"
         description="A drawer is a composition of named parts. Use them in this order."
       >
-        <pre className="docs-code">{`<Drawer>                   // root — owns state, direction, size, snaps
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Drawer>                   // root — owns state, direction, size, snaps
   <DrawerTrigger />        // opens the drawer (asChild recommended)
   <DrawerContent>          // the sliding panel (portalled, focus-trapped)
     <DrawerHeader>         // top region — title + handle
@@ -1361,18 +1362,18 @@ export function DrawerPage() {
     <DrawerFooter />       // sticky action bar (auto-margin pushes to bottom)
     <DrawerClose />        // closes the drawer (place anywhere)
   </DrawerContent>
-</Drawer>`}</pre>
+</Drawer>`} />
         <p className="docs-prose">
-          <strong>Why these parts?</strong> <code>DrawerBody</code> scrolls, which
+          <strong>Why these parts?</strong> <VirtariInlineCode>DrawerBody</VirtariInlineCode> scrolls, which
           keeps the header and footer visually pinned while the middle region grows
-          or shrinks to fit. <code>DrawerHandle</code> is a drag target on touch
+          or shrinks to fit. <VirtariInlineCode>DrawerHandle</VirtariInlineCode> is a drag target on touch
           devices — keep it inside the header for the familiar bottom-sheet look,
-          or set <code>indicator="outside"</code> for a floating pill.
+          or set <VirtariInlineCode>indicator="outside"</VirtariInlineCode> for a floating pill.
         </p>
         <p className="docs-prose">
           <strong>Recommended shell:</strong> for desktop side-panels, prefer
-          <code>direction="left" | "right"</code> with
-          <code>indicator="hidden"</code>, and keep a separated header + footer so
+          <VirtariInlineCode>direction="left" | "right"</VirtariInlineCode> with
+          <VirtariInlineCode>indicator="hidden"</VirtariInlineCode>, and keep a separated header + footer so
           the drawer reads like an app panel instead of a plain sheet.
         </p>
       </Section>
@@ -1387,12 +1388,12 @@ export function DrawerPage() {
           <EditProfileDrawer />
         </Row>
         <p className="docs-prose">
-          The responsive direction comes from a tiny <code>useMediaQuery</code>
-          hook. Swap <code>direction</code> and <code>sizeMode</code> based on the
-          breakpoint, and pass <code>openStates</code> only on mobile so the user
+          The responsive direction comes from a tiny <VirtariInlineCode>useMediaQuery</VirtariInlineCode>
+          hook. Swap <VirtariInlineCode>direction</VirtariInlineCode> and <VirtariInlineCode>sizeMode</VirtariInlineCode> based on the
+          breakpoint, and pass <VirtariInlineCode>openStates</VirtariInlineCode> only on mobile so the user
           can peek the form before committing to full height.
         </p>
-        <pre className="docs-code">{`const isDesktop = useMediaQuery("(min-width: 768px)");
+        <VirtariCodeBlock renderer="static" language="tsx" code={`const isDesktop = useMediaQuery("(min-width: 768px)");
 
 <Drawer
   direction={isDesktop ? "right" : "bottom"}
@@ -1404,7 +1405,7 @@ export function DrawerPage() {
   ]}
 >
   {/* ... */}
-</Drawer>`}</pre>
+</Drawer>`} />
       </Section>
 
       <Section
@@ -1529,7 +1530,8 @@ export function DrawerPage() {
             { id: "comfortable", size: 0.7, label: "Comfortable" },
             { id: "full", size: 1, label: "Full" },
           ]}
-          defaultOpenState="comfortable"
+          activeOpenState={stage}
+          onActiveOpenStateChange={setStage}
           scaleBackground
         >
           <DrawerTrigger asChild>
@@ -1537,18 +1539,23 @@ export function DrawerPage() {
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--vds-space-2)" }}>
+                {["peek", "comfortable", "full"].map((id) => (
+                  <Button key={id} size="sm" variant="outline" aria-pressed={stage === id} onClick={() => setStage(id)}>{id}</Button>
+                ))}
+              </div>
               <DrawerHandle />
               <DrawerTitle>Three stages</DrawerTitle>
               <DrawerDescription>
-                Drag or flick the handle — the drawer snaps to the nearest stage.
+                Drag the handle or choose a stage using the buttons.
               </DrawerDescription>
             </DrawerHeader>
             <DrawerBody>
               <p className="docs-prose">
-                Each stage has an <code>id</code> and a <code>size</code> — a ratio
-                between 0 and 1 for relative sizing, or an absolute number/string
-                for explicit sizing. Control the current stage via{" "}
-                <code>activeOpenState</code> + <code>onActiveOpenStateChange</code>.
+                Each stage has an <VirtariInlineCode>id</VirtariInlineCode> and a <VirtariInlineCode>size</VirtariInlineCode> — a ratio
+                between 0 and 1 relative to the measured drawer size, or a number
+                greater than 1 for pixels. Control the current stage via{" "}
+                <VirtariInlineCode>activeOpenState</VirtariInlineCode> + <VirtariInlineCode>onActiveOpenStateChange</VirtariInlineCode>.
               </p>
             </DrawerBody>
           </DrawerContent>
@@ -1565,6 +1572,9 @@ export function DrawerPage() {
             { id: "full", size: 1, label: "Full" },
           ]}
           minimizedState={{ id: "minimized", size: 72, label: "Minimized" }}
+          activeOpenState={lane}
+          onActiveOpenStateChange={setLane}
+          indicator="hidden"
           scaleBackground
         >
           <DrawerTrigger asChild>
@@ -1573,6 +1583,9 @@ export function DrawerPage() {
           <DrawerContent>
             <DrawerHeader>
               <DrawerHandle />
+              <Button size="sm" variant="outline" onClick={() => setLane(lane === "minimized" ? "full" : "minimized")}>
+                {lane === "minimized" ? "Expand drawer" : "Minimize drawer"}
+              </Button>
               <DrawerTitle>Three lanes</DrawerTitle>
               <DrawerDescription>
                 minimized → open states → closed. Drag down past peek to minimize.
@@ -1581,7 +1594,7 @@ export function DrawerPage() {
             <DrawerBody>
               <p className="docs-prose">
                 While minimized the drawer becomes non-modal so the page behind is
-                interactive. Tap the minimized bar to expand back to an open state.
+                interactive. Use Expand drawer to return to the full state.
               </p>
             </DrawerBody>
           </DrawerContent>
@@ -1625,7 +1638,7 @@ export function DrawerPage() {
         <p className="docs-prose">
           <strong>Progress indicator</strong> is a drag-aware variant: as the
           user pulls the drawer past its smallest resting stage toward the{" "}
-          <code>closeThreshold</code>, the handle bar fills from the center
+          <VirtariInlineCode>closeThreshold</VirtariInlineCode>, the handle bar fills from the center
           outward. When it's fully saturated, releasing dismisses the drawer.
           Use it for confirmation-heavy drawers (checkout, destructive flows)
           where the user benefits from seeing how committed a swipe is.
@@ -1667,17 +1680,17 @@ export function DrawerPage() {
 
       <Section
         title="Mobile keyboard (IME)"
-        description="The drawer watches the virtual keyboard via the visualViewport API and keeps focused inputs visible above the IME on both iOS and Android. No viewport meta tag changes required."
+        description="The drawer uses visualViewport changes to adjust its visible area and scroll focused inputs into view. Verify this with the target mobile browser, keyboard, and viewport configuration."
       >
         <p className="docs-prose">
           On <strong>iOS</strong>, Safari scrolls the layout viewport so the focused
           input stays above the keyboard — the drawer follows natively. On{" "}
           <strong>Android</strong>, the layout viewport does not shrink when the
           IME opens, so a CSS custom property{" "}
-          <code>--vds-drawer-keyboard-inset</code> lifts the bottom drawer by the
-          keyboard height and shrinks side drawers so the focused input is never
-          occluded. The formula self-balances — it contributes zero on iOS and the
-          true keyboard height on Android.
+          <VirtariInlineCode>--vds-drawer-keyboard-inset</VirtariInlineCode> lifts the bottom drawer by the
+          keyboard height and shrinks side drawers to help keep the focused input
+          visible. The inset uses the space between the layout and visual viewports;
+          its effect depends on the browser's keyboard resize behavior.
         </p>
         <p className="docs-prose">
           Test it: open any of the real-world examples above on a mobile device,
@@ -1691,19 +1704,19 @@ export function DrawerPage() {
         description="Built on Dialog primitives. What you get for free — and what you own."
       >
         <p className="docs-prose">
-          <strong>Built in:</strong> focus trap while open, <code>Escape</code> to
-          close (unless <code>dismissible=false</code>), scroll lock on the
-          document, <code>aria-modal</code>, labelled region via{" "}
-          <code>DrawerTitle</code>, described by <code>DrawerDescription</code>{" "}
-          when present. The drag handle is purely decorative — the drawer remains
-          usable with keyboard only.
+          <strong>Built in:</strong> focus trap while open, <VirtariInlineCode>Escape</VirtariInlineCode> to
+          close (unless <VirtariInlineCode>dismissible=false</VirtariInlineCode>), scroll lock on the
+          document, <VirtariInlineCode>aria-modal</VirtariInlineCode>, labelled region via{" "}
+          <VirtariInlineCode>DrawerTitle</VirtariInlineCode>, described by <VirtariInlineCode>DrawerDescription</VirtariInlineCode>{" "}
+          when present. The drag handle is purely decorative; provide reachable
+          buttons for stage changes that must be available without dragging.
         </p>
         <p className="docs-prose">
-          <strong>You own:</strong> always include <code>DrawerTitle</code>, even
+          <strong>You own:</strong> always include <VirtariInlineCode>DrawerTitle</VirtariInlineCode>, even
           for visual-first drawers — wrap it with a visually-hidden utility if you
-          don't want to show the text. Keep the initial focus sensible (first
-          input, primary action, or the title) — use <code>preventAutoFocus</code>{" "}
-          and call <code>focus()</code> yourself if the default pick is wrong.
+          don't want to show the text. Initial focus goes to the drawer itself by
+          default, avoiding the mobile keyboard. Set <VirtariInlineCode>{"preventAutoFocus={false}"}</VirtariInlineCode>{" "}
+          for primitive autofocus, or choose a focus target in <VirtariInlineCode>onOpenAutoFocus</VirtariInlineCode>.
         </p>
       </Section>
 
@@ -1715,7 +1728,7 @@ export function DrawerPage() {
       </Section>
 
       <Section title="Installation & imports">
-        <pre className="docs-code">{`pnpm add @virtari-packages/react-drawer
+        <VirtariCodeBlock renderer="static" language="shell" code={`pnpm add @virtari-packages/react-drawer
 
 // your app entry (once):
 import "@virtari-packages/react-drawer/styles";
@@ -1725,14 +1738,14 @@ import {
   Drawer, DrawerTrigger, DrawerContent,
   DrawerHeader, DrawerHandle, DrawerTitle, DrawerDescription,
   DrawerBody, DrawerFooter, DrawerClose,
-} from "@virtari-packages/react-drawer";`}</pre>
+} from "@virtari-packages/react-drawer";`} />
       </Section>
 
       <Section
         title="API reference"
         description="The most-used props on the Drawer root. Every part also forwards its refs and standard HTML attributes."
       >
-        <pre className="docs-code">{`<Drawer>
+        <VirtariCodeBlock renderer="static" language="tsx" code={`<Drawer>
   // Positioning
   direction?:      "top" | "bottom" | "left" | "right"   // default "bottom"
   sizeMode?:       "adaptive" | "full" | "fixed"         // default "adaptive"
@@ -1771,7 +1784,7 @@ import {
   dismissible?:     boolean                              // default true
   dragHandleOnly?:  boolean                              // default false
   preventAutoFocus?: boolean
-</Drawer>`}</pre>
+</Drawer>`} />
       </Section>
     </>
   );

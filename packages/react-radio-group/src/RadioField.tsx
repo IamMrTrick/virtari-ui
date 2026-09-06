@@ -37,6 +37,10 @@ export function RadioField({
 
   const reactId = useId();
   const inputId = idProp ?? `vds-radio-field-${reactId}`;
+  const labelId = `${inputId}-label`;
+  const descriptionId = `${inputId}-description`;
+  const { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy,
+    "aria-describedby": ariaDescribedBy, ...restRadioProps } = radioProps;
 
   const { className: labelClassName, ...restLabelProps } = labelProps ?? {};
 
@@ -57,14 +61,17 @@ export function RadioField({
         error={resolvedError}
         disabled={resolvedDisabled}
         className={className}
-        {...radioProps}
+        {...restRadioProps}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy ?? (ariaLabel ? undefined : labelId)}
+        aria-describedby={[ariaDescribedBy, description ? descriptionId : null].filter(Boolean).join(" ") || undefined}
       />
       <span className="vds-radio-field-text">
         <span className="vds-radio-field-main">
-          <span className="vds-radio-field-label">{label}</span>
+          <span id={labelId} className="vds-radio-field-label">{label}</span>
         </span>
         {description ? (
-          <span className="vds-radio-field-description">{description}</span>
+          <span id={descriptionId} className="vds-radio-field-description">{description}</span>
         ) : null}
       </span>
     </label>

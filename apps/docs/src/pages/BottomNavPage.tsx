@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   BottomNav,
@@ -350,7 +351,7 @@ export function BottomNavPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   BottomNav,
   BottomNavItem,
   BottomNavFab,
@@ -363,7 +364,7 @@ export function BottomNavPage() {
   <BottomNavFab icon={<IconPlus />} label="Compose" color="accent" />
   <BottomNavItem href="/alerts" icon={<IconBell />}   label="Alerts" badge={3} />
   <BottomNavItem href="/me"     icon={<IconUser />}   label="Profile" />
-</BottomNav>`}</pre>
+</BottomNav>`} />
       </Section>
     </>
   );

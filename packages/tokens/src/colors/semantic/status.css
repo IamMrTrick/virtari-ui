@@ -11,10 +11,10 @@
    *   {intent}-bg-hover     hover on muted bg       (intent-4)
    *   {intent}-bg-active    active on muted bg      (intent-5)
    *   {intent}-solid        emphasis bg (CTAs)      (intent-9)
-   *   {intent}-solid-hover  solid hover             (intent-10)
-   *   {intent}-solid-active solid active            (intent-11)
-   *   {intent}-text         high-contrast text      (intent-11)
-   *   {intent}-text-muted   low-contrast text       (intent-10)
+   *   {intent}-solid-hover  solid hover             (mode-aware solid tone)
+   *   {intent}-solid-active solid active            (mode-aware solid tone)
+   *   {intent}-text         readable intent text    (intent-11; light warning-12)
+   *   {intent}-text-muted   supporting intent text  (same readable text role)
    *   on-{intent}           text/icon on *-solid    (white or black)
    *
    * The `*-emphasis`, `*-on-emphasis`, `*-muted`, `*-muted-text` and
@@ -25,10 +25,8 @@
   :root,
   [data-theme] {
     /* ─── On-colors (text/icon on solid intent backgrounds) ───
-     * Hand-picked defaults cover every brand tuning within our palette.
-     * The @supports block below upgrades to contrast-color() where the
-     * browser implements CSS Color Module 6 — automatically re-selects
-     * black/white when a brand sets an unexpectedly light/dark intent-9. */
+     * These defaults are measured for the bundled palette. A custom brand
+     * must recheck its foreground and background pairs. */
     /* Hand-picked per the brand palette — white on all saturated intents
      * except warning (amber) which needs dark text for readability.
      * We intentionally do NOT use contrast-color() here: early Chromium
@@ -60,7 +58,7 @@
     --vds-color-primary-solid-hover:  var(--vds-color-primary-solid-hover-tone);
     --vds-color-primary-solid-active: var(--vds-color-primary-solid-active-tone);
     --vds-color-primary-text:         var(--vds-color-primary-11);
-    --vds-color-primary-text-muted:   var(--vds-color-primary-10);
+    --vds-color-primary-text-muted:   var(--vds-color-primary-text);
 
     /* ─── Success ─── */
     --vds-color-success-bg-subtle:    var(--vds-color-success-2);
@@ -71,7 +69,7 @@
     --vds-color-success-solid-hover:  var(--vds-color-success-solid-hover-tone);
     --vds-color-success-solid-active: var(--vds-color-success-solid-active-tone);
     --vds-color-success-text:         var(--vds-color-success-11);
-    --vds-color-success-text-muted:   var(--vds-color-success-10);
+    --vds-color-success-text-muted:   var(--vds-color-success-text);
 
     /* ─── Warning ─── */
     --vds-color-warning-bg-subtle:    var(--vds-color-warning-2);
@@ -80,21 +78,12 @@
     --vds-color-warning-bg-active:    var(--vds-color-warning-5);
     --vds-color-warning-solid:        var(--vds-color-warning-9);
     --vds-color-warning-solid-hover:  var(--vds-color-warning-10);
-    /* The only intent whose solid-active cannot reuse step 11.
-     * Step 11 serves two roles: --{intent}-solid-active (a BACKGROUND, under
-     * on-{intent} ink) and --{intent}-text (a FOREGROUND on the page canvas).
-     * For the five white-ink intents that is harmless — in light mode the
-     * ladder darkens toward 11, which improves white contrast and page-text
-     * contrast together. warning carries BLACK ink, so the two roles pull in
-     * opposite directions: light warning-11 (L 0.500) is 3.47:1 under black
-     * as a solid, while lightening it to fix that would push warning TEXT
-     * toward the canvas. The luminance window satisfying both is 0.005 wide —
-     * real, but it would not survive a brand retune. So solid-active gets its
-     * own value: darker than solid-hover (L 0.650) so a press still reads as
-     * a press, and 5.27:1 under black ink. */
+    /* Warning carries black ink. Its active solid needs a separate tone
+     * because light warning-11 is only 3.47:1 under black. */
     --vds-color-warning-solid-active: var(--vds-color-warning-solid-active-tone);
-    --vds-color-warning-text:         var(--vds-color-warning-11);
-    --vds-color-warning-text-muted:   var(--vds-color-warning-10);
+    /* Step 11 fails ordinary text on the light active tint (4.25:1). */
+    --vds-color-warning-text:         var(--vds-color-warning-12);
+    --vds-color-warning-text-muted:   var(--vds-color-warning-text);
 
     /* ─── Danger ─── */
     --vds-color-danger-bg-subtle:    var(--vds-color-danger-2);
@@ -105,7 +94,7 @@
     --vds-color-danger-solid-hover:  var(--vds-color-danger-solid-hover-tone);
     --vds-color-danger-solid-active: var(--vds-color-danger-solid-active-tone);
     --vds-color-danger-text:         var(--vds-color-danger-11);
-    --vds-color-danger-text-muted:   var(--vds-color-danger-10);
+    --vds-color-danger-text-muted:   var(--vds-color-danger-text);
 
     /* ─── Info ─── */
     --vds-color-info-bg-subtle:    var(--vds-color-info-2);
@@ -116,7 +105,7 @@
     --vds-color-info-solid-hover:  var(--vds-color-info-solid-hover-tone);
     --vds-color-info-solid-active: var(--vds-color-info-solid-active-tone);
     --vds-color-info-text:         var(--vds-color-info-11);
-    --vds-color-info-text-muted:   var(--vds-color-info-10);
+    --vds-color-info-text-muted:   var(--vds-color-info-text);
 
     /* ─── Accent ─── */
     --vds-color-accent-bg-subtle:    var(--vds-color-accent-2);
@@ -127,18 +116,12 @@
     --vds-color-accent-solid-hover:  var(--vds-color-accent-solid-hover-tone);
     --vds-color-accent-solid-active: var(--vds-color-accent-solid-active-tone);
     --vds-color-accent-text:         var(--vds-color-accent-11);
-    --vds-color-accent-text-muted:   var(--vds-color-accent-10);
+    --vds-color-accent-text-muted:   var(--vds-color-accent-text);
   }
 
-  /* warning solid-active, per mode.
-   * This is the one intent whose solid-active cannot ride step 11, because
-   * warning carries BLACK ink and step 11 is also --warning-text. In LIGHT
-   * mode the ladder darkens toward 11, so warning-11 (L 0.500) is only
-   * 3.47:1 under black as a solid — while lightening it to fix that would
-   * push warning TEXT toward the canvas. The luminance window satisfying
-   * both roles is 0.005 wide: real, but it would not survive a brand retune.
-   * In DARK mode the ladder lightens toward 11, so both roles agree and
-   * warning-11 is 11.73:1 under black — no exception needed there. */
+  /* Warning solid-active, per mode. Step 11 remains suitable for both
+   * solid black-ink backgrounds and page text in dark themes. Light text
+   * uses step 12 to remain readable on every bundled warning tint. */
   :root,
   [data-theme] {
     /* darker than solid-hover (L 0.650) so a press still reads as a press;
@@ -149,12 +132,13 @@
   [data-theme="dark"],
   [data-theme="dark-oled"] {
     --vds-color-warning-solid-active-tone: var(--vds-color-warning-11);
+    --vds-color-warning-text: var(--vds-color-warning-11);
   }
 
 
   /* Solid hover/active for the five white-ink intents, per mode.
    * The same two-role conflict as warning above, mirrored. Steps 10 and 11
-   * are also --{intent}-text-muted and --{intent}-text, which on a DARK
+   * are light palette steps intended for foregrounds on a DARK
    * canvas must be light to stay readable — and that is exactly what makes
    * them fail under white ink as solids: dark hover measured 2.69–3.33:1
    * and active 1.98–2.23:1.

@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { Button } from "@virtari-packages/react-button";
 import { Input } from "@virtari-packages/react-input";
 import { Toggle } from "@virtari-packages/react-toggle";
@@ -30,14 +31,14 @@ export function SizingPage() {
         title="Size System"
         description="One token controls height across all interactive components. Change --vds-size-md in sizing.css and Button, Input, Select, Toggle all update."
       >
-        <pre className="docs-code">{`/* packages/tokens/src/sizing.css */
+        <VirtariCodeBlock renderer="static" language="tsx" code={`/* packages/tokens/src/sizing.css */
 --vds-size-2xs: 1.5rem;   /* 24px */
 --vds-size-xs:  1.75rem;  /* 28px */
 --vds-size-sm:  2rem;     /* 32px */
 --vds-size-md:  2.5rem;   /* 40px */  ← default
 --vds-size-lg:  2.75rem;  /* 44px */
 --vds-size-xl:  3.25rem;  /* 52px */
---vds-size-2xl: 4rem;     /* 64px */`}</pre>
+--vds-size-2xl: 4rem;     /* 64px */`} />
       </Section>
 
       <Section
@@ -48,7 +49,7 @@ export function SizingPage() {
           {HEIGHT_RAMP.map((row) => (
             <div key={row.size} className="docs-sizing-row">
               <div className="docs-sizing-meta">
-                <code className="docs-size-label">{row.size}</code>
+                <VirtariInlineCode className="docs-size-label">{row.size}</VirtariInlineCode>
                 <span className="docs-sizing-px">{row.px}</span>
                 <span className="docs-sizing-wcag">{row.wcag}</span>
               </div>

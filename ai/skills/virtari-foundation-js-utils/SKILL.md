@@ -8,6 +8,7 @@ description: "Use when implementing or reviewing Virtari JavaScript and React ut
 Shared class, ref, native-form, direction and keyboard behavior with explicit contracts.
 
 - Import helpers from '@virtari-packages/utils'. cn joins truthy string arguments; useComposedRefs combines object/callback refs and supports React 19 callback cleanup.
+- controlText groups adjacent plain text in vds-control-text spans and preserves consumer elements/fragments. Core supplies font-metric text-box trimming for supported browsers, with ordinary line boxes as fallback. Use this inside icon/text flex rows instead of fixed per-label transforms; arbitrary custom child components keep their own typography.
 - useFormReset(ref, onReset, formId?) associates with the nearest form or an explicit document form ID and runs after cancellable native reset listeners via a microtask.
 - useDirection(ref?) initially returns ltr for stable server markup, reads computed client direction, then observes dir changes on the target and its current ancestors.
 - Bind platform-neutral shortcuts with useHotkey('mod+k', handler). Use formatCombo for visible keys, ariaKeyShortcuts for the bound action and shortcutLabel for spoken labels from the same combination.

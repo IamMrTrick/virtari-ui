@@ -21,6 +21,7 @@ Use the existing package and its composition API. Verify the installed version a
 - Choose surface/outline/soft/ghost variants and sm/md/lg sizes. Defaults are surface and md. Surface styling and geometry follow shared tokens and the active surface/radius theme.
 - Use Card for nested cards. It measures the nearest ancestor .vds-card and the actual inset, observes relevant geometry/theme changes, and computes a child radius capped by its parent with a small-radius floor.
 - CardTitle is h3. Keep semantic heading order correct in the surrounding page. Use links or buttons within the card for actions.
+- Long body identifiers can wrap within narrow cards. Interactive hover movement respects reduced motion; decorative interactivity does not add action semantics.
 
 ## Known limits and mistakes to avoid
 

@@ -2,6 +2,8 @@
   .vds-radio-card {
     box-shadow: var(--radio-card-shadow);
     position: relative;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
     display: flex;
     align-items: flex-start;
     gap: var(--radio-card-gap);
@@ -69,6 +71,7 @@
 
   .vds-radio-card-label-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--vds-space-3, 0.75rem);
@@ -91,11 +94,13 @@
   }
 
   .vds-radio-card-trailing {
-    flex-shrink: 0;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    margin-inline-start: auto;
     font-size: var(--radio-card-trailing-font-size);
     font-weight: var(--radio-card-label-font-weight);
     color: var(--radio-card-trailing-color);
-    white-space: nowrap;
+    line-height: var(--vds-control-line-height, 1.5);
   }
 
   .vds-radio-card-badge {
@@ -116,7 +121,7 @@
   }
 
   .vds-radio-card[data-layout="row"] > .vds-radio-card-input {
-    margin-block-start: 0.125rem;
+    margin-block-start: max(0px, calc((var(--radio-card-label-font-size) * var(--vds-control-line-height, 1.5) - var(--radio-size)) / 2));
   }
 
   /* =========================================================================
@@ -130,9 +135,7 @@
   }
 
   .vds-radio-card[data-layout="icon-grid"] > .vds-radio-card-input {
-    position: absolute;
-    inset-block-start: var(--vds-space-2-5, 0.625rem);
-    inset-inline-end: var(--vds-space-2-5, 0.625rem);
+    align-self: flex-end;
   }
 
   .vds-radio-card[data-layout="icon-grid"] .vds-radio-card-body {

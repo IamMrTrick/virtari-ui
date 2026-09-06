@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/CheckboxPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useMemo, useState } from "react";
 import {
   Checkbox,
@@ -17,6 +18,7 @@ import {
   IconMail,
   IconCalendar,
 } from "@virtari-packages/react-icons";
+import { Card } from "@virtari-packages/react-card";
 import { Section, Row } from "../components";
 
 /* -------------------------------------------------------------
@@ -47,13 +49,12 @@ const cellStyle: React.CSSProperties = {
   alignItems: "center",
   gap: "var(--vds-space-2)",
   fontSize: "var(--vds-text-sm)",
-  lineHeight: 1,
+  lineHeight: 1.5,
 };
 
 const cellLabelStyle: React.CSSProperties = {
   display: "inline-block",
-  lineHeight: 1,
-  transform: "translateY(calc(var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem))",
+  lineHeight: 1.5,
 };
 
 const columnStyle: React.CSSProperties = {
@@ -91,11 +92,11 @@ const groupRowStyle: React.CSSProperties = {
 
 const cardFrame: React.CSSProperties = {
   padding: "var(--vds-space-4)",
-  border: "1px solid var(--vds-color-border)",
-  borderRadius: "var(--vds-radius-card)",
-  background: "var(--vds-color-surface)",
+
+
+
   flex: 1,
-  minWidth: "18rem",
+  minWidth: "min(100%, 18rem)",
 };
 
 type CheckboxStateRowProps = {
@@ -104,60 +105,23 @@ type CheckboxStateRowProps = {
 };
 
 function StateRow({ heading, checked }: CheckboxStateRowProps) {
-  const props = checked !== undefined ? { checked } : {};
   return (
     <div>
       <span style={rowLabelStyle}>{heading}</span>
       <div style={groupRowStyle}>
-        <div style={columnStyle}>
-          <span style={columnHeaderStyle}>Default</span>
-          <div style={cellStyle}>
-            <Checkbox {...props} />
-            <span style={cellLabelStyle}>Label</span>
+        {[
+          { title: "Default" },
+          { title: "Hover preview", className: "cb-force-hover" },
+          { title: "Focus preview", className: "cb-force-focus" },
+          { title: "Disabled", disabled: true },
+          { title: "Error", error: true },
+          { title: "Error + focus preview", error: true, className: "cb-force-focus" },
+        ].map(({ title, ...props }) => (
+          <div key={title} style={columnStyle}>
+            <span style={columnHeaderStyle}>{title}</span>
+            <CheckboxField label="Label" aria-label={`${heading}: ${title}`} defaultChecked={checked} {...props} />
           </div>
-        </div>
-        <div style={columnStyle}>
-          <span style={columnHeaderStyle}>Hover</span>
-          <div style={cellStyle}>
-            <Checkbox {...props} className="cb-force-hover" />
-            <span style={cellLabelStyle}>Label</span>
-          </div>
-        </div>
-        <div style={columnStyle}>
-          <span style={columnHeaderStyle}>Focus</span>
-          <div style={cellStyle}>
-            <Checkbox {...props} className="cb-force-focus" />
-            <span style={cellLabelStyle}>Label</span>
-          </div>
-        </div>
-        <div style={columnStyle}>
-          <span style={columnHeaderStyle}>Disabled</span>
-          <div style={cellStyle}>
-            <Checkbox {...props} disabled />
-            <span
-              style={{
-                ...cellLabelStyle,
-                color: "var(--vds-color-text-muted)",
-              }}
-            >
-              Label
-            </span>
-          </div>
-        </div>
-        <div style={columnStyle}>
-          <span style={columnHeaderStyle}>Error</span>
-          <div style={cellStyle}>
-            <Checkbox {...props} error />
-            <span style={cellLabelStyle}>Label</span>
-          </div>
-        </div>
-        <div style={columnStyle}>
-          <span style={columnHeaderStyle}>Error + Focus</span>
-          <div style={cellStyle}>
-            <Checkbox {...props} error className="cb-force-focus" />
-            <span style={cellLabelStyle}>Label</span>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -208,17 +172,17 @@ function NestedPermissionsDemo() {
   };
 
   return (
-    <div
+    <Card
       style={{
         display: "flex",
         flexDirection: "column",
         gap: "var(--vds-space-3)",
         padding: "var(--vds-space-4)",
-        border: "1px solid var(--vds-color-border)",
-        borderRadius: "var(--vds-radius-card)",
-        background: "var(--vds-color-surface)",
+
+
+
         flex: 1,
-        minWidth: "18rem",
+        minWidth: "min(100%, 18rem)",
         maxWidth: "28rem",
       }}
     >
@@ -248,7 +212,7 @@ function NestedPermissionsDemo() {
           />
         ))}
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -282,17 +246,17 @@ function NestedNotificationsDemo() {
       : false;
 
   return (
-    <div
+    <Card
       style={{
         display: "flex",
         flexDirection: "column",
         gap: "var(--vds-space-3)",
         padding: "var(--vds-space-4)",
-        border: "1px solid var(--vds-color-border)",
-        borderRadius: "var(--vds-radius-card)",
-        background: "var(--vds-color-surface)",
+
+
+
         flex: 1,
-        minWidth: "16rem",
+        minWidth: "min(100%, 16rem)",
         maxWidth: "22rem",
       }}
     >
@@ -324,7 +288,7 @@ function NestedNotificationsDemo() {
           />
         ))}
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -338,7 +302,7 @@ export function CheckboxPage() {
 
       <Section
         title="States"
-        description="All interactive states across unchecked, checked, and indeterminate variants."
+        description="Starting states across unchecked, checked, and indeterminate controls. Hover and focus previews are simulated; use Tab and Space to try actual keyboard interaction."
       >
         <div
           style={{
@@ -403,14 +367,14 @@ export function CheckboxPage() {
         description="Vertical layout is the default for multi-select groups with label and helper text."
       >
         <div style={groupRowStyle}>
-          <div
+          <Card
             style={{
               padding: "var(--vds-space-4)",
-              border: "1px solid var(--vds-color-border)",
-              borderRadius: "var(--vds-radius-card)",
-              background: "var(--vds-color-surface)",
+
+
+
               flex: 1,
-              minWidth: "18rem",
+              minWidth: "min(100%, 18rem)",
               maxWidth: "28rem",
             }}
           >
@@ -439,16 +403,16 @@ export function CheckboxPage() {
                 disabled
               />
             </CheckboxGroup>
-          </div>
+          </Card>
 
-          <div
+          <Card
             style={{
               padding: "var(--vds-space-4)",
-              border: "1px solid var(--vds-color-border)",
-              borderRadius: "var(--vds-radius-card)",
-              background: "var(--vds-color-surface)",
+
+
+
               flex: 1,
-              minWidth: "18rem",
+              minWidth: "min(100%, 18rem)",
               maxWidth: "28rem",
             }}
           >
@@ -459,11 +423,11 @@ export function CheckboxPage() {
               required
               error="Please accept all required terms to continue"
             >
-              <CheckboxField label="I agree to the Terms of Service" />
-              <CheckboxField label="I agree to the Privacy Policy" />
-              <CheckboxField label="I accept the Data Processing Agreement" />
+              <CheckboxField name="terms" value="accepted" required label="I agree to the Terms of Service" />
+              <CheckboxField name="privacy" value="accepted" required label="I agree to the Privacy Policy" />
+              <CheckboxField name="processing" value="accepted" required label="I accept the Data Processing Agreement" />
             </CheckboxGroup>
-          </div>
+          </Card>
         </div>
       </Section>
 
@@ -472,14 +436,14 @@ export function CheckboxPage() {
         description="Card-style checkboxes for rich multi-select scenarios like feature selection and plan add-ons."
       >
         <div style={groupRowStyle}>
-          <div
+          <Card
             style={{
               padding: "var(--vds-space-4)",
-              border: "1px solid var(--vds-color-border)",
-              borderRadius: "var(--vds-radius-card)",
-              background: "var(--vds-color-surface)",
+
+
+
               flex: 1,
-              minWidth: "20rem",
+              minWidth: "min(100%, 20rem)",
               maxWidth: "28rem",
             }}
           >
@@ -526,31 +490,30 @@ export function CheckboxPage() {
               />
               <CheckboxCard
                 label="Advanced analytics"
-                description="Coming in Q2 2026"
+                description="Not available on your current plan"
                 trailing="TBD"
                 disabled
               />
             </CheckboxGroup>
-          </div>
+          </Card>
 
-          <div
+          <Card
             style={{
               padding: "var(--vds-space-4)",
-              border: "1px solid var(--vds-color-border)",
-              borderRadius: "var(--vds-radius-card)",
-              background: "var(--vds-color-surface)",
+
+
+
               flex: 1,
-              minWidth: "20rem",
+              minWidth: "min(100%, 20rem)",
               maxWidth: "28rem",
             }}
           >
             <span style={rowLabelStyle}>Card states</span>
-            <CheckboxGroup label="">
+            <CheckboxGroup aria-label="Card states">
               <CheckboxCard label="Default" description="Resting state" />
               <CheckboxCard
                 label="Hover"
-                description="Mouse over state"
-                labelProps={{ style: { boxShadow: "inset 0 0 0 1px transparent" } }}
+                description="Move the pointer over this card to preview"
               />
               <CheckboxCard
                 label="Selected"
@@ -558,9 +521,8 @@ export function CheckboxPage() {
                 defaultChecked
               />
               <CheckboxCard
-                label="Focus"
-                description="Keyboard focus state"
-                labelProps={{ className: "cb-card-force-focus" }}
+                label="Keyboard focus"
+                description="Press Tab to focus, then Space to toggle"
               />
               <CheckboxCard
                 label="Disabled"
@@ -569,16 +531,9 @@ export function CheckboxPage() {
               />
               <CheckboxCard label="Error" description="Validation error state" error />
             </CheckboxGroup>
-          </div>
+          </Card>
         </div>
 
-        <style>{`
-          .cb-card-force-focus {
-            outline: var(--checkbox-card-focus-ring-width) solid var(--checkbox-card-focus-ring-color);
-            outline-offset: var(--checkbox-card-focus-ring-offset);
-            border-color: var(--checkbox-card-border-color-hover);
-          }
-        `}</style>
       </Section>
 
       <Section
@@ -610,7 +565,7 @@ export function CheckboxPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(14rem, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 14rem), 1fr))",
               gap: "var(--vds-space-3)",
             }}
           >
@@ -643,9 +598,9 @@ export function CheckboxPage() {
         description="Rounded pill-shaped toggles for tags, filters, and multi-select categorical choices."
       >
         <div style={groupRowStyle}>
-          <div style={cardFrame}>
+          <Card style={cardFrame}>
             <span style={rowLabelStyle}>Topic filters</span>
-            <PillCheckbox aria-label="Topics">
+            <PillCheckbox name="topics" aria-label="Topics">
               <PillCheckboxItem value="design" defaultChecked>
                 Design
               </PillCheckboxItem>
@@ -656,9 +611,9 @@ export function CheckboxPage() {
               </PillCheckboxItem>
               <PillCheckboxItem value="support">Support</PillCheckboxItem>
             </PillCheckbox>
-          </div>
+          </Card>
 
-          <div style={cardFrame}>
+          <Card style={cardFrame}>
             <span style={rowLabelStyle}>Sizes</span>
             <div
               style={{
@@ -689,11 +644,11 @@ export function CheckboxPage() {
                 <PillCheckboxItem value="c">Checkbox</PillCheckboxItem>
               </PillCheckbox>
             </div>
-          </div>
+          </Card>
         </div>
 
         <Row>
-          <div style={{ ...cardFrame, flex: "1 1 100%" }}>
+          <Card style={{ ...cardFrame, flex: "1 1 100%" }}>
             <span style={rowLabelStyle}>States</span>
             <div
               style={{
@@ -719,12 +674,12 @@ export function CheckboxPage() {
                 <PillCheckboxItem value="b">Error unselected</PillCheckboxItem>
               </PillCheckbox>
             </div>
-          </div>
+          </Card>
         </Row>
       </Section>
 
-      <Section title="Usage">
-        <pre className="docs-code">{`import {
+      <Section title="Usage" description="Group name is inherited by items unless overridden. Group required is an indication, not an at-least-one validator; implement that rule in your form, or mark each mandatory item required.">
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Checkbox,
   CheckboxField,
   CheckboxGroup,
@@ -732,9 +687,13 @@ export function CheckboxPage() {
   PillCheckbox,
   PillCheckboxItem,
 } from "@virtari-packages/react-checkbox";
+import { IconBrandSlack } from "@virtari-packages/react-icons";
+import "@virtari-packages/core";
+import "@virtari-packages/tokens";
+import "@virtari-packages/react-checkbox/styles";
 
-// Primitive — all states: error, disabled, indeterminate.
-<Checkbox checked={value} onCheckedChange={setValue} error={hasError} />
+// Primitive with an accessible name.
+<Checkbox aria-label="Select row" defaultChecked />
 
 // Labelled row (click anywhere on the row to toggle).
 <CheckboxField label="Two-factor authentication" description="Require a second step" />
@@ -746,8 +705,8 @@ export function CheckboxPage() {
   error="Please accept all required terms to continue"
   required
 >
-  <CheckboxField label="I agree to the Terms of Service" />
-  <CheckboxField label="I agree to the Privacy Policy" />
+  <CheckboxField name="terms" value="accepted" required label="I agree to the Terms of Service" />
+  <CheckboxField name="privacy" value="accepted" required label="I agree to the Privacy Policy" />
 </CheckboxGroup>
 
 // Card — row layout with trailing price + badge.
@@ -759,14 +718,14 @@ export function CheckboxPage() {
 />
 
 // Card — icon-grid layout for visual pickers.
-<CheckboxCard layout="icon-grid" icon={<IconBrandSlack />} label="Slack" description="Team messaging" />
+<CheckboxCard layout="icon-grid" icon={<IconBrandSlack aria-hidden />} label="Slack" description="Team messaging" />
 
 // Pill — chip-shaped multi-select toggles for tag/filter lists.
-<PillCheckbox aria-label="Topics">
+<PillCheckbox name="topics" aria-label="Topics">
   <PillCheckboxItem value="design">Design</PillCheckboxItem>
   <PillCheckboxItem value="development">Development</PillCheckboxItem>
   <PillCheckboxItem value="marketing">Marketing</PillCheckboxItem>
-</PillCheckbox>`}</pre>
+</PillCheckbox>`} />
       </Section>
     </>
   );

@@ -1,5 +1,6 @@
 import { cn } from "@virtari-packages/utils";
 import type { Ref, ReactNode, MouseEvent } from "react";
+import { cloneElement, isValidElement } from "react";
 import { Slot, Slottable } from "@virtari-packages/primitives/slot";
 
 /** Intent palette — orthogonal to variant. */
@@ -26,10 +27,10 @@ export type BadgeVariant =
   /** @deprecated Use `color="danger"` + `variant="soft"`. */
   | "destructive";
 
-/** Four sizes: xs(18) · sm(20) · md(22) · lg(26). */
+/** Four minimum heights: xs(20) · sm(20) · md(24) · lg(28). */
 export type BadgeSize = "xs" | "sm" | "md" | "lg";
 
-/** Corner shape — pill by default; square swaps to element radius for tag look. */
+/** Corner shape — pill by default; square uses the scoped navigation-item radius. */
 export type BadgeShape = "pill" | "square";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -39,7 +40,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
   /** Size preset. */
   size?: BadgeSize;
-  /** Corner shape. `pill` (default) uses the badge radius token; `square` uses element radius. */
+  /** Corner shape. `pill` uses the badge radius token; `square` uses navigation-item radius. */
   shape?: BadgeShape;
   /** Show a leading colored dot (overrides `leftSection`). */
   dot?: boolean;
@@ -91,13 +92,19 @@ export function Badge({
   asChild = false,
   className,
   children,
+  onClick,
   ref,
   ...props
 }: BadgeProps) {
   const Comp = asChild ? Slot : "span";
   const { color: resolvedColor, variant: resolvedVariant } = resolveLegacy(color, variant);
 
-  const interactive = !!props.onClick && !asChild;
+  const interactive = !!onClick && !asChild;
+  // Keep the semantic child as Slot's root, including in dot-only mode.
+  // A label wrapper lets long text shrink without compressing either icon slot.
+  const content = asChild && isValidElement<{ children?: ReactNode }>(children)
+    ? cloneElement(children, undefined, dotOnly ? null : <span className="vds-badge-label vds-control-text">{children.props.children}</span>)
+    : <span className="vds-badge-label vds-control-text">{children}</span>;
 
   return (
     <Comp
@@ -110,6 +117,10 @@ export function Badge({
       data-interactive={interactive || undefined}
       data-dot-only={dotOnly || undefined}
       {...props}
+      onClick={onClick ? (event) => {
+        // Slot runs the child's handler first; allow that child to cancel this action.
+        if (!asChild || !event.defaultPrevented) onClick(event);
+      } : undefined}
     >
       {!dotOnly && dot && <span className="vds-badge-dot" aria-hidden="true" />}
       {!dotOnly && !dot && leftSection && (
@@ -117,7 +128,7 @@ export function Badge({
           {leftSection}
         </span>
       )}
-      {!dotOnly && <Slottable>{children}</Slottable>}
+      {(!dotOnly || asChild) && <Slottable>{content}</Slottable>}
       {!dotOnly && !onRemove && rightSection && (
         <span className="vds-badge-section" data-position="end">
           {rightSection}

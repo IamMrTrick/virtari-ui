@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useMemo, useState } from "react";
 import { Button } from "@virtari-packages/react-button";
 import { Card } from "@virtari-packages/react-card";
@@ -37,13 +38,13 @@ export function TokensReferencePage() {
       </Cluster>
       <div className="docs-reference-results">
         {filtered.slice(page * REFERENCE_PAGE_SIZE, (page + 1) * REFERENCE_PAGE_SIZE).map(item => <Card key={item.id} className="docs-reference-entry"><Stack gap="sm">
-          <h3 dir="ltr"><code>{item.name}</code></h3>
+          <h3 dir="ltr"><VirtariInlineCode>{item.name}</VirtariInlineCode></h3>
           <ReferenceCode label={text("CSS reference", "ارجاع CSS")} code={`var(${item.name})`} />
-          <pre className="docs-code docs-reference-code" dir="ltr"><code>{`${item.name}: ${item.value};`}</code></pre>
+          <VirtariCodeBlock renderer="static" language="css" code={`${item.name}: ${item.value};`} />
           <div className="docs-reference-meta">
             <span>{text("Category", "دسته")}: {item.category}</span>
-            <span>{text("Selector", "سلکتور")}: <code dir="ltr">{item.selector || text("Top level", "سطح اصلی")}</code></span>
-            {item.conditions.map((condition, index) => <code dir="ltr" key={index}>{condition}</code>)}
+            <span>{text("Selector", "سلکتور")}: <VirtariInlineCode dir="ltr">{item.selector || text("Top level", "سطح اصلی")}</VirtariInlineCode></span>
+            {item.conditions.map((condition, index) => <VirtariInlineCode dir="ltr" key={index}>{condition}</VirtariInlineCode>)}
             <span dir="ltr">{item.sourceId}:{item.line}</span>
           </div>
         </Stack></Card>)}

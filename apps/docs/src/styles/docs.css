@@ -1,10 +1,4 @@
 /* ── Section ── */
-.docs-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--vds-space-4);
-}
-
 .docs-section-title {
   font-size: var(--vds-text-xl);
   font-weight: var(--vds-font-weight-semibold);
@@ -13,26 +7,23 @@
 }
 
 .docs-section-description {
-  font-size: var(--vds-text-sm);
-  color: var(--vds-color-text-muted);
   margin: 0;
-  line-height: 1.75;
 }
 
 /* ── Helpers ── */
-.docs-row {
+.docs-row:not(.vds-cluster) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--vds-space-3);
 }
 
-.docs-stack {
+.docs-stack:not(.vds-stack) {
   display: flex;
   flex-direction: column;
   gap: var(--vds-space-3);
-  max-inline-size: 24rem;
 }
+.docs-stack { max-inline-size: 24rem; }
 
 .docs-prose {
   font-size: var(--vds-text-sm);
@@ -43,25 +34,6 @@
     font-weight: var(--vds-font-weight-semibold);
   }
 
-  & code {
-    font-family: var(--vds-font-mono);
-    font-size: 0.9em;
-    background-color: var(--vds-color-bg-muted);
-    padding-inline: var(--vds-space-1);
-    border-radius: var(--vds-radius-2);
-  }
-}
-
-.docs-code {
-  font-family: var(--vds-font-mono);
-  font-size: var(--vds-text-xs);
-  line-height: var(--vds-leading-relaxed);
-  background-color: var(--vds-color-bg-subtle);
-  border: 1px solid transparent;
-  border-radius: var(--vds-radius-code);
-  padding: var(--vds-space-5);
-  overflow-x: auto;
-  white-space: pre;
 }
 
 /* ── DataTable demo helpers ── */

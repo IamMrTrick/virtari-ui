@@ -51,7 +51,7 @@
       ],
       "pitfalls": [
         "seo only works with items. seoBaseUrl resolves relative URLs but does not make untrusted content safe.",
-        "The current SEO script is inserted using JSON.stringify and dangerouslySetInnerHTML without escaping HTML script terminators. Keep seo disabled for untrusted item content, especially during SSR, until safe script serialization is implemented.",
+        "SEO script serialization escapes less-than characters before HTML embedding, preserving JSON data without emitting literal script terminators. This does not validate consumer URLs or certify the structured data for search engines.",
         "Do not render a second nested anchor inside BreadcrumbLink or make BreadcrumbPage clickable; use actual links for ancestors and current-page semantics for the final location."
       ],
       "related": ["react-nav", "react-dropdown-menu", "react-icons", "primitives"]
@@ -147,7 +147,8 @@
         "Use value/onValueChange or defaultValue, and the inherited radio-group name, required and disabled props where form semantics are needed. Supply aria-label or aria-labelledby for the group.",
         "Set size=sm/md/lg, orientation=horizontal/vertical and fullWidth on the root. Use the item's icon prop for the dedicated decorative icon slot and an accessible text label.",
         "Direction resolves explicit dir, primitive DirectionProvider, then inherited DOM direction. Keep behavioral direction and surrounding layout direction aligned.",
-        "Import this package's styles entry; it includes the shared Tabs styling. Preserve the generated track's data-radius-host and let the shared track/item radius roles derive nested corners."
+        "Import this package's styles entry; it includes the shared Tabs styling. Preserve the generated track's data-radius-host and let the shared track/item radius roles derive nested corners.",
+        "Full-width labels wrap within equal columns and controls grow from minimum heights. Non-full-width horizontal tracks can scroll within their parent; long labels do not require per-label positioning overrides."
       ],
       "pitfalls": [
         "The selected state is data-state=checked because items are radios, unlike Tabs' active state. Do not target only the Tabs active selector when customizing a shared appearance.",
@@ -167,7 +168,9 @@
         "The default activationMode is automatic; use manual when moving focus should not immediately activate expensive content. The primitive handles roving focus and direction-sensitive orientation keys.",
         "collapseAt is a container-width threshold in pixels that changes a vertical root to horizontal. Root swipeable only acts in horizontal orientation; it is separate from the carousel-style TabsPanels feature.",
         "Use TabsPanels with direct TabsContent children in trigger order for carousel panels. mountStrategy=all keeps every panel mounted; adjacent limits mounting to the active panel and its neighbors. touchOnly defaults true.",
-        "Direction resolves explicit dir, DirectionProvider, then DOM inheritance. Segmented track and item/indicator radii share the system's shape roles and inset geometry; preserve data-radius-host and token-derived styles."
+        "Direction resolves explicit dir, DirectionProvider, then DOM inheritance. Segmented track and item/indicator radii share the system's shape roles and inset geometry; preserve data-radius-host and token-derived styles.",
+        "Full-width triggers wrap and grow from minimum heights with stable icon slots. Non-full-width and boxed tracks scroll internally; focus draws inside the trigger to remain visible. Auto-scroll respects RTL coordinates.",
+        "TabsPanels marks inactive mounted slides inert and aria-hidden. This protects keyboard/assistive-technology exposure while retaining their React state; custom forceMount animations outside TabsPanels need their own exposure handling."
       ],
       "pitfalls": [
         "Tabs visually styled as pills still represent tabpanel switching, not route navigation or a form radiogroup.",

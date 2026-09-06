@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/YooptaEditorPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
 import {
   YooptaEditor,
@@ -20,14 +21,14 @@ export function YooptaEditorPage() {
         title="Overview"
         description="Notion-style block editor — Yoopta-Editor wrapped with Virtari design tokens. Slash menu, floating toolbar with Turn-into menu, drag-and-drop blocks, block options popover, mentions, emoji, math, and 20 block plugins. All chrome reuses the Virtari Button + tokens — no Tailwind, no shadcn."
       >
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   YooptaEditor,
   STARTER_CONTENT,
 } from "@virtari-packages/react-yoopta-editor";
 import "@virtari-packages/react-yoopta-editor/tokens";
 import "@virtari-packages/react-yoopta-editor/styles";
 
-<YooptaEditor value={STARTER_CONTENT} onChange={setValue} />`}</pre>
+<YooptaEditor value={STARTER_CONTENT} onChange={setValue} />`} />
       </Section>
 
       <Section
@@ -52,12 +53,7 @@ import "@virtari-packages/react-yoopta-editor/styles";
         title="Output (JSON)"
         description="The serialized YooptaContentValue you'd persist to a backend."
       >
-        <pre
-          className="docs-code"
-          style={{ maxBlockSize: "20rem", overflow: "auto" }}
-        >
-          {JSON.stringify(value, null, 2)}
-        </pre>
+        <VirtariCodeBlock renderer="static" language="json" code={JSON.stringify(value, null, 2)} maxHeight={"20rem"} />
       </Section>
     </>
   );

@@ -67,6 +67,8 @@ export function Checkbox({
   size = "md",
   error,
   disabled,
+  name,
+  "aria-describedby": describedBy,
   className,
   ref,
   ...props
@@ -168,7 +170,7 @@ export interface CheckboxGroupProps
   /** Propagates disabled to every descendant Checkbox / CheckboxField / CheckboxCard. */
   disabled?: boolean;
   orientation?: "vertical" | "horizontal";
-  /** Optional form field name; passed through context for name= inheritance if needed by consumers. */
+  /** Default form field name inherited by descendant checkboxes; an item name overrides it. */
   name?: string;
   children: ReactNode;
   ref?: Ref<HTMLDivElement>;
@@ -201,6 +203,7 @@ export interface CheckboxGroupContextValue {
   disabled?: boolean;
   error?: boolean;
   name?: string;
+  describedBy?: string;
 }
 ```
 
@@ -237,8 +240,8 @@ Source: `packages/react-checkbox/src/PillCheckbox.tsx`
 ```tsx
 export function PillCheckbox({
   size = "md",
-  error = false,
-  disabled = false,
+  error,
+  disabled,
   orientation = "horizontal",
   name,
   className,
@@ -263,6 +266,8 @@ Source: `packages/react-checkbox/src/PillCheckbox.tsx`
 export function PillCheckboxItem({
   className,
   disabled,
+  name,
+  "aria-describedby": describedBy,
   ref,
   children,
   ...props

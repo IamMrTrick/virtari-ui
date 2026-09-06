@@ -28,7 +28,7 @@ export interface OtpInputProps
   /** Called when all slots are filled. */
   onComplete?: (value: string) => void;
   type?: OtpInputType;
-  /** Render slots as password fields. */
+  /** Visually obscure slots where the browser supports text-security. */
   mask?: boolean;
   /** Control size. Canonical name, shared with every other sized control. */
   size?: OtpInputSize;
@@ -100,7 +100,7 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
   inputSize,
   disabled = false,
   readOnly = false,
-  invalid = false,
+  invalid,
   autoFocus = false,
   name,
   required,
@@ -112,8 +112,15 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
   id,
   dir = "ltr",
   "aria-describedby": ariaDescribedBy,
+  "aria-errormessage": ariaErrorMessage,
+  "aria-invalid": ariaInvalid,
+  "aria-label": ariaLabel,
+  onKeyDown,
+  onPaste,
   ...rootProps
 }, ref) {
+  const resolvedInvalid = invalid ?? ariaInvalid;
+  const accessibleLabel = ariaLabel ?? label;
   const [internalValue, setInternalValue] = useState(defaultValue);
   const value = controlledValue ?? internalValue;
   const rootRef = useRef<HTMLDivElement>(null);
@@ -134,12 +141,12 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
     if (sanitizedValue.length < length) lastCompletedValue.current = null;
   }, [sanitizedValue, length]);
 
-  const focusSlot = useCallback((index: number, select = true) => {
+  const focusSlot = useCallback((index: number, select = selectOnFocus) => {
     const el = inputRefs.current[index];
     if (!el) return;
     el.focus();
     if (select) el.select();
-  }, []);
+  }, [selectOnFocus]);
 
   const commitValue = useCallback(
     (nextValue: string) => {
@@ -197,7 +204,7 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
   );
 
   const handleKeyDown = useCallback(
-    (index: number, e: KeyboardEvent<HTMLInputElement>) => {
+    (index: number, e: KeyboardEvent<HTMLDivElement>) => {
       if (disabled || readOnly || e.defaultPrevented || e.nativeEvent.isComposing) return;
 
       if (e.key === "Backspace") {
@@ -235,8 +242,8 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
   );
 
   const handlePaste = useCallback(
-    (index: number, e: ClipboardEvent<HTMLInputElement>) => {
-      if (disabled || readOnly) return;
+    (index: number, e: ClipboardEvent<HTMLDivElement>) => {
+      if (disabled || readOnly || e.defaultPrevented) return;
       e.preventDefault();
       insertValue(index, e.clipboardData.getData("text"));
     },
@@ -248,16 +255,27 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
       ref={mergedRef}
       id={rootId}
       role="group"
-      aria-label={label}
+      aria-label={accessibleLabel}
       aria-describedby={ariaDescribedBy}
+      aria-errormessage={ariaErrorMessage}
       aria-disabled={disabled || undefined}
-      aria-invalid={invalid || undefined}
+      aria-invalid={resolvedInvalid}
       className={cn("vds-otp-input", className)}
       data-size={size ?? inputSize ?? "md"}
       data-readonly={readOnly || undefined}
       data-complete={sanitizedValue.length === length || undefined}
       dir={dir}
       {...rootProps}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        const index = inputRefs.current.indexOf(event.target as HTMLInputElement);
+        if (index >= 0) handleKeyDown(index, event);
+      }}
+      onPaste={(event) => {
+        onPaste?.(event);
+        const index = inputRefs.current.indexOf(event.target as HTMLInputElement);
+        if (index >= 0) handlePaste(index, event);
+      }}
     >
       {slots.map((char, i) => (
         <input
@@ -278,17 +296,16 @@ export const OtpInput = forwardRef<HTMLDivElement, OtpInputProps>(function OtpIn
           form={form}
           disabled={disabled}
           readOnly={readOnly}
-          aria-invalid={invalid || undefined}
-          aria-label={`${label}, character ${i + 1} of ${length}`}
+          aria-invalid={resolvedInvalid}
+          aria-label={`${accessibleLabel}, character ${i + 1} of ${length}`}
           aria-describedby={ariaDescribedBy}
+          aria-errormessage={ariaErrorMessage}
           autoFocus={autoFocus && i === 0}
           enterKeyHint={i === length - 1 ? "done" : "next"}
           className="vds-otp-input__slot"
           data-filled={char ? "" : undefined}
           data-mask={mask || undefined}
           onChange={(e) => handleChange(i, e.target.value)}
-          onKeyDown={(e) => handleKeyDown(i, e)}
-          onPaste={(e) => handlePaste(i, e)}
           onFocus={(e) => {
             if (selectOnFocus) e.target.select();
           }}

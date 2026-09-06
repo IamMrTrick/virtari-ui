@@ -1,5 +1,7 @@
 @layer design-system.components {
   .vds-checkbox-card {
+    min-inline-size: 0;
+    box-sizing: border-box;
     box-shadow: var(--checkbox-card-shadow);
     position: relative;
     display: flex;
@@ -58,6 +60,7 @@
   }
 
   .vds-checkbox-card-text {
+    overflow-wrap: anywhere;
     display: flex;
     flex-direction: column;
     gap: var(--vds-space-1, 0.25rem);
@@ -67,6 +70,7 @@
 
   .vds-checkbox-card-label-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--vds-space-3, 0.75rem);
@@ -89,11 +93,13 @@
   }
 
   .vds-checkbox-card-trailing {
-    flex-shrink: 0;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    margin-inline-start: auto;
     font-size: var(--checkbox-card-trailing-font-size);
     font-weight: var(--checkbox-card-label-font-weight);
     color: var(--checkbox-card-trailing-color);
-    white-space: nowrap;
+    line-height: var(--vds-control-line-height, 1.5);
   }
 
   .vds-checkbox-card-badge {
@@ -114,7 +120,7 @@
   }
 
   .vds-checkbox-card[data-layout="row"] > .vds-checkbox-card-input {
-    margin-block-start: 0.125rem;
+    margin-block-start: max(0px, calc((var(--checkbox-card-label-font-size) * var(--vds-control-line-height, 1.5) - var(--checkbox-size)) / 2));
   }
 
   /* =========================================================================
@@ -161,4 +167,8 @@
     inline-size: var(--checkbox-card-icon-glyph-size);
     block-size: var(--checkbox-card-icon-glyph-size);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vds-checkbox-card { transition: none; }
 }

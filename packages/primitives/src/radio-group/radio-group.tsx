@@ -69,11 +69,37 @@ const RadioGroup = React.forwardRef<RadioGroupElement, RadioGroupProps>(
     } = props;
     const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeRadioGroup);
     const direction = useDirection(dir);
+    const rootRef = React.useRef<RadioGroupElement>(null);
+    const composedRefs = useComposedRefs(forwardedRef, rootRef);
     const [value, setValue] = useControllableState({
       prop: valueProp,
       defaultProp: defaultValue ?? null,
-      onChange: onValueChange as (value: string | null) => void,
+      onChange: (nextValue) => { if (nextValue !== null) onValueChange?.(nextValue); },
       caller: RADIO_GROUP_NAME,
+    });
+
+    // The native inputs serialize the group, but resetting them alone cannot
+    // reset React's selected value. Resolve their actual owners to also support
+    // items associated with an external form. Controlled values remain owned by
+    // the consumer, as with a native controlled input.
+    React.useEffect(() => {
+      const root = rootRef.current;
+      if (!root) return;
+      const forms = new Set<HTMLFormElement>();
+      const containingForm = root.closest('form');
+      if (containingForm) forms.add(containingForm);
+      root.querySelectorAll<HTMLInputElement>('input[type="radio"]').forEach((input) => {
+        if (input.form) forms.add(input.form);
+      });
+      const handleReset = (event: Event) => {
+        queueMicrotask(() => {
+          if (!event.defaultPrevented && valueProp === undefined) {
+            setValue(defaultValue ?? null);
+          }
+        });
+      };
+      forms.forEach((form) => form.addEventListener('reset', handleReset));
+      return () => forms.forEach((form) => form.removeEventListener('reset', handleReset));
     });
 
     return (
@@ -96,10 +122,11 @@ const RadioGroup = React.forwardRef<RadioGroupElement, RadioGroupProps>(
             role="radiogroup"
             aria-required={required}
             aria-orientation={orientation}
+            data-orientation={orientation}
             data-disabled={disabled ? '' : undefined}
             dir={direction}
             {...groupProps}
-            ref={forwardedRef}
+            ref={composedRefs}
           />
         </RovingFocusGroup.Root>
       </RadioGroupProvider>

@@ -137,6 +137,7 @@ const CheckboxTrigger = React.forwardRef<HTMLButtonElement, CheckboxTriggerProps
       disabled,
       checked,
       required,
+      form: formId,
       setControl,
       setChecked,
       hasConsumerStoppedPropagationRef,
@@ -149,15 +150,22 @@ const CheckboxTrigger = React.forwardRef<HTMLButtonElement, CheckboxTriggerProps
     React.useEffect(() => {
       const form = control?.form;
       if (form) {
-        const reset = () => setChecked(initialCheckedStateRef.current);
+        // Reset is cancelable. Consumers may cancel it on the form (or an
+        // ancestor) after this listener runs, so read cancellation after dispatch.
+        const reset = (event: Event) => {
+          queueMicrotask(() => {
+            if (!event.defaultPrevented) setChecked(initialCheckedStateRef.current);
+          });
+        };
         form.addEventListener('reset', reset);
         return () => form.removeEventListener('reset', reset);
       }
-    }, [control, setChecked]);
+    }, [control, setChecked, formId]);
 
     return (
       <Primitive.button
         type="button"
+        form={formId}
         role="checkbox"
         aria-checked={isIndeterminate(checked) ? 'mixed' : checked}
         aria-required={required}

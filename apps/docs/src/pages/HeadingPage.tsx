@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Heading, type HeadingLevel, type HeadingSize } from "@virtari-packages/react-text";
 import { Section, Stack } from "../components";
 
@@ -68,7 +69,7 @@ export function HeadingPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Heading } from "@virtari-packages/react-text";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Heading } from "@virtari-packages/react-text";
 
 // Level controls semantics; size controls visuals.
 <Heading level={1} size="9">Hero</Heading>
@@ -77,7 +78,7 @@ export function HeadingPage() {
 
 // Truncate + balance wrap
 <Heading level={2} truncate>Long title…</Heading>
-<Heading level={1} size="8" wrap="balance">Hero with balanced lines</Heading>`}</pre>
+<Heading level={1} size="8" wrap="balance">Hero with balanced lines</Heading>`} />
       </Section>
     </>
   );

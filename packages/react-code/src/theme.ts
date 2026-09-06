@@ -7,7 +7,7 @@ import { tags as t } from "@lezer/highlight";
  * Code.tokens.css. No color literals live here. This means light/dark/variant
  * switching is fully driven by CSS, not by re-instantiating the editor.
  */
-const vdsHighlightStyle = HighlightStyle.define([
+export const vdsHighlightStyle = HighlightStyle.define([
   /* Keywords & control flow */
   { tag: t.keyword, color: "var(--vds-code-token-keyword)" },
   { tag: [t.controlKeyword, t.moduleKeyword], color: "var(--vds-code-token-control)", fontWeight: "var(--vds-font-weight-semibold, 600)" },

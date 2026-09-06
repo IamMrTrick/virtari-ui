@@ -20,11 +20,13 @@ Use the existing package and its composition API. Verify the installed version a
 - Use OtpInput with string value/defaultValue and onChange; length defaults to 6 and type is numeric, alphanumeric or alphabetic. onComplete reports a filled code so the application can decide the next step.
 - Provide a translated group label. autoComplete defaults to one-time-code on the first slot; normalizeDigits defaults to true for Persian/Arabic digits. Preserve full-code paste and the built-in slot focus handling.
 - Use size sm, md or lg, mask for obscured slots, and required for native slot requirements. name adds a hidden serialized code input; form associates the component with an external form.
-- The ref targets the root div, not an individual input. Use autoFocus only when entering the code is clearly the current task; selectOnFocus is true by default.
+- The ref targets the root div, not an individual input. Use autoFocus only when entering the code is clearly the current task; selectOnFocus is true by default and automatic focus respects false.
+- Root keyboard and paste handlers run before internal handling and may preventDefault to cancel it. Explicit invalid takes precedence over aria-invalid; native slot metadata includes linked errors. Code order remains LTR inside RTL forms, and slots wrap within narrow containers.
 
 ## Known limits and mistakes to avoid
 
 - A completed code is not an authenticated code; expiration, retry limits and verification remain server/application responsibilities.
 - Do not spread Input's seven-size union onto OtpInput: it supports only sm/md/lg. Its type describes character filtering rather than a native input type.
+- Mask uses browser-dependent visual text security on text inputs, not password semantics. Slot label prefixes are customizable but their appended character-position phrase is currently English. Real SMS retrieval and mobile autofill depend on the consuming browser.
 
 Related package IDs: `react-fieldset`, `react-form`, `utils`, `tokens`. Discover their focused skills from the catalog; do not load all packages at once.

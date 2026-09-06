@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Text, type TextSize } from "@virtari-packages/react-text";
 import { Section, Stack } from "../components";
 
@@ -77,13 +78,13 @@ export function TextPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Text } from "@virtari-packages/react-text";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Text } from "@virtari-packages/react-text";
 
 <Text>Default paragraph</Text>
 <Text size="2" tone="muted">Caption / helper</Text>
 <Text as="label" weight="medium">Form label</Text>
 <Text truncate>Single-line cell content…</Text>
-<Text wrap="pretty">Marketing paragraph with nicer line breaks.</Text>`}</pre>
+<Text wrap="pretty">Marketing paragraph with nicer line breaks.</Text>`} />
       </Section>
     </>
   );

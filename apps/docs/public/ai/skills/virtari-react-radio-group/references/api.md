@@ -93,6 +93,7 @@ export function PillRadio({
   error = false,
   className,
   orientation = "horizontal",
+  dir,
   disabled,
   ref,
   ...props
@@ -230,11 +231,15 @@ export function RadioGroup({
   size = "md",
   disabled = false,
   orientation = "vertical",
+  dir,
   name,
   className,
   children,
   ref,
   id: idProp,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
+  "aria-describedby": ariaDescribedBy,
   ...rest
 }: RadioGroupProps);
 ```
@@ -287,6 +292,7 @@ export function SegmentedRadio({
   error = false,
   className,
   orientation = "horizontal",
+  dir,
   disabled,
   ref,
   ...props
@@ -313,6 +319,12 @@ export function SegmentedRadioItem({
 }: SegmentedRadioItemProps);
 ```
 
+Source: `packages/react-radio-group/src/useRadioDirection.ts`
+
+```tsx
+export function useRadioDirection(dir: "ltr" | "rtl" | undefined, ref: Ref<HTMLDivElement> | undefined);
+```
+
 ## Source files
 
 - `packages/react-radio-group/src/context.ts`
@@ -328,4 +340,5 @@ export function SegmentedRadioItem({
 - `packages/react-radio-group/src/RadioGroup.tsx`
 - `packages/react-radio-group/src/SegmentedRadio.css`
 - `packages/react-radio-group/src/SegmentedRadio.tsx`
+- `packages/react-radio-group/src/useRadioDirection.ts`
 - `packages/react-radio-group/package.json`

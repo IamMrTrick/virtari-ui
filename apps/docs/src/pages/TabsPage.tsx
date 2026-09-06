@@ -1,4 +1,6 @@
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { useState } from "react";
+import { Switch } from "@virtari-packages/react-switch";
 import {
   Tabs,
   TabsList,
@@ -22,7 +24,7 @@ const VARIANTS: TabsVariant[] = [
   "ghost",
 ];
 
-const SIZES: TabsSize[] = ["2xs", "xs", "sm", "md", "lg", "xl", "2xl"];
+const SIZES: TabsSize[] = ["2xs", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"];
 
 function DemoTabs({
   variant,
@@ -52,7 +54,7 @@ function DemoTabs({
       collapseAt={collapseAt}
       swipeable={swipeable}
     >
-      <TabsList
+      <TabsList aria-label="Workspace sections"
         variant={variant}
         size={size}
         fullWidth={fullWidth}
@@ -108,7 +110,7 @@ export function TabsPage() {
 
       <Section
         title="Sizes"
-        description="Seven-tier ramp shared with Button / Select / Input."
+        description="Eight-tier ramp shared with Button / Select / Input."
       >
         <div className="docs-tabs-stack">
           {SIZES.map((s) => (
@@ -158,7 +160,7 @@ export function TabsPage() {
           <div className="docs-stack-item">
             <h3 className="docs-subtitle">segmented · carousel</h3>
             <Tabs defaultValue="overview">
-              <TabsList variant="segmented" fullWidth>
+              <TabsList aria-label="Workspace sections" variant="segmented" fullWidth>
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="analytics">Analytics</TabsTrigger>
                 <TabsTrigger value="reports">Reports</TabsTrigger>
@@ -187,7 +189,7 @@ export function TabsPage() {
           <div className="docs-stack-item">
             <h3 className="docs-subtitle">pills · carousel</h3>
             <Tabs defaultValue="a">
-              <TabsList variant="pills">
+              <TabsList aria-label="Workspace sections" variant="pills">
                 <TabsTrigger value="a">Photos</TabsTrigger>
                 <TabsTrigger value="b">Albums</TabsTrigger>
                 <TabsTrigger value="c">Shared</TabsTrigger>
@@ -219,7 +221,7 @@ export function TabsPage() {
           <div className="docs-stack-item">
             <h3 className="docs-subtitle">adjacent mounting</h3>
             <Tabs defaultValue="summary">
-              <TabsList variant="segmented" fullWidth>
+              <TabsList aria-label="Workspace sections" variant="segmented" fullWidth>
                 <TabsTrigger value="summary">Summary</TabsTrigger>
                 <TabsTrigger value="traffic">Traffic</TabsTrigger>
                 <TabsTrigger value="revenue">Revenue</TabsTrigger>
@@ -242,18 +244,18 @@ export function TabsPage() {
             </Tabs>
           </div>
 
-          <pre className="docs-code">{`<TabsPanels mountStrategy="adjacent">
+          <VirtariCodeBlock renderer="static" language="tsx" code={`<TabsPanels mountStrategy="adjacent">
   <TabsContent value="summary">...</TabsContent>
   <TabsContent value="traffic">...</TabsContent>
   <TabsContent value="revenue">...</TabsContent>
   <TabsContent value="exports">...</TabsContent>
-</TabsPanels>`}</pre>
+</TabsPanels>`} />
         </div>
       </Section>
 
       <Section
         title="Full-width"
-        description="Triggers distribute equally across the list's inline size."
+        description="Triggers share the available width. Long labels wrap and the row grows to keep text centered."
       >
         <div className="docs-tabs-stack">
           <div className="docs-stack-item">
@@ -289,10 +291,10 @@ export function TabsPage() {
       >
         <div className="docs-tabs-stack">
           <label className="docs-inline-field">
-            <input
-              type="checkbox"
+            <Switch
+              aria-label="Animate selected tab indicator"
               checked={animated}
-              onChange={(e) => setAnimated(e.target.checked)}
+              onCheckedChange={setAnimated}
             />
             <span>animatedIndicator = {String(animated)}</span>
           </label>
@@ -312,12 +314,12 @@ export function TabsPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Tabs, TabsList, TabsTrigger, TabsContent,
 } from "@virtari-packages/react-tabs";
 
 <Tabs defaultValue="overview">
-  <TabsList variant="pills" size="md">
+  <TabsList aria-label="Workspace sections" variant="pills" size="md">
     <TabsTrigger value="overview">Overview</TabsTrigger>
     <TabsTrigger value="analytics">Analytics</TabsTrigger>
     <TabsTrigger value="settings">Settings</TabsTrigger>
@@ -325,10 +327,10 @@ export function TabsPage() {
   <TabsContent value="overview">...</TabsContent>
   <TabsContent value="analytics">...</TabsContent>
   <TabsContent value="settings">...</TabsContent>
-</Tabs>`}</pre>
-        <pre className="docs-code">{`// Carousel panels with lazy-adjacent mounting for heavy content
+</Tabs>`} />
+        <VirtariCodeBlock renderer="static" language="tsx" code={`// Carousel panels with lazy-adjacent mounting for heavy content
 <Tabs defaultValue="overview">
-  <TabsList variant="segmented" fullWidth>
+  <TabsList aria-label="Workspace sections" variant="segmented" fullWidth>
     <TabsTrigger value="overview">Overview</TabsTrigger>
     <TabsTrigger value="analytics">Analytics</TabsTrigger>
     <TabsTrigger value="reports">Reports</TabsTrigger>
@@ -338,7 +340,7 @@ export function TabsPage() {
     <TabsContent value="analytics">...</TabsContent>
     <TabsContent value="reports">...</TabsContent>
   </TabsPanels>
-</Tabs>`}</pre>
+</Tabs>`} />
       </Section>
     </>
   );

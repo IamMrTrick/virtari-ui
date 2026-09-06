@@ -1,3 +1,4 @@
+import { InlineCode as VirtariInlineCode } from "@virtari-packages/react-code";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { InputField } from "@virtari-packages/react-input";
@@ -25,6 +26,7 @@ export function ColorsPage() {
   };
   return <Stack gap="xl">
     <p className="docs-prose">{copy("The complete color inventory, read directly from Virtari’s token source. Select a swatch to copy its CSS variable and inspect its rendered value.", "فهرست کامل رنگ‌ها، مستقیماً از منبع توکن‌های ویرتاری. هر نمونه را انتخاب کنید تا متغیر CSS کپی و مقدار نمایشی آن مشخص شود.")}</p>
+    <p className="docs-prose">{copy("Use text and intent-text roles on canvas and tonal surfaces, and on-intent roles on solid intent fills. Supporting text now uses readable text steps: text-subtle matches text-muted, intent-text-muted matches intent-text, and light warning text uses step 12. Variable names and raw palettes are unchanged. Use spacing and type weight for additional hierarchy; custom brands and translucent backgrounds still need a contrast check.", "برای زمینه‌های اصلی و ملایم از نقش‌های text و intent-text، و برای زمینه‌های پررنگ از on-intent استفاده کنید. متن کم‌تأکید اکنون خواناتر است: text-subtle با text-muted و intent-text-muted با intent-text برابر است و متن هشدار در تم روشن از مرحلهٔ ۱۲ استفاده می‌کند. نام متغیرها و پالت خام تغییر نکرده‌اند. برای سلسله‌مراتب بیشتر از فاصله و وزن قلم استفاده کنید؛ برند سفارشی و زمینهٔ شفاف همچنان به بررسی کنتراست نیاز دارند.")}</p>
     <Stack gap="md">
       <InputField label={copy("Find a color or token", "جست‌وجوی رنگ یا توکن")} type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="primary, alpha, text, scrim…" />
       <Cluster gap="md">
@@ -51,7 +53,7 @@ export function ColorsPage() {
             catch { setSelection(`${entry.token} · ${value} · ${copy("Copy unavailable; select this text.", "کپی ممکن نبود؛ این متن را انتخاب کنید.")}`); }
           }}>
             <span className="docs-palette-checker" aria-hidden="true"><span className="docs-palette-paint" style={{ backgroundColor: `var(${entry.token})` }} /></span>
-            <code dir="ltr">{entry.token.replace("--vds-color-", "")}</code>
+            <VirtariInlineCode dir="ltr">{entry.token.replace("--vds-color-", "")}</VirtariInlineCode>
           </Button>)}
         </div>
       </Stack>)}

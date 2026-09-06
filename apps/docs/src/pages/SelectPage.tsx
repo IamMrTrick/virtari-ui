@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectField,
@@ -188,16 +189,6 @@ export function SelectPage() {
 
   const asyncSearch = useAsyncUserSearch();
 
-  const groupedCountries = useMemo(() => {
-    const groups = new Map<string, ComboboxItemData[]>();
-    COUNTRIES.forEach((c) => {
-      const key = c.region as string;
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key)!.push(c);
-    });
-    return Array.from(groups.entries());
-  }, []);
-
   return (
     <>
       {/* ═══════════════════════ SELECT ═══════════════════════ */}
@@ -208,7 +199,7 @@ export function SelectPage() {
       >
         <div style={{ maxInlineSize: "18rem" }}>
           <Select value={plan} onValueChange={setPlan}>
-            <SelectTrigger>
+            <SelectTrigger aria-label="Choose an option">
               <SelectValue placeholder="Choose a plan…" />
             </SelectTrigger>
             <SelectContent>
@@ -246,14 +237,14 @@ export function SelectPage() {
                   aria-describedby={describedBy}
                   invalid={invalid}
                 >
-                  <SelectValue placeholder="Choose a planâ€¦" />
+                  <SelectValue placeholder="Choose a plan…" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="free">Free â€” 3 projects</SelectItem>
-                  <SelectItem value="pro">Pro â€” $19/mo</SelectItem>
-                  <SelectItem value="team">Team â€” $49/mo</SelectItem>
+                  <SelectItem value="free">Free — 3 projects</SelectItem>
+                  <SelectItem value="pro">Pro — $19/mo</SelectItem>
+                  <SelectItem value="team">Team — $49/mo</SelectItem>
                   <SelectItem value="enterprise">
-                    Enterprise â€” contact sales
+                    Enterprise — contact sales
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -267,7 +258,7 @@ export function SelectPage() {
           {(["soft", "outline", "ghost", "filled"] as const).map((a) => (
             <div key={a} style={{ inlineSize: "14rem" }}>
               <Select>
-                <SelectTrigger appearance={a}>
+                <SelectTrigger appearance={a} aria-label={`${a} appearance`}>
                   <SelectValue placeholder={`${a} appearance`} />
                 </SelectTrigger>
                 <SelectContent>
@@ -296,7 +287,7 @@ export function SelectPage() {
             <Row key={s}>
               <span className="docs-size-label">{s}</span>
               <Select>
-                <SelectTrigger size={s}>
+                <SelectTrigger size={s} aria-label={`${s} size`}>
                   <SelectValue placeholder={`${s} size`} />
                 </SelectTrigger>
                 <SelectContent size={s}>
@@ -317,6 +308,7 @@ export function SelectPage() {
           <div style={{ inlineSize: "16rem" }}>
             <Select value={plan} onValueChange={setPlan}>
               <SelectTrigger
+                aria-label="Billing plan"
                 clearable
                 onClear={() => setPlan("")}
               >
@@ -331,7 +323,7 @@ export function SelectPage() {
           </div>
           <div style={{ inlineSize: "16rem" }}>
             <Select>
-              <SelectTrigger loading>
+              <SelectTrigger loading aria-label="Loading plans">
                 <SelectValue placeholder="Loading plans…" />
               </SelectTrigger>
               <SelectContent>
@@ -341,7 +333,7 @@ export function SelectPage() {
           </div>
           <div style={{ inlineSize: "16rem" }}>
             <Select>
-              <SelectTrigger invalid>
+              <SelectTrigger invalid aria-label="Required plan">
                 <SelectValue placeholder="Invalid — field required" />
               </SelectTrigger>
               <SelectContent>
@@ -351,7 +343,7 @@ export function SelectPage() {
           </div>
           <div style={{ inlineSize: "16rem" }}>
             <Select disabled>
-              <SelectTrigger>
+              <SelectTrigger aria-label="Choose an option">
                 <SelectValue placeholder="Disabled" />
               </SelectTrigger>
               <SelectContent>
@@ -365,7 +357,7 @@ export function SelectPage() {
       <Section title="Grouped">
         <div style={{ maxInlineSize: "18rem" }}>
           <Select>
-            <SelectTrigger>
+            <SelectTrigger aria-label="Choose an option">
               <SelectValue placeholder="Pick a timezone…" />
             </SelectTrigger>
             <SelectContent>
@@ -398,7 +390,7 @@ export function SelectPage() {
       <Section title="Empty state" description="Use <SelectEmpty> when you render no SelectItems.">
         <div style={{ maxInlineSize: "18rem" }}>
           <Select>
-            <SelectTrigger>
+            <SelectTrigger aria-label="Choose an option">
               <SelectValue placeholder="No options yet…" />
             </SelectTrigger>
             <SelectContent>
@@ -421,7 +413,7 @@ export function SelectPage() {
             onValueChange={setCountry}
             emptyMessage="No countries match that search"
           >
-            <ComboboxTrigger placeholder="Select a country…" clearable />
+            <ComboboxTrigger aria-label="Country" placeholder="Select a country…" clearable />
             <ComboboxContent>
               <ComboboxInput placeholder="Search countries…" />
               <ComboboxList>
@@ -454,7 +446,7 @@ export function SelectPage() {
             multiple
             emptyMessage="No frameworks match"
           >
-            <ComboboxTrigger placeholder="Pick your stack…" clearable />
+            <ComboboxTrigger aria-label="Frameworks" placeholder="Pick your stack…" clearable />
             <ComboboxContent>
               <ComboboxInput placeholder="Search frameworks…" />
               <ComboboxList>
@@ -488,7 +480,7 @@ export function SelectPage() {
             onSearchChange={asyncSearch.onSearchChange}
             emptyMessage="No teammates found"
           >
-            <ComboboxTrigger placeholder="Assign to teammate…" clearable />
+            <ComboboxTrigger aria-label="Teammate" placeholder="Assign to teammate…" clearable />
             <ComboboxContent>
               <ComboboxInput placeholder="Type a name or role…" />
               <ComboboxList>
@@ -536,7 +528,7 @@ export function SelectPage() {
             virtualized
             emptyMessage="No cities match"
           >
-            <ComboboxTrigger placeholder="Pick a district…" clearable />
+            <ComboboxTrigger aria-label="District" placeholder="Pick a district…" clearable />
             <ComboboxContent>
               <ComboboxInput placeholder="Search 2 000 districts…" />
               <ComboboxList>
@@ -565,7 +557,7 @@ export function SelectPage() {
             onValueChange={setRegion}
             emptyMessage="No countries match"
           >
-            <ComboboxTrigger placeholder="Pick a country…" clearable />
+            <ComboboxTrigger aria-label="Country by region" placeholder="Pick a country…" clearable />
             <ComboboxContent>
               <ComboboxInput placeholder="Search countries…" />
               <ComboboxList>
@@ -586,7 +578,7 @@ export function SelectPage() {
         <Row>
           <div style={{ inlineSize: "18rem" }}>
             <Combobox items={FRAMEWORKS} invalid>
-              <ComboboxTrigger placeholder="Required" />
+              <ComboboxTrigger aria-label="Required framework" placeholder="Required" />
               <ComboboxContent>
                 <ComboboxInput />
                 <ComboboxList>
@@ -603,7 +595,7 @@ export function SelectPage() {
           </div>
           <div style={{ inlineSize: "18rem" }}>
             <Combobox items={FRAMEWORKS} disabled>
-              <ComboboxTrigger placeholder="Disabled" />
+              <ComboboxTrigger aria-label="Disabled framework" placeholder="Disabled" />
               <ComboboxContent>
                 <ComboboxInput />
                 <ComboboxList>
@@ -620,7 +612,7 @@ export function SelectPage() {
           </div>
           <div style={{ inlineSize: "18rem" }}>
             <Combobox items={[]} loading>
-              <ComboboxTrigger placeholder="Fetching…" />
+              <ComboboxTrigger aria-label="Loading frameworks" placeholder="Fetching…" />
               <ComboboxContent>
                 <ComboboxInput />
                 <ComboboxList>
@@ -642,7 +634,7 @@ export function SelectPage() {
       {/* ═══════════════════════ USAGE ═══════════════════════ */}
 
       <Section title="Usage — Select">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Select,
   SelectTrigger,
   SelectValue,
@@ -654,7 +646,7 @@ export function SelectPage() {
   <SelectTrigger
     size="md"
     appearance="outline"   // soft | outline | ghost | filled
-    clearable              // X button when a value is set
+    clearable              // clear action; update value in onClear
     invalid                // form error state
     loading                // spinner replaces chevron
     onClear={() => setPlan("")}
@@ -665,11 +657,11 @@ export function SelectPage() {
     <SelectItem value="free">Free</SelectItem>
     <SelectItem value="pro">Pro</SelectItem>
   </SelectContent>
-</Select>`}</pre>
+</Select>`} />
       </Section>
 
       <Section title="Usage — Combobox">
-        <pre className="docs-code">{`import {
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import {
   Combobox,
   ComboboxTrigger,
   ComboboxContent,
@@ -691,7 +683,7 @@ export function SelectPage() {
   onSearchChange={setQuery}      // async mode — consumer owns filtering
   emptyMessage="No matches"
 >
-  <ComboboxTrigger placeholder="Assign…" clearable />
+  <ComboboxTrigger aria-label="Choose an option" placeholder="Assign…" clearable />
   <ComboboxContent>
     <ComboboxInput placeholder="Search…" />
     <ComboboxList>
@@ -706,7 +698,7 @@ export function SelectPage() {
       <ComboboxEmpty />
     </ComboboxList>
   </ComboboxContent>
-</Combobox>`}</pre>
+</Combobox>`} />
       </Section>
     </>
   );

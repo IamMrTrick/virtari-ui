@@ -14,7 +14,7 @@ export interface CheckboxGroupProps
   /** Propagates disabled to every descendant Checkbox / CheckboxField / CheckboxCard. */
   disabled?: boolean;
   orientation?: "vertical" | "horizontal";
-  /** Optional form field name; passed through context for name= inheritance if needed by consumers. */
+  /** Default form field name inherited by descendant checkboxes; an item name overrides it. */
   name?: string;
   children: ReactNode;
   ref?: Ref<HTMLDivElement>;
@@ -48,8 +48,8 @@ export function CheckboxGroup({
       .join(" ") || undefined;
 
   const contextValue = useMemo(
-    () => ({ disabled, error: hasError, name }),
-    [disabled, hasError, name],
+    () => ({ disabled, error: hasError, name, describedBy }),
+    [disabled, hasError, name, describedBy],
   );
 
   return (

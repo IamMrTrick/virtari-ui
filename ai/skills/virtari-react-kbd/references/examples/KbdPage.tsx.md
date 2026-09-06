@@ -3,6 +3,7 @@
 Source ID: `apps/docs/src/pages/KbdPage.tsx`. This is source context, not a standalone app. Preserve required state/helpers; replace documentation wrappers with application layout.
 
 ```tsx
+import { CodeBlock as VirtariCodeBlock } from "@virtari-packages/react-code";
 import { Kbd, KbdShortcut } from "@virtari-packages/react-kbd";
 import { Section, Row } from "../components";
 
@@ -63,7 +64,7 @@ export function KbdPage() {
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Kbd, KbdShortcut } from "@virtari-packages/react-kbd";
+        <VirtariCodeBlock renderer="static" language="tsx" code={`import { Kbd, KbdShortcut } from "@virtari-packages/react-kbd";
 import { ariaKeyShortcuts, useHotkey, useKeyboardPlatform } from "@virtari-packages/utils";
 
 // Single key
@@ -77,7 +78,7 @@ const platform = useKeyboardPlatform();
 useHotkey("mod+k", openSearch);
 <Button onClick={openSearch} aria-keyshortcuts={ariaKeyShortcuts("mod+k", platform)}>
   Search <KbdShortcut combo="mod+k" />
-</Button>`}</pre>
+</Button>`} />
       </Section>
     </>
   );

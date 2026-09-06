@@ -26,7 +26,7 @@ Use the existing package and its composition API. Verify the installed version a
 ## Known limits and mistakes to avoid
 
 - seo only works with items. seoBaseUrl resolves relative URLs but does not make untrusted content safe.
-- The current SEO script is inserted using JSON.stringify and dangerouslySetInnerHTML without escaping HTML script terminators. Keep seo disabled for untrusted item content, especially during SSR, until safe script serialization is implemented.
+- SEO script serialization escapes less-than characters before HTML embedding, preserving JSON data without emitting literal script terminators. This does not validate consumer URLs or certify the structured data for search engines.
 - Do not render a second nested anchor inside BreadcrumbLink or make BreadcrumbPage clickable; use actual links for ancestors and current-page semantics for the final location.
 
 Related package IDs: `react-nav`, `react-dropdown-menu`, `react-icons`, `primitives`. Discover their focused skills from the catalog; do not load all packages at once.

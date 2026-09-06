@@ -13,12 +13,10 @@
     justify-content: space-between;
     gap: var(--select-trigger-gap);
     inline-size: 100%;
-    block-size: var(--select-trigger-height);
+    min-block-size: var(--select-trigger-height);
     padding-inline: var(--select-trigger-padding-inline);
-    padding-block-start: calc(
-      var(--select-trigger-padding-block) + var(--select-trigger-optical-offset)
-    );
-    padding-block-end: var(--select-trigger-padding-block);
+    padding-block: var(--select-trigger-padding-block);
+    text-align: start;
 
     font-family: var(--select-trigger-font-family);
     font-size: var(--select-trigger-font-size);
@@ -99,6 +97,13 @@
     flex: none;
   }
 
+  .vds-select-trigger-value > span {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   /* ── Chevron icon ── */
   .vds-select-icon {
     display: inline-flex;
@@ -106,6 +111,8 @@
     color: var(--select-trigger-icon-color);
     opacity: var(--select-trigger-icon-opacity);
     flex: none;
+    inline-size: 0.875rem;
+    justify-content: center;
     transition:
       transform var(--select-trigger-transition-duration) var(--select-trigger-transition-easing),
       opacity var(--select-trigger-transition-duration) var(--select-trigger-transition-easing);
@@ -181,6 +188,9 @@
 
   /* ── Content (popover panel) ── */
   .vds-select-content {
+    box-sizing: border-box;
+    max-inline-size: min(var(--vds-select-content-available-width, 100vw), calc(100vw - 1rem));
+    max-block-size: var(--vds-select-content-available-height, 80vh);
     z-index: var(--select-content-z-index);
     background-color: var(--select-content-bg);
     border: var(--select-content-border-width) solid var(--select-content-border-color);
@@ -208,8 +218,16 @@
 
   /* When position="popper", match trigger width */
   .vds-select-content[data-position="popper"] > .vds-select-viewport {
+    inline-size: 100%;
+  }
+
+  .vds-select-content[data-position="popper"] {
     inline-size: var(--vds-select-trigger-width);
-    max-block-size: var(--vds-select-content-available-height);
+  }
+
+  .vds-select-item-label {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
   }
 
   /* ── Item ── */
@@ -281,6 +299,11 @@
 @layer design-system.components {
   .vds-select-control { position: relative; display: inline-flex; inline-size: 100%; min-inline-size: 0; }
   .vds-select-control > .vds-select-clear { position: absolute; inset-inline-end: calc(var(--select-trigger-padding-inline) + 0.875rem + var(--select-trigger-gap)); inset-block-start: 50%; transform: translateY(-50%); }
-  .vds-select-clear-space { inline-size: 1rem; }
+  .vds-select-clear-space { inline-size: min(1.5rem, calc(var(--select-trigger-height) - 4px)); }
   .vds-select-clear:disabled { cursor: not-allowed; opacity: var(--vds-opacity-disabled, 0.5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vds-select-content, .vds-select-spinner > svg { animation: none !important; }
+  .vds-select-trigger:active { scale: 1 !important; }
 }

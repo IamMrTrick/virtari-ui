@@ -87,6 +87,7 @@ export function Chip({
   asChild = false,
   className,
   ref,
+  children,
   ...props
 }: ChipProps);
 ```
@@ -122,7 +123,7 @@ export interface ChipLabelProps extends React.HTMLAttributes<HTMLSpanElement> {
 Source: `packages/react-chip/src/Chip.tsx`
 
 ```tsx
-export function ChipLabel({ className, ref, ...props }: ChipLabelProps);
+export function ChipLabel({ className, ref, children, ...props }: ChipLabelProps);
 ```
 
 Source: `packages/react-chip/src/Chip.tsx`

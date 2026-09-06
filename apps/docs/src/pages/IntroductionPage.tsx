@@ -1,3 +1,4 @@
+import { CodeBlock as VirtariCodeBlock, InlineCode } from "@virtari-packages/react-code";
 import { Trans, useTranslation } from "react-i18next";
 import { Badge } from "@virtari-packages/react-badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@virtari-packages/react-card";
@@ -33,7 +34,7 @@ export function IntroductionPage() {
         <Grid className="docs-principles-grid" gap="md" minItemWidth="13rem">
           {principles.map(principle => <Card key={principle.path} variant="soft" className="docs-principle-card">
             <CardHeader><span className="docs-principle-icon" aria-hidden="true">{principle.icon}</span><CardTitle>{principle.title}</CardTitle><CardDescription>{principle.body}</CardDescription></CardHeader>
-            <CardContent><Button asChild size="sm" variant="ghost"><a href={href(principle.path)}>{label("Explore", "مشاهده")}<IconArrowRight className="docs-directional-icon" size={16}/></a></Button></CardContent>
+            <CardContent><Button asChild size="sm" variant="ghost" rightSection={<IconArrowRight className="docs-directional-icon" size={16}/>}><a href={href(principle.path)}>{label("Explore", "مشاهده")}</a></Button></CardContent>
           </Card>)}
         </Grid>
       </Section>
@@ -44,7 +45,7 @@ export function IntroductionPage() {
       <Section title={label("Fields on colored surfaces", "ورودی‌ها روی سطوح رنگی")}
         description={label("Field tone works independently from border, shadow and radius. A deeper transparent fill retains the color of its container.", "شدت رنگ ورودی مستقل از بوردر، سایه و رادیوس است. سطح شفاف قوی‌تر، رنگ ظرف خودش را حفظ می‌کند.")}>
         <FieldToneExample />
-        <pre className="docs-code">{'<Card data-surface-style="tonal" data-field-tone="strong">\n  <CardContent>\n    <InputField label="Workspace" />\n  </CardContent>\n</Card>'}</pre>
+        <VirtariCodeBlock renderer="static" language="tsx" code={'<Card data-surface-style="tonal" data-field-tone="strong">\n  <CardContent>\n    <InputField label="Workspace" />\n  </CardContent>\n</Card>'} />
         <p className="docs-prose">{label("Use visible labels and connected help, then test contrast against your actual background. Stronger contrast preferences restore clear control boundaries.", "از برچسب قابل‌مشاهده و راهنمای متصل استفاده کنید و کنتراست را روی زمینهٔ واقعی بسنجید. تنظیم کنتراست بیشتر، مرز کنترل‌ها را واضح‌تر می‌کند.")}</p>
         <Cluster>
           <Button asChild variant="soft" rightSection={<IconArrowRight className="docs-directional-icon" />}><a href={href("guidelines")}>{label("Read the interaction guidelines", "راهنمای طراحی تعامل")}</a></Button>
@@ -53,17 +54,16 @@ export function IntroductionPage() {
       </Section>
       <Section title={t("whatIs.title")}>
         <p className="docs-prose">
-          {/* `components` positional map — <1>/<2>/<3> = <strong>, <4> = <code>.
-              i18next renders translated chunks between these markers. */}
+          {/* Match the explicit translation markers in both locales. */}
           <Trans
             ns="introduction"
             i18nKey="whatIs.body"
-            components={[
-              <strong key="0" />,
-              <strong key="1" />,
-              <strong key="2" />,
-              <code key="3" />,
-            ]}
+            components={{
+              1: <strong />,
+              2: <strong />,
+              3: <strong />,
+              4: <InlineCode />,
+            }}
           />
         </p>
       </Section>
@@ -84,12 +84,13 @@ export function IntroductionPage() {
         </div>
       </Section>
 
-      <Section title={t("quickStart.title")}>
-        <pre className="docs-code">{t("quickStart.snippet")}</pre>
+      <Section title={t("quickStart.title")} description={t("quickStart.description")}>
+        <VirtariCodeBlock renderer="static" language="shell" filename={label("Install packages", "نصب پکیج‌ها")} code="pnpm add @virtari-packages/core @virtari-packages/tokens @virtari-packages/react-button" />
+        <VirtariCodeBlock renderer="static" language="tsx" filename="App.tsx" code={'import "@virtari-packages/core";\nimport "@virtari-packages/tokens";\nimport "@virtari-packages/react-button/styles";\nimport { Button } from "@virtari-packages/react-button";\n\nexport function App() {\n  return <Button variant="outline">Continue</Button>;\n}'} />
       </Section>
 
       <Section title={t("architecture.title")}>
-        <pre className="docs-code">{t("architecture.snippet")}</pre>
+        <VirtariCodeBlock renderer="static" language="plaintext" code={t("architecture.snippet")} />
       </Section>
     </>
   );

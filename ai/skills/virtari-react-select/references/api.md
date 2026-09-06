@@ -372,7 +372,7 @@ export function SelectField({
   className,
   children,
   controlId,
-  invalid = false,
+  invalid,
   ref,
   ...props
 }: SelectFieldProps);
@@ -415,6 +415,7 @@ export interface ComboboxContextValue {
 
   /* data */
   filteredItems: ComboboxItemData[];
+  setItemDisabled: (value: string, disabled: boolean) => void;
   selectedItems: ComboboxItemData[];
 
   /* selection */
@@ -448,7 +449,7 @@ export interface ComboboxContextValue {
   getItemId: (index: number) => string;
 
   /* keyboard */
-  handleInputKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+  handleInputKeyDown: (e: KeyboardEvent<HTMLElement>) => void;
 }
 ```
 

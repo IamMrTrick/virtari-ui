@@ -1,4 +1,4 @@
-import { cn, useDirection } from "@virtari-packages/utils";
+import { cn, controlText, useDirection } from "@virtari-packages/utils";
 import { useDirection as usePrimitiveDirection } from "@virtari-packages/primitives/direction";
 import {
   useRef,
@@ -152,7 +152,7 @@ export function TabsTrigger({
       className={cn("vds-tabs-trigger", className)}
       {...props}
     >
-      <span className="vds-tabs-trigger-content">{children}</span>
+      <span className="vds-tabs-trigger-content">{controlText(children)}</span>
     </TabsPrimitive.Trigger>
   );
 }

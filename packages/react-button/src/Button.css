@@ -13,15 +13,12 @@
     box-sizing: border-box;
     min-block-size: var(--button-height);
     min-inline-size: var(--button-min-width);
+    max-inline-size: 100%;
     padding-inline: var(--button-padding-inline);
     padding-block-start: var(--button-padding-block);
     padding-block-end: var(--button-padding-block);
 
-    /* State overlay sits ON TOP of background-color via background-image.
-     * For solid variant on hover/active, `--button-overlay` resolves to a
-     * neutral alpha (black in light, white in dark) that darkens/lightens
-     * the button without ever touching the brand hue. Non-solid variants
-     * set the overlay to transparent so only the bg swap is visible. */
+    /* Optional consumer overlay; built-in states use paired color roles. */
     background-color: var(--button-bg);
     background-image: linear-gradient(
       var(--button-overlay, transparent),
@@ -38,7 +35,9 @@
     letter-spacing: var(--button-letter-spacing);
 
     text-decoration: none;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
