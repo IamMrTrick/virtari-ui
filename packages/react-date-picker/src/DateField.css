@@ -468,7 +468,7 @@
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
     scroll-padding-block: calc((var(--time-picker-wheel-height) - var(--time-picker-wheel-item-height)) / 2);
-    border-radius: var(--vds-radius-2, 0.25rem);
+    border-radius: var(--vds-radius-date-segment, 0.25rem);
     scrollbar-width: none;
     touch-action: pan-y;
     cursor: grab;

@@ -82,6 +82,7 @@
     "@virtari-packages/react-yoopta-editor": "workspace:*",
     "@virtari-packages/tokens": "workspace:*",
     "@virtari-packages/utilities": "workspace:*",
+    "@virtari-packages/utils": "workspace:*",
     "@xyflow/react": "^12.10.2",
     "@yoopta/accordion": "^6.0.3",
     "@yoopta/blockquote": "^6.0.3",

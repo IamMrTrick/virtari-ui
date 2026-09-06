@@ -14,13 +14,13 @@ import { Avatar } from "@virtari-packages/react-avatar";
 import { Section, Row } from "../components";
 
 const HEIGHT_RAMP = [
-  { size: "2xs" as const, px: "24px", wcag: "AA min", note: "Dense UI only" },
-  { size: "xs" as const, px: "28px", wcag: "AA", note: "Tables, toolbars" },
-  { size: "sm" as const, px: "32px", wcag: "AA", note: "Secondary actions" },
-  { size: "md" as const, px: "40px", wcag: "AA", note: "Default" },
-  { size: "lg" as const, px: "44px", wcag: "AAA + Apple", note: "Primary CTA" },
-  { size: "xl" as const, px: "52px", wcag: "AAA + All", note: "Hero sections" },
-  { size: "2xl" as const, px: "64px", wcag: "AAA + All", note: "Landing pages" },
+  { size: "2xs" as const, px: "24px", wcag: "Dense", note: "Dense UI only" },
+  { size: "xs" as const, px: "28px", wcag: "Compact", note: "Tables, toolbars" },
+  { size: "sm" as const, px: "32px", wcag: "Compact", note: "Secondary actions" },
+  { size: "md" as const, px: "40px", wcag: "Default", note: "Default" },
+  { size: "lg" as const, px: "44px", wcag: "Touch", note: "Primary CTA" },
+  { size: "xl" as const, px: "52px", wcag: "Touch", note: "Hero sections" },
+  { size: "2xl" as const, px: "64px", wcag: "Touch", note: "Landing pages" },
 ];
 
 export function SizingPage() {
@@ -42,7 +42,7 @@ export function SizingPage() {
 
       <Section
         title="Height-Ramp Components"
-        description="These share the same height at the same size. Button + Input + Select side by side = pixel-perfect alignment."
+        description="These share a minimum height at the same size. Larger text can expand the line box; verify mixed controls with your product’s fonts."
       >
         <div className="docs-sizing-table">
           {HEIGHT_RAMP.map((row) => (
@@ -80,7 +80,7 @@ export function SizingPage() {
               Checkbox — sm / md / lg
             </h3>
             <Row>
-              <Checkbox size="sm" /> <Checkbox /> <Checkbox size="lg" />
+              <Checkbox size="sm" aria-label="Small checkbox" /> <Checkbox aria-label="Medium checkbox" /> <Checkbox size="lg" aria-label="Large checkbox" />
             </Row>
           </div>
           <div>
@@ -88,7 +88,7 @@ export function SizingPage() {
               Switch — sm / md / lg
             </h3>
             <Row>
-              <Switch size="sm" /> <Switch /> <Switch size="lg" />
+              <Switch size="sm" aria-label="Small switch" /> <Switch aria-label="Medium switch" /> <Switch size="lg" aria-label="Large switch" />
             </Row>
           </div>
           <div>
@@ -106,18 +106,10 @@ export function SizingPage() {
         </div>
       </Section>
 
-      <Section title="WCAG Compliance">
-        <pre className="docs-code">{`Size  Height  WCAG 2.5.8 (AA 24px)  WCAG 2.5.5 (AAA 44px)  Apple HIG  Google MD
-───── ─────── ───────────────────── ────────────────────── ────────── ─────────
-2xs   24px    ⚠ Bare minimum         ✗                      ✗          ✗
-xs    28px    ✓                       ✗                      ✗          ✗
-sm    32px    ✓                       ✗                      ✗          ✗
-md    40px    ✓                       ✗                      ✗          ✗
-lg    44px    ✓                       ✓                      ✓ (44pt)   ✗
-xl    52px    ✓                       ✓                      ✓          ✓ (48dp)
-2xl   64px    ✓                       ✓                      ✓          ✓
-
-⚠ For touch-primary interfaces, use lg+ to meet AAA and platform guidelines.`}</pre>
+      <Section title="Target size guidance" description="A height token alone does not establish accessibility compliance. Evaluate the complete clickable area, both dimensions, nearby targets and the final interaction.">
+        <p className="docs-prose">WCAG 2.2 target size (minimum) uses 24 × 24 CSS pixels, with exceptions such as sufficient spacing. The enhanced criterion uses 44 × 44 CSS pixels. Small visible controls can have a larger clickable label; do not equate a 14px checkbox mark with the entire target.</p>
+        <p className="docs-prose">For touch-focused interfaces, start with lg or larger, then check the final target size, spacing, text enlargement and keyboard behavior. CSS pixels, Apple points and Android density-independent pixels are different platform units.</p>
+        <p className="docs-prose"><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html">W3C: target size minimum</a>{" · "}<a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html">W3C: target size enhanced</a></p>
       </Section>
     </>
   );

@@ -58,7 +58,7 @@
   [data-radius="round"] {
     --vds-radius-xs:  var(--vds-radius-3);
     --vds-radius-sm:  var(--vds-radius-4);
-    --vds-radius-md:  var(--vds-radius-5);
+    --vds-radius-md:  var(--vds-radius-6);
     --vds-radius-lg:  var(--vds-radius-7);
     --vds-radius-xl:  2rem;
     --vds-radius-2xl: 2.5rem;

@@ -12,8 +12,8 @@
      * or the element/surface/badge aliases — intentional.
      */
 
-    /* Checkbox — cap at primitive-4 (8px) so it never reads as a radio.
-     * Must use a primitive cap, not another mode-reactive radius token. */
+    /* Checkbox — finite mode role, with a further size-relative cap in the
+     * component so even its smallest size remains distinct from a radio. */
     --vds-radius-checkbox: min(var(--vds-radius-element), var(--vds-radius-4));
 
     /* Checkbox card — follow card radius family (xl cap) so card-style
@@ -23,9 +23,8 @@
     /* Multiline fields share the finite radius of other input shells. */
     --vds-radius-textarea: var(--vds-radius-control);
 
-    /* Kbd (keyboard key cap) — cap at primitive-4 (8px) so it keeps a key-like shape
-     * and works with the bottom-border-width trick used for depth */
-    --vds-radius-kbd: min(var(--vds-radius-element), var(--vds-radius-4));
+    /* Keycaps remain compact rectangles, distinct from action capsules. */
+    --vds-radius-kbd: min(var(--vds-radius-xs), var(--vds-radius-3));
 
     /* Default control shell/action aliases. Inputs and fields stay on the
      * finite control radius; button-like affordances switch to full in pill
@@ -40,6 +39,7 @@
     --vds-radius-toggle: var(--vds-radius-button);
     --vds-radius-pagination-button: var(--vds-radius-button);
     --vds-radius-tabs-trigger: var(--vds-radius-button);
+    --vds-radius-tabs-boxed: min(var(--vds-radius-control), var(--vds-radius-4));
     --vds-radius-toast-action: var(--vds-radius-button);
 
     /* Chip — follow Badge: pill in every mode.
@@ -95,9 +95,9 @@
     --vds-radius-radio-card: var(--vds-radius-card);
     --vds-radius-radio-card-icon: var(--vds-radius-control-action);
 
-    /* Segmented radio — cap at primitive-4 (8px). Outer group keeps a clean corner
-     * but inner segment dividers would blur if pill-mode rounded them too much. */
-    --vds-radius-segmented: min(var(--vds-radius-element), var(--vds-radius-4));
+    /* Segmented tracks belong to the field family. Their inset indicators
+     * subtract the track border and padding; they do not repeat this radius. */
+    --vds-radius-segmented: var(--vds-radius-control);
 
     /* Nav item — cap at primitive-5 (12px) so pill radius mode rounds items
      * noticeably but never turns them into full capsules in the sidebar.

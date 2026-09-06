@@ -72,10 +72,15 @@ export function useTabsIndicator(
     });
     mo.observe(list, {
       attributes: true,
-      attributeFilter: ["data-state", "data-orientation"],
+      attributeFilter: ["data-state", "data-orientation", "dir"],
       subtree: true,
       childList: true,
     });
+    // Direction can change without any dimensions changing. Observe the
+    // owning roots too, so a live locale switch repositions the indicator.
+    for (let ancestor = list.parentElement; ancestor; ancestor = ancestor.parentElement) {
+      mo.observe(ancestor, { attributes: true, attributeFilter: ["dir"] });
+    }
 
     window.addEventListener("resize", update);
     measure();

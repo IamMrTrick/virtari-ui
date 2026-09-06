@@ -19,12 +19,6 @@
     --flow-shadow-selected:
       0 0 0 1px var(--vds-color-border-primary, var(--vds-color-primary-solid, #6366f1)),
       0 24px 48px rgb(0 0 0 / 0.22);
-    /* Nodes are canvas cards — same radius family as every other card surface. */
-    --flow-radius: var(--vds-radius-card, var(--vds-radius-surface, 0.75rem));
-    /* Floating canvas chrome (controls bar, minimap). One step tighter than a
-     * node so the chrome reads as secondary — driven by the mode-reactive
-     * scale rather than a hardcoded subtraction off the node radius. */
-    --flow-panel-radius: var(--vds-radius-md, 0.5rem);
     --flow-handle-size: 0.95rem;
     --flow-handle-ring: 0 0 0 3px color-mix(in oklab, var(--vds-color-surface) 78%, transparent);
     --flow-edge-width: 2.75px;
@@ -33,6 +27,14 @@
     --flow-label-bg: color-mix(in oklab, var(--vds-color-surface) 88%, var(--vds-color-bg-subtle));
     --flow-label-border: color-mix(in oklab, var(--vds-color-border-muted) 90%, transparent);
     --flow-label-shadow: 0 12px 24px rgb(0 0 0 / 0.14);
+  }
+
+  /* Rebind at each radius boundary; root-only aliases otherwise inherit the
+   * resolved root radius when a canvas is inside a different radius mode. */
+  :root,
+  [data-radius] {
+    --flow-radius: var(--vds-radius-card, var(--vds-radius-surface, 0.75rem));
+    --flow-panel-radius: var(--vds-radius-control, var(--vds-radius-md, 0.5rem));
   }
 
   [data-theme="light"] {

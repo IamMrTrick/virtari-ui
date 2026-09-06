@@ -11,10 +11,10 @@
      * the editor surface (outer radius minus the toolbar's own padding), then
      * capped so it never exceeds the block radius. Never let this exceed
      * --vds-editor-radius: an inner corner cannot be rounder than its host. */
-    --vds-editor-toolbar-radius: min(
+    --vds-editor-toolbar-radius: max(0px, min(
       calc(var(--vds-editor-radius) - var(--vds-editor-toolbar-padding-block)),
       var(--vds-radius-editor-block, 0.75rem)
-    );
+    ));
     --vds-editor-radius-block: var(--vds-radius-editor-block, 0.5rem);
     --vds-editor-radius-surface: var(--vds-radius-editor-surface, var(--vds-radius-card, 1rem));
     --vds-editor-radius-popover: var(--vds-radius-editor-popover, 0.75rem);

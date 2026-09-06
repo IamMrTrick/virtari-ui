@@ -100,6 +100,7 @@ function Palette() {
 ```
 
 - `hotkey="mod+k"` auto-binds `Cmd+K` on macOS and `Ctrl+K` elsewhere. Pass `hotkey={false}` (or omit) to own toggling yourself.
+- On close, `CommandDialog` returns focus to the element that opened it, including an input used to invoke the hotkey. Consumer `onOpenAutoFocus` and `onCloseAutoFocus` handlers can override focus by calling `event.preventDefault()`.
 - `Command.Item` accepts `leftSection`, `rightSection`, and `shortcut` (rendered via `<Kbd>` using platform-aware symbols on macOS).
 
 ### Async search

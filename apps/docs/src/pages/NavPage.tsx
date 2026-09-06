@@ -42,6 +42,7 @@ import {
 import { Button } from "@virtari-packages/react-button";
 import { Badge } from "@virtari-packages/react-badge";
 import { Section } from "../components";
+import { formatCombo } from "@virtari-packages/utils";
 
 /* ──────────────────────────────────────────────
  * Demo frames
@@ -222,7 +223,7 @@ function IconsSection() {
               href="/search"
               label="Search"
               icon={<IconSearch size={18} />}
-              kbd="⌘K"
+              kbd={formatCombo("mod+k").join(" ")}
             />
             <NavItem
               href="/notifications"
@@ -234,7 +235,7 @@ function IconsSection() {
               href="/store"
               label="Store"
               icon={<IconShoppingCart size={18} />}
-              kbd="⌘S"
+              kbd={formatCombo("mod+s").join(" ")}
             />
           </NavList>
         </Nav>
@@ -249,7 +250,7 @@ function IconsSection() {
 <NavItem href="/search"
   label="Search"
   icon={<IconSearch />}
-  kbd="⌘K"
+  kbd={formatCombo("mod+k").join(" ")}
 />`}</pre>
     </Section>
   );
@@ -280,7 +281,7 @@ function DeclarativeSidebar() {
                 href="/settings"
                 label="Settings"
                 icon={<IconSettings size={18} />}
-                kbd="⌘,"
+                kbd={formatCombo("mod+,").join(" ")}
               />
             </NavList>
           </NavGroup>
@@ -340,7 +341,7 @@ function CompoundSidebar() {
               <NavLink href="/dashboard" active>
                 <NavIcon><IconHome size={18} /></NavIcon>
                 <NavLabel>Dashboard</NavLabel>
-                <NavKbd>⌘1</NavKbd>
+                <NavKbd>{formatCombo("mod+1").join(" ")}</NavKbd>
               </NavLink>
             </NavItem>
 
@@ -1009,7 +1010,7 @@ function SizesSection() {
               <NavList>
                 <NavItem href="/" label="Home" icon={<IconHome size={size === "lg" ? 20 : size === "sm" ? 14 : 16} />} />
                 <NavItem href="/docs" label="Docs" icon={<IconBook2 size={size === "lg" ? 20 : size === "sm" ? 14 : 16} />} />
-                <NavItem href="/settings" label="Settings" icon={<IconSettings size={size === "lg" ? 20 : size === "sm" ? 14 : 16} />} kbd="⌘," />
+                <NavItem href="/settings" label="Settings" icon={<IconSettings size={size === "lg" ? 20 : size === "sm" ? 14 : 16} />} kbd={formatCombo("mod+,").join(" ")} />
               </NavList>
             </Nav>
           </DemoFrame>

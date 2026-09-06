@@ -270,6 +270,9 @@ importers:
       '@virtari-packages/utilities':
         specifier: workspace:*
         version: link:../../packages/utilities
+      '@virtari-packages/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@xyflow/react':
         specifier: ^12.10.2
         version: 12.10.2(@types/react@19.2.14)(immer@10.2.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -1932,6 +1935,9 @@ importers:
       '@virtari-packages/primitives':
         specifier: workspace:*
         version: link:../primitives
+      '@virtari-packages/react-tabs':
+        specifier: workspace:*
+        version: link:../react-tabs
       '@virtari-packages/utils':
         specifier: workspace:*
         version: link:../utils

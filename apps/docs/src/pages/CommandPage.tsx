@@ -6,6 +6,8 @@ import {
 import "@virtari-packages/react-command/styles";
 import "@virtari-packages/react-dialog/styles";
 import { Button } from "@virtari-packages/react-button";
+import { KbdShortcut } from "@virtari-packages/react-kbd";
+import { ariaKeyShortcuts, useKeyboardPlatform } from "@virtari-packages/utils";
 import "@virtari-packages/react-button/styles";
 import {
   IconBell,
@@ -85,10 +87,11 @@ function InlineCommand() {
 }
 
 /* ────────────────────────────────────────────────────────────
- * Dialog showcase — global Cmd/Ctrl+K palette
+ * Dialog showcase — a distinct shortcut leaves site search available
  * ──────────────────────────────────────────────────────────── */
 
 function DialogCommand() {
+  const keyboardPlatform = useKeyboardPlatform();
   const [open, setOpen] = useState(false);
   const [last, setLast] = useState<string | null>(null);
 
@@ -100,19 +103,19 @@ function DialogCommand() {
   return (
     <Stack>
       <div style={{ display: "flex", alignItems: "center", gap: "var(--vds-space-3, 0.75rem)", flexWrap: "wrap" }}>
-        <Button onClick={() => setOpen(true)}>
-          <IconSearch size={16} aria-hidden="true" style={{ marginInlineEnd: "var(--vds-space-1-5, 0.375rem)" }} />
+        <Button onClick={() => setOpen(true)} aria-keyshortcuts={ariaKeyShortcuts("mod+shift+k", keyboardPlatform)}>
+          <IconSearch size={16} aria-hidden="true" />
           Open palette
         </Button>
         <span style={{ color: "var(--vds-color-text-muted, #6b7280)" }}>
-          or press <kbd className="vds-kbd">⌘</kbd> <kbd className="vds-kbd">K</kbd>
+          or press <KbdShortcut combo="mod+shift+k" />
         </span>
       </div>
 
       <CommandDialog
         open={open}
         onOpenChange={setOpen}
-        hotkey="mod+k"
+        hotkey="mod+shift+k"
         title="Command palette"
       >
         <Command.Input placeholder="Type a command or search…" />
@@ -283,8 +286,8 @@ export function CommandPage() {
       </Section>
 
       <Section
-        title="CommandDialog with Cmd+K"
-        description="Global palette with explicit hotkey binding. Pass hotkey='mod+k' to auto-toggle (mod = meta on macOS, ctrl elsewhere). Omit hotkey to leave the trigger up to you."
+        title="CommandDialog with a keyboard shortcut"
+        description="This demo uses mod+shift+k so mod+k remains available for documentation search. Shortcut hints on items are display-only. In your app, pass hotkey='mod+k' to auto-toggle (mod = meta on macOS, ctrl elsewhere). Omit hotkey to leave the trigger up to you."
       >
         <DialogCommand />
       </Section>

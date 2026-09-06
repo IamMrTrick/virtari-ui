@@ -385,7 +385,7 @@
     --input-height: 2rem;
     --input-font-size: var(--vds-text-xs, 0.75rem);
     /* Block-flush inside the wrap, so the only gap is the wrap's 1px border. */
-    --input-radius: calc(var(--vds-editor-toolbar-radius) - 1px);
+    --input-radius: max(0px, calc(var(--vds-editor-toolbar-radius) - 1px));
     flex: 1 1 auto;
     min-inline-size: 0;
     inline-size: 100%;
@@ -486,14 +486,14 @@
     --tabs-list-padding-inline: var(--vds-editor-mode-list-padding);
     --tabs-list-padding-block: var(--vds-editor-mode-list-padding);
     --tabs-indicator-color: var(--vds-editor-bg);
-    --tabs-indicator-radius: calc(
+    --tabs-indicator-radius: max(0px, calc(
       var(--vds-editor-toolbar-radius) - var(--vds-editor-mode-list-padding)
-    );
+    ));
     --tabs-trigger-height: 2rem;
     --tabs-trigger-padding-inline: var(--vds-space-2-5, 0.625rem);
-    --tabs-trigger-radius: calc(
+    --tabs-trigger-radius: max(0px, calc(
       var(--vds-editor-toolbar-radius) - var(--vds-editor-mode-list-padding)
-    );
+    ));
     --tabs-trigger-bg-hover: transparent;
     --tabs-trigger-bg-active: var(--vds-editor-bg);
     --tabs-trigger-color-active: var(--vds-editor-text);

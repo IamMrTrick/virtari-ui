@@ -1,4 +1,5 @@
-import { cn } from "@virtari-packages/utils";
+import { cn, useDirection } from "@virtari-packages/utils";
+import { useDirection as usePrimitiveDirection } from "@virtari-packages/primitives/direction";
 import {
   useRef,
   type ComponentRef,
@@ -56,6 +57,7 @@ export interface TabsProps
 export function Tabs({
   className,
   orientation = "horizontal",
+  dir,
   collapseAt,
   swipeable = false,
   swipeThreshold = 60,
@@ -64,6 +66,9 @@ export function Tabs({
   ...props
 }: TabsProps) {
   const rootRef = useRef<ComponentRef<typeof TabsPrimitive.Root>>(null);
+  const parentRef = useRef<Element | null>(null);
+  const inheritedDirection = useDirection(parentRef);
+  const direction = usePrimitiveDirection(dir, inheritedDirection);
 
   const effectiveOrientation = useResponsiveOrientation(
     rootRef,
@@ -79,7 +84,8 @@ export function Tabs({
 
   return (
     <TabsPrimitive.Root
-      ref={mergeRefs(rootRef, ref)}
+      ref={mergeRefs(rootRef, ref, node => { parentRef.current = node?.parentElement ?? null; })}
+      dir={direction}
       orientation={effectiveOrientation}
       className={cn("vds-tabs", className)}
       {...props}

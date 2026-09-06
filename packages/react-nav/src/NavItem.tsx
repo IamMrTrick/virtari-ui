@@ -75,7 +75,7 @@ export interface NavKbdProps extends HTMLAttributes<HTMLElement> {
 
 export function NavKbd({ className, ref, ...rest }: NavKbdProps) {
   return (
-    <kbd ref={ref} className={cn("vds-nav__kbd", className)} {...rest} />
+    <kbd ref={ref} dir="ltr" className={cn("vds-nav__kbd", className)} {...rest} />
   );
 }
 

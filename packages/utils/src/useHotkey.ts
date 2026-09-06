@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
+import { getKeyboardPlatform, type KeyboardPlatform } from "./keyboardPlatform";
 
 export interface ParsedCombo {
   key: string;
@@ -8,13 +9,6 @@ export interface ParsedCombo {
   alt: boolean;
   /** `mod` = meta on macOS, ctrl elsewhere. Resolved at match time. */
   mod: boolean;
-}
-
-const MAC_PLATFORMS = /Mac|iPhone|iPad|iPod/;
-
-function isMac(): boolean {
-  if (typeof navigator === "undefined") return false;
-  return MAC_PLATFORMS.test(navigator.platform);
 }
 
 /**
@@ -78,8 +72,8 @@ function normalizeEventKey(e: KeyboardEvent): string {
   return k;
 }
 
-export function matchesCombo(e: KeyboardEvent, combo: ParsedCombo): boolean {
-  const mac = isMac();
+export function matchesCombo(e: KeyboardEvent, combo: ParsedCombo, platform: KeyboardPlatform = getKeyboardPlatform()): boolean {
+  const mac = platform === "mac";
   const needCtrl = combo.ctrl || (combo.mod && !mac);
   const needMeta = combo.meta || (combo.mod && mac);
   if (needCtrl !== e.ctrlKey) return false;
@@ -102,6 +96,8 @@ export interface UseHotkeyOptions {
   preventDefault?: boolean;
   /** If false (default), hotkey is ignored when focus is in an editable field. */
   allowInInputs?: boolean;
+  /** Permit repeated keydown events when a key is held. Defaults to false. */
+  allowRepeat?: boolean;
   deps?: unknown[];
 }
 
@@ -119,6 +115,7 @@ export function useHotkey(
     target,
     preventDefault = true,
     allowInInputs = false,
+    allowRepeat = false,
     deps = [],
   } = opts;
 
@@ -139,6 +136,7 @@ export function useHotkey(
 
     const onKeyDown = (e: Event) => {
       const ke = e as KeyboardEvent;
+      if (ke.defaultPrevented || ke.isComposing || ke.keyCode === 229 || (!allowRepeat && ke.repeat)) return;
       if (!allowInInputs && isEditableTarget(ke.target)) return;
       for (const c of parsed) {
         if (matchesCombo(ke, c)) {
@@ -152,5 +150,5 @@ export function useHotkey(
     node.addEventListener("keydown", onKeyDown);
     return () => node.removeEventListener("keydown", onKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, target, preventDefault, allowInInputs, parsed, ...deps]);
+  }, [enabled, target, preventDefault, allowInInputs, allowRepeat, parsed, ...deps]);
 }

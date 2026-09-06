@@ -1,3 +1,7 @@
+/* Inlined into the published style entry by PostCSS, so standalone consumers
+ * receive the shared track without relying on another global style import. */
+@import "../../react-tabs/src/Tabs.css";
+
 @layer design-system.components {
   /* Outer RadioGroup wrapper — inline by default, block when full-width */
   .vds-segmented-control {

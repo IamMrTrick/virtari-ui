@@ -41,6 +41,12 @@ yarn add @virtari-packages/utils
 import { /* … */ } from "@virtari-packages/utils";
 ```
 
+## Keyboard shortcuts
+
+`useHotkey("mod+k", handler)` resolves `mod` to Command on Apple platforms and Control elsewhere. `formatCombo` produces visible key labels; `ariaKeyShortcuts` produces standardized ARIA key names; `shortcutLabel` produces readable modifier names. Use `useKeyboardPlatform()` when rendering platform-specific attributes in React to keep server hydration stable.
+
+Hotkeys ignore composition/IME events, already-handled events, and key repeats by default. `allowRepeat: true` opts into repeated keydown events. Editable fields remain protected unless `allowInInputs: true` is set. Handlers should bind only shortcuts that their visible actions actually implement and avoid overriding established browser or operating-system actions.
+
 ## Design tokens
 
 This package reads `@virtari-packages/tokens` CSS variables. Import the token layer once at the root of your app:

@@ -35,6 +35,11 @@ Open `/tests/form-geometry.html`. The fixture automatically checks seven sizes, 
 
 ## Design language regressions
 
+- `/tests/radius-system.html`: 445 checks for shared shape roles, bounded checkbox/keycap geometry, three sizes, LTR/RTL, nested/live modes and invariance across theme/surface styles.
+- `/tests/tabs-radius.html`: 1004 tab/segment geometry checks plus 30 direction checks, including live ancestor changes, explicit/provider precedence and boxed/vertical RTL edges. Also exercises published standalone SegmentedControl styles.
+- `/tests/radius-secondary.html`: 128 checks for nested Flow roles, TimeWheel and nonnegative Editor lengths.
+- `/tests/platform-shortcuts.html`: run the shortcut checks; 38 assertions for platform labels, ARIA names, actual hotkey hooks, IME/repeat/handled-event guards, cleanup and RTL keycap composition. Mac platform inputs are simulated.
+- `/tests/command-focus.html`: run the focus checks; 8 assertions for hotkey/input caret restoration, button restoration and consumer autofocus overrides in a controlled CommandDialog.
 - `/tests/control-geometry.html`: 48 line-box, padding and enlarged-text checks across action controls.
 - `/tests/surface-contrast.html`: 39 text/surface pairs in light, dark and OLED, with a 4.5:1 minimum. This checks the default palette, not arbitrary consumer overrides.
 - `/tests/segmented-keyboard.html`: run the keyboard checks for LTR/RTL selection, disabled-item skipping, looping and consumer event forwarding.

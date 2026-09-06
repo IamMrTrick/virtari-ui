@@ -21,6 +21,8 @@ The documentation uses Virtari layout, header, navigation, sidebar, drawer, comm
 
 Existing public component APIs and color/radius aliases remain. Default surfaces, shapes and line metrics change intentionally. Remove application-level optical `translateY` patches before evaluating the new defaults. Test custom fonts, long labels, RTL, zoom and touch density in the consuming app. Existing form/autofill and drawer-release fixes are preserved.
 
+The [radius and shortcut audit](./radius-audit.md) records the shape-role matrix, intentional exceptions, corrected inconsistencies and browser verification. The Design guidelines page includes a live comparison of the four radius modes.
+
 Checkpoint before the redesign: `35df268` on `main`. Redesign branch: `codex/virtari-design-language`.
 
 ## Primary references

@@ -48,10 +48,14 @@ export function useSegmentedIndicator(
     });
     mo.observe(list, {
       attributes: true,
-      attributeFilter: ["data-state", "data-orientation"],
+      attributeFilter: ["data-state", "data-orientation", "dir"],
       subtree: true,
       childList: true,
     });
+    // A direction switch changes physical offsets even if sizes stay equal.
+    for (let ancestor = list.parentElement; ancestor; ancestor = ancestor.parentElement) {
+      mo.observe(ancestor, { attributes: true, attributeFilter: ["dir"] });
+    }
 
     window.addEventListener("resize", update);
     measure();

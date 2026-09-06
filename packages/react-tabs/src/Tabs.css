@@ -506,11 +506,11 @@
   /* RTL: logical inset flips the pseudos to the opposite physical side, so
    * the gradient's circle center must flip too (background position is
    * physical, not logical). */
-  :dir(rtl) .vds-tabs-list[data-variant="boxed"]:not([data-orientation="vertical"])
+  .vds-tabs-list:dir(rtl)[data-variant="boxed"]:not([data-orientation="vertical"])
     .vds-tabs-trigger::before {
     --tabs-boxed-curve-origin-x: 100%;
   }
-  :dir(rtl) .vds-tabs-list[data-variant="boxed"]:not([data-orientation="vertical"])
+  .vds-tabs-list:dir(rtl)[data-variant="boxed"]:not([data-orientation="vertical"])
     .vds-tabs-trigger::after {
     --tabs-boxed-curve-origin-x: 0%;
   }
@@ -575,7 +575,7 @@
     box-shadow: var(--tabs-boxed-curve-shadow-x)
       calc(-1 * var(--tabs-boxed-curve) / 2) 0 0 var(--tabs-boxed-bg);
   }
-  :dir(rtl) .vds-tabs-list[data-variant="boxed"][data-orientation="vertical"] {
+  .vds-tabs-list:dir(rtl)[data-variant="boxed"][data-orientation="vertical"] {
     --tabs-boxed-curve-shadow-x: calc(-1 * var(--tabs-boxed-curve) / 2);
   }
 
@@ -612,31 +612,37 @@
   }
 
   /* Static fallback for vertical underline/line (animated off) */
+  .vds-tabs-list[data-orientation="vertical"] {
+    --tabs-static-inline-sign: 1;
+  }
+  .vds-tabs-list[data-orientation="vertical"]:dir(rtl) {
+    --tabs-static-inline-sign: -1;
+  }
   .vds-tabs-list[data-variant="underline"][data-orientation="vertical"]:not(
       [data-animated="true"]
     )
     .vds-tabs-trigger {
-    box-shadow: inset calc(-1 * var(--tabs-indicator-thickness)) 0 0 0
+    box-shadow: inset calc(-1 * var(--tabs-static-inline-sign) * var(--tabs-indicator-thickness)) 0 0 0
       transparent;
   }
   .vds-tabs-list[data-variant="underline"][data-orientation="vertical"]:not(
       [data-animated="true"]
     )
     .vds-tabs-trigger[data-state="active"] {
-    box-shadow: inset calc(-1 * var(--tabs-indicator-thickness)) 0 0 0
+    box-shadow: inset calc(-1 * var(--tabs-static-inline-sign) * var(--tabs-indicator-thickness)) 0 0 0
       var(--tabs-indicator-color);
   }
   .vds-tabs-list[data-variant="line"][data-orientation="vertical"]:not(
       [data-animated="true"]
     )
     .vds-tabs-trigger {
-    box-shadow: inset var(--tabs-indicator-thickness) 0 0 0 transparent;
+    box-shadow: inset calc(var(--tabs-static-inline-sign) * var(--tabs-indicator-thickness)) 0 0 0 transparent;
   }
   .vds-tabs-list[data-variant="line"][data-orientation="vertical"]:not(
       [data-animated="true"]
     )
     .vds-tabs-trigger[data-state="active"] {
-    box-shadow: inset var(--tabs-indicator-thickness) 0 0 0
+    box-shadow: inset calc(var(--tabs-static-inline-sign) * var(--tabs-indicator-thickness)) 0 0 0
       var(--tabs-indicator-color);
   }
 

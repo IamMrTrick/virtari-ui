@@ -9,6 +9,7 @@ import { Badge } from "@virtari-packages/react-badge";
 import { Kbd } from "@virtari-packages/react-kbd";
 import { SegmentedControl, SegmentedControlItem } from "@virtari-packages/react-segmented-control";
 import { Section } from "../components";
+import { ShapeHierarchyExample } from "../components/ShapeHierarchyExample";
 
 type Copy = (english: string, persian: string) => string;
 function GuidanceCard({ title, description, children }: { title: string; description: string; children?: ReactNode }) {
@@ -56,6 +57,7 @@ export function DesignGuidelinesPage() {
     { title: copy("A choice or disclosure", "انتخاب یا بازشو"), body: copy("Use SegmentedControl for a single choice, Tabs for panels, NavSubmenu for navigation and Drawer for a temporary surface. Keep their focus behavior intact.", "برای یک انتخاب از SegmentedControl، برای پنل‌ها از Tabs، برای ناوبری از NavSubmenu و برای سطح موقت از Drawer استفاده کنید؛ رفتار فوکوس آن‌ها را حفظ کنید."), path: "composition" },
   ];
   return <>
+    <ShapeHierarchyExample />
     <Section title={copy("Make every field understandable", "هر فیلد را قابل‌فهم کنید")} description={copy("Try submitting the empty example, correct the email, then submit again. Help stays available while the error explains the next step.", "نمونهٔ خالی را ثبت کنید، ایمیل را اصلاح کنید و دوباره ثبت کنید. راهنما باقی می‌ماند و خطا قدم بعدی را توضیح می‌دهد.")}>
       <FieldAnatomy copy={copy}/>
       <ul className="docs-prose">

@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { cn } from "@virtari-packages/utils";
+import { cn, useComposedRefs, useDirection } from "@virtari-packages/utils";
+import { useDirection as usePrimitiveDirection } from "@virtari-packages/primitives/direction";
 import * as RadioGroupPrimitive from "@virtari-packages/primitives/radio-group";
 import type { ComponentRef, Ref, ReactNode } from "react";
 import { useSegmentedIndicator } from "./use-segmented-indicator";
@@ -33,6 +34,7 @@ export function SegmentedControl({
   size = "md",
   fullWidth = false,
   orientation = "horizontal",
+  dir,
   disabled,
   className,
   children,
@@ -40,11 +42,16 @@ export function SegmentedControl({
   ...props
 }: SegmentedControlProps) {
   const listRef = useRef<HTMLDivElement>(null);
+  const parentRef = useRef<Element | null>(null);
+  const inheritedDirection = useDirection(parentRef);
+  const direction = usePrimitiveDirection(dir, inheritedDirection);
+  const composedRef = useComposedRefs(ref, node => { parentRef.current = node?.parentElement ?? null; });
   useSegmentedIndicator(listRef);
 
   return (
     <RadioGroupPrimitive.Root
-      ref={ref}
+      ref={composedRef}
+      dir={direction}
       orientation={orientation}
       disabled={disabled}
       data-full-width={fullWidth ? "true" : undefined}
@@ -93,12 +100,14 @@ export function SegmentedControlItem({
       className={cn("vds-tabs-trigger", className)}
       {...props}
     >
-      {icon && (
-        <span className="vds-segmented-control-icon" aria-hidden="true">
-          {icon}
-        </span>
-      )}
-      {children}
+      <span className="vds-tabs-trigger-content">
+        {icon && (
+          <span className="vds-segmented-control-icon" aria-hidden="true">
+            {icon}
+          </span>
+        )}
+        {children}
+      </span>
     </RadioGroupPrimitive.Item>
   );
 }

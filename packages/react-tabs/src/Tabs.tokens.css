@@ -210,12 +210,20 @@
     --tabs-trigger-shadow-active: var(--vds-shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
   }
 
+  /* A vertical track contains several short rows. Making the entire stack a
+   * capsule would curve underneath the first/last labels, so it uses the
+   * finite field shell even in pill mode. The tile and indicator keep deriving
+   * their corners from this same track radius. */
+  .vds-tabs-list[data-variant="segmented"][data-orientation="vertical"] {
+    --tabs-list-radius: var(--vds-radius-control, var(--vds-radius-element, 0.375rem));
+  }
+
   /* ── boxed (Chrome-style browser tabs with inverted curves) ── */
   .vds-tabs-list[data-variant="boxed"] {
     --tabs-list-gap: 0;
     --tabs-list-border-width: 1px;
     /* Curve radius — also used for top corners of each tab. */
-    --tabs-boxed-curve: 0.5rem;
+    --tabs-boxed-curve: var(--vds-radius-tabs-boxed, min(var(--vds-radius-control, 0.5rem), var(--vds-radius-4, 0.5rem)));
     --tabs-boxed-bg: var(--vds-color-surface, #ffffff);
     --tabs-boxed-border: var(--vds-color-border, #d1d5db);
   }

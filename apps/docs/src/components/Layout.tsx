@@ -5,7 +5,8 @@ import { Main, Stack, Cluster, Grid } from "@virtari-packages/react-layout";
 import { Heading } from "@virtari-packages/react-text";
 import { Button } from "@virtari-packages/react-button";
 import { ScrollArea } from "@virtari-packages/react-scroll-area";
-import { Kbd } from "@virtari-packages/react-kbd";
+import { KbdShortcut } from "@virtari-packages/react-kbd";
+import { ariaKeyShortcuts, useKeyboardPlatform } from "@virtari-packages/utils";
 import { Nav, NavList, NavItem } from "@virtari-packages/react-nav";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari-packages/react-collapsible";
 import { Card, CardContent } from "@virtari-packages/react-card";
@@ -31,6 +32,7 @@ type Props = {
 };
 
 export function Layout(p: Props) {
+  const keyboardPlatform = useKeyboardPlatform();
   const { t } = useTranslation();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -106,7 +108,7 @@ export function Layout(p: Props) {
           </Nav>
         </HeaderStart>
         <HeaderEnd>
-          <Button variant="soft" color="contrast" className="docs-search-trigger" onClick={() => setSearchOpen(true)} aria-label={label("Search documentation", "جست‌وجوی مستندات")}><IconSearch size={16}/><span className="docs-search-label">{label("Search documentation…", "جست‌وجوی مستندات…")}</span><Kbd>⌘ K</Kbd></Button>
+          <Button variant="soft" color="contrast" className="docs-search-trigger" onClick={() => setSearchOpen(true)} aria-label={label("Search documentation", "جست‌وجوی مستندات")} aria-keyshortcuts={ariaKeyShortcuts("mod+k", keyboardPlatform)}><IconSearch size={16}/><span className="docs-search-label">{label("Search documentation…", "جست‌وجوی مستندات…")}</span><KbdShortcut combo="mod+k" /></Button>
           <Button variant="ghost" color="contrast" aria-label={label(p.dark ? "Switch to light theme" : "Switch to dark theme", p.dark ? "حالت روشن" : "حالت تیره")} onClick={() => p.onToggleDark(!p.dark)}>{p.dark ? <IconSun size={18}/> : <IconMoon size={18}/>}</Button>
           <Button variant="ghost" color="contrast" onClick={() => setSettingsOpen(true)} aria-label={t("settings.open")} aria-expanded={settingsOpen}><IconSettings size={18}/></Button>
         </HeaderEnd>

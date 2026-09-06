@@ -38,7 +38,10 @@ yarn add @virtari-packages/react-kbd
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari-packages/react-kbd";
+import { Kbd, KbdShortcut } from "@virtari-packages/react-kbd";
+
+<Kbd>Enter</Kbd>
+<KbdShortcut combo="mod+k" />
 ```
 
 ### Import styles
@@ -48,6 +51,8 @@ import "@virtari-packages/react-kbd/styles";
 ```
 
 Styles sit in the `design-system.components` cascade layer so your app can override them without `!important`.
+
+`KbdShortcut` displays Command on Apple platforms and Control on Windows/Linux, with a readable accessible name and left-to-right key order inside RTL text. It shares the combo grammar and platform detection used by `useHotkey`. It does **not** bind a shortcut. Set `aria-keyshortcuts={ariaKeyShortcuts(combo, platform)}` on the action that actually implements it, using `useKeyboardPlatform()` for a hydration-safe platform value. Use the optional `platform="mac" | "other"` only for explicit documentation previews or remote environments.
 
 ## Design tokens
 

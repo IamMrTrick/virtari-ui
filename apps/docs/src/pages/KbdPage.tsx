@@ -1,4 +1,4 @@
-import { Kbd } from "@virtari-packages/react-kbd";
+import { Kbd, KbdShortcut } from "@virtari-packages/react-kbd";
 import { Section, Row } from "../components";
 
 export function KbdPage() {
@@ -15,59 +15,64 @@ export function KbdPage() {
         </Row>
       </Section>
 
-      <Section title="Keyboard Shortcuts" description="Common key combinations.">
+      <Section title="Keyboard Shortcuts" description="Use mod for application shortcuts: Command on Apple platforms, Control on Windows and Linux. These examples display shortcuts; they do not register handlers.">
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-3)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxInlineSize: "20rem" }}>
             <span>Copy</span>
-            <span><Kbd>Ctrl</Kbd> + <Kbd>C</Kbd></span>
+            <KbdShortcut combo="mod+c" />
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxInlineSize: "20rem" }}>
             <span>Paste</span>
-            <span><Kbd>Ctrl</Kbd> + <Kbd>V</Kbd></span>
+            <KbdShortcut combo="mod+v" />
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxInlineSize: "20rem" }}>
             <span>Undo</span>
-            <span><Kbd>Ctrl</Kbd> + <Kbd>Z</Kbd></span>
+            <KbdShortcut combo="mod+z" />
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxInlineSize: "20rem" }}>
             <span>Save</span>
-            <span><Kbd>Ctrl</Kbd> + <Kbd>S</Kbd></span>
+            <KbdShortcut combo="mod+s" />
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxInlineSize: "20rem" }}>
             <span>Select All</span>
-            <span><Kbd>Ctrl</Kbd> + <Kbd>A</Kbd></span>
+            <KbdShortcut combo="mod+a" />
           </div>
         </div>
       </Section>
 
-      <Section title="Mac Shortcuts" description="Using Mac modifier symbols.">
+      <Section title="Platform comparison" description="Explicit platform overrides are for documentation or a known remote environment. Application hints should use the detected platform.">
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--vds-space-3)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxInlineSize: "20rem" }}>
-            <span>Copy</span>
-            <span><Kbd>&#8984;</Kbd> + <Kbd>C</Kbd></span>
+            <span>Windows / Linux</span>
+            <KbdShortcut combo="mod+k" platform="other" />
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxInlineSize: "20rem" }}>
-            <span>Paste</span>
-            <span><Kbd>&#8984;</Kbd> + <Kbd>V</Kbd></span>
+            <span>macOS</span>
+            <KbdShortcut combo="mod+k" platform="mac" />
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxInlineSize: "20rem" }}>
-            <span>Spotlight</span>
-            <span><Kbd>&#8984;</Kbd> + <Kbd>Space</Kbd></span>
+            <span>Additional modifier</span>
+            <KbdShortcut combo="mod+shift+k" />
           </div>
         </div>
       </Section>
 
       <Section title="Usage">
-        <pre className="docs-code">{`import { Kbd } from "@virtari-packages/react-kbd";
+        <pre className="docs-code">{`import { Kbd, KbdShortcut } from "@virtari-packages/react-kbd";
+import { ariaKeyShortcuts, useHotkey, useKeyboardPlatform } from "@virtari-packages/utils";
 
 // Single key
 <Kbd>Ctrl</Kbd>
 
-// Combination
-<Kbd>Ctrl</Kbd> + <Kbd>C</Kbd>
+// Platform-aware display; it does not bind the shortcut
+<KbdShortcut combo="mod+k" />
 
-// Mac style
-<Kbd>\u2318</Kbd> + <Kbd>V</Kbd>`}</pre>
+// Use the same combination for behavior and accessibility
+const platform = useKeyboardPlatform();
+useHotkey("mod+k", openSearch);
+<Button onClick={openSearch} aria-keyshortcuts={ariaKeyShortcuts("mod+k", platform)}>
+  Search <KbdShortcut combo="mod+k" />
+</Button>`}</pre>
       </Section>
     </>
   );
