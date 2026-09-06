@@ -66,6 +66,16 @@
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
+    justify-content: center;
+    inline-size: var(--tabs-trigger-icon-size, 1.125rem);
+    block-size: var(--tabs-trigger-icon-size, 1.125rem);
+    line-height: 1;
     font-size: 1em;
+  }
+  .vds-segmented-control-icon > svg {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    flex-shrink: 0;
   }
 }

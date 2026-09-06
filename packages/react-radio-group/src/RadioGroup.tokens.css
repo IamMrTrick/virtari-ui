@@ -111,10 +111,8 @@
     --radio-field-description-color: var(--vds-color-text-muted, #6b7280);
     --radio-field-description-font-size: var(--vds-text-xs, 0.75rem);
     --radio-field-label-font-weight: var(--vds-font-weight-medium, 500);
-    --radio-field-align-block-start: 0.125rem;
-    --radio-field-text-offset: calc(
-      var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem
-    );
+    --radio-field-align-block-start: max(0px, calc((var(--radio-field-font-size) * var(--vds-control-line-height, 1.5) - var(--radio-field-control-size)) / 2));
+    --radio-field-text-offset: 0px;
   }
 
   .vds-radio-field[data-error] {

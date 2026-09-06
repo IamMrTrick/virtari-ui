@@ -12,7 +12,7 @@
     --combobox-trigger-gap: var(--vds-space-2, 0.5rem);
     --combobox-trigger-padding-inline: var(--vds-space-3, 0.75rem);
     --combobox-trigger-padding-block: var(--vds-space-1, 0.25rem);
-    --combobox-trigger-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
+    --combobox-trigger-optical-offset: var(--vds-control-optical-offset, 0px);
     --combobox-trigger-radius: var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
     --combobox-trigger-border-width: 1px;
     --combobox-trigger-chip-gap: var(--vds-space-1, 0.25rem);
@@ -21,10 +21,10 @@
     --combobox-trigger-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --combobox-trigger-font-size: var(--vds-text-sm, 0.875rem);
     --combobox-trigger-font-weight: var(--vds-font-weight-normal, 400);
-    --combobox-trigger-line-height: var(--vds-control-line-height, 1);
+    --combobox-trigger-line-height: var(--vds-control-line-height, 1.5);
 
     /* Colors (soft appearance default) */
-    --combobox-trigger-bg: var(--vds-color-surface, #ffffff);
+    --combobox-trigger-bg: var(--vds-color-surface-field, var(--vds-color-surface, #ffffff));
     --combobox-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
     --combobox-trigger-border-color: var(--vds-color-border-interactive, #6b7280);
     --combobox-trigger-border-color-hover: var(--vds-color-neutral-10, #4b5563);

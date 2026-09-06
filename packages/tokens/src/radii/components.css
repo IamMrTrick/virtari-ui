@@ -19,8 +19,8 @@
      * selections match sibling surfaces like Card / Alert / Toast. */
     --vds-radius-checkbox-card: var(--vds-radius-card);
 
-    /* Textarea — cap at lg (12px) so big multi-line corners stay readable */
-    --vds-radius-textarea: min(var(--vds-radius-element), var(--vds-radius-lg));
+    /* Multiline fields share the finite radius of other input shells. */
+    --vds-radius-textarea: var(--vds-radius-control);
 
     /* Kbd (keyboard key cap) — cap at primitive-4 (8px) so it keeps a key-like shape
      * and works with the bottom-border-width trick used for depth */
@@ -29,10 +29,10 @@
     /* Default control shell/action aliases. Inputs and fields stay on the
      * finite control radius; button-like affordances switch to full in pill
      * mode below. */
-    --vds-radius-control: var(--vds-radius-element);
+    --vds-radius-control: var(--vds-radius-md);
     --vds-radius-input: var(--vds-radius-control);
     --vds-radius-control-action: min(var(--vds-radius-control), var(--vds-radius-4));
-    --vds-radius-button: var(--vds-radius-control);
+    --vds-radius-button: var(--vds-radius-lg);
     --vds-radius-button-group: var(--vds-radius-button);
     --vds-radius-action: var(--vds-radius-control-action);
     --vds-radius-copy-button: var(--vds-radius-action);
@@ -45,12 +45,8 @@
      * Kept as a separate alias so future themes can diverge chip from badge. */
     --vds-radius-chip: var(--vds-radius-badge);
 
-    /* Floating content panels with list-based content —
-     * cap at xl (16px / 24px in pill) so they stay readable: pill mode makes
-     * the popover noticeably rounder, but never a full circle.
-     * (Popover / DropdownMenu intentionally stay on --vds-radius-surface,
-     * which tops out at 2xl=24px in pill — acceptable for those panels.) */
-    --vds-radius-select-content: min(var(--vds-radius-element), var(--vds-radius-xl));
+    /* List panels share the surface family; tooltips stay compact. */
+    --vds-radius-select-content: var(--vds-radius-surface);
     --vds-radius-tooltip:        min(var(--vds-radius-element), var(--vds-radius-4));
 
     /* Command/list panels and code surfaces. */
@@ -77,14 +73,14 @@
     /* Bottom navigation surface. */
     --vds-radius-bottom-nav: var(--vds-radius-card);
 
-    /* Alert (banner-style container) — cap at xl (16px), matches card/toast */
+    /* Alert banners use the compact field family. */
     --vds-radius-alert: min(var(--vds-radius-md), var(--vds-radius-xl));
 
-    /* Large containers — cap at xl (16px) so pill mode doesn't bloat them */
+    /* Cards/toasts follow surfaces; modal panels use the larger sheet role. */
     --vds-radius-card:         min(var(--vds-radius-surface), var(--vds-radius-xl));
-    --vds-radius-dialog:       min(var(--vds-radius-surface), var(--vds-radius-xl));
-    --vds-radius-alert-dialog: min(var(--vds-radius-surface), var(--vds-radius-xl));
-    --vds-radius-drawer:       min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-dialog:       var(--vds-radius-xl);
+    --vds-radius-alert-dialog: var(--vds-radius-xl);
+    --vds-radius-drawer:       var(--vds-radius-xl);
     --vds-radius-toast:        min(var(--vds-radius-surface), var(--vds-radius-xl));
 
     /* Data table — cap at primitive-4 (8px). The inner <table> cells can't round,

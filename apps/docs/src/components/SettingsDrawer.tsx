@@ -11,6 +11,7 @@ import {
   DrawerTitle,
 } from "@virtari-packages/react-drawer";
 import { Button } from "@virtari-packages/react-button";
+import { SegmentedControl, SegmentedControlItem } from "@virtari-packages/react-segmented-control";
 import { Switch } from "@virtari-packages/react-switch";
 import { IconSun, IconMoon } from "@virtari-packages/react-icons";
 import type { RadiusMode, Direction } from "../App";
@@ -128,94 +129,20 @@ export function SettingsDrawer({
         </DrawerHeader>
 
         <DrawerBody className="docs-settings-body">
-          {/* ── Language ── */}
           <Section label={t("settings.language")}>
-            <div
-              className="docs-settings-segmented"
-              role="radiogroup"
-              aria-label={t("settings.language")}
-            >
-              {LOCALES.map((l) => {
-                const active = locale === l.value;
-                return (
-                  <button
-                    key={l.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={active}
-                    data-active={active || undefined}
-                    className="docs-settings-segmented-option"
-                    onClick={() => onLocaleChange(l.value)}
-                  >
-                    <span className="docs-settings-segmented-label">
-                      {t(l.i18nKey)}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <SegmentedControl fullWidth value={locale} onValueChange={value => onLocaleChange(value as Locale)} aria-label={t("settings.language")}>
+              {LOCALES.map(option => <SegmentedControlItem key={option.value} value={option.value}>{t(option.i18nKey)}</SegmentedControlItem>)}
+            </SegmentedControl>
           </Section>
-
-          {/* ── Direction ── */}
           <Section label={t("settings.direction")}>
-            <div
-              className="docs-settings-segmented"
-              role="radiogroup"
-              aria-label={t("settings.direction")}
-            >
-              {DIRECTIONS.map((d) => {
-                const active = direction === d.value;
-                return (
-                  <button
-                    key={d.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={active}
-                    data-active={active || undefined}
-                    className="docs-settings-segmented-option"
-                    onClick={() => onDirectionChange(d.value)}
-                  >
-                    <span className="docs-settings-segmented-label">
-                      {t(d.labelKey)}
-                    </span>
-                    <span className="docs-settings-segmented-hint">{d.hint}</span>
-                  </button>
-                );
-              })}
-            </div>
+            <SegmentedControl fullWidth value={direction} onValueChange={value => onDirectionChange(value as Direction)} aria-label={t("settings.direction")}>
+              {DIRECTIONS.map(option => <SegmentedControlItem key={option.value} value={option.value}>{t(option.labelKey)}</SegmentedControlItem>)}
+            </SegmentedControl>
           </Section>
-
-          {/* ── Radius ── */}
           <Section label={t("settings.radius")}>
-            <div
-              className="docs-settings-radius"
-              role="radiogroup"
-              aria-label={t("settings.radius")}
-            >
-              {RADIUS_MODES.map((mode) => {
-                const active = radius === mode.value;
-                return (
-                  <button
-                    key={mode.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={active}
-                    data-active={active || undefined}
-                    className="docs-settings-radius-option"
-                    onClick={() => onRadiusChange(mode.value)}
-                  >
-                    <span
-                      className="docs-settings-radius-preview"
-                      data-mode={mode.value}
-                      aria-hidden="true"
-                    />
-                    <span className="docs-settings-radius-label">
-                      {t(mode.i18nKey)}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <SegmentedControl fullWidth value={radius} onValueChange={value => onRadiusChange(value as RadiusMode)} aria-label={t("settings.radius")}>
+              {RADIUS_MODES.map(option => <SegmentedControlItem key={option.value} value={option.value}>{t(option.i18nKey)}</SegmentedControlItem>)}
+            </SegmentedControl>
           </Section>
 
           {/* ── Micro-interactions ── */}
@@ -223,7 +150,7 @@ export function SettingsDrawer({
             <label className="docs-settings-theme-toggle">
               <span className="docs-settings-theme-text">
                 <span className="docs-settings-theme-label">
-                  {microInteractions ? "Enabled" : "Disabled"}
+                  {locale === "fa" ? (microInteractions ? "فعال" : "غیرفعال") : (microInteractions ? "Enabled" : "Disabled")}
                 </span>
               </span>
               <Switch

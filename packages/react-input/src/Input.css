@@ -54,8 +54,8 @@
     --input-padding-inline: var(--vds-space-3);
     --input-padding-block: 0;
     --input-font-size: var(--vds-text-sm);
-    --input-line-height: var(--vds-control-line-height, 1);
-    --input-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
+    --input-line-height: var(--vds-control-line-height, 1.5);
+    --input-optical-offset: var(--vds-control-optical-offset, 0px);
     --input-radius: var(--vds-radius-input, var(--vds-radius-element));
 
     /*
@@ -72,11 +72,14 @@
     --_input-optical-offset: var(--input-optical-offset);
     --_input-radius: var(--input-radius);
 
-    display: flex;
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    display: block;
     inline-size: 100%;
     font-family: var(--vds-font-sans);
     border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
-    background-color: var(--vds-color-surface);
+    background-color: var(--vds-color-surface-field, var(--vds-color-surface));
     color: var(--vds-color-text);
     -webkit-touch-callout: default;
     -webkit-user-select: text;
@@ -185,40 +188,91 @@
     }
   }
 
-  /* ── Input wrapper with icon support ── */
+  /* One slot contract: outer inset + icon + text gap, mirrored by logical edges.
+     Geometry is inherited by siblings; the native input keeps its own identity. */
+  :is(.vds-input-wrapper, .vds-input-field-control) {
+    --input-slot-inset: var(--vds-space-3);
+    --input-slot-font-size: var(--vds-text-sm);
+    --input-icon-size: 1.125rem;
+    --input-icon-gap: var(--vds-space-2);
+    --input-action-size: var(--vds-space-8);
+    &:has(> .vds-input[data-size="2xs"]) {
+      --input-slot-inset: var(--vds-space-1-5);
+      --input-slot-font-size: var(--vds-text-xs);
+      --input-icon-size: 0.75rem;
+      --input-icon-gap: var(--vds-space-1);
+      --input-action-size: var(--vds-space-5);
+    }
+    &:has(> .vds-input[data-size="xs"]) {
+      --input-slot-inset: var(--vds-space-2);
+      --input-slot-font-size: var(--vds-text-xs);
+      --input-icon-size: 0.875rem;
+      --input-icon-gap: var(--vds-space-1-5);
+      --input-action-size: var(--vds-space-6);
+    }
+    &:has(> .vds-input[data-size="sm"]) {
+      --input-slot-inset: var(--vds-space-2-5);
+      --input-icon-size: 1rem;
+      --input-action-size: var(--vds-space-7);
+    }
+    &:has(> .vds-input[data-size="lg"]) {
+      --input-slot-inset: var(--vds-space-4);
+      --input-slot-font-size: var(--vds-text-base);
+      --input-icon-size: 1.25rem;
+      --input-action-size: var(--vds-space-9);
+    }
+    &:has(> .vds-input[data-size="xl"]) {
+      --input-slot-inset: var(--vds-space-5);
+      --input-slot-font-size: var(--vds-text-lg);
+      --input-icon-size: 1.375rem;
+      --input-action-size: var(--vds-space-10);
+    }
+    &:has(> .vds-input[data-size="2xl"]) {
+      --input-slot-inset: var(--vds-space-6);
+      --input-slot-font-size: var(--vds-text-xl);
+      --input-icon-size: 1.5rem;
+      --input-action-size: var(--vds-space-12);
+    }
+  }
+
   .vds-input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
     inline-size: 100%;
+    min-inline-size: 0;
 
-    & .vds-input-icon {
+    & > .vds-input-icon {
       position: absolute;
-      display: flex;
+      z-index: 1;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      block-size: 100%;
-      inline-size: var(--vds-space-10);
+      inset-block: 0;
+      inline-size: var(--input-icon-size);
       color: var(--vds-color-text-muted);
       pointer-events: none;
+      & > :is(svg, img) {
+        display: block;
+        inline-size: 100%;
+        block-size: var(--input-icon-size);
+        flex: none;
+      }
     }
 
-    & .vds-input-icon:first-child {
-      inset-inline-start: 0;
+    & > .vds-input-icon:is([data-side="start"], :first-child:not([data-side])) {
+      inset-inline-start: var(--input-slot-inset);
     }
-
-    & .vds-input-icon:last-child {
-      inset-inline-end: 0;
+    & > .vds-input-icon:is([data-side="end"], :last-child:not([data-side])) {
+      inset-inline-end: var(--input-slot-inset);
     }
-
-    &:has(> .vds-input-icon:first-child) > .vds-input,
+    &:has(> .vds-input-icon:is([data-side="start"], :first-child:not([data-side]))) > .vds-input,
     &[data-icon-start] > .vds-input {
-      padding-inline-start: var(--vds-space-10);
+      padding-inline-start: calc(var(--input-slot-inset) + var(--input-icon-size) + var(--input-icon-gap));
     }
-
-    &:has(> .vds-input-icon:last-child) > .vds-input,
+    &:has(> .vds-input-icon:is([data-side="end"], :last-child:not([data-side]))) > .vds-input,
     &[data-icon-end] > .vds-input {
-      padding-inline-end: var(--vds-space-10);
+      padding-inline-end: calc(var(--input-slot-inset) + var(--input-icon-size) + var(--input-icon-gap));
     }
   }
 
@@ -272,6 +326,9 @@
 
   /* ── InputAddon — the bordered text box that attaches to the input ── */
   .vds-input-addon {
+    box-sizing: border-box;
+    font-family: var(--vds-font-sans);
+    line-height: var(--vds-control-line-height, 1.5);
     display: inline-flex;
     align-items: center;
     padding-inline: var(--vds-space-3);
@@ -309,7 +366,6 @@
      */
     --input-radius: var(--vds-radius-input, var(--vds-radius-element));
     --input-action-inset: var(--vds-space-1);
-    --input-action-size: var(--vds-space-8);
   }
 
   .vds-input-field-control[data-pw-anim="reveal"] > .vds-input {
@@ -326,7 +382,7 @@
   }
 
   .vds-input-field-control[data-has-action] > .vds-input {
-    padding-inline-end: calc(var(--_input-px) + var(--input-action-size));
+    padding-inline-end: calc(var(--input-action-inset) + var(--input-action-size) + var(--input-icon-gap));
   }
 
   .vds-input-field-action {
@@ -369,6 +425,13 @@
     @media (prefers-reduced-motion: reduce) {
       transition-duration: 0s;
     }
+  }
+
+  .vds-input-field-action > svg {
+    inline-size: var(--input-icon-size);
+    block-size: var(--input-icon-size);
+    max-block-size: 100%;
+    flex: none;
   }
 
   .vds-input-field-action:hover {

@@ -21,6 +21,10 @@
   }
 
   .vds-otp-input__slot {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    line-height: var(--vds-control-line-height, 1.5);
     inline-size: var(--_otp-slot-size);
     block-size: var(--_otp-slot-size);
     text-align: center;
@@ -30,7 +34,7 @@
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
     color: var(--vds-color-text);
-    background-color: var(--vds-color-surface);
+    background-color: var(--vds-color-surface-field, var(--vds-color-surface));
     border: var(--_otp-border-w) solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
     border-radius: var(--_otp-radius);
     caret-color: var(--vds-color-primary-9);

@@ -26,6 +26,8 @@
         var(--_switch-thumb-offset) - 2 * var(--_switch-border-width)
     );
 
+    box-sizing: border-box;
+    padding: 0;
     display: inline-flex;
     align-items: center;
     position: relative;

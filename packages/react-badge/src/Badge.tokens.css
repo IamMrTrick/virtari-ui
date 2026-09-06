@@ -7,7 +7,7 @@
    * ========================================================================= */
   .vds-badge {
     /* ── Layout ── */
-    --badge-height: 1.375rem; /* 22px — md default */
+    --badge-height: 1.5rem; /* 24px — md default */
     --badge-padding-inline: var(--vds-space-2, 0.5rem);
     --badge-gap: var(--vds-space-1, 0.25rem);
     --badge-border-width: 1px;
@@ -19,7 +19,7 @@
     --badge-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --badge-font-size: var(--vds-text-xs, 0.75rem);
     --badge-font-weight: var(--vds-font-weight-medium, 500);
-    --badge-line-height: 1;
+    --badge-line-height: var(--vds-control-line-height, 1.5);
     --badge-letter-spacing: var(--vds-tracking-normal, 0);
 
     /* ── Motion ── */
@@ -175,10 +175,10 @@
    * ========================================================================= */
 
   .vds-badge[data-size="xs"] {
-    --badge-height:         1.125rem; /* 18px */
+    --badge-height:         1.25rem; /* 20px */
     --badge-padding-inline: var(--vds-space-1-5, 0.375rem);
     --badge-font-size:      0.625rem; /* 10px */
-    --badge-gap:            var(--vds-space-0-5, 0.125rem);
+    --badge-gap:            var(--vds-space-1, 0.25rem);
     --badge-icon-size:      0.625rem;
     --badge-dot-size:       0.3125rem;
   }
@@ -195,10 +195,10 @@
   /* md — default, inherits base tokens (22px) */
 
   .vds-badge[data-size="lg"] {
-    --badge-height:         1.625rem; /* 26px */
+    --badge-height:         1.75rem; /* 28px */
     --badge-padding-inline: var(--vds-space-2-5, 0.625rem);
     --badge-font-size:      var(--vds-text-sm, 0.875rem);
-    --badge-gap:            var(--vds-space-1-5, 0.375rem);
+    --badge-gap:            var(--vds-space-2, 0.5rem);
     --badge-icon-size:      0.875rem;
     --badge-dot-size:       0.4375rem;
   }

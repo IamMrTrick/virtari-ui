@@ -105,7 +105,7 @@
     flex: 1 1 auto;
 
     min-inline-size: 0;
-    block-size: var(--item-height);
+    min-block-size: var(--item-height);
     padding-inline: calc(var(--item-padding-inline) + var(--item-indent));
     padding-block: 0;
 
@@ -117,7 +117,7 @@
     font: inherit;
     font-size: var(--item-font-size);
     font-weight: var(--item-font-weight);
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
     text-align: start;
     text-decoration: none;
     white-space: nowrap;

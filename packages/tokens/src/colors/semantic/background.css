@@ -56,17 +56,26 @@
 
   :root {
     /* ─── Backgrounds ─── */
-    --vds-color-bg:          var(--vds-color-neutral-1);
+    --vds-color-bg:          color-mix(in oklch, var(--vds-color-neutral-1) 96%, var(--vds-color-primary-3));
     --vds-color-bg-subtle:   var(--vds-color-neutral-2);
     --vds-color-bg-muted:    var(--vds-color-neutral-3);
     --vds-color-bg-disabled: var(--vds-color-neutral-3);
     --vds-color-bg-inverse:  var(--vds-color-neutral-12);
 
     /* ─── Surfaces / elevation ─── */
-    --vds-color-surface:          var(--vds-color-neutral-1);
-    --vds-color-surface-sunken:   var(--vds-color-neutral-2);
-    --vds-color-surface-raised:   var(--vds-color-neutral-2);
-    --vds-color-surface-overlay:  var(--vds-color-neutral-2);
+    /* Tonal containment separates permanent navigation, content, fields and
+       transient surfaces without making every boundary a heavy border. */
+    --vds-color-surface-container-low: color-mix(in oklch, var(--vds-color-neutral-2) 82%, var(--vds-color-primary-3));
+    --vds-color-surface-container: color-mix(in oklch, var(--vds-color-neutral-3) 84%, var(--vds-color-primary-3));
+    --vds-color-surface-container-high: color-mix(in oklch, var(--vds-color-neutral-4) 88%, var(--vds-color-primary-4));
+    --vds-color-surface-field: color-mix(in oklch, var(--vds-color-neutral-3) 90%, var(--vds-color-primary-3));
+    --vds-color-primary-container: var(--vds-color-primary-4);
+    --vds-color-on-primary-container: var(--vds-color-primary-12);
+    --vds-color-on-surface-variant: var(--vds-color-neutral-11);
+    --vds-color-surface:          var(--vds-color-bg);
+    --vds-color-surface-sunken:   var(--vds-color-surface-container);
+    --vds-color-surface-raised:   var(--vds-color-surface-container-low);
+    --vds-color-surface-overlay:  var(--vds-color-surface-container-low);
     --vds-color-surface-hover:    var(--vds-color-neutral-3);
     --vds-color-surface-active:   var(--vds-color-neutral-4);
     --vds-color-surface-selected: var(--vds-color-primary-3);

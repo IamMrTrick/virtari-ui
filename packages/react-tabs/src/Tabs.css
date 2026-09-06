@@ -127,7 +127,7 @@
     gap: inherit;
     inline-size: 100%;
     min-inline-size: 0;
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
     transform: translateY(var(--tabs-trigger-optical-offset));
     white-space: inherit;
   }

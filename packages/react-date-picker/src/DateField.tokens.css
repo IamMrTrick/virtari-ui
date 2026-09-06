@@ -22,7 +22,7 @@
     --date-field-font-size: var(--vds-text-sm, 0.875rem);
     --date-field-line-height: var(--vds-leading-normal, 1.5);
 
-    --date-field-bg: var(--vds-color-surface, #ffffff);
+    --date-field-bg: var(--vds-color-surface-field, var(--vds-color-surface, #ffffff));
     --date-field-bg-hover: var(--vds-color-surface-hover, #f9fafb);
     --date-field-border-color: var(--vds-color-border-interactive, #6b7280);
     --date-field-border-color-hover: var(--vds-color-neutral-10, #4b5563);
@@ -47,12 +47,12 @@
     --date-field-trigger-size: 1rem;
     --date-field-trigger-color: var(--vds-color-text-muted, #6b7280);
 
-    --time-picker-surface-bg: var(--vds-color-surface, #ffffff);
+    --time-picker-surface-bg: var(--vds-color-surface-field, var(--vds-color-surface, #ffffff));
     --time-picker-surface-border-color: var(--vds-color-border-muted, #e5e7eb);
     --time-picker-surface-shadow: var(--vds-shadow-lg, 0 18px 45px rgb(15 23 42 / 0.18));
     --time-picker-surface-radius: var(--vds-radius-time-picker-surface, 0.75rem);
     --time-picker-surface-inner-radius: var(--vds-radius-time-picker-inner, 0.5rem);
-    --time-picker-wheel-surface-bg: color-mix(in oklab, var(--vds-color-bg-subtle, #f8fafc) 90%, var(--vds-color-surface, #ffffff));
+    --time-picker-wheel-surface-bg: color-mix(in oklab, var(--vds-color-bg-subtle, #f8fafc) 90%, var(--vds-color-surface-field, var(--vds-color-surface, #ffffff)));
     --time-picker-wheel-height: 11rem;
     --time-picker-wheel-item-height: 2.75rem;
     --time-picker-wheel-header-height: 1.5rem;

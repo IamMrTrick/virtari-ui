@@ -23,7 +23,7 @@
     --drawer-label-gap: var(--vds-label-gap, var(--vds-space-1, 0.25rem));
 
     /* Surfaces */
-    --drawer-surface: var(--vds-color-surface, #ffffff);
+    --drawer-surface: var(--vds-color-surface-overlay, #ffffff);
     --drawer-background: linear-gradient(
       180deg,
       color-mix(in oklch, var(--drawer-surface), white 4%),

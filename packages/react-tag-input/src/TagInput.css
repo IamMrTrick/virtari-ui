@@ -2,6 +2,9 @@
 
 @layer design-system.components {
   .vds-tag-input {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    font-family: var(--vds-font-sans);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -58,14 +61,17 @@
   /* ── Native input ── */
   .vds-tag-input-field {
     flex: 1;
-    min-inline-size: var(--tag-input-field-min-w);
+    box-sizing: border-box;
+    margin: 0;
+    min-inline-size: min(var(--tag-input-field-min-w), 100%);
     border: 0;
     outline: none;
     background: transparent;
     font-family: inherit;
     font-size: var(--tag-input-field-size);
     color: var(--tag-input-field-color);
-    padding: 0;
+    padding-block: 0;
+    padding-inline: var(--vds-space-1-5);
     line-height: var(--vds-leading-normal, 1.5);
   }
 

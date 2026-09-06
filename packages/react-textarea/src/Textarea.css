@@ -36,13 +36,17 @@
     --_textarea-font-size: var(--textarea-font-size);
     --_textarea-radius: var(--textarea-radius);
 
-    display: flex;
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    line-height: var(--vds-leading-normal, 1.5);
+    display: block;
     inline-size: 100%;
     min-block-size: var(--textarea-min-block-size);
     resize: vertical;
     font-family: var(--vds-font-sans);
     border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
-    background-color: var(--vds-color-surface);
+    background-color: var(--vds-color-surface-field, var(--vds-color-surface));
     color: var(--vds-color-text);
     -webkit-touch-callout: default;
     -webkit-user-select: text;

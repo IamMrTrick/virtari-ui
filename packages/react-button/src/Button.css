@@ -10,7 +10,8 @@
     position: relative;
     vertical-align: middle;
 
-    block-size: var(--button-height);
+    box-sizing: border-box;
+    min-block-size: var(--button-height);
     min-inline-size: var(--button-min-width);
     padding-inline: var(--button-padding-inline);
     padding-block-start: var(--button-padding-block);
@@ -47,7 +48,8 @@
       border-color     var(--button-transition-duration) var(--button-transition-easing),
       color            var(--button-transition-duration) var(--button-transition-easing),
       box-shadow       var(--button-transition-duration) var(--button-transition-easing),
-      opacity          var(--button-transition-duration) var(--button-transition-easing);
+      opacity          var(--button-transition-duration) var(--button-transition-easing),
+      scale            var(--button-transition-duration) var(--button-transition-easing);
   }
 
   /* Interaction states */
@@ -102,7 +104,7 @@
     align-items: center;
     justify-content: center;
     min-inline-size: 0;
-    line-height: 1;
+    line-height: inherit;
     transform: translateY(var(--button-optical-offset));
     white-space: inherit;
   }
@@ -113,6 +115,7 @@
 
   .vds-button[data-icon-only] {
     padding-inline: 0;
+    inline-size: var(--button-height);
     aspect-ratio: 1;
     --button-min-width: var(--button-height);
   }
@@ -166,6 +169,10 @@
     inline-size: var(--button-icon-size);
     block-size: var(--button-icon-size);
     flex-shrink: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-button { transition-duration: 0s; --button-press-scale: 1; }
   }
 
   /* Keyframes */

@@ -4,6 +4,9 @@
 @layer design-system.components {
   /* ── Trigger ── */
   .vds-select-trigger {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
@@ -116,8 +119,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    inline-size: 1rem;
-    block-size: 1rem;
+    inline-size: min(1.5rem, calc(var(--select-trigger-height) - 4px));
+    block-size: min(1.5rem, calc(var(--select-trigger-height) - 4px));
     padding: 0;
     margin: 0;
     background: transparent;
@@ -219,6 +222,7 @@
     border-radius: var(--select-item-radius);
 
     font-size: var(--select-item-font-size);
+    line-height: var(--vds-control-line-height, 1.5);
     color: var(--select-item-text-color);
     background-color: var(--select-item-bg);
 

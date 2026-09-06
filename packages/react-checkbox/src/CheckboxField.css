@@ -7,7 +7,7 @@
     cursor: pointer;
     color: var(--checkbox-field-label-color);
     font-family: inherit;
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
   }
 
   .vds-checkbox-field[data-size="sm"] {
@@ -68,7 +68,7 @@
     font-size: var(--checkbox-field-font-size);
     font-weight: var(--checkbox-field-label-font-weight);
     color: var(--checkbox-field-label-color);
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
     transform: translateY(var(--checkbox-field-text-offset));
   }
 
@@ -80,6 +80,6 @@
     font-size: var(--checkbox-field-description-font-size);
     font-weight: var(--vds-font-weight-normal, 400);
     color: var(--checkbox-field-description-color);
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
   }
 }

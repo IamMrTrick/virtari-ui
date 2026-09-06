@@ -50,7 +50,7 @@
     --tabs-trigger-gap: var(--vds-space-2, 0.5rem);
     --tabs-trigger-padding-inline: var(--vds-space-4, 1rem);
     --tabs-trigger-padding-block: 0;
-    --tabs-trigger-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
+    --tabs-trigger-optical-offset: var(--vds-control-optical-offset, 0px);
     --tabs-trigger-radius: 0;
     --tabs-trigger-border-width: 0;
 
@@ -184,9 +184,7 @@
     );
   }
   .vds-tabs-list[data-variant="segmented"] .vds-tabs-trigger {
-    --tabs-trigger-optical-offset: calc(
-      var(--vds-control-optical-offset, 0.09375rem) + 0.03125rem
-    );
+    --tabs-trigger-optical-offset: var(--vds-control-optical-offset, 0px);
     /* Concentric with the track. The list carries `data-radius-host`, so a
      * trigger — a direct child — simply reads the channel's answer:
      * track radius − track border − track padding.

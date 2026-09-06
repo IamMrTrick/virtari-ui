@@ -25,7 +25,7 @@
     font-size: var(--checkbox-group-label-font-size);
     font-weight: var(--checkbox-group-label-font-weight);
     color: var(--checkbox-group-label-color);
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
   }
 
   .vds-checkbox-group-required {
@@ -36,7 +36,7 @@
   .vds-checkbox-group-description {
     font-size: var(--checkbox-group-description-font-size);
     color: var(--checkbox-group-description-color);
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
   }
 
   .vds-checkbox-group-items {

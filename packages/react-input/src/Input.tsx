@@ -93,12 +93,14 @@ export const InputWrapper = forwardRef<HTMLDivElement, InputWrapperProps>(functi
 /* ── InputIcon ── */
 
 export interface InputIconProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** Logical slot; omitted retains first/last-child placement. */
+  side?: "start" | "end";
   ref?: Ref<HTMLSpanElement>;
 }
 
-export const InputIcon = forwardRef<HTMLSpanElement, InputIconProps>(function InputIcon({ className, ...props }, ref) {
+export const InputIcon = forwardRef<HTMLSpanElement, InputIconProps>(function InputIcon({ className, side, ...props }, ref) {
   return (
-    <span ref={ref} className={cn("vds-input-icon", className)} aria-hidden="true" {...props} />
+    <span ref={ref} className={cn("vds-input-icon", className)} data-side={side} aria-hidden="true" {...props} />
   );
 });
 

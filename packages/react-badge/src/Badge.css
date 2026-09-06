@@ -9,7 +9,9 @@
     gap: var(--badge-gap);
     vertical-align: middle;
 
-    block-size: var(--badge-height);
+    box-sizing: border-box;
+    min-block-size: var(--badge-height);
+    padding-block: 0;
     padding-inline: var(--badge-padding-inline);
 
     background-color: var(--badge-bg);
@@ -56,6 +58,8 @@
   }
 
   .vds-badge-section > svg {
+    display: block;
+    flex-shrink: 0;
     inline-size: var(--badge-icon-size);
     block-size: var(--badge-icon-size);
   }
@@ -107,6 +111,7 @@
   /* ── Dot-only mode ── */
   .vds-badge[data-dot-only="true"] {
     inline-size: var(--badge-dot-size);
+    block-size: var(--badge-dot-size);
     background-color: var(--badge-color-solid);
     border: 0;
   }

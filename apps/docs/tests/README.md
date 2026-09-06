@@ -28,3 +28,14 @@ The input/change simulations do not invoke a real saved-password manager. Test p
 - Rich editors expose document values through their APIs; they are not native password fields. Consumers serialize their document state explicitly. Yoopta value updates replace external documents; normal echoed edits retain the mounted editor view.
 
 Type-check the test page with `pnpm --filter @virtari-packages/docs exec tsc --noEmit --project tsconfig.tests.json`.
+
+## Form geometry
+
+Open `/tests/form-geometry.html`. The fixture automatically checks seven sizes, LTR/RTL, and three font stacks for balanced padding, fitting line boxes, icon centering/gaps, password action placement, and country/phone separation. It also serves as a visual specimen. Geometry assertions check boxes and spacing, not subjective optical glyph alignment.
+
+## Design language regressions
+
+- `/tests/control-geometry.html`: 48 line-box, padding and enlarged-text checks across action controls.
+- `/tests/surface-contrast.html`: 39 text/surface pairs in light, dark and OLED, with a 4.5:1 minimum. This checks the default palette, not arbitrary consumer overrides.
+- `/tests/segmented-keyboard.html`: run the keyboard checks for LTR/RTL selection, disabled-item skipping, looping and consumer event forwarding.
+- `/tests/drawer-release.html`: run the release checks for lost mouseup recovery and drag cleanup.

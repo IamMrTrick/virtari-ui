@@ -8,7 +8,7 @@
   .vds-dialog-content {
     /* Layout */
     --dialog-radius: var(--vds-radius-dialog, 0.75rem);
-    --dialog-surface: var(--vds-color-surface, #ffffff);
+    --dialog-surface: var(--vds-color-surface-overlay, #ffffff);
     --dialog-shadow: var(--vds-shadow-xl, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1));
     --dialog-border-width: 1px;
     --dialog-border-color: var(--vds-color-border, #e5e7eb);

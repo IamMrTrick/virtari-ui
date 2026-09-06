@@ -78,7 +78,7 @@
     font-size: var(--radio-card-label-font-size);
     font-weight: var(--radio-card-label-font-weight);
     color: var(--radio-card-label-color);
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
     min-inline-size: 0;
   }
 
@@ -86,7 +86,7 @@
     font-size: var(--radio-card-description-font-size);
     color: var(--radio-card-description-color);
     font-weight: var(--vds-font-weight-normal, 400);
-    line-height: 1;
+    line-height: var(--vds-control-line-height, 1.5);
   }
 
   .vds-radio-card-trailing {

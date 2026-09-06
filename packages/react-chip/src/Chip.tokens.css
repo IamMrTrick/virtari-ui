@@ -9,7 +9,7 @@
     /* Layout — md default, on the shared control-height ramp so an unsized
      * Chip lines up with an unsized Input/Button/Select in a filter row. */
     --chip-height: var(--vds-size-md, 2.25rem);
-    --chip-gap: var(--vds-space-1-5, 0.375rem);
+    --chip-gap: var(--vds-gap-icon, 0.5rem);
     --chip-padding-inline: var(--vds-space-3, 0.75rem);
     --chip-padding-block: 0;
     --chip-radius: var(--vds-radius-chip, 9999px);
@@ -19,7 +19,7 @@
     --chip-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --chip-font-size: var(--vds-text-sm, 0.875rem);
     --chip-font-weight: var(--vds-font-weight-medium, 500);
-    --chip-line-height: var(--vds-leading-none, 1);
+    --chip-line-height: var(--vds-control-line-height, 1.5);
     --chip-letter-spacing: var(--vds-tracking-normal, 0);
 
     /* Icon / Avatar slot.
@@ -197,7 +197,7 @@
   .vds-chip[data-size="sm"] {
     --chip-height: var(--vds-size-sm, 2rem);
     --chip-padding-inline: var(--vds-space-2-5, 0.625rem);
-    --chip-gap: var(--vds-space-1, 0.25rem);
+    --chip-gap: var(--vds-gap-icon-compact, 0.25rem);
     --chip-font-size: var(--vds-text-xs, 0.75rem);
     --chip-icon-size: 0.875rem;
     --chip-remove-size: 0.875rem;
@@ -207,7 +207,7 @@
   .vds-chip[data-size="lg"] {
     --chip-height: var(--vds-size-lg, 2.5rem);
     --chip-padding-inline: var(--vds-space-4, 1rem);
-    --chip-gap: var(--vds-space-2, 0.5rem);
+    --chip-gap: var(--vds-gap-icon, 0.5rem);
     --chip-font-size: var(--vds-text-base, 1rem);
     --chip-icon-size: 1.25rem;
     --chip-remove-size: 1.25rem;

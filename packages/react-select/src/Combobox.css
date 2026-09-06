@@ -3,6 +3,8 @@
 @layer design-system.components {
   /* ── Trigger (role=combobox div) ── */
   .vds-combobox-trigger {
+    box-sizing: border-box;
+    min-inline-size: 0;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;

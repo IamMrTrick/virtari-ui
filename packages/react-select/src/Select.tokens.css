@@ -13,7 +13,7 @@
     --select-trigger-gap: var(--vds-space-2, 0.5rem);
     --select-trigger-padding-inline: var(--vds-space-3, 0.75rem);
     --select-trigger-padding-block: 0;
-    --select-trigger-optical-offset: var(--vds-control-optical-offset, 0.09375rem);
+    --select-trigger-optical-offset: var(--vds-control-optical-offset, 0px);
     --select-trigger-radius: var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
     --select-trigger-border-width: 1px;
 
@@ -21,10 +21,10 @@
     --select-trigger-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
     --select-trigger-font-size: var(--vds-text-sm, 0.875rem);
     --select-trigger-font-weight: var(--vds-font-weight-normal, 400);
-    --select-trigger-line-height: var(--vds-control-line-height, 1);
+    --select-trigger-line-height: var(--vds-control-line-height, 1.5);
 
     /* Colors — soft appearance (default) */
-    --select-trigger-bg: var(--vds-color-surface, #ffffff);
+    --select-trigger-bg: var(--vds-color-surface-field, var(--vds-color-surface, #ffffff));
     --select-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
     --select-trigger-border-color: var(--vds-color-border-interactive, #6b7280);
     --select-trigger-border-color-hover: var(--vds-color-neutral-10, #4b5563);
@@ -46,7 +46,7 @@
 
   /* ── Content (popover panel) ── */
   .vds-select-content {
-    --select-content-bg: var(--vds-color-surface, #ffffff);
+    --select-content-bg: var(--vds-color-surface-field, var(--vds-color-surface, #ffffff));
     --select-content-border-color: var(--vds-color-border-muted, #e5e7eb);
     --select-content-border-width: 1px;
     --select-content-radius: var(--vds-radius-select-content, var(--vds-radius-element, 0.5rem));

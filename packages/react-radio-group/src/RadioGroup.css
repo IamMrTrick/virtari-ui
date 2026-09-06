@@ -27,6 +27,7 @@
    * Atomic radio — circular selector with inner dot.
    * ========================================================================= */
   .vds-radio-item {
+    box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;

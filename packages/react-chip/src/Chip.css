@@ -5,10 +5,12 @@
   .vds-chip {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--chip-gap);
     flex: none;
 
-    block-size: var(--chip-height);
+    box-sizing: border-box;
+    min-block-size: var(--chip-height);
     padding-inline: var(--chip-padding-inline);
     padding-block: var(--chip-padding-block);
 
@@ -77,6 +79,7 @@
   .vds-chip-icon > img {
     inline-size: 100%;
     block-size: 100%;
+    display: block;
     object-fit: cover;
     border-radius: inherit;
   }

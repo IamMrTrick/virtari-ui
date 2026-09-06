@@ -16,7 +16,7 @@
     --popover-padding-block: var(--vds-surface-padding-block, var(--vds-space-4, 1rem));
 
     /* Surface */
-    --popover-surface: var(--vds-color-surface, #ffffff);
+    --popover-surface: var(--vds-color-surface-overlay, #ffffff);
     --popover-border-width: 1px;
     --popover-border-color: var(--vds-color-border-muted, #e5e7eb);
     --popover-radius: var(--vds-radius-surface, 0.75rem);

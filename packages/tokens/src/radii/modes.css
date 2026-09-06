@@ -4,8 +4,8 @@
    * Purpose-based, mode-reactive tokens. Prefer these in component CSS.
    *
    *   xs   tightest interactive (tiny chips, compact controls)
-   *   sm   default interactive  (button, input, select, toggle, tooltip)
-   *   md   larger interactive   (textarea cap, kbd, small badge)
+   *   sm   compact interactive  (small controls, item details)
+   *   md   field shell          (input, select, textarea)
    *   lg   small surface        (card, dropdown-menu, popover)
    *   xl   large surface        (dialog, drawer, toast)
    *   2xl  extra-large surface
@@ -14,7 +14,7 @@
    * ── Modes ──
    * Set `data-radius` on <html> or any container to switch the personality.
    *   sharp  — minimal rounding → enterprise, technical, dense
-   *   soft   — gentle rounding  → default, industry standard (= :root)
+   *   soft   — branded rounding → default (= :root)
    *   round  — noticeable rounding → friendly, modern, consumer
    *   pill   — roundest personality → button/pill affordances go fully rounded
    *
@@ -24,11 +24,11 @@
    */
   :root {
     --vds-radius-xs:   var(--vds-radius-2);  /* 4px  */
-    --vds-radius-sm:   var(--vds-radius-3);  /* 6px  */
-    --vds-radius-md:   var(--vds-radius-4);  /* 8px  */
-    --vds-radius-lg:   var(--vds-radius-5);  /* 12px */
-    --vds-radius-xl:   var(--vds-radius-6);  /* 16px */
-    --vds-radius-2xl:  var(--vds-radius-7);  /* 24px */
+    --vds-radius-sm:   var(--vds-radius-4);  /* 8px: compact actions */
+    --vds-radius-md:   var(--vds-radius-5);  /* 12px: fields */
+    --vds-radius-lg:   1.25rem;             /* 20px: contained groups */
+    --vds-radius-xl:   1.75rem;             /* 28px: dialogs and sheets */
+    --vds-radius-2xl:  2rem;                /* 32px: large surfaces */
 
     /* Back-compat aliases */
     --vds-radius-element: var(--vds-radius-sm);
@@ -53,9 +53,9 @@
     --vds-radius-xs:  var(--vds-radius-3);
     --vds-radius-sm:  var(--vds-radius-4);
     --vds-radius-md:  var(--vds-radius-5);
-    --vds-radius-lg:  var(--vds-radius-6);
-    --vds-radius-xl:  var(--vds-radius-6);
-    --vds-radius-2xl: var(--vds-radius-7);
+    --vds-radius-lg:  var(--vds-radius-7);
+    --vds-radius-xl:  2rem;
+    --vds-radius-2xl: 2.5rem;
   }
 
   /* ── Mode: Pill ── */
@@ -63,8 +63,8 @@
     --vds-radius-xs:  var(--vds-radius-4);
     --vds-radius-sm:  var(--vds-radius-5);
     --vds-radius-md:  var(--vds-radius-6);
-    --vds-radius-lg:  var(--vds-radius-6);
-    --vds-radius-xl:  var(--vds-radius-7);
-    --vds-radius-2xl: var(--vds-radius-7);
+    --vds-radius-lg:  var(--vds-radius-7);
+    --vds-radius-xl:  2rem;
+    --vds-radius-2xl: 2.5rem;
   }
 }

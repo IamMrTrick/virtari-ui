@@ -45,7 +45,7 @@
     --sidebar-footer-min-block-size: 0;
 
     /* Surfaces */
-    --sidebar-background: var(--vds-color-surface, #ffffff);
+    --sidebar-background: var(--vds-color-surface-container-low, #ffffff);
     --sidebar-text-color: var(--vds-color-text, #111827);
     --sidebar-border-color: var(--vds-color-border-muted, #e5e7eb);
     --sidebar-border-inline: 1px solid var(--sidebar-border-color);
@@ -100,7 +100,7 @@
    * 4. Background presets
    * ───────────────────────────────────────────── */
   .vds-sidebar[data-background="none"]    { --sidebar-background: transparent; }
-  .vds-sidebar[data-background="surface"] { --sidebar-background: var(--vds-color-surface, #ffffff); }
+  .vds-sidebar[data-background="surface"] { --sidebar-background: var(--vds-color-surface-container-low, #ffffff); }
   .vds-sidebar[data-background="subtle"]  { --sidebar-background: var(--vds-color-bg-subtle, #f9fafb); }
   .vds-sidebar[data-background="muted"]   { --sidebar-background: var(--vds-color-bg-muted, #f3f4f6); }
 

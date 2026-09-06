@@ -1,176 +1,3 @@
-/* ──────────────────────────────────────────────
- * Docs App Layout
- *
- * The shell is now <Sidebar> (react-sidebar) + <main> with <Header>
- * (react-header) inside. Layout switched from grid to flex so the
- * sidebar can manage its own width (and rail/collapse in the future).
- * ────────────────────────────────────────────── */
-.docs-app {
-  display: flex;
-  block-size: 100dvh;
-  overflow: hidden;
-  background-color: var(--vds-color-bg);
-  color: var(--vds-color-text);
-}
-
-html,
-body {
-  /* Prevent a body scrollbar stacking on top of <main>'s internal scroll —
-     the app chrome is a fixed-height shell with scroll delegated to
-     <main class="docs-main"> and <SidebarBody>. */
-  block-size: 100%;
-  margin: 0;
-  overflow: hidden;
-}
-
-/* Sidebar branding row (rendered inside <SidebarHeader>) */
-.docs-sidebar-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--vds-space-2);
-  text-decoration: none;
-  color: inherit;
-}
-
-.docs-sidebar-logo-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: 2rem;
-  block-size: 2rem;
-  border-radius: var(--vds-radius-control-action);
-  background-color: var(--vds-color-primary-500);
-  color: white;
-  font-weight: var(--vds-font-weight-bold);
-  font-size: var(--vds-text-sm);
-  flex: none;
-}
-
-.docs-sidebar-logo-text {
-  font-weight: var(--vds-font-weight-semibold);
-  font-size: var(--vds-text-sm);
-}
-
-.docs-sidebar-logo--in-drawer {
-  padding-block-end: 0;
-  border-block-end: none;
-}
-
-/* ──────────────────────────────────────────────
- * Main column — holds the <Header> + scrollable content
- * ────────────────────────────────────────────── */
-.docs-main {
-  flex: 1 1 0;
-  min-inline-size: 0;
-  display: flex;
-  flex-direction: column;
-  block-size: 100dvh;
-  overflow-y: auto;
-}
-
-/* The <header> itself has display:contents (so sticky works across the
-   whole scroll container) — we only need to style the inner chrome: the
-   toggle button, the title stack, and the settings gear. */
-.docs-header-titles {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-inline-size: 0;
-}
-
-.docs-header-title {
-  font-size: var(--vds-text-lg);
-  font-weight: var(--vds-font-weight-semibold);
-  line-height: var(--vds-leading-tight);
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.docs-header-description {
-  font-size: var(--vds-text-xs);
-  color: var(--vds-color-text-muted);
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-inline-size: 48rem;
-}
-
-/* Mobile sidebar toggle (shown <= 768px). Sits inside HeaderStart. */
-.docs-sidebar-toggle {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
-  border: none;
-  background: transparent;
-  color: var(--vds-color-text-muted);
-  cursor: pointer;
-  border-radius: var(--vds-radius-control-action);
-  transition:
-    background-color var(--vds-duration-fast) var(--vds-ease-out),
-    color var(--vds-duration-fast) var(--vds-ease-out);
-}
-.docs-sidebar-toggle:hover {
-  background-color: var(--vds-color-bg-muted);
-  color: var(--vds-color-text);
-}
-
-/* Settings gear — always visible on the end of the header. */
-.docs-settings-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
-  border: 1px solid var(--vds-color-border-muted);
-  background-color: var(--vds-color-surface);
-  color: var(--vds-color-text-muted);
-  border-radius: var(--vds-radius-action, var(--vds-radius-element));
-  cursor: pointer;
-  transition:
-    background-color var(--vds-duration-fast) var(--vds-ease-out),
-    color var(--vds-duration-fast) var(--vds-ease-out),
-    border-color var(--vds-duration-fast) var(--vds-ease-out);
-}
-.docs-settings-trigger:hover {
-  background-color: var(--vds-color-bg-muted);
-  color: var(--vds-color-text);
-  border-color: var(--vds-color-border);
-}
-.docs-settings-trigger:focus-visible {
-  outline: 2px solid var(--vds-color-primary, currentColor);
-  outline-offset: 2px;
-}
-
-/* Keep the end section (settings gear) pinned — never let a long title squeeze it. */
-.docs-header .vds-header__section[data-side="end"] {
-  flex-shrink: 0;
-}
-
-/* Let the start column shrink below its intrinsic content size so the title/description
-   ellipsis can actually kick in — default `auto` grid tracks grow to fit content and would
-   push the end section (settings gear) out from under the viewport. */
-.docs-header .vds-header__row-inner {
-  grid-template-columns: minmax(0, auto) 1fr auto;
-}
-.docs-header .vds-header__section[data-side="start"] {
-  min-inline-size: 0;
-}
-
-.docs-content {
-  padding: var(--vds-space-8);
-  display: flex;
-  flex-direction: column;
-  gap: var(--vds-space-10);
-  max-inline-size: 80rem;
-}
-
 /* ── Section ── */
 .docs-section {
   display: flex;
@@ -179,16 +6,17 @@ body {
 }
 
 .docs-section-title {
-  font-size: var(--vds-text-lg);
+  font-size: var(--vds-text-xl);
   font-weight: var(--vds-font-weight-semibold);
-  padding-block-end: var(--vds-space-2);
-  border-block-end: 1px solid var(--vds-color-border-muted);
+  letter-spacing: -.015em;
+  margin: 0;
 }
 
 .docs-section-description {
   font-size: var(--vds-text-sm);
   color: var(--vds-color-text-muted);
-  margin-block-start: calc(-1 * var(--vds-space-2));
+  margin: 0;
+  line-height: 1.75;
 }
 
 /* ── Helpers ── */
@@ -209,7 +37,7 @@ body {
 .docs-prose {
   font-size: var(--vds-text-sm);
   line-height: var(--vds-leading-relaxed);
-  max-inline-size: 40rem;
+  max-inline-size: none;
 
   & strong {
     font-weight: var(--vds-font-weight-semibold);
@@ -229,9 +57,9 @@ body {
   font-size: var(--vds-text-xs);
   line-height: var(--vds-leading-relaxed);
   background-color: var(--vds-color-bg-subtle);
-  border: 1px solid var(--vds-color-border-muted);
+  border: 1px solid transparent;
   border-radius: var(--vds-radius-code);
-  padding: var(--vds-space-4);
+  padding: var(--vds-space-5);
   overflow-x: auto;
   white-space: pre;
 }
@@ -465,114 +293,6 @@ body {
   line-height: var(--vds-leading-snug, 1.35);
 }
 
-/* ── Segmented (direction) ── */
-.docs-settings-segmented {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--vds-space-2);
-}
-
-.docs-settings-segmented-option {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  padding: var(--vds-space-2) var(--vds-space-3);
-  border: 1px solid var(--vds-color-border-muted);
-  border-radius: var(--vds-radius-nav-item);
-  background-color: var(--vds-color-surface);
-  color: var(--vds-color-text);
-  cursor: pointer;
-  font-family: inherit;
-  text-align: start;
-  transition:
-    background-color var(--vds-duration-fast) var(--vds-ease-out),
-    border-color var(--vds-duration-fast) var(--vds-ease-out),
-    color var(--vds-duration-fast) var(--vds-ease-out);
-}
-.docs-settings-segmented-option:hover {
-  background-color: var(--vds-color-bg-muted);
-}
-.docs-settings-segmented-option[data-active] {
-  border-color: var(--vds-color-primary-emphasis, var(--vds-color-primary-500));
-  background-color: var(--vds-color-primary-muted, var(--vds-color-primary-50));
-  color: var(--vds-color-primary-muted-text, var(--vds-color-primary-700));
-}
-.docs-settings-segmented-option:focus-visible {
-  outline: 2px solid var(--vds-color-ring, var(--vds-color-primary));
-  outline-offset: 2px;
-}
-
-.docs-settings-segmented-label {
-  font-size: var(--vds-text-sm);
-  font-weight: var(--vds-font-weight-semibold);
-}
-
-.docs-settings-segmented-hint {
-  font-size: var(--vds-text-xs);
-  color: var(--vds-color-text-muted);
-}
-.docs-settings-segmented-option[data-active] .docs-settings-segmented-hint {
-  color: inherit;
-  opacity: 0.75;
-}
-
-/* ── Radius picker ── */
-.docs-settings-radius {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--vds-space-2);
-}
-
-.docs-settings-radius-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--vds-space-1-5);
-  padding: var(--vds-space-2-5) var(--vds-space-1);
-  border: 1px solid var(--vds-color-border-muted);
-  border-radius: var(--vds-radius-nav-item);
-  background-color: var(--vds-color-surface);
-  color: var(--vds-color-text);
-  cursor: pointer;
-  font-family: inherit;
-  transition:
-    background-color var(--vds-duration-fast) var(--vds-ease-out),
-    border-color var(--vds-duration-fast) var(--vds-ease-out);
-}
-.docs-settings-radius-option:hover {
-  background-color: var(--vds-color-bg-muted);
-}
-.docs-settings-radius-option[data-active] {
-  border-color: var(--vds-color-primary-emphasis, var(--vds-color-primary-500));
-  background-color: var(--vds-color-primary-muted, var(--vds-color-primary-50));
-}
-.docs-settings-radius-option:focus-visible {
-  outline: 2px solid var(--vds-color-ring, var(--vds-color-primary));
-  outline-offset: 2px;
-}
-
-.docs-settings-radius-preview {
-  display: block;
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  border: 2px solid var(--vds-color-text-muted);
-}
-.docs-settings-radius-preview[data-mode="sharp"] { border-radius: 1px; }
-.docs-settings-radius-preview[data-mode="soft"]  { border-radius: 4px; }
-.docs-settings-radius-preview[data-mode="round"] { border-radius: 8px; }
-.docs-settings-radius-preview[data-mode="pill"]  { border-radius: 9999px; }
-
-.docs-settings-radius-option[data-active] .docs-settings-radius-preview {
-  border-color: var(--vds-color-primary-emphasis, var(--vds-color-primary-500));
-}
-
-.docs-settings-radius-label {
-  font-size: var(--vds-text-xs);
-  font-weight: var(--vds-font-weight-medium);
-  color: var(--vds-color-text-muted);
-}
-
 /* ── Theme toggle ── */
 .docs-settings-theme-toggle {
   display: flex;
@@ -614,31 +334,6 @@ body {
 .docs-settings-theme-hint {
   font-size: var(--vds-text-xs);
   color: var(--vds-color-text-muted);
-}
-
-/* ──────────────────────────────────────────────
- * Responsive
- * Below 768px the desktop sidebar hides and the hamburger in the
- * header opens the mobile Drawer (rendered in the App root).
- * ────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .docs-app > .vds-sidebar {
-    display: none;
-  }
-
-  .docs-sidebar-toggle {
-    display: inline-flex;
-  }
-
-  .docs-content {
-    padding: var(--vds-space-3);
-    gap: var(--vds-space-6);
-  }
-
-  /* Shrink the header's built-in gutter to match the tighter mobile content padding. */
-  .docs-header .vds-header__row {
-    --row-padding-inline: var(--vds-space-3);
-  }
 }
 
 /* ── Tabs showcase helpers ── */
@@ -801,3 +496,12 @@ body {
   color: var(--vds-color-text-muted);
   font-size: var(--vds-text-sm);
 }
+/* Introduction uses the same Card, Grid, Badge and Button primitives as consumers. */
+.docs-language-hero { background: var(--vds-color-primary-container, var(--vds-color-primary-a3)); }
+.docs-language-hero .vds-badge { align-self: flex-start; }
+.docs-language-statement { margin: 0; white-space: pre-line; font-size: clamp(28px, 3vw, 42px); font-weight: 650; line-height: 1.25; letter-spacing: -.025em; color: var(--vds-color-on-primary-container, var(--vds-color-primary-12)); }
+.docs-language-hero .docs-prose { margin: 0; max-inline-size: 38rem; }
+.docs-principle-card { background: var(--vds-color-surface-container-low, var(--vds-color-bg-subtle)); }
+.docs-principle-card .vds-card-content { margin-block-start: auto; }
+.docs-principle-icon { display: grid; place-items: center; inline-size: 44px; block-size: 44px; background: var(--vds-color-primary-a3); color: var(--vds-color-primary-11); border-radius: var(--vds-radius-control-action); margin-block-end: 12px; }
+.docs-principle-card .vds-card-description { line-height: 1.75; }

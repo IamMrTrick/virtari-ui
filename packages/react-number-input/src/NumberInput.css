@@ -21,13 +21,15 @@
 
 @layer design-system.components {
   .vds-number-input {
+    box-sizing: border-box;
+    min-inline-size: 0;
     display: flex;
     align-items: stretch;
     inline-size: 100%;
     block-size: var(--_ni-height);
     border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
     border-radius: var(--_ni-radius);
-    background-color: var(--vds-color-surface);
+    background-color: var(--vds-color-surface-field, var(--vds-color-surface));
     overflow: hidden;
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
@@ -116,6 +118,10 @@
 
 @layer design-system.components {
   .vds-number-input__field {
+    box-sizing: border-box;
+    margin: 0;
+    padding-block: 0;
+    line-height: var(--vds-control-line-height, 1.5);
     flex: 1;
     min-inline-size: 0;
     border: none;
