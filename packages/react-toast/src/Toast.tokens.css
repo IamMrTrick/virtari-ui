@@ -28,9 +28,9 @@
     /* Surface */
     --toast-min-height: var(--vds-toast-min-height, 4rem);
     --toast-min-height-with-actions: 5rem;
-    --toast-surface: var(--vds-color-surface, #ffffff);
+    --toast-surface: var(--vds-overlay-bg, var(--vds-color-surface, #ffffff));
     --toast-border-width: 1px;
-    --toast-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --toast-border-color: var(--vds-surface-border, var(--vds-color-border-muted, #e5e7eb));
     --toast-border-color-stacked: var(--vds-color-border, #d1d5db);
     --toast-surface-stacked: color-mix(
       in oklch,
@@ -48,17 +48,17 @@
       max(0px, calc(var(--toast-radius-base) - 2px))
     );
     --toast-radius: var(--toast-radius-base);
-    --toast-shadow: var(
+    --toast-shadow: var(--vds-overlay-shadow, var(
       --vds-toast-shadow,
       0 10px 38px -10px color-mix(in oklch, black 28%, transparent),
       0 10px 20px -15px color-mix(in oklch, black 18%, transparent)
-    );
-    --toast-shadow-hover: var(
+    ));
+    --toast-shadow-hover: var(--vds-overlay-shadow, var(
       --vds-toast-shadow-hover,
       0 10px 38px -10px color-mix(in oklch, black 28%, transparent),
       0 10px 20px -15px color-mix(in oklch, black 18%, transparent),
       0 8px 30px -8px color-mix(in oklch, black 30%, transparent)
-    );
+    ));
 
     /* Interior layout */
     --toast-padding-inline: var(--vds-space-5, 1.25rem);

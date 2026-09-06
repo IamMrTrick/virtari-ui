@@ -4,6 +4,7 @@ import { Header, HeaderMain, HeaderStart, HeaderEnd } from "@virtari-packages/re
 import { Main, Stack, Cluster, Grid } from "@virtari-packages/react-layout";
 import { Heading } from "@virtari-packages/react-text";
 import { Button } from "@virtari-packages/react-button";
+import { ScrollArea } from "@virtari-packages/react-scroll-area";
 import { Kbd } from "@virtari-packages/react-kbd";
 import { Nav, NavList, NavItem } from "@virtari-packages/react-nav";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari-packages/react-collapsible";
@@ -13,11 +14,12 @@ import { IconMenu2, IconSettings, IconSearch, IconArrowLeft, IconArrowRight, Ico
 import { toast } from "@virtari-packages/react-toast";
 import { SettingsDrawer } from "./SettingsDrawer";
 import { NAV_ITEMS, DOC_PATHS, getPageIcon } from "./navigation";
-import type { RadiusMode, Direction } from "../App";
+import type { RadiusMode, Direction, SurfaceStyle } from "../App";
 import type { Locale } from "../i18n";
 
 type Props = {
   dark: boolean; onToggleDark: (v: boolean) => void;
+  surfaceStyle: SurfaceStyle; onSurfaceStyleChange: (v: SurfaceStyle) => void;
   radius: RadiusMode; onRadiusChange: (v: RadiusMode) => void;
   direction: Direction; onDirectionChange: (v: Direction) => void;
   locale: Locale; onLocaleChange: (v: Locale) => void;
@@ -34,7 +36,7 @@ export function Layout(p: Props) {
   const [sections, setSections] = useState<HTMLElement[]>([]);
   const [activeSection, setActiveSection] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
-  const mainRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
   const fa = p.locale === "fa";
   const label = (en: string, persian: string) => fa ? persian : en;
   const paths = DOC_PATHS;
@@ -109,7 +111,8 @@ export function Layout(p: Props) {
 
     <Grid className="docs-workspace">
       {p.sidebar}
-      <Main contained={false} className="docs-main" ref={mainRef} tabIndex={-1}>
+      <Main contained={false} className="docs-main">
+        <ScrollArea className="docs-main-scroll" viewportRef={mainRef} viewportProps={{ role: "region", "aria-label": p.title }}>
         <div className="docs-article">
           <Cluster className="docs-page-toolbar">
             <span className="docs-eyebrow">{label("Documentation", "مستندات")} <span aria-hidden="true">/</span> {p.title}</span>
@@ -128,11 +131,14 @@ export function Layout(p: Props) {
           </Cluster>
           <p className="docs-colophon">{label("Built with Virtari components. Designed to work together.", "ساخته‌شده با کامپوننت‌های ویرتاری؛ طراحی‌شده برای کار در کنار هم.")}</p>
         </div>
+        </ScrollArea>
       </Main>
       <aside className="docs-outline" aria-label={label("Page contents", "فهرست صفحه")}>
+        <ScrollArea className="docs-outline-scroll" viewportProps={{ "aria-label": label("Page contents", "فهرست صفحه"), role: "region" }}><div className="docs-outline-content">
         <p className="docs-outline-title">{label("On this page", "در این صفحه")}</p>
         {sectionLinks}
         <Card className="docs-outline-note" variant="soft" size="sm"><CardContent><Stack gap="sm"><strong>{label("Your expression. One system.", "بیان شما، یک سیستم.")}</strong><p>{label("A shared foundation for color, shape, and motion. Make it feel like you.", "مبنایی مشترک برای رنگ، فرم و حرکت؛ با حس و هویت شما.")}</p><Button variant="soft" size="sm" onClick={() => setSettingsOpen(true)}>{label("Personalize", "شخصی‌سازی")}</Button></Stack></CardContent></Card>
+        </div></ScrollArea>
       </aside>
     </Grid>
 
@@ -140,6 +146,6 @@ export function Layout(p: Props) {
       <CommandInput placeholder={label("Search components and guides…", "جست‌وجوی کامپوننت‌ها و راهنماها…")} />
       <CommandList><CommandEmpty>{label("No pages found.", "صفحه‌ای پیدا نشد.")}</CommandEmpty>{NAV_ITEMS.map(group => <CommandGroup key={group.groupKey} heading={t(group.groupKey)}>{group.items.map(path => <CommandItem key={path} value={`${pageLabel(path)} ${path}`} onSelect={() => {p.onNavigate(path); setSearchOpen(false);}}>{getPageIcon(path)}{pageLabel(path)}</CommandItem>)}</CommandGroup>)}</CommandList>
     </CommandDialog>
-    <SettingsDrawer open={settingsOpen} onOpenChange={setSettingsOpen} dark={p.dark} onDarkChange={p.onToggleDark} radius={p.radius} onRadiusChange={p.onRadiusChange} direction={p.direction} onDirectionChange={p.onDirectionChange} locale={p.locale} onLocaleChange={p.onLocaleChange} microInteractions={p.microInteractions} onMicroInteractionsChange={p.onMicroInteractionsChange}/>
+    <SettingsDrawer surfaceStyle={p.surfaceStyle} onSurfaceStyleChange={p.onSurfaceStyleChange} open={settingsOpen} onOpenChange={setSettingsOpen} dark={p.dark} onDarkChange={p.onToggleDark} radius={p.radius} onRadiusChange={p.onRadiusChange} direction={p.direction} onDirectionChange={p.onDirectionChange} locale={p.locale} onLocaleChange={p.onLocaleChange} microInteractions={p.microInteractions} onMicroInteractionsChange={p.onMicroInteractionsChange}/>
   </>;
 }

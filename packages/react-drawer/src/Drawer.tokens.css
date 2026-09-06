@@ -23,7 +23,7 @@
     --drawer-label-gap: var(--vds-label-gap, var(--vds-space-1, 0.25rem));
 
     /* Surfaces */
-    --drawer-surface: var(--vds-color-surface-overlay, #ffffff);
+    --drawer-surface: var(--vds-overlay-bg, var(--vds-color-surface-overlay, #ffffff));
     --drawer-background: linear-gradient(
       180deg,
       color-mix(in oklch, var(--drawer-surface), white 4%),
@@ -35,7 +35,7 @@
       color-mix(in oklch, var(--drawer-surface), transparent 8%),
       color-mix(in oklch, var(--drawer-surface), black 2%)
     );
-    --drawer-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --drawer-border-color: var(--vds-surface-border, var(--vds-color-border-muted, #e5e7eb));
     --drawer-section-border: 1px solid var(--drawer-border-color);
 
     /* Typography */

@@ -16,15 +16,15 @@
     --popover-padding-block: var(--vds-surface-padding-block, var(--vds-space-4, 1rem));
 
     /* Surface */
-    --popover-surface: var(--vds-color-surface-overlay, #ffffff);
+    --popover-surface: var(--vds-overlay-bg, var(--vds-color-surface-overlay, #ffffff));
     --popover-border-width: 1px;
-    --popover-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --popover-border-color: var(--vds-surface-border, var(--vds-color-border-muted, #e5e7eb));
     --popover-radius: var(--vds-radius-surface, 0.75rem);
-    --popover-shadow: var(
+    --popover-shadow: var(--vds-overlay-shadow, var(
       --vds-shadow-lg,
       0 10px 15px -3px rgb(0 0 0 / 0.1),
       0 4px 6px -4px rgb(0 0 0 / 0.1)
-    );
+    ));
 
     /* Layering */
     --popover-z: var(--vds-z-popover, 1200);

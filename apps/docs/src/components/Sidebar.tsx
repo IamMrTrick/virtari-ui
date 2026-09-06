@@ -4,6 +4,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerTitle, DrawerDes
 import { Sidebar as VdsSidebar, SidebarHeader, SidebarBody } from "@virtari-packages/react-sidebar";
 import { Nav, NavList, NavItem, NavSubmenu } from "@virtari-packages/react-nav";
 import { Input, InputWrapper, InputIcon } from "@virtari-packages/react-input";
+import { ScrollArea } from "@virtari-packages/react-scroll-area";
 import { Button } from "@virtari-packages/react-button";
 import { IconSearch, IconX } from "@virtari-packages/react-icons";
 import { NAV_ITEMS, getPageIcon } from "./navigation";
@@ -63,7 +64,7 @@ export function Sidebar(props: NavigationProps) {
   return <VdsSidebar className="docs-navigation" mode="below-header" stickyOffset="var(--docs-header-height)"
     inlineSize="100%" collapsible={false} bordered={false} background="none" aria-label={t("sidebar.ariaPrimary")}>
     <SidebarHeader><NavSearch value={query} onChange={setQuery} /></SidebarHeader>
-    <SidebarBody><NavigationTree {...props} query={query} /></SidebarBody>
+    <SidebarBody><ScrollArea className="docs-sidebar-scroll" viewportProps={{ "aria-label": t("sidebar.ariaDocs"), role: "region" }}><div className="docs-navigation-content"><NavigationTree {...props} query={query} /></div></ScrollArea></SidebarBody>
   </VdsSidebar>;
 }
 
@@ -77,9 +78,9 @@ export function MobileSidebar({ open, onOpenChange, ...props }: NavigationProps 
         <DrawerDescription>{t("sidebar.mobileDescription")}</DrawerDescription>
         <DrawerClose asChild><Button className="docs-mobile-close" variant="ghost" color="contrast" aria-label={t("sidebar.close")}><IconX size={18}/></Button></DrawerClose>
       </DrawerHeader>
-      <DrawerBody>
+      <DrawerBody className="docs-mobile-navigation-body">
         <NavSearch value={query} onChange={setQuery} />
-        <NavigationTree {...props} query={query} onNavigate={page => { props.onNavigate(page); onOpenChange(false); }} />
+        <ScrollArea className="docs-mobile-nav-scroll" viewportProps={{ "aria-label": t("sidebar.ariaDocs"), role: "region" }}><NavigationTree {...props} query={query} onNavigate={page => { props.onNavigate(page); onOpenChange(false); }} /></ScrollArea>
       </DrawerBody>
     </DrawerContent>
   </Drawer>;

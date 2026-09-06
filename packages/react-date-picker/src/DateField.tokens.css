@@ -13,7 +13,7 @@
   .vds-date-range-picker-group {
     /* Field shell (shared sizing ramp with Button/Input/Select) */
     --date-field-height: var(--vds-size-md, 2.25rem);
-    --date-field-gap: var(--vds-space-1, 0.25rem);
+    --date-field-gap: var(--vds-space-2, 0.5rem);
     --date-field-padding-inline: var(--vds-space-3, 0.75rem);
     --date-field-radius: var(--vds-radius-date-field, 0.5rem);
     --date-field-border-width: 1px;
@@ -22,10 +22,11 @@
     --date-field-font-size: var(--vds-text-sm, 0.875rem);
     --date-field-line-height: var(--vds-leading-normal, 1.5);
 
-    --date-field-bg: var(--vds-color-surface-field, var(--vds-color-surface, #ffffff));
-    --date-field-bg-hover: var(--vds-color-surface-hover, #f9fafb);
-    --date-field-border-color: var(--vds-color-border-interactive, #6b7280);
-    --date-field-border-color-hover: var(--vds-color-neutral-10, #4b5563);
+    --date-field-bg: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface, #ffffff)));
+    --date-field-shadow: var(--vds-field-shadow, none);
+    --date-field-bg-hover: var(--vds-field-bg, var(--vds-color-surface-hover, #f9fafb));
+    --date-field-border-color: var(--vds-field-border, var(--vds-color-border-interactive, #6b7280));
+    --date-field-border-color-hover: var(--vds-field-border-hover, var(--vds-color-neutral-10, #4b5563));
     --date-field-text-color: var(--vds-color-text, #111827);
     --date-field-placeholder-color: var(--vds-color-text-placeholder, #4b5563);
     --date-field-label-color: var(--vds-color-text-muted, #6b7280);
@@ -35,6 +36,8 @@
     --date-field-focus-ring-color: var(--vds-color-ring, #6366f1);
     --date-field-focus-ring-width: var(--vds-focus-ring-width, 2px);
     --date-field-focus-border-color: var(--vds-color-primary-9, #6366f1);
+    --date-field-focus-alpha: var(--vds-color-primary-a4);
+    --date-field-focus-soft-alpha: var(--vds-color-primary-a2);
 
     --date-field-segment-focus-bg: var(--vds-color-primary-9, #6366f1);
     --date-field-segment-focus-text: var(--vds-color-primary-contrast, #ffffff);
@@ -76,6 +79,9 @@
   .vds-date-picker[data-appearance="outline"] .vds-date-picker-group,
   .vds-date-range-picker[data-appearance="outline"] .vds-date-range-picker-group {
     --date-field-bg: transparent;
+    --date-field-border-color: var(--vds-color-border-interactive, #6b7280);
+    --date-field-border-color-hover: var(--vds-color-neutral-10, #4b5563);
+    --date-field-shadow: none;
   }
 
   .vds-date-field[data-appearance="ghost"],
@@ -83,6 +89,7 @@
   .vds-date-picker[data-appearance="ghost"] .vds-date-picker-group,
   .vds-date-range-picker[data-appearance="ghost"] .vds-date-range-picker-group {
     --date-field-bg: transparent;
+    --date-field-shadow: none;
     --date-field-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
     --date-field-border-color: transparent;
     --date-field-border-color-hover: transparent;
@@ -93,6 +100,7 @@
   .vds-date-picker[data-appearance="filled"] .vds-date-picker-group,
   .vds-date-range-picker[data-appearance="filled"] .vds-date-range-picker-group {
     --date-field-bg: var(--vds-color-bg-muted, #f3f4f6);
+    --date-field-shadow: none;
     --date-field-bg-hover: var(--vds-color-bg-subtle, #e5e7eb);
     --date-field-border-color: transparent;
     --date-field-border-color-hover: transparent;
@@ -164,6 +172,8 @@
     --date-field-border-color-hover: var(--vds-color-danger-solid-hover, #dc2626);
     --date-field-focus-ring-color: var(--vds-color-danger-solid, #ef4444);
     --date-field-focus-border-color: var(--vds-color-danger-solid, #ef4444);
+    --date-field-focus-alpha: var(--vds-color-danger-a4);
+    --date-field-focus-soft-alpha: var(--vds-color-danger-a2);
     --date-field-segment-focus-bg: var(--vds-color-danger-solid, #ef4444);
   }
 }

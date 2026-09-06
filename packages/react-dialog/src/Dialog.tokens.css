@@ -8,10 +8,10 @@
   .vds-dialog-content {
     /* Layout */
     --dialog-radius: var(--vds-radius-dialog, 0.75rem);
-    --dialog-surface: var(--vds-color-surface-overlay, #ffffff);
-    --dialog-shadow: var(--vds-shadow-xl, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1));
+    --dialog-surface: var(--vds-overlay-bg, var(--vds-color-surface-overlay, #ffffff));
+    --dialog-shadow: var(--vds-overlay-shadow, var(--vds-shadow-xl, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)));
     --dialog-border-width: 1px;
-    --dialog-border-color: var(--vds-color-border, #e5e7eb);
+    --dialog-border-color: var(--vds-surface-border, var(--vds-color-border, #e5e7eb));
     --dialog-padding-inline: var(--vds-surface-padding-inline, var(--vds-space-6, 1.5rem));
     --dialog-padding-block: var(--vds-surface-padding-block, var(--vds-space-6, 1.5rem));
     /* The one seam token: gap between adjacent slots, and the flex gap of the

@@ -71,11 +71,14 @@
  * the outer host's `-b` and `-p` and subtract the wrong distance. The
  * `0px` initial only protects a host with no host above it.
  *
- * ── Status ──
+ * ── Nested hosts ──
  *
- * Infrastructure. Components are NOT being migrated onto this in the
- * pass that introduced it — adopt it when you next touch a component
- * that actually nests rounded corners.
+ * These outputs are for leaf geometry. A child that publishes its own
+ * host-r must not derive that same host-r from --vds-radius-inset: that
+ * would create a custom-property cycle on the child. Card-to-Card nesting
+ * uses a pooled layout observer and a separate --card-nested-radius input
+ * instead. It measures intervening slots/wrappers and never changes these
+ * generic channels.
  */
 
 @property --vds-radius-host-r {

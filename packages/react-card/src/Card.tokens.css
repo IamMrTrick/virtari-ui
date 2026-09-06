@@ -3,27 +3,16 @@
     --card-radius: var(--vds-radius-card, 0.75rem);
     --card-border-width: 1px;
 
-    --card-background: var(--vds-color-surface-container-low, var(--vds-color-surface, #ffffff));
+    --card-background: var(--vds-surface-bg, var(--vds-color-surface-container-low, var(--vds-color-surface, #ffffff)));
     --card-background-hover: color-mix(
       in oklch,
       var(--card-background) 94%,
       var(--vds-color-bg-subtle, #f9fafb) 6%
     );
-    --card-border-color: var(
-      --vds-color-border-muted,
-      var(--vds-color-border, #e5e7eb)
-    );
-    --card-border-color-hover: var(--vds-color-border, #d1d5db);
-    --card-shadow: var(
-      --vds-elevation-resting,
-      0 1px 3px 0 rgb(0 0 0 / 0.1),
-      0 1px 2px -1px rgb(0 0 0 / 0.1)
-    );
-    --card-shadow-hover: var(
-      --vds-elevation-raised,
-      0 4px 6px -1px rgb(0 0 0 / 0.1),
-      0 2px 4px -2px rgb(0 0 0 / 0.1)
-    );
+    --card-border-color: var(--vds-surface-border, var(--vds-color-border-muted, var(--vds-color-border, #e5e7eb)));
+    --card-border-color-hover: var(--vds-surface-border, var(--vds-color-border, #d1d5db));
+    --card-shadow: var(--vds-surface-shadow, var(--vds-elevation-resting, none));
+    --card-shadow-hover: var(--vds-surface-shadow, var(--vds-elevation-raised, none));
 
     --card-text-color: var(--vds-color-text, #111827);
     --card-muted-color: var(--vds-color-text-muted, #6b7280);
@@ -70,7 +59,19 @@
     --card-focus-ring-offset: 2px;
   }
 
+  /* A nested surface stays visible in tonal mode without inventing a border. */
+  .vds-card[data-nested-card]:not([data-variant]) {
+    --card-background: var(--vds-surface-nested-bg, var(--vds-color-surface-container));
+  }
+
+  .vds-card[data-nested-card]:not([data-card-depth="1"]):not([data-variant]) {
+    --card-background: var(--vds-surface-nested-bg-high, var(--vds-color-surface-container-high));
+  }
+
   .vds-card[data-variant="outline"] {
+    --card-background: var(--vds-color-surface, #fff);
+    --card-border-color: var(--vds-color-border);
+    --card-border-color-hover: var(--vds-color-border-strong, var(--vds-color-border));
     --card-shadow: none;
     --card-shadow-hover: none;
   }

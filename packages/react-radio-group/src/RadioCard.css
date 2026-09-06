@@ -1,5 +1,6 @@
 @layer design-system.components {
   .vds-radio-card {
+    box-shadow: var(--radio-card-shadow);
     position: relative;
     display: flex;
     align-items: flex-start;

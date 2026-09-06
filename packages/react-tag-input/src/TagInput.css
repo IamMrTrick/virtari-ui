@@ -2,6 +2,7 @@
 
 @layer design-system.components {
   .vds-tag-input {
+    box-shadow: var(--tag-input-shadow);
     box-sizing: border-box;
     min-inline-size: 0;
     font-family: var(--vds-font-sans);
@@ -81,5 +82,11 @@
 
   .vds-tag-input-field:disabled {
     cursor: not-allowed;
+  }
+}
+
+@layer design-system.components {
+  .vds-tag-input:hover:not(:disabled):not([data-disabled]):not([aria-invalid="true"]):not([data-invalid]):not(:focus-within) {
+    border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
   }
 }

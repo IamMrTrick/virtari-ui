@@ -31,15 +31,18 @@ html, body { block-size: 100%; margin: 0; overflow: hidden; }
   inset-block-start: 0;
   min-block-size: 0;
   block-size: 100%;
-  background: var(--vds-color-surface-container, var(--vds-color-bg-muted));
+  background: var(--vds-navigation-bg, var(--vds-color-surface-container));
+  border: 1px solid var(--vds-surface-border, transparent);
+  box-shadow: var(--vds-surface-shadow, none);
   border-radius: var(--vds-radius-dialog);
   padding-block-start: var(--vds-space-2);
   overflow: hidden;
 }
-.docs-navigation .vds-sidebar__body { padding: 8px 12px 24px; }
+.docs-navigation .vds-sidebar__body { padding: 0; overflow: hidden; }
+.docs-navigation-content { padding: 8px 12px 24px; }
+.docs-sidebar-scroll { block-size: 100%; }
 .docs-navigation .vds-sidebar__header { padding: 12px; }
 .docs-nav-search { inline-size: 100%; }
-.docs-nav-search .vds-input { background: var(--vds-color-surface-container-low, var(--vds-color-bg)); }
 .docs-nav-empty { color: var(--vds-color-text-muted); font-size: var(--vds-text-sm); padding: 12px; }
 .docs-nav-group > .vds-nav__trigger { font-weight: var(--vds-font-weight-semibold); }
 .docs-navigation .vds-nav__submenu[data-mode="inline"], .docs-sidebar-drawer .vds-nav__submenu[data-mode="inline"] { margin-block: 4px 8px; }
@@ -48,13 +51,22 @@ html, body { block-size: 100%; margin: 0; overflow: hidden; }
   block-size: 100%;
   min-block-size: 0;
   min-inline-size: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
+  overflow: hidden;
   background: var(--vds-color-bg);
+  border: 1px solid var(--vds-surface-border, transparent);
+  box-shadow: var(--vds-surface-shadow, none);
   border-radius: var(--vds-radius-dialog);
 }
-.docs-main > .vds-section__inner { display: block; min-inline-size: 0; }
+.docs-main > .vds-section__inner { display: block; min-inline-size: 0; block-size: 100%; }
+.docs-main-scroll, .docs-outline-scroll { block-size: 100%; border-radius: inherit; }
+.docs-main-scroll > .vds-scroll-area > .vds-scroll-area-viewport > div {
+  /* This is a vertical document, so the primitive's intrinsic table wrapper
+     must not let wide code samples dictate the article width on mobile. */
+  display: block !important;
+  inline-size: 100%;
+  max-inline-size: 100%;
+}
+.docs-main-scroll, .docs-outline-scroll, .docs-sidebar-scroll { --scroll-area-track-inset: var(--vds-space-3); }
 .docs-article { max-inline-size: 900px; margin-inline: auto; padding: 32px 40px 40px; min-inline-size: 0; }
 .docs-page-toolbar { justify-content: space-between; gap: 12px; margin-block-end: 36px; }
 .docs-eyebrow { font-size: 12px; color: var(--vds-color-text-muted); }
@@ -68,12 +80,17 @@ html, body { block-size: 100%; margin: 0; overflow: hidden; }
 .docs-page-pagination { justify-content: space-between; padding-block-start: 32px; margin-block-start: 48px; border-block-start: 1px solid var(--vds-color-border-muted); }
 .docs-colophon { margin-block: 28px 0; font-size: 12px; color: var(--vds-color-text-muted); }
 .docs-outline {
-  padding: 28px 16px;
-  overflow: auto;
+  overflow: hidden;
   min-block-size: 0;
-  background: var(--vds-color-surface-container, var(--vds-color-bg-muted));
+  background: var(--vds-navigation-bg, var(--vds-color-surface-container));
+  border: 1px solid var(--vds-surface-border, transparent);
+  box-shadow: var(--vds-surface-shadow, none);
   border-radius: var(--vds-radius-dialog);
 }
+.docs-outline-content { padding: 28px 16px; }
+.docs-mobile-navigation-body { display: flex; flex-direction: column; overflow: hidden; min-block-size: 0; }
+.docs-mobile-navigation-body > .docs-nav-search { flex: none; }
+.docs-mobile-nav-scroll { flex: 1; min-block-size: 0; }
 .docs-outline-title { font-size: 13px; font-weight: 600; margin: 0 12px 16px; }
 .docs-outline .vds-nav__item { --item-font-size: 13px; --item-font-weight: 400; --item-padding-inline: 12px; --item-color: var(--vds-color-text-muted); }
 .docs-outline .vds-nav__label { white-space: normal; line-height: 1.5; }

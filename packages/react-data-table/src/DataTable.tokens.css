@@ -85,7 +85,7 @@
     /* ── Radii ───────────────────────────────────────────────── */
     --data-table-radius: var(--vds-radius-data-table, 0.5rem);
     --data-table-shadow:
-      var(--vds-shadow-xl, 0 24px 48px -18px rgba(0, 0, 0, 0.42));
+      var(--vds-surface-shadow, var(--vds-shadow-xl, 0 24px 48px -18px rgba(0, 0, 0, 0.42)));
 
     /* ── Motion ──────────────────────────────────────────────── */
     --data-table-transition-duration: var(--vds-duration-fast, 100ms);

@@ -6,7 +6,7 @@
   }
 
   .vds-command {
-    --vds-command-bg: var(--vds-color-surface, #ffffff);
+    --vds-command-bg: var(--vds-overlay-bg, var(--vds-color-surface, #ffffff));
     --vds-command-border: 1px solid
       var(--vds-color-border-default, var(--vds-color-border, #e5e7eb));
     --vds-command-radius: var(--vds-radius-command, 0.75rem);

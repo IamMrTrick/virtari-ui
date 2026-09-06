@@ -4,6 +4,7 @@
 @layer design-system.components {
   /* ── Trigger ── */
   .vds-select-trigger {
+    box-shadow: var(--select-trigger-shadow);
     box-sizing: border-box;
     min-inline-size: 0;
     margin: 0;
@@ -50,7 +51,7 @@
   .vds-select-trigger:focus-visible {
     border-color: var(--select-trigger-focus-border-color);
     outline: none;
-    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    box-shadow: 0 0 0 4px var(--select-trigger-focus-alpha), 0 0 12px 2px var(--select-trigger-focus-soft-alpha);
     @media (forced-colors: active) {
       outline: 2px solid Highlight;
       outline-offset: 2px;
@@ -279,7 +280,7 @@
 
 @layer design-system.components {
   .vds-select-control { position: relative; display: inline-flex; inline-size: 100%; min-inline-size: 0; }
-  .vds-select-control > .vds-select-clear { position: absolute; inset-inline-end: calc(var(--select-trigger-padding-inline) + 0.875rem + var(--select-trigger-gap)); inset-block-start: calc(50% - 0.5rem); }
+  .vds-select-control > .vds-select-clear { position: absolute; inset-inline-end: calc(var(--select-trigger-padding-inline) + 0.875rem + var(--select-trigger-gap)); inset-block-start: 50%; transform: translateY(-50%); }
   .vds-select-clear-space { inline-size: 1rem; }
   .vds-select-clear:disabled { cursor: not-allowed; opacity: var(--vds-opacity-disabled, 0.5); }
 }

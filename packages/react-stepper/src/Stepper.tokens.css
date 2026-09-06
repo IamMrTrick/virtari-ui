@@ -62,11 +62,11 @@
     --stepper-error-ring: color-mix(in oklab, var(--vds-color-danger-solid, #ef4444) 18%, transparent);
 
     /* Surface */
-    --stepper-card-bg: var(--vds-color-surface, #fff);
+    --stepper-card-bg: var(--vds-surface-bg, var(--vds-color-surface, #fff));
     --stepper-card-bg-hover: var(--vds-color-surface-hover, #f3f4f6);
     --stepper-card-border: var(--vds-color-border-muted, #e5e7eb);
     --stepper-card-radius: var(--vds-radius-card, 0.75rem);
-    --stepper-card-shadow: var(--vds-shadow-xs, 0 1px 2px rgb(0 0 0 / 0.05));
+    --stepper-card-shadow: var(--vds-surface-shadow, var(--vds-shadow-xs, 0 1px 2px rgb(0 0 0 / 0.05)));
 
     /* Text */
     --stepper-label-size: var(--vds-text-sm, 0.875rem);

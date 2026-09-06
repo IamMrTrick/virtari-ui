@@ -9,7 +9,12 @@
     color: var(--card-text-color);
     background-color: var(--card-background);
     border: var(--card-border-width) solid var(--card-border-color);
-    border-radius: var(--card-radius);
+    --card-effective-radius: min(
+      var(--card-radius),
+      var(--card-parent-radius, var(--card-radius)),
+      max(var(--card-nested-radius, var(--card-radius)), var(--vds-radius-xs, 0px))
+    );
+    border-radius: var(--card-effective-radius);
     box-shadow: var(--card-shadow);
     overflow: hidden;
 
@@ -27,7 +32,7 @@
      * themselves, not to this box; the simple (slot-less) card overrides
      * it below, where the padding really is on the container.
      */
-    --vds-radius-host-r: var(--card-radius);
+    --vds-radius-host-r: var(--card-effective-radius);
     --vds-radius-host-b: var(--card-border-width);
     --vds-radius-host-p: 0px;
 
@@ -69,14 +74,9 @@
     padding-inline: var(--card-padding-inline);
     padding-block: 0;
 
-    /*
-     * The slots deliberately do NOT re-host. A slot insets its children by
-     * --card-padding-inline (16px at the smallest) while the card's corner
-     * is at most 16px and its inner corner 15px, so the concentric answer
-     * for anything inside a slot is always a square corner — the arc is
-     * fully consumed before the child starts. The constraint is slack;
-     * re-hosting here would publish a channel that can only ever say 0px.
-     */
+    /* Slots do not publish a second host channel. Nested Cards measure
+       their actual inset through these slots; leaf geometry can still
+       consume the outer card's explicit flush/inset outputs. */
   }
 
   .vds-card

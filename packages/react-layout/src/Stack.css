@@ -5,13 +5,10 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    gap: var(--stack-gap);
   }
 
-  .vds-stack > * + * {
-    margin-block-start: var(--stack-gap);
-  }
-
-  .vds-stack[data-recursive] * + * {
+  .vds-stack[data-recursive] > * * + *:not(:where(.vds-stack > *)) {
     margin-block-start: var(--stack-gap);
   }
 }

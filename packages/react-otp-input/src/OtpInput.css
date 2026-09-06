@@ -21,6 +21,7 @@
   }
 
   .vds-otp-input__slot {
+    box-shadow: var(--vds-field-shadow, none);
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -34,8 +35,8 @@
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
     color: var(--vds-color-text);
-    background-color: var(--vds-color-surface-field, var(--vds-color-surface));
-    border: var(--_otp-border-w) solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
+    background-color: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface)));
+    border: var(--_otp-border-w) solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
     border-radius: var(--_otp-radius);
     caret-color: var(--vds-color-primary-9);
     appearance: none;
@@ -58,8 +59,8 @@
     &:hover:not(:disabled) {
       /* neutral-10, not border-strong (neutral-8): the resting boundary is now
          neutral-9, so border-strong would make hover *lighter* than rest. */
-      border-color: var(--vds-color-neutral-10);
-      background-color: var(--vds-color-surface-raised);
+      border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
+      background-color: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface)));
     }
 
     &:focus-visible {
@@ -93,8 +94,8 @@
       }
     }
 
-    &[data-filled]:not(:focus-visible) {
-      border-color: var(--vds-color-neutral-10);
+    &[data-filled]:not(:focus-visible):not([aria-invalid="true"]) {
+      border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
     }
 
     &[data-mask] {

@@ -27,7 +27,7 @@
        0.5rem, so a standalone drop-in without @virtari-packages/tokens drew a
        4px-tighter row than the tokenized build. */
     --vds-file-upload-item-radius: var(--vds-radius-card, 0.75rem);
-    --vds-file-upload-item-bg: var(--vds-color-surface, #ffffff);
+    --vds-file-upload-item-bg: var(--vds-surface-bg, var(--vds-color-surface, #ffffff));
     --vds-file-upload-item-border: 1px solid
       var(--vds-color-border, #e5e7eb);
 
@@ -58,7 +58,7 @@
        controls resolve 6px — and its 0.5rem fallback did not match that token
        either, so the standalone and tokenized builds disagreed. */
     --vds-file-upload-input-radius: var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
-    --vds-file-upload-input-bg: var(--vds-color-surface, #ffffff);
+    --vds-file-upload-input-bg: var(--vds-field-bg, var(--vds-color-surface, #ffffff));
     --vds-file-upload-input-font-size: var(--vds-text-sm, 0.875rem);
 
     --vds-file-upload-input-btn-bg: var(--vds-color-surface-sunken, #f9fafb);

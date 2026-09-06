@@ -23,7 +23,7 @@
     --vds-drawer-radius: var(--vds-radius-drawer);
     --vds-drawer-duration: var(--vds-duration-slower);
     --vds-drawer-ease: var(--vds-ease-ios);
-    --vds-drawer-shadow: var(--vds-shadow-xl);
+    --vds-drawer-shadow: var(--vds-overlay-shadow, var(--vds-shadow-xl));
     --vds-drawer-shadow-minimized:
       0 0 0 1px color-mix(in oklch, var(--vds-color-border-muted), transparent 40%),
       var(--vds-shadow-lg);

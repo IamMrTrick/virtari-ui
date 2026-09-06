@@ -159,10 +159,10 @@
    * the element that draws the corner (panel > ul > li > link) would take
    * three chained `data-radius-host`s. */
   .vds-nav__submenu {
-    --submenu-background: var(--vds-color-surface, #ffffff);
-    --submenu-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --submenu-background: var(--vds-overlay-bg, var(--vds-color-surface, #ffffff));
+    --submenu-border-color: var(--vds-surface-border, var(--vds-color-border-muted, #e5e7eb));
     --submenu-radius: var(--vds-radius-surface, 0.75rem);
-    --submenu-shadow: var(--vds-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
+    --submenu-shadow: var(--vds-overlay-shadow, var(--vds-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)));
     --submenu-padding: var(--vds-space-2, 0.5rem);
     --submenu-item-padding-inline: var(--vds-space-3, 0.75rem);
     --submenu-min-inline-size: 14rem;
@@ -181,10 +181,10 @@
 
   /* Mega panel tokens */
   .vds-nav__mega {
-    --mega-background: var(--vds-color-surface, #ffffff);
-    --mega-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --mega-background: var(--vds-overlay-bg, var(--vds-color-surface, #ffffff));
+    --mega-border-color: var(--vds-surface-border, var(--vds-color-border-muted, #e5e7eb));
     --mega-radius: var(--vds-radius-surface, 0.75rem);
-    --mega-shadow: var(--vds-shadow-xl, 0 20px 25px -5px rgb(0 0 0 / 0.1));
+    --mega-shadow: var(--vds-overlay-shadow, var(--vds-shadow-xl, 0 20px 25px -5px rgb(0 0 0 / 0.1)));
     --mega-padding: var(--vds-space-6, 1.5rem);
     --mega-column-gap: var(--vds-space-6, 1.5rem);
     --mega-row-gap: var(--vds-space-4, 1rem);

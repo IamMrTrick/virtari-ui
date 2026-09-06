@@ -24,10 +24,11 @@
     --select-trigger-line-height: var(--vds-control-line-height, 1.5);
 
     /* Colors — soft appearance (default) */
-    --select-trigger-bg: var(--vds-color-surface-field, var(--vds-color-surface, #ffffff));
-    --select-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
-    --select-trigger-border-color: var(--vds-color-border-interactive, #6b7280);
-    --select-trigger-border-color-hover: var(--vds-color-neutral-10, #4b5563);
+    --select-trigger-bg: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface, #ffffff)));
+    --select-trigger-shadow: var(--vds-field-shadow, none);
+    --select-trigger-bg-hover: var(--vds-field-bg, var(--vds-color-surface-hover, #f9fafb));
+    --select-trigger-border-color: var(--vds-field-border, var(--vds-color-border-interactive, #6b7280));
+    --select-trigger-border-color-hover: var(--vds-field-border-hover, var(--vds-color-neutral-10, #4b5563));
     --select-trigger-text-color: var(--vds-color-text, #111827);
     --select-trigger-placeholder-color: var(--vds-color-text-placeholder, #4b5563);
     --select-trigger-icon-color: var(--vds-color-text-muted, #6b7280);
@@ -38,6 +39,8 @@
     --select-trigger-focus-ring-width: var(--vds-focus-ring-width, 2px);
     --select-trigger-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
     --select-trigger-focus-border-color: var(--vds-color-primary-9, #6366f1);
+    --select-trigger-focus-alpha: var(--vds-color-primary-a4);
+    --select-trigger-focus-soft-alpha: var(--vds-color-primary-a2);
 
     /* Motion */
     --select-trigger-transition-duration: var(--vds-duration-fast, 100ms);
@@ -46,11 +49,11 @@
 
   /* ── Content (popover panel) ── */
   .vds-select-content {
-    --select-content-bg: var(--vds-color-surface-field, var(--vds-color-surface, #ffffff));
-    --select-content-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --select-content-bg: var(--vds-overlay-bg, var(--vds-color-surface, #ffffff));
+    --select-content-border-color: var(--vds-surface-border, var(--vds-color-border-muted, #e5e7eb));
     --select-content-border-width: 1px;
     --select-content-radius: var(--vds-radius-select-content, var(--vds-radius-element, 0.5rem));
-    --select-content-shadow: var(--vds-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
+    --select-content-shadow: var(--vds-overlay-shadow, var(--vds-shadow-lg));
     --select-content-padding-block: 0;
     --select-content-z-index: var(--vds-z-dropdown, 1500);
 
@@ -107,13 +110,17 @@
 
   /* outline — same as soft default but flat surface */
   :is(.vds-select-trigger, .vds-select-control)[data-appearance="outline"] {
+    --select-trigger-border-color: var(--vds-color-border-interactive, #6b7280);
+    --select-trigger-border-color-hover: var(--vds-color-neutral-10, #4b5563);
     --select-trigger-bg: transparent;
+    --select-trigger-shadow: none;
     --select-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);
   }
 
   /* ghost — borderless until hover */
   :is(.vds-select-trigger, .vds-select-control)[data-appearance="ghost"] {
     --select-trigger-bg: transparent;
+    --select-trigger-shadow: none;
     --select-trigger-bg-hover: var(--vds-color-bg-muted, #f3f4f6);
     --select-trigger-border-color: transparent;
     --select-trigger-border-color-hover: transparent;
@@ -122,6 +129,7 @@
   /* filled — muted filled surface */
   :is(.vds-select-trigger, .vds-select-control)[data-appearance="filled"] {
     --select-trigger-bg: var(--vds-color-bg-muted, #f3f4f6);
+    --select-trigger-shadow: none;
     --select-trigger-bg-hover: var(--vds-color-bg-subtle, #e5e7eb);
     --select-trigger-border-color: transparent;
     --select-trigger-border-color-hover: transparent;
@@ -187,6 +195,8 @@
     --select-trigger-border-color-hover: var(--vds-color-danger-solid-hover, #dc2626);
     --select-trigger-focus-ring-color: var(--vds-color-danger-solid, #ef4444);
     --select-trigger-focus-border-color: var(--vds-color-danger-solid, #ef4444);
+    --select-trigger-focus-alpha: var(--vds-color-danger-a4);
+    --select-trigger-focus-soft-alpha: var(--vds-color-danger-a2);
   }
 
   /* Loading — slightly dim chevron, trigger stays interactive enough to close */

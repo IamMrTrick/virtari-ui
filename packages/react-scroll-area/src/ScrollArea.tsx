@@ -1,6 +1,7 @@
 import {
   Children,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -11,7 +12,7 @@ import {
   type Ref,
 } from "react";
 import * as ScrollAreaPrimitive from "@virtari-packages/primitives/scroll-area";
-import { cn } from "@virtari-packages/utils";
+import { cn, useComposedRefs } from "@virtari-packages/utils";
 import { ScrollAreaArrow } from "./ScrollAreaArrow";
 import { useDragScroll } from "./hooks/use-drag-scroll";
 import { useEdgeState, type EdgeState } from "./hooks/use-edge-state";
@@ -28,7 +29,7 @@ type MarqueeDirection = "normal" | "reverse";
 export interface ScrollAreaProps
   extends Omit<
     ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>,
-    "children" | "dir"
+    "children" | "dir" | "type"
   > {
   children?: ReactNode;
 
@@ -36,6 +37,12 @@ export interface ScrollAreaProps
   orientation?: Orientation;
   /** Scrollbar thickness ramp — matches Button/Input size vocabulary. */
   size?: Size;
+  /** Smart shows overflowing scrollbars on scroll, hover, or keyboard focus. */
+  type?: "smart" | "auto" | "always" | "scroll" | "hover";
+  /** Access the native scrolling element for scroll restoration and measurement. */
+  viewportRef?: Ref<HTMLDivElement>;
+  /** Native viewport attributes/events; keyboard scrolling remains available. */
+  viewportProps?: Omit<ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Viewport>, "children" | "asChild">;
 
   /** Enable pointer-drag-to-scroll (mouse, touch, pen). */
   drag?: boolean;
@@ -114,15 +121,36 @@ export function ScrollArea({
   marqueeDirection,
   marqueePauseOnHover = true,
   hideScrollbar,
-  type = "hover",
-  scrollHideDelay,
+  type = "smart",
+  scrollHideDelay = 900,
+  viewportRef: externalViewportRef,
+  viewportProps,
   dir,
   ref,
   ...rootProps
 }: ScrollAreaProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
+  const mergedViewportRef = useComposedRefs(viewportRef, externalViewportRef);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const root = rootRef.current;
+    if (!viewport || !root || type !== "smart") return;
+    let timer: ReturnType<typeof setTimeout>;
+    const reveal = () => {
+      root.setAttribute("data-scrolling", "true");
+      clearTimeout(timer);
+      timer = setTimeout(() => root.removeAttribute("data-scrolling"), scrollHideDelay);
+    };
+    viewport.addEventListener("scroll", reveal, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      root.removeAttribute("data-scrolling");
+      viewport.removeEventListener("scroll", reveal);
+    };
+  }, [type, scrollHideDelay]);
 
   const [edge, setEdge] = useState<EdgeState>({
     atInlineStart: true,
@@ -224,6 +252,7 @@ export function ScrollArea({
       dir={dir}
       data-orientation={orientation}
       data-size={size}
+      data-scrollbar-type={type}
       data-drag={dragEnabled ? "true" : undefined}
       data-mask={mask ? "true" : undefined}
       data-arrows={showArrows ? "true" : undefined}
@@ -248,15 +277,17 @@ export function ScrollArea({
 
       <ScrollAreaPrimitive.Root
         ref={ref}
-        type={type}
+        type={type === "smart" ? "auto" : type}
         scrollHideDelay={scrollHideDelay}
         dir={dir}
         className="vds-scroll-area"
         {...rootProps}
       >
         <ScrollAreaPrimitive.Viewport
-          ref={viewportRef}
-          className="vds-scroll-area-viewport"
+          {...viewportProps}
+          ref={mergedViewportRef}
+          tabIndex={viewportProps?.tabIndex ?? (marquee ? -1 : 0)}
+          className={cn("vds-scroll-area-viewport", viewportProps?.className)}
         >
           {marquee ? (
             <div className="vds-scroll-area-marquee">

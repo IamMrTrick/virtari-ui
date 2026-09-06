@@ -1,5 +1,6 @@
 @layer design-system.components {
   .vds-checkbox-card {
+    box-shadow: var(--checkbox-card-shadow);
     position: relative;
     display: flex;
     align-items: flex-start;

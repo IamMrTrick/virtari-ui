@@ -257,6 +257,13 @@
 .docs-settings-body {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+.docs-settings-scroll { flex: 1; min-block-size: 0; --scroll-area-track-inset: var(--vds-space-3); }
+.docs-settings-scroll-content {
+  display: flex;
+  flex-direction: column;
   gap: var(--vds-space-6);
   padding: var(--vds-space-4) var(--vds-space-6);
 }

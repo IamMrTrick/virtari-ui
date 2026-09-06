@@ -59,6 +59,11 @@
     inline-size: 100%;
     block-size: 100%;
     border-radius: inherit;
+    overscroll-behavior: contain;
+  }
+  .vds-scroll-area-viewport:focus-visible {
+    outline: 2px solid var(--vds-color-border-focus, Highlight);
+    outline-offset: -2px;
   }
 
   /* Drag-to-scroll cursor affordance */
@@ -235,18 +240,45 @@
     user-select: none;
     padding: var(--scroll-area-scrollbar-padding);
     background-color: var(--scroll-area-track-bg);
+    border-radius: var(--scroll-area-thumb-radius);
     transition: background-color var(--scroll-area-transition-duration)
-      var(--scroll-area-transition-ease);
+      var(--scroll-area-transition-ease), opacity var(--scroll-area-transition-duration) var(--scroll-area-transition-ease);
   }
   .vds-scrollbar:hover {
     background-color: var(--scroll-area-track-bg-hover);
   }
   .vds-scrollbar[data-orientation="vertical"] {
     inline-size: var(--scroll-area-scrollbar-size);
+    margin-block: var(--scroll-area-track-inset);
   }
   .vds-scrollbar[data-orientation="horizontal"] {
     flex-direction: column;
     block-size: var(--scroll-area-scrollbar-size);
+    margin-inline: var(--scroll-area-track-inset);
+  }
+
+  /* Scope to direct descendants: a nested area's interaction must not reveal
+     every ancestor scrollbar. The primitive still decides whether it overflows. */
+  .vds-scroll-area-root[data-scrollbar-type="smart"] > .vds-scroll-area > .vds-scrollbar {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .vds-scroll-area-root[data-scrollbar-type="smart"]:is([data-scrolling="true"], :focus-within) > .vds-scroll-area > .vds-scrollbar {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  @media (hover: hover) {
+    .vds-scroll-area-root[data-scrollbar-type="smart"]:hover > .vds-scroll-area > .vds-scrollbar {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+  @media (forced-colors: active) {
+    .vds-scroll-area-root[data-scrollbar-type="smart"] > .vds-scroll-area > .vds-scrollbar {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .vds-scrollbar-thumb { background-color: CanvasText; }
   }
 
   .vds-scroll-area-root[data-drag="true"] .vds-scrollbar,

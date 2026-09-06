@@ -46,8 +46,8 @@
     --alert-focus-ring-offset: 2px;
 
     /* Default colors — neutral surface (overridden by variants) */
-    --alert-background: var(--vds-color-surface, #ffffff);
-    --alert-border-color: var(--vds-color-border, #d1d5db);
+    --alert-background: var(--vds-surface-bg, var(--vds-color-surface, #ffffff));
+    --alert-border-color: var(--vds-surface-border, var(--vds-color-border, #d1d5db));
     --alert-text-color: var(--vds-color-text, #111827);
     --alert-title-color: var(--vds-color-text, #111827);
     --alert-description-color: var(--vds-color-text-muted, #6b7280);

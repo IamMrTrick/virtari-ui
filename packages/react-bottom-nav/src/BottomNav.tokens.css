@@ -22,10 +22,10 @@
     --bottom-nav-z-index: var(--vds-z-banner, 1200);
 
     /* Surface */
-    --bottom-nav-background: var(--vds-color-surface, #fff);
-    --bottom-nav-border-color: var(--vds-color-border-muted, #e5e7eb);
+    --bottom-nav-background: var(--vds-surface-bg, var(--vds-color-surface, #fff));
+    --bottom-nav-border-color: var(--vds-surface-border, var(--vds-color-border-muted, #e5e7eb));
     --bottom-nav-border-block-start-width: 1px;
-    --bottom-nav-shadow: var(--vds-shadow-none, 0 0 0 0 transparent);
+    --bottom-nav-shadow: var(--vds-surface-shadow, var(--vds-shadow-none, 0 0 0 0 transparent));
 
     /* ── Radius nesting host ──
      * The bar draws the corner; items, the FAB and the sliding indicator are

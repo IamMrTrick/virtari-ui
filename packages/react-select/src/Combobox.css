@@ -3,6 +3,7 @@
 @layer design-system.components {
   /* ── Trigger (role=combobox div) ── */
   .vds-combobox-trigger {
+    box-shadow: var(--combobox-trigger-shadow);
     box-sizing: border-box;
     min-inline-size: 0;
     display: inline-flex;
@@ -49,7 +50,7 @@
   .vds-combobox-trigger:focus-visible {
     border-color: var(--combobox-trigger-focus-border-color);
     outline: none;
-    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    box-shadow: 0 0 0 4px var(--combobox-trigger-focus-alpha), 0 0 12px 2px var(--combobox-trigger-focus-soft-alpha);
     @media (forced-colors: active) {
       outline: 2px solid Highlight;
       outline-offset: 2px;

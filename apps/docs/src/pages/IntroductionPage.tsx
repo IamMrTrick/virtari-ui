@@ -5,6 +5,7 @@ import { Grid, Cluster, Stack } from "@virtari-packages/react-layout";
 import { Button } from "@virtari-packages/react-button";
 import { IconPalette, IconLayout, IconTypography, IconArrowRight } from "@virtari-packages/react-icons";
 import { Section } from "../components";
+import { SurfaceStylesExample } from "../components/SurfaceStylesExample";
 
 export function IntroductionPage() {
   const { t, i18n } = useTranslation("introduction");
@@ -34,6 +35,10 @@ export function IntroductionPage() {
             <CardContent><Button asChild size="sm" variant="ghost"><a href={href(principle.path)}>{label("Explore", "مشاهده")}<IconArrowRight className="docs-directional-icon" size={16}/></a></Button></CardContent>
           </Card>)}
         </Grid>
+      </Section>
+      <Section title={label("Three surface styles, one system", "سه سبک سطح، یک سیستم")}>
+        <p className="docs-prose">{label("The same fields and nested cards in each style. Change radius in Settings to compare their shape together.", "همان ورودی‌ها و کارت‌های تو‌در‌تو در هر سه سبک. با تغییر رادیوس در تنظیمات، شکل همه را هم‌زمان مقایسه کنید.")}</p>
+        <SurfaceStylesExample/>
       </Section>
       <Section title={t("whatIs.title")}>
         <p className="docs-prose">

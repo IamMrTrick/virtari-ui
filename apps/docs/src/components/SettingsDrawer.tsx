@@ -13,8 +13,9 @@ import {
 import { Button } from "@virtari-packages/react-button";
 import { SegmentedControl, SegmentedControlItem } from "@virtari-packages/react-segmented-control";
 import { Switch } from "@virtari-packages/react-switch";
+import { ScrollArea } from "@virtari-packages/react-scroll-area";
 import { IconSun, IconMoon } from "@virtari-packages/react-icons";
-import type { RadiusMode, Direction } from "../App";
+import type { RadiusMode, Direction, SurfaceStyle } from "../App";
 import { SUPPORTED_LOCALES, type Locale } from "../i18n";
 
 const RADIUS_MODES: { value: RadiusMode; i18nKey: string }[] = [
@@ -82,6 +83,8 @@ export function SettingsDrawer({
   onDarkChange,
   radius,
   onRadiusChange,
+  surfaceStyle,
+  onSurfaceStyleChange,
   direction,
   onDirectionChange,
   locale,
@@ -95,6 +98,8 @@ export function SettingsDrawer({
   onDarkChange: (dark: boolean) => void;
   radius: RadiusMode;
   onRadiusChange: (radius: RadiusMode) => void;
+  surfaceStyle: SurfaceStyle;
+  onSurfaceStyleChange: (style: SurfaceStyle) => void;
   direction: Direction;
   onDirectionChange: (direction: Direction) => void;
   locale: Locale;
@@ -129,6 +134,7 @@ export function SettingsDrawer({
         </DrawerHeader>
 
         <DrawerBody className="docs-settings-body">
+          <ScrollArea className="docs-settings-scroll" viewportProps={{role:"region", "aria-label":t("settings.title")}}><div className="docs-settings-scroll-content">
           <Section label={t("settings.language")}>
             <SegmentedControl fullWidth value={locale} onValueChange={value => onLocaleChange(value as Locale)} aria-label={t("settings.language")}>
               {LOCALES.map(option => <SegmentedControlItem key={option.value} value={option.value}>{t(option.i18nKey)}</SegmentedControlItem>)}
@@ -142,6 +148,14 @@ export function SettingsDrawer({
           <Section label={t("settings.radius")}>
             <SegmentedControl fullWidth value={radius} onValueChange={value => onRadiusChange(value as RadiusMode)} aria-label={t("settings.radius")}>
               {RADIUS_MODES.map(option => <SegmentedControlItem key={option.value} value={option.value}>{t(option.i18nKey)}</SegmentedControlItem>)}
+            </SegmentedControl>
+          </Section>
+
+          <Section label={locale === "fa" ? "سبک سطوح" : "Surface style"} hint={locale === "fa" ? "برای ورودی‌ها، کارت‌ها و پنل‌ها" : "For fields, cards and panels"}>
+            <SegmentedControl fullWidth value={surfaceStyle} onValueChange={value => onSurfaceStyleChange(value as SurfaceStyle)} aria-label={locale === "fa" ? "سبک سطوح" : "Surface style"}>
+              <SegmentedControlItem value="bordered">{locale === "fa" ? "بوردر" : "Bordered"}</SegmentedControlItem>
+              <SegmentedControlItem value="tonal">{locale === "fa" ? "بدون بوردر" : "Tonal"}</SegmentedControlItem>
+              <SegmentedControlItem value="elevated">{locale === "fa" ? "سایه" : "Shadow"}</SegmentedControlItem>
             </SegmentedControl>
           </Section>
 
@@ -183,6 +197,7 @@ export function SettingsDrawer({
               />
             </label>
           </Section>
+          </div></ScrollArea>
         </DrawerBody>
         <DrawerFooter className="docs-settings-footer">
           <DrawerClose asChild>

@@ -21,15 +21,16 @@
 
 @layer design-system.components {
   .vds-number-input {
+    box-shadow: var(--vds-field-shadow, none);
     box-sizing: border-box;
     min-inline-size: 0;
     display: flex;
     align-items: stretch;
     inline-size: 100%;
     block-size: var(--_ni-height);
-    border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
+    border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
     border-radius: var(--_ni-radius);
-    background-color: var(--vds-color-surface-field, var(--vds-color-surface));
+    background-color: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface)));
     overflow: hidden;
     transition:
       border-color var(--vds-duration-fast) var(--vds-ease-out),
@@ -229,5 +230,11 @@
         animation: ni-step-up-press 140ms var(--vds-ease-out) forwards;
       }
     }
+  }
+}
+
+@layer design-system.components {
+  .vds-number-input:hover:not(:disabled):not([data-disabled]):not([aria-invalid="true"]):not([data-invalid]):not(:focus-within) {
+    border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
   }
 }

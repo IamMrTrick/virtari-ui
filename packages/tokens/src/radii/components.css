@@ -1,5 +1,6 @@
 @layer tokens {
-  :root {
+  :root,
+  [data-radius] {
     /*
      * ── Per-component radius tokens (caps) ──
      * Only components that break under certain modes get a dedicated token.

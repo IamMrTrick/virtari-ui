@@ -164,8 +164,9 @@
     --radio-card-trailing-font-size: var(--vds-text-sm, 0.875rem);
 
     /* Default palette */
-    --radio-card-bg: var(--vds-color-surface, #ffffff);
-    --radio-card-border-color: var(--vds-color-border, #d1d5db);
+    --radio-card-bg: var(--vds-surface-bg, var(--vds-color-surface, #ffffff));
+    --radio-card-shadow: var(--vds-surface-shadow, none);
+    --radio-card-border-color: var(--vds-surface-border, var(--vds-color-border, #d1d5db));
 
     /* Hover */
     --radio-card-bg-hover: var(

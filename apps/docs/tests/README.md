@@ -39,3 +39,7 @@ Open `/tests/form-geometry.html`. The fixture automatically checks seven sizes, 
 - `/tests/surface-contrast.html`: 39 text/surface pairs in light, dark and OLED, with a 4.5:1 minimum. This checks the default palette, not arbitrary consumer overrides.
 - `/tests/segmented-keyboard.html`: run the keyboard checks for LTR/RTL selection, disabled-item skipping, looping and consumer event forwarding.
 - `/tests/drawer-release.html`: run the release checks for lost mouseup recovery and drag cleanup.
+- `/tests/scroll-smart.html`: run the smart scroll checks with the pointer left on the Run button. Checks idle/activity visibility, native scrolling, viewport refs/events, fitting content, rounded track containment, width stability and keyboard entry/exit. Follow with real Tab and Page Down to verify native keyboard scrolling.
+- `/tests/field-surfaces.html`: 360 assertions for shared field geometry and appearance across three surface styles in light and dark themes.
+- `/tests/card-radius.html`: 36 checks for nested surface tones and radii, scoped radius modes, live padding changes and transformed ancestors.
+- `/tests/stack-spacing.html`: 64 checks for mixed fields, hidden native form controls, recursive layouts and independently spaced nested Stacks in LTR/RTL.

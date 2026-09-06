@@ -1,0 +1,24 @@
+import React, {useEffect, useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import {Input} from '@virtari-packages/react-input';
+import {Textarea} from '@virtari-packages/react-textarea';
+import {NumberInput} from '@virtari-packages/react-number-input';
+import {PhoneInput} from '@virtari-packages/react-phone-input';
+import {OtpInput} from '@virtari-packages/react-otp-input';
+import {TagInput} from '@virtari-packages/react-tag-input';
+import {DateField} from '@virtari-packages/react-date-picker';
+import {Select, SelectTrigger, SelectValue, Combobox, ComboboxTrigger} from '@virtari-packages/react-select';
+import '@virtari-packages/tokens';
+import '@virtari-packages/core';
+import '@virtari-packages/react-input/styles';
+import '@virtari-packages/react-textarea/styles';
+import '@virtari-packages/react-number-input/styles';
+import '@virtari-packages/react-phone-input/styles';
+import '@virtari-packages/react-otp-input/styles';
+import '@virtari-packages/react-tag-input/styles';
+import '@virtari-packages/react-date-picker/styles';
+import '@virtari-packages/react-select/styles';
+import '@virtari-packages/react-select/combobox/styles';
+const shell='.vds-input,.vds-textarea,.vds-number-input,.vds-select-trigger,.vds-combobox-trigger,.vds-otp-input__slot,.vds-tag-input,.vds-date-field-group';
+function Audit(){const[result,setResult]=useState('Waiting for fonts');useEffect(()=>{document.fonts.ready.then(()=>requestAnimationFrame(()=>{let total=0;const fails:string[]=[];const check=(ok:boolean,name:string)=>{total++;if(!ok)fails.push(name)};document.querySelectorAll<HTMLElement>('[data-surface-case]').forEach(section=>{const controls=[...section.querySelectorAll<HTMLElement>(shell)],reference=getComputedStyle(controls[0]);controls.forEach(control=>{const style=getComputedStyle(control),name=section.dataset.surfaceCase+'/'+control.className;for(const key of ['backgroundColor','borderTopColor','borderTopWidth','boxShadow'] as const)check(style[key]===reference[key],name+': '+key);check(style.boxSizing==='border-box',name+': border-box');});});setResult(`${total-fails.length}/${total} passed\n${fails.join('\n')}`)}))},[]);return <main style={{padding:24}}><h1>Field surface audit</h1><pre id="surface-results">{result}</pre>{(['light','dark'] as const).flatMap(theme=>(['bordered','tonal','elevated'] as const).map(mode=><section key={theme+mode} data-theme={theme} data-surface-style={mode} data-surface-case={theme+'/'+mode} style={{display:'grid',gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:24,padding:24,marginBlock:24,background:'var(--vds-color-bg)',color:'var(--vds-color-text)'}}><h2 style={{gridColumn:'1/-1'}}>{theme} / {mode}</h2><Input placeholder="Input" aria-label="Input"/><NumberInput placeholder="Number" aria-label="Number"/><PhoneInput defaultCountry="us" aria-label="Phone"/><Select><SelectTrigger aria-label="Select"><SelectValue placeholder="Select"/></SelectTrigger></Select><Combobox items={[]}><ComboboxTrigger placeholder="Combobox" aria-label="Combobox"/></Combobox><DateField aria-label="Date"/><Textarea placeholder="Textarea" aria-label="Textarea"/><TagInput value={[]} onChange={()=>{}} placeholder="Tags" aria-label="Tags"/><OtpInput length={4} label="Code"/></section>))}</main>}
+createRoot(document.getElementById('root')!).render(<Audit/>);

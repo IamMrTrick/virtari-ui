@@ -18,6 +18,7 @@
 
 @layer design-system.components {
   .vds-textarea {
+    box-shadow: var(--vds-field-shadow, none);
     /* ── Public config ── */
     --textarea-padding-inline: var(--vds-space-3);
     --textarea-padding-block: var(--vds-space-2);
@@ -45,8 +46,8 @@
     min-block-size: var(--textarea-min-block-size);
     resize: vertical;
     font-family: var(--vds-font-sans);
-    border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
-    background-color: var(--vds-color-surface-field, var(--vds-color-surface));
+    border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
+    background-color: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface)));
     color: var(--vds-color-text);
     -webkit-touch-callout: default;
     -webkit-user-select: text;
@@ -158,3 +159,9 @@
 }
 
 [data-vds-no-micro] .vds-textarea--pulse { animation: none; }
+
+@layer design-system.components {
+  .vds-textarea:hover:not(:disabled):not([data-disabled]):not([aria-invalid="true"]):not([data-invalid]):not(:focus-within) {
+    border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
+  }
+}

@@ -22,7 +22,8 @@
    * --vds-radius-element / --vds-radius-surface / --vds-radius-badge remain
    * thin aliases. Component tokens decide what becomes truly full in pill.
    */
-  :root {
+  :root,
+  [data-radius="soft"] {
     --vds-radius-xs:   var(--vds-radius-2);  /* 4px  */
     --vds-radius-sm:   var(--vds-radius-4);  /* 8px: compact actions */
     --vds-radius-md:   var(--vds-radius-5);  /* 12px: fields */
@@ -30,10 +31,15 @@
     --vds-radius-xl:   1.75rem;             /* 28px: dialogs and sheets */
     --vds-radius-2xl:  2rem;                /* 32px: large surfaces */
 
-    /* Back-compat aliases */
+
+  }
+
+  /* Resolve aliases at every mode boundary, including nested themes. */
+  :root,
+  [data-radius] {
     --vds-radius-element: var(--vds-radius-sm);
     --vds-radius-surface: var(--vds-radius-lg);
-    --vds-radius-badge:   var(--vds-radius-full);
+    --vds-radius-badge: var(--vds-radius-full);
   }
 
   /* ── Mode: Sharp ── */

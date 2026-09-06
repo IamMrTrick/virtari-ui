@@ -9,6 +9,7 @@
     /* ── Scrollbar track / thumb ── */
     --scroll-area-scrollbar-size: var(--vds-space-2-5, 0.625rem); /* md default (10px) */
     --scroll-area-scrollbar-padding: 2px;
+    --scroll-area-track-inset: var(--vds-space-1, 4px);
     --scroll-area-track-bg: transparent;
     --scroll-area-track-bg-hover: var(--vds-color-bg-subtle, rgba(0, 0, 0, 0.04));
     --scroll-area-thumb-bg: var(--vds-color-border-muted, #d4d4d8);

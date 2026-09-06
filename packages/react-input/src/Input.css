@@ -45,6 +45,7 @@
 
 @layer design-system.components {
   .vds-input {
+    box-shadow: var(--vds-field-shadow, none);
     /*
      * ── Public config ──
      * Height uses shared --vds-size-* tokens (same as Button, Select, Toggle).
@@ -78,8 +79,8 @@
     display: block;
     inline-size: 100%;
     font-family: var(--vds-font-sans);
-    border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
-    background-color: var(--vds-color-surface-field, var(--vds-color-surface));
+    border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
+    background-color: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface)));
     color: var(--vds-color-text);
     -webkit-touch-callout: default;
     -webkit-user-select: text;
@@ -335,7 +336,7 @@
     font-size: var(--vds-text-sm);
     color: var(--vds-color-text-muted);
     background-color: var(--vds-color-surface-raised);
-    border: 1px solid var(--vds-color-border-interactive, var(--vds-color-neutral-9));
+    border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
     white-space: nowrap;
     flex-shrink: 0;
 
@@ -656,3 +657,9 @@
 }
 
 [data-vds-no-micro] .vds-input--pulse { animation: none; }
+
+@layer design-system.components {
+  .vds-input:hover:not(:disabled):not([data-disabled]):not([aria-invalid="true"]):not([data-invalid]):not(:focus-within) {
+    border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
+  }
+}

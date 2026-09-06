@@ -28,9 +28,9 @@
     --timeline-connector-min-h: var(--vds-space-9, 2.25rem);
 
     /* Surface */
-    --timeline-card-bg: var(--vds-color-surface, #fff);
+    --timeline-card-bg: var(--vds-surface-bg, var(--vds-color-surface, #fff));
     --timeline-card-border: var(--vds-color-border-muted, #e5e7eb);
-    --timeline-card-shadow: var(--vds-shadow-xs, 0 1px 2px rgb(0 0 0 / 0.05));
+    --timeline-card-shadow: var(--vds-surface-shadow, var(--vds-shadow-xs, 0 1px 2px rgb(0 0 0 / 0.05)));
     --timeline-card-shadow-hover: var(--vds-shadow-sm, 0 1px 3px rgb(0 0 0 / 0.1));
     --timeline-card-radius: var(--vds-radius-card, 0.75rem);
 

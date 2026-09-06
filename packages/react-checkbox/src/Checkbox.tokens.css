@@ -126,8 +126,9 @@
     --checkbox-card-trailing-font-size: var(--vds-text-sm, 0.875rem);
 
     /* Default palette */
-    --checkbox-card-bg: var(--vds-color-surface, #ffffff);
-    --checkbox-card-border-color: var(--vds-color-border, #d1d5db);
+    --checkbox-card-bg: var(--vds-surface-bg, var(--vds-color-surface, #ffffff));
+    --checkbox-card-shadow: var(--vds-surface-shadow, none);
+    --checkbox-card-border-color: var(--vds-surface-border, var(--vds-color-border, #d1d5db));
 
     /* Hover */
     --checkbox-card-bg-hover: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 4%, transparent));

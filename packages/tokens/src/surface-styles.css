@@ -1,0 +1,49 @@
+@layer tokens {
+  /* Appearance is independent from color theme, shape and component intent.
+     Keep a transparent 1px border in flat modes so switching never shifts layout.
+     Error/selection/focus colors remain semantic, not decorative boundaries. */
+  :root,
+  [data-surface-style="tonal"] {
+    --vds-surface-bg: var(--vds-color-surface-container-low);
+    --vds-navigation-bg: var(--vds-color-surface-container);
+    --vds-surface-border: transparent;
+    --vds-surface-shadow: 0 0 0 0 transparent;
+    --vds-overlay-bg: var(--vds-color-surface-container-high);
+    --vds-overlay-shadow: 0 0 0 0 transparent;
+    --vds-field-bg: var(--vds-color-surface-field);
+    --vds-field-border: transparent;
+    --vds-field-border-hover: transparent;
+    --vds-field-shadow: 0 0 0 0 transparent;
+  }
+  [data-surface-style="bordered"] {
+    --vds-surface-bg: var(--vds-color-bg);
+    --vds-navigation-bg: var(--vds-color-surface-container-low);
+    --vds-surface-border: var(--vds-color-neutral-7);
+    --vds-surface-shadow: 0 0 0 0 transparent;
+    --vds-overlay-bg: var(--vds-color-surface-container-low);
+    --vds-overlay-shadow: 0 0 0 0 transparent;
+    --vds-field-bg: var(--vds-color-bg);
+    --vds-field-border: var(--vds-color-border-interactive);
+    --vds-field-border-hover: var(--vds-color-neutral-10);
+    --vds-field-shadow: 0 0 0 0 transparent;
+  }
+  [data-surface-style="elevated"] {
+    --vds-surface-bg: var(--vds-color-surface-container-low);
+    --vds-navigation-bg: var(--vds-color-surface-container);
+    --vds-surface-border: transparent;
+    --vds-surface-shadow: var(--vds-shadow-sm);
+    --vds-overlay-bg: var(--vds-color-surface-container-high);
+    --vds-overlay-shadow: var(--vds-shadow-lg);
+    --vds-field-bg: var(--vds-color-surface-field);
+    --vds-field-border: transparent;
+    --vds-field-border-hover: transparent;
+    --vds-field-shadow: var(--vds-shadow-xs);
+  }
+  @media (forced-colors: active) {
+    :root, [data-surface-style] {
+      --vds-surface-border: CanvasText;
+      --vds-field-border: ButtonText;
+      --vds-field-border-hover: Highlight;
+    }
+  }
+}
