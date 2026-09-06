@@ -46,6 +46,9 @@ jobs:
       - name: Install repository dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=low
+
       - name: Verify release contents
         run: pnpm release:cli:check
 

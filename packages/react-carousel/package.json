@@ -60,7 +60,7 @@
     "@virtari-packages/react-button": "workspace:*",
     "@virtari-packages/react-icons": "workspace:*",
     "@virtari-packages/utils": "workspace:*",
-    "swiper": "^11.2.0"
+    "swiper": "^12.1.2"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

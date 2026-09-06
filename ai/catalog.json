@@ -170426,7 +170426,7 @@
     },
     {
       "id": "packages/react-carousel/package.json",
-      "sha256": "50c7d27e3a86d374bc7d2dae09d5b3971b41537db1141d38cb84fff231d5afc5",
+      "sha256": "afb57650087087102c876e2921f882fb3bd364b28e8c863819c32d2f6ddec423",
       "bytes": 1950,
       "kind": "json"
     },
@@ -173474,7 +173474,7 @@
     },
     {
       "id": "packages/react-form/package.json",
-      "sha256": "09bcf6687fd1e80b902a98bd0c1de5abf078c8a37d25ad060c9bad902ef42616",
+      "sha256": "f2be680cd30a10b42f8370b08813987fe6184c8f83b94c68e0979130197cc73c",
       "bytes": 1918,
       "kind": "json"
     },
@@ -175646,7 +175646,7 @@
     },
     {
       "id": "registry.json",
-      "sha256": "515e20c324f78a64f4bc3e990e79959d89643b1e843f27411c4c206197bf3564",
+      "sha256": "fe499baf6bb3c032e7c1c14f3d68f22e5919608e9489157f62bdd6557f567aa0",
       "bytes": 296753,
       "kind": "json"
     },

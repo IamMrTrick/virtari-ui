@@ -2064,7 +2064,7 @@ publishing with OIDC.
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
-        "swiper@^11.2.0"
+        "swiper@^12.1.2"
       ],
       "files": [
         {
