@@ -120,12 +120,14 @@ export function useHotkey(
   } = opts;
 
   const handlerRef = useRef(handler);
-  handlerRef.current = handler;
+  useEffect(() => {
+    handlerRef.current = handler;
+  }, [handler]);
 
   const parsed = useMemo(() => {
     const list = Array.isArray(combo) ? combo : [combo];
     return list.map(parseCombo);
-  }, [Array.isArray(combo) ? combo.join("|") : combo]);
+  }, [combo]);
 
   useEffect(() => {
     if (!enabled) return;

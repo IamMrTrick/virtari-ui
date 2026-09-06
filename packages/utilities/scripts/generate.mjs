@@ -358,7 +358,7 @@ function main() {
 
   const breakpointDecls = fs.readFileSync(TOKENS_BREAKPOINTS, "utf8").trim();
   const breakpointWidths = new Map(
-    [...breakpointDecls.matchAll(/--vds-([a-z0-9]+)\s+\(width\s*>=\s*(\d+px)\)/g)]
+    [...breakpointDecls.matchAll(/--vds-breakpoint-([a-z0-9]+)\s*:\s*(\d+px)/g)]
       .map((match) => [match[1], match[2]])
   );
 

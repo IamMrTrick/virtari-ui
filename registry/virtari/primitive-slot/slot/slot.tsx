@@ -11,7 +11,7 @@ const REACT_LAZY_TYPE = Symbol.for('react.lazy');
 
 interface LazyReactElement extends React.ReactElement {
   $$typeof: typeof REACT_LAZY_TYPE;
-  _payload: PromiseLike<Exclude<React.ReactNode, PromiseLike<any>>>;
+  _payload: PromiseLike<Exclude<React.ReactNode, PromiseLike<unknown>>>;
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@ interface LazyReactElement extends React.ReactElement {
  * -----------------------------------------------------------------------------------------------*/
 
 export type Usable<T> = PromiseLike<T> | React.Context<T>;
-const use: typeof React.use | undefined = (React as any)[' use '.trim().toString()];
+const use: typeof React.use | undefined = (React as { use?: typeof React.use }).use;
 
 interface SlotProps extends React.HTMLAttributes<HTMLElement> {
   children?: React.ReactNode;
@@ -43,10 +43,10 @@ function isLazyComponent(element: React.ReactNode): element is LazyReactElement 
 /* @__NO_SIDE_EFFECTS__ */ export function createSlot(ownerName: string) {
   const SlotClone = createSlotClone(ownerName);
   const Slot = React.forwardRef<HTMLElement, SlotProps>((props, forwardedRef) => {
-    let { children, ...slotProps } = props;
-    if (isLazyComponent(children) && typeof use === 'function') {
-      children = use(children._payload);
-    }
+    const { children: originalChildren, ...slotProps } = props;
+    const children = isLazyComponent(originalChildren) && typeof use === 'function'
+      ? use(originalChildren._payload)
+      : originalChildren;
     const childrenArray = React.Children.toArray(children);
     const slottable = childrenArray.find(isSlottable);
 
@@ -98,11 +98,11 @@ interface SlotCloneProps {
 }
 
 /* @__NO_SIDE_EFFECTS__ */ function createSlotClone(ownerName: string) {
-  const SlotClone = React.forwardRef<any, SlotCloneProps>((props, forwardedRef) => {
-    let { children, ...slotProps } = props;
-    if (isLazyComponent(children) && typeof use === 'function') {
-      children = use(children._payload);
-    }
+  const SlotClone = React.forwardRef<HTMLElement, SlotCloneProps>((props, forwardedRef) => {
+    const { children: originalChildren, ...slotProps } = props;
+    const children = isLazyComponent(originalChildren) && typeof use === 'function'
+      ? use(originalChildren._payload)
+      : originalChildren;
 
     if (React.isValidElement(children)) {
       const childrenRef = getElementRef(children);
@@ -148,7 +148,7 @@ const Slottable = createSlottable('Slottable');
 
 /* ---------------------------------------------------------------------------------------------- */
 
-type AnyProps = Record<string, any>;
+type AnyProps = Record<string, unknown>;
 
 function isSlottable(
   child: React.ReactNode,
@@ -172,7 +172,7 @@ function mergeProps(slotProps: AnyProps, childProps: AnyProps) {
     const isHandler = /^on[A-Z]/.test(propName);
     if (isHandler) {
       // if the handler exists on both, we compose them
-      if (slotPropValue && childPropValue) {
+      if (typeof slotPropValue === 'function' && typeof childPropValue === 'function') {
         overrideProps[propName] = (...args: unknown[]) => {
           const result = childPropValue(...args);
           slotPropValue(...args);
@@ -180,13 +180,16 @@ function mergeProps(slotProps: AnyProps, childProps: AnyProps) {
         };
       }
       // but if it exists only on the slot, we use only this one
-      else if (slotPropValue) {
+      else if (typeof slotPropValue === 'function') {
         overrideProps[propName] = slotPropValue;
       }
     }
     // if it's `style`, we merge them
     else if (propName === 'style') {
-      overrideProps[propName] = { ...slotPropValue, ...childPropValue };
+      overrideProps[propName] = {
+        ...(slotPropValue as React.CSSProperties | undefined),
+        ...(childPropValue as React.CSSProperties | undefined),
+      };
     } else if (propName === 'className') {
       overrideProps[propName] = [slotPropValue, childPropValue].filter(Boolean).join(' ');
     }
@@ -205,7 +208,7 @@ function getElementRef(element: React.ReactElement) {
   let getter = Object.getOwnPropertyDescriptor(element.props, 'ref')?.get;
   let mayWarn = getter && 'isReactWarning' in getter && getter.isReactWarning;
   if (mayWarn) {
-    return (element as any).ref;
+    return (element as React.ReactElement & { ref?: React.Ref<unknown> }).ref;
   }
 
   // React 19 in DEV
@@ -216,7 +219,8 @@ function getElementRef(element: React.ReactElement) {
   }
 
   // Not DEV
-  return (element.props as { ref?: React.Ref<unknown> }).ref || (element as any).ref;
+  return (element.props as { ref?: React.Ref<unknown> }).ref ||
+    (element as React.ReactElement & { ref?: React.Ref<unknown> }).ref;
 }
 
 export {

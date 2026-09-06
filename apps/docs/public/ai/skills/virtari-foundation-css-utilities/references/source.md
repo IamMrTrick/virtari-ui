@@ -361,7 +361,7 @@ function main() {
 
   const breakpointDecls = fs.readFileSync(TOKENS_BREAKPOINTS, "utf8").trim();
   const breakpointWidths = new Map(
-    [...breakpointDecls.matchAll(/--vds-([a-z0-9]+)\s+\(width\s*>=\s*(\d+px)\)/g)]
+    [...breakpointDecls.matchAll(/--vds-breakpoint-([a-z0-9]+)\s*:\s*(\d+px)/g)]
       .map((match) => [match[1], match[2]])
   );
 
@@ -458,11 +458,16 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
 ## packages/tokens/src/breakpoints.css
 
 ```css
-@custom-media --vds-sm (width >= 640px);
-@custom-media --vds-md (width >= 768px);
-@custom-media --vds-lg (width >= 1024px);
-@custom-media --vds-xl (width >= 1280px);
-@custom-media --vds-2xl (width >= 1536px);
+@layer design-system.tokens {
+  :root,
+  [data-theme] {
+    --vds-breakpoint-sm: 640px;
+    --vds-breakpoint-md: 768px;
+    --vds-breakpoint-lg: 1024px;
+    --vds-breakpoint-xl: 1280px;
+    --vds-breakpoint-2xl: 1536px;
+  }
+}
 
 ```
 

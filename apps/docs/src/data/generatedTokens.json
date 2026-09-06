@@ -52639,6 +52639,66 @@
       "line": 66
     },
     {
+      "id": "packages/tokens/src/breakpoints.css:4:5",
+      "name": "--vds-breakpoint-sm",
+      "value": "640px",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer design-system.tokens"
+      ],
+      "category": "breakpoints",
+      "sourceId": "packages/tokens/src/breakpoints.css",
+      "line": 4
+    },
+    {
+      "id": "packages/tokens/src/breakpoints.css:5:5",
+      "name": "--vds-breakpoint-md",
+      "value": "768px",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer design-system.tokens"
+      ],
+      "category": "breakpoints",
+      "sourceId": "packages/tokens/src/breakpoints.css",
+      "line": 5
+    },
+    {
+      "id": "packages/tokens/src/breakpoints.css:6:5",
+      "name": "--vds-breakpoint-lg",
+      "value": "1024px",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer design-system.tokens"
+      ],
+      "category": "breakpoints",
+      "sourceId": "packages/tokens/src/breakpoints.css",
+      "line": 6
+    },
+    {
+      "id": "packages/tokens/src/breakpoints.css:7:5",
+      "name": "--vds-breakpoint-xl",
+      "value": "1280px",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer design-system.tokens"
+      ],
+      "category": "breakpoints",
+      "sourceId": "packages/tokens/src/breakpoints.css",
+      "line": 7
+    },
+    {
+      "id": "packages/tokens/src/breakpoints.css:8:5",
+      "name": "--vds-breakpoint-2xl",
+      "value": "1536px",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer design-system.tokens"
+      ],
+      "category": "breakpoints",
+      "sourceId": "packages/tokens/src/breakpoints.css",
+      "line": 8
+    },
+    {
       "id": "packages/tokens/src/colors/aliases.css:11:5",
       "name": "--vds-color-primary",
       "value": "var(--vds-color-primary-solid)",

@@ -17,5 +17,6 @@ export function useComposedRefs<T>(...refs: Array<Ref<T> | undefined>): RefCallb
         });
       };
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/use-memo
   }, refs);
 }

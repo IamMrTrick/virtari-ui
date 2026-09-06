@@ -77,7 +77,7 @@ export function IntroductionPage() {
           <Badge>Container Queries</Badge>
           <Badge>OKLCH Colors</Badge>
           <Badge>Logical Properties</Badge>
-          <Badge>@custom-media</Badge>
+          <Badge>Responsive Queries</Badge>
         </div>
       </Section>
 

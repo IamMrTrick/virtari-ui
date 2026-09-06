@@ -5,6 +5,11 @@
     "report": "docs/page-audit/introduction.md"
   },
   {
+    "id": "installation",
+    "page": "apps/docs/src/pages/SourceInstallationPage.tsx",
+    "report": "docs/page-audit/source-installation.md"
+  },
+  {
     "id": "guidelines",
     "page": "apps/docs/src/pages/DesignGuidelinesPage.tsx",
     "report": "docs/page-audit/guidelines.md"

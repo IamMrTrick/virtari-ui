@@ -85,11 +85,12 @@ All documentation sections importing this package (some demonstrate another pack
 - `rtl/4` — Spinner; source `apps/docs/src/pages/RTLPage.tsx` lines 154–174.
 - `rtl/5` — Tabs; source `apps/docs/src/pages/RTLPage.tsx` lines 176–206.
 - `rtl/6` — Audited components; source `apps/docs/src/pages/RTLPage.tsx` lines 208–237.
-- `source-installation/1` — {text("Install editable source", "نصب سورس قابل‌ویرایش")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 24–31.
-- `source-installation/2` — {text("Choose any scope", "انتخاب هر محدوده")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 33–42.
-- `source-installation/3` — {text("What is copied", "چه چیزهایی کپی می‌شوند")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 44–49.
-- `source-installation/4` — {text("Customize and update safely", "شخصی‌سازی و به‌روزرسانی امن")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 51–54.
-- `source-installation/5` — {text("Use the shadcn CLI", "استفاده با CLI خود shadcn")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 56–60.
+- `source-installation/1` — {text("Install editable source", "نصب سورس قابل‌ویرایش")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 30–37.
+- `source-installation/2` — {text("Choose any scope", "انتخاب هر محدوده")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 39–48.
+- `source-installation/3` — {text("Next.js App Router", "Next.js App Router")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 50–60.
+- `source-installation/4` — {text("What is copied", "چه چیزهایی کپی می‌شوند")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 62–67.
+- `source-installation/5` — {text("Customize and update safely", "شخصی‌سازی و به‌روزرسانی امن")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 69–72.
+- `source-installation/6` — {text("Use the shadcn CLI", "استفاده با CLI خود shadcn")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 74–78.
 - `table/1` — Live playground; source `apps/docs/src/pages/TablePage.tsx` lines 168–246.
 - `table/2` — Variants; source `apps/docs/src/pages/TablePage.tsx` lines 303–317.
 - `table/3` — Row styles; source `apps/docs/src/pages/TablePage.tsx` lines 325–339.

@@ -7,7 +7,10 @@ export function useFormReset(
   formId?: string,
 ) {
   const callback = useRef(onReset);
-  callback.current = onReset;
+  useEffect(() => {
+    callback.current = onReset;
+  }, [onReset]);
+
   useEffect(() => {
     const node = ref.current;
     const form = formId

@@ -142,10 +142,11 @@ All documentation sections importing this package (some demonstrate another pack
 - `sidebar/9` — App shell — Header + Sidebar + scrollable content; source `apps/docs/src/pages/SidebarPage.tsx` lines 922–1006.
 - `sidebar/10` — API; source `apps/docs/src/pages/SidebarPage.tsx` lines 1014–1055.
 - `sidebar/11` — Accessibility; source `apps/docs/src/pages/SidebarPage.tsx` lines 1061–1102.
-- `source-installation/1` — {text("Install editable source", "نصب سورس قابل‌ویرایش")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 24–31.
-- `source-installation/2` — {text("Choose any scope", "انتخاب هر محدوده")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 33–42.
-- `source-installation/3` — {text("What is copied", "چه چیزهایی کپی می‌شوند")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 44–49.
-- `source-installation/4` — {text("Customize and update safely", "شخصی‌سازی و به‌روزرسانی امن")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 51–54.
-- `source-installation/5` — {text("Use the shadcn CLI", "استفاده با CLI خود shadcn")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 56–60.
+- `source-installation/1` — {text("Install editable source", "نصب سورس قابل‌ویرایش")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 30–37.
+- `source-installation/2` — {text("Choose any scope", "انتخاب هر محدوده")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 39–48.
+- `source-installation/3` — {text("Next.js App Router", "Next.js App Router")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 50–60.
+- `source-installation/4` — {text("What is copied", "چه چیزهایی کپی می‌شوند")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 62–67.
+- `source-installation/5` — {text("Customize and update safely", "شخصی‌سازی و به‌روزرسانی امن")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 69–72.
+- `source-installation/6` — {text("Use the shadcn CLI", "استفاده با CLI خود shadcn")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 74–78.
 
 MCP: `get_record({collection:"examples",id:"<example ID>"})`; then `read_source` for full page context. A section fragment may reference imports, state, helper components, assets, docs CSS or shared page scaffolding.

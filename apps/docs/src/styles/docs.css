@@ -36,6 +36,30 @@
 
 }
 
+.docs-install-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--vds-space-5) var(--vds-space-6);
+  min-inline-size: 0;
+}
+
+.docs-install-option {
+  display: grid;
+  align-content: start;
+  gap: var(--vds-space-2);
+  min-inline-size: 0;
+}
+
+.docs-install-option > .vds-badge {
+  justify-self: start;
+}
+
+@media (max-width: 700px) {
+  .docs-install-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* ── DataTable demo helpers ── */
 .docs-demo-hint {
   font-size: var(--vds-text-xs);

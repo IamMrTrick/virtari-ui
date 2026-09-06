@@ -48,6 +48,7 @@ export function useComposedRefs<T>(...refs: Array<Ref<T> | undefined>): RefCallb
         });
       };
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/use-memo
   }, refs);
 }
 
@@ -65,7 +66,10 @@ export function useFormReset(
   formId?: string,
 ) {
   const callback = useRef(onReset);
-  callback.current = onReset;
+  useEffect(() => {
+    callback.current = onReset;
+  }, [onReset]);
+
   useEffect(() => {
     const node = ref.current;
     const form = formId
@@ -262,12 +266,14 @@ export function useHotkey(
   } = opts;
 
   const handlerRef = useRef(handler);
-  handlerRef.current = handler;
+  useEffect(() => {
+    handlerRef.current = handler;
+  }, [handler]);
 
   const parsed = useMemo(() => {
     const list = Array.isArray(combo) ? combo : [combo];
     return list.map(parseCombo);
-  }, [Array.isArray(combo) ? combo.join("|") : combo]);
+  }, [combo]);
 
   useEffect(() => {
     if (!enabled) return;

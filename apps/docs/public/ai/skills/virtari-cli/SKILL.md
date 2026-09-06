@@ -5,7 +5,7 @@ description: "Use when building, reviewing, or troubleshooting virtari. Source-f
 
 # virtari
 
-Use the existing package and its composition API. Verify the installed version against this snapshot (0.1.1); do not invent exports or Tailwind classes.
+Use the existing package and its composition API. Verify the installed version against this snapshot (0.1.2); do not invent exports or Tailwind classes.
 
 ## Workflow
 

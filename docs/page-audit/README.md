@@ -1,12 +1,13 @@
 # Page quality review progress
 
-16 of 77 registered pages have individual review records. A record states its own checks and limitations; it is not a universal accessibility certification. Shared mechanical changes do not count as individual review completion.
+17 of 78 registered pages have individual review records. A record states its own checks and limitations; it is not a universal accessibility certification. Shared mechanical changes do not count as individual review completion.
 
 Read [the quality contract](../component-quality.md) and [shared corrections](shared.md). Root runs final integration builds and regenerates AI knowledge after package edits settle.
 
 | Page | Individual review |
 | --- | --- |
 | introduction | Pending |
+| installation | [Reviewed](source-installation.md) |
 | guidelines | Pending |
 | brand | Pending |
 | sizing | Pending |
