@@ -10,12 +10,19 @@ migration, but a source installation has no runtime dependency on
 ```bash
 pnpm dlx virtari@latest init
 pnpm dlx virtari@latest add button input dialog
+pnpm dlx virtari@latest add virtari-utilities
+pnpm dlx virtari@latest add virtari-all
 ```
 
 `init` creates `virtari.json`, installs the shared foundation under
 `src/virtari`, and records provenance in `.virtari/installed.json`. `add`
 resolves only the requested components and their transitive source dependencies.
 It also adds required third-party packages to `package.json`.
+
+`virtari-utilities` installs the generated token-backed utility stylesheet.
+`virtari-all` resolves the shared foundation, utilities, every component, and
+their transitive primitives. Prefer individual items when an application only
+needs part of the system. Use `virtari list` to inspect the complete inventory.
 
 Headless primitives are registry items at submodule granularity. A button pulls
 the slot and ref-composition source it uses; it does not install dialog,
@@ -37,9 +44,9 @@ The default target can be changed before installation:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.0/virtari.schema.json",
+  "$schema": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.1/virtari.schema.json",
   "target": "src/design-system",
-  "registry": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.0/registry.json",
+  "registry": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.1/registry.json",
   "install": true
 }
 ```
@@ -71,7 +78,7 @@ The root `registry.json` follows the public shadcn source-registry schema. A
 consumer can use the standard shadcn CLI without installing the Virtari CLI:
 
 ```bash
-pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.0
+pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.1
 ```
 
 Registry dependencies use full same-repository GitHub addresses because bare

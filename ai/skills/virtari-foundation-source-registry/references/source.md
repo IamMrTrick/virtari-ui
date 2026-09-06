@@ -13,12 +13,19 @@ migration, but a source installation has no runtime dependency on
 ```bash
 pnpm dlx virtari@latest init
 pnpm dlx virtari@latest add button input dialog
+pnpm dlx virtari@latest add virtari-utilities
+pnpm dlx virtari@latest add virtari-all
 ```
 
 `init` creates `virtari.json`, installs the shared foundation under
 `src/virtari`, and records provenance in `.virtari/installed.json`. `add`
 resolves only the requested components and their transitive source dependencies.
 It also adds required third-party packages to `package.json`.
+
+`virtari-utilities` installs the generated token-backed utility stylesheet.
+`virtari-all` resolves the shared foundation, utilities, every component, and
+their transitive primitives. Prefer individual items when an application only
+needs part of the system. Use `virtari list` to inspect the complete inventory.
 
 Headless primitives are registry items at submodule granularity. A button pulls
 the slot and ref-composition source it uses; it does not install dialog,
@@ -40,9 +47,9 @@ The default target can be changed before installation:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.0/virtari.schema.json",
+  "$schema": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.1/virtari.schema.json",
   "target": "src/design-system",
-  "registry": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.0/registry.json",
+  "registry": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.1/registry.json",
   "install": true
 }
 ```
@@ -74,7 +81,7 @@ The root `registry.json` follows the public shadcn source-registry schema. A
 consumer can use the standard shadcn CLI without installing the Virtari CLI:
 
 ```bash
-pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.0
+pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.1
 ```
 
 Registry dependencies use full same-repository GitHub addresses because bare
@@ -174,8 +181,8 @@ publishing with OIDC.
       "description": "Virtari cascade layers, design tokens, global reset, primitives, and shared React utilities.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-core#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-core#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -193,8 +200,8 @@ publishing with OIDC.
       "description": "Base reset, layers, and global primitives for the Virtari design system.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-tokens#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-tokens#cli-v0.1.1"
       ],
       "files": [
         {
@@ -231,16 +238,16 @@ publishing with OIDC.
       "description": "Headless Accordion behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -262,12 +269,12 @@ publishing with OIDC.
       "description": "Headless Alert Dialog behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -289,8 +296,8 @@ publishing with OIDC.
       "description": "Headless Arrow behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -312,12 +319,12 @@ publishing with OIDC.
       "description": "Headless Avatar behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-is-hydrated#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-is-hydrated#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -339,15 +346,15 @@ publishing with OIDC.
       "description": "Headless Checkbox behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -369,15 +376,15 @@ publishing with OIDC.
       "description": "Headless Collapsible behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -399,10 +406,10 @@ publishing with OIDC.
       "description": "Headless Collection behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -446,7 +453,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -468,7 +475,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -478,19 +485,19 @@ publishing with OIDC.
       "description": "Headless Dialog behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -528,7 +535,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -538,12 +545,12 @@ publishing with OIDC.
       "description": "Headless Dismissable Layer behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-escape-keydown#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-escape-keydown#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -565,14 +572,14 @@ publishing with OIDC.
       "description": "Headless Dropdown Menu behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-menu#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-menu#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -611,7 +618,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -633,7 +640,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -643,10 +650,10 @@ publishing with OIDC.
       "description": "Headless Focus Scope behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -668,8 +675,8 @@ publishing with OIDC.
       "description": "Headless Id behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -691,8 +698,8 @@ publishing with OIDC.
       "description": "Headless Label behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -714,23 +721,23 @@ publishing with OIDC.
       "description": "Headless Menu behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -768,7 +775,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -778,20 +785,20 @@ publishing with OIDC.
       "description": "Headless Popover behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -817,15 +824,15 @@ publishing with OIDC.
       "description": "Headless Popper behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-arrow#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-arrow#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "dependencies": [
         "@floating-ui/react-dom@^2.1.8"
@@ -850,9 +857,9 @@ publishing with OIDC.
       "description": "Headless Portal behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -874,9 +881,9 @@ publishing with OIDC.
       "description": "Headless Presence behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -903,8 +910,8 @@ publishing with OIDC.
       "description": "Headless Primitive behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -926,9 +933,9 @@ publishing with OIDC.
       "description": "Headless Progress behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -950,17 +957,17 @@ publishing with OIDC.
       "description": "Headless Radio Group behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -999,7 +1006,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -1009,16 +1016,16 @@ publishing with OIDC.
       "description": "Headless Roving Focus behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1040,16 +1047,16 @@ publishing with OIDC.
       "description": "Headless Scroll Area behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1076,26 +1083,26 @@ publishing with OIDC.
       "description": "Headless Select behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -1121,8 +1128,8 @@ publishing with OIDC.
       "description": "Headless Separator behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1144,17 +1151,17 @@ publishing with OIDC.
       "description": "Headless Slider behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1176,8 +1183,8 @@ publishing with OIDC.
       "description": "Headless Slot behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1199,14 +1206,14 @@ publishing with OIDC.
       "description": "Headless Switch behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1228,15 +1235,15 @@ publishing with OIDC.
       "description": "Headless Tabs behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1258,19 +1265,19 @@ publishing with OIDC.
       "description": "Headless Toast behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1292,10 +1299,10 @@ publishing with OIDC.
       "description": "Headless Toggle behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1317,19 +1324,19 @@ publishing with OIDC.
       "description": "Headless Tooltip behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1363,7 +1370,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -1373,9 +1380,9 @@ publishing with OIDC.
       "description": "Headless Use Controllable State behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-use-effect-event#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-effect-event#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1402,8 +1409,8 @@ publishing with OIDC.
       "description": "Headless Use Effect Event behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1425,8 +1432,8 @@ publishing with OIDC.
       "description": "Headless Use Escape Keydown behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1463,7 +1470,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -1485,7 +1492,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -1507,7 +1514,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -1517,8 +1524,8 @@ publishing with OIDC.
       "description": "Headless Use Rect behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1540,8 +1547,8 @@ publishing with OIDC.
       "description": "Headless Use Size behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1563,8 +1570,8 @@ publishing with OIDC.
       "description": "Headless Visually Hidden behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1586,56 +1593,56 @@ publishing with OIDC.
       "description": "Complete headless primitive collection. Component installs use smaller primitive items automatically.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-accordion#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-alert-dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-arrow#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-avatar#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-checkbox#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dropdown-menu#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-label#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-menu#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-progress#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-scroll-area#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-select#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-separator#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slider#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-switch#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-tabs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-toast#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-toggle#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-tooltip#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-effect-event#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-escape-keydown#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-is-hydrated#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-rect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-accordion#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-alert-dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-arrow#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-avatar#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-checkbox#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dropdown-menu#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-label#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-menu#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-progress#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-scroll-area#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-select#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-separator#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slider#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-switch#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-tabs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-toast#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-toggle#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-tooltip#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-effect-event#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-escape-keydown#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-is-hydrated#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-rect#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -1645,11 +1652,11 @@ publishing with OIDC.
       "description": "Accordion source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-accordion#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-accordion#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -1690,10 +1697,10 @@ publishing with OIDC.
       "description": "Alert source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1726,10 +1733,10 @@ publishing with OIDC.
       "description": "Alert Dialog source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-alert-dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-alert-dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1757,10 +1764,10 @@ publishing with OIDC.
       "description": "Avatar source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-avatar#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-avatar#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1788,10 +1795,10 @@ publishing with OIDC.
       "description": "Badge source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1824,10 +1831,10 @@ publishing with OIDC.
       "description": "Bottom Nav source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1885,12 +1892,12 @@ publishing with OIDC.
       "description": "Breadcrumb source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1923,10 +1930,10 @@ publishing with OIDC.
       "description": "Button source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -1974,10 +1981,10 @@ publishing with OIDC.
       "description": "Button Group source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -2010,9 +2017,9 @@ publishing with OIDC.
       "description": "Card source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -2050,11 +2057,11 @@ publishing with OIDC.
       "description": "Carousel source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "swiper@^11.2.0"
@@ -2090,11 +2097,11 @@ publishing with OIDC.
       "description": "Checkbox source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-checkbox#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-checkbox#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -2175,10 +2182,10 @@ publishing with OIDC.
       "description": "Chip source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -2211,10 +2218,10 @@ publishing with OIDC.
       "description": "Code source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/copy-button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/copy-button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@codemirror/autocomplete@^6.18.4",
@@ -2303,10 +2310,10 @@ publishing with OIDC.
       "description": "Collapsible source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -2334,15 +2341,15 @@ publishing with OIDC.
       "description": "Color Picker source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -2390,12 +2397,12 @@ publishing with OIDC.
       "description": "Command source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "cmdk@^1.0.0"
@@ -2441,10 +2448,10 @@ publishing with OIDC.
       "description": "Copy Button source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -2477,23 +2484,23 @@ publishing with OIDC.
       "description": "Data Table source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/avatar#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/badge#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/checkbox#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/pagination#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/switch#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/avatar#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/badge#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/checkbox#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/pagination#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/switch#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@dnd-kit/core@^6.1.0",
@@ -2854,15 +2861,15 @@ publishing with OIDC.
       "description": "Date Picker source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/radio-group#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/radio-group#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@internationalized/date@^3.5.6",
@@ -2994,11 +3001,11 @@ publishing with OIDC.
       "description": "Dialog source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -3034,10 +3041,10 @@ publishing with OIDC.
       "description": "Drawer source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -3085,11 +3092,11 @@ publishing with OIDC.
       "description": "Dropdown Menu source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-dropdown-menu#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-dropdown-menu#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -3117,23 +3124,23 @@ publishing with OIDC.
       "description": "Editor source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/code#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/color-picker#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/file-upload#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/scroll-area#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/code#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/color-picker#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/file-upload#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/scroll-area#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@lexical/code@^0.38.2",
@@ -3318,9 +3325,9 @@ publishing with OIDC.
       "description": "Empty State source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -3353,9 +3360,9 @@ publishing with OIDC.
       "description": "Fieldset source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -3393,12 +3400,12 @@ publishing with OIDC.
       "description": "File Upload source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/progress#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/progress#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "react-dropzone@^14.2.0"
@@ -3449,9 +3456,9 @@ publishing with OIDC.
       "description": "Flag source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -4854,9 +4861,9 @@ publishing with OIDC.
       "description": "Flow source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@xyflow/react@^12.10.2"
@@ -4912,11 +4919,11 @@ publishing with OIDC.
       "description": "Form source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/label#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/label#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "react-hook-form@^7.0.0"
@@ -4992,9 +4999,9 @@ publishing with OIDC.
       "description": "Header source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5042,9 +5049,9 @@ publishing with OIDC.
       "description": "Icons source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -5085,11 +5092,11 @@ publishing with OIDC.
       "description": "Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5137,9 +5144,9 @@ publishing with OIDC.
       "description": "Kbd source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5167,10 +5174,10 @@ publishing with OIDC.
       "description": "Label source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-label#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-label#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5198,13 +5205,13 @@ publishing with OIDC.
       "description": "Language Picker source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/flag#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/flag#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5262,9 +5269,9 @@ publishing with OIDC.
       "description": "Layout source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5427,10 +5434,10 @@ publishing with OIDC.
       "description": "Nav source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@floating-ui/react@^0.27.0"
@@ -5491,11 +5498,11 @@ publishing with OIDC.
       "description": "Number Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5533,9 +5540,9 @@ publishing with OIDC.
       "description": "Otp Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5568,11 +5575,11 @@ publishing with OIDC.
       "description": "Pagination source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5615,13 +5622,13 @@ publishing with OIDC.
       "description": "Phone Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/flag#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/flag#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "libphonenumber-js@^1.11.0"
@@ -5687,11 +5694,11 @@ publishing with OIDC.
       "description": "Popover source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5724,10 +5731,10 @@ publishing with OIDC.
       "description": "Progress source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-progress#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-progress#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5760,12 +5767,12 @@ publishing with OIDC.
       "description": "Radio Group source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -5851,10 +5858,10 @@ publishing with OIDC.
       "description": "Scroll Area source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-scroll-area#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-scroll-area#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5912,12 +5919,12 @@ publishing with OIDC.
       "description": "Segmented Control source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -5955,15 +5962,15 @@ publishing with OIDC.
       "description": "Select source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-select#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-select#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0",
@@ -6030,10 +6037,10 @@ publishing with OIDC.
       "description": "Separator source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-separator#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-separator#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6061,9 +6068,9 @@ publishing with OIDC.
       "description": "Sidebar source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6106,9 +6113,9 @@ publishing with OIDC.
       "description": "Skeleton source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6136,11 +6143,11 @@ publishing with OIDC.
       "description": "Slider source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slider#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-slider#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6168,9 +6175,9 @@ publishing with OIDC.
       "description": "Spinner source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6203,9 +6210,9 @@ publishing with OIDC.
       "description": "Stepper source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6243,10 +6250,10 @@ publishing with OIDC.
       "description": "Switch source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-switch#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-switch#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6279,9 +6286,9 @@ publishing with OIDC.
       "description": "Table source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6314,11 +6321,11 @@ publishing with OIDC.
       "description": "Tabs source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-tabs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-tabs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6381,10 +6388,10 @@ publishing with OIDC.
       "description": "Tag Input source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6417,10 +6424,10 @@ publishing with OIDC.
       "description": "Text source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6468,10 +6475,10 @@ publishing with OIDC.
       "description": "Textarea source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6504,9 +6511,9 @@ publishing with OIDC.
       "description": "Timeline source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6539,11 +6546,11 @@ publishing with OIDC.
       "description": "Toast source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-toast#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-toast#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@tabler/icons-react@^3.0.0"
@@ -6614,10 +6621,10 @@ publishing with OIDC.
       "description": "Toggle source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-toggle#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-toggle#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6645,11 +6652,11 @@ publishing with OIDC.
       "description": "Tooltip source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-tooltip#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/primitive-tooltip#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6682,9 +6689,9 @@ publishing with OIDC.
       "description": "Tree View source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6722,10 +6729,10 @@ publishing with OIDC.
       "description": "Visually Hidden source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "files": [
         {
@@ -6748,19 +6755,19 @@ publishing with OIDC.
       "description": "Yoopta Editor source component with Virtari tokens, behavior, and editable styles.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/accordion#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/file-upload#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/scroll-area#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/accordion#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/file-upload#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/scroll-area#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.1"
       ],
       "dependencies": [
         "@yoopta/accordion@^6.0.3",
@@ -7144,7 +7151,25 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
+      ]
+    },
+    {
+      "name": "virtari-utilities",
+      "type": "registry:style",
+      "title": "Utilities",
+      "description": "Utility CSS classes (spacing, sizing, layout, z-index) driven by Virtari tokens.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-tokens#cli-v0.1.1"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/virtari-utilities/index.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/utilities/index.css"
+        }
       ]
     },
     {
@@ -7201,7 +7226,7 @@ publishing with OIDC.
         }
       ],
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1"
       ]
     },
     {
@@ -7211,75 +7236,76 @@ publishing with OIDC.
       "description": "The complete Virtari source component collection. Prefer individual items for smaller applications.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/accordion#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/alert#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/alert-dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/avatar#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/badge#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/bottom-nav#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/breadcrumb#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/button-group#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/card#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/carousel#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/checkbox#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/code#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/collapsible#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/color-picker#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/command#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/copy-button#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/data-table#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/date-picker#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/editor#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/empty-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/file-upload#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/flag#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/flow#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/form#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/header#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/label#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/language-picker#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/layout#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/nav#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/number-input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/otp-input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/pagination#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/phone-input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/progress#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/radio-group#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/scroll-area#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/segmented-control#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/separator#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/sidebar#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/skeleton#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/slider#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/spinner#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/stepper#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/switch#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/table#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tag-input#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/text#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/timeline#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/toast#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/toggle#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/tree-view#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/visually-hidden#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/yoopta-editor#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/accordion#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/alert#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/alert-dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/avatar#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/badge#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/bottom-nav#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/breadcrumb#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/button-group#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/card#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/carousel#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/checkbox#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/code#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/collapsible#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/color-picker#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/command#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/copy-button#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/data-table#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/date-picker#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/editor#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/empty-state#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/file-upload#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/flag#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/flow#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/form#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/header#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/label#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/language-picker#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/layout#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/nav#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/number-input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/otp-input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/pagination#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/phone-input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/progress#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/radio-group#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/scroll-area#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/segmented-control#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/separator#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/sidebar#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/skeleton#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/slider#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/spinner#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/stepper#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/switch#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/table#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tag-input#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/text#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/timeline#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/toast#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/toggle#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/tree-view#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/virtari-utilities#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/visually-hidden#cli-v0.1.1",
+        "Virtari-Packages/virtari-design-system/yoopta-editor#cli-v0.1.1"
       ]
     }
   ]

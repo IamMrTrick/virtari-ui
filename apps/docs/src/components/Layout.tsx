@@ -10,12 +10,13 @@ import { ariaKeyShortcuts, useKeyboardPlatform } from "@virtari-packages/utils";
 import { Nav, NavList, NavItem } from "@virtari-packages/react-nav";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@virtari-packages/react-collapsible";
 import { Card, CardContent } from "@virtari-packages/react-card";
+import { CodeBlock } from "@virtari-packages/react-code";
 import { CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem, CommandEmpty } from "@virtari-packages/react-command";
 import { IconMenu2, IconSettings, IconSearch, IconArrowLeft, IconArrowRight, IconCopy, IconSun, IconMoon } from "@virtari-packages/react-icons";
 import { toast } from "@virtari-packages/react-toast";
 import { SettingsDrawer } from "./SettingsDrawer";
 import { Logo } from "./branding/Logo";
-import { NAV_ITEMS, DOC_PATHS, getPageIcon } from "./navigation";
+import { NAV_ITEMS, DOC_PATHS, getInstallItem, getPageIcon } from "./navigation";
 import type { RadiusMode, Direction, SurfaceStyle } from "../App";
 import type { Locale } from "../i18n";
 
@@ -46,6 +47,7 @@ export function Layout(p: Props) {
   const pageIndex = paths.indexOf(p.activePage);
   const previous = paths[pageIndex - 1];
   const next = paths[pageIndex + 1];
+  const installItem = getInstallItem(p.activePage);
   const pageLabel = (path: string) => t(`nav:${path}`, { defaultValue: path });
 
   useEffect(() => {
@@ -129,6 +131,10 @@ export function Layout(p: Props) {
             </Cluster>
           </Cluster>
           <Stack className="docs-page-intro" gap="sm"><Heading level={1} size="8" tracking="tight">{p.title}</Heading><p>{p.description}</p></Stack>
+          {installItem && <Card className="docs-page-install" variant="soft" size="sm"><CardContent><Stack gap="sm">
+            <Cluster justify="between"><strong>{label("Add editable source", "افزودن سورس قابل‌ویرایش")}</strong><Button asChild variant="ghost" color="contrast" size="sm"><a href={p.hrefFor("installation")}>{label("Installation guide", "راهنمای نصب")}</a></Button></Cluster>
+            <CodeBlock renderer="static" language="shell" code={`pnpm dlx virtari@latest add ${installItem}`} />
+          </Stack></CardContent></Card>}
           {sections.length > 0 && <Collapsible className="docs-mobile-toc"><CollapsibleTrigger asChild><Button color="contrast" variant="soft" size="sm">{label("On this page", "در این صفحه")}</Button></CollapsibleTrigger><CollapsibleContent>{sectionLinks}</CollapsibleContent></Collapsible>}
           <div className="docs-content" ref={contentRef} key={p.activePage}>{p.children}</div>
           <Cluster className="docs-page-pagination">

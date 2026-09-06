@@ -5,6 +5,7 @@ const navIconProps = { size: 16, stroke: 1.75 } as const;
 
 const ICONS: Record<string, ReactNode> = {
   introduction: <IconBook2 {...navIconProps} />,
+  installation: <IconPackage {...navIconProps} />,
   guidelines: <IconBook2 {...navIconProps} />,
   brand: <IconPalette {...navIconProps} />,
 
@@ -95,7 +96,7 @@ const FALLBACK_ICON = <IconCircle {...navIconProps} />;
 export type NavGroupData = { groupKey: string; items: string[] };
 
 export const NAV_ITEMS: NavGroupData[] = [
-  { groupKey: "groups.overview", items: ["introduction", "guidelines"] },
+  { groupKey: "groups.overview", items: ["introduction", "installation", "guidelines"] },
   {
     groupKey: "groups.foundations",
     items: [
@@ -194,3 +195,30 @@ export const NAV_ITEMS: NavGroupData[] = [
 
 export const DOC_PATHS = NAV_ITEMS.flatMap(group => group.items);
 export function getPageIcon(path: string) { return ICONS[path] ?? FALLBACK_ICON; }
+
+const INSTALL_ALIASES: Record<string, string> = {
+  composition: "layout",
+  colors: "virtari-tokens",
+  heading: "text",
+  sizing: "virtari-tokens",
+  typography: "virtari-tokens",
+  utilities: "virtari-utilities",
+  "tokens-reference": "virtari-tokens",
+};
+
+const NON_INSTALLABLE_PATHS = new Set([
+  "introduction",
+  "installation",
+  "guidelines",
+  "brand",
+  "rtl",
+  "ai-integration",
+  "data-table-users",
+  "data-table-products",
+  "data-table-orders",
+]);
+
+export function getInstallItem(path: string) {
+  if (NON_INSTALLABLE_PATHS.has(path)) return undefined;
+  return INSTALL_ALIASES[path] ?? path;
+}

@@ -1,17 +1,17 @@
 {
   "whatIs": {
     "title": "What is Virtari DS?",
-    "body": "Virtari Design System is a package-based component library built on <1>React</1>, <2>our own headless primitives</2>, and <3>pure vanilla CSS</3> using 2026 standards. Every component is its own publishable npm package under the <4>@virtari-packages</4> scope."
+    "body": "Virtari Design System is a source-owned component system built on <1>React</1>, <2>our own headless primitives</2>, and <3>pure vanilla CSS</3>. Install only the parts you need with the <4>virtari</4> CLI, then edit the resulting files directly in your application."
   },
   "cssFeatures": {
     "title": "CSS Features"
   },
   "quickStart": {
     "title": "Quick Start",
-    "description": "Start with an existing React 18 or 19 application that supports CSS imports. These packages use the restricted GitHub Packages registry; configure @virtari-packages for npm.pkg.github.com and authenticate with an account that has package access before installing. Import core, tokens, then component styles once in your app root."
+    "description": "Start with a React 18 or 19 application that supports CSS imports. The public CLI installs editable React and CSS source, resolves transitive Virtari dependencies, and adds required third-party packages."
   },
   "architecture": {
     "title": "Architecture",
-    "snippet": "@virtari-packages/tokens       → Design tokens (CSS custom properties)\n@virtari-packages/core         → @layer order, reset, base styles\n@virtari-packages/react-*      → One package per component"
+    "snippet": "src/virtari/styles             → Tokens, layers, reset, and optional utilities\nsrc/virtari/components         → Editable React components and styles\nsrc/virtari/lib                → Shared helpers and headless primitives"
   }
 }

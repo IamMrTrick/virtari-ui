@@ -278,10 +278,10 @@ All documentation sections importing this package (some demonstrate another pack
 - `introduction/1` — {label("Principles in practice", "اصول در عمل")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 33–40.
 - `introduction/2` — {label("Three surface styles, one system", "سه سبک سطح، یک سیستم")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 41–44.
 - `introduction/3` — {label("Fields on colored surfaces", "ورودی‌ها روی سطوح رنگی")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 45–54.
-- `introduction/4` — {t("whatIs.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 55–69.
-- `introduction/5` — {t("cssFeatures.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 71–85.
-- `introduction/6` — {t("quickStart.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 87–90.
-- `introduction/7` — {t("architecture.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 92–94.
+- `introduction/4` — {t("whatIs.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 55–68.
+- `introduction/5` — {t("cssFeatures.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 70–82.
+- `introduction/6` — {t("quickStart.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 84–88.
+- `introduction/7` — {t("architecture.title")}; source `apps/docs/src/pages/IntroductionPage.tsx` lines 90–92.
 - `kbd/1` — Single Keys; source `apps/docs/src/pages/KbdPage.tsx` lines 8–17.
 - `kbd/2` — Keyboard Shortcuts; source `apps/docs/src/pages/KbdPage.tsx` lines 19–42.
 - `kbd/3` — Platform comparison; source `apps/docs/src/pages/KbdPage.tsx` lines 44–59.
@@ -437,6 +437,11 @@ All documentation sections importing this package (some demonstrate another pack
 - `slider/2` — Range; source `apps/docs/src/pages/SliderPage.tsx` lines 14–18.
 - `slider/3` — Disabled; source `apps/docs/src/pages/SliderPage.tsx` lines 20–24.
 - `slider/4` — Usage; source `apps/docs/src/pages/SliderPage.tsx` lines 26–37.
+- `source-installation/1` — {text("Install editable source", "نصب سورس قابل‌ویرایش")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 24–31.
+- `source-installation/2` — {text("Choose any scope", "انتخاب هر محدوده")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 33–42.
+- `source-installation/3` — {text("What is copied", "چه چیزهایی کپی می‌شوند")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 44–49.
+- `source-installation/4` — {text("Customize and update safely", "شخصی‌سازی و به‌روزرسانی امن")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 51–54.
+- `source-installation/5` — {text("Use the shadcn CLI", "استفاده با CLI خود shadcn")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 56–60.
 - `spinner/1` — Variants; source `apps/docs/src/pages/SpinnerPage.tsx` lines 31–68.
 - `spinner/2` — Sizes; source `apps/docs/src/pages/SpinnerPage.tsx` lines 71–90.
 - `spinner/3` — Colors; source `apps/docs/src/pages/SpinnerPage.tsx` lines 93–143.

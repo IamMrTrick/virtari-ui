@@ -72,6 +72,7 @@ html, body { block-size: 100%; margin: 0; overflow: hidden; }
 .docs-eyebrow { font-size: 12px; color: var(--vds-color-text-muted); }
 .docs-eyebrow > span { margin-inline: 8px; color: var(--vds-color-border-strong); }
 .docs-page-intro { margin-block-end: 40px; }
+.docs-page-install { margin-block-end: 40px; }
 .docs-page-intro h1 { font-size: clamp(32px, 3vw, 48px); line-height: 1.2; font-weight: 650; }
 .docs-page-intro p { color: var(--vds-color-on-surface-variant, var(--vds-color-text-muted)); font-size: 16px; line-height: 1.75; max-inline-size: 640px; margin: 0; }
 .docs-content { display: flex; flex-direction: column; gap: 40px; min-inline-size: 0; }
@@ -130,6 +131,7 @@ html, body { block-size: 100%; margin: 0; overflow: hidden; }
   .docs-page-toolbar { margin-block-end: 24px; }
   .docs-eyebrow { font-size: 11px; }
   .docs-page-intro { margin-block-end: 28px; }
+  .docs-page-install { margin-block-end: 28px; }
   .docs-content { gap: 32px; }
   .docs-topbar button { min-block-size: 44px; }
   .docs-wordmark { font-size: 17px; gap: 8px; }

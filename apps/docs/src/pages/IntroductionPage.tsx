@@ -54,7 +54,6 @@ export function IntroductionPage() {
       </Section>
       <Section title={t("whatIs.title")}>
         <p className="docs-prose">
-          {/* Match the explicit translation markers in both locales. */}
           <Trans
             ns="introduction"
             i18nKey="whatIs.body"
@@ -70,8 +69,6 @@ export function IntroductionPage() {
 
       <Section title={t("cssFeatures.title")}>
         <div className="docs-row" style={{ flexWrap: "wrap" }}>
-          {/* Tech-feature names are kept in English by convention even in
-              Persian — they\u2019re canonical CSS identifiers. */}
           <Badge>CSS Nesting</Badge>
           <Badge>@layer</Badge>
           <Badge>color-mix()</Badge>
@@ -85,8 +82,9 @@ export function IntroductionPage() {
       </Section>
 
       <Section title={t("quickStart.title")} description={t("quickStart.description")}>
-        <VirtariCodeBlock renderer="static" language="shell" filename={label("Install packages", "نصب پکیج‌ها")} code="pnpm add @virtari-packages/core @virtari-packages/tokens @virtari-packages/react-button" />
-        <VirtariCodeBlock renderer="static" language="tsx" filename="App.tsx" code={'import "@virtari-packages/core";\nimport "@virtari-packages/tokens";\nimport "@virtari-packages/react-button/styles";\nimport { Button } from "@virtari-packages/react-button";\n\nexport function App() {\n  return <Button variant="outline">Continue</Button>;\n}'} />
+        <VirtariCodeBlock renderer="static" language="shell" filename={label("Add editable source", "افزودن سورس قابل‌ویرایش")} code="pnpm dlx virtari@latest init\npnpm dlx virtari@latest add button" />
+        <VirtariCodeBlock renderer="static" language="tsx" filename="App.tsx" code={'import "./virtari/styles/index.css";\nimport { Button } from "./virtari/components/button";\n\nexport function App() {\n  return <Button variant="outline">Continue</Button>;\n}'} />
+        <Button asChild variant="soft" rightSection={<IconArrowRight className="docs-directional-icon" size={16}/>}><a href={href("installation")}>{label("Read the installation guide", "مشاهدهٔ راهنمای نصب")}</a></Button>
       </Section>
 
       <Section title={t("architecture.title")}>

@@ -4,7 +4,7 @@
     {
       "id": "cli",
       "name": "virtari",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "category": "tooling",
       "description": "Source-first CLI that installs editable Virtari React and CSS files with transitive dependencies, conflict protection, diffing, and health checks.",
       "publicSymbols": [],
@@ -4394,6 +4394,11 @@
         "rtl/4",
         "rtl/5",
         "rtl/6",
+        "source-installation/1",
+        "source-installation/2",
+        "source-installation/3",
+        "source-installation/4",
+        "source-installation/5",
         "table/1",
         "table/2",
         "table/3",
@@ -5064,6 +5069,11 @@
         "sizing/2",
         "sizing/3",
         "sizing/4",
+        "source-installation/1",
+        "source-installation/2",
+        "source-installation/3",
+        "source-installation/4",
+        "source-installation/5",
         "stepper/1",
         "stepper/2",
         "stepper/3",
@@ -5354,6 +5364,11 @@
         "introduction/5",
         "introduction/6",
         "introduction/7",
+        "source-installation/1",
+        "source-installation/2",
+        "source-installation/3",
+        "source-installation/4",
+        "source-installation/5",
         "tokens-reference/1",
         "tokens-reference/2",
         "utilities/1",
@@ -6452,6 +6467,11 @@
         "slider/2",
         "slider/3",
         "slider/4",
+        "source-installation/1",
+        "source-installation/2",
+        "source-installation/3",
+        "source-installation/4",
+        "source-installation/5",
         "spinner/1",
         "spinner/2",
         "spinner/3",
@@ -13865,7 +13885,12 @@
         "sidebar/8",
         "sidebar/9",
         "sidebar/10",
-        "sidebar/11"
+        "sidebar/11",
+        "source-installation/1",
+        "source-installation/2",
+        "source-installation/3",
+        "source-installation/4",
+        "source-installation/5"
       ],
       "guidance": [
         "Import Icon and a named Tabler component from this package, then pass the component through icon, for example Icon icon={IconSearch}. Use xs/sm/md/lg/xl sizes for shared sizing or a number for an explicit size.",
@@ -15041,6 +15066,11 @@
         "layout/8",
         "layout/9",
         "layout/10",
+        "source-installation/1",
+        "source-installation/2",
+        "source-installation/3",
+        "source-installation/4",
+        "source-installation/5",
         "table/1",
         "table/2",
         "table/3",
@@ -20079,6 +20109,7 @@
       "publicSymbols": [],
       "externalReexports": [],
       "sourceIds": [
+        "packages/utilities/src/index.css",
         "packages/utilities/package.json",
         "packages/utilities/scripts/generate.mjs"
       ],
@@ -162403,8 +162434,8 @@
       ],
       "sourceId": "apps/docs/src/pages/IntroductionPage.tsx",
       "startLine": 55,
-      "endLine": 69,
-      "code": "<Section title={t(\"whatIs.title\")}>\n        <p className=\"docs-prose\">\n          {/* Match the explicit translation markers in both locales. */}\n          <Trans\n            ns=\"introduction\"\n            i18nKey=\"whatIs.body\"\n            components={{\n              1: <strong />,\n              2: <strong />,\n              3: <strong />,\n              4: <InlineCode />,\n            }}\n          />\n        </p>\n      </Section>",
+      "endLine": 68,
+      "code": "<Section title={t(\"whatIs.title\")}>\n        <p className=\"docs-prose\">\n          <Trans\n            ns=\"introduction\"\n            i18nKey=\"whatIs.body\"\n            components={{\n              1: <strong />,\n              2: <strong />,\n              3: <strong />,\n              4: <InlineCode />,\n            }}\n          />\n        </p>\n      </Section>",
       "imports": [
         "import { CodeBlock as VirtariCodeBlock, InlineCode } from \"@virtari-packages/react-code\";",
         "import { Trans, useTranslation } from \"react-i18next\";",
@@ -162431,9 +162462,9 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/IntroductionPage.tsx",
-      "startLine": 71,
-      "endLine": 85,
-      "code": "<Section title={t(\"cssFeatures.title\")}>\n        <div className=\"docs-row\" style={{ flexWrap: \"wrap\" }}>\n          {/* Tech-feature names are kept in English by convention even in\n              Persian — they\\u2019re canonical CSS identifiers. */}\n          <Badge>CSS Nesting</Badge>\n          <Badge>@layer</Badge>\n          <Badge>color-mix()</Badge>\n          <Badge>:has()</Badge>\n          <Badge>@property</Badge>\n          <Badge>Container Queries</Badge>\n          <Badge>OKLCH Colors</Badge>\n          <Badge>Logical Properties</Badge>\n          <Badge>@custom-media</Badge>\n        </div>\n      </Section>",
+      "startLine": 70,
+      "endLine": 82,
+      "code": "<Section title={t(\"cssFeatures.title\")}>\n        <div className=\"docs-row\" style={{ flexWrap: \"wrap\" }}>\n          <Badge>CSS Nesting</Badge>\n          <Badge>@layer</Badge>\n          <Badge>color-mix()</Badge>\n          <Badge>:has()</Badge>\n          <Badge>@property</Badge>\n          <Badge>Container Queries</Badge>\n          <Badge>OKLCH Colors</Badge>\n          <Badge>Logical Properties</Badge>\n          <Badge>@custom-media</Badge>\n        </div>\n      </Section>",
       "imports": [
         "import { CodeBlock as VirtariCodeBlock, InlineCode } from \"@virtari-packages/react-code\";",
         "import { Trans, useTranslation } from \"react-i18next\";",
@@ -162460,9 +162491,9 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/IntroductionPage.tsx",
-      "startLine": 87,
-      "endLine": 90,
-      "code": "<Section title={t(\"quickStart.title\")} description={t(\"quickStart.description\")}>\n        <VirtariCodeBlock renderer=\"static\" language=\"shell\" filename={label(\"Install packages\", \"نصب پکیج‌ها\")} code=\"pnpm add @virtari-packages/core @virtari-packages/tokens @virtari-packages/react-button\" />\n        <VirtariCodeBlock renderer=\"static\" language=\"tsx\" filename=\"App.tsx\" code={'import \"@virtari-packages/core\";\\nimport \"@virtari-packages/tokens\";\\nimport \"@virtari-packages/react-button/styles\";\\nimport { Button } from \"@virtari-packages/react-button\";\\n\\nexport function App() {\\n  return <Button variant=\"outline\">Continue</Button>;\\n}'} />\n      </Section>",
+      "startLine": 84,
+      "endLine": 88,
+      "code": "<Section title={t(\"quickStart.title\")} description={t(\"quickStart.description\")}>\n        <VirtariCodeBlock renderer=\"static\" language=\"shell\" filename={label(\"Add editable source\", \"افزودن سورس قابل‌ویرایش\")} code=\"pnpm dlx virtari@latest init\\npnpm dlx virtari@latest add button\" />\n        <VirtariCodeBlock renderer=\"static\" language=\"tsx\" filename=\"App.tsx\" code={'import \"./virtari/styles/index.css\";\\nimport { Button } from \"./virtari/components/button\";\\n\\nexport function App() {\\n  return <Button variant=\"outline\">Continue</Button>;\\n}'} />\n        <Button asChild variant=\"soft\" rightSection={<IconArrowRight className=\"docs-directional-icon\" size={16}/>}><a href={href(\"installation\")}>{label(\"Read the installation guide\", \"مشاهدهٔ راهنمای نصب\")}</a></Button>\n      </Section>",
       "imports": [
         "import { CodeBlock as VirtariCodeBlock, InlineCode } from \"@virtari-packages/react-code\";",
         "import { Trans, useTranslation } from \"react-i18next\";",
@@ -162489,8 +162520,8 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/IntroductionPage.tsx",
-      "startLine": 92,
-      "endLine": 94,
+      "startLine": 90,
+      "endLine": 92,
       "code": "<Section title={t(\"architecture.title\")}>\n        <VirtariCodeBlock renderer=\"static\" language=\"plaintext\" code={t(\"architecture.snippet\")} />\n      </Section>",
       "imports": [
         "import { CodeBlock as VirtariCodeBlock, InlineCode } from \"@virtari-packages/react-code\";",
@@ -165875,6 +165906,141 @@
       ]
     },
     {
+      "id": "source-installation/1",
+      "title": "{text(\"Install editable source\", \"نصب سورس قابل‌ویرایش\")}",
+      "page": "source-installation",
+      "packageIds": [
+        "react-badge",
+        "react-button",
+        "react-card",
+        "react-code",
+        "react-icons",
+        "react-layout"
+      ],
+      "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
+      "startLine": 24,
+      "endLine": 31,
+      "code": "<Section\n      title={text(\"Install editable source\", \"نصب سورس قابل‌ویرایش\")}\n      description={text(\"Virtari places ordinary React and CSS files in your project, following the same source-ownership idea as shadcn.\", \"ویرتاری فایل‌های عادی React و CSS را با همان ایدهٔ مالکیت سورس shadcn داخل پروژهٔ شما قرار می‌دهد.\")}\n    >\n      <CodeBlock renderer=\"static\" language=\"shell\" code={\"pnpm dlx virtari@latest init\\npnpm dlx virtari@latest add button\"} />\n      <p className=\"docs-prose\">{text(\"The default destination is \", \"مسیر پیش‌فرض \")}<InlineCode>src/virtari</InlineCode>{text(\". Import the shared foundation once, then import each local component from that directory.\", \" است. استایل پایه را یک‌بار و سپس هر کامپوننت محلی را از همین مسیر ایمپورت کنید.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"tsx\" filename=\"App.tsx\" code={'import \"./virtari/styles/index.css\";\\nimport { Button } from \"./virtari/components/button\";\\n\\nexport function App() {\\n  return <Button>Continue</Button>;\\n}'} />\n    </Section>",
+      "imports": [
+        "import { Badge } from \"@virtari-packages/react-badge\";",
+        "import { Button } from \"@virtari-packages/react-button\";",
+        "import { Card, CardContent } from \"@virtari-packages/react-card\";",
+        "import { CodeBlock, InlineCode } from \"@virtari-packages/react-code\";",
+        "import { Cluster, Grid, Stack } from \"@virtari-packages/react-layout\";",
+        "import { IconArrowRight, IconCheck } from \"@virtari-packages/react-icons\";",
+        "import { useTranslation } from \"react-i18next\";",
+        "import { Section } from \"../components\";"
+      ]
+    },
+    {
+      "id": "source-installation/2",
+      "title": "{text(\"Choose any scope\", \"انتخاب هر محدوده\")}",
+      "page": "source-installation",
+      "packageIds": [
+        "react-badge",
+        "react-button",
+        "react-card",
+        "react-code",
+        "react-icons",
+        "react-layout"
+      ],
+      "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
+      "startLine": 33,
+      "endLine": 42,
+      "code": "<Section title={text(\"Choose any scope\", \"انتخاب هر محدوده\")}\n      description={text(\"Install one component, several related components, optional utility classes, or the complete collection.\", \"یک کامپوننت، چند کامپوننت مرتبط، کلاس‌های utility اختیاری یا کل مجموعه را نصب کنید.\")}>\n      <Grid minItemWidth=\"16rem\" gap=\"md\">\n        <Card variant=\"soft\"><CardContent><Stack gap=\"sm\"><Badge variant=\"soft\">{text(\"One component\", \"یک کامپوننت\")}</Badge><CodeBlock renderer=\"static\" language=\"shell\" code=\"pnpm dlx virtari@latest add input\" /></Stack></CardContent></Card>\n        <Card variant=\"soft\"><CardContent><Stack gap=\"sm\"><Badge variant=\"soft\">{text(\"Several components\", \"چند کامپوننت\")}</Badge><CodeBlock renderer=\"static\" language=\"shell\" code=\"pnpm dlx virtari@latest add button input dialog\" /></Stack></CardContent></Card>\n        <Card variant=\"soft\"><CardContent><Stack gap=\"sm\"><Badge variant=\"soft\">{text(\"Utility classes\", \"کلاس‌های Utility\")}</Badge><CodeBlock renderer=\"static\" language=\"shell\" code=\"pnpm dlx virtari@latest add virtari-utilities\" /></Stack></CardContent></Card>\n        <Card variant=\"soft\"><CardContent><Stack gap=\"sm\"><Badge variant=\"soft\">{text(\"Complete system\", \"کل سیستم\")}</Badge><CodeBlock renderer=\"static\" language=\"shell\" code=\"pnpm dlx virtari@latest add virtari-all\" /></Stack></CardContent></Card>\n      </Grid>\n      <CodeBlock renderer=\"static\" language=\"shell\" filename={text(\"Discover all registry items\", \"مشاهدهٔ تمام آیتم‌های رجیستری\")} code=\"pnpm dlx virtari@latest list\" />\n    </Section>",
+      "imports": [
+        "import { Badge } from \"@virtari-packages/react-badge\";",
+        "import { Button } from \"@virtari-packages/react-button\";",
+        "import { Card, CardContent } from \"@virtari-packages/react-card\";",
+        "import { CodeBlock, InlineCode } from \"@virtari-packages/react-code\";",
+        "import { Cluster, Grid, Stack } from \"@virtari-packages/react-layout\";",
+        "import { IconArrowRight, IconCheck } from \"@virtari-packages/react-icons\";",
+        "import { useTranslation } from \"react-i18next\";",
+        "import { Section } from \"../components\";"
+      ]
+    },
+    {
+      "id": "source-installation/3",
+      "title": "{text(\"What is copied\", \"چه چیزهایی کپی می‌شوند\")}",
+      "page": "source-installation",
+      "packageIds": [
+        "react-badge",
+        "react-button",
+        "react-card",
+        "react-code",
+        "react-icons",
+        "react-layout"
+      ],
+      "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
+      "startLine": 44,
+      "endLine": 49,
+      "code": "<Section title={text(\"What is copied\", \"چه چیزهایی کپی می‌شوند\")}>\n      <Stack gap=\"sm\">\n        {guarantees.map(item => <Cluster key={item} align=\"start\"><IconCheck aria-hidden=\"true\" size={18}/><span>{item}</span></Cluster>)}\n      </Stack>\n      <CodeBlock renderer=\"static\" language=\"plaintext\" code={\"src/virtari/\\n├── LICENSE\\n├── styles/\\n│   ├── index.css\\n│   ├── core/\\n│   └── tokens/\\n├── components/\\n│   └── button/\\n└── lib/\"} />\n    </Section>",
+      "imports": [
+        "import { Badge } from \"@virtari-packages/react-badge\";",
+        "import { Button } from \"@virtari-packages/react-button\";",
+        "import { Card, CardContent } from \"@virtari-packages/react-card\";",
+        "import { CodeBlock, InlineCode } from \"@virtari-packages/react-code\";",
+        "import { Cluster, Grid, Stack } from \"@virtari-packages/react-layout\";",
+        "import { IconArrowRight, IconCheck } from \"@virtari-packages/react-icons\";",
+        "import { useTranslation } from \"react-i18next\";",
+        "import { Section } from \"../components\";"
+      ]
+    },
+    {
+      "id": "source-installation/4",
+      "title": "{text(\"Customize and update safely\", \"شخصی‌سازی و به‌روزرسانی امن\")}",
+      "page": "source-installation",
+      "packageIds": [
+        "react-badge",
+        "react-button",
+        "react-card",
+        "react-code",
+        "react-icons",
+        "react-layout"
+      ],
+      "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
+      "startLine": 51,
+      "endLine": 54,
+      "code": "<Section title={text(\"Customize and update safely\", \"شخصی‌سازی و به‌روزرسانی امن\")}>\n      <p className=\"docs-prose\">{text(\"After installation the files belong to the application. Edit markup, props, CSS, tokens, and motion directly. Before replacing an edited component, inspect the upstream change.\", \"بعد از نصب، فایل‌ها متعلق به اپلیکیشن هستند. مارکاپ، پراپ‌ها، CSS، توکن‌ها و حرکت را مستقیم تغییر دهید. پیش از جایگزینی کامپوننت ویرایش‌شده، تغییر نسخهٔ جدید را بررسی کنید.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"shell\" code={\"pnpm dlx virtari@latest diff button\\npnpm dlx virtari@latest add button --dry-run\\npnpm dlx virtari@latest add button --overwrite\\npnpm dlx virtari@latest doctor\"} />\n    </Section>",
+      "imports": [
+        "import { Badge } from \"@virtari-packages/react-badge\";",
+        "import { Button } from \"@virtari-packages/react-button\";",
+        "import { Card, CardContent } from \"@virtari-packages/react-card\";",
+        "import { CodeBlock, InlineCode } from \"@virtari-packages/react-code\";",
+        "import { Cluster, Grid, Stack } from \"@virtari-packages/react-layout\";",
+        "import { IconArrowRight, IconCheck } from \"@virtari-packages/react-icons\";",
+        "import { useTranslation } from \"react-i18next\";",
+        "import { Section } from \"../components\";"
+      ]
+    },
+    {
+      "id": "source-installation/5",
+      "title": "{text(\"Use the shadcn CLI\", \"استفاده با CLI خود shadcn\")}",
+      "page": "source-installation",
+      "packageIds": [
+        "react-badge",
+        "react-button",
+        "react-card",
+        "react-code",
+        "react-icons",
+        "react-layout"
+      ],
+      "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
+      "startLine": 56,
+      "endLine": 60,
+      "code": "<Section title={text(\"Use the shadcn CLI\", \"استفاده با CLI خود shadcn\")}>\n      <p className=\"docs-prose\">{text(\"The public registry also follows shadcn's GitHub registry protocol. Pinning the release tag keeps installation reproducible.\", \"رجیستری عمومی با پروتکل GitHub رجیستری shadcn هم سازگار است. پین‌کردن تگ انتشار، نصب را قابل‌بازتولید نگه می‌دارد.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"shell\" code=\"pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.1\" />\n      <Button asChild variant=\"soft\" rightSection={<IconArrowRight className=\"docs-directional-icon\" size={16}/>}><a href={href(\"button\")}>{text(\"Open component documentation\", \"مشاهدهٔ مستندات کامپوننت‌ها\")}</a></Button>\n    </Section>",
+      "imports": [
+        "import { Badge } from \"@virtari-packages/react-badge\";",
+        "import { Button } from \"@virtari-packages/react-button\";",
+        "import { Card, CardContent } from \"@virtari-packages/react-card\";",
+        "import { CodeBlock, InlineCode } from \"@virtari-packages/react-code\";",
+        "import { Cluster, Grid, Stack } from \"@virtari-packages/react-layout\";",
+        "import { IconArrowRight, IconCheck } from \"@virtari-packages/react-icons\";",
+        "import { useTranslation } from \"react-i18next\";",
+        "import { Section } from \"../components\";"
+      ]
+    },
+    {
       "id": "spinner/1",
       "title": "Variants",
       "page": "spinner",
@@ -168352,8 +168518,8 @@
     },
     {
       "id": "apps/docs/src/App.tsx",
-      "sha256": "d3fae8146f3ca5e834793e1b86e69b75363104092c0657d1b52fc024331c3222",
-      "bytes": 11357,
+      "sha256": "437a06986b64aa12664c989c2875e01c4fafdc3d11a32f2e028a91e898816338",
+      "bytes": 11423,
       "kind": "tsx"
     },
     {
@@ -168370,8 +168536,8 @@
     },
     {
       "id": "apps/docs/src/components/Layout.tsx",
-      "sha256": "712bbf9c4b22804a40d361c2048898620ae730fe0676cfe7946bd55abeb257c6",
-      "bytes": 12176,
+      "sha256": "a32bee31c8052c8f779aa8eba8bea8375cd4701020f97f7bcc8038cecc6df5c6",
+      "bytes": 12881,
       "kind": "tsx"
     },
     {
@@ -168424,8 +168590,8 @@
     },
     {
       "id": "apps/docs/src/components/navigation.tsx",
-      "sha256": "b82799bd377437b4d5c162c65413f14472559b6f59d5ca4e9dbdd904c65c6d26",
-      "bytes": 7128,
+      "sha256": "e989a1ecd9a7db4c9ddf69956b809bb121b2ce6cac1721d34ad568af4c61616a",
+      "bytes": 7809,
       "kind": "tsx"
     },
     {
@@ -168448,20 +168614,20 @@
     },
     {
       "id": "apps/docs/src/i18n/locales/en/introduction.json",
-      "sha256": "fe17605a1e9746efca6d19dfbb2b9e8c950544c916e5b4c3f3142de859ee3777",
-      "bytes": 1062,
+      "sha256": "609738adaeb8c6dcbde602d4441945475e2c0def80a9a67fb1121e074496e18b",
+      "bytes": 966,
       "kind": "json"
     },
     {
       "id": "apps/docs/src/i18n/locales/en/nav.json",
-      "sha256": "4eeec4d4c0a1762aedae2b4782f7c6735605b493018ef291126bfe262c6fecbe",
-      "bytes": 2078,
+      "sha256": "f672c4e792b627759580e72b58ab4c3e6a71983f1bea744f05f7b682fe8adc86",
+      "bytes": 2119,
       "kind": "json"
     },
     {
       "id": "apps/docs/src/i18n/locales/en/pageMeta.json",
-      "sha256": "7d8af52a4c3efb03467186a3ec82703e983748485aa96c6aa06a10b508b2abd2",
-      "bytes": 12793,
+      "sha256": "93aff54a62bf5e19c4ea3e7b94eff6c9ac297bc6440be81e134911a7991ef0a6",
+      "bytes": 12952,
       "kind": "json"
     },
     {
@@ -168472,20 +168638,20 @@
     },
     {
       "id": "apps/docs/src/i18n/locales/fa/introduction.json",
-      "sha256": "509bae87a09f413e25dcf5273e15079cc1604021574bdf251f438d39c80bcc80",
-      "bytes": 1535,
+      "sha256": "6416bd523f1614abb7c62cbe7f033d83779d8792e687cc0074dce79190ecaa8d",
+      "bytes": 1372,
       "kind": "json"
     },
     {
       "id": "apps/docs/src/i18n/locales/fa/nav.json",
-      "sha256": "5ee219c09b7fac170b9edd52a1496cda6709f6dde2dd64c8529973a420d95bb6",
-      "bytes": 4837,
+      "sha256": "5e116fda7be51b0bf7869a1df94a0c997174549a68bac23ac59018f0125f8a32",
+      "bytes": 4908,
       "kind": "json"
     },
     {
       "id": "apps/docs/src/i18n/locales/fa/pageMeta.json",
-      "sha256": "cfab1c7978cdfcfb4e01d2cdf8b14cbeefb596627f245891ab61c0fa6b8b60cc",
-      "bytes": 16900,
+      "sha256": "f9bbc87044427e0a838b153cb9729f6e3c17b0fa205d30be2ec6d5bd5c56cb1a",
+      "bytes": 17129,
       "kind": "json"
     },
     {
@@ -168742,8 +168908,8 @@
     },
     {
       "id": "apps/docs/src/pages/IntroductionPage.tsx",
-      "sha256": "8c9e7ca278c59304b78e702272cd41533378a3687ddc9f8e5f942241a56d7e30",
-      "bytes": 8323,
+      "sha256": "dcdaebb3b106047df35da0449cffd81be9e51b64d28f5c62c22fb8a6900dd296",
+      "bytes": 8262,
       "kind": "tsx"
     },
     {
@@ -168873,6 +169039,12 @@
       "kind": "tsx"
     },
     {
+      "id": "apps/docs/src/pages/SourceInstallationPage.tsx",
+      "sha256": "f392229c457bb9bccfde8a928fff49e3e91fe51c7aad63c3c7645968fdb5f6ce",
+      "bytes": 6923,
+      "kind": "tsx"
+    },
+    {
       "id": "apps/docs/src/pages/SpinnerPage.tsx",
       "sha256": "037b52cf00731def86569774ce9d8fff0b04327c7261c9b6d9816d9ffdd9ef11",
       "bytes": 10733,
@@ -168976,8 +169148,8 @@
     },
     {
       "id": "apps/docs/src/pages/index.ts",
-      "sha256": "93a7e735668c290ce62509ef73d4cd4d5d305764b0ddcf9dcafca33fd46a2248",
-      "bytes": 16328,
+      "sha256": "b44d0743f2df8cb091e18327f7cf145b4bf5c50daaf28de13d0043e27b10af03",
+      "bytes": 16538,
       "kind": "ts"
     },
     {
@@ -169024,8 +169196,8 @@
     },
     {
       "id": "apps/docs/src/styles/shell.css",
-      "sha256": "7abf505fc9751f360dbeebebe5cd5e301b2ded63d4dd289159e8f8ca131df477",
-      "bytes": 8262,
+      "sha256": "652953b6ae2f41127df69b019efcb7f470f2226d39c42686d41d027491410337",
+      "bytes": 8358,
       "kind": "css"
     },
     {
@@ -169210,8 +169382,8 @@
     },
     {
       "id": "docs/source-registry.md",
-      "sha256": "af4c5d4bec6649e8044405437a6b5a40ed09d625a6ee9da34222d46153d96e49",
-      "bytes": 4090,
+      "sha256": "29e051b78a5581c4d24e2eee9d5611743db5c221f9d461413ab6dfe15876c438",
+      "bytes": 4489,
       "kind": "md"
     },
     {
@@ -169228,7 +169400,7 @@
     },
     {
       "id": "packages/cli/package.json",
-      "sha256": "f969fa6718204a0a2a3b2279cb73c1c2f431df8f217db9253c96e0080407078c",
+      "sha256": "5e9e564c82ab5708a23f593c728780aa55e76f2be8da635ef359cca474806098",
       "bytes": 1010,
       "kind": "json"
     },
@@ -175402,9 +175574,15 @@
     },
     {
       "id": "packages/utilities/scripts/generate.mjs",
-      "sha256": "78394abb35a3800e1e3299d15e5ed6035b1c71df8796a60a1c2bb59910dd2fe3",
-      "bytes": 11914,
+      "sha256": "fea66a541e7a0ac2e63ec328610b8bdb57d42dbd3ab487168c8307eb28cc483b",
+      "bytes": 12343,
       "kind": "mjs"
+    },
+    {
+      "id": "packages/utilities/src/index.css",
+      "sha256": "2a09ce04c082db7422a91c7cbc15aca09b857738fb0d6fc288d5c274add0fd37",
+      "bytes": 278335,
+      "kind": "css"
     },
     {
       "id": "packages/utils/package.json",
@@ -175468,8 +175646,8 @@
     },
     {
       "id": "registry.json",
-      "sha256": "ba1ea516ef7cf0b3b1bc8263dd796f19e8cebb6f4b5cfcf1046d78cd6516a2a6",
-      "bytes": 296032,
+      "sha256": "515e20c324f78a64f4bc3e990e79959d89643b1e843f27411c4c206197bf3564",
+      "bytes": 296753,
       "kind": "json"
     },
     {

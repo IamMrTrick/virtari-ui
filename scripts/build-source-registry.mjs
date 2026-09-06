@@ -17,6 +17,7 @@ const registryRef = `cli-v${cliManifest.version}`;
 const sourceExtensions = new Set([".ts", ".tsx", ".js", ".jsx", ".css", ".json", ".svg"]);
 const execFileAsync = promisify(execFile);
 const sourceGenerators = [
+  ["utilities", "generate.mjs"],
   ["react-flag", "build-flags.mjs"],
   ["react-language-picker", "build-languages.mjs"],
   ["react-phone-input", "build-countries.mjs"],
@@ -371,7 +372,7 @@ async function createOutput() {
     title: "Virtari Complete",
     description: "The complete Virtari source component collection. Prefer individual items for smaller applications.",
     author: "Virtari",
-    registryDependencies: [registryAddress("virtari-base"), ...allComponents],
+    registryDependencies: [registryAddress("virtari-base"), registryAddress("virtari-utilities"), ...allComponents],
   });
 
   const licenseAddress = registryAddress("virtari-license");

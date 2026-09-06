@@ -43,7 +43,13 @@ Full list: [`packages/`](./packages). Each package has its own README with insta
 ```bash
 pnpm dlx virtari@latest init
 pnpm dlx virtari@latest add button input dialog
+pnpm dlx virtari@latest add virtari-utilities
+pnpm dlx virtari@latest add virtari-all
 ```
+
+Use `add` for any single registry item, pass several names in one command, or
+install `virtari-all` for the complete component collection. `virtari list`
+prints every available component, primitive, foundation, and utility item.
 
 Import the installed foundation once, then import local components:
 
@@ -59,7 +65,7 @@ an explicit `--overwrite` update. See the [source registry contract](./docs/sour
 The registry can also be consumed with the official shadcn CLI:
 
 ```bash
-pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.0
+pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.1
 ```
 
 ## Legacy package installation

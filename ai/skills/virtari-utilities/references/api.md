@@ -20,5 +20,6 @@ This package has no inventoried JavaScript barrel exports; use its package expor
 
 ## Source files
 
+- `packages/utilities/src/index.css`
 - `packages/utilities/package.json`
 - `packages/utilities/scripts/generate.mjs`

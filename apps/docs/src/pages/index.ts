@@ -1,6 +1,7 @@
 export { DesignGuidelinesPage } from "./DesignGuidelinesPage";
 export { BrandingPage } from "./BrandingPage";
 export { IntroductionPage } from "./IntroductionPage";
+export { SourceInstallationPage } from "./SourceInstallationPage";
 export { ButtonPage } from "./ButtonPage";
 export { ButtonGroupPage } from "./ButtonGroupPage";
 export { BadgePage } from "./BadgePage";
@@ -82,6 +83,7 @@ export const PAGE_META: Record<string, { title: string; description: string }> =
   guidelines: { title: "Design guidelines", description: "Practical patterns for understandable forms, clear actions and predictable keyboard use." },
   brand: { title: "Brand", description: "Virtari marks, app icons and loading states." },
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },
+  installation: { title: "Source installation", description: "Add one component or the complete Virtari system as editable project source." },
   sizing: { title: "Sizing", description: "Unified size system, height ramp, WCAG compliance." },
   colors: { title: "Colors", description: "OKLCH color palette and semantic token reference." },
   typography: { title: "Typography", description: "Font scale, weights, and font family tokens." },
