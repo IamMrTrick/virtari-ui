@@ -109,56 +109,6 @@
   white-space: nowrap;
 }
 
-/* ── Colors Page ── */
-.docs-color-grid {
-  display: flex;
-  gap: var(--vds-space-1);
-}
-
-.docs-color-swatch {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--vds-space-1);
-}
-
-.docs-color-swatch-block {
-  inline-size: 3rem;
-  block-size: 3rem;
-  border-radius: var(--vds-radius-card);
-  border: 1px solid var(--vds-color-border-muted);
-}
-
-.docs-color-swatch-block--sm {
-  inline-size: 2rem;
-  block-size: 2rem;
-  border-radius: var(--vds-radius-4);
-}
-
-.docs-color-swatch-label {
-  font-size: var(--vds-text-xs);
-  color: var(--vds-color-text-muted);
-}
-
-.docs-color-token {
-  display: block;
-  font-family: var(--vds-font-mono);
-  font-size: 0.65rem;
-  color: var(--vds-color-text-subtle);
-}
-
-.docs-color-semantic-grid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--vds-space-2);
-}
-
-.docs-color-semantic-row {
-  display: flex;
-  align-items: center;
-  gap: var(--vds-space-3);
-}
-
 /* ── Typography Page ── */
 .docs-type-scale {
   display: flex;
@@ -514,3 +464,18 @@
 .docs-principle-card .vds-card-description { line-height: 1.75; }
 .docs-brand-preview { display: grid; place-items: center; min-block-size: 10rem; padding: var(--vds-space-6); color: var(--vds-color-text); }
 .docs-brand-preview svg { max-inline-size: 100%; }
+
+/* Source-driven color catalog. Preview scopes own their canvas and text roles. */
+.docs-palette { display: grid; container-type: inline-size; gap: var(--vds-space-10); padding: var(--vds-space-4); background: var(--vds-color-bg); color: var(--vds-color-text); border-radius: var(--vds-radius-card); min-inline-size: 0; }
+.docs-palette-heading { margin: 0; font-size: var(--vds-text-lg); color: var(--vds-color-text); }
+.docs-palette .docs-prose { margin: 0; }
+.docs-palette-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--vds-space-2); }
+@container (max-width: 30rem) { .docs-palette-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@container (min-width: 64rem) { .docs-palette-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); } }
+.docs-palette-grid[data-kind="semantic"], .docs-palette-grid[data-kind="alias"] { grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); }
+.docs-palette-swatch.vds-button { padding: var(--vds-space-1); block-size: auto; min-inline-size: 0; inline-size: 100%; border-radius: var(--vds-radius-sm); }
+.docs-palette-swatch .vds-button-content, .docs-palette-swatch .vds-button-label { display: flex; flex-direction: column; align-items: stretch; inline-size: 100%; min-inline-size: 0; gap: var(--vds-space-2); }
+.docs-palette-swatch code { font-size: 0.6875rem; line-height: 1.5; overflow-wrap: anywhere; white-space: normal; text-align: start; color: var(--vds-color-text); }
+.docs-palette-checker { display: block; overflow: hidden; block-size: 3.5rem; border-radius: var(--vds-radius-xs); background: repeating-conic-gradient(var(--vds-color-neutral-5) 0% 25%, var(--vds-color-neutral-2) 0% 50%) 0 / 12px 12px; }
+.docs-palette-paint { display: block; inline-size: 100%; block-size: 100%; box-shadow: inset 0 0 0 1px var(--vds-color-neutral-a3); }
+.docs-palette-status { margin: 0; min-block-size: 1.5em; color: var(--vds-color-text-muted); font-size: var(--vds-text-sm); overflow-wrap: anywhere; }
