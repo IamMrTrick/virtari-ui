@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { Command as CommandPrimitive } from "cmdk";
-import { cn } from "@virtari-packages/utils";
+import { cn, controlText } from "@virtari-packages/utils";
 import { KbdShortcut } from "@virtari-packages/react-kbd";
 
 /* ────────────────────────────────────────────────────────────
@@ -113,7 +113,7 @@ export const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
             {leftSection}
           </span>
         ) : null}
-        <span className="vds-command-item-label">{children}</span>
+        <span className="vds-command-item-label">{controlText(children)}</span>
         {rightSection ? (
           <span className="vds-command-item-right">{rightSection}</span>
         ) : null}

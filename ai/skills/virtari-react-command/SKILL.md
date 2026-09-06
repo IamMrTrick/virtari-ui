@@ -28,7 +28,7 @@ Use the existing package and its composition API. Verify the installed version a
 ## Known limits and mistakes to avoid
 
 - A shortcut label does not register a handler; avoid duplicate bindings between CommandDialog hotkey and a separate useHotkey for the same toggle.
-- Current CommandDialog implementation adds an explicit portal/overlay around DialogContent even though DialogContent already creates them. Do not copy this duplication into consumer composition; track it as an implementation cleanup.
+- DialogContent owns the portal and backdrop used by CommandDialog. Do not add a second DialogPortal or DialogOverlay around it.
 - Command is the namespaced object, not a JSX root component. Use Command.Root or CommandRoot.
 
 Related package IDs: `react-dialog`, `react-kbd`, `react-icons`, `utils`. Discover their focused skills from the catalog; do not load all packages at once.

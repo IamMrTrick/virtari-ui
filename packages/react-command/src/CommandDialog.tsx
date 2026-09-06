@@ -4,8 +4,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogOverlay,
-  DialogPortal,
   DialogTitle,
 } from "@virtari-packages/react-dialog";
 import type { DialogContentProps } from "@virtari-packages/react-dialog";
@@ -56,8 +54,6 @@ export function CommandDialog({
   );
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogPortal>
-        <DialogOverlay />
         <DialogContent
           size={size}
           className={cn("vds-command-dialog", className)}
@@ -91,7 +87,6 @@ export function CommandDialog({
             {children}
           </CommandRoot>
         </DialogContent>
-      </DialogPortal>
     </Dialog>
   );
 }

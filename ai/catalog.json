@@ -7123,7 +7123,7 @@
       ],
       "pitfalls": [
         "A shortcut label does not register a handler; avoid duplicate bindings between CommandDialog hotkey and a separate useHotkey for the same toggle.",
-        "Current CommandDialog implementation adds an explicit portal/overlay around DialogContent even though DialogContent already creates them. Do not copy this duplication into consumer composition; track it as an implementation cleanup.",
+        "DialogContent owns the portal and backdrop used by CommandDialog. Do not add a second DialogPortal or DialogOverlay around it.",
         "Command is the namespaced object, not a JSX root component. Use Command.Root or CommandRoot."
       ],
       "related": [
@@ -36810,21 +36810,117 @@
       "line": 29
     },
     {
-      "id": "packages/react-command/src/Command.tokens.css:45:5",
+      "id": "packages/react-command/src/Command.tokens.css:32:5",
       "name": "--vds-command-item-radius",
-      "value": "max(\n      0px,\n      calc(var(--vds-command-radius) - var(--vds-command-list-padding))\n    )",
+      "value": "min(\n      var(--vds-radius-nav-item, 0.5rem),\n      max(0px, calc(var(--vds-command-radius) - var(--vds-command-list-padding)))\n    )",
       "selector": ".vds-command",
       "conditions": [
         "@layer design-system.components"
       ],
       "category": "component",
       "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 45
+      "line": 32
+    },
+    {
+      "id": "packages/react-command/src/Command.tokens.css:36:5",
+      "name": "--vds-command-item-bg-hover",
+      "value": "var(--vds-color-surface-hover, #f3f4f6)",
+      "selector": ".vds-command",
+      "conditions": [
+        "@layer design-system.components"
+      ],
+      "category": "component",
+      "sourceId": "packages/react-command/src/Command.tokens.css",
+      "line": 36
+    },
+    {
+      "id": "packages/react-command/src/Command.tokens.css:37:5",
+      "name": "--vds-command-item-bg-selected",
+      "value": "var(--vds-color-primary-bg, #eef2ff)",
+      "selector": ".vds-command",
+      "conditions": [
+        "@layer design-system.components"
+      ],
+      "category": "component",
+      "sourceId": "packages/react-command/src/Command.tokens.css",
+      "line": 37
+    },
+    {
+      "id": "packages/react-command/src/Command.tokens.css:38:5",
+      "name": "--vds-command-item-fg-selected",
+      "value": "var(--vds-color-primary-text, #3730a3)",
+      "selector": ".vds-command",
+      "conditions": [
+        "@layer design-system.components"
+      ],
+      "category": "component",
+      "sourceId": "packages/react-command/src/Command.tokens.css",
+      "line": 38
+    },
+    {
+      "id": "packages/react-command/src/Command.tokens.css:40:5",
+      "name": "--vds-command-item-fg-muted",
+      "value": "var(--vds-color-text-muted, #6b7280)",
+      "selector": ".vds-command",
+      "conditions": [
+        "@layer design-system.components"
+      ],
+      "category": "component",
+      "sourceId": "packages/react-command/src/Command.tokens.css",
+      "line": 40
+    },
+    {
+      "id": "packages/react-command/src/Command.tokens.css:42:5",
+      "name": "--vds-command-group-heading-padding-inline",
+      "value": "var(--vds-space-3, 0.75rem)",
+      "selector": ".vds-command",
+      "conditions": [
+        "@layer design-system.components"
+      ],
+      "category": "component",
+      "sourceId": "packages/react-command/src/Command.tokens.css",
+      "line": 42
+    },
+    {
+      "id": "packages/react-command/src/Command.tokens.css:44:5",
+      "name": "--vds-command-group-heading-padding-block",
+      "value": "var(--vds-space-1-5, 0.375rem)",
+      "selector": ".vds-command",
+      "conditions": [
+        "@layer design-system.components"
+      ],
+      "category": "component",
+      "sourceId": "packages/react-command/src/Command.tokens.css",
+      "line": 44
+    },
+    {
+      "id": "packages/react-command/src/Command.tokens.css:46:5",
+      "name": "--vds-command-group-heading-fg",
+      "value": "var(--vds-color-text-muted, #6b7280)",
+      "selector": ".vds-command",
+      "conditions": [
+        "@layer design-system.components"
+      ],
+      "category": "component",
+      "sourceId": "packages/react-command/src/Command.tokens.css",
+      "line": 46
+    },
+    {
+      "id": "packages/react-command/src/Command.tokens.css:48:5",
+      "name": "--vds-command-group-heading-size",
+      "value": "var(--vds-text-xs, 0.75rem)",
+      "selector": ".vds-command",
+      "conditions": [
+        "@layer design-system.components"
+      ],
+      "category": "component",
+      "sourceId": "packages/react-command/src/Command.tokens.css",
+      "line": 48
     },
     {
       "id": "packages/react-command/src/Command.tokens.css:49:5",
-      "name": "--vds-command-item-bg-hover",
-      "value": "var(--vds-color-surface-hover, #f3f4f6)",
+      "name": "--vds-command-group-heading-weight",
+      "value": "var(--vds-font-weight-semibold, 600)",
       "selector": ".vds-command",
       "conditions": [
         "@layer design-system.components"
@@ -36834,103 +36930,7 @@
       "line": 49
     },
     {
-      "id": "packages/react-command/src/Command.tokens.css:50:5",
-      "name": "--vds-command-item-bg-selected",
-      "value": "var(--vds-color-primary-bg, #eef2ff)",
-      "selector": ".vds-command",
-      "conditions": [
-        "@layer design-system.components"
-      ],
-      "category": "component",
-      "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 50
-    },
-    {
-      "id": "packages/react-command/src/Command.tokens.css:51:5",
-      "name": "--vds-command-item-fg-selected",
-      "value": "var(--vds-color-primary-solid, #6366f1)",
-      "selector": ".vds-command",
-      "conditions": [
-        "@layer design-system.components"
-      ],
-      "category": "component",
-      "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 51
-    },
-    {
-      "id": "packages/react-command/src/Command.tokens.css:53:5",
-      "name": "--vds-command-item-fg-muted",
-      "value": "var(--vds-color-text-muted, #6b7280)",
-      "selector": ".vds-command",
-      "conditions": [
-        "@layer design-system.components"
-      ],
-      "category": "component",
-      "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 53
-    },
-    {
-      "id": "packages/react-command/src/Command.tokens.css:55:5",
-      "name": "--vds-command-group-heading-padding-inline",
-      "value": "var(--vds-space-3, 0.75rem)",
-      "selector": ".vds-command",
-      "conditions": [
-        "@layer design-system.components"
-      ],
-      "category": "component",
-      "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 55
-    },
-    {
-      "id": "packages/react-command/src/Command.tokens.css:57:5",
-      "name": "--vds-command-group-heading-padding-block",
-      "value": "var(--vds-space-1-5, 0.375rem)",
-      "selector": ".vds-command",
-      "conditions": [
-        "@layer design-system.components"
-      ],
-      "category": "component",
-      "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 57
-    },
-    {
-      "id": "packages/react-command/src/Command.tokens.css:59:5",
-      "name": "--vds-command-group-heading-fg",
-      "value": "var(--vds-color-text-muted, #6b7280)",
-      "selector": ".vds-command",
-      "conditions": [
-        "@layer design-system.components"
-      ],
-      "category": "component",
-      "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 59
-    },
-    {
-      "id": "packages/react-command/src/Command.tokens.css:61:5",
-      "name": "--vds-command-group-heading-size",
-      "value": "var(--vds-text-xs, 0.75rem)",
-      "selector": ".vds-command",
-      "conditions": [
-        "@layer design-system.components"
-      ],
-      "category": "component",
-      "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 61
-    },
-    {
-      "id": "packages/react-command/src/Command.tokens.css:62:5",
-      "name": "--vds-command-group-heading-weight",
-      "value": "var(--vds-font-weight-semibold, 600)",
-      "selector": ".vds-command",
-      "conditions": [
-        "@layer design-system.components"
-      ],
-      "category": "component",
-      "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 62
-    },
-    {
-      "id": "packages/react-command/src/Command.tokens.css:65:5",
+      "id": "packages/react-command/src/Command.tokens.css:52:5",
       "name": "--vds-command-separator-color",
       "value": "var(--vds-color-border-muted, #e5e7eb)",
       "selector": ".vds-command",
@@ -36939,10 +36939,10 @@
       ],
       "category": "component",
       "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 65
+      "line": 52
     },
     {
-      "id": "packages/react-command/src/Command.tokens.css:67:5",
+      "id": "packages/react-command/src/Command.tokens.css:54:5",
       "name": "--vds-command-empty-padding-block",
       "value": "var(--vds-space-6, 1.5rem)",
       "selector": ".vds-command",
@@ -36951,7 +36951,7 @@
       ],
       "category": "component",
       "sourceId": "packages/react-command/src/Command.tokens.css",
-      "line": 67
+      "line": 54
     },
     {
       "id": "packages/react-copy-button/src/CopyButton.css:8:5",
@@ -168316,8 +168316,8 @@
     },
     {
       "id": "apps/docs/src/components/Layout.tsx",
-      "sha256": "2e5a32e8df2e6a87b430514fddaa969e1cc8129dfc7be30fd75c474ea738e3a1",
-      "bytes": 12163,
+      "sha256": "712bbf9c4b22804a40d361c2048898620ae730fe0676cfe7946bd55abeb257c6",
+      "bytes": 12176,
       "kind": "tsx"
     },
     {
@@ -169140,6 +169140,12 @@
       "id": "docs/page-audit/utilities.md",
       "sha256": "21c2a46c2b6bead28ed31781f3113951c563d9253520a1739a0f505683a9d2b2",
       "bytes": 4177,
+      "kind": "md"
+    },
+    {
+      "id": "docs/page-audit/validation.md",
+      "sha256": "a63dd84fdec28dc28e89c91cb1ea4b198da7bcef9a0b1635714b3b1844d4368e",
+      "bytes": 1195,
       "kind": "md"
     },
     {
@@ -170470,26 +170476,26 @@
     },
     {
       "id": "packages/react-command/src/Command.css",
-      "sha256": "e9d85d4251034e04b7a870daa0c5be3ffc3518c74cc89801dd86bdcb782872fe",
-      "bytes": 5836,
+      "sha256": "c2d4f1733e8f40257812fd727df9c98a8eba31f575ba10378bb9e078b16ca922",
+      "bytes": 6533,
       "kind": "css"
     },
     {
       "id": "packages/react-command/src/Command.tokens.css",
-      "sha256": "43e1754a385d674ab5de8684719b0e3cd4bcadc12a206fe7a50df6f2a45cd746",
-      "bytes": 3148,
+      "sha256": "d4b883abf5eb024407b6d87446d9a1ac32efa093ae5e3c1c2fc1a6c336528188",
+      "bytes": 2479,
       "kind": "css"
     },
     {
       "id": "packages/react-command/src/Command.tsx",
-      "sha256": "f0eec18b8d069922822aaa0eb798c97e0cf5b6780612a2e105091e9174665f50",
-      "bytes": 5541,
+      "sha256": "7b12c77fbecbe2dfce31f6c8fc38888f764d5c357edd90b2799d0952b54debd0",
+      "bytes": 5567,
       "kind": "tsx"
     },
     {
       "id": "packages/react-command/src/CommandDialog.tsx",
-      "sha256": "1117d50adc97583f0fd2a2b79d748c6517197ab82cc4e3a2111a1f33e66d8c7a",
-      "bytes": 3201,
+      "sha256": "619747973c1643fcf5e8e1fa0b0c3fe955cd7e162477f89cb41e0dc7c4699df6",
+      "bytes": 3099,
       "kind": "tsx"
     },
     {

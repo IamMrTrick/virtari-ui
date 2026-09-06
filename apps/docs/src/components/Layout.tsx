@@ -150,7 +150,7 @@ export function Layout(p: Props) {
 
     <CommandDialog open={searchOpen} onOpenChange={setSearchOpen} hotkey="mod+k" title={label("Search documentation", "جست‌وجوی مستندات")} description={label("Find a component or guide.", "یک کامپوننت یا راهنما پیدا کنید.")}>
       <CommandInput placeholder={label("Search components and guides…", "جست‌وجوی کامپوننت‌ها و راهنماها…")} />
-      <CommandList><CommandEmpty>{label("No pages found.", "صفحه‌ای پیدا نشد.")}</CommandEmpty>{NAV_ITEMS.map(group => <CommandGroup key={group.groupKey} heading={t(group.groupKey)}>{group.items.map(path => <CommandItem key={path} value={`${pageLabel(path)} ${path}`} onSelect={() => {p.onNavigate(path); setSearchOpen(false);}}>{getPageIcon(path)}{pageLabel(path)}</CommandItem>)}</CommandGroup>)}</CommandList>
+      <CommandList><CommandEmpty>{label("No pages found.", "صفحه‌ای پیدا نشد.")}</CommandEmpty>{NAV_ITEMS.map(group => <CommandGroup key={group.groupKey} heading={t(group.groupKey)}>{group.items.map(path => <CommandItem key={path} leftSection={getPageIcon(path)} value={`${pageLabel(path)} ${path}`} onSelect={() => {p.onNavigate(path); setSearchOpen(false);}}>{pageLabel(path)}</CommandItem>)}</CommandGroup>)}</CommandList>
     </CommandDialog>
     <SettingsDrawer surfaceStyle={p.surfaceStyle} onSurfaceStyleChange={p.onSurfaceStyleChange} open={settingsOpen} onOpenChange={setSettingsOpen} dark={p.dark} onDarkChange={p.onToggleDark} radius={p.radius} onRadiusChange={p.onRadiusChange} direction={p.direction} onDirectionChange={p.onDirectionChange} locale={p.locale} onLocaleChange={p.onLocaleChange} microInteractions={p.microInteractions} onMicroInteractionsChange={p.onMicroInteractionsChange}/>
   </>;
