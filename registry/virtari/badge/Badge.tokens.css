@@ -1,0 +1,222 @@
+@layer design-system.components {
+  /* =========================================================================
+   * 1. Base component tokens
+   *    Layout, typography, motion, focus — orthogonal to color/variant.
+   *    Defaults resolve to: color=primary, variant=soft, size=md.
+   *    Fallbacks keep the package usable without @virtari-packages/tokens.
+   * ========================================================================= */
+  .vds-badge {
+    /* ── Layout ── */
+    --badge-height: 1.5rem; /* 24px — md default */
+    --badge-padding-inline: var(--vds-space-2, 0.5rem);
+    --badge-gap: var(--vds-space-1, 0.25rem);
+    --badge-border-width: 1px;
+    --badge-radius: var(--vds-radius-badge, 9999px);
+    --badge-icon-size: 0.75rem;
+    --badge-dot-size: 0.375rem;
+
+    /* ── Typography ── */
+    --badge-font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    --badge-font-size: var(--vds-text-xs, 0.75rem);
+    --badge-font-weight: var(--vds-font-weight-medium, 500);
+    --badge-line-height: var(--vds-control-line-height, 1.5);
+    --badge-letter-spacing: var(--vds-tracking-normal, 0);
+
+    /* ── Motion ── */
+    --badge-transition-duration: var(--vds-duration-fast, 120ms);
+    --badge-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* ── Focus (interactive only) ── */
+    --badge-focus-ring-color: var(--vds-color-ring, var(--badge-color-solid));
+    --badge-focus-ring-width: 2px;
+    --badge-focus-ring-offset: 2px;
+
+    /* =====================================================================
+     * Intent palette — default: primary
+     * ===================================================================== */
+    --badge-color-solid:        var(--vds-color-primary-solid, #4f46e5);
+    --badge-color-solid-hover:  var(--vds-color-primary-solid-hover, #4338ca);
+    --badge-color-on-solid:     var(--vds-color-on-primary, #fff);
+
+    --badge-color-bg:           var(--vds-color-primary-bg, #e0e7ff);
+    --badge-color-bg-hover:     var(--vds-color-primary-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
+
+    --badge-color-text:         var(--vds-color-primary-text, #3730a3);
+    --badge-color-border:       var(--badge-color-solid);
+    --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
+
+    /* =====================================================================
+     * Rendering tokens — defaults to soft variant.
+     * Variants override these only; colors override the palette only.
+     * ===================================================================== */
+    --badge-bg:            var(--badge-color-bg);
+    --badge-bg-hover:      var(--badge-color-bg-hover);
+    --badge-text:          var(--badge-color-text);
+    --badge-border:        transparent;
+    --badge-dot:           var(--badge-color-solid);
+  }
+
+  /* =========================================================================
+   * 2. Color palettes — redefine --badge-color-* meta-tokens.
+   * ========================================================================= */
+
+  .vds-badge[data-color="success"] {
+    --badge-color-solid:        var(--vds-color-success-solid, #16a34a);
+    --badge-color-solid-hover:  var(--vds-color-success-solid-hover, #15803d);
+    --badge-color-on-solid:     var(--vds-color-on-success, #fff);
+    --badge-color-bg:           var(--vds-color-success-bg, #dcfce7);
+    --badge-color-bg-hover:     var(--vds-color-success-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
+    --badge-color-text:         var(--vds-color-success-text, #166534);
+    --badge-color-border:       var(--badge-color-solid);
+    --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
+  }
+
+  .vds-badge[data-color="warning"] {
+    --badge-color-solid:        var(--vds-color-warning-solid, #f59e0b);
+    --badge-color-solid-hover:  var(--vds-color-warning-solid-hover, #d97706);
+    --badge-color-on-solid:     var(--vds-color-on-warning, #111);
+    --badge-color-bg:           var(--vds-color-warning-bg, #fef3c7);
+    --badge-color-bg-hover:     var(--vds-color-warning-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
+    --badge-color-text:         var(--vds-color-warning-text, #78350f);
+    --badge-color-border:       var(--badge-color-solid);
+    --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
+  }
+
+  .vds-badge[data-color="danger"] {
+    --badge-color-solid:        var(--vds-color-danger-solid, #dc2626);
+    --badge-color-solid-hover:  var(--vds-color-danger-solid-hover, #b91c1c);
+    --badge-color-on-solid:     var(--vds-color-on-danger, #fff);
+    --badge-color-bg:           var(--vds-color-danger-bg, #fee2e2);
+    --badge-color-bg-hover:     var(--vds-color-danger-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
+    --badge-color-text:         var(--vds-color-danger-text, #991b1b);
+    --badge-color-border:       var(--badge-color-solid);
+    --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
+  }
+
+  .vds-badge[data-color="info"] {
+    --badge-color-solid:        var(--vds-color-info-solid, #0891b2);
+    --badge-color-solid-hover:  var(--vds-color-info-solid-hover, #0e7490);
+    --badge-color-on-solid:     var(--vds-color-on-info, #fff);
+    --badge-color-bg:           var(--vds-color-info-bg, #cffafe);
+    --badge-color-bg-hover:     var(--vds-color-info-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
+    --badge-color-text:         var(--vds-color-info-text, #155e75);
+    --badge-color-border:       var(--badge-color-solid);
+    --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
+  }
+
+  .vds-badge[data-color="accent"] {
+    --badge-color-solid:        var(--vds-color-accent-solid, var(--vds-color-accent-emphasis, #f97316));
+    --badge-color-solid-hover:  var(--vds-color-accent-solid-hover, #ea580c);
+    --badge-color-on-solid:     var(--vds-color-on-accent, #fff);
+    --badge-color-bg:           var(--vds-color-accent-bg, #ffedd5);
+    --badge-color-bg-hover:     var(--vds-color-accent-bg-hover, color-mix(in oklch, var(--badge-color-bg), var(--badge-color-solid) 15%));
+    --badge-color-text:         var(--vds-color-accent-text, #7c2d12);
+    --badge-color-border:       var(--badge-color-solid);
+    --badge-color-border-soft:  color-mix(in oklch, var(--badge-color-solid) 30%, transparent);
+  }
+
+  /* Neutral — desaturated. Useful for "secondary" status chips.
+   * Reads semantic roles wherever the neutral family exposes one. The two
+   * remaining raw steps (11 / 4) are the hover rungs the neutral family has
+   * no role for yet — there is no --vds-color-neutral-*-hover. */
+  .vds-badge[data-color="neutral"] {
+    --badge-color-solid:        var(--vds-color-bg-inverse, #171717);
+    --badge-color-solid-hover:  var(--vds-color-neutral-11, #262626);
+    --badge-color-on-solid:     var(--vds-color-text-inverse, #fafafa);
+    --badge-color-bg:           var(--vds-color-neutral-bg, var(--vds-color-bg-muted, #f5f5f5));
+    --badge-color-bg-hover:     var(--vds-color-neutral-4, var(--vds-color-neutral-bg, #e5e5e5));
+    --badge-color-text:         var(--vds-color-text, #171717);
+    --badge-color-border:       var(--vds-color-border-strong, #a3a3a3);
+    --badge-color-border-soft:  var(--vds-color-border-muted, color-mix(in oklch, var(--badge-color-solid) 20%, transparent));
+  }
+
+  /* =========================================================================
+   * 3. Variants — re-map the palette into rendering tokens.
+   *    Soft is baked into the base above.
+   * ========================================================================= */
+
+  .vds-badge[data-variant="solid"] {
+    --badge-bg:       var(--badge-color-solid);
+    --badge-bg-hover: var(--badge-color-solid-hover);
+    --badge-text:     var(--badge-color-on-solid);
+    --badge-border:   transparent;
+    --badge-dot:      var(--badge-color-on-solid);
+  }
+
+  .vds-badge[data-variant="outline"] {
+    --badge-bg:       transparent;
+    --badge-bg-hover: var(--badge-color-bg);
+    --badge-text:     var(--badge-color-text);
+    --badge-border:   var(--badge-color-border);
+  }
+
+  /* Subtle — borderless, transparent background, only color in text + dot.
+   * For very quiet metadata badges ("draft", "v1.2"). */
+  .vds-badge[data-variant="subtle"] {
+    --badge-bg:       transparent;
+    --badge-bg-hover: var(--badge-color-bg);
+    --badge-text:     var(--badge-color-text);
+    --badge-border:   transparent;
+  }
+
+  /* Soft-outline hybrid — soft bg with a translucent tint of the color border.
+   * Gives status chips a touch more structure than plain soft without the
+   * weight of a full outline variant. */
+  .vds-badge[data-variant="soft-outline"] {
+    --badge-bg:       var(--badge-color-bg);
+    --badge-bg-hover: var(--badge-color-bg-hover);
+    --badge-text:     var(--badge-color-text);
+    --badge-border:   var(--badge-color-border-soft);
+  }
+
+  /* =========================================================================
+   * 4. Sizes — redefine layout-only tokens.
+   *    4 minimum heights: xs(20) · sm(20) · md(24) · lg(28). md is the default.
+   * ========================================================================= */
+
+  .vds-badge[data-size="xs"] {
+    --badge-height:         1.25rem; /* 20px */
+    --badge-padding-inline: var(--vds-space-1-5, 0.375rem);
+    --badge-font-size:      0.625rem; /* 10px */
+    --badge-gap:            var(--vds-space-1, 0.25rem);
+    --badge-icon-size:      0.625rem;
+    --badge-dot-size:       0.3125rem;
+  }
+
+  .vds-badge[data-size="sm"] {
+    --badge-height:         1.25rem; /* 20px */
+    --badge-padding-inline: var(--vds-space-1-5, 0.375rem);
+    --badge-font-size:      var(--vds-text-xs, 0.6875rem);
+    --badge-gap:            var(--vds-space-1, 0.25rem);
+    --badge-icon-size:      0.6875rem;
+    --badge-dot-size:       0.3125rem;
+  }
+
+  /* md — default, inherits base tokens (24px) */
+
+  .vds-badge[data-size="lg"] {
+    --badge-height:         1.75rem; /* 28px */
+    --badge-padding-inline: var(--vds-space-2-5, 0.625rem);
+    --badge-font-size:      var(--vds-text-sm, 0.875rem);
+    --badge-gap:            var(--vds-space-2, 0.5rem);
+    --badge-icon-size:      0.875rem;
+    --badge-dot-size:       0.4375rem;
+  }
+
+  /* =========================================================================
+   * 5. Shape modifier — switch from pill to a rectangular tag radius.
+   * ========================================================================= */
+  .vds-badge[data-shape="square"] {
+    --badge-radius: var(--vds-radius-nav-item, 0.375rem);
+  }
+
+  /* =========================================================================
+   * 6. Dot indicator — standalone dot with no label. Takes the current color.
+   *    Useful for presence / status dots on its own.
+   * ========================================================================= */
+  .vds-badge[data-dot-only="true"] {
+    --badge-height:         var(--badge-dot-size);
+    --badge-padding-inline: 0;
+    --badge-border-width:   0;
+  }
+}

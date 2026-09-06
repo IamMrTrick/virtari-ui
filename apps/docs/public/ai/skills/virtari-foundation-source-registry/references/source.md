@@ -1,0 +1,7550 @@
+## docs/source-registry.md
+
+````md
+# Virtari source registry
+
+Virtari's primary distribution model installs readable React and CSS source into
+the consumer repository. The existing package builds remain available during
+migration, but a source installation has no runtime dependency on
+`@virtari-packages/*`.
+
+## Consumer workflow
+
+```bash
+pnpm dlx virtari@latest init
+pnpm dlx virtari@latest add button input dialog
+```
+
+`init` creates `virtari.json`, installs the shared foundation under
+`src/virtari`, and records provenance in `.virtari/installed.json`. `add`
+resolves only the requested components and their transitive source dependencies.
+It also adds required third-party packages to `package.json`.
+
+Headless primitives are registry items at submodule granularity. A button pulls
+the slot and ref-composition source it uses; it does not install dialog,
+positioning, scroll-lock, or the rest of the primitive package.
+
+Import the base stylesheet once from the application entry point:
+
+```ts
+import "./virtari/styles/index.css";
+```
+
+Then import the local component source:
+
+```tsx
+import { Button } from "./virtari/components/button";
+```
+
+The default target can be changed before installation:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.0/virtari.schema.json",
+  "target": "src/design-system",
+  "registry": "https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v0.1.0/registry.json",
+  "install": true
+}
+```
+
+All generated internal imports are relative, so moving the whole target tree does
+not require an alias or a Virtari package at runtime.
+
+## Safe customization and updates
+
+Installed files are application source. Teams may change markup, props, tokens,
+motion, and styles directly. The CLI stores content hashes only to explain update
+drift; it does not control the installed code.
+
+```bash
+pnpm dlx virtari@latest diff button
+pnpm dlx virtari@latest add button --dry-run
+pnpm dlx virtari@latest add button --overwrite
+pnpm dlx virtari@latest doctor
+```
+
+An ordinary `add` never replaces a changed file. `--overwrite` is explicit and
+should follow review of `diff`. File targets are confined to the project, writes
+are atomic, and the registry cannot invoke arbitrary post-install hooks. Package
+manager installation is optional with `--no-install`.
+
+## shadcn compatibility
+
+The root `registry.json` follows the public shadcn source-registry schema. A
+consumer can use the standard shadcn CLI without installing the Virtari CLI:
+
+```bash
+pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.0
+```
+
+Registry dependencies use full same-repository GitHub addresses because bare
+names refer to shadcn's built-in registry. Tagged release commands should pin the
+GitHub item address to the release tag for reproducible installs.
+
+## Repository ownership
+
+Package source under `packages/*/src` is authoritative. `pnpm registry:build`
+creates the transformed files under `registry/` and the root manifest.
+Generated registry files are never edited by hand.
+
+```bash
+pnpm registry:build
+pnpm registry:check
+pnpm registry:test
+```
+
+CI checks deterministic generation, every relative import, third-party
+dependency declarations, target confinement, conflict protection, update diffs,
+and removal of internal package imports.
+
+## Scope and limits
+
+Source ownership removes Virtari's component API ceiling: consumers can change
+the actual implementation instead of waiting for a prop. It does not remove the
+contracts of React, browsers, accessibility, or third-party behavior packages.
+The registry therefore keeps dependency declarations explicit and installs only
+what a selected component needs.
+
+The repository currently has a proprietary license that forbids redistribution.
+A public source registry must not be released with an "Own Your Code" promise
+until the project adopts a license that grants consumers the intended rights.
+The public CLI workflow enforces this as a release gate and uses npm trusted
+publishing with OIDC after the package is connected to the workflow on npm.
+The GitHub registry route also requires a public repository. If the monorepo
+stays private, publish the generated registry from a separate public repository
+and point the CLI configuration to that location. Private registry access may
+provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
+
+````
+
+## virtari.schema.json
+
+```tsx
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://virtari.dev/schema.json",
+  "title": "Virtari source installation configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "target"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "target": {
+      "type": "string",
+      "description": "Project-relative directory that receives the source-owned Virtari tree.",
+      "default": "src/virtari"
+    },
+    "registry": {
+      "type": "string",
+      "description": "Registry JSON URL or local path."
+    },
+    "install": {
+      "type": "boolean",
+      "description": "Install third-party dependencies after adding source.",
+      "default": true
+    }
+  }
+}
+
+```
+
+## registry.json
+
+```tsx
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "virtari",
+  "homepage": "https://github.com/Virtari-Packages/virtari-design-system",
+  "items": [
+    {
+      "name": "virtari-base",
+      "type": "registry:base",
+      "title": "Virtari Base",
+      "description": "Virtari cascade layers, design tokens, global reset, primitives, and shared React utilities.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-core#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/virtari-base/index.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/index.css"
+        }
+      ],
+      "docs": "Import \"./src/virtari/styles/index.css\" once from the application entry point."
+    },
+    {
+      "name": "virtari-core",
+      "type": "registry:style",
+      "title": "Core",
+      "description": "Base reset, layers, and global primitives for the Virtari design system.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-tokens#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/virtari-core/base.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/core/base.css"
+        },
+        {
+          "path": "registry/virtari/virtari-core/index.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/core/index.css"
+        },
+        {
+          "path": "registry/virtari/virtari-core/layers.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/core/layers.css"
+        },
+        {
+          "path": "registry/virtari/virtari-core/reset.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/core/reset.css"
+        },
+        {
+          "path": "registry/virtari/virtari-core/utilities.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/core/utilities.css"
+        }
+      ]
+    },
+    {
+      "name": "primitive-accordion",
+      "type": "registry:lib",
+      "title": "Accordion Primitive",
+      "description": "Headless Accordion behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-accordion/accordion/accordion.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/accordion/accordion.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-accordion/accordion/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/accordion/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-alert-dialog",
+      "type": "registry:lib",
+      "title": "Alert Dialog Primitive",
+      "description": "Headless Alert Dialog behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-alert-dialog/alert-dialog/alert-dialog.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/alert-dialog/alert-dialog.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-alert-dialog/alert-dialog/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/alert-dialog/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-arrow",
+      "type": "registry:lib",
+      "title": "Arrow Primitive",
+      "description": "Headless Arrow behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-arrow/arrow/arrow.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/arrow/arrow.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-arrow/arrow/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/arrow/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-avatar",
+      "type": "registry:lib",
+      "title": "Avatar Primitive",
+      "description": "Headless Avatar behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-is-hydrated#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-avatar/avatar/avatar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/avatar/avatar.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-avatar/avatar/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/avatar/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-checkbox",
+      "type": "registry:lib",
+      "title": "Checkbox Primitive",
+      "description": "Headless Checkbox behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-checkbox/checkbox/checkbox.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/checkbox/checkbox.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-checkbox/checkbox/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/checkbox/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-collapsible",
+      "type": "registry:lib",
+      "title": "Collapsible Primitive",
+      "description": "Headless Collapsible behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-collapsible/collapsible/collapsible.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/collapsible/collapsible.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-collapsible/collapsible/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/collapsible/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-collection",
+      "type": "registry:lib",
+      "title": "Collection Primitive",
+      "description": "Headless Collection behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-collection/collection/collection-legacy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/collection/collection-legacy.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-collection/collection/collection.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/collection/collection.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-collection/collection/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/collection/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-collection/collection/ordered-dictionary.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/collection/ordered-dictionary.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-compose-refs",
+      "type": "registry:lib",
+      "title": "Compose Refs Primitive",
+      "description": "Headless Compose Refs behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-compose-refs/compose-refs/compose-refs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/compose-refs/compose-refs.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-compose-refs/compose-refs/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/compose-refs/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-context",
+      "type": "registry:lib",
+      "title": "Context Primitive",
+      "description": "Headless Context behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-context/context/create-context.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/context/create-context.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-context/context/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/context/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-dialog",
+      "type": "registry:lib",
+      "title": "Dialog Primitive",
+      "description": "Headless Dialog behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "aria-hidden@^1.2.6",
+        "react-remove-scroll@^2.7.2"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-dialog/dialog/dialog.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/dialog/dialog.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-dialog/dialog/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/dialog/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-direction",
+      "type": "registry:lib",
+      "title": "Direction Primitive",
+      "description": "Headless Direction behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-direction/direction/direction.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/direction/direction.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-direction/direction/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/direction/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-dismissable-layer",
+      "type": "registry:lib",
+      "title": "Dismissable Layer Primitive",
+      "description": "Headless Dismissable Layer behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-escape-keydown#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-dismissable-layer/dismissable-layer/dismissable-layer.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/dismissable-layer/dismissable-layer.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-dismissable-layer/dismissable-layer/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/dismissable-layer/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-dropdown-menu",
+      "type": "registry:lib",
+      "title": "Dropdown Menu Primitive",
+      "description": "Headless Dropdown Menu behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-menu#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-dropdown-menu/dropdown-menu/dropdown-menu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/dropdown-menu/dropdown-menu.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-dropdown-menu/dropdown-menu/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/dropdown-menu/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-event-handlers",
+      "type": "registry:lib",
+      "title": "Event Handlers Primitive",
+      "description": "Headless Event Handlers behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-event-handlers/event-handlers/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/event-handlers/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-event-handlers/event-handlers/primitive.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/event-handlers/primitive.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-event-handlers/event-handlers/types.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/event-handlers/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-focus-guards",
+      "type": "registry:lib",
+      "title": "Focus Guards Primitive",
+      "description": "Headless Focus Guards behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-focus-guards/focus-guards/focus-guards.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/focus-guards/focus-guards.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-focus-guards/focus-guards/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/focus-guards/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-focus-scope",
+      "type": "registry:lib",
+      "title": "Focus Scope Primitive",
+      "description": "Headless Focus Scope behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-focus-scope/focus-scope/focus-scope.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/focus-scope/focus-scope.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-focus-scope/focus-scope/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/focus-scope/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-id",
+      "type": "registry:lib",
+      "title": "Id Primitive",
+      "description": "Headless Id behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-id/id/id.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/id/id.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-id/id/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/id/index.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-label",
+      "type": "registry:lib",
+      "title": "Label Primitive",
+      "description": "Headless Label behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-label/label/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/label/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-label/label/label.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/label/label.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-menu",
+      "type": "registry:lib",
+      "title": "Menu Primitive",
+      "description": "Headless Menu behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "aria-hidden@^1.2.6",
+        "react-remove-scroll@^2.7.2"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-menu/menu/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/menu/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-menu/menu/menu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/menu/menu.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-number",
+      "type": "registry:lib",
+      "title": "Number Primitive",
+      "description": "Headless Number behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-number/number/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/number/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-number/number/number.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/number/number.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-popover",
+      "type": "registry:lib",
+      "title": "Popover Primitive",
+      "description": "Headless Popover behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "aria-hidden@^1.2.6",
+        "react-remove-scroll@^2.7.2"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-popover/popover/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/popover/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-popover/popover/popover.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/popover/popover.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-popper",
+      "type": "registry:lib",
+      "title": "Popper Primitive",
+      "description": "Headless Popper behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-arrow#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@floating-ui/react-dom@^2.1.8"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-popper/popper/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/popper/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-popper/popper/popper.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/popper/popper.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-portal",
+      "type": "registry:lib",
+      "title": "Portal Primitive",
+      "description": "Headless Portal behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-portal/portal/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/portal/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-portal/portal/portal.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/portal/portal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-presence",
+      "type": "registry:lib",
+      "title": "Presence Primitive",
+      "description": "Headless Presence behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-presence/presence/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/presence/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-presence/presence/presence.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/presence/presence.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-presence/presence/use-state-machine.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/presence/use-state-machine.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-primitive",
+      "type": "registry:lib",
+      "title": "Primitive Primitive",
+      "description": "Headless Primitive behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-primitive/primitive/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/primitive/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-primitive/primitive/primitive.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/primitive/primitive.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-progress",
+      "type": "registry:lib",
+      "title": "Progress Primitive",
+      "description": "Headless Progress behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-progress/progress/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/progress/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-progress/progress/progress.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/progress/progress.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-radio-group",
+      "type": "registry:lib",
+      "title": "Radio Group Primitive",
+      "description": "Headless Radio Group behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-radio-group/radio-group/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/radio-group/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-radio-group/radio-group/radio-group.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/radio-group/radio-group.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-radio-group/radio-group/radio.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/radio-group/radio.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-rect",
+      "type": "registry:lib",
+      "title": "Rect Primitive",
+      "description": "Headless Rect behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-rect/rect/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/rect/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-rect/rect/observe-element-rect.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/rect/observe-element-rect.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-roving-focus",
+      "type": "registry:lib",
+      "title": "Roving Focus Primitive",
+      "description": "Headless Roving Focus behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-roving-focus/roving-focus/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/roving-focus/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-roving-focus/roving-focus/roving-focus-group.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/roving-focus/roving-focus-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-scroll-area",
+      "type": "registry:lib",
+      "title": "Scroll Area Primitive",
+      "description": "Headless Scroll Area behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-scroll-area/scroll-area/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/scroll-area/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-scroll-area/scroll-area/scroll-area.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/scroll-area/scroll-area.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-scroll-area/scroll-area/use-state-machine.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/scroll-area/use-state-machine.ts"
+        }
+      ]
+    },
+    {
+      "name": "primitive-select",
+      "type": "registry:lib",
+      "title": "Select Primitive",
+      "description": "Headless Select behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "aria-hidden@^1.2.6",
+        "react-remove-scroll@^2.7.2"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-select/select/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/select/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-select/select/select.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/select/select.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-separator",
+      "type": "registry:lib",
+      "title": "Separator Primitive",
+      "description": "Headless Separator behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-separator/separator/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/separator/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-separator/separator/separator.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/separator/separator.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-slider",
+      "type": "registry:lib",
+      "title": "Slider Primitive",
+      "description": "Headless Slider behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-slider/slider/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/slider/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-slider/slider/slider.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/slider/slider.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-slot",
+      "type": "registry:lib",
+      "title": "Slot Primitive",
+      "description": "Headless Slot behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-slot/slot/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/slot/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-slot/slot/slot.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/slot/slot.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-switch",
+      "type": "registry:lib",
+      "title": "Switch Primitive",
+      "description": "Headless Switch behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-switch/switch/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/switch/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-switch/switch/switch.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/switch/switch.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-tabs",
+      "type": "registry:lib",
+      "title": "Tabs Primitive",
+      "description": "Headless Tabs behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-tabs/tabs/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/tabs/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-tabs/tabs/tabs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/tabs/tabs.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-toast",
+      "type": "registry:lib",
+      "title": "Toast Primitive",
+      "description": "Headless Toast behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-toast/toast/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/toast/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-toast/toast/toast.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/toast/toast.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-toggle",
+      "type": "registry:lib",
+      "title": "Toggle Primitive",
+      "description": "Headless Toggle behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-toggle/toggle/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/toggle/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-toggle/toggle/toggle.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/toggle/toggle.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-tooltip",
+      "type": "registry:lib",
+      "title": "Tooltip Primitive",
+      "description": "Headless Tooltip behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-tooltip/tooltip/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/tooltip/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-tooltip/tooltip/tooltip.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/tooltip/tooltip.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-use-callback-ref",
+      "type": "registry:lib",
+      "title": "Use Callback Ref Primitive",
+      "description": "Headless Use Callback Ref behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-use-callback-ref/use-callback-ref/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-callback-ref/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-use-callback-ref/use-callback-ref/use-callback-ref.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-callback-ref/use-callback-ref.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-use-controllable-state",
+      "type": "registry:lib",
+      "title": "Use Controllable State Primitive",
+      "description": "Headless Use Controllable State behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-use-effect-event#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-use-controllable-state/use-controllable-state/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-controllable-state/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-use-controllable-state/use-controllable-state/use-controllable-state-reducer.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-controllable-state/use-controllable-state-reducer.tsx"
+        },
+        {
+          "path": "registry/virtari/primitive-use-controllable-state/use-controllable-state/use-controllable-state.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-controllable-state/use-controllable-state.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-use-effect-event",
+      "type": "registry:lib",
+      "title": "Use Effect Event Primitive",
+      "description": "Headless Use Effect Event behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-use-effect-event/use-effect-event/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-effect-event/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-use-effect-event/use-effect-event/use-effect-event.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-effect-event/use-effect-event.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-use-escape-keydown",
+      "type": "registry:lib",
+      "title": "Use Escape Keydown Primitive",
+      "description": "Headless Use Escape Keydown behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-use-escape-keydown/use-escape-keydown/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-escape-keydown/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-use-escape-keydown/use-escape-keydown/use-escape-keydown.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-escape-keydown/use-escape-keydown.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-use-is-hydrated",
+      "type": "registry:lib",
+      "title": "Use Is Hydrated Primitive",
+      "description": "Headless Use Is Hydrated behavior used by Virtari components.",
+      "author": "Virtari",
+      "dependencies": [
+        "use-sync-external-store@^1.6.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-use-is-hydrated/use-is-hydrated/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-is-hydrated/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-use-is-hydrated/use-is-hydrated/use-is-hydrated.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-is-hydrated/use-is-hydrated.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-use-layout-effect",
+      "type": "registry:lib",
+      "title": "Use Layout Effect Primitive",
+      "description": "Headless Use Layout Effect behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-use-layout-effect/use-layout-effect/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-layout-effect/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-use-layout-effect/use-layout-effect/use-layout-effect.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-layout-effect/use-layout-effect.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-use-previous",
+      "type": "registry:lib",
+      "title": "Use Previous Primitive",
+      "description": "Headless Use Previous behavior used by Virtari components.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/primitive-use-previous/use-previous/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-previous/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-use-previous/use-previous/use-previous.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-previous/use-previous.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-use-rect",
+      "type": "registry:lib",
+      "title": "Use Rect Primitive",
+      "description": "Headless Use Rect behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-use-rect/use-rect/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-rect/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-use-rect/use-rect/use-rect.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-rect/use-rect.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-use-size",
+      "type": "registry:lib",
+      "title": "Use Size Primitive",
+      "description": "Headless Use Size behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-use-size/use-size/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-size/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-use-size/use-size/use-size.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/use-size/use-size.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-visually-hidden",
+      "type": "registry:lib",
+      "title": "Visually Hidden Primitive",
+      "description": "Headless Visually Hidden behavior used by Virtari components.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/primitive-visually-hidden/visually-hidden/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/visually-hidden/index.ts"
+        },
+        {
+          "path": "registry/virtari/primitive-visually-hidden/visually-hidden/visually-hidden.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/primitives/visually-hidden/visually-hidden.tsx"
+        }
+      ]
+    },
+    {
+      "name": "virtari-primitives",
+      "type": "registry:lib",
+      "title": "Virtari Primitives",
+      "description": "Complete headless primitive collection. Component installs use smaller primitive items automatically.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-accordion#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-alert-dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-arrow#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-avatar#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-checkbox#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-collection#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dismissable-layer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dropdown-menu#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-guards#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-focus-scope#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-label#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-menu#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-number#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popper#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-portal#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-progress#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-scroll-area#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-select#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-separator#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slider#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-switch#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-tabs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-toast#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-toggle#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-tooltip#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-effect-event#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-escape-keydown#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-is-hydrated#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-rect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0"
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Accordion source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-accordion#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@tabler/icons-react@^3.0.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/accordion/Accordion.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/accordion/Accordion.css"
+        },
+        {
+          "path": "registry/virtari/accordion/Accordion.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/accordion/Accordion.tokens.css"
+        },
+        {
+          "path": "registry/virtari/accordion/Accordion.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/accordion/Accordion.tsx"
+        },
+        {
+          "path": "registry/virtari/accordion/FAQAccordion.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/accordion/FAQAccordion.tsx"
+        },
+        {
+          "path": "registry/virtari/accordion/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/accordion/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/accordion\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Alert source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/alert/Alert.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/alert/Alert.css"
+        },
+        {
+          "path": "registry/virtari/alert/Alert.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/alert/Alert.tokens.css"
+        },
+        {
+          "path": "registry/virtari/alert/Alert.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/alert/Alert.tsx"
+        },
+        {
+          "path": "registry/virtari/alert/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/alert/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/alert\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert Dialog",
+      "description": "Alert Dialog source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-alert-dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/alert-dialog/AlertDialog.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/alert-dialog/AlertDialog.css"
+        },
+        {
+          "path": "registry/virtari/alert-dialog/AlertDialog.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/alert-dialog/AlertDialog.tsx"
+        },
+        {
+          "path": "registry/virtari/alert-dialog/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/alert-dialog/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/alert-dialog\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "Avatar source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-avatar#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/avatar/Avatar.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/avatar/Avatar.css"
+        },
+        {
+          "path": "registry/virtari/avatar/Avatar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/avatar/Avatar.tsx"
+        },
+        {
+          "path": "registry/virtari/avatar/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/avatar/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/avatar\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Badge source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/badge/Badge.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/badge/Badge.css"
+        },
+        {
+          "path": "registry/virtari/badge/Badge.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/badge/Badge.tokens.css"
+        },
+        {
+          "path": "registry/virtari/badge/Badge.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/badge/Badge.tsx"
+        },
+        {
+          "path": "registry/virtari/badge/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/badge/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/badge\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "bottom-nav",
+      "type": "registry:ui",
+      "title": "Bottom Nav",
+      "description": "Bottom Nav source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/bottom-nav/BottomNav.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/bottom-nav/BottomNav.css"
+        },
+        {
+          "path": "registry/virtari/bottom-nav/BottomNav.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/bottom-nav/BottomNav.tokens.css"
+        },
+        {
+          "path": "registry/virtari/bottom-nav/BottomNav.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/bottom-nav/BottomNav.tsx"
+        },
+        {
+          "path": "registry/virtari/bottom-nav/BottomNavBadge.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/bottom-nav/BottomNavBadge.tsx"
+        },
+        {
+          "path": "registry/virtari/bottom-nav/BottomNavFab.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/bottom-nav/BottomNavFab.tsx"
+        },
+        {
+          "path": "registry/virtari/bottom-nav/BottomNavItem.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/bottom-nav/BottomNavItem.tsx"
+        },
+        {
+          "path": "registry/virtari/bottom-nav/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/bottom-nav/context.ts"
+        },
+        {
+          "path": "registry/virtari/bottom-nav/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/bottom-nav/index.ts"
+        },
+        {
+          "path": "registry/virtari/bottom-nav/useAutoHide.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/bottom-nav/useAutoHide.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/bottom-nav\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Breadcrumb source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/breadcrumb/Breadcrumb.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/breadcrumb/Breadcrumb.css"
+        },
+        {
+          "path": "registry/virtari/breadcrumb/Breadcrumb.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/breadcrumb/Breadcrumb.tokens.css"
+        },
+        {
+          "path": "registry/virtari/breadcrumb/Breadcrumb.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/breadcrumb/Breadcrumb.tsx"
+        },
+        {
+          "path": "registry/virtari/breadcrumb/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/breadcrumb/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/breadcrumb\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Button source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/button/animations.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button/animations.css"
+        },
+        {
+          "path": "registry/virtari/button/Button.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button/Button.css"
+        },
+        {
+          "path": "registry/virtari/button/Button.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button/Button.tokens.css"
+        },
+        {
+          "path": "registry/virtari/button/Button.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button/Button.tsx"
+        },
+        {
+          "path": "registry/virtari/button/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button/context.ts"
+        },
+        {
+          "path": "registry/virtari/button/effects.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button/effects.css"
+        },
+        {
+          "path": "registry/virtari/button/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/button\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button Group",
+      "description": "Button Group source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/button-group/ButtonGroup.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button-group/ButtonGroup.css"
+        },
+        {
+          "path": "registry/virtari/button-group/ButtonGroup.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button-group/ButtonGroup.tokens.css"
+        },
+        {
+          "path": "registry/virtari/button-group/ButtonGroup.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button-group/ButtonGroup.tsx"
+        },
+        {
+          "path": "registry/virtari/button-group/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/button-group/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/button-group\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Card source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/card/Card.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/card/Card.css"
+        },
+        {
+          "path": "registry/virtari/card/Card.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/card/Card.tokens.css"
+        },
+        {
+          "path": "registry/virtari/card/Card.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/card/Card.tsx"
+        },
+        {
+          "path": "registry/virtari/card/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/card/index.ts"
+        },
+        {
+          "path": "registry/virtari/card/useNestedCardRadius.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/card/useNestedCardRadius.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/card\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "carousel",
+      "type": "registry:ui",
+      "title": "Carousel",
+      "description": "Carousel source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "swiper@^11.2.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/carousel/Carousel.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/carousel/Carousel.css"
+        },
+        {
+          "path": "registry/virtari/carousel/Carousel.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/carousel/Carousel.tokens.css"
+        },
+        {
+          "path": "registry/virtari/carousel/Carousel.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/carousel/Carousel.tsx"
+        },
+        {
+          "path": "registry/virtari/carousel/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/carousel/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/carousel\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Checkbox source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-checkbox#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@tabler/icons-react@^3.0.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/checkbox/Checkbox.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/Checkbox.css"
+        },
+        {
+          "path": "registry/virtari/checkbox/Checkbox.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/Checkbox.tokens.css"
+        },
+        {
+          "path": "registry/virtari/checkbox/Checkbox.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/Checkbox.tsx"
+        },
+        {
+          "path": "registry/virtari/checkbox/CheckboxCard.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/CheckboxCard.css"
+        },
+        {
+          "path": "registry/virtari/checkbox/CheckboxCard.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/CheckboxCard.tsx"
+        },
+        {
+          "path": "registry/virtari/checkbox/CheckboxField.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/CheckboxField.css"
+        },
+        {
+          "path": "registry/virtari/checkbox/CheckboxField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/CheckboxField.tsx"
+        },
+        {
+          "path": "registry/virtari/checkbox/CheckboxGroup.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/CheckboxGroup.css"
+        },
+        {
+          "path": "registry/virtari/checkbox/CheckboxGroup.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/CheckboxGroup.tsx"
+        },
+        {
+          "path": "registry/virtari/checkbox/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/context.ts"
+        },
+        {
+          "path": "registry/virtari/checkbox/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/index.ts"
+        },
+        {
+          "path": "registry/virtari/checkbox/PillCheckbox.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/PillCheckbox.css"
+        },
+        {
+          "path": "registry/virtari/checkbox/PillCheckbox.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/checkbox/PillCheckbox.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/checkbox\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "chip",
+      "type": "registry:ui",
+      "title": "Chip",
+      "description": "Chip source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/chip/Chip.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/chip/Chip.css"
+        },
+        {
+          "path": "registry/virtari/chip/Chip.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/chip/Chip.tokens.css"
+        },
+        {
+          "path": "registry/virtari/chip/Chip.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/chip/Chip.tsx"
+        },
+        {
+          "path": "registry/virtari/chip/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/chip/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/chip\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "code",
+      "type": "registry:ui",
+      "title": "Code",
+      "description": "Code source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/copy-button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@codemirror/autocomplete@^6.18.4",
+        "@codemirror/commands@^6.7.1",
+        "@codemirror/lang-css@^6.3.1",
+        "@codemirror/lang-go@^6.0.1",
+        "@codemirror/lang-html@^6.4.9",
+        "@codemirror/lang-javascript@^6.2.2",
+        "@codemirror/lang-json@^6.0.1",
+        "@codemirror/lang-markdown@^6.3.1",
+        "@codemirror/lang-python@^6.1.6",
+        "@codemirror/lang-rust@^6.0.1",
+        "@codemirror/lang-sql@^6.8.0",
+        "@codemirror/lang-xml@^6.1.0",
+        "@codemirror/lang-yaml@^6.1.2",
+        "@codemirror/language@^6.10.6",
+        "@codemirror/search@^6.5.8",
+        "@codemirror/state@^6.5.0",
+        "@codemirror/view@^6.36.0",
+        "@lezer/highlight@^1.2.1",
+        "@uiw/react-codemirror@^4.23.7"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/code/Code.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/Code.css"
+        },
+        {
+          "path": "registry/virtari/code/Code.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/Code.tokens.css"
+        },
+        {
+          "path": "registry/virtari/code/CodeBlock.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/CodeBlock.tsx"
+        },
+        {
+          "path": "registry/virtari/code/CodeEditor.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/CodeEditor.tsx"
+        },
+        {
+          "path": "registry/virtari/code/extensions.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/extensions.ts"
+        },
+        {
+          "path": "registry/virtari/code/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/index.ts"
+        },
+        {
+          "path": "registry/virtari/code/InlineCode.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/InlineCode.tsx"
+        },
+        {
+          "path": "registry/virtari/code/languages.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/languages.ts"
+        },
+        {
+          "path": "registry/virtari/code/StaticCode.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/StaticCode.tsx"
+        },
+        {
+          "path": "registry/virtari/code/theme.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/theme.ts"
+        },
+        {
+          "path": "registry/virtari/code/useCodeLanguage.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/code/useCodeLanguage.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/code\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "Collapsible",
+      "description": "Collapsible source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/collapsible/Collapsible.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/collapsible/Collapsible.css"
+        },
+        {
+          "path": "registry/virtari/collapsible/Collapsible.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/collapsible/Collapsible.tsx"
+        },
+        {
+          "path": "registry/virtari/collapsible/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/collapsible/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/collapsible\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:ui",
+      "title": "Color Picker",
+      "description": "Color Picker source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/color-picker/color-utils.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/color-picker/color-utils.ts"
+        },
+        {
+          "path": "registry/virtari/color-picker/ColorPicker.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/color-picker/ColorPicker.css"
+        },
+        {
+          "path": "registry/virtari/color-picker/ColorPicker.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/color-picker/ColorPicker.tokens.css"
+        },
+        {
+          "path": "registry/virtari/color-picker/ColorPicker.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/color-picker/ColorPicker.tsx"
+        },
+        {
+          "path": "registry/virtari/color-picker/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/color-picker/index.ts"
+        },
+        {
+          "path": "registry/virtari/color-picker/types.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/color-picker/types.ts"
+        },
+        {
+          "path": "registry/virtari/color-picker/useControllableState.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/color-picker/useControllableState.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/color-picker\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "command",
+      "type": "registry:ui",
+      "title": "Command",
+      "description": "Command source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "cmdk@^1.0.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/command/Command.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/command/Command.css"
+        },
+        {
+          "path": "registry/virtari/command/Command.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/command/Command.tokens.css"
+        },
+        {
+          "path": "registry/virtari/command/Command.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/command/Command.tsx"
+        },
+        {
+          "path": "registry/virtari/command/CommandDialog.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/command/CommandDialog.tsx"
+        },
+        {
+          "path": "registry/virtari/command/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/command/index.ts"
+        },
+        {
+          "path": "registry/virtari/command/shortcut.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/command/shortcut.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/command\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "copy-button",
+      "type": "registry:ui",
+      "title": "Copy Button",
+      "description": "Copy Button source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/copy-button/CopyButton.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/copy-button/CopyButton.css"
+        },
+        {
+          "path": "registry/virtari/copy-button/CopyButton.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/copy-button/CopyButton.tokens.css"
+        },
+        {
+          "path": "registry/virtari/copy-button/CopyButton.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/copy-button/CopyButton.tsx"
+        },
+        {
+          "path": "registry/virtari/copy-button/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/copy-button/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/copy-button\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Data Table",
+      "description": "Data Table source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/avatar#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/badge#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/checkbox#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/pagination#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/switch#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@dnd-kit/core@^6.1.0",
+        "@dnd-kit/sortable@^8.0.0 || ^10.0.0",
+        "@dnd-kit/utilities@^3.2.0",
+        "@tabler/icons-react@^3.0.0",
+        "@tanstack/react-table@^8.21.0",
+        "@tanstack/react-virtual@^3.10.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/data-table/bulk/BulkActions.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/bulk/BulkActions.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/bulk/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/bulk/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/cells/ActionsCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/cells/ActionsCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/cells/AvatarCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/cells/AvatarCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/cells/BadgeCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/cells/BadgeCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/cells/CopyableCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/cells/CopyableCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/cells/DateCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/cells/DateCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/cells/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/cells/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/cells/LinkCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/cells/LinkCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/cells/NumberCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/cells/NumberCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/cells/TextCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/cells/TextCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/customize/CustomizeDrawer.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/customize/CustomizeDrawer.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/customize/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/customize/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/DataTable.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/DataTable.css"
+        },
+        {
+          "path": "registry/virtari/data-table/DataTable.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/DataTable.tokens.css"
+        },
+        {
+          "path": "registry/virtari/data-table/DataTable.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/DataTable.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/DataTableContext.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/DataTableContext.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/DataTableNamespace.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/DataTableNamespace.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/dnd/DndProvider.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/dnd/DndProvider.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/dnd/DraggableHeaderCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/dnd/DraggableHeaderCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/dnd/use-column-dnd.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/dnd/use-column-dnd.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/editing/CellEditor.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/editing/CellEditor.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/editing/EditableCell.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/editing/EditableCell.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/editing/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/editing/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/editing/use-cell-edit.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/editing/use-cell-edit.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/filter-bar/FilterBar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filter-bar/FilterBar.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/filter-bar/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filter-bar/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/filter-drawer/FilterConfigPanel.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filter-drawer/FilterConfigPanel.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/filter-drawer/FilterDrawer.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filter-drawer/FilterDrawer.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/filter-drawer/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filter-drawer/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/filter-drawer/types.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filter-drawer/types.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/filters/DateFilter.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filters/DateFilter.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/filters/FilterPopover.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filters/FilterPopover.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/filters/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filters/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/filters/NumberFilter.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filters/NumberFilter.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/filters/SelectFilter.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filters/SelectFilter.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/filters/TextFilter.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/filters/TextFilter.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/index.dnd.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/index.dnd.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/pagination/adapter.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/pagination/adapter.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/pagination/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/pagination/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/preferences.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/preferences.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/toolbar/ActionButtons.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/toolbar/ActionButtons.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/toolbar/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/toolbar/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/toolbar/SearchField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/toolbar/SearchField.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/types.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/types.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/use-auto-fit-column.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/use-auto-fit-column.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/use-column-filter.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/use-column-filter.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/use-column-resize.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/use-column-resize.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/use-controllable-state.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/use-controllable-state.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/use-data-table.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/use-data-table.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/use-keyboard-grid-nav.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/use-keyboard-grid-nav.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/announce.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/announce.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/columns.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/columns.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/compose-refs.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/compose-refs.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/css-vars.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/css-vars.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/data-attrs.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/data-attrs.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/measure-cell.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/measure-cell.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/scroll-sync.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/scroll-sync.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/sticky.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/sticky.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/use-scroll-drag.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/use-scroll-drag.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/utils/use-sticky-stack.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/utils/use-sticky-stack.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/views/Board.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/views/Board.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/views/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/views/index.ts"
+        },
+        {
+          "path": "registry/virtari/data-table/views/List.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/views/List.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/views/ViewModeToggle.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/views/ViewModeToggle.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/views/Views.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/views/Views.tsx"
+        },
+        {
+          "path": "registry/virtari/data-table/virtualizer.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/data-table/virtualizer.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/data-table\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date Picker",
+      "description": "Date Picker source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/radio-group#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@internationalized/date@^3.5.6",
+        "@react-aria/calendar@^3.5.14",
+        "@react-aria/datepicker@^3.11.5",
+        "@react-aria/i18n@^3.12.3",
+        "@react-stately/calendar@^3.5.5",
+        "@react-stately/datepicker@^3.10.3",
+        "@tabler/icons-react@^3.0.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/date-picker/aria-button.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/aria-button.ts"
+        },
+        {
+          "path": "registry/virtari/date-picker/Calendar.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/Calendar.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/Calendar.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/Calendar.tokens.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/Calendar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/Calendar.tsx"
+        },
+        {
+          "path": "registry/virtari/date-picker/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/context.ts"
+        },
+        {
+          "path": "registry/virtari/date-picker/date-utils.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/date-utils.ts"
+        },
+        {
+          "path": "registry/virtari/date-picker/DateField.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/DateField.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/DateField.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/DateField.tokens.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/DateField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/DateField.tsx"
+        },
+        {
+          "path": "registry/virtari/date-picker/DatePicker.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/DatePicker.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/DatePicker.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/DatePicker.tokens.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/DatePicker.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/DatePicker.tsx"
+        },
+        {
+          "path": "registry/virtari/date-picker/DateRangePicker.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/DateRangePicker.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/DateRangePicker.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/DateRangePicker.tokens.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/DateRangePicker.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/DateRangePicker.tsx"
+        },
+        {
+          "path": "registry/virtari/date-picker/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/index.ts"
+        },
+        {
+          "path": "registry/virtari/date-picker/picker-overlay.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/picker-overlay.tsx"
+        },
+        {
+          "path": "registry/virtari/date-picker/Presets.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/Presets.tsx"
+        },
+        {
+          "path": "registry/virtari/date-picker/TimeField.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/TimeField.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/TimeField.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/TimeField.tokens.css"
+        },
+        {
+          "path": "registry/virtari/date-picker/TimeField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/TimeField.tsx"
+        },
+        {
+          "path": "registry/virtari/date-picker/Wheel.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/date-picker/Wheel.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/date-picker\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Dialog source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@tabler/icons-react@^3.0.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/dialog/Dialog.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/dialog/Dialog.css"
+        },
+        {
+          "path": "registry/virtari/dialog/Dialog.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/dialog/Dialog.tokens.css"
+        },
+        {
+          "path": "registry/virtari/dialog/Dialog.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/dialog/Dialog.tsx"
+        },
+        {
+          "path": "registry/virtari/dialog/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/dialog/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/dialog\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "Drawer source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/drawer/Drawer.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/drawer/Drawer.css"
+        },
+        {
+          "path": "registry/virtari/drawer/Drawer.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/drawer/Drawer.tokens.css"
+        },
+        {
+          "path": "registry/virtari/drawer/Drawer.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/drawer/Drawer.tsx"
+        },
+        {
+          "path": "registry/virtari/drawer/DrawerContext.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/drawer/DrawerContext.tsx"
+        },
+        {
+          "path": "registry/virtari/drawer/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/drawer/index.ts"
+        },
+        {
+          "path": "registry/virtari/drawer/useDrawerDrag.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/drawer/useDrawerDrag.ts"
+        },
+        {
+          "path": "registry/virtari/drawer/utils.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/drawer/utils.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/drawer\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown Menu",
+      "description": "Dropdown Menu source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-dropdown-menu#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/dropdown-menu/DropdownMenu.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/dropdown-menu/DropdownMenu.css"
+        },
+        {
+          "path": "registry/virtari/dropdown-menu/DropdownMenu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/dropdown-menu/DropdownMenu.tsx"
+        },
+        {
+          "path": "registry/virtari/dropdown-menu/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/dropdown-menu/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/dropdown-menu\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "editor",
+      "type": "registry:ui",
+      "title": "Editor",
+      "description": "Editor source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/code#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/color-picker#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/file-upload#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/scroll-area#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@lexical/code@^0.38.2",
+        "@lexical/extension@^0.38.2",
+        "@lexical/history@^0.38.2",
+        "@lexical/html@^0.38.2",
+        "@lexical/link@^0.38.2",
+        "@lexical/list@^0.38.2",
+        "@lexical/mark@^0.38.2",
+        "@lexical/markdown@^0.38.2",
+        "@lexical/overflow@^0.38.2",
+        "@lexical/react@^0.38.2",
+        "@lexical/rich-text@^0.38.2",
+        "@lexical/selection@^0.38.2",
+        "@lexical/table@^0.38.2",
+        "@lexical/utils@^0.38.2",
+        "lexical@^0.38.2"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/editor/context.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/context.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/defaults.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/defaults.ts"
+        },
+        {
+          "path": "registry/virtari/editor/editor-shortcuts.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/editor-shortcuts.ts"
+        },
+        {
+          "path": "registry/virtari/editor/editor-utils.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/editor-utils.ts"
+        },
+        {
+          "path": "registry/virtari/editor/Editor.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/Editor.css"
+        },
+        {
+          "path": "registry/virtari/editor/Editor.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/Editor.tokens.css"
+        },
+        {
+          "path": "registry/virtari/editor/Editor.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/Editor.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorCodeHighlightPlugin.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorCodeHighlightPlugin.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorCommentsPanel.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorCommentsPanel.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorComposer.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorComposer.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorDraggableBlocks.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorDraggableBlocks.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorDropdown.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorDropdown.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorField.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorFloatingToolbar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorFloatingToolbar.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorInsertMenu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorInsertMenu.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorMediaDialog.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorMediaDialog.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorMediaNode.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorMediaNode.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorModeSwitcher.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorModeSwitcher.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorShortcutsPlugin.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorShortcutsPlugin.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorSlashMenu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorSlashMenu.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorSolidColorPicker.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorSolidColorPicker.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorSourcePanel.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorSourcePanel.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorStatusBar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorStatusBar.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorSurface.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorSurface.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorTableHoverActions.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorTableHoverActions.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorToolbar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorToolbar.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/EditorTrailingParagraphPlugin.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/EditorTrailingParagraphPlugin.tsx"
+        },
+        {
+          "path": "registry/virtari/editor/index.core.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/index.core.ts"
+        },
+        {
+          "path": "registry/virtari/editor/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/index.ts"
+        },
+        {
+          "path": "registry/virtari/editor/theme.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/theme.ts"
+        },
+        {
+          "path": "registry/virtari/editor/types.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/editor/types.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/editor\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:ui",
+      "title": "Empty State",
+      "description": "Empty State source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/empty-state/EmptyState.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/empty-state/EmptyState.css"
+        },
+        {
+          "path": "registry/virtari/empty-state/EmptyState.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/empty-state/EmptyState.tokens.css"
+        },
+        {
+          "path": "registry/virtari/empty-state/EmptyState.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/empty-state/EmptyState.tsx"
+        },
+        {
+          "path": "registry/virtari/empty-state/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/empty-state/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/empty-state\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "fieldset",
+      "type": "registry:ui",
+      "title": "Fieldset",
+      "description": "Fieldset source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/fieldset/Field.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/fieldset/Field.tsx"
+        },
+        {
+          "path": "registry/virtari/fieldset/Fieldset.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/fieldset/Fieldset.css"
+        },
+        {
+          "path": "registry/virtari/fieldset/Fieldset.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/fieldset/Fieldset.tokens.css"
+        },
+        {
+          "path": "registry/virtari/fieldset/Fieldset.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/fieldset/Fieldset.tsx"
+        },
+        {
+          "path": "registry/virtari/fieldset/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/fieldset/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/fieldset\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "file-upload",
+      "type": "registry:ui",
+      "title": "File Upload",
+      "description": "File Upload source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/progress#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "react-dropzone@^14.2.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/file-upload/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/file-upload/context.ts"
+        },
+        {
+          "path": "registry/virtari/file-upload/FileUpload.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/file-upload/FileUpload.css"
+        },
+        {
+          "path": "registry/virtari/file-upload/FileUpload.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/file-upload/FileUpload.tokens.css"
+        },
+        {
+          "path": "registry/virtari/file-upload/FileUpload.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/file-upload/FileUpload.tsx"
+        },
+        {
+          "path": "registry/virtari/file-upload/format.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/file-upload/format.ts"
+        },
+        {
+          "path": "registry/virtari/file-upload/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/file-upload/index.ts"
+        },
+        {
+          "path": "registry/virtari/file-upload/types.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/file-upload/types.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/file-upload\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "flag",
+      "type": "registry:ui",
+      "title": "Flag",
+      "description": "Flag source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/flag/Flag.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/Flag.css"
+        },
+        {
+          "path": "registry/virtari/flag/Flag.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/Flag.tokens.css"
+        },
+        {
+          "path": "registry/virtari/flag/Flag.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/Flag.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/codes.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/codes.ts"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAd.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAd.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAf.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAf.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAq.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAq.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagArab.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagArab.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAsean.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAsean.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAx.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAx.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagAz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagAz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBb.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBb.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBd.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBd.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBf.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBf.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBh.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBh.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBj.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBj.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBq.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBq.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBv.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBv.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBy.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagBz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagBz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCd.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCd.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCefta.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCefta.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCf.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCf.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCh.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCh.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCp.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCp.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCv.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCv.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCx.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCx.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCy.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagCz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagCz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagDe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagDe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagDg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagDg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagDj.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagDj.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagDk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagDk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagDm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagDm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagDo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagDo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagDz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagDz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEac.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEac.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEh.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEh.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEsCt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEsCt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEsGa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEsGa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEsPv.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEsPv.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagEu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagEu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagFi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagFi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagFj.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagFj.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagFk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagFk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagFm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagFm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagFo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagFo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagFr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagFr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGb.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGb.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGbEng.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGbEng.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGbNir.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGbNir.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGbSct.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGbSct.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGbWls.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGbWls.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGd.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGd.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGf.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGf.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGh.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGh.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGp.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGp.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGq.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGq.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagGy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagGy.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagHk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagHk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagHm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagHm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagHn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagHn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagHr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagHr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagHt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagHt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagHu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagHu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagId.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagId.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIq.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIq.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagIt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagIt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagJe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagJe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagJm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagJm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagJo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagJo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagJp.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagJp.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKh.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKh.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKp.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKp.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKy.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagKz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagKz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLb.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLb.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLv.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLv.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagLy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagLy.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMd.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMd.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMf.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMf.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMh.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMh.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMp.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMp.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMq.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMq.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMv.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMv.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMx.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMx.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMy.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagMz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagMz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNf.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNf.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNp.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNp.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagNz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagNz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagOm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagOm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPf.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPf.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPh.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPh.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagPy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagPy.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagQa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagQa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagRe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagRe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagRo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagRo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagRs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagRs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagRu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagRu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagRw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagRw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSb.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSb.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSd.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSd.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSh.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSh.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagShAc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagShAc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagShHl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagShHl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagShTa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagShTa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSj.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSj.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSv.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSv.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSx.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSx.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSy.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagSz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagSz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTd.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTd.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTf.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTf.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTh.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTh.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTj.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTj.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTl.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTo.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTo.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTr.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTr.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTv.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTv.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagTz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagTz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagUa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagUa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagUg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagUg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagUm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagUm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagUn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagUn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagUs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagUs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagUy.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagUy.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagUz.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagUz.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagVa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagVa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagVc.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagVc.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagVe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagVe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagVg.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagVg.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagVi.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagVi.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagVn.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagVn.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagVu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagVu.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagWf.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagWf.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagWs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagWs.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagXk.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagXk.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagXx.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagXx.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagYe.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagYe.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagYt.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagYt.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagZa.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagZa.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagZm.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagZm.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/flags/FlagZw.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/flags/FlagZw.tsx"
+        },
+        {
+          "path": "registry/virtari/flag/generated/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/index.ts"
+        },
+        {
+          "path": "registry/virtari/flag/generated/manifest.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/generated/manifest.ts"
+        },
+        {
+          "path": "registry/virtari/flag/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flag/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/flag\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "flow",
+      "type": "registry:ui",
+      "title": "Flow",
+      "description": "Flow source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@xyflow/react@^12.10.2"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/flow/FlowBadgeEdge.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flow/FlowBadgeEdge.tsx"
+        },
+        {
+          "path": "registry/virtari/flow/FlowCanvas.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flow/FlowCanvas.tsx"
+        },
+        {
+          "path": "registry/virtari/flow/FlowHandle.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flow/FlowHandle.tsx"
+        },
+        {
+          "path": "registry/virtari/flow/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flow/index.ts"
+        },
+        {
+          "path": "registry/virtari/flow/layout.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flow/layout.ts"
+        },
+        {
+          "path": "registry/virtari/flow/ReactFlow.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flow/ReactFlow.css"
+        },
+        {
+          "path": "registry/virtari/flow/ReactFlow.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flow/ReactFlow.tokens.css"
+        },
+        {
+          "path": "registry/virtari/flow/useFlowPersistence.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/flow/useFlowPersistence.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/flow\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "form",
+      "type": "registry:ui",
+      "title": "Form",
+      "description": "Form source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/label#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "react-hook-form@^7.0.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/form/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/context.ts"
+        },
+        {
+          "path": "registry/virtari/form/Form.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/Form.css"
+        },
+        {
+          "path": "registry/virtari/form/Form.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/Form.tokens.css"
+        },
+        {
+          "path": "registry/virtari/form/Form.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/Form.tsx"
+        },
+        {
+          "path": "registry/virtari/form/FormControl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/FormControl.tsx"
+        },
+        {
+          "path": "registry/virtari/form/FormDescription.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/FormDescription.tsx"
+        },
+        {
+          "path": "registry/virtari/form/FormField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/FormField.tsx"
+        },
+        {
+          "path": "registry/virtari/form/FormItem.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/FormItem.tsx"
+        },
+        {
+          "path": "registry/virtari/form/FormLabel.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/FormLabel.tsx"
+        },
+        {
+          "path": "registry/virtari/form/FormMessage.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/FormMessage.tsx"
+        },
+        {
+          "path": "registry/virtari/form/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/index.ts"
+        },
+        {
+          "path": "registry/virtari/form/use-form-field.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/form/use-form-field.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/form\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "header",
+      "type": "registry:ui",
+      "title": "Header",
+      "description": "Header source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/header/Header.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/header/Header.css"
+        },
+        {
+          "path": "registry/virtari/header/Header.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/header/Header.tokens.css"
+        },
+        {
+          "path": "registry/virtari/header/Header.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/header/Header.tsx"
+        },
+        {
+          "path": "registry/virtari/header/HeaderRow.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/header/HeaderRow.tsx"
+        },
+        {
+          "path": "registry/virtari/header/HeaderSection.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/header/HeaderSection.tsx"
+        },
+        {
+          "path": "registry/virtari/header/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/header/index.ts"
+        },
+        {
+          "path": "registry/virtari/header/useStickyBehavior.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/header/useStickyBehavior.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/header\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "icons",
+      "type": "registry:ui",
+      "title": "Icons",
+      "description": "Icons source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@tabler/icons-react@^3.0.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/icons/Icon.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/icons/Icon.css"
+        },
+        {
+          "path": "registry/virtari/icons/Icon.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/icons/Icon.tokens.css"
+        },
+        {
+          "path": "registry/virtari/icons/Icon.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/icons/Icon.tsx"
+        },
+        {
+          "path": "registry/virtari/icons/IconProvider.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/icons/IconProvider.tsx"
+        },
+        {
+          "path": "registry/virtari/icons/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/icons/index.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/icons\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Input source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/input/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/input/index.ts"
+        },
+        {
+          "path": "registry/virtari/input/Input.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/input/Input.css"
+        },
+        {
+          "path": "registry/virtari/input/Input.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/input/Input.tsx"
+        },
+        {
+          "path": "registry/virtari/input/InputField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/input/InputField.tsx"
+        },
+        {
+          "path": "registry/virtari/input/PasswordInput.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/input/PasswordInput.tsx"
+        },
+        {
+          "path": "registry/virtari/input/PasswordInputField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/input/PasswordInputField.tsx"
+        },
+        {
+          "path": "registry/virtari/input/passwordStrength.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/input/passwordStrength.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/input\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Kbd source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/kbd/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/kbd/index.ts"
+        },
+        {
+          "path": "registry/virtari/kbd/Kbd.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/kbd/Kbd.css"
+        },
+        {
+          "path": "registry/virtari/kbd/Kbd.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/kbd/Kbd.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/kbd\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Label source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-label#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/label/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/label/index.ts"
+        },
+        {
+          "path": "registry/virtari/label/Label.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/label/Label.css"
+        },
+        {
+          "path": "registry/virtari/label/Label.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/label/Label.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/label\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "language-picker",
+      "type": "registry:ui",
+      "title": "Language Picker",
+      "description": "Language Picker source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/flag#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/language-picker/data/localeToFlag.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/language-picker/data/localeToFlag.ts"
+        },
+        {
+          "path": "registry/virtari/language-picker/generated/languages.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/language-picker/generated/languages.ts"
+        },
+        {
+          "path": "registry/virtari/language-picker/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/language-picker/index.ts"
+        },
+        {
+          "path": "registry/virtari/language-picker/internals.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/language-picker/internals.ts"
+        },
+        {
+          "path": "registry/virtari/language-picker/LanguageLabel.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/language-picker/LanguageLabel.tsx"
+        },
+        {
+          "path": "registry/virtari/language-picker/LanguageMark.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/language-picker/LanguageMark.tsx"
+        },
+        {
+          "path": "registry/virtari/language-picker/LanguagePicker.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/language-picker/LanguagePicker.css"
+        },
+        {
+          "path": "registry/virtari/language-picker/LanguagePicker.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/language-picker/LanguagePicker.tokens.css"
+        },
+        {
+          "path": "registry/virtari/language-picker/LanguagePicker.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/language-picker/LanguagePicker.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/language-picker\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "layout",
+      "type": "registry:ui",
+      "title": "Layout",
+      "description": "Layout source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/layout/Center.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Center.css"
+        },
+        {
+          "path": "registry/virtari/layout/Center.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Center.tokens.css"
+        },
+        {
+          "path": "registry/virtari/layout/Center.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Center.tsx"
+        },
+        {
+          "path": "registry/virtari/layout/Cluster.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Cluster.css"
+        },
+        {
+          "path": "registry/virtari/layout/Cluster.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Cluster.tokens.css"
+        },
+        {
+          "path": "registry/virtari/layout/Cluster.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Cluster.tsx"
+        },
+        {
+          "path": "registry/virtari/layout/Col.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Col.css"
+        },
+        {
+          "path": "registry/virtari/layout/Col.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Col.tokens.css"
+        },
+        {
+          "path": "registry/virtari/layout/Col.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Col.tsx"
+        },
+        {
+          "path": "registry/virtari/layout/Container.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Container.css"
+        },
+        {
+          "path": "registry/virtari/layout/Container.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Container.tokens.css"
+        },
+        {
+          "path": "registry/virtari/layout/Container.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Container.tsx"
+        },
+        {
+          "path": "registry/virtari/layout/Grid.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Grid.css"
+        },
+        {
+          "path": "registry/virtari/layout/Grid.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Grid.tokens.css"
+        },
+        {
+          "path": "registry/virtari/layout/Grid.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Grid.tsx"
+        },
+        {
+          "path": "registry/virtari/layout/index.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/index.css"
+        },
+        {
+          "path": "registry/virtari/layout/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/index.ts"
+        },
+        {
+          "path": "registry/virtari/layout/Main.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Main.tsx"
+        },
+        {
+          "path": "registry/virtari/layout/Row.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Row.css"
+        },
+        {
+          "path": "registry/virtari/layout/Row.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Row.tokens.css"
+        },
+        {
+          "path": "registry/virtari/layout/Row.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Row.tsx"
+        },
+        {
+          "path": "registry/virtari/layout/Section.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Section.css"
+        },
+        {
+          "path": "registry/virtari/layout/Section.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Section.tokens.css"
+        },
+        {
+          "path": "registry/virtari/layout/Section.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Section.tsx"
+        },
+        {
+          "path": "registry/virtari/layout/Sidebar.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Sidebar.css"
+        },
+        {
+          "path": "registry/virtari/layout/Sidebar.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Sidebar.tokens.css"
+        },
+        {
+          "path": "registry/virtari/layout/Sidebar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Sidebar.tsx"
+        },
+        {
+          "path": "registry/virtari/layout/Stack.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Stack.css"
+        },
+        {
+          "path": "registry/virtari/layout/Stack.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Stack.tokens.css"
+        },
+        {
+          "path": "registry/virtari/layout/Stack.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/layout/Stack.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/layout\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "nav",
+      "type": "registry:ui",
+      "title": "Nav",
+      "description": "Nav source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@floating-ui/react@^0.27.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/nav/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/nav/context.ts"
+        },
+        {
+          "path": "registry/virtari/nav/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/nav/index.ts"
+        },
+        {
+          "path": "registry/virtari/nav/Nav.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/nav/Nav.css"
+        },
+        {
+          "path": "registry/virtari/nav/Nav.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/nav/Nav.tokens.css"
+        },
+        {
+          "path": "registry/virtari/nav/Nav.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/nav/Nav.tsx"
+        },
+        {
+          "path": "registry/virtari/nav/NavItem.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/nav/NavItem.tsx"
+        },
+        {
+          "path": "registry/virtari/nav/NavList.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/nav/NavList.tsx"
+        },
+        {
+          "path": "registry/virtari/nav/NavSubmenu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/nav/NavSubmenu.tsx"
+        },
+        {
+          "path": "registry/virtari/nav/useSubmenu.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/nav/useSubmenu.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/nav\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "number-input",
+      "type": "registry:ui",
+      "title": "Number Input",
+      "description": "Number Input source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/number-input/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/number-input/index.ts"
+        },
+        {
+          "path": "registry/virtari/number-input/NumberInput.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/number-input/NumberInput.css"
+        },
+        {
+          "path": "registry/virtari/number-input/NumberInput.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/number-input/NumberInput.tokens.css"
+        },
+        {
+          "path": "registry/virtari/number-input/NumberInput.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/number-input/NumberInput.tsx"
+        },
+        {
+          "path": "registry/virtari/number-input/NumberInputField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/number-input/NumberInputField.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/number-input\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "otp-input",
+      "type": "registry:ui",
+      "title": "Otp Input",
+      "description": "Otp Input source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/otp-input/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/otp-input/index.ts"
+        },
+        {
+          "path": "registry/virtari/otp-input/OtpInput.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/otp-input/OtpInput.css"
+        },
+        {
+          "path": "registry/virtari/otp-input/OtpInput.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/otp-input/OtpInput.tokens.css"
+        },
+        {
+          "path": "registry/virtari/otp-input/OtpInput.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/otp-input/OtpInput.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/otp-input\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Pagination source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/pagination/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/pagination/context.ts"
+        },
+        {
+          "path": "registry/virtari/pagination/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/pagination/index.ts"
+        },
+        {
+          "path": "registry/virtari/pagination/Pagination.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/pagination/Pagination.css"
+        },
+        {
+          "path": "registry/virtari/pagination/Pagination.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/pagination/Pagination.tokens.css"
+        },
+        {
+          "path": "registry/virtari/pagination/Pagination.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/pagination/Pagination.tsx"
+        },
+        {
+          "path": "registry/virtari/pagination/use-pagination.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/pagination/use-pagination.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/pagination\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "phone-input",
+      "type": "registry:ui",
+      "title": "Phone Input",
+      "description": "Phone Input source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/flag#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "libphonenumber-js@^1.11.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/phone-input/digits.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/digits.ts"
+        },
+        {
+          "path": "registry/virtari/phone-input/generated/countries.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/generated/countries.ts"
+        },
+        {
+          "path": "registry/virtari/phone-input/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/index.ts"
+        },
+        {
+          "path": "registry/virtari/phone-input/lazy-libphonenumber.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/lazy-libphonenumber.ts"
+        },
+        {
+          "path": "registry/virtari/phone-input/PhoneInput.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/PhoneInput.css"
+        },
+        {
+          "path": "registry/virtari/phone-input/PhoneInput.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/PhoneInput.tokens.css"
+        },
+        {
+          "path": "registry/virtari/phone-input/PhoneInput.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/PhoneInput.tsx"
+        },
+        {
+          "path": "registry/virtari/phone-input/PhoneInputCountrySelect.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/PhoneInputCountrySelect.tsx"
+        },
+        {
+          "path": "registry/virtari/phone-input/use-phone-input.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/use-phone-input.ts"
+        },
+        {
+          "path": "registry/virtari/phone-input/utils.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/phone-input/utils.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/phone-input\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Popover source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/popover/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/popover/index.ts"
+        },
+        {
+          "path": "registry/virtari/popover/Popover.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/popover/Popover.css"
+        },
+        {
+          "path": "registry/virtari/popover/Popover.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/popover/Popover.tokens.css"
+        },
+        {
+          "path": "registry/virtari/popover/Popover.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/popover/Popover.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/popover\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Progress source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-progress#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/progress/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/progress/index.ts"
+        },
+        {
+          "path": "registry/virtari/progress/Progress.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/progress/Progress.css"
+        },
+        {
+          "path": "registry/virtari/progress/Progress.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/progress/Progress.tokens.css"
+        },
+        {
+          "path": "registry/virtari/progress/Progress.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/progress/Progress.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/progress\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio Group",
+      "description": "Radio Group source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@tabler/icons-react@^3.0.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/radio-group/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/context.ts"
+        },
+        {
+          "path": "registry/virtari/radio-group/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/index.ts"
+        },
+        {
+          "path": "registry/virtari/radio-group/PillRadio.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/PillRadio.css"
+        },
+        {
+          "path": "registry/virtari/radio-group/PillRadio.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/PillRadio.tsx"
+        },
+        {
+          "path": "registry/virtari/radio-group/RadioCard.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/RadioCard.css"
+        },
+        {
+          "path": "registry/virtari/radio-group/RadioCard.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/RadioCard.tsx"
+        },
+        {
+          "path": "registry/virtari/radio-group/RadioField.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/RadioField.css"
+        },
+        {
+          "path": "registry/virtari/radio-group/RadioField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/RadioField.tsx"
+        },
+        {
+          "path": "registry/virtari/radio-group/RadioGroup.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/RadioGroup.css"
+        },
+        {
+          "path": "registry/virtari/radio-group/RadioGroup.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/RadioGroup.tokens.css"
+        },
+        {
+          "path": "registry/virtari/radio-group/RadioGroup.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/RadioGroup.tsx"
+        },
+        {
+          "path": "registry/virtari/radio-group/SegmentedRadio.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/SegmentedRadio.css"
+        },
+        {
+          "path": "registry/virtari/radio-group/SegmentedRadio.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/SegmentedRadio.tsx"
+        },
+        {
+          "path": "registry/virtari/radio-group/useRadioDirection.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/radio-group/useRadioDirection.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/radio-group\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "scroll-area",
+      "type": "registry:ui",
+      "title": "Scroll Area",
+      "description": "Scroll Area source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-scroll-area#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/scroll-area/hooks/use-drag-scroll.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/scroll-area/hooks/use-drag-scroll.ts"
+        },
+        {
+          "path": "registry/virtari/scroll-area/hooks/use-edge-state.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/scroll-area/hooks/use-edge-state.ts"
+        },
+        {
+          "path": "registry/virtari/scroll-area/hooks/use-infinite-scroll.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/scroll-area/hooks/use-infinite-scroll.ts"
+        },
+        {
+          "path": "registry/virtari/scroll-area/hooks/use-wheel-horizontal.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/scroll-area/hooks/use-wheel-horizontal.ts"
+        },
+        {
+          "path": "registry/virtari/scroll-area/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/scroll-area/index.ts"
+        },
+        {
+          "path": "registry/virtari/scroll-area/ScrollArea.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/scroll-area/ScrollArea.css"
+        },
+        {
+          "path": "registry/virtari/scroll-area/ScrollArea.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/scroll-area/ScrollArea.tokens.css"
+        },
+        {
+          "path": "registry/virtari/scroll-area/ScrollArea.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/scroll-area/ScrollArea.tsx"
+        },
+        {
+          "path": "registry/virtari/scroll-area/ScrollAreaArrow.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/scroll-area/ScrollAreaArrow.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/scroll-area\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:ui",
+      "title": "Segmented Control",
+      "description": "Segmented Control source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/segmented-control/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/segmented-control/index.ts"
+        },
+        {
+          "path": "registry/virtari/segmented-control/SegmentedControl.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/segmented-control/SegmentedControl.css"
+        },
+        {
+          "path": "registry/virtari/segmented-control/SegmentedControl.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/segmented-control/SegmentedControl.tokens.css"
+        },
+        {
+          "path": "registry/virtari/segmented-control/SegmentedControl.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/segmented-control/SegmentedControl.tsx"
+        },
+        {
+          "path": "registry/virtari/segmented-control/use-segmented-indicator.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/segmented-control/use-segmented-indicator.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/segmented-control\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Select source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-select#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@tabler/icons-react@^3.0.0",
+        "@tanstack/react-virtual@^3.10.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/select/Combobox.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/Combobox.css"
+        },
+        {
+          "path": "registry/virtari/select/Combobox.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/Combobox.tokens.css"
+        },
+        {
+          "path": "registry/virtari/select/Combobox.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/Combobox.tsx"
+        },
+        {
+          "path": "registry/virtari/select/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/index.ts"
+        },
+        {
+          "path": "registry/virtari/select/Select.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/Select.css"
+        },
+        {
+          "path": "registry/virtari/select/Select.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/Select.tokens.css"
+        },
+        {
+          "path": "registry/virtari/select/Select.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/Select.tsx"
+        },
+        {
+          "path": "registry/virtari/select/SelectField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/SelectField.tsx"
+        },
+        {
+          "path": "registry/virtari/select/use-combobox.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/use-combobox.ts"
+        },
+        {
+          "path": "registry/virtari/select/virtualizer.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/select/virtualizer.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/select\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "Separator source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-separator#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/separator/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/separator/index.ts"
+        },
+        {
+          "path": "registry/virtari/separator/Separator.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/separator/Separator.css"
+        },
+        {
+          "path": "registry/virtari/separator/Separator.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/separator/Separator.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/separator\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "Sidebar source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/sidebar/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/sidebar/index.ts"
+        },
+        {
+          "path": "registry/virtari/sidebar/Sidebar.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/sidebar/Sidebar.css"
+        },
+        {
+          "path": "registry/virtari/sidebar/Sidebar.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/sidebar/Sidebar.tokens.css"
+        },
+        {
+          "path": "registry/virtari/sidebar/Sidebar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/sidebar/Sidebar.tsx"
+        },
+        {
+          "path": "registry/virtari/sidebar/SidebarParts.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/sidebar/SidebarParts.tsx"
+        },
+        {
+          "path": "registry/virtari/sidebar/SidebarTrigger.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/sidebar/SidebarTrigger.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/sidebar\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Skeleton source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/skeleton/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/skeleton/index.ts"
+        },
+        {
+          "path": "registry/virtari/skeleton/Skeleton.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/skeleton/Skeleton.css"
+        },
+        {
+          "path": "registry/virtari/skeleton/Skeleton.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/skeleton/Skeleton.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/skeleton\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Slider source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-slider#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/slider/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/slider/index.ts"
+        },
+        {
+          "path": "registry/virtari/slider/Slider.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/slider/Slider.css"
+        },
+        {
+          "path": "registry/virtari/slider/Slider.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/slider/Slider.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/slider\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "Spinner source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/spinner/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/spinner/index.ts"
+        },
+        {
+          "path": "registry/virtari/spinner/Spinner.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/spinner/Spinner.css"
+        },
+        {
+          "path": "registry/virtari/spinner/Spinner.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/spinner/Spinner.tokens.css"
+        },
+        {
+          "path": "registry/virtari/spinner/Spinner.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/spinner/Spinner.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/spinner\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "title": "Stepper",
+      "description": "Stepper source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/stepper/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/stepper/context.ts"
+        },
+        {
+          "path": "registry/virtari/stepper/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/stepper/index.ts"
+        },
+        {
+          "path": "registry/virtari/stepper/Stepper.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/stepper/Stepper.css"
+        },
+        {
+          "path": "registry/virtari/stepper/Stepper.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/stepper/Stepper.tokens.css"
+        },
+        {
+          "path": "registry/virtari/stepper/Stepper.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/stepper/Stepper.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/stepper\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Switch source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-switch#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/switch/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/switch/index.ts"
+        },
+        {
+          "path": "registry/virtari/switch/Switch.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/switch/Switch.css"
+        },
+        {
+          "path": "registry/virtari/switch/Switch.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/switch/Switch.tsx"
+        },
+        {
+          "path": "registry/virtari/switch/useSwitchDrag.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/switch/useSwitchDrag.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/switch\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Table source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/table/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/table/index.ts"
+        },
+        {
+          "path": "registry/virtari/table/Table.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/table/Table.css"
+        },
+        {
+          "path": "registry/virtari/table/Table.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/table/Table.tokens.css"
+        },
+        {
+          "path": "registry/virtari/table/Table.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/table/Table.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/table\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Tabs source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-tabs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/tabs/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/index.ts"
+        },
+        {
+          "path": "registry/virtari/tabs/Tabs.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/Tabs.css"
+        },
+        {
+          "path": "registry/virtari/tabs/Tabs.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/Tabs.tokens.css"
+        },
+        {
+          "path": "registry/virtari/tabs/Tabs.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/Tabs.tsx"
+        },
+        {
+          "path": "registry/virtari/tabs/TabsPanels.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/TabsPanels.tsx"
+        },
+        {
+          "path": "registry/virtari/tabs/use-carousel-swipe.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/use-carousel-swipe.ts"
+        },
+        {
+          "path": "registry/virtari/tabs/use-responsive-orientation.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/use-responsive-orientation.ts"
+        },
+        {
+          "path": "registry/virtari/tabs/use-tabs-auto-scroll.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/use-tabs-auto-scroll.ts"
+        },
+        {
+          "path": "registry/virtari/tabs/use-tabs-indicator.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/use-tabs-indicator.ts"
+        },
+        {
+          "path": "registry/virtari/tabs/use-tabs-swipe.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tabs/use-tabs-swipe.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/tabs\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "tag-input",
+      "type": "registry:ui",
+      "title": "Tag Input",
+      "description": "Tag Input source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/tag-input/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tag-input/index.ts"
+        },
+        {
+          "path": "registry/virtari/tag-input/TagInput.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tag-input/TagInput.css"
+        },
+        {
+          "path": "registry/virtari/tag-input/TagInput.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tag-input/TagInput.tokens.css"
+        },
+        {
+          "path": "registry/virtari/tag-input/TagInput.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tag-input/TagInput.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/tag-input\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "text",
+      "type": "registry:ui",
+      "title": "Text",
+      "description": "Text source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/text/Heading.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/text/Heading.css"
+        },
+        {
+          "path": "registry/virtari/text/Heading.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/text/Heading.tokens.css"
+        },
+        {
+          "path": "registry/virtari/text/Heading.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/text/Heading.tsx"
+        },
+        {
+          "path": "registry/virtari/text/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/text/index.ts"
+        },
+        {
+          "path": "registry/virtari/text/Text.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/text/Text.css"
+        },
+        {
+          "path": "registry/virtari/text/Text.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/text/Text.tokens.css"
+        },
+        {
+          "path": "registry/virtari/text/Text.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/text/Text.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/text\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Textarea source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/textarea/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/textarea/index.ts"
+        },
+        {
+          "path": "registry/virtari/textarea/Textarea.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/textarea/Textarea.css"
+        },
+        {
+          "path": "registry/virtari/textarea/Textarea.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/textarea/Textarea.tsx"
+        },
+        {
+          "path": "registry/virtari/textarea/TextareaField.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/textarea/TextareaField.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/textarea\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "Timeline source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/timeline/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/timeline/index.ts"
+        },
+        {
+          "path": "registry/virtari/timeline/Timeline.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/timeline/Timeline.css"
+        },
+        {
+          "path": "registry/virtari/timeline/Timeline.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/timeline/Timeline.tokens.css"
+        },
+        {
+          "path": "registry/virtari/timeline/Timeline.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/timeline/Timeline.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/timeline\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Toast source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-toast#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@tabler/icons-react@^3.0.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/toast/icons.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/icons.tsx"
+        },
+        {
+          "path": "registry/virtari/toast/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/index.ts"
+        },
+        {
+          "path": "registry/virtari/toast/primitives.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/primitives.tsx"
+        },
+        {
+          "path": "registry/virtari/toast/store.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/store.ts"
+        },
+        {
+          "path": "registry/virtari/toast/Toast.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/Toast.css"
+        },
+        {
+          "path": "registry/virtari/toast/Toast.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/Toast.tokens.css"
+        },
+        {
+          "path": "registry/virtari/toast/toast.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/toast.ts"
+        },
+        {
+          "path": "registry/virtari/toast/Toaster.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/Toaster.tsx"
+        },
+        {
+          "path": "registry/virtari/toast/ToastItem.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/ToastItem.tsx"
+        },
+        {
+          "path": "registry/virtari/toast/types.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/types.ts"
+        },
+        {
+          "path": "registry/virtari/toast/useToast.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toast/useToast.ts"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/toast\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Toggle source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-toggle#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/toggle/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toggle/index.ts"
+        },
+        {
+          "path": "registry/virtari/toggle/Toggle.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toggle/Toggle.css"
+        },
+        {
+          "path": "registry/virtari/toggle/Toggle.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/toggle/Toggle.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/toggle\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Tooltip source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/primitive-tooltip#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/tooltip/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tooltip/index.ts"
+        },
+        {
+          "path": "registry/virtari/tooltip/Tooltip.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tooltip/Tooltip.css"
+        },
+        {
+          "path": "registry/virtari/tooltip/Tooltip.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tooltip/Tooltip.tokens.css"
+        },
+        {
+          "path": "registry/virtari/tooltip/Tooltip.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tooltip/Tooltip.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/tooltip\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "tree-view",
+      "type": "registry:ui",
+      "title": "Tree View",
+      "description": "Tree View source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/tree-view/context.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tree-view/context.ts"
+        },
+        {
+          "path": "registry/virtari/tree-view/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tree-view/index.ts"
+        },
+        {
+          "path": "registry/virtari/tree-view/TreeView.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tree-view/TreeView.css"
+        },
+        {
+          "path": "registry/virtari/tree-view/TreeView.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tree-view/TreeView.tokens.css"
+        },
+        {
+          "path": "registry/virtari/tree-view/TreeView.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/tree-view/TreeView.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/tree-view\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "visually-hidden",
+      "type": "registry:ui",
+      "title": "Visually Hidden",
+      "description": "Visually Hidden source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/visually-hidden/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/visually-hidden/index.ts"
+        },
+        {
+          "path": "registry/virtari/visually-hidden/VisuallyHidden.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/visually-hidden/VisuallyHidden.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/visually-hidden\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "yoopta-editor",
+      "type": "registry:ui",
+      "title": "Yoopta Editor",
+      "description": "Yoopta Editor source component with Virtari tokens, behavior, and editable styles.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/accordion#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/file-upload#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/scroll-area#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
+      ],
+      "dependencies": [
+        "@yoopta/accordion@^6.0.3",
+        "@yoopta/blockquote@^6.0.3",
+        "@yoopta/callout@^6.0.3",
+        "@yoopta/carousel@^6.0.3",
+        "@yoopta/code@^6.0.3",
+        "@yoopta/divider@^6.0.3",
+        "@yoopta/editor@^6.0.3",
+        "@yoopta/embed@^6.0.3",
+        "@yoopta/emoji@^6.0.3",
+        "@yoopta/file@^6.0.3",
+        "@yoopta/headings@^6.0.3",
+        "@yoopta/image@^6.0.3",
+        "@yoopta/link@^6.0.3",
+        "@yoopta/lists@^6.0.3",
+        "@yoopta/marks@^6.0.3",
+        "@yoopta/math@^6.0.3",
+        "@yoopta/mention@^6.0.3",
+        "@yoopta/paragraph@^6.0.3",
+        "@yoopta/steps@^6.0.3",
+        "@yoopta/table-of-contents@^6.0.3",
+        "@yoopta/table@^6.0.3",
+        "@yoopta/tabs@^6.0.3",
+        "@yoopta/video@^6.0.3",
+        "katex@^0.16.11",
+        "slate-dom@^0.119.0",
+        "slate-react@^0.120.0",
+        "slate@^0.120.0"
+      ],
+      "files": [
+        {
+          "path": "registry/virtari/yoopta-editor/chrome/ActionMenu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/chrome/ActionMenu.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/chrome/BlockActions.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/chrome/BlockActions.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/chrome/BlockOptions.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/chrome/BlockOptions.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/chrome/pluginIcons.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/chrome/pluginIcons.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/chrome/SlashMenu.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/chrome/SlashMenu.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/chrome/TableHoverActions.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/chrome/TableHoverActions.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/chrome/Toolbar.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/chrome/Toolbar.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/css.d.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/css.d.ts"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/elements/AccordionElements.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/elements/AccordionElements.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/elements/CarouselElements.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/elements/CarouselElements.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/elements/FileElement.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/elements/FileElement.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/elements/ImageElement.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/elements/ImageElement.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/elements/MediaPicker.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/elements/MediaPicker.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/elements/TabsElements.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/elements/TabsElements.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/elements/TodoListElement.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/elements/TodoListElement.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/elements/VideoElement.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/elements/VideoElement.tsx"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/index.ts"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/marks.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/marks.ts"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/plugins.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/plugins.ts"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/starter-content.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/starter-content.ts"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/uploads.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/uploads.ts"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/YooptaEditor.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/YooptaEditor.css"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/YooptaEditor.tokens.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/YooptaEditor.tokens.css"
+        },
+        {
+          "path": "registry/virtari/yoopta-editor/YooptaEditor.tsx",
+          "type": "registry:file",
+          "target": "~/src/virtari/components/yoopta-editor/YooptaEditor.tsx"
+        }
+      ],
+      "docs": "Import from \"./src/virtari/components/yoopta-editor\". Source and styles are installed into your project and can be edited."
+    },
+    {
+      "name": "virtari-tokens",
+      "type": "registry:style",
+      "title": "Tokens",
+      "description": "Design tokens (colors, spacing, typography, radii, shadows, motion) as CSS variables.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/virtari-tokens/brands/_template.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/brands/_template.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/brands/index.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/brands/index.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/brands/virtari.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/brands/virtari.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/breakpoints.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/breakpoints.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/aliases.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/aliases.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/primitives/alphas.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/primitives/alphas.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/primitives/index.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/primitives/index.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/primitives/intents.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/primitives/intents.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/primitives/neutral.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/primitives/neutral.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/primitives.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/primitives.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/semantic/background.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/semantic/background.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/semantic/border.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/semantic/border.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/semantic/data-viz.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/semantic/data-viz.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/semantic/icon.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/semantic/icon.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/semantic/index.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/semantic/index.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/semantic/interactive.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/semantic/interactive.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/semantic/status.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/semantic/status.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/semantic/text.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/semantic/text.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors/semantic.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors/semantic.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/colors.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/colors.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/design-language.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/design-language.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/filter.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/filter.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/fonts.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/fonts.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/gradient.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/gradient.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/index.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/index.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/layout/components.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/layout/components.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/layout/primitives.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/layout/primitives.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/layout/semantic.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/layout/semantic.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/layout.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/layout.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/motion.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/motion.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/opacity.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/opacity.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/radii/components.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/radii/components.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/radii/modes.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/radii/modes.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/radii/nesting.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/radii/nesting.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/radii/primitives.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/radii/primitives.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/radii.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/radii.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/shadows.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/shadows.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/sizing.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/sizing.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/spacing/semantic.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/spacing/semantic.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/spacing.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/spacing.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/surface-styles.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/surface-styles.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/transition.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/transition.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/typography.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/typography.css"
+        },
+        {
+          "path": "registry/virtari/virtari-tokens/z-index.css",
+          "type": "registry:file",
+          "target": "~/src/virtari/styles/tokens/z-index.css"
+        }
+      ]
+    },
+    {
+      "name": "virtari-utils",
+      "type": "registry:lib",
+      "title": "Utils",
+      "description": "Small internal helpers shared across Virtari React packages.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/virtari-utils/cn.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/utils/cn.ts"
+        },
+        {
+          "path": "registry/virtari/virtari-utils/controlText.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/utils/controlText.ts"
+        },
+        {
+          "path": "registry/virtari/virtari-utils/index.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/utils/index.ts"
+        },
+        {
+          "path": "registry/virtari/virtari-utils/keyboard.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/utils/keyboard.ts"
+        },
+        {
+          "path": "registry/virtari/virtari-utils/keyboardPlatform.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/utils/keyboardPlatform.ts"
+        },
+        {
+          "path": "registry/virtari/virtari-utils/useComposedRefs.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/utils/useComposedRefs.ts"
+        },
+        {
+          "path": "registry/virtari/virtari-utils/useDirection.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/utils/useDirection.ts"
+        },
+        {
+          "path": "registry/virtari/virtari-utils/useFormReset.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/utils/useFormReset.ts"
+        },
+        {
+          "path": "registry/virtari/virtari-utils/useHotkey.ts",
+          "type": "registry:file",
+          "target": "~/src/virtari/lib/utils/useHotkey.ts"
+        }
+      ]
+    },
+    {
+      "name": "virtari-all",
+      "type": "registry:block",
+      "title": "Virtari Complete",
+      "description": "The complete Virtari source component collection. Prefer individual items for smaller applications.",
+      "author": "Virtari",
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/accordion#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/alert#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/alert-dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/avatar#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/badge#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/bottom-nav#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/breadcrumb#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/button-group#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/card#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/carousel#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/checkbox#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/chip#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/code#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/collapsible#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/color-picker#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/command#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/copy-button#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/data-table#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/date-picker#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/dialog#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/drawer#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/dropdown-menu#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/editor#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/empty-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/file-upload#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/flag#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/flow#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/form#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/header#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/label#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/language-picker#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/layout#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/nav#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/number-input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/otp-input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/pagination#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/phone-input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/popover#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/progress#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/radio-group#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/scroll-area#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/segmented-control#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/separator#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/sidebar#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/skeleton#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/slider#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/spinner#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/stepper#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/switch#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/table#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tag-input#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/text#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/timeline#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/toast#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/toggle#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/tree-view#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/visually-hidden#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/yoopta-editor#cli-v0.1.0"
+      ]
+    }
+  ]
+}
+
+```
+
+## packages/cli/bin/virtari.mjs
+
+```tsx
+#!/usr/bin/env node
+
+import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
+import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
+import path from "node:path";
+import process from "node:process";
+import { spawnSync } from "node:child_process";
+
+const CLI_MANIFEST = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
+const DEFAULT_REGISTRY = `https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v${CLI_MANIFEST.version}/registry.json`;
+const CONFIG_NAME = "virtari.json";
+const TRACKING_PATH = ".virtari/installed.json";
+const SOURCE_PREFIX = "src/virtari";
+
+function fail(message) {
+  const error = new Error(message);
+  error.isUserError = true;
+  throw error;
+}
+
+function parseArguments(argv) {
+  const positional = [];
+  const options = {
+    cwd: process.cwd(),
+    registry: undefined,
+    target: undefined,
+    overwrite: false,
+    dryRun: false,
+    install: true,
+    json: false,
+  };
+  for (let index = 0; index < argv.length; index += 1) {
+    const argument = argv[index];
+    if (argument === "--cwd" || argument === "--registry" || argument === "--target") {
+      const value = argv[index + 1];
+      if (!value || value.startsWith("--")) fail(`${argument} requires a value.`);
+      options[argument.slice(2)] = value;
+      index += 1;
+    } else if (argument === "--overwrite") options.overwrite = true;
+    else if (argument === "--dry-run") options.dryRun = true;
+    else if (argument === "--no-install") options.install = false;
+    else if (argument === "--json") options.json = true;
+    else if (argument === "--help" || argument === "-h") options.help = true;
+    else if (argument === "--version" || argument === "-v") options.version = true;
+    else if (argument.startsWith("--")) fail(`Unknown option: ${argument}`);
+    else positional.push(argument);
+  }
+  options.cwd = path.resolve(options.cwd);
+  return { positional, options };
+}
+
+function printHelp() {
+  console.log(`Virtari source CLI
+
+Usage:
+  virtari init [--target src/virtari] [--registry <url-or-path>] [--no-install]
+  virtari add <item...> [--overwrite] [--dry-run] [--no-install]
+  virtari list [--json]
+  virtari diff <item...> [--json]
+  virtari doctor [--json]
+
+Every installed component is ordinary source code in your project. Use --dry-run
+to preview changes and diff before updating edited components.`);
+}
+
+function isUrl(value) {
+  return /^https?:\/\//i.test(value);
+}
+
+function requestHeaders() {
+  const token = process.env.VIRTARI_REGISTRY_TOKEN ?? process.env.GITHUB_TOKEN;
+  return {
+    "user-agent": `virtari-cli/${CLI_MANIFEST.version}`,
+    ...(token ? { authorization: `Bearer ${token}` } : {}),
+  };
+}
+
+async function request(url) {
+  let lastError;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const response = await fetch(url, { headers: requestHeaders(), signal: AbortSignal.timeout(20_000) });
+      if (response.ok || response.status < 500) return response;
+      lastError = new Error(`HTTP ${response.status}`);
+    } catch (error) {
+      lastError = error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  fail(`Could not load ${url}: ${lastError?.message ?? "network error"}`);
+}
+
+async function readJson(source, cwd) {
+  if (isUrl(source)) {
+    const response = await request(source);
+    if (!response.ok) fail(`Could not load registry (${response.status}) from ${source}`);
+    return { value: await response.json(), source, base: new URL(".", source).href };
+  }
+  const absolute = path.resolve(cwd, source);
+  if (!existsSync(absolute)) fail(`Registry not found: ${absolute}`);
+  return { value: JSON.parse(await readFile(absolute, "utf8")), source: absolute, base: path.dirname(absolute) };
+}
+
+async function readRegistryFile(base, filePath) {
+  if (isUrl(base)) {
+    const url = new URL(filePath, base).href;
+    const response = await request(url);
+    if (!response.ok) fail(`Could not load registry file (${response.status}) from ${url}`);
+    return response.text();
+  }
+  return readFile(path.join(base, filePath), "utf8");
+}
+
+async function mapLimit(values, limit, mapper) {
+  const result = new Array(values.length);
+  let next = 0;
+  async function worker() {
+    while (next < values.length) {
+      const index = next;
+      next += 1;
+      result[index] = await mapper(values[index], index);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, values.length) }, worker));
+  return result;
+}
+
+function validateRegistry(registry) {
+  if (!registry || !Array.isArray(registry.items)) fail("Registry must contain an items array.");
+  const names = new Set();
+  for (const item of registry.items) {
+    if (!item?.name || typeof item.name !== "string") fail("Every registry item needs a name.");
+    if (names.has(item.name)) fail(`Duplicate registry item: ${item.name}`);
+    names.add(item.name);
+    if (item.files && !Array.isArray(item.files)) fail(`Invalid files for ${item.name}.`);
+    for (const file of item.files ?? []) {
+      if (!file.path || path.posix.isAbsolute(file.path) || file.path.split("/").includes("..") || file.path.includes("://")) fail(`Unsafe registry source path in ${item.name}: ${file.path}`);
+    }
+  }
+}
+
+async function readConfig(cwd, required = true) {
+  const configPath = path.join(cwd, CONFIG_NAME);
+  if (!existsSync(configPath)) {
+    if (required) fail(`No ${CONFIG_NAME} found. Run \"virtari init\" first.`);
+    return null;
+  }
+  const config = JSON.parse(await readFile(configPath, "utf8"));
+  if (!config.target || path.isAbsolute(config.target)) fail(`${CONFIG_NAME} target must be a project-relative path.`);
+  const target = path.resolve(cwd, config.target);
+  if (target !== cwd && !target.startsWith(`${cwd}${path.sep}`)) fail(`${CONFIG_NAME} target must stay inside the project.`);
+  return config;
+}
+
+function registryDependencyName(address) {
+  const clean = address.split("#")[0].replace(/\/$/, "");
+  return clean.slice(clean.lastIndexOf("/") + 1).replace(/\.json$/, "");
+}
+
+function resolveItems(registry, requested) {
+  const byName = new Map(registry.items.map((item) => [item.name, item]));
+  const resolved = [];
+  const visited = new Set();
+  const visiting = new Set();
+  function visit(name) {
+    if (visited.has(name)) return;
+    if (visiting.has(name)) fail(`Registry dependency cycle at ${name}.`);
+    const item = byName.get(name);
+    if (!item) fail(`Unknown Virtari item: ${name}`);
+    visiting.add(name);
+    for (const dependency of item.registryDependencies ?? []) visit(registryDependencyName(dependency));
+    visiting.delete(name);
+    visited.add(name);
+    resolved.push(item);
+  }
+  requested.forEach(visit);
+  return resolved;
+}
+
+function safeDestination(cwd, targetRoot, declaredTarget) {
+  if (!declaredTarget?.startsWith("~/")) fail(`Registry file target must start with ~/: ${declaredTarget}`);
+  const projectPath = declaredTarget.slice(2).replace(/^src\/virtari(?=\/|$)/, targetRoot.replace(/\\/g, "/"));
+  const destination = path.resolve(cwd, projectPath);
+  const prefix = `${path.resolve(cwd)}${path.sep}`;
+  if (destination !== path.resolve(cwd) && !destination.startsWith(prefix)) fail(`Registry target escapes the project: ${declaredTarget}`);
+  return destination;
+}
+
+function hash(content) {
+  return createHash("sha256").update(content).digest("hex");
+}
+
+async function atomicWrite(destination, content) {
+  await mkdir(path.dirname(destination), { recursive: true });
+  const temporary = `${destination}.virtari-${process.pid}.tmp`;
+  await writeFile(temporary, content, "utf8");
+  await rename(temporary, destination);
+}
+
+function parseDependency(specifier) {
+  const splitAt = specifier.startsWith("@") ? specifier.indexOf("@", 1) : specifier.lastIndexOf("@");
+  if (splitAt <= 0) return [specifier, "latest"];
+  return [specifier.slice(0, splitAt), specifier.slice(splitAt + 1) || "latest"];
+}
+
+function detectPackageManager(cwd) {
+  if (existsSync(path.join(cwd, "pnpm-lock.yaml"))) return { command: "pnpm", args: ["install"] };
+  if (existsSync(path.join(cwd, "yarn.lock"))) return { command: "yarn", args: ["install"] };
+  if (existsSync(path.join(cwd, "bun.lock")) || existsSync(path.join(cwd, "bun.lockb"))) return { command: "bun", args: ["install"] };
+  return { command: "npm", args: ["install"] };
+}
+
+async function mergeDependencies(cwd, dependencies, dryRun) {
+  const packagePath = path.join(cwd, "package.json");
+  if (!existsSync(packagePath)) fail(`No package.json found in ${cwd}.`);
+  const source = await readFile(packagePath, "utf8");
+  const manifest = JSON.parse(source);
+  manifest.dependencies ??= {};
+  const added = [];
+  for (const specifier of dependencies) {
+    const [name, range] = parseDependency(specifier);
+    if (manifest.dependencies[name] || manifest.devDependencies?.[name] || manifest.peerDependencies?.[name]) continue;
+    manifest.dependencies[name] = range;
+    added.push(name);
+  }
+  if (added.length && !dryRun) {
+    manifest.dependencies = Object.fromEntries(Object.entries(manifest.dependencies).sort(([a], [b]) => a.localeCompare(b)));
+    await atomicWrite(packagePath, `${JSON.stringify(manifest, null, 2)}\n`);
+  }
+  return added;
+}
+
+async function createPlan({ cwd, registryData, config, itemNames }) {
+  const items = resolveItems(registryData.value, itemNames);
+  const files = new Map();
+  const dependencies = new Set();
+  const requests = [];
+  for (const item of items) {
+    for (const dependency of item.dependencies ?? []) dependencies.add(dependency);
+    for (const file of item.files ?? []) {
+      const destination = safeDestination(cwd, config.target, file.target);
+      requests.push({ destination, file, item });
+    }
+  }
+  const contents = await mapLimit(requests, 12, ({ file }) => readRegistryFile(registryData.base, file.path));
+  for (let index = 0; index < requests.length; index += 1) {
+      const { destination, file, item } = requests[index];
+      const content = contents[index];
+      const previous = files.get(destination);
+      if (previous && previous.content !== content) fail(`Two registry files target ${path.relative(cwd, destination)}.`);
+      files.set(destination, { content, item: item.name, source: file.path });
+  }
+  return { items, files, dependencies: [...dependencies].sort() };
+}
+
+async function readTracking(cwd) {
+  const tracking = path.join(cwd, TRACKING_PATH);
+  if (!existsSync(tracking)) return { version: 1, items: {} };
+  return JSON.parse(await readFile(tracking, "utf8"));
+}
+
+async function installPlan({ cwd, registryData, config, plan, overwrite, dryRun, install }) {
+  const conflicts = [];
+  const changed = [];
+  const unchanged = [];
+  for (const [destination, file] of plan.files) {
+    if (!existsSync(destination)) {
+      changed.push([destination, file]);
+      continue;
+    }
+    const current = await readFile(destination, "utf8");
+    if (current === file.content) unchanged.push(destination);
+    else if (overwrite) changed.push([destination, file]);
+    else conflicts.push(path.relative(cwd, destination));
+  }
+  if (conflicts.length) fail(`Edited files would be overwritten:\n${conflicts.map((file) => `  ${file}`).join("\n")}\nRun \"virtari diff\" first, then pass --overwrite only if intended.`);
+
+  if (!dryRun) {
+    for (const [destination, file] of changed) await atomicWrite(destination, file.content);
+  }
+  const addedDependencies = await mergeDependencies(cwd, plan.dependencies, dryRun);
+  if (!dryRun) {
+    const tracking = await readTracking(cwd);
+    tracking.registry = registryData.source;
+    tracking.updatedAt = new Date().toISOString();
+    for (const item of plan.items) {
+      tracking.items[item.name] = {
+        files: (item.files ?? []).map((file) => {
+          const destination = safeDestination(cwd, config.target, file.target);
+          const planned = plan.files.get(destination);
+          return { path: path.relative(cwd, destination).replace(/\\/g, "/"), hash: hash(planned.content) };
+        }),
+      };
+    }
+    await atomicWrite(path.join(cwd, TRACKING_PATH), `${JSON.stringify(tracking, null, 2)}\n`);
+  }
+  if (install && addedDependencies.length && !dryRun) {
+    const packageManager = detectPackageManager(cwd);
+    const result = spawnSync(packageManager.command, packageManager.args, { cwd, stdio: "inherit", shell: process.platform === "win32" });
+    if (result.status !== 0) fail(`${packageManager.command} install failed. Source files remain installed; run the package manager manually.`);
+  }
+  return { items: plan.items.map((item) => item.name), written: changed.length, unchanged: unchanged.length, dependencies: addedDependencies };
+}
+
+async function commandInit(options) {
+  if (!existsSync(path.join(options.cwd, "package.json"))) fail(`No package.json found in ${options.cwd}.`);
+  const configPath = path.join(options.cwd, CONFIG_NAME);
+  let config = await readConfig(options.cwd, false);
+  if (!config) {
+    config = {
+      $schema: `https://raw.githubusercontent.com/Virtari-Packages/virtari-design-system/cli-v${CLI_MANIFEST.version}/virtari.schema.json`,
+      target: options.target ?? SOURCE_PREFIX,
+      registry: options.registry ?? DEFAULT_REGISTRY,
+      install: true,
+    };
+    if (!options.dryRun) await atomicWrite(configPath, `${JSON.stringify(config, null, 2)}\n`);
+  }
+  const registryData = await readJson(options.registry ?? config.registry ?? DEFAULT_REGISTRY, options.cwd);
+  validateRegistry(registryData.value);
+  const plan = await createPlan({ cwd: options.cwd, registryData, config, itemNames: ["virtari-base"] });
+  const result = await installPlan({ cwd: options.cwd, registryData, config, plan, overwrite: options.overwrite, dryRun: options.dryRun, install: options.install && config.install !== false });
+  console.log(`Initialized Virtari in ${path.relative(process.cwd(), options.cwd) || "."} (${result.written} files).`);
+}
+
+async function loadContext(options) {
+  const config = await readConfig(options.cwd);
+  const registryData = await readJson(options.registry ?? config.registry ?? DEFAULT_REGISTRY, options.cwd);
+  validateRegistry(registryData.value);
+  return { config, registryData };
+}
+
+async function commandAdd(names, options) {
+  if (!names.length) fail("Add requires at least one item name.");
+  const { config, registryData } = await loadContext(options);
+  const plan = await createPlan({ cwd: options.cwd, registryData, config, itemNames: names });
+  const result = await installPlan({ cwd: options.cwd, registryData, config, plan, overwrite: options.overwrite, dryRun: options.dryRun, install: options.install && config.install !== false });
+  const verb = options.dryRun ? "Would install" : "Installed";
+  console.log(`${verb} ${result.items.join(", ")} (${result.written} files, ${result.unchanged} unchanged).`);
+  if (result.dependencies.length) console.log(`${options.dryRun ? "Would add" : "Added"} dependencies: ${result.dependencies.join(", ")}`);
+}
+
+async function commandList(options) {
+  const config = await readConfig(options.cwd, false);
+  const registryData = await readJson(options.registry ?? config?.registry ?? DEFAULT_REGISTRY, options.cwd);
+  validateRegistry(registryData.value);
+  const rows = registryData.value.items.map((item) => ({ name: item.name, type: item.type, description: item.description ?? "" }));
+  if (options.json) console.log(JSON.stringify(rows, null, 2));
+  else for (const row of rows) console.log(`${row.name.padEnd(24)} ${row.description}`);
+}
+
+async function commandDiff(names, options) {
+  if (!names.length) fail("Diff requires at least one item name.");
+  const { config, registryData } = await loadContext(options);
+  const plan = await createPlan({ cwd: options.cwd, registryData, config, itemNames: names });
+  const result = [];
+  for (const [destination, file] of plan.files) {
+    const relative = path.relative(options.cwd, destination).replace(/\\/g, "/");
+    if (!existsSync(destination)) result.push({ path: relative, status: "missing", item: file.item });
+    else if (await readFile(destination, "utf8") !== file.content) result.push({ path: relative, status: "modified", item: file.item });
+  }
+  if (options.json) console.log(JSON.stringify(result, null, 2));
+  else if (!result.length) console.log("Installed source matches the registry.");
+  else for (const entry of result) console.log(`${entry.status.padEnd(9)} ${entry.path}`);
+}
+
+async function scanForInternalImports(directory) {
+  if (!existsSync(directory)) return [];
+  const found = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const absolute = path.join(directory, entry.name);
+    if (entry.isDirectory()) found.push(...await scanForInternalImports(absolute));
+    else if (entry.isFile() && /\.(?:tsx?|jsx?|css)$/.test(entry.name)) {
+      const content = await readFile(absolute, "utf8");
+      if (/(?:from\s*|import\s*|require\(\s*)["']@virtari-packages\/|@import\s+["']@virtari-packages\//.test(content)) found.push(absolute);
+    }
+  }
+  return found;
+}
+
+async function commandDoctor(options) {
+  const config = await readConfig(options.cwd);
+  const target = path.resolve(options.cwd, config.target);
+  const issues = [];
+  if (!existsSync(target)) issues.push(`Missing source directory: ${config.target}`);
+  const leakedImports = await scanForInternalImports(target);
+  for (const file of leakedImports) issues.push(`Package import remains: ${path.relative(options.cwd, file)}`);
+  if (!existsSync(path.join(options.cwd, TRACKING_PATH))) issues.push(`Missing ${TRACKING_PATH}; run virtari add again to restore update metadata.`);
+  const result = { ok: issues.length === 0, target: config.target, issues };
+  if (options.json) console.log(JSON.stringify(result, null, 2));
+  else if (result.ok) console.log(`Virtari source is healthy at ${config.target}.`);
+  else for (const issue of issues) console.log(`issue  ${issue}`);
+  if (!result.ok) process.exitCode = 1;
+}
+
+async function main() {
+  const { positional, options } = parseArguments(process.argv.slice(2));
+  if (options.version) {
+    console.log(CLI_MANIFEST.version);
+    return;
+  }
+  const [command, ...names] = positional;
+  if (options.help || !command) return printHelp();
+  if (command === "init") return commandInit(options);
+  if (command === "add") return commandAdd(names, options);
+  if (command === "list") return commandList(options);
+  if (command === "diff") return commandDiff(names, options);
+  if (command === "doctor") return commandDoctor(options);
+  fail(`Unknown command: ${command}`);
+}
+
+main().catch((error) => {
+  console.error(error.isUserError ? error.message : error.stack ?? error.message);
+  process.exitCode = 1;
+});
+
+```

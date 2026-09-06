@@ -1,0 +1,204 @@
+@import "./Command.tokens.css";
+
+@layer design-system.components {
+  /* ── CommandDialog surface ──
+   * A palette is a search field first: it must reach the surface edge, so the
+   * Dialog "simple layout" padding (which would inset the input by
+   * --dialog-padding-inline) is neutralised here. The selector matches that
+   * rule's own shape so it wins regardless of stylesheet import order.
+   * Width comes from --command-dialog-width at the default size only;
+   * passing an explicit `size` falls back to the standard Dialog ramp. */
+  .vds-dialog-content.vds-command-dialog[data-size="md"] {
+    --dialog-width: var(--command-dialog-width);
+  }
+
+  .vds-dialog-content.vds-command-dialog:not(:has(> .vds-dialog-header)):not(
+      :has(> .vds-dialog-body)
+    ) {
+    padding-block: 0;
+    padding-inline: 0;
+    gap: 0;
+
+    /* The Dialog's simple layout sets this to its inline padding; the
+       palette removes that padding, so its children are flush again. */
+    --vds-radius-host-p: 0px;
+  }
+
+  .vds-command {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--vds-command-bg);
+    border-radius: var(--vds-command-radius);
+    overflow: hidden;
+  }
+
+  /* Inside a CommandDialog the palette fills the dialog edge to edge, so its
+     corner is the dialog's corner minus the dialog's border — not its own
+     standalone radius, which would sit 1px proud of it. --vds-radius-flush
+     is published by the dialog host (packages/tokens/src/radii/nesting.css)
+     and only resolves for its direct children, which is exactly what the
+     palette is. */
+  .vds-command-dialog > .vds-command {
+    border-radius: var(--vds-radius-flush);
+  }
+
+  /* Input */
+  .vds-command-input-wrapper {
+    transition: box-shadow 180ms ease-out;
+    display: flex;
+    align-items: center;
+    padding-inline: var(--vds-command-input-padding-inline);
+    border-block-end: var(--vds-command-input-border-block-end);
+  }
+  .vds-command-input {
+    outline: none;
+    all: unset;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    inline-size: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+    line-height: var(--vds-control-line-height, 1.5);
+    padding-block: var(--vds-command-input-padding-block);
+    color: var(--vds-command-input-fg);
+    background-color: var(--vds-command-input-bg);
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-command-input::placeholder {
+    color: var(--vds-command-input-placeholder-fg);
+  }
+
+  /* List */
+  .vds-command-list {
+    max-block-size: var(--vds-command-list-max-block-size);
+    overflow-y: auto;
+    padding: var(--vds-command-list-padding);
+  }
+
+  /* Group */
+  .vds-command-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .vds-command-group [cmdk-group-heading] {
+    padding-inline: var(--vds-command-group-heading-padding-inline);
+    padding-block: var(--vds-command-group-heading-padding-block);
+    color: var(--vds-command-group-heading-fg);
+    font-size: var(--vds-command-group-heading-size);
+    font-weight: var(--vds-command-group-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Item */
+  .vds-command-item {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--vds-size-lg, 2.5rem);
+    box-sizing: border-box;
+    line-height: var(--vds-control-line-height, 1.5);
+    gap: var(--vds-command-item-gap);
+    padding-inline: var(--vds-command-item-padding-inline);
+    padding-block: var(--vds-command-item-padding-block);
+    border-radius: var(--vds-command-item-radius);
+    cursor: pointer;
+    user-select: none;
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-command-item[data-selected="true"] {
+    background-color: var(--vds-command-item-bg-selected);
+    color: var(--vds-command-item-fg-selected);
+  }
+  .vds-command-item:hover:not([data-disabled="true"]) {
+    background-color: var(--vds-command-item-bg-hover);
+  }
+  .vds-command-item[data-disabled="true"] {
+    opacity: var(--vds-opacity-disabled, 0.5);
+    cursor: not-allowed;
+  }
+
+  .vds-command-item-left {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    flex-shrink: 0;
+  }
+  .vds-command-item-label {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-command-item-gap);
+    min-block-size: 1lh;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: clip visible;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vds-command-item-label > .vds-control-text {
+    min-inline-size: 0;
+    overflow: clip visible;
+    text-overflow: ellipsis;
+  }
+  .vds-command-item-left > svg,
+  .vds-command-item-label > svg {
+    display: block;
+    inline-size: var(--vds-space-4, 1rem);
+    block-size: var(--vds-space-4, 1rem);
+    flex: none;
+  }
+  .vds-command-item-right {
+    color: var(--vds-command-item-fg-muted);
+    flex-shrink: 0;
+  }
+  .vds-command-item-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    margin-inline-start: auto;
+    flex-shrink: 0;
+  }
+
+  /* Empty / Loading / Separator */
+  .vds-command-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--vds-command-empty-padding-block);
+    color: var(--vds-command-item-fg-muted);
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-command-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--vds-command-empty-padding-block);
+    color: var(--vds-command-item-fg-muted);
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+  .vds-command-separator {
+    block-size: 1px;
+    background-color: var(--vds-command-separator-color);
+    margin-inline: var(--vds-space-1, 0.25rem);
+    margin-block: var(--vds-space-1, 0.25rem);
+  }
+
+  /* Screen-reader-only utility (used by CommandDialog for visually-hidden title). */
+  .vds-sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@layer design-system.components {
+  .vds-command-input-wrapper:focus-within { box-shadow: inset 0 0 0 4px var(--vds-color-primary-a4), inset 0 0 12px 2px var(--vds-color-primary-a2); }
+  @media (prefers-reduced-motion: reduce) { .vds-command-input-wrapper { transition-duration: 0s; } }
+  @media (forced-colors: active) { .vds-command-input-wrapper:focus-within { outline: 2px solid Highlight; outline-offset: -2px; box-shadow: none; } }
+}

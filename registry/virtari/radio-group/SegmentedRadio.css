@@ -1,0 +1,126 @@
+@layer design-system.components {
+  .vds-segmented-radio {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    align-items: stretch;
+    padding: var(--segmented-padding);
+    background-color: var(--segmented-track-bg);
+    border: var(--segmented-track-border-width) solid
+      var(--segmented-track-border-color);
+    border-radius: var(--segmented-radius);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+
+    /* ── Radius nesting host ──
+       The track is the element that draws the corner, so it publishes its
+       radius / border / padding and the items — its direct children — read the
+       answer from --vds-radius-inset. All three are declared, zeroes included,
+       so a segmented group dropped inside another host cannot inherit that
+       host's border/padding and subtract the wrong distance.
+
+       This replaces `calc(--segmented-radius - --segmented-padding)`, which
+       subtracted the padding but not the 1px track border: --segmented-radius
+       is the track's *outer* radius, so the distance to an item is border +
+       padding, not padding alone. The items were 1px too round in every mode
+       that has a finite radius. */
+    --vds-radius-host-r: var(--segmented-radius);
+    --vds-radius-host-b: var(--segmented-track-border-width);
+    --vds-radius-host-p: var(--segmented-padding);
+  }
+
+  .vds-segmented-radio[data-orientation="vertical"] {
+    grid-auto-flow: row;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vds-segmented-radio-item {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-2, 0.5rem);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    min-block-size: var(--segmented-item-height);
+    padding-inline: var(--segmented-item-padding-inline);
+    padding-block: var(--vds-gap-icon-compact, 0.25rem);
+    font-family: inherit;
+    font-size: var(--segmented-item-font-size);
+    font-weight: var(--segmented-item-font-weight);
+    line-height: var(--vds-control-line-height, 1.5);
+    color: var(--segmented-item-color);
+    background-color: transparent;
+    border: 0;
+    /* Concentric with the track — see the host declaration above. */
+    border-radius: var(--vds-radius-inset);
+    cursor: pointer;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    transition:
+      background-color var(--segmented-transition-duration)
+        var(--segmented-transition-easing),
+      color var(--segmented-transition-duration)
+        var(--segmented-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+
+  /* ── Hover ── */
+  .vds-segmented-radio-item:hover:not(:disabled):not([data-state="checked"]) {
+    color: var(--segmented-item-color-hover);
+  }
+
+  /* ── Checked (selected) — elevated white tile over muted track ── */
+  .vds-segmented-radio-item[data-state="checked"] {
+    background-color: var(--segmented-item-checked-bg);
+    color: var(--segmented-item-checked-color);
+    box-shadow: var(--segmented-item-checked-shadow);
+  }
+
+  /* ── Focus ring ── */
+  .vds-segmented-radio-item:focus-visible {
+    z-index: 1;
+    outline: var(--segmented-focus-ring-width) solid var(--segmented-focus-ring-color);
+    outline-offset: var(--segmented-focus-ring-offset);
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+
+  /* ── Disabled ── */
+  .vds-segmented-radio-item:disabled {
+    cursor: not-allowed;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  /* ── Error — entire segmented group shows danger state ── */
+  .vds-segmented-radio[data-error] {
+    --segmented-focus-ring-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  .vds-segmented-radio[data-error] .vds-segmented-radio-item {
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+
+  .vds-segmented-radio[data-error] .vds-segmented-radio-item:focus-visible {
+    outline: var(--segmented-focus-ring-width) solid var(--segmented-focus-ring-color);
+    outline-offset: var(--segmented-focus-ring-offset);
+    box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+}

@@ -1,0 +1,49 @@
+@import "./Section.tokens.css";
+
+@layer design-system.components {
+  /* ── Outer band ── */
+  .vds-section {
+    display: block;
+    inline-size: 100%;
+    min-block-size: var(--section-min-block-size);
+    padding-block: var(--section-padding-block);
+    background-color: var(--section-background);
+  }
+
+  /* ── Inner container ── */
+  .vds-section__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--section-gap);
+
+    inline-size: 100%;
+    max-inline-size: var(--section-container-width);
+    padding-inline: var(--section-padding-inline);
+
+    /* Alignment inside outer band */
+    margin-inline: auto;
+  }
+
+  .vds-section[data-align="start"] > .vds-section__inner {
+    margin-inline-start: 0;
+    margin-inline-end: auto;
+  }
+
+  .vds-section[data-align="end"] > .vds-section__inner {
+    margin-inline-start: auto;
+    margin-inline-end: 0;
+  }
+
+  /* Not contained → inner grows to full width, gutter still applies.
+     We drop the max-width so the content goes wall-to-wall. */
+  .vds-section[data-contained="false"] > .vds-section__inner {
+    max-inline-size: none;
+  }
+
+  /* Full-height alignment: when section fills the viewport, let the
+     inner container stretch vertically so children can use
+     flex: 1 or align themselves. */
+  .vds-section[data-full-height="true"] > .vds-section__inner {
+    min-block-size: inherit;
+  }
+}

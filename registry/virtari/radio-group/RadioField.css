@@ -1,0 +1,89 @@
+@layer design-system.components {
+  .vds-radio-field {
+    --radio-field-control-size: 1.125rem;
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--radio-field-gap);
+    cursor: pointer;
+    color: var(--radio-field-label-color);
+    font-family: inherit;
+    line-height: var(--vds-control-line-height, 1.5);
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .vds-radio-field[data-size="sm"] {
+    --radio-field-control-size: 0.875rem;
+  }
+
+  .vds-radio-field[data-size="lg"] {
+    --radio-field-control-size: 1.375rem;
+  }
+
+  .vds-radio-field[data-has-description] {
+    align-items: flex-start;
+  }
+
+  .vds-radio-field[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  /* Dim once — see RadioCard. */
+  .vds-radio-field[data-disabled] .vds-radio-item:disabled {
+    opacity: 1;
+  }
+
+  .vds-radio-field > .vds-radio-item {
+    margin-block-start: var(--radio-field-align-block-start);
+    flex-shrink: 0;
+  }
+
+  .vds-radio-field[data-has-description] > .vds-radio-item {
+    margin-block-start: var(--radio-field-align-block-start);
+  }
+
+  .vds-radio-field-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radio-field-label-gap);
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .vds-radio-field-main {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--radio-field-control-size);
+  }
+
+  .vds-radio-field[data-has-description] .vds-radio-field-text {
+    min-block-size: auto;
+  }
+
+  .vds-radio-field[data-has-description] .vds-radio-field-main {
+    align-items: flex-start;
+    min-block-size: auto;
+  }
+
+  .vds-radio-field-label {
+    display: block;
+    min-inline-size: 0;
+    font-size: var(--radio-field-font-size);
+    font-weight: var(--radio-field-label-font-weight);
+    color: var(--radio-field-label-color);
+    line-height: var(--vds-control-line-height, 1.5);
+    transform: translateY(var(--radio-field-text-offset));
+  }
+
+  .vds-radio-field[data-has-description] .vds-radio-field-label {
+    transform: none;
+  }
+
+  .vds-radio-field-description {
+    font-size: var(--radio-field-description-font-size);
+    color: var(--radio-field-description-color);
+    font-weight: var(--vds-font-weight-normal, 400);
+    line-height: var(--vds-control-line-height, 1.5);
+  }
+}

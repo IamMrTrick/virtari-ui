@@ -1,0 +1,150 @@
+@layer design-system.components {
+  .vds-toggle {
+    /*
+     * ── Config ──
+     * Height uses shared --vds-size-* tokens (same as Button, Input, Select).
+     */
+    --_toggle-height: var(--vds-size-md);
+    --_toggle-px: var(--vds-space-3);
+    --_toggle-py: 0;
+    --_toggle-font-size: var(--vds-text-sm);
+    --_toggle-line-height: var(--vds-control-line-height, 1.5);
+    --_toggle-radius: var(--vds-radius-toggle, var(--vds-radius-element));
+    --_toggle-gap: var(--vds-gap-icon, 0.5rem);
+    --_toggle-icon-size: 1.25rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--_toggle-gap);
+    font-family: var(--vds-font-sans);
+    font-weight: var(--vds-font-weight-medium);
+    border-radius: var(--_toggle-radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow 180ms ease-out;
+
+    box-sizing: border-box;
+    min-block-size: max(var(--_toggle-height), calc(1em * var(--_toggle-line-height) + 2px));
+    padding-inline: var(--_toggle-px);
+    padding-block: var(--_toggle-py);
+    font-size: var(--_toggle-font-size);
+    line-height: var(--_toggle-line-height);
+    background-color: transparent;
+    color: var(--vds-color-text-muted);
+
+    &:hover:not(:disabled) {
+      background-color: var(--vds-color-bg-muted);
+      color: var(--vds-color-text);
+    }
+
+    &[data-state="on"] {
+      background-color: var(--vds-color-primary-bg);
+      color: var(--vds-color-primary-text);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
+    }
+
+    &:disabled {
+      opacity: var(--vds-opacity-disabled, 0.5);
+      cursor: not-allowed;
+    }
+
+    /* ── Variant: outline ── */
+    &[data-variant="outline"] {
+      border-color: var(--vds-color-border-interactive, var(--vds-color-neutral-9));
+
+      &[data-state="on"] {
+        background-color: var(--vds-color-primary-bg);
+        border-color: var(--vds-color-primary-border);
+      }
+    }
+
+    /* ── Sizes ──
+       Every size keeps the base --_toggle-radius: the radius is a mode
+       (`data-radius`), not a function of the control's height. Each block used
+       to restate it verbatim, which was dead weight and an invitation to let
+       one size drift. */
+
+    &[data-size="2xs"] {
+      --_toggle-height: var(--vds-size-2xs);
+      --_toggle-px: var(--vds-space-1-5);
+      --_toggle-font-size: var(--vds-text-xs);
+      --_toggle-gap: var(--vds-gap-icon-compact, 0.25rem);
+      --_toggle-icon-size: 0.875rem;
+    }
+
+    &[data-size="xs"] {
+      --_toggle-height: var(--vds-size-xs);
+      --_toggle-px: var(--vds-space-2);
+      --_toggle-font-size: var(--vds-text-xs);
+      --_toggle-gap: var(--vds-gap-icon-compact, 0.25rem);
+      --_toggle-icon-size: 0.875rem;
+    }
+
+    &[data-size="sm"] {
+      --_toggle-height: var(--vds-size-sm);
+      --_toggle-px: var(--vds-space-2);
+      --_toggle-font-size: var(--vds-text-sm);
+      --_toggle-gap: var(--vds-gap-icon, 0.5rem);
+      --_toggle-icon-size: 1rem;
+    }
+
+    /* md uses defaults */
+
+    &[data-size="lg"] {
+      --_toggle-height: var(--vds-size-lg);
+      --_toggle-px: var(--vds-space-4);
+      --_toggle-font-size: var(--vds-text-base);
+      --_toggle-gap: var(--vds-gap-icon, 0.5rem);
+      --_toggle-icon-size: 1.25rem;
+    }
+
+    &[data-size="xl"] {
+      --_toggle-height: var(--vds-size-xl);
+      --_toggle-px: var(--vds-space-5);
+      --_toggle-font-size: var(--vds-text-lg);
+      --_toggle-gap: var(--vds-gap-icon, 0.5rem);
+      --_toggle-icon-size: 1.25rem;
+    }
+
+    &[data-size="2xl"] {
+      --_toggle-height: var(--vds-size-2xl);
+      --_toggle-px: var(--vds-space-6);
+      --_toggle-font-size: var(--vds-text-xl);
+      --_toggle-gap: var(--vds-space-3);
+      --_toggle-icon-size: 1.5rem;
+    }
+
+    /* ── Icon-only ── */
+    &:has(> svg:only-child),
+    &[data-icon-only] {
+      padding-inline: 0;
+      inline-size: var(--_toggle-height);
+      aspect-ratio: 1;
+    }
+
+    & > svg {
+      display: block;
+      flex-shrink: 0;
+      inline-size: var(--_toggle-icon-size);
+      block-size: var(--_toggle-icon-size);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+}

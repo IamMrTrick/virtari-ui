@@ -1,0 +1,47 @@
+@import "./Flag.tokens.css";
+
+@layer design-system.components {
+  .vds-flag {
+    display: inline-block;
+    inline-size: var(--flag-size);
+    block-size: auto;
+    aspect-ratio: var(--flag-aspect);
+    border-radius: var(--flag-border-radius);
+    box-shadow: 0 0 0 var(--flag-outline-width) var(--flag-outline-color) inset,
+      var(--flag-shadow);
+    overflow: hidden;
+    flex: none;
+    vertical-align: middle;
+    user-select: none;
+  }
+
+  .vds-flag[data-rounded="full"] {
+    border-radius: var(--vds-radius-full, 9999px);
+    /* Circular flags need 1:1, else they clip oddly. */
+    --flag-aspect: 1 / 1;
+  }
+
+  /* `rounded` maps to three attribute states, and only two of them are a
+   * value: the generated components emit `data-rounded=""` for the default
+   * `true` (which is why there is no rule for it — it just keeps the token
+   * radius), `"full"` for the circle, and **nothing at all** for `false`.
+   * So the hard-corner case has to match the *absence* of the attribute;
+   * matching `[data-rounded]:not([data-rounded=""])` alone silently left
+   * `rounded={false}` flags rounded. */
+  .vds-flag:not([data-rounded]),
+  .vds-flag[data-rounded]:not([data-rounded=""]):not([data-rounded="full"]) {
+    border-radius: 0;
+    box-shadow: 0 0 0 var(--flag-outline-width) var(--flag-outline-color) inset;
+  }
+
+  /* The Suspense fallback is a bare <span>, so it reads the same token block
+   * as the flag itself (see Flag.tokens.css) rather than repeating literals
+   * that would drift from it. */
+  .vds-flag-placeholder {
+    display: inline-block;
+    inline-size: var(--flag-size);
+    aspect-ratio: var(--flag-aspect);
+    background: color-mix(in oklch, currentColor 10%, transparent);
+    border-radius: var(--flag-border-radius);
+  }
+}

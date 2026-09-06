@@ -1,0 +1,131 @@
+@layer design-system.components {
+  .vds-avatar {
+    /*
+     * ── Config (Proportional) ──
+     * Avatar is circular and reads every step off the shared --vds-size-*
+     * ramp, so it lines up with the controls it sits beside. Its five slots
+     * skip ramp steps (they are picked for profile pictures: inline text at
+     * xs through hero at xl), but every one of them is a real ramp step:
+     *
+     *   xs  2xs  1.5rem  / 24px
+     *   sm  sm   2rem    / 32px
+     *   md  md   2.25rem / 36px   ← default
+     *   lg  xl   2.75rem / 44px
+     *   xl  2xl  3.25rem / 52px
+     */
+    --avatar-size: var(--vds-size-md);
+    --avatar-font-size: var(--vds-text-sm);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: var(--vds-radius-full);
+    flex-shrink: 0;
+
+    inline-size: var(--avatar-size);
+    block-size: var(--avatar-size);
+
+    /* ── Sizes ── */
+
+    &[data-size="xs"] {
+      --avatar-size: var(--vds-size-2xs);
+      --avatar-font-size: var(--vds-text-xs);
+    }
+
+    &[data-size="sm"] {
+      --avatar-size: var(--vds-size-sm);
+      --avatar-font-size: var(--vds-text-xs);
+    }
+
+    /* md uses the defaults above (--vds-size-md = 2.25rem / 36px) */
+
+    &[data-size="lg"] {
+      --avatar-size: var(--vds-size-xl);
+      --avatar-font-size: var(--vds-text-base);
+    }
+
+    &[data-size="xl"] {
+      --avatar-size: var(--vds-size-2xl);
+      --avatar-font-size: var(--vds-text-lg);
+    }
+
+    &:focus-visible {
+      outline: var(--vds-focus-ring-width, 2px) solid var(--vds-color-ring);
+      outline-offset: var(--vds-focus-ring-offset, 2px);
+    }
+  }
+
+  .vds-avatar-image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .vds-avatar-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    block-size: 100%;
+    font-family: var(--vds-font-sans);
+    font-size: var(--avatar-font-size);
+    font-weight: var(--vds-font-weight-medium);
+    /* Two-var contract — slots override these (bg + text). Defaults resolve
+       to the primary tokens so the original "neutral" look is preserved when
+       `color` is unset. */
+    --avatar-bg: var(--vds-color-primary-bg);
+    --avatar-fg: var(--vds-color-primary-text);
+    background-color: var(--avatar-bg);
+    color: var(--avatar-fg);
+  }
+
+  /* ── Color slots ──
+   * 1\u20136 map onto the existing intent scales so they flip with
+   * [data-brand] and invert correctly in dark mode (step 3 is light in
+   * LTR\u2019s light mode and dark in dark mode; step 11 is the opposite). 7
+   * and 8 use inline oklch values for two extra hues (pink, purple) so the
+   * palette reaches 8 without depending on tokens that don\u2019t exist. */
+  .vds-avatar[data-color="1"] .vds-avatar-fallback {
+    --avatar-bg: var(--vds-color-primary-3);
+    --avatar-fg: var(--vds-color-primary-11);
+  }
+  .vds-avatar[data-color="2"] .vds-avatar-fallback {
+    --avatar-bg: var(--vds-color-success-3);
+    --avatar-fg: var(--vds-color-success-11);
+  }
+  .vds-avatar[data-color="3"] .vds-avatar-fallback {
+    --avatar-bg: var(--vds-color-warning-3);
+    --avatar-fg: var(--vds-color-warning-11);
+  }
+  .vds-avatar[data-color="4"] .vds-avatar-fallback {
+    --avatar-bg: var(--vds-color-danger-3);
+    --avatar-fg: var(--vds-color-danger-11);
+  }
+  .vds-avatar[data-color="5"] .vds-avatar-fallback {
+    --avatar-bg: var(--vds-color-info-3);
+    --avatar-fg: var(--vds-color-info-11);
+  }
+  .vds-avatar[data-color="6"] .vds-avatar-fallback {
+    --avatar-bg: var(--vds-color-accent-3);
+    --avatar-fg: var(--vds-color-accent-11);
+  }
+  /* Pink — hue 350 */
+  .vds-avatar[data-color="7"] .vds-avatar-fallback {
+    --avatar-bg: oklch(0.945 0.025 350);
+    --avatar-fg: oklch(0.450 0.170 350);
+  }
+  [data-theme="dark"] .vds-avatar[data-color="7"] .vds-avatar-fallback {
+    --avatar-bg: oklch(0.260 0.070 350);
+    --avatar-fg: oklch(0.830 0.130 350);
+  }
+  /* Purple — hue 300 */
+  .vds-avatar[data-color="8"] .vds-avatar-fallback {
+    --avatar-bg: oklch(0.945 0.030 300);
+    --avatar-fg: oklch(0.460 0.180 300);
+  }
+  [data-theme="dark"] .vds-avatar[data-color="8"] .vds-avatar-fallback {
+    --avatar-bg: oklch(0.255 0.075 300);
+    --avatar-fg: oklch(0.835 0.140 300);
+  }
+}

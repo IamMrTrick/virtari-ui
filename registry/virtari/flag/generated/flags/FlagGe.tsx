@@ -1,0 +1,36 @@
+// AUTO-GENERATED. DO NOT EDIT. Source: flag-icons/flags/4x3/ge.svg
+import type { FC } from "react";
+import { cn } from "../../../../lib/utils";
+import type { FlagCoreProps } from "../../Flag";
+
+const FlagGe: FC<FlagCoreProps> = ({
+  size,
+  rounded = true,
+  title,
+  className,
+  style,
+  ...rest
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 640 480"
+    className={cn("vds-flag", className)}
+    data-size={typeof size === "string" ? size : undefined}
+    data-rounded={rounded === false ? undefined : rounded === "full" ? "full" : ""}
+    data-code="ge"
+    role={title ? "img" : undefined}
+    aria-hidden={title ? undefined : true}
+    aria-label={title}
+    focusable="false"
+    style={typeof size === "number" ? { inlineSize: size, ...style } : style}
+    {...rest}
+  >
+    {title ? <title>{title}</title> : null}
+    <path fill="#fff" d="M0 0h640v480H0z"/>
+  <path fill="red" d="M272 0h96v480h-96z"/>
+  <path fill="red" d="M0 192h640v96H0z"/>
+  <path fill="red" fillRule="evenodd" d="M146.8 373.1c1-16.8 4-31.1 4-31.1s-9.8 1-14.8 1-14.8-1-14.8-1 3 14.3 4 31.2c-16.9-1-31.2-4-31.2-4s1 7.4 1 14.8-1 14.8-1 14.8 14.3-3 31.2-4c-1 16.9-4 31.2-4 31.2s7.4-1 14.8-1 14.8 1 14.8 1-3-14.3-4-31.2c16.9 1 31.2 4 31.2 4s-1-9.8-1-14.8 1-14.8 1-14.8-14.3 3-31.1 4zm368-288c1-16.8 4-31.1 4-31.1s-9.8 1-14.8 1-14.8-1-14.8-1 3 14.3 4 31.1c-16.9-1-31.2-3.9-31.2-3.9s1 7.4 1 14.8-1 14.8-1 14.8 14.3-3 31.2-4c-1 16.9-4 31.2-4 31.2s7.4-1 14.8-1 14.8 1 14.8 1-3-14.3-4-31.1c16.9 1 31.2 4 31.2 4s-1-10-1-14.9 1-14.8 1-14.8-14.3 3-31.2 4zm-368 0c1-16.8 4-31.1 4-31.1s-9.8 1-14.8 1-14.8-1-14.8-1 3 14.3 4 31.2c-16.9-1-31.2-4-31.2-4s1 7.4 1 14.8-1 14.8-1 14.8 14.3-3 31.2-4c-1 16.9-4 31.2-4 31.2s7.4-1 14.8-1 14.8 1 14.8 1-3-14.3-4-31.2c16.9 1 31.2 4 31.2 4s-1-9.8-1-14.8 1-14.8 1-14.8-14.3 3-31.1 4zm368 288c1-16.8 4-31.1 4-31.1s-9.8 1-14.8 1-14.8-1-14.8-1 3 14.3 4 31.2c-16.9-1-31.2-4-31.2-4s1 7.4 1 14.8-1 14.8-1 14.8 14.3-3 31.2-4c-1 16.9-4 31.2-4 31.2s7.4-1 14.8-1 14.8 1 14.8 1-3-14.3-4-31.2c16.9 1 31.2 4 31.2 4s-1-9.8-1-14.8 1-14.8 1-14.8-14.3 3-31.2 4z"/>
+  </svg>
+);
+
+export default FlagGe;

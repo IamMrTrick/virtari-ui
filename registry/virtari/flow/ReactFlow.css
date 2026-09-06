@@ -1,0 +1,383 @@
+/* xyflow ships its stylesheet unlayered, and an unlayered rule beats every
+ * layered one regardless of specificity — so every .react-flow__* rule we
+ * write below was dead. Importing it into `components` (which core orders
+ * before `design-system`) lets our rules win, deterministically and without
+ * touching the global layer statement.
+ *
+ * Anything we do NOT override still comes from xyflow, which is the point:
+ * handle positioning, the pane transform, edge interaction. Only override
+ * what is genuinely ours. */
+@import "@xyflow/react/dist/style.css" layer(components);
+@import "./ReactFlow.tokens.css";
+
+@layer design-system.components {
+  .vds-flow {
+    inline-size: 100%;
+    min-inline-size: 0;
+    background:
+      radial-gradient(circle at top, color-mix(in oklab, var(--vds-color-primary-solid) 9%, transparent), transparent 34%),
+      linear-gradient(180deg, color-mix(in oklab, var(--vds-color-surface) 94%, var(--vds-color-bg-subtle)), var(--vds-color-bg-subtle));
+    border-radius: var(--flow-radius);
+    color: var(--vds-color-text);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .vds-flow .react-flow__renderer,
+  .vds-flow .react-flow__pane,
+  .vds-flow .react-flow__viewport {
+    background: transparent;
+  }
+
+  .vds-flow .react-flow__edges svg {
+    position: absolute;
+    inset: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .vds-flow .react-flow__background {
+    opacity: 0.88;
+  }
+
+  .vds-flow .react-flow__edges {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .vds-flow .react-flow__background-pattern line,
+  .vds-flow .react-flow__background-pattern path {
+    stroke: var(--flow-grid-color-subtle);
+  }
+
+  .vds-flow .react-flow__controls {
+    overflow: hidden;
+    border: 1px solid var(--flow-border);
+    border-radius: var(--flow-panel-radius);
+    background: color-mix(in oklab, var(--vds-color-surface) 90%, transparent);
+    box-shadow: var(--flow-shadow);
+    backdrop-filter: blur(18px);
+  }
+
+  .vds-flow .react-flow__controls-button {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    color: var(--vds-color-text-muted);
+    background: transparent;
+    border: 0;
+    transition:
+      color var(--vds-duration-fast, 160ms) ease,
+      background-color var(--vds-duration-fast, 160ms) ease;
+  }
+
+  .vds-flow .react-flow__controls-button:hover,
+  .vds-flow .react-flow__controls-button:focus-visible {
+    color: var(--vds-color-text);
+    background: color-mix(in oklab, var(--vds-color-bg-subtle) 72%, transparent);
+  }
+
+  .vds-flow .react-flow__minimap {
+    border: 1px solid var(--flow-border);
+    border-radius: var(--flow-panel-radius);
+    background: color-mix(in oklab, var(--vds-color-surface) 90%, transparent);
+    box-shadow: var(--flow-shadow);
+    overflow: hidden;
+    backdrop-filter: blur(18px);
+  }
+
+  .vds-flow .react-flow__panel {
+    margin: var(--vds-space-4);
+  }
+
+  /* xyflow bakes its own 15px margin into the centring transform
+   * (`translateX(-15px) translateX(-50%)`). Ours is --vds-space-4, so the
+   * compensation has to track it or a centred panel sits 1px off centre. */
+  .vds-flow .react-flow__panel.top.center,
+  .vds-flow .react-flow__panel.bottom.center {
+    transform: translateX(calc(-1 * var(--vds-space-4))) translateX(-50%);
+  }
+
+  .vds-flow .react-flow__panel.left.center,
+  .vds-flow .react-flow__panel.right.center {
+    transform: translateY(calc(-1 * var(--vds-space-4))) translateY(-50%);
+  }
+
+  .vds-flow .react-flow__attribution {
+    background: color-mix(in oklab, var(--vds-color-surface) 88%, transparent);
+    color: var(--vds-color-text-muted);
+    border-top-left-radius: var(--vds-radius-control, var(--vds-radius-element));
+    backdrop-filter: blur(10px);
+  }
+
+  .vds-flow-node {
+    position: relative;
+    inline-size: min(100%, 19rem);
+    min-inline-size: 15rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-3);
+    padding: var(--vds-space-4);
+    border: var(--_flow-node-border-width) solid var(--flow-border);
+    border-radius: var(--flow-radius);
+    --_flow-node-border-width: 1px;
+    /* The tone strip below is absolutely positioned, so it spans the node's
+     * padding box — inside the border. A flush child's corner is the host's
+     * radius minus that border, never the host's radius repeated. `max()`
+     * floors it at square for sharp mode, where the node radius can be
+     * smaller than the border. */
+    --_flow-node-strip-radius: max(
+      0px,
+      calc(var(--flow-radius) - var(--_flow-node-border-width))
+    );
+    background:
+      linear-gradient(180deg, color-mix(in oklab, var(--flow-surface-elevated) 74%, transparent), transparent 46%),
+      var(--flow-surface);
+    box-shadow: var(--flow-shadow);
+    transition:
+      border-color var(--vds-duration-fast, 160ms) ease,
+      box-shadow var(--vds-duration-fast, 160ms) ease,
+      transform var(--vds-duration-fast, 160ms) ease;
+  }
+
+  .vds-flow-node[data-tone="primary"] {
+    --_flow-tone: var(--vds-color-primary-solid);
+    --_flow-tone-bg: var(--vds-color-primary-bg-subtle);
+  }
+
+  .vds-flow-node[data-tone="success"] {
+    --_flow-tone: var(--vds-color-success-solid);
+    --_flow-tone-bg: var(--vds-color-success-bg-subtle);
+  }
+
+  .vds-flow-node[data-tone="warning"] {
+    --_flow-tone: var(--vds-color-warning-solid);
+    --_flow-tone-bg: var(--vds-color-warning-bg-subtle);
+  }
+
+  .vds-flow-node[data-tone="danger"] {
+    --_flow-tone: var(--vds-color-danger-solid);
+    --_flow-tone-bg: var(--vds-color-danger-bg-subtle);
+  }
+
+  .vds-flow-node[data-tone="info"] {
+    --_flow-tone: var(--vds-color-info-solid);
+    --_flow-tone-bg: var(--vds-color-info-bg-subtle);
+  }
+
+  .vds-flow-node[data-tone="accent"] {
+    --_flow-tone: var(--vds-color-accent-solid);
+    --_flow-tone-bg: var(--vds-color-accent-bg-subtle);
+  }
+
+  .vds-flow-node[data-tone="neutral"] {
+    --_flow-tone: var(--vds-color-text-muted);
+    --_flow-tone-bg: var(--vds-color-bg-subtle);
+  }
+
+  .vds-flow-node::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: 0.2rem;
+    border-start-start-radius: var(--_flow-node-strip-radius);
+    border-start-end-radius: var(--_flow-node-strip-radius);
+    background:
+      linear-gradient(90deg, color-mix(in oklab, var(--_flow-tone, var(--vds-color-primary-solid)) 82%, white 18%), transparent);
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+  .vds-flow-node[data-selected] {
+    border-color: color-mix(in oklab, var(--_flow-tone, var(--vds-color-primary-solid)) 58%, white 18%);
+    background: var(--flow-surface-selected);
+    box-shadow: var(--flow-shadow-selected);
+    transform: translateY(-1px);
+  }
+
+  .vds-flow-node-header,
+  .vds-flow-node-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vds-space-2);
+    min-inline-size: 0;
+  }
+
+  .vds-flow-node-header {
+    align-items: flex-start;
+  }
+
+  .vds-flow-node-eyebrow {
+    margin: 0;
+    color: var(--vds-color-text-muted);
+    font-size: var(--vds-text-xs);
+    font-weight: var(--vds-font-weight-medium);
+    letter-spacing: var(--vds-tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .vds-flow-node-title {
+    margin: 0;
+    color: var(--vds-color-text);
+    font-size: var(--vds-text-base);
+    font-weight: var(--vds-font-weight-semibold);
+    line-height: var(--vds-leading-tight);
+  }
+
+  .vds-flow-node-meta,
+  .vds-flow-node-description {
+    margin: 0;
+    color: var(--vds-color-text-muted);
+    font-size: var(--vds-text-sm);
+    line-height: var(--vds-leading-relaxed);
+  }
+
+  .vds-flow-node-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-3);
+    min-inline-size: 0;
+  }
+
+  .vds-flow-node-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--vds-space-2);
+  }
+
+  .vds-flow-node-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-inline-size: 0;
+    padding: var(--vds-space-2-5);
+    border: 1px solid color-mix(in oklab, var(--flow-border) 86%, transparent);
+    border-radius: var(--vds-radius-card, var(--vds-radius-element));
+    background: color-mix(in oklab, var(--_flow-tone-bg, var(--vds-color-bg-subtle)) 42%, transparent);
+  }
+
+  .vds-flow-node-stat-label {
+    color: var(--vds-color-text-muted);
+    font-size: var(--vds-text-xs);
+  }
+
+  .vds-flow-node-stat-value {
+    color: var(--vds-color-text);
+    font-size: var(--vds-text-sm);
+    font-weight: var(--vds-font-weight-semibold);
+  }
+
+  .vds-flow-node-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vds-space-2);
+  }
+
+  .vds-flow-handle {
+    inline-size: var(--flow-handle-size);
+    block-size: var(--flow-handle-size);
+    border: 2px solid color-mix(in oklab, var(--vds-color-surface) 72%, transparent);
+    background: var(--_flow-tone, var(--vds-color-primary-solid));
+    box-shadow: var(--flow-handle-ring);
+    transition:
+      scale var(--vds-duration-fast, 160ms) ease,
+      box-shadow var(--vds-duration-fast, 160ms) ease;
+  }
+
+  .vds-flow-handle:hover,
+  .vds-flow-handle.connecting,
+  .vds-flow-handle.valid {
+    /* `scale`, not `transform`. xyflow centres each handle with a per-side
+     * translate (top/left -50%,-50%; right 50%,-50%; bottom -50%,50%), so a
+     * `transform` here would replace it and throw the handle off its edge.
+     * The independent `scale` property composes with `transform` instead. */
+    scale: 1.08;
+    box-shadow:
+      var(--flow-handle-ring),
+      0 0 0 6px color-mix(in oklab, var(--_flow-tone, var(--vds-color-primary-solid)) 16%, transparent);
+  }
+
+  .vds-flow-handle[data-size="sm"] {
+    --flow-handle-size: 0.82rem;
+  }
+
+  .vds-flow-edge-halo {
+    stroke: color-mix(in oklab, var(--flow-edge-color) 28%, transparent);
+    stroke-width: calc(var(--flow-edge-width) + 7px);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .vds-flow-edge-path {
+    stroke: var(--flow-edge-color);
+    stroke-width: var(--flow-edge-width);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 0.45rem color-mix(in oklab, var(--flow-edge-color) 20%, transparent));
+  }
+
+  .vds-flow-edge-path[data-active] {
+    stroke: var(--flow-edge-active);
+  }
+
+  .vds-flow-edge-path[data-animated] {
+    stroke-dasharray: 10 8;
+    animation: vds-flow-edge-dash 0.95s linear infinite;
+  }
+
+  .vds-flow-edge-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1-5);
+    padding: 0.35rem 0.55rem;
+    border: 1px solid var(--flow-label-border);
+    border-radius: var(--vds-radius-full);
+    background: var(--flow-label-bg);
+    color: var(--vds-color-text);
+    font-size: var(--vds-text-xs);
+    font-weight: var(--vds-font-weight-semibold);
+    box-shadow: var(--flow-label-shadow);
+    backdrop-filter: blur(10px);
+  }
+
+  .vds-flow-edge-label[data-tone="success"] {
+    color: var(--vds-color-success-text);
+  }
+
+  .vds-flow-edge-label[data-tone="warning"] {
+    color: var(--vds-color-warning-text);
+  }
+
+  .vds-flow-edge-label[data-tone="danger"] {
+    color: var(--vds-color-danger-text);
+  }
+
+  .vds-flow-edge-label[data-tone="info"] {
+    color: var(--vds-color-info-text);
+  }
+
+  .vds-flow-edge-label[data-tone="accent"] {
+    color: var(--vds-color-accent-text);
+  }
+
+  .vds-flow-edge-dot {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: 999px;
+    background: currentColor;
+    flex: none;
+  }
+
+  @keyframes vds-flow-edge-dash {
+    to {
+      stroke-dashoffset: -18;
+    }
+  }
+}

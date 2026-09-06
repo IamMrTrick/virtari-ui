@@ -1,0 +1,69 @@
+@layer design-system.components {
+  .vds-yoopta-editor {
+    /* Typography */
+    --vds-yoopta-font: var(--vds-font-sans);
+    --vds-yoopta-font-mono: var(--vds-font-mono);
+    --vds-yoopta-text-body: var(--vds-text-base);
+    --vds-yoopta-leading-body: var(--vds-leading-relaxed);
+
+    /* Surface */
+    --vds-yoopta-color-surface: var(--vds-color-surface);
+    --vds-yoopta-color-surface-raised: var(--vds-color-surface-raised);
+    --vds-yoopta-color-surface-overlay: var(--vds-color-surface-overlay);
+    --vds-yoopta-color-border: var(--vds-color-border-muted);
+    --vds-yoopta-color-border-strong: var(--vds-color-border);
+
+    /* Text */
+    --vds-yoopta-color-text: var(--vds-color-text);
+    --vds-yoopta-color-text-muted: var(--vds-color-text-muted);
+    --vds-yoopta-color-text-placeholder: var(--vds-color-text-placeholder);
+
+    /* Accent / Ring */
+    --vds-yoopta-color-accent: var(--vds-color-primary-solid);
+    --vds-yoopta-color-accent-text: var(--vds-color-on-solid);
+    --vds-yoopta-color-ring: var(--vds-color-ring);
+
+    /* Block tones */
+    --vds-yoopta-color-callout-info-bg: var(--vds-color-info-bg-subtle);
+    --vds-yoopta-color-callout-info-border: var(--vds-color-info-bg);
+    --vds-yoopta-color-callout-info-text: var(--vds-color-info-text);
+    --vds-yoopta-color-callout-success-bg: var(--vds-color-success-bg-subtle);
+    --vds-yoopta-color-callout-success-border: var(--vds-color-success-bg);
+    --vds-yoopta-color-callout-success-text: var(--vds-color-success-text);
+    --vds-yoopta-color-callout-warning-bg: var(--vds-color-warning-bg-subtle);
+    --vds-yoopta-color-callout-warning-border: var(--vds-color-warning-bg);
+    --vds-yoopta-color-callout-warning-text: var(--vds-color-warning-text);
+    --vds-yoopta-color-callout-danger-bg: var(--vds-color-danger-bg-subtle);
+    --vds-yoopta-color-callout-danger-border: var(--vds-color-danger-bg);
+    --vds-yoopta-color-callout-danger-text: var(--vds-color-danger-text);
+
+    /* Code */
+    --vds-yoopta-color-code-bg: var(--vds-color-bg-subtle);
+    --vds-yoopta-color-code-text: var(--vds-color-text);
+    --vds-yoopta-color-code-inline-bg: var(--vds-color-bg-muted);
+
+    /* Quote */
+    --vds-yoopta-color-quote-border: var(--vds-color-primary-solid);
+
+    /* Spacing */
+    --vds-yoopta-gap-block: var(--vds-space-2);
+    --vds-yoopta-padding-block: var(--vds-space-2);
+    --vds-yoopta-padding-surface: var(--vds-space-4);
+
+    /* Radius */
+    --vds-yoopta-radius-block: var(--vds-radius-yoopta-block, 0.5rem);
+    --vds-yoopta-radius-surface: var(--vds-radius-yoopta-surface, 0.75rem);
+    --vds-yoopta-radius-popover: var(--vds-radius-yoopta-popover, 0.75rem);
+    --vds-yoopta-radius-inline: var(--vds-radius-yoopta-inline, 0.25rem);
+    --vds-yoopta-radius-control: var(--vds-radius-yoopta-control, 0.375rem);
+
+    /* Motion */
+    --vds-yoopta-duration: var(--vds-duration-fast);
+    --vds-yoopta-ease: var(--vds-ease-out);
+
+    /* Elevation */
+    --vds-yoopta-shadow-popover: 0 4px 12px rgb(0 0 0 / 0.08), 0 2px 4px rgb(0 0 0 / 0.04);
+    --vds-yoopta-shadow-toolbar: 0 2px 8px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
+
+  }
+}

@@ -1,0 +1,10 @@
+/*
+ * Color primitives entry — re-exports the split structure.
+ *
+ *   primitives/neutral.css   absolute anchors + 12-step neutral (mode-aware)
+ *   primitives/intents.css   12-step intent scales (mode-aware)
+ *   primitives/alphas.css    black-a, white-a, neutral-a, per-intent-a
+ *
+ * Brand themes (brands/*.css) override these via [data-brand="..."].
+ */
+@import "./primitives/index.css";

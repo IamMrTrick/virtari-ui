@@ -2,6 +2,37 @@
   "schemaVersion": 1,
   "packages": [
     {
+      "id": "cli",
+      "name": "virtari",
+      "version": "0.1.0",
+      "category": "tooling",
+      "description": "Source-first CLI that installs editable Virtari React and CSS files with transitive dependencies, conflict protection, diffing, and health checks.",
+      "publicSymbols": [],
+      "externalReexports": [],
+      "sourceIds": [
+        "packages/cli/package.json"
+      ],
+      "exampleIds": [],
+      "guidance": [
+        "Run virtari init once, import the installed styles/index.css at the application root, then add only the component items the application needs.",
+        "Import installed components from the local target in virtari.json. Source-owned projects must not add @virtari-packages/* runtime imports.",
+        "Use virtari diff and --dry-run before updating customized files. Pass --overwrite only after reviewing local changes.",
+        "The root registry.json is compatible with shadcn GitHub registries; package source remains authoritative and pnpm registry:build regenerates transformed files."
+      ],
+      "pitfalls": [
+        "Third-party React and behavior dependencies remain normal package dependencies; source ownership removes the Virtari black box, not the React runtime.",
+        "Do not edit generated registry files. Change packages/*/src, rebuild the registry, and commit both source and generated output.",
+        "A public Own Your Code release requires a license that grants copying and modification; the current proprietary license does not."
+      ],
+      "related": [
+        "core",
+        "tokens",
+        "utils",
+        "primitives"
+      ],
+      "skill": "ai/skills/virtari-cli/SKILL.md"
+    },
+    {
       "id": "core",
       "name": "@virtari-packages/core",
       "version": "0.3.5",
@@ -20567,6 +20598,29 @@
         "Calling formatCombo directly during server/client initial rendering can produce different platform text. Prefer useKeyboardPlatform when hydration consistency matters."
       ],
       "skill": "ai/skills/virtari-foundation-js-utils/SKILL.md"
+    },
+    {
+      "id": "source-registry",
+      "name": "Source-owned installation and registry",
+      "description": "Use Virtari as editable project source through its CLI or the shadcn-compatible GitHub registry.",
+      "sourcePaths": [
+        "docs/source-registry.md",
+        "virtari.schema.json",
+        "registry.json",
+        "packages/cli/bin/virtari.mjs"
+      ],
+      "guidance": [
+        "Read virtari.json to locate the installed source tree; the consumer's local source is authoritative after installation.",
+        "Use registry dependencies for transitive Virtari source and dependencies for external npm packages.",
+        "Keep generated imports relative so custom target roots remain portable without TypeScript aliases.",
+        "Use full owner/repository/item addresses for same-repository dependencies in a shadcn GitHub registry."
+      ],
+      "pitfalls": [
+        "Bare registry dependency names resolve to shadcn built-in items rather than sibling GitHub items.",
+        "Do not overwrite consumer edits implicitly; compare, preview, then require an explicit overwrite decision.",
+        "Do not describe source as freely owned while the distribution license forbids copying or modification."
+      ],
+      "skill": "ai/skills/virtari-foundation-source-registry/SKILL.md"
     }
   ],
   "tokens": [
@@ -169155,10 +169209,28 @@
       "kind": "md"
     },
     {
+      "id": "docs/source-registry.md",
+      "sha256": "658d6566e1206a67d892bb678bed84964ed53cf5d422479952cb403db89dcd5e",
+      "bytes": 4393,
+      "kind": "md"
+    },
+    {
       "id": "docs/surface-styles.md",
       "sha256": "ff7632741fd513f49c04bf93747c56b74b1cddd337ce4fecb2bd0b5ffc3c5c70",
       "bytes": 3578,
       "kind": "md"
+    },
+    {
+      "id": "packages/cli/bin/virtari.mjs",
+      "sha256": "86b0ada08213672987bb0723e8a2447d5dd829b8dc142193f0294d0b3ec0311a",
+      "bytes": 18668,
+      "kind": "mjs"
+    },
+    {
+      "id": "packages/cli/package.json",
+      "sha256": "94d2591728344172b26bcc746ed1d414e650b0f3fb629df8592d709c868f9bcc",
+      "bytes": 1031,
+      "kind": "json"
     },
     {
       "id": "packages/core/package.json",
@@ -175393,6 +175465,18 @@
       "sha256": "ae8daafaf4f2d10c538829438b8f625990f452a142cb1261b1ecd571140740b1",
       "bytes": 4597,
       "kind": "ts"
+    },
+    {
+      "id": "registry.json",
+      "sha256": "9b6ce28ee92e214d441cf316a865e2d547d340bcb744afa3b7ceb14efaafc8a1",
+      "bytes": 285695,
+      "kind": "json"
+    },
+    {
+      "id": "virtari.schema.json",
+      "sha256": "c39529cdd074874f73739a59863885a2beec67c2c6faf2456424851fca3fcaeb",
+      "bytes": 741,
+      "kind": "json"
     }
   ]
 }

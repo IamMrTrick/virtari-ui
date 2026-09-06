@@ -1,0 +1,116 @@
+@layer design-system.components {
+  .vds-pill-checkbox {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--pill-checkbox-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-pill-checkbox[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vds-pill-checkbox-item {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-1-5, 0.375rem);
+    min-block-size: var(--pill-checkbox-item-height);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    box-sizing: border-box;
+    padding-inline: var(--pill-checkbox-item-padding-inline);
+    padding-block: var(--vds-space-1, 0.25rem);
+    font-family: inherit;
+    font-size: var(--pill-checkbox-item-font-size);
+    font-weight: var(--pill-checkbox-item-font-weight);
+    line-height: var(--vds-control-line-height, 1.5);
+    color: var(--pill-checkbox-item-color);
+    background-color: var(--pill-checkbox-item-bg);
+    border: var(--pill-checkbox-item-border-width) solid
+      var(--pill-checkbox-item-border-color);
+    border-radius: var(--pill-checkbox-item-radius);
+    cursor: pointer;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    transition:
+      background-color var(--pill-checkbox-transition-duration)
+        var(--pill-checkbox-transition-easing),
+      border-color var(--pill-checkbox-transition-duration)
+        var(--pill-checkbox-transition-easing),
+      color var(--pill-checkbox-transition-duration)
+        var(--pill-checkbox-transition-easing),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+
+  /* ── Hover (unchecked) ── */
+  .vds-pill-checkbox-item:hover:not(:disabled):not([data-state="checked"]) {
+    background-color: var(--pill-checkbox-item-bg-hover);
+    border-color: var(--pill-checkbox-item-border-color-hover);
+  }
+
+  /* ── Checked ── */
+  .vds-pill-checkbox-item[data-state="checked"] {
+    background-color: var(--pill-checkbox-item-bg-checked);
+    border-color: var(--pill-checkbox-item-border-color-checked);
+    color: var(--pill-checkbox-item-color-checked);
+  }
+
+  /* ── Focus ring ── */
+  .vds-pill-checkbox-item:focus-visible {
+    outline: var(--pill-checkbox-focus-ring-width) solid var(--pill-checkbox-focus-ring-color);
+    outline-offset: var(--pill-checkbox-focus-ring-offset);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+
+  /* ── Disabled ── */
+  .vds-pill-checkbox-item:disabled {
+    cursor: not-allowed;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  /* ── Error ── */
+  .vds-pill-checkbox[data-error] .vds-pill-checkbox-item {
+    border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+
+  .vds-pill-checkbox[data-error] .vds-pill-checkbox-item:focus-visible {
+    outline-color: var(--vds-color-danger-solid);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+
+  .vds-pill-checkbox-label { min-inline-size: 0; }
+  .vds-pill-checkbox-indicator {
+    display: inline-flex;
+    inline-size: 1em;
+    block-size: 1em;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+  }
+  .vds-pill-checkbox-indicator svg { inline-size: 100%; block-size: 100%; }
+  .vds-pill-checkbox-mixed { display: none; }
+  .vds-pill-checkbox-item[data-state="checked"] .vds-pill-checkbox-indicator,
+  .vds-pill-checkbox-item[data-state="indeterminate"] .vds-pill-checkbox-indicator { visibility: visible; }
+  .vds-pill-checkbox-item[data-state="indeterminate"] .vds-pill-checkbox-check { display: none; }
+  .vds-pill-checkbox-item[data-state="indeterminate"] .vds-pill-checkbox-mixed { display: block; }
+}

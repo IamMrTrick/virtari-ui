@@ -1,0 +1,18 @@
+/*
+ * Semantic color barrel.
+ *
+ *   1. background.css   bg, surface, scrim, shadow-tint, highlight-tint, color-scheme
+ *   2. text.css         text, muted/subtle/disabled, link, placeholder, inverse, selection, on-solid
+ *   3. icon.css         icon-*
+ *   4. border.css       border, muted/strong/subtle/input, focus, divider, per-intent
+ *   5. interactive.css  ring, skeleton, hover, active, pressed, selection-bg
+ *   6. status.css       on-{intent}, {intent}-solid/bg/text + hover/active variants
+ *   7. data-viz.css     chart-*-muted, chart-*-strong (brand-safe via color-mix)
+ */
+@import "./background.css";
+@import "./text.css";
+@import "./icon.css";
+@import "./border.css";
+@import "./interactive.css";
+@import "./status.css";
+@import "./data-viz.css";

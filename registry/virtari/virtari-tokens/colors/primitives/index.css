@@ -1,0 +1,13 @@
+/*
+ * Primitives barrel — raw color scales (mode-aware 12-step + alphas).
+ *
+ *   neutral.css   absolute anchors + neutral 1..12 (light/dark/oled)
+ *   intents.css   primary / success / warning / danger / info / accent  1..12
+ *   alphas.css    black-a, white-a, neutral-a, per-intent-a
+ *
+ * Brand themes override these in ../brands/*.css.
+ * Components should consume semantic tokens, not primitives directly.
+ */
+@import "./neutral.css";
+@import "./intents.css";
+@import "./alphas.css";

@@ -1,0 +1,434 @@
+@import "./Stepper.tokens.css";
+
+@layer design-system.components {
+  .vds-stepper {
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: var(--stepper-label-color);
+  }
+
+  .vds-stepper *,
+  .vds-stepper *::before,
+  .vds-stepper *::after {
+    box-sizing: border-box;
+  }
+
+  .vds-stepper[data-orientation="horizontal"] {
+    display: grid;
+    grid-auto-columns: minmax(var(--stepper-horizontal-item-min), 1fr);
+    grid-auto-flow: column;
+    gap: var(--stepper-gap);
+    align-items: start;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding-block: var(--stepper-ring-size) var(--vds-space-2, 0.5rem);
+    scroll-snap-type: inline proximity;
+    scrollbar-width: thin;
+  }
+
+  .vds-stepper[data-orientation="vertical"] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .vds-stepper-step {
+    --_stepper-indicator-bg: var(--stepper-pending-bg);
+    --_stepper-indicator-color: var(--stepper-pending-text);
+    --_stepper-indicator-border: var(--stepper-pending-border);
+    --_stepper-indicator-shadow: var(--stepper-pending-shadow);
+    --_stepper-label-color: var(--stepper-label-color);
+    --_stepper-connector-fill: var(--stepper-connector-complete);
+    --_stepper-connector-progress: 0;
+
+    position: relative;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  .vds-stepper-step[data-status="active"] {
+    --_stepper-indicator-bg: var(--stepper-active-bg);
+    --_stepper-indicator-color: var(--stepper-active-text);
+    --_stepper-indicator-border: var(--stepper-active-border);
+    --_stepper-indicator-shadow:
+      0 0 0 var(--stepper-ring-size) var(--stepper-active-ring),
+      var(--stepper-active-shadow);
+    --_stepper-label-color: var(--stepper-tone-text);
+  }
+
+  .vds-stepper-step[data-status="complete"] {
+    --_stepper-indicator-bg: var(--stepper-complete-bg);
+    --_stepper-indicator-color: var(--stepper-complete-text);
+    --_stepper-indicator-border: var(--stepper-complete-border);
+    --_stepper-indicator-shadow: var(--stepper-complete-shadow);
+    --_stepper-label-color: var(--stepper-label-color);
+    --_stepper-connector-progress: 1;
+  }
+
+  .vds-stepper-step[data-status="error"] {
+    --_stepper-indicator-bg: var(--stepper-error-bg);
+    --_stepper-indicator-color: var(--stepper-error-text);
+    --_stepper-indicator-border: var(--stepper-error-border);
+    --_stepper-indicator-shadow: 0 0 0 var(--stepper-ring-size) var(--stepper-error-ring);
+    --_stepper-label-color: var(--vds-color-danger-text, #991b1b);
+    --_stepper-connector-fill: var(--stepper-error-bg);
+    --_stepper-connector-progress: 1;
+  }
+
+  .vds-stepper[data-orientation="horizontal"] .vds-stepper-step {
+    display: grid;
+    grid-template-rows: var(--stepper-indicator-size) auto;
+    justify-items: center;
+    min-inline-size: var(--stepper-horizontal-item-min);
+    scroll-snap-align: start;
+  }
+
+  .vds-stepper[data-orientation="vertical"] .vds-stepper-step {
+    display: grid;
+    grid-template-columns: var(--stepper-indicator-size) minmax(0, 1fr);
+    grid-template-rows: auto minmax(var(--stepper-connector-min-block), 1fr);
+    column-gap: var(--stepper-step-gap);
+  }
+
+  .vds-stepper-header {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  .vds-stepper[data-orientation="horizontal"] .vds-stepper-header {
+    grid-column: 1;
+    grid-row: 1;
+    inline-size: 100%;
+    justify-content: center;
+  }
+
+  .vds-stepper[data-orientation="vertical"] .vds-stepper-header {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .vds-stepper-indicator {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    inline-size: var(--stepper-indicator-size);
+    block-size: var(--stepper-indicator-size);
+    border: var(--stepper-indicator-border-width) solid var(--_stepper-indicator-border);
+    border-radius: var(--stepper-indicator-radius);
+    background-color: var(--_stepper-indicator-bg);
+    color: var(--_stepper-indicator-color);
+    box-shadow: var(--_stepper-indicator-shadow);
+    font-size: var(--stepper-indicator-font);
+    font-weight: var(--stepper-indicator-weight);
+    line-height: 1;
+    transform: translateZ(0);
+    transition:
+      background-color var(--stepper-transition),
+      border-color var(--stepper-transition),
+      color var(--stepper-transition),
+      box-shadow var(--stepper-transition),
+      transform var(--stepper-transition-spring);
+  }
+
+  .vds-stepper-indicator > svg {
+    inline-size: var(--stepper-indicator-icon-size);
+    block-size: var(--stepper-indicator-icon-size);
+    flex: none;
+  }
+
+  .vds-stepper-indicator::after {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--stepper-ring-size));
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--stepper-active-ring);
+    opacity: 0;
+    scale: 0.86;
+  }
+
+  .vds-stepper-connector {
+    position: relative;
+    flex: 1 1 auto;
+    overflow: hidden;
+    border-radius: var(--stepper-connector-radius);
+    background-color: var(--stepper-connector-color);
+    transition: background-color var(--stepper-transition);
+  }
+
+  .vds-stepper-connector::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--_stepper-connector-fill);
+    transform: scaleX(var(--_stepper-connector-progress));
+    transform-origin: left center;
+    transition:
+      background var(--stepper-transition),
+      transform var(--stepper-transition-spring);
+  }
+
+  :where([dir="rtl"]) .vds-stepper[data-orientation="horizontal"] .vds-stepper-connector::before {
+    transform-origin: right center;
+  }
+
+  .vds-stepper[data-orientation="horizontal"] .vds-stepper-connector {
+    position: absolute;
+    inset-block-start: calc((var(--stepper-indicator-size) - var(--stepper-connector-size)) / 2);
+    inset-inline-start: calc(50% + (var(--stepper-indicator-size) / 2) + var(--stepper-connector-gap));
+    inset-inline-end: calc(-50% - var(--stepper-gap) + (var(--stepper-indicator-size) / 2) + var(--stepper-connector-gap));
+    block-size: var(--stepper-connector-size);
+  }
+
+  .vds-stepper[data-orientation="vertical"] .vds-stepper-connector {
+    inline-size: var(--stepper-connector-size);
+    min-block-size: var(--stepper-connector-min-block);
+    margin-block: var(--stepper-connector-gap) 0;
+  }
+
+  .vds-stepper[data-orientation="vertical"] .vds-stepper-connector::before {
+    transform: scaleY(var(--_stepper-connector-progress));
+    transform-origin: center top;
+  }
+
+  .vds-stepper[data-line="dashed"] .vds-stepper-connector,
+  .vds-stepper[data-line="dashed"] .vds-stepper-connector::before {
+    background:
+      repeating-linear-gradient(
+        to right,
+        currentColor 0 0.375rem,
+        transparent 0.375rem 0.625rem
+      );
+    color: inherit;
+  }
+
+  .vds-stepper[data-line="dashed"] .vds-stepper-connector {
+    color: var(--stepper-connector-color);
+  }
+
+  .vds-stepper[data-line="dashed"] .vds-stepper-connector::before {
+    color: var(--_stepper-connector-fill);
+  }
+
+  .vds-stepper[data-orientation="vertical"][data-line="dashed"] .vds-stepper-connector,
+  .vds-stepper[data-orientation="vertical"][data-line="dashed"] .vds-stepper-connector::before {
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        currentColor 0 0.375rem,
+        transparent 0.375rem 0.625rem
+      );
+  }
+
+  .vds-stepper[data-line="gradient"] .vds-stepper-connector::before {
+    background:
+      linear-gradient(
+        90deg,
+        var(--stepper-tone-solid),
+        var(--vds-color-accent-solid, var(--stepper-tone-solid))
+      );
+  }
+
+  .vds-stepper-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stepper-content-gap);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    color: var(--stepper-desc-color);
+    transition:
+      background-color var(--stepper-transition),
+      border-color var(--stepper-transition),
+      box-shadow var(--stepper-transition),
+      color var(--stepper-transition),
+      transform var(--stepper-transition);
+  }
+
+  .vds-stepper[data-orientation="horizontal"] .vds-stepper-content {
+    grid-column: 1;
+    grid-row: 2;
+    align-items: center;
+    inline-size: 100%;
+    padding-block-start: var(--stepper-content-offset);
+    text-align: center;
+  }
+
+  .vds-stepper[data-orientation="vertical"] .vds-stepper-content {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    padding-block-end: var(--vds-space-6, 1.5rem);
+  }
+
+  .vds-stepper-label {
+    max-inline-size: 100%;
+    color: var(--_stepper-label-color);
+    font-size: var(--stepper-label-size);
+    font-weight: var(--stepper-label-weight);
+    line-height: var(--vds-leading-snug, 1.375);
+    overflow-wrap: anywhere;
+    transition: color var(--stepper-transition);
+  }
+
+  .vds-stepper-step[data-status="pending"] .vds-stepper-label {
+    color: var(--stepper-desc-color);
+  }
+
+  .vds-stepper-description {
+    max-inline-size: 100%;
+    color: var(--stepper-desc-color);
+    font-size: var(--stepper-desc-size);
+    line-height: var(--vds-leading-normal, 1.5);
+    overflow-wrap: anywhere;
+  }
+
+  .vds-stepper[data-variant="cards"] .vds-stepper-content {
+    inline-size: 100%;
+    padding: var(--stepper-content-padding);
+    border: 1px solid var(--stepper-card-border);
+    border-radius: var(--stepper-card-radius);
+    background-color: var(--stepper-card-bg);
+    box-shadow: var(--stepper-card-shadow);
+  }
+
+  .vds-stepper[data-variant="cards"] .vds-stepper-step[data-status="active"] .vds-stepper-content {
+    border-color: var(--stepper-tone-border);
+    background-color: var(--stepper-tone-bg-subtle);
+  }
+
+  .vds-stepper[data-variant="cards"] .vds-stepper-step[data-status="complete"] .vds-stepper-content {
+    border-color: color-mix(in oklab, var(--stepper-tone-border) 72%, var(--stepper-card-border));
+  }
+
+  .vds-stepper[data-variant="minimal"] .vds-stepper-content {
+    gap: var(--vds-space-0-5, 0.125rem);
+  }
+
+  .vds-stepper[data-variant="minimal"] .vds-stepper-indicator {
+    box-shadow: none;
+  }
+
+  .vds-stepper[data-animation="fade"] .vds-stepper-step,
+  .vds-stepper[data-animation="slide"] .vds-stepper-step,
+  .vds-stepper[data-animation="scale"] .vds-stepper-step,
+  .vds-stepper[data-animation="pulse"] .vds-stepper-step {
+    animation-duration: var(--stepper-entrance-duration);
+    animation-fill-mode: both;
+    animation-timing-function: var(--vds-ease-out, ease-out);
+    animation-delay: var(--stepper-step-delay, 0ms);
+  }
+
+  .vds-stepper[data-animation="fade"] .vds-stepper-step {
+    animation-name: vds-stepper-fade-in;
+  }
+
+  .vds-stepper[data-animation="slide"] .vds-stepper-step,
+  .vds-stepper[data-animation="pulse"] .vds-stepper-step {
+    animation-name: vds-stepper-slide-in;
+  }
+
+  .vds-stepper[data-animation="scale"] .vds-stepper-step {
+    animation-name: vds-stepper-scale-in;
+    animation-timing-function: var(--vds-ease-spring, cubic-bezier(0.22, 1.2, 0.36, 1));
+  }
+
+  .vds-stepper[data-animation="scale"] .vds-stepper-step[data-status="active"] .vds-stepper-indicator,
+  .vds-stepper[data-animation="pulse"] .vds-stepper-step[data-status="active"] .vds-stepper-indicator {
+    animation: vds-stepper-indicator-pop var(--stepper-entrance-duration) var(--vds-ease-spring, ease-out) both;
+  }
+
+  .vds-stepper[data-animation="pulse"] .vds-stepper-step[data-status="active"] .vds-stepper-indicator::after {
+    animation: vds-stepper-pulse 1.8s var(--vds-ease-out, ease-out) infinite;
+  }
+
+  @media (hover: hover) {
+    .vds-stepper-step:hover .vds-stepper-indicator {
+      transform: translateY(-1px) scale(1.03);
+    }
+
+    .vds-stepper[data-variant="cards"] .vds-stepper-step:hover .vds-stepper-content {
+      background-color: var(--stepper-card-bg-hover);
+      border-color: var(--stepper-tone-border);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .vds-stepper[data-orientation="horizontal"] {
+      grid-auto-columns: minmax(9rem, 72vw);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-stepper *,
+    .vds-stepper *::before,
+    .vds-stepper *::after {
+      animation: none !important;
+      transition-duration: 0ms !important;
+    }
+  }
+
+  @keyframes vds-stepper-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes vds-stepper-slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.375rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes vds-stepper-scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes vds-stepper-indicator-pop {
+    from {
+      transform: scale(0.82);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes vds-stepper-pulse {
+    0% {
+      opacity: 0.42;
+      scale: 0.86;
+    }
+    70% {
+      opacity: 0;
+      scale: 1.55;
+    }
+    100% {
+      opacity: 0;
+      scale: 1.55;
+    }
+  }
+}

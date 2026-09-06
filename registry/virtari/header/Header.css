@@ -1,0 +1,139 @@
+@import "./Header.tokens.css";
+
+@layer design-system.components {
+  /*
+   * Root <header>
+   *
+   * `display: contents` is intentional: the landmark element is preserved for
+   * accessibility (modern screen readers keep the `banner` role), but it
+   * produces no layout box. This matters because `position: sticky` uses the
+   * child's parent box as its sticky rail — if <header> had its own box, sticky
+   * rows would only stick for <header>'s own height (i.e. not at all).
+   * With `display: contents`, each row's sticky rail becomes the surrounding
+   * scroll container — the full page / scrollable region — so sticky works.
+   *
+   * `color` still inherits into children (CSS inheritance follows the DOM, not
+   * the box tree), and so do the CSS custom properties set via the `style` prop
+   * on the <header> element.
+   */
+  .vds-header {
+    display: contents;
+    color: var(--header-text-color);
+  }
+
+  /* ── Row ── */
+  .vds-header__row {
+    display: block;
+    inline-size: 100%;
+    background-color: var(--row-background);
+    color: var(--row-text-color);
+    border-block-end: var(--row-border-block-end);
+    transition:
+      transform var(--header-transition-duration) var(--header-transition-easing),
+      background-color var(--header-transition-duration) var(--header-transition-easing),
+      border-color var(--header-transition-duration) var(--header-transition-easing);
+    will-change: transform;
+  }
+
+  /* Inner — container constraint + three-section grid */
+  .vds-header__row-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: var(--row-section-gap);
+    block-size: var(--row-block-size);
+    inline-size: 100%;
+    max-inline-size: var(--row-container-width);
+    margin-inline: auto;
+    padding-inline: var(--row-padding-inline);
+    transition:
+      block-size var(--header-transition-duration) var(--header-transition-easing),
+      padding-block var(--header-transition-duration) var(--header-transition-easing);
+  }
+
+  /* Center mode — dead-centered middle section, outer columns equally weighted */
+  .vds-header__row[data-center="true"] > .vds-header__row-inner {
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  /* Not contained — edge-to-edge inner */
+  .vds-header__row[data-contained="false"] > .vds-header__row-inner {
+    max-inline-size: none;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Sticky modes
+   *
+   * Stacking strategy: each slot adds to the `top` of the next
+   * by consuming sibling heights tracked on the root via CSS vars.
+   * ───────────────────────────────────────────── */
+  .vds-header__row[data-sticky="always"],
+  .vds-header__row[data-sticky="smart"],
+  .vds-header__row[data-sticky="collapse"] {
+    position: sticky;
+  }
+
+  /* Per-slot top offsets */
+  .vds-header__row[data-slot="top"][data-sticky="always"],
+  .vds-header__row[data-slot="top"][data-sticky="smart"],
+  .vds-header__row[data-slot="top"][data-sticky="collapse"] {
+    inset-block-start: var(--header-sticky-offset);
+    z-index: var(--header-z-top);
+  }
+
+  .vds-header__row[data-slot="main"][data-sticky="always"],
+  .vds-header__row[data-slot="main"][data-sticky="smart"],
+  .vds-header__row[data-slot="main"][data-sticky="collapse"] {
+    inset-block-start: calc(var(--header-sticky-offset) + var(--header-top-sticky-height));
+    z-index: var(--header-z-main);
+  }
+
+  .vds-header__row[data-slot="bottom"][data-sticky="always"],
+  .vds-header__row[data-slot="bottom"][data-sticky="smart"],
+  .vds-header__row[data-slot="bottom"][data-sticky="collapse"] {
+    inset-block-start: calc(
+      var(--header-sticky-offset) +
+      var(--header-top-sticky-height) +
+      var(--header-main-sticky-height)
+    );
+    z-index: var(--header-z-bottom);
+  }
+
+  /* Smart — hide on scroll-down (translate up), show on scroll-up */
+  .vds-header__row[data-sticky="smart"][data-hidden="true"] {
+    transform: translateY(-100%);
+    pointer-events: none;
+  }
+
+  /* Collapse — row stays pinned but its inner height shrinks to 0 */
+  .vds-header__row[data-sticky="collapse"] {
+    overflow: hidden;
+  }
+  .vds-header__row[data-sticky="collapse"][data-collapsed="true"] {
+    --row-border-block-end: 0;
+  }
+  .vds-header__row[data-sticky="collapse"][data-collapsed="true"]
+    > .vds-header__row-inner {
+    block-size: 0;
+    padding-block: 0;
+  }
+
+  /* ── Section (start / center / end) ── */
+  .vds-header__section {
+    display: flex;
+    align-items: center;
+    gap: var(--row-section-item-gap);
+    min-inline-size: 0;
+  }
+  .vds-header__section[data-side="start"]  { justify-content: flex-start; }
+  .vds-header__section[data-side="center"] { justify-content: center; }
+  .vds-header__section[data-side="end"]    { justify-content: flex-end; }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .vds-header__row,
+    .vds-header__row-inner {
+      transition: none;
+    }
+  }
+}

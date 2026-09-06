@@ -1,0 +1,252 @@
+@import "../fieldset/Fieldset.css";
+
+@import "./NumberInput.tokens.css";
+
+@keyframes vds-number-typing-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+  }
+  35% {
+    box-shadow: 0 0 0 calc(1px + var(--_ti, 0.4) * 3px)
+      color-mix(in oklch, var(--vds-color-ring) 22%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--vds-color-ring) 0%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes vds-number-typing-pulse { 0%, 100% { box-shadow: none; } }
+}
+
+@layer design-system.components {
+  .vds-number-input {
+    box-shadow: var(--vds-field-shadow, none);
+    box-sizing: border-box;
+    min-inline-size: 0;
+    display: flex;
+    align-items: stretch;
+    inline-size: 100%;
+    min-block-size: var(--_ni-height);
+    border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
+    border-radius: var(--_ni-radius);
+    background-color: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface)));
+    overflow: hidden;
+    transition:
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow 180ms ease-out;
+
+    &:focus-within {
+      border-color: var(--vds-color-primary-9);
+      outline: none;
+      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
+    }
+
+    &[data-invalid] {
+      border-color: var(--vds-color-danger-9);
+      &:focus-within {
+        outline: none;
+        box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+
+        @media (forced-colors: active) {
+          outline: 2px solid Highlight;
+          outline-offset: 2px;
+          box-shadow: none;
+        }
+      }
+      transition: box-shadow 180ms ease-out;
+      @media (prefers-reduced-motion: reduce) {
+        transition-duration: 0s;
+      }
+    }
+
+    &[data-disabled] {
+      opacity: var(--vds-opacity-disabled, 0.5);
+      pointer-events: none;
+    }
+
+    /* Dim once: the shell already carries the disabled opacity. */
+    &[data-disabled] .vds-number-input__step:disabled {
+      opacity: 1;
+    }
+
+    &[data-readonly] .vds-number-input__steppers {
+      display: none;
+    }
+
+    /* ── inline stepper layout ──────────────────────────── */
+    &[data-stepper="inline"] {
+      & .vds-number-input__field {
+        text-align: center;
+      }
+
+      & .vds-number-input__step--dec {
+        border-inline-end: 1px solid var(--vds-color-border-muted);
+        inline-size: var(--_ni-height);
+        flex: 0 0 auto;
+      }
+
+      & .vds-number-input__step--inc {
+        border-inline-start: 1px solid var(--vds-color-border-muted);
+        inline-size: var(--_ni-height);
+        flex: 0 0 auto;
+      }
+    }
+
+    &[data-stepper="inline"][data-readonly] .vds-number-input__step {
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+}
+
+/* Typing pulse on the inner input */
+@layer design-system.components {
+  .vds-number-input__field.vds-field--pulse {
+    animation: vds-number-typing-pulse 140ms var(--vds-ease-out) forwards;
+  }
+}
+
+[data-vds-no-micro] .vds-field--pulse        { animation: none; }
+
+@layer design-system.components {
+  .vds-number-input__field {
+    box-sizing: border-box;
+    margin: 0;
+    padding-block: 0;
+    line-height: var(--vds-control-line-height, 1.5);
+    flex: 1;
+    min-inline-size: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding-inline: var(--_ni-px);
+    font-size: var(--_ni-font-size);
+    font-family: var(--vds-font-sans);
+    color: var(--vds-color-text);
+    min-block-size: calc(var(--_ni-height) - 2px);
+    -webkit-touch-callout: default;
+    -webkit-user-select: text;
+    user-select: text;
+
+    &::placeholder {
+      color: var(--vds-color-text-placeholder, var(--vds-color-neutral-11));
+    }
+
+    /* hide browser native spinners */
+    -moz-appearance: textfield;
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      display: none;
+    }
+  }
+
+  .vds-number-input__steppers {
+    display: flex;
+    flex-direction: column;
+    border-inline-start: 1px solid var(--vds-color-border-muted);
+    flex-shrink: 0;
+  }
+
+  @keyframes ni-step-up-press {
+    0%   { transform: translateY(0) scale(1); }
+    35%  { transform: translateY(-1px) scale(0.94); }
+    70%  { transform: translateY(0.5px) scale(1.015); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  @keyframes ni-step-down-press {
+    0%   { transform: translateY(0) scale(1); }
+    35%  { transform: translateY(1px) scale(0.94); }
+    70%  { transform: translateY(-0.5px) scale(1.015); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  .vds-number-input__step {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_ni-stepper-w);
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--vds-color-text-muted);
+    cursor: pointer;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out);
+
+    & > svg {
+      inline-size: var(--_ni-stepper-icon);
+      block-size: var(--_ni-stepper-icon);
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: var(--vds-color-surface-hover);
+      color: var(--vds-color-text);
+    }
+
+    &:active:not(:disabled) {
+      background-color: var(--vds-color-primary-3);
+      color: var(--vds-color-primary-11);
+    }
+
+    &:disabled {
+      opacity: var(--vds-opacity-disabled, 0.5);
+      cursor: not-allowed;
+    }
+
+    &.vds-number-input__step--up {
+      border-block-end: 1px solid var(--vds-color-border-muted);
+
+      &:active:not(:disabled) > svg {
+        animation: ni-step-up-press 140ms var(--vds-ease-out) forwards;
+      }
+    }
+
+    &.vds-number-input__step--down {
+      &:active:not(:disabled) > svg {
+        animation: ni-step-down-press 140ms var(--vds-ease-out) forwards;
+      }
+    }
+
+    &.vds-number-input__step--dec {
+      &:active:not(:disabled) > svg {
+        animation: ni-step-down-press 140ms var(--vds-ease-out) forwards;
+      }
+    }
+
+    &.vds-number-input__step--inc {
+      &:active:not(:disabled) > svg {
+        animation: ni-step-up-press 140ms var(--vds-ease-out) forwards;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-number-input__step {
+      transition: none;
+    }
+
+    .vds-number-input .vds-number-input__step:active:not(:disabled) > svg,
+    .vds-number-input__field.vds-field--pulse {
+      animation: none;
+    }
+  }
+}
+
+@layer design-system.components {
+  .vds-number-input:hover:not(:disabled):not([data-disabled]):not([aria-invalid="true"]):not([data-invalid]):not(:focus-within) {
+    border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
+  }
+}

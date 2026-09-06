@@ -1,0 +1,15 @@
+@import "./Container.tokens.css";
+
+@layer design-system.components {
+  .vds-container {
+    display: block;
+    inline-size: 100%;
+    max-inline-size: var(--container-width);
+    padding-inline: var(--container-gutter);
+    margin-inline: auto;
+  }
+
+  .vds-container[data-center="false"] {
+    margin-inline: 0;
+  }
+}

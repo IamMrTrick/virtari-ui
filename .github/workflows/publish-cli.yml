@@ -1,0 +1,60 @@
+name: Publish Virtari CLI
+
+on:
+  push:
+    tags:
+      - "cli-v*"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Publish mode
+        required: true
+        type: choice
+        default: stage
+        options:
+          - stage
+          - direct
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Verify and publish
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node and npm registry
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Use an OIDC-capable npm CLI
+        run: npm install --global npm@latest
+
+      - name: Install repository dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify release contents
+        run: pnpm release:cli:check
+
+      - name: Stage package for 2FA approval
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'stage'
+        working-directory: packages/cli
+        run: npm stage publish --access public
+
+      - name: Publish package
+        if: github.event_name == 'push' || inputs.mode == 'direct'
+        working-directory: packages/cli
+        run: npm publish --access public

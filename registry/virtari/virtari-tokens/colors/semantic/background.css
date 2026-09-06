@@ -1,0 +1,104 @@
+@layer tokens {
+  /*
+   * ── Background / surface / scrim semantic layer ──
+   *
+   * Canonical home for every neutral-family and overlay-family token.
+   * Values consume the mode-aware 12-step primitives directly, so there
+   * are no `light-dark()` wrappers — primitives already mode-switch.
+   *
+   * Elevation model (applies in both light & dark modes thanks to the
+   * inverted luminance ladder in dark — higher step = lighter in dark,
+   * darker in light):
+   *
+   *   bg               = canvas          (neutral-1)
+   *   bg-subtle        = muted canvas    (neutral-2)
+   *   bg-muted         = container       (neutral-3)
+   *   surface          = flat surface    (neutral-1)
+   *   surface-sunken   = inset           (neutral-2)
+   *   surface-raised   = elevated        (neutral-2)
+   *   surface-overlay  = popover/menu    (neutral-2)
+   *   surface-hover    = hover state     (neutral-3)
+   *   surface-active   = active state    (neutral-4)
+   *   surface-selected = primary-tinted  (primary-3)
+   *
+   * Overlay/scrim always uses black-alpha regardless of theme —
+   * a white-tinted scrim reads as a highlight, not a dim.
+   */
+
+  :root,
+  [data-theme] {
+    /* ─── Color-scheme signaling ───
+     * Must state exactly one scheme here, and it must be the scheme the
+     * tokens are actually in.
+     *
+     * This used to say `light dark`, which invites the browser to honor
+     * prefers-color-scheme. Nothing in this repo does: there is not one
+     * `@media (prefers-color-scheme: …)` rule anywhere, and every dark
+     * value is keyed off `[data-theme="dark"]`. So on a machine set to
+     * dark, the browser darkened everything it owns — scrollbars, form
+     * controls, the canvas behind the page, autofill, spellcheck
+     * underlines, `<select>` popups — while every token stayed light.
+     * Dark chrome, light UI, on a theme nobody selected.
+     *
+     * `light` is the honest default because :root's token values are the
+     * light ones. `[data-theme]` below re-states it whenever the app
+     * actually switches. Add `light dark` back only together with real
+     * prefers-color-scheme support — that is a product decision, not a
+     * token one. */
+    color-scheme: light;
+  }
+  [data-theme="light"] {
+    color-scheme: light;
+  }
+  [data-theme="dark"],
+  [data-theme="dark-oled"] {
+    color-scheme: dark;
+  }
+
+  :root,
+  [data-theme] {
+    /* ─── Backgrounds ─── */
+    --vds-color-bg:          color-mix(in oklch, var(--vds-color-neutral-1) 96%, var(--vds-color-primary-3));
+    --vds-color-bg-subtle:   var(--vds-color-neutral-2);
+    --vds-color-bg-muted:    var(--vds-color-neutral-3);
+    --vds-color-bg-disabled: var(--vds-color-neutral-3);
+    --vds-color-bg-inverse:  var(--vds-color-neutral-12);
+
+    /* ─── Surfaces / elevation ─── */
+    /* Tonal containment separates permanent navigation, content, fields and
+       transient surfaces without making every boundary a heavy border. */
+    --vds-color-surface-container-low: color-mix(in oklch, var(--vds-color-neutral-2) 82%, var(--vds-color-primary-3));
+    --vds-color-surface-container: color-mix(in oklch, var(--vds-color-neutral-3) 84%, var(--vds-color-primary-3));
+    --vds-color-surface-container-high: color-mix(in oklch, var(--vds-color-neutral-4) 88%, var(--vds-color-primary-4));
+    --vds-color-surface-field: color-mix(in oklch, var(--vds-color-neutral-3) 90%, var(--vds-color-primary-3));
+    --vds-color-primary-container: var(--vds-color-primary-4);
+    --vds-color-on-primary-container: var(--vds-color-primary-12);
+    --vds-color-on-surface-variant: var(--vds-color-neutral-11);
+    --vds-color-surface:          var(--vds-color-bg);
+    --vds-color-surface-sunken:   var(--vds-color-surface-container);
+    --vds-color-surface-raised:   var(--vds-color-surface-container-low);
+    --vds-color-surface-overlay:  var(--vds-color-surface-container-low);
+    --vds-color-surface-hover:    var(--vds-color-neutral-3);
+    --vds-color-surface-active:   var(--vds-color-neutral-4);
+    --vds-color-surface-selected: var(--vds-color-primary-3);
+    --vds-color-surface-inverse:  var(--vds-color-neutral-12);
+
+    /* ─── Scrim (canonical) ───
+       Always black alpha — shadows/scrims must not invert in dark.
+       The older `overlay*` spelling lives in ../aliases.css. */
+    --vds-color-scrim:        var(--vds-color-black-a7);
+    --vds-color-scrim-light:  var(--vds-color-black-a4);
+    --vds-color-scrim-strong: var(--vds-color-black-a9);
+
+    /* ─── Shadow tint tokens ───
+       Drop-in for `box-shadow: 0 1px 3px var(--shadow-tint)` so
+       components don't hardcode `black`. */
+    --vds-color-shadow-tint-low:    var(--vds-color-black-a3);
+    --vds-color-shadow-tint:        var(--vds-color-black-a5);
+    --vds-color-shadow-tint-strong: var(--vds-color-black-a7);
+
+    /* ─── Highlight tints (glass/frost overlays on media) ─── */
+    --vds-color-highlight-tint:        var(--vds-color-white-a3);
+    --vds-color-highlight-tint-strong: var(--vds-color-white-a7);
+  }
+}

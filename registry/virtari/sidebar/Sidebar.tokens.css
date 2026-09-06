@@ -1,0 +1,119 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * 1. Root tokens
+   *    The <aside> landmark owns the width, rail width,
+   *    sticky offset (below-header mode), background, and
+   *    the transition used for collapse/expand.
+   * ───────────────────────────────────────────── */
+  .vds-sidebar {
+    /* Geometry */
+    --sidebar-width:         var(--vds-sidebar-width-default, 16rem);
+    --sidebar-rail:          var(--vds-sidebar-rail-default, 3.5rem);
+    --sidebar-sticky-offset: 0px;
+    --sidebar-inline-size:   var(--sidebar-width);
+    --sidebar-block-size:    100svh;
+
+    /* Padding around direct children (header / body / footer).
+       `--sidebar-padding-block` is the *edge* inset: the aside applies it to
+       the leading edge of its first slot and the trailing edge of its last.
+       The seam BETWEEN two adjacent slots is owned by the container through
+       the single `--sidebar-slot-gap` token, so no two slots ever stack their
+       own paddings into a doubled gutter. */
+    --sidebar-padding-block:  var(--vds-space-2, 0.5rem);
+    --sidebar-padding-inline: var(--vds-space-3, 0.75rem);
+    --sidebar-slot-gap:       var(--vds-slot-gap, var(--vds-space-4, 1rem));
+    /* Half the seam on each side of a separator keeps it optically centred
+       in the same gutter. */
+    --sidebar-separator-gap:  calc(var(--sidebar-slot-gap) / 2);
+    /* Stack gap inside the body (nav sections). */
+    --sidebar-section-gap:    var(--vds-sidebar-gap-default, 0.25rem);
+    /* Inline cluster gap inside header / footer (brand + trigger, avatar + name). */
+    --sidebar-cluster-gap:    var(--vds-cluster-gap, var(--vds-space-2, 0.5rem));
+
+    /*
+     * Header / footer minimum heights.
+     * Default `0` — region is content-driven (brand row, stacked search +
+     * brand, user card, etc. each dictate their own height).
+     *
+     * Set to a concrete value when you need visual alignment with a page
+     * <Header> row:
+     *   <VdsSidebar style={{ "--sidebar-header-min-block-size": "5rem" }}>
+     * or on a wrapping element:
+     *   .app-shell { --sidebar-header-min-block-size: 5rem; }
+     */
+    --sidebar-header-min-block-size: 0;
+    --sidebar-footer-min-block-size: 0;
+
+    /* Surfaces */
+    --sidebar-background: var(--vds-surface-bg, var(--vds-color-surface-container-low, #ffffff));
+    --sidebar-text-color: var(--vds-color-text, #111827);
+    --sidebar-border-color: var(--vds-surface-border, var(--vds-color-border-muted, #e5e7eb));
+    --sidebar-border-inline: 1px solid var(--sidebar-border-color);
+
+    /* Rail gutter (inline padding when collapsed — smaller so icons center) */
+    --sidebar-rail-padding-inline: var(--vds-space-2, 0.5rem);
+
+    /* Motion */
+    --sidebar-transition-duration: var(--vds-duration-base, 200ms);
+    --sidebar-transition-easing:   var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* Z-index — below Header (30-32) so Header overlays it when they stack */
+    --sidebar-z: 20;
+
+    /* Trigger (icon button) — respects .vds-sidebar-trigger default sizing */
+    --sidebar-trigger-size:   var(--vds-size-sm, 2rem);
+    --sidebar-trigger-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
+
+    /* Focus ring — one shared width/offset across the design system */
+    --sidebar-focus-ring-width:  var(--vds-focus-ring-width, 2px);
+    --sidebar-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
+    --sidebar-focus-ring-color:  var(--vds-color-ring, currentColor);
+  }
+
+  /* ─────────────────────────────────────────────
+   * 2. Size presets (expanded width)
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-size="sm"] { --sidebar-width: var(--vds-sidebar-width-sm, 12rem); }
+  .vds-sidebar[data-size="md"] { --sidebar-width: var(--vds-sidebar-width-md, 16rem); }
+  .vds-sidebar[data-size="lg"] { --sidebar-width: var(--vds-sidebar-width-lg, 20rem); }
+  .vds-sidebar[data-size="xl"] { --sidebar-width: var(--vds-sidebar-width-xl, 24rem); }
+
+  /* ─────────────────────────────────────────────
+   * 3. Modes — full-height vs below-header
+   *
+   * full-height: sidebar takes the whole viewport height; user places
+   * it *beside* the header (Layout A — GitHub/Linear/Notion style).
+   *
+   * below-header: sidebar starts below a sticky header; its block-size
+   * subtracts the header's sticky offset so it never overlaps.
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-mode="full-height"] {
+    --sidebar-sticky-offset: 0px;
+    --sidebar-block-size: 100svh;
+  }
+
+  .vds-sidebar[data-mode="below-header"] {
+    --sidebar-block-size: calc(100svh - var(--sidebar-sticky-offset));
+  }
+
+  /* ─────────────────────────────────────────────
+   * 4. Background presets
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-background="none"]    { --sidebar-background: transparent; }
+  .vds-sidebar[data-background="surface"] { --sidebar-background: var(--vds-color-surface-container-low, #ffffff); }
+  .vds-sidebar[data-background="subtle"]  { --sidebar-background: var(--vds-color-bg-subtle, #f9fafb); }
+  .vds-sidebar[data-background="muted"]   { --sidebar-background: var(--vds-color-bg-muted, #f3f4f6); }
+
+  /* ─────────────────────────────────────────────
+   * 5. Bordered — the side-adjacent divider between sidebar and content
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-bordered="false"] { --sidebar-border-inline: 0; }
+
+  /* ─────────────────────────────────────────────
+   * 6. Collapsed — inline-size flips to the rail width
+   * ───────────────────────────────────────────── */
+  .vds-sidebar[data-collapsed="true"] {
+    --sidebar-inline-size:   var(--sidebar-rail);
+    --sidebar-padding-inline: var(--sidebar-rail-padding-inline);
+  }
+}

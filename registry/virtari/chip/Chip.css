@@ -1,0 +1,144 @@
+@import "./Chip.tokens.css";
+
+@layer design-system.components {
+  /* ── Root ── */
+  .vds-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--chip-gap);
+    flex: none;
+
+    box-sizing: border-box;
+    min-block-size: var(--chip-height);
+    padding-inline: var(--chip-padding-inline);
+    padding-block: var(--chip-padding-block);
+
+    background-color: var(--chip-background);
+    border: var(--chip-border-width) solid var(--chip-border-color);
+    border-radius: var(--chip-radius);
+    color: var(--chip-text-color);
+
+    font-family: var(--chip-font-family);
+    font-size: var(--chip-font-size);
+    font-weight: var(--chip-font-weight);
+    line-height: var(--chip-line-height);
+    letter-spacing: var(--chip-letter-spacing);
+
+    white-space: nowrap;
+    user-select: none;
+    vertical-align: middle;
+
+    transition:
+      background-color var(--chip-transition-duration) var(--chip-transition-easing),
+      border-color var(--chip-transition-duration) var(--chip-transition-easing),
+      color var(--chip-transition-duration) var(--chip-transition-easing);
+  }
+
+  /* ── Interactive root (button element) ── */
+  button.vds-chip,
+  a.vds-chip {
+    cursor: pointer;
+    appearance: none;
+    text-decoration: none;
+  }
+
+  .vds-chip[data-interactive="true"]:focus-visible,
+  button.vds-chip:focus-visible,
+  a.vds-chip:focus-visible {
+    outline: var(--chip-focus-ring-width) solid var(--chip-focus-ring-color);
+    outline-offset: var(--chip-focus-ring-offset);
+  }
+
+  /* ── Disabled ── */
+  .vds-chip[aria-disabled="true"],
+  .vds-chip:disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* ── Icon / Avatar slot ── */
+  .vds-chip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+
+    inline-size: var(--chip-icon-size);
+    block-size: var(--chip-icon-size);
+    margin-inline-start: var(--chip-icon-inset-inline-start);
+    /* Load-bearing: `> img` below inherits this. Without a radius here the
+       inherit resolved to the initial 0 and an avatar in the slot rendered
+       square inside a pill. */
+    border-radius: var(--chip-icon-radius);
+
+    color: var(--chip-icon-color);
+  }
+
+  .vds-chip-icon > svg,
+  .vds-chip-icon > img {
+    inline-size: 100%;
+    block-size: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  .vds-chip > svg {
+    display: block;
+    inline-size: var(--chip-icon-size);
+    block-size: var(--chip-icon-size);
+    flex-shrink: 0;
+  }
+
+  /* ── Label (optional wrapper) ── */
+  .vds-chip-label {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 1lh;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── Remove button ── */
+  .vds-chip-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+
+    inline-size: var(--chip-remove-size);
+    block-size: var(--chip-remove-size);
+    margin-inline-end: var(--chip-remove-inset-inline-end);
+    padding: 0;
+
+    background-color: var(--chip-remove-bg);
+    border: 0;
+    border-radius: var(--chip-remove-radius);
+    color: inherit;
+
+    cursor: pointer;
+    appearance: none;
+
+    transition: background-color var(--chip-transition-duration) var(--chip-transition-easing);
+  }
+
+  .vds-chip-remove:hover {
+    background-color: var(--chip-remove-bg-hover);
+  }
+
+  .vds-chip-remove:active {
+    background-color: var(--chip-remove-bg-active);
+  }
+
+  .vds-chip-remove:focus-visible {
+    outline: var(--chip-focus-ring-width) solid var(--chip-focus-ring-color);
+    outline-offset: 1px;
+  }
+
+  .vds-chip-remove > svg {
+    inline-size: var(--chip-remove-icon-size);
+    block-size: var(--chip-remove-icon-size);
+  }
+}

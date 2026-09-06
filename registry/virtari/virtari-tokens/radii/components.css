@@ -1,0 +1,153 @@
+@layer tokens {
+  :root,
+  [data-radius] {
+    /*
+     * ── Per-component radius tokens (caps) ──
+     * Only components that break under certain modes get a dedicated token.
+     * Pattern: min(<what the mode wants>, <this component's breaking point>).
+     * min() lets global modes shrink the value (sharp) but never exceed the cap,
+     * so pill mode can't turn a checkbox into a radio or bloat a dialog.
+     *
+     * Components NOT listed here keep using the generic t-shirt scale
+     * or the element/surface/badge aliases — intentional.
+     */
+
+    /* Checkbox — finite mode role, with a further size-relative cap in the
+     * component so even its smallest size remains distinct from a radio. */
+    --vds-radius-checkbox: min(var(--vds-radius-element), var(--vds-radius-4));
+
+    /* Checkbox card — follow card radius family (xl cap) so card-style
+     * selections match sibling surfaces like Card / Alert / Toast. */
+    --vds-radius-checkbox-card: var(--vds-radius-card);
+
+    /* Multiline fields share the finite radius of other input shells. */
+    --vds-radius-textarea: var(--vds-radius-control);
+
+    /* Keycaps remain compact rectangles, distinct from action capsules. */
+    --vds-radius-kbd: min(var(--vds-radius-xs), var(--vds-radius-3));
+
+    /* Default control shell/action aliases. Inputs and fields stay on the
+     * finite control radius; button-like affordances switch to full in pill
+     * mode below. */
+    --vds-radius-control: var(--vds-radius-md);
+    --vds-radius-input: var(--vds-radius-control);
+    --vds-radius-control-action: min(var(--vds-radius-control), var(--vds-radius-4));
+    --vds-radius-button: var(--vds-radius-lg);
+    --vds-radius-button-group: var(--vds-radius-button);
+    --vds-radius-action: var(--vds-radius-control-action);
+    --vds-radius-copy-button: var(--vds-radius-action);
+    --vds-radius-toggle: var(--vds-radius-button);
+    --vds-radius-pagination-button: var(--vds-radius-button);
+    --vds-radius-tabs-trigger: var(--vds-radius-button);
+    --vds-radius-tabs-boxed: min(var(--vds-radius-control), var(--vds-radius-4));
+    --vds-radius-toast-action: var(--vds-radius-button);
+
+    /* Chip — follow Badge: pill in every mode.
+     * Kept as a separate alias so future themes can diverge chip from badge. */
+    --vds-radius-chip: var(--vds-radius-badge);
+
+    /* List panels share the surface family; tooltips stay compact. */
+    --vds-radius-select-content: var(--vds-radius-surface);
+    --vds-radius-tooltip:        min(var(--vds-radius-element), var(--vds-radius-4));
+
+    /* Command/list panels and code surfaces. */
+    --vds-radius-command: min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-code: min(var(--vds-radius-md), var(--vds-radius-lg));
+    --vds-radius-code-inline: min(var(--vds-radius-control), var(--vds-radius-4));
+
+    /* Color picker. The shell behaves like a small surface, nested panels like
+     * code blocks, and compact fields like controls. */
+    --vds-radius-color-picker: var(--vds-radius-card);
+    --vds-radius-color-picker-panel: var(--vds-radius-code);
+    --vds-radius-color-picker-field: var(--vds-radius-control);
+
+    /* Date/time picker. Calendar cells and segment focus rectangles must not
+     * become pills; content surfaces follow popover/card shaping. */
+    --vds-radius-date-field: var(--vds-radius-input);
+    --vds-radius-date-segment: var(--vds-radius-control-action);
+    --vds-radius-date-trigger: var(--vds-radius-control-action);
+    --vds-radius-date-cell: min(var(--vds-radius-control), var(--vds-radius-4));
+    --vds-radius-date-content: min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-time-picker-surface: var(--vds-radius-date-content);
+    --vds-radius-time-picker-inner: var(--vds-radius-input);
+
+    /* Bottom navigation surface. */
+    --vds-radius-bottom-nav: var(--vds-radius-card);
+
+    /* Alert banners use the compact field family. */
+    --vds-radius-alert: min(var(--vds-radius-md), var(--vds-radius-xl));
+
+    /* Cards/toasts follow surfaces; modal panels use the larger sheet role. */
+    --vds-radius-card:         min(var(--vds-radius-surface), var(--vds-radius-xl));
+    --vds-radius-dialog:       var(--vds-radius-xl);
+    --vds-radius-alert-dialog: var(--vds-radius-xl);
+    --vds-radius-drawer:       var(--vds-radius-xl);
+    --vds-radius-toast:        min(var(--vds-radius-surface), var(--vds-radius-xl));
+
+    /* Data table — cap at primitive-4 (8px). The inner <table> cells can't round,
+     * so the outer container radius is purely decorative. Anything above 8px
+     * creates visible wedges where the sticky-header divider and scrollbar
+     * meet the rounded corners. Must use a primitive cap. */
+    --vds-radius-data-table: min(var(--vds-radius-surface), var(--vds-radius-4));
+
+    /* Radio card — follow card radius family (xl cap) so card-style
+     * selections match sibling surfaces and the checkbox card. */
+    --vds-radius-radio-card: var(--vds-radius-card);
+    --vds-radius-radio-card-icon: var(--vds-radius-control-action);
+
+    /* Segmented tracks belong to the field family. Their inset indicators
+     * subtract the track border and padding; they do not repeat this radius. */
+    --vds-radius-segmented: var(--vds-radius-control);
+
+    /* Nav item — cap at primitive-5 (12px) so pill radius mode rounds items
+     * noticeably but never turns them into full capsules in the sidebar.
+     * data-variant="pill" on <Nav> still overrides to --vds-radius-full explicitly. */
+    --vds-radius-nav-item: min(var(--vds-radius-element), var(--vds-radius-5));
+    --vds-radius-breadcrumb-item: var(--vds-radius-nav-item);
+    --vds-radius-tree-item: var(--vds-radius-nav-item);
+
+    /* Editor families. Rich text surfaces need their own caps because they
+     * contain many nested controls that would otherwise inherit the raw scale. */
+    --vds-radius-editor-block: var(--vds-radius-code);
+    --vds-radius-editor-surface: var(--vds-radius-card);
+    --vds-radius-editor-popover: var(--vds-radius-card);
+    --vds-radius-editor-control: var(--vds-radius-button);
+    --vds-radius-editor-control-sm: var(--vds-radius-action);
+    --vds-radius-yoopta-block: var(--vds-radius-editor-block);
+    --vds-radius-yoopta-surface: var(--vds-radius-editor-surface);
+    --vds-radius-yoopta-popover: var(--vds-radius-editor-popover);
+    --vds-radius-yoopta-inline: var(--vds-radius-code-inline);
+    --vds-radius-yoopta-control: var(--vds-radius-editor-control-sm);
+
+    /* File upload. */
+    --vds-radius-file-upload-dropzone: var(--vds-radius-card);
+    --vds-radius-file-upload-preview: var(--vds-radius-control-action);
+    --vds-radius-file-upload-remove: var(--vds-radius-action);
+
+    /* Pill radio — always pill-shaped, mirroring badge/chip. */
+    --vds-radius-pill-radio: var(--vds-radius-badge);
+
+    /* Pill checkbox — mirrors pill-radio. */
+    --vds-radius-pill-checkbox: var(--vds-radius-badge);
+
+    /* Scrollbar thumb — cap via primitive so pill mode can't bloat the
+     * thumb into a full circle. Thumbs are 8–10px thick; 9999px radius
+     * makes them capsules/circles which reads as a UI glitch. The
+     * primitive --vds-radius-3 (6px) is mode-invariant, while
+     * --vds-radius-sm still lets sharp mode tighten to 2px. */
+    --vds-radius-scrollbar-thumb: min(var(--vds-radius-sm), var(--vds-radius-3));
+  }
+
+  [data-radius="pill"] {
+    --vds-radius-input: var(--vds-radius-md);
+    --vds-radius-button: var(--vds-radius-full);
+    --vds-radius-button-group: var(--vds-radius-full);
+    --vds-radius-action: var(--vds-radius-full);
+    --vds-radius-copy-button: var(--vds-radius-full);
+    --vds-radius-toggle: var(--vds-radius-full);
+    --vds-radius-pagination-button: var(--vds-radius-full);
+    --vds-radius-segmented: var(--vds-radius-full);
+    --vds-radius-tabs-trigger: var(--vds-radius-full);
+    --vds-radius-toast-action: var(--vds-radius-full);
+  }
+}

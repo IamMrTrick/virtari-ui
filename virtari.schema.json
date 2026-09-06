@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://virtari.dev/schema.json",
+  "title": "Virtari source installation configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "target"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "target": {
+      "type": "string",
+      "description": "Project-relative directory that receives the source-owned Virtari tree.",
+      "default": "src/virtari"
+    },
+    "registry": {
+      "type": "string",
+      "description": "Registry JSON URL or local path."
+    },
+    "install": {
+      "type": "boolean",
+      "description": "Install third-party dependencies after adding source.",
+      "default": true
+    }
+  }
+}

@@ -1,0 +1,53 @@
+@layer design-system.components {
+  .vds-tag-input {
+    /* ─── Layout ─── */
+    --tag-input-min-height:    var(--vds-size-md, 2.25rem);
+    --tag-input-padding:       var(--vds-space-1-5, 0.375rem);
+    --tag-input-gap:           var(--vds-space-1-5, 0.375rem);
+
+    /* ─── Surface ─── */
+    --tag-input-bg:            var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface, #ffffff)));
+    --tag-input-shadow: var(--vds-field-shadow, none);
+    --tag-input-border-color:  var(--vds-field-border, var(--vds-color-border-interactive, #6b7280));
+    --tag-input-border-width:  1px;
+    --tag-input-radius:        var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
+
+    /* ─── Input field ─── */
+    --tag-input-field-size:    var(--vds-text-sm, 0.875rem);
+    --tag-input-field-color:   var(--vds-color-text, currentColor);
+    --tag-input-field-min-w:   8rem;
+    --tag-input-placeholder:   var(--vds-color-text-placeholder, #4b5563);
+
+    /* ─── Focus ring ─── */
+    --tag-input-ring-color:    var(--vds-color-ring, oklch(0.55 0.2 265));
+    --tag-input-ring-width:    var(--vds-focus-ring-width, 2px);
+
+    /* ─── Motion ─── */
+    --tag-input-transition:    var(--vds-transition-base, 200ms ease-out);
+  }
+
+  /* ─── Size modifiers ─── */
+  .vds-tag-input[data-size="sm"] {
+    --tag-input-min-height:  var(--vds-size-sm, 2rem);
+    --tag-input-padding:     var(--vds-space-1, 0.25rem);
+    --tag-input-gap:         var(--vds-space-1, 0.25rem);
+    --tag-input-field-size:  var(--vds-text-xs, 0.75rem);
+  }
+
+  .vds-tag-input[data-size="lg"] {
+    --tag-input-min-height:  var(--vds-size-lg, 2.5rem);
+    --tag-input-padding:     var(--vds-space-2, 0.5rem);
+    --tag-input-gap:         var(--vds-space-2, 0.5rem);
+    --tag-input-field-size:  var(--vds-text-base, 1rem);
+  }
+
+  /* ─── States ─── */
+  .vds-tag-input[data-invalid] {
+    --tag-input-border-color: var(--vds-color-danger-7, #fca5a5);
+  }
+
+  .vds-tag-input[data-disabled] {
+    --tag-input-bg:           var(--vds-color-bg-disabled, #f9fafb);
+    --tag-input-border-color: var(--vds-color-border-disabled, #e5e7eb);
+  }
+}

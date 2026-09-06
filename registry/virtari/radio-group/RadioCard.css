@@ -1,0 +1,169 @@
+@layer design-system.components {
+  .vds-radio-card {
+    box-shadow: var(--radio-card-shadow);
+    position: relative;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--radio-card-gap);
+    padding: var(--radio-card-padding-block) var(--radio-card-padding-inline);
+    border: var(--radio-card-border-width) solid var(--radio-card-border-color);
+    border-radius: var(--radio-card-radius);
+    background-color: var(--radio-card-bg);
+    color: var(--radio-card-label-color);
+    cursor: pointer;
+    transition:
+      background-color var(--radio-card-transition-duration)
+        var(--radio-card-transition-easing),
+      border-color var(--radio-card-transition-duration)
+        var(--radio-card-transition-easing),
+      box-shadow var(--radio-card-transition-duration)
+        var(--radio-card-transition-easing);
+    isolation: isolate;
+  }
+
+  /* ── Hover ── */
+  .vds-radio-card:hover:not([data-disabled]) {
+    background-color: var(--radio-card-bg-hover);
+    border-color: var(--radio-card-border-color-hover);
+  }
+
+  /* ── Focus-within (inner radio owns the focus ring) ── */
+  .vds-radio-card:focus-within {
+    border-color: var(--radio-card-border-color-hover);
+  }
+
+  /* ── Selected (derived from inner radio :has()) ── */
+  .vds-radio-card:has(.vds-radio-card-input[data-state="checked"]) {
+    background-color: var(--radio-card-bg-checked);
+    border-color: var(--radio-card-border-color-checked);
+  }
+
+  /* ── Disabled ── */
+  .vds-radio-card[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  /* Dim once: the card already carries the disabled opacity, so the radio
+     nested inside it must not multiply it down again. */
+  .vds-radio-card[data-disabled] .vds-radio-item:disabled {
+    opacity: 1;
+  }
+
+  /* ── Body / text layout ── */
+  .vds-radio-card-body {
+    display: flex;
+    flex: 1;
+    min-inline-size: 0;
+    gap: var(--radio-card-gap);
+    align-items: flex-start;
+  }
+
+  .vds-radio-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+    min-inline-size: 0;
+    flex: 1;
+  }
+
+  .vds-radio-card-label-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--vds-space-3, 0.75rem);
+    min-inline-size: 0;
+  }
+
+  .vds-radio-card-label {
+    font-size: var(--radio-card-label-font-size);
+    font-weight: var(--radio-card-label-font-weight);
+    color: var(--radio-card-label-color);
+    line-height: var(--vds-control-line-height, 1.5);
+    min-inline-size: 0;
+  }
+
+  .vds-radio-card-description {
+    font-size: var(--radio-card-description-font-size);
+    color: var(--radio-card-description-color);
+    font-weight: var(--vds-font-weight-normal, 400);
+    line-height: var(--vds-control-line-height, 1.5);
+  }
+
+  .vds-radio-card-trailing {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    margin-inline-start: auto;
+    font-size: var(--radio-card-trailing-font-size);
+    font-weight: var(--radio-card-label-font-weight);
+    color: var(--radio-card-trailing-color);
+    line-height: var(--vds-control-line-height, 1.5);
+  }
+
+  .vds-radio-card-badge {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-size: var(--radio-card-badge-font-size);
+    font-weight: var(--radio-card-badge-font-weight);
+    color: var(--radio-card-badge-color);
+    margin-block-start: var(--vds-space-0-5, 0.125rem);
+  }
+
+  /* =========================================================================
+   * Row layout (default) — [radio][content + trailing]
+   * ========================================================================= */
+  .vds-radio-card[data-layout="row"] {
+    flex-direction: row;
+  }
+
+  .vds-radio-card[data-layout="row"] > .vds-radio-card-input {
+    margin-block-start: max(0px, calc((var(--radio-card-label-font-size) * var(--vds-control-line-height, 1.5) - var(--radio-size)) / 2));
+  }
+
+  /* =========================================================================
+   * Icon-grid layout — icon centered on top, text below, radio in corner.
+   * ========================================================================= */
+  .vds-radio-card[data-layout="icon-grid"] {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--vds-space-2, 0.5rem);
+    padding-block: var(--vds-space-4, 1rem);
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] > .vds-radio-card-input {
+    align-self: flex-end;
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] .vds-radio-card-body {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] .vds-radio-card-text {
+    align-items: center;
+    text-align: center;
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] .vds-radio-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--radio-card-icon-size);
+    block-size: var(--radio-card-icon-size);
+    border-radius: var(--radio-card-icon-radius);
+    background-color: var(--radio-card-icon-bg);
+    color: var(--radio-card-icon-color);
+    flex-shrink: 0;
+  }
+
+  .vds-radio-card[data-layout="icon-grid"] .vds-radio-card-icon svg {
+    inline-size: var(--radio-card-icon-glyph-size);
+    block-size: var(--radio-card-icon-glyph-size);
+  }
+}

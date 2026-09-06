@@ -1,0 +1,87 @@
+@layer tokens.base {
+  /*
+   * ── Neutral 12-step scale ──
+   *
+   * Hand-tuned OKLCH scale for neutral surfaces, borders and text.
+   * Each step has a specific semantic role (industry-standard 12-step):
+   *
+   *   1   App canvas
+   *   2   Subtle bg (cards on app)
+   *   3   UI element rest
+   *   4   UI element hover
+   *   5   UI element active / pressed
+   *   6   Subtle border
+   *   7   UI border / focus border
+   *   8   Hovered border / strong divider
+   *   9   Solid neutral bg
+   *   10  Solid neutral hover
+   *   11  Low-contrast text
+   *   12  High-contrast text
+   *
+   * Curve is non-linear (perceptually tuned). Steps 1-4 are tight
+   * for surface elevation; 8→9 is the big jump from borders to solids;
+   * 11→12 widens for max text contrast.
+   *
+   * hue 270 = slight cool tint (avoids yellow cast on warm displays)
+   * Dark mode uses higher L for elevation (raised = lighter — modern).
+   */
+
+  :root,
+  [data-theme="light"] {
+    /* ── Absolute anchors ──
+     * Used by alpha primitives, shadows, scrims, and any component
+     * that truly wants pure black or white regardless of theme. */
+    --vds-color-white: oklch(1 0 0);
+    --vds-color-black: oklch(0 0 0);
+
+    /* ── Neutral solids (light, default) ── */
+    --vds-color-neutral-1:  oklch(0.985 0.002 270);
+    --vds-color-neutral-2:  oklch(0.975 0.003 270);
+    --vds-color-neutral-3:  oklch(0.945 0.004 270);
+    --vds-color-neutral-4:  oklch(0.920 0.005 270);
+    --vds-color-neutral-5:  oklch(0.890 0.006 270);
+    --vds-color-neutral-6:  oklch(0.855 0.007 270);
+    --vds-color-neutral-7:  oklch(0.810 0.008 270);
+    --vds-color-neutral-8:  oklch(0.745 0.010 270);
+    --vds-color-neutral-9:  oklch(0.580 0.014 270);
+    --vds-color-neutral-10: oklch(0.530 0.014 270);
+    --vds-color-neutral-11: oklch(0.430 0.013 270);
+    --vds-color-neutral-12: oklch(0.180 0.012 270);
+  }
+
+  /* ── Neutral solids (dark) ── */
+  [data-theme="dark"] {
+    --vds-color-neutral-1:  oklch(0.178 0.005 270);
+    --vds-color-neutral-2:  oklch(0.210 0.005 270);
+    --vds-color-neutral-3:  oklch(0.245 0.006 270);
+    --vds-color-neutral-4:  oklch(0.275 0.007 270);
+    --vds-color-neutral-5:  oklch(0.305 0.008 270);
+    --vds-color-neutral-6:  oklch(0.345 0.009 270);
+    --vds-color-neutral-7:  oklch(0.395 0.010 270);
+    --vds-color-neutral-8:  oklch(0.460 0.011 270);
+    --vds-color-neutral-9:  oklch(0.530 0.013 270);
+    --vds-color-neutral-10: oklch(0.580 0.013 270);
+    --vds-color-neutral-11: oklch(0.720 0.011 270);
+    --vds-color-neutral-12: oklch(0.930 0.008 270);
+  }
+
+  /*
+   * Optional OLED variant — overrides ONLY canvas to pure black.
+   * Keeps elevation ladder so hierarchy doesn't collapse.
+   * Activate with [data-theme="dark-oled"] on <html>.
+   */
+  [data-theme="dark-oled"] {
+    --vds-color-neutral-1:  oklch(0 0 0);
+    --vds-color-neutral-2:  oklch(0.150 0.005 270);
+    --vds-color-neutral-3:  oklch(0.200 0.006 270);
+    --vds-color-neutral-4:  oklch(0.245 0.007 270);
+    --vds-color-neutral-5:  oklch(0.285 0.008 270);
+    --vds-color-neutral-6:  oklch(0.330 0.009 270);
+    --vds-color-neutral-7:  oklch(0.385 0.010 270);
+    --vds-color-neutral-8:  oklch(0.455 0.011 270);
+    --vds-color-neutral-9:  oklch(0.525 0.013 270);
+    --vds-color-neutral-10: oklch(0.580 0.013 270);
+    --vds-color-neutral-11: oklch(0.720 0.011 270);
+    --vds-color-neutral-12: oklch(0.945 0.008 270);
+  }
+}

@@ -1,0 +1,64 @@
+@layer tokens {
+  /* Inherit appearance intent as numbers, not resolved colors. Rebinding colors
+     at a nested theme boundary must retain the ancestor's style and field tone. */
+  :root {
+    --_vds-surface-bordered: 0;
+    --_vds-field-strong: 0;
+    --vds-surface-shadow: 0 0 0 0 transparent;
+    --vds-overlay-shadow: 0 0 0 0 transparent;
+    --vds-field-shadow: 0 0 0 0 transparent;
+  }
+  [data-surface-style="tonal"] {
+    --_vds-surface-bordered: 0;
+    --vds-surface-shadow: 0 0 0 0 transparent;
+    --vds-overlay-shadow: 0 0 0 0 transparent;
+    --vds-field-shadow: 0 0 0 0 transparent;
+  }
+  [data-surface-style="bordered"] {
+    --_vds-surface-bordered: 1;
+    --vds-surface-shadow: 0 0 0 0 transparent;
+    --vds-overlay-shadow: 0 0 0 0 transparent;
+    --vds-field-shadow: 0 0 0 0 transparent;
+  }
+  [data-surface-style="elevated"] {
+    --_vds-surface-bordered: 0;
+    --vds-surface-shadow: var(--vds-shadow-sm);
+    --vds-overlay-shadow: var(--vds-shadow-lg);
+    --vds-field-shadow: var(--vds-shadow-xs);
+  }
+  [data-field-tone="strong"] { --_vds-field-strong: 1; }
+  [data-field-tone="default"] { --_vds-field-strong: 0; }
+
+  /* At the 0/100 endpoints color-mix selects an existing palette color exactly.
+     Strong alpha preserves tinted parents: deeper in light and lifted in dark. */
+  :root, [data-theme], [data-surface-style], [data-field-tone] {
+    --vds-surface-bg: color-mix(in oklch, var(--vds-color-bg) calc(var(--_vds-surface-bordered) * 100%), var(--vds-color-surface-container-low));
+    --vds-navigation-bg: color-mix(in oklch, var(--vds-color-surface-container-low) calc(var(--_vds-surface-bordered) * 100%), var(--vds-color-surface-container));
+    --vds-surface-border: color-mix(in oklch, var(--vds-color-neutral-a4) calc(var(--_vds-surface-bordered) * 100%), transparent);
+    --vds-overlay-bg: color-mix(in oklch, var(--vds-color-surface-container-low) calc(var(--_vds-surface-bordered) * 100%), var(--vds-color-surface-container-high));
+    --vds-field-rest-bg: color-mix(in oklch, var(--vds-color-bg) calc(var(--_vds-surface-bordered) * 100%), var(--vds-color-surface-field));
+    --vds-field-bg: color-mix(in oklch, var(--vds-color-neutral-a4) calc(var(--_vds-field-strong) * 100%), var(--vds-field-rest-bg));
+    --vds-field-border: color-mix(in oklch, var(--vds-color-neutral-a6) calc(var(--_vds-surface-bordered) * 100%), transparent);
+    --vds-field-border-hover: color-mix(in oklch, var(--vds-color-neutral-a8) calc(var(--_vds-surface-bordered) * 100%), transparent);
+  }
+  /* Quiet decorative boundaries are not a 3:1 guarantee. Honor stronger contrast
+     preferences without changing semantic error/selection/focus indicators. */
+  @media (prefers-contrast: more) {
+    :root, [data-theme], [data-surface-style], [data-field-tone] {
+      --vds-surface-border: var(--vds-color-text-muted);
+      --vds-field-border: var(--vds-color-text-muted);
+      --vds-field-border-hover: var(--vds-color-text);
+      --vds-outline-field-border: var(--vds-color-text-muted);
+      --vds-outline-field-border-hover: var(--vds-color-text);
+    }
+  }
+  @media (forced-colors: active) {
+    :root, [data-theme], [data-surface-style], [data-field-tone] {
+      --vds-outline-field-border: ButtonText;
+      --vds-outline-field-border-hover: Highlight;
+      --vds-surface-border: CanvasText;
+      --vds-field-border: ButtonText;
+      --vds-field-border-hover: Highlight;
+    }
+  }
+}

@@ -39,5 +39,8 @@ jobs:
       - name: Verify MCP transport
         run: pnpm mcp:build && pnpm mcp:test
 
+      - name: Verify source registry and CLI
+        run: pnpm registry:check && pnpm registry:test
+
       - name: Verify documentation
         run: pnpm --filter @virtari-packages/docs exec tsc --noEmit && pnpm --filter @virtari-packages/docs exec vite build

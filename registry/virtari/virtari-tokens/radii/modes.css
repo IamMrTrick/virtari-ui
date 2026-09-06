@@ -1,0 +1,76 @@
+@layer tokens {
+  /*
+   * ── T-shirt semantic scale ──
+   * Purpose-based, mode-reactive tokens. Prefer these in component CSS.
+   *
+   *   xs   tightest interactive (tiny chips, compact controls)
+   *   sm   compact interactive  (small controls, item details)
+   *   md   field shell          (input, select, textarea)
+   *   lg   small surface        (card, dropdown-menu, popover)
+   *   xl   large surface        (dialog, drawer, toast)
+   *   2xl  extra-large surface
+   *   full fully rounded (pill/circle)
+   *
+   * ── Modes ──
+   * Set `data-radius` on <html> or any container to switch the personality.
+   *   sharp  — minimal rounding → enterprise, technical, dense
+   *   soft   — branded rounding → default (= :root)
+   *   round  — noticeable rounding → friendly, modern, consumer
+   *   pill   — roundest personality → button/pill affordances go fully rounded
+   *
+   * ── Back-compat aliases ──
+   * --vds-radius-element / --vds-radius-surface / --vds-radius-badge remain
+   * thin aliases. Component tokens decide what becomes truly full in pill.
+   */
+  :root,
+  [data-radius="soft"] {
+    --vds-radius-xs:   var(--vds-radius-2);  /* 4px  */
+    --vds-radius-sm:   var(--vds-radius-4);  /* 8px: compact actions */
+    --vds-radius-md:   var(--vds-radius-5);  /* 12px: fields */
+    --vds-radius-lg:   1.25rem;             /* 20px: contained groups */
+    --vds-radius-xl:   1.75rem;             /* 28px: dialogs and sheets */
+    --vds-radius-2xl:  2rem;                /* 32px: large surfaces */
+
+
+  }
+
+  /* Resolve aliases at every mode boundary, including nested themes. */
+  :root,
+  [data-radius] {
+    --vds-radius-element: var(--vds-radius-sm);
+    --vds-radius-surface: var(--vds-radius-lg);
+    --vds-radius-badge: var(--vds-radius-full);
+  }
+
+  /* ── Mode: Sharp ── */
+  [data-radius="sharp"] {
+    --vds-radius-xs:  var(--vds-radius-0);
+    --vds-radius-sm:  var(--vds-radius-1);
+    --vds-radius-md:  var(--vds-radius-1);
+    --vds-radius-lg:  var(--vds-radius-2);
+    --vds-radius-xl:  var(--vds-radius-2);
+    --vds-radius-2xl: var(--vds-radius-3);
+  }
+
+  /* ── Mode: Soft (default — same as :root) ── */
+
+  /* ── Mode: Round ── */
+  [data-radius="round"] {
+    --vds-radius-xs:  var(--vds-radius-3);
+    --vds-radius-sm:  var(--vds-radius-4);
+    --vds-radius-md:  var(--vds-radius-6);
+    --vds-radius-lg:  var(--vds-radius-7);
+    --vds-radius-xl:  2rem;
+    --vds-radius-2xl: 2.5rem;
+  }
+
+  /* ── Mode: Pill ── */
+  [data-radius="pill"] {
+    --vds-radius-xs:  var(--vds-radius-4);
+    --vds-radius-sm:  var(--vds-radius-5);
+    --vds-radius-md:  var(--vds-radius-6);
+    --vds-radius-lg:  var(--vds-radius-7);
+    --vds-radius-xl:  2rem;
+    --vds-radius-2xl: 2.5rem;
+  }
+}

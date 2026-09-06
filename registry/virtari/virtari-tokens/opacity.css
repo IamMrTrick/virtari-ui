@@ -1,0 +1,37 @@
+@layer tokens {
+  :root {
+    --vds-opacity-0:   0;
+    --vds-opacity-5:   0.05;
+    --vds-opacity-10:  0.1;
+    --vds-opacity-20:  0.2;
+    --vds-opacity-25:  0.25;
+    --vds-opacity-30:  0.3;
+    --vds-opacity-40:  0.4;
+    --vds-opacity-50:  0.5;
+    --vds-opacity-60:  0.6;
+    --vds-opacity-70:  0.7;
+    --vds-opacity-75:  0.75;
+    --vds-opacity-80:  0.8;
+    --vds-opacity-90:  0.9;
+    --vds-opacity-95:  0.95;
+    --vds-opacity-100: 1;
+
+    /*
+     * ── Semantic ──
+     * The numeric scale above says how transparent; this says why.
+     *
+     * There is exactly ONE disabled opacity. Components had drifted to
+     * seven different literals — 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.7 —
+     * across ~50 declarations, so a disabled button and the disabled
+     * input beside it faded by visibly different amounts. Reach for this
+     * instead of a literal.
+     *
+     * Opacity is the last resort for a disabled state — it dims the
+     * border and the focus ring along with the label. Prefer
+     * --vds-color-text-disabled / -bg-disabled / -border-disabled where
+     * the design allows, and use this for the parts (icons, nested
+     * controls, custom art) those don't reach.
+     */
+    --vds-opacity-disabled: var(--vds-opacity-50);
+  }
+}

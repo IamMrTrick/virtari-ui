@@ -1,0 +1,181 @@
+@layer tokens {
+  /*
+   * ── Status (intent) semantic layer ──
+   *
+   * Canonical home for every intent token. Each intent
+   * (primary/success/warning/danger/info/accent) is expanded to full
+   * 12-step role coverage:
+   *
+   *   {intent}-bg-subtle    app-level intent tint   (intent-2)
+   *   {intent}-bg           component muted bg      (intent-3)
+   *   {intent}-bg-hover     hover on muted bg       (intent-4)
+   *   {intent}-bg-active    active on muted bg      (intent-5)
+   *   {intent}-solid        emphasis bg (CTAs)      (intent-9)
+   *   {intent}-solid-hover  solid hover             (mode-aware solid tone)
+   *   {intent}-solid-active solid active            (mode-aware solid tone)
+   *   {intent}-text         readable intent text    (intent-11; light warning-12)
+   *   {intent}-text-muted   supporting intent text  (same readable text role)
+   *   on-{intent}           text/icon on *-solid    (white or black)
+   *
+   * The `*-emphasis`, `*-on-emphasis`, `*-muted`, `*-muted-text` and
+   * `*-subtle` spellings live in ../aliases.css and forward to the
+   * canonical names here.
+   */
+
+  :root,
+  [data-theme] {
+    /* ─── On-colors (text/icon on solid intent backgrounds) ───
+     * These defaults are measured for the bundled palette. A custom brand
+     * must recheck its foreground and background pairs. */
+    /* Hand-picked per the brand palette — white on all saturated intents
+     * except warning (amber) which needs dark text for readability.
+     * We intentionally do NOT use contrast-color() here: early Chromium
+     * implementations use an OKLCH L=0.5 threshold, which picks black on
+     * brand colors that sit just above that midpoint (e.g. primary-9 at
+     * L=0.550), even though white has demonstrably higher WCAG contrast.
+     *
+     * Every value here MUST be mode-independent. `--vds-color-white` and
+     * `--vds-color-black` are the absolute anchors; the 12-step scale is
+     * not. on-warning used to read `--vds-color-neutral-12`, which is
+     * near-black in light mode but near-white in dark — so the moment the
+     * theme flipped, every warning solid rendered white-on-amber at
+     * 2.19:1. Amber stays amber in both modes (warning-9 is L≈0.70
+     * either way), so its ink must not move either: black gives 7.78:1
+     * in both. */
+    --vds-color-on-primary: var(--vds-color-white);
+    --vds-color-on-success: var(--vds-color-white);
+    --vds-color-on-warning: var(--vds-color-black);
+    --vds-color-on-danger:  var(--vds-color-white);
+    --vds-color-on-info:    var(--vds-color-white);
+    --vds-color-on-accent:  var(--vds-color-white);
+
+    /* ─── Primary ─── */
+    --vds-color-primary-bg-subtle:    var(--vds-color-primary-2);
+    --vds-color-primary-bg:           var(--vds-color-primary-3);
+    --vds-color-primary-bg-hover:     var(--vds-color-primary-4);
+    --vds-color-primary-bg-active:    var(--vds-color-primary-5);
+    --vds-color-primary-solid:        var(--vds-color-primary-9);
+    --vds-color-primary-solid-hover:  var(--vds-color-primary-solid-hover-tone);
+    --vds-color-primary-solid-active: var(--vds-color-primary-solid-active-tone);
+    --vds-color-primary-text:         var(--vds-color-primary-11);
+    --vds-color-primary-text-muted:   var(--vds-color-primary-text);
+
+    /* ─── Success ─── */
+    --vds-color-success-bg-subtle:    var(--vds-color-success-2);
+    --vds-color-success-bg:           var(--vds-color-success-3);
+    --vds-color-success-bg-hover:     var(--vds-color-success-4);
+    --vds-color-success-bg-active:    var(--vds-color-success-5);
+    --vds-color-success-solid:        var(--vds-color-success-9);
+    --vds-color-success-solid-hover:  var(--vds-color-success-solid-hover-tone);
+    --vds-color-success-solid-active: var(--vds-color-success-solid-active-tone);
+    --vds-color-success-text:         var(--vds-color-success-11);
+    --vds-color-success-text-muted:   var(--vds-color-success-text);
+
+    /* ─── Warning ─── */
+    --vds-color-warning-bg-subtle:    var(--vds-color-warning-2);
+    --vds-color-warning-bg:           var(--vds-color-warning-3);
+    --vds-color-warning-bg-hover:     var(--vds-color-warning-4);
+    --vds-color-warning-bg-active:    var(--vds-color-warning-5);
+    --vds-color-warning-solid:        var(--vds-color-warning-9);
+    --vds-color-warning-solid-hover:  var(--vds-color-warning-10);
+    /* Warning carries black ink. Its active solid needs a separate tone
+     * because light warning-11 is only 3.47:1 under black. */
+    --vds-color-warning-solid-active: var(--vds-color-warning-solid-active-tone);
+    /* Step 11 fails ordinary text on the light active tint (4.25:1). */
+    --vds-color-warning-text:         var(--vds-color-warning-12);
+    --vds-color-warning-text-muted:   var(--vds-color-warning-text);
+
+    /* ─── Danger ─── */
+    --vds-color-danger-bg-subtle:    var(--vds-color-danger-2);
+    --vds-color-danger-bg:           var(--vds-color-danger-3);
+    --vds-color-danger-bg-hover:     var(--vds-color-danger-4);
+    --vds-color-danger-bg-active:    var(--vds-color-danger-5);
+    --vds-color-danger-solid:        var(--vds-color-danger-9);
+    --vds-color-danger-solid-hover:  var(--vds-color-danger-solid-hover-tone);
+    --vds-color-danger-solid-active: var(--vds-color-danger-solid-active-tone);
+    --vds-color-danger-text:         var(--vds-color-danger-11);
+    --vds-color-danger-text-muted:   var(--vds-color-danger-text);
+
+    /* ─── Info ─── */
+    --vds-color-info-bg-subtle:    var(--vds-color-info-2);
+    --vds-color-info-bg:           var(--vds-color-info-3);
+    --vds-color-info-bg-hover:     var(--vds-color-info-4);
+    --vds-color-info-bg-active:    var(--vds-color-info-5);
+    --vds-color-info-solid:        var(--vds-color-info-9);
+    --vds-color-info-solid-hover:  var(--vds-color-info-solid-hover-tone);
+    --vds-color-info-solid-active: var(--vds-color-info-solid-active-tone);
+    --vds-color-info-text:         var(--vds-color-info-11);
+    --vds-color-info-text-muted:   var(--vds-color-info-text);
+
+    /* ─── Accent ─── */
+    --vds-color-accent-bg-subtle:    var(--vds-color-accent-2);
+    --vds-color-accent-bg:           var(--vds-color-accent-3);
+    --vds-color-accent-bg-hover:     var(--vds-color-accent-4);
+    --vds-color-accent-bg-active:    var(--vds-color-accent-5);
+    --vds-color-accent-solid:        var(--vds-color-accent-9);
+    --vds-color-accent-solid-hover:  var(--vds-color-accent-solid-hover-tone);
+    --vds-color-accent-solid-active: var(--vds-color-accent-solid-active-tone);
+    --vds-color-accent-text:         var(--vds-color-accent-11);
+    --vds-color-accent-text-muted:   var(--vds-color-accent-text);
+  }
+
+  /* Warning solid-active, per mode. Step 11 remains suitable for both
+   * solid black-ink backgrounds and page text in dark themes. Light text
+   * uses step 12 to remain readable on every bundled warning tint. */
+  :root,
+  [data-theme] {
+    /* darker than solid-hover (L 0.650) so a press still reads as a press;
+     * 5.27:1 under black ink. */
+    --vds-color-warning-solid-active-tone: oklch(0.600 0.145 85);
+  }
+
+  [data-theme="dark"],
+  [data-theme="dark-oled"] {
+    --vds-color-warning-solid-active-tone: var(--vds-color-warning-11);
+    --vds-color-warning-text: var(--vds-color-warning-11);
+  }
+
+
+  /* Solid hover/active for the five white-ink intents, per mode.
+   * The same two-role conflict as warning above, mirrored. Steps 10 and 11
+   * are light palette steps intended for foregrounds on a DARK
+   * canvas must be light to stay readable — and that is exactly what makes
+   * them fail under white ink as solids: dark hover measured 2.69–3.33:1
+   * and active 1.98–2.23:1.
+   *
+   * Lightening is not available as a fix. Step 9 already sits at the
+   * lightest value clearing 4.5:1 under white, so anything lighter fails by
+   * construction. In dark mode the solid therefore darkens on hover, which
+   * is what it already does in light mode — one behaviour in both themes.
+   *
+   * Derived from step 9 with color-mix rather than hardcoded, so a brand
+   * that retunes its solid gets correct interaction states for free. */
+  :root,
+  [data-theme] {
+    --vds-color-primary-solid-hover-tone:  var(--vds-color-primary-10);
+    --vds-color-primary-solid-active-tone: var(--vds-color-primary-11);
+    --vds-color-success-solid-hover-tone:  var(--vds-color-success-10);
+    --vds-color-success-solid-active-tone: var(--vds-color-success-11);
+    --vds-color-danger-solid-hover-tone:  var(--vds-color-danger-10);
+    --vds-color-danger-solid-active-tone: var(--vds-color-danger-11);
+    --vds-color-info-solid-hover-tone:  var(--vds-color-info-10);
+    --vds-color-info-solid-active-tone: var(--vds-color-info-11);
+    --vds-color-accent-solid-hover-tone:  var(--vds-color-accent-10);
+    --vds-color-accent-solid-active-tone: var(--vds-color-accent-11);
+  }
+
+  [data-theme="dark"],
+  [data-theme="dark-oled"] {
+    --vds-color-primary-solid-hover-tone:  color-mix(in oklch, var(--vds-color-primary-9), black 8%);
+    --vds-color-primary-solid-active-tone: color-mix(in oklch, var(--vds-color-primary-9), black 16%);
+    --vds-color-success-solid-hover-tone:  color-mix(in oklch, var(--vds-color-success-9), black 8%);
+    --vds-color-success-solid-active-tone: color-mix(in oklch, var(--vds-color-success-9), black 16%);
+    --vds-color-danger-solid-hover-tone:  color-mix(in oklch, var(--vds-color-danger-9), black 8%);
+    --vds-color-danger-solid-active-tone: color-mix(in oklch, var(--vds-color-danger-9), black 16%);
+    --vds-color-info-solid-hover-tone:  color-mix(in oklch, var(--vds-color-info-9), black 8%);
+    --vds-color-info-solid-active-tone: color-mix(in oklch, var(--vds-color-info-9), black 16%);
+    --vds-color-accent-solid-hover-tone:  color-mix(in oklch, var(--vds-color-accent-9), black 8%);
+    --vds-color-accent-solid-active-tone: color-mix(in oklch, var(--vds-color-accent-9), black 16%);
+  }
+
+}

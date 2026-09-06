@@ -1,0 +1,28 @@
+@layer design-system.components {
+  @keyframes vds-skeleton-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  .vds-skeleton {
+    display: block;
+    background-color: var(--vds-color-skeleton);
+    /* The t-shirt scale, not the raw primitive it used to read: a skeleton
+       stands in for a real element, so its corner has to move with
+       `data-radius` the way that element's does. --vds-radius-md resolves to
+       the same 8px in the default mode, so nothing shifts there. */
+    border-radius: var(--vds-radius-md, 0.5rem);
+    animation: vds-skeleton-pulse 2s ease-in-out infinite;
+    inline-size: var(--_skeleton-w, 100%);
+    block-size: var(--_skeleton-h, 1rem);
+
+    &[data-circle] {
+      border-radius: var(--vds-radius-full);
+    }
+  }
+}

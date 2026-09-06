@@ -1,0 +1,75 @@
+@layer design-system.components {
+  /* =========================================================================
+   * ButtonGroup — wrapper-level layout tokens.
+   *
+   * Children (<Button>) keep using their own size/variant/color tokens;
+   * this file only drives the group container (gap, radius when attached,
+   * border-collapse between adjacent items).
+   *
+   * Size ramp below mirrors Button's 8-slot scale exactly so a group at
+   * size "md" lines up with a Button at size "md".
+   *    2xs(24) · xs(28) · sm(32) · md(36) · lg(40) · xl(44) · 2xl(52) · 3xl(64)
+   * ========================================================================= */
+
+  .vds-button-group {
+    /* ── Layout (md defaults) ── */
+    --button-group-height: var(--vds-size-md, 2.25rem);
+    --button-group-gap: var(--vds-space-2, 0.5rem);
+    --button-group-radius: var(--vds-radius-button-group, var(--vds-radius-element, 0.375rem));
+
+    /* Attached mode — shared 1px border between adjacent items. */
+    --button-group-divider-width: 1px;
+
+    /* Focus ring bump so an item's ring is not clipped by its neighbour. */
+    --button-group-focus-z: 1;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Size ramp — synced 1:1 with Button.
+   * Only gap/radius vary; height is informational for attached layouts.
+   * ───────────────────────────────────────────── */
+
+  .vds-button-group[data-size="2xs"] {
+    --button-group-height: var(--vds-size-2xs, 1.5rem);
+    --button-group-gap: var(--vds-space-1, 0.25rem);
+    --button-group-radius: var(--vds-radius-button-group, var(--vds-radius-element, 0.375rem));
+  }
+
+  .vds-button-group[data-size="xs"] {
+    --button-group-height: var(--vds-size-xs, 1.75rem);
+    --button-group-gap: var(--vds-space-1, 0.25rem);
+    --button-group-radius: var(--vds-radius-button-group, var(--vds-radius-element, 0.375rem));
+  }
+
+  .vds-button-group[data-size="sm"] {
+    --button-group-height: var(--vds-size-sm, 2rem);
+    --button-group-gap: var(--vds-space-1-5, 0.375rem);
+    --button-group-radius: var(--vds-radius-button-group, var(--vds-radius-element, 0.375rem));
+  }
+
+  /* md — default, inherits base tokens */
+
+  .vds-button-group[data-size="lg"] {
+    --button-group-height: var(--vds-size-lg, 2.5rem);
+    --button-group-gap: var(--vds-space-2, 0.5rem);
+    --button-group-radius: var(--vds-radius-button-group, var(--vds-radius-element, 0.375rem));
+  }
+
+  .vds-button-group[data-size="xl"] {
+    --button-group-height: var(--vds-size-xl, 2.75rem);
+    --button-group-gap: var(--vds-space-2, 0.5rem);
+    --button-group-radius: var(--vds-radius-button-group, var(--vds-radius-element, 0.375rem));
+  }
+
+  .vds-button-group[data-size="2xl"] {
+    --button-group-height: var(--vds-size-2xl, 3.25rem);
+    --button-group-gap: var(--vds-space-2-5, 0.625rem);
+    --button-group-radius: var(--vds-radius-button-group, var(--vds-radius-element, 0.375rem));
+  }
+
+  .vds-button-group[data-size="3xl"] {
+    --button-group-height: var(--vds-size-3xl, 4rem);
+    --button-group-gap: var(--vds-space-3, 0.75rem);
+    --button-group-radius: var(--vds-radius-button-group, var(--vds-radius-element, 0.375rem));
+  }
+}

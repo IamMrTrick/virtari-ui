@@ -1,0 +1,79 @@
+@layer design-system.components {
+  .vds-dropdown-menu-content {
+    /* An inline-size must not be drawn from the spacing scale: retuning
+       spacing would silently resize every menu. 10rem is narrower than the
+       smallest --vds-surface-width-* step (xs = 20rem), which is sized for
+       dialog-class overlays, so the menu keeps its own local token. */
+    --dropdown-menu-min-inline-size: 10rem;
+    z-index: var(--vds-z-dropdown);
+    background-color: var(--vds-overlay-bg, var(--vds-color-surface));
+    border: 1px solid var(--vds-surface-border, var(--vds-color-border-muted));
+    border-radius: var(--vds-radius-surface);
+    box-shadow: var(--vds-overlay-shadow, var(--vds-shadow-lg));
+    overflow: hidden;
+    padding-block: var(--vds-space-1);
+    min-inline-size: var(--dropdown-menu-min-inline-size);
+    animation: vds-fade-in var(--vds-duration-fast) var(--vds-ease-out);
+
+    &[data-state="closed"] {
+      animation: vds-fade-out var(--vds-duration-fastest) var(--vds-ease-in);
+    }
+
+    &[data-side="bottom"] {
+      animation: vds-slide-in-from-top var(--vds-duration-fast) var(--vds-ease-out);
+    }
+
+    &[data-side="top"] {
+      animation: vds-slide-in-from-bottom var(--vds-duration-fast) var(--vds-ease-out);
+    }
+
+    /* Logical side animations — the menu primitive flips `data-side` under dir="rtl", and
+       the logical keyframes flip their motion axis, so both combine to a
+       correctly mirrored slide in Persian/Arabic. */
+    &[data-side="left"] {
+      animation: vds-slide-in-from-inline-end var(--vds-duration-fast) var(--vds-ease-out);
+    }
+
+    &[data-side="right"] {
+      animation: vds-slide-in-from-inline-start var(--vds-duration-fast) var(--vds-ease-out);
+    }
+  }
+
+  .vds-dropdown-menu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2);
+    padding-inline: var(--vds-space-3);
+    padding-block: var(--vds-space-2);
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    transition: background-color var(--vds-duration-fastest) var(--vds-ease-out);
+
+    &[data-highlighted] {
+      background-color: var(--vds-color-bg-muted);
+    }
+
+    &[data-disabled] {
+      opacity: var(--vds-opacity-disabled, 0.5);
+      pointer-events: none;
+    }
+  }
+
+  .vds-dropdown-menu-label {
+    padding-inline: var(--vds-space-3);
+    padding-block: var(--vds-space-1-5);
+    font-size: var(--vds-text-xs);
+    font-weight: var(--vds-font-weight-semibold);
+    color: var(--vds-color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: var(--vds-tracking-wider);
+  }
+
+  .vds-dropdown-menu-separator {
+    block-size: 1px;
+    margin-block: var(--vds-space-1);
+    background-color: var(--vds-color-border-muted);
+  }
+}

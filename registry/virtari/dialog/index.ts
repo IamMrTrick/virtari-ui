@@ -1,0 +1,31 @@
+import "./Dialog.css";
+export {
+  Dialog,
+  DialogTrigger,
+  DialogClose,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogCloseIcon,
+} from "./Dialog";
+
+export type {
+  DialogOverlayProps,
+  DialogContentProps,
+  DialogHeaderProps,
+  DialogBodyProps,
+  DialogFooterProps,
+  DialogTitleProps,
+  DialogDescriptionProps,
+  DialogCloseIconProps,
+  DialogSize,
+  DialogAnimation,
+  DialogIntent,
+  DialogBackdrop,
+  DialogHeaderVariant,
+} from "./Dialog";

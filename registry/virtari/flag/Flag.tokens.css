@@ -1,0 +1,32 @@
+@layer design-system.components {
+  .vds-flag,
+  .vds-flag-placeholder {
+    /* ── Layout ── */
+    --flag-size: 1.25rem;          /* md default — inline-size; block-size follows 3:2 */
+    --flag-aspect: 4 / 3;
+    /* A flag is a picture of a real object, so its corner is a fixed 4px
+     * detail rather than a share of the theme's roundness — but it was
+     * reading `--vds-radius-2` straight off the primitive scale, which the
+     * primitives file explicitly tells components not to do, and which left
+     * flags completely deaf to `data-radius`. Same shape as the scrollbar
+     * thumb: track the mode-reactive step, capped by the primitive. `sharp`
+     * now squares the corner off with everything else; `round` and `pill`
+     * stop at 4px instead of turning a 14px flag into a blob. */
+    --flag-border-radius: min(
+      var(--vds-radius-xs, 0.25rem),
+      var(--vds-radius-2, 0.25rem)
+    );
+    --flag-outline-color: color-mix(in oklch, currentColor 12%, transparent);
+    --flag-outline-width: 1px;
+    --flag-shadow: none;
+  }
+
+  /* ── Size ramp (aligned with --vds-size-*) ── */
+  .vds-flag[data-size="2xs"] { --flag-size: 0.875rem; }  /* 14px */
+  .vds-flag[data-size="xs"]  { --flag-size: 1rem; }      /* 16px */
+  .vds-flag[data-size="sm"]  { --flag-size: 1.125rem; }  /* 18px */
+  /* md = default (1.25rem / 20px) */
+  .vds-flag[data-size="lg"]  { --flag-size: 1.5rem; }    /* 24px */
+  .vds-flag[data-size="xl"]  { --flag-size: 1.875rem; }  /* 30px */
+  .vds-flag[data-size="2xl"] { --flag-size: 2.5rem; }    /* 40px */
+}

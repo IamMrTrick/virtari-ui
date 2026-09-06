@@ -1,0 +1,151 @@
+@import "./Badge.tokens.css";
+
+@layer design-system.components {
+  /* ── Root ── */
+  .vds-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--badge-gap);
+    vertical-align: middle;
+
+    box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    min-block-size: var(--badge-height);
+    padding-block: 0;
+    padding-inline: var(--badge-padding-inline);
+
+    background-color: var(--badge-bg);
+    color: var(--badge-text);
+    border: var(--badge-border-width) solid var(--badge-border);
+    border-radius: var(--badge-radius);
+
+    font-family: var(--badge-font-family);
+    font-size: var(--badge-font-size);
+    font-weight: var(--badge-font-weight);
+    line-height: var(--badge-line-height);
+    letter-spacing: var(--badge-letter-spacing);
+
+    white-space: normal;
+    text-decoration: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+      background-color var(--badge-transition-duration) var(--badge-transition-easing),
+      border-color     var(--badge-transition-duration) var(--badge-transition-easing),
+      color            var(--badge-transition-duration) var(--badge-transition-easing);
+  }
+
+  /* ── Interactive state (button/anchor render) ── */
+  .vds-badge[data-interactive="true"],
+  .vds-badge:is(a[href], button:enabled) {
+    cursor: pointer;
+  }
+
+  .vds-badge[data-interactive="true"]:not(:disabled):hover,
+  .vds-badge:is(a[href], button:enabled):hover {
+    background-color: var(--badge-bg-hover);
+  }
+
+  .vds-badge[data-interactive="true"]:focus-visible,
+  .vds-badge:is(a, button):focus-visible {
+    outline: var(--badge-focus-ring-width) solid var(--badge-focus-ring-color);
+    outline-offset: var(--badge-focus-ring-offset);
+  }
+
+  /* ── Sections (leading/trailing icon slots) ── */
+  .vds-badge-label {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .vds-badge-section {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .vds-badge > svg,
+  .vds-badge-section > svg {
+    display: block;
+    flex-shrink: 0;
+    inline-size: var(--badge-icon-size);
+    block-size: var(--badge-icon-size);
+  }
+
+  /* ── Dot indicator ── */
+  .vds-badge-dot {
+    flex-shrink: 0;
+    inline-size: var(--badge-dot-size);
+    block-size: var(--badge-dot-size);
+    border-radius: var(--vds-radius-full, 9999px);
+    background-color: var(--badge-dot);
+  }
+
+  /* ── Close (removable chip) ── */
+  .vds-badge-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    inline-size: var(--badge-icon-size);
+    block-size: var(--badge-icon-size);
+    margin-inline-start: calc(var(--badge-gap) / 2);
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: var(--vds-radius-full, 9999px);
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity var(--badge-transition-duration) var(--badge-transition-easing),
+                background-color var(--badge-transition-duration) var(--badge-transition-easing);
+  }
+
+  .vds-badge-close:hover,
+  .vds-badge-close:focus-visible {
+    opacity: 1;
+    background-color: color-mix(in oklch, currentColor 14%, transparent);
+  }
+
+  .vds-badge-close:focus-visible {
+    outline: var(--badge-focus-ring-width) solid var(--badge-focus-ring-color);
+    outline-offset: 1px;
+  }
+
+  .vds-badge-close > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* ── Dot-only mode ── */
+  .vds-badge[data-dot-only="true"] {
+    flex-shrink: 0;
+    inline-size: var(--badge-dot-size);
+    block-size: var(--badge-dot-size);
+    background-color: var(--badge-color-solid);
+    border: 0;
+  }
+  .vds-badge[data-dot-only="true"] > .vds-badge-dot {
+    display: none;
+  }
+
+  .vds-badge:disabled {
+    cursor: not-allowed;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-badge,
+    .vds-badge-close { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .vds-badge { border-color: CanvasText; }
+    .vds-badge:disabled { color: GrayText; border-color: GrayText; opacity: 1; }
+    .vds-badge-dot,
+    .vds-badge[data-dot-only="true"] { background-color: CanvasText; forced-color-adjust: none; }
+  }
+}

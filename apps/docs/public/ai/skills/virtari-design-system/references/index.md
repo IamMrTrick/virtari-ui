@@ -4,6 +4,7 @@ These paths are relative to the skill bundle root (ai/skills in a repository che
 
 ## Packages
 
+- `virtari-cli/SKILL.md` — Source-first CLI that installs editable Virtari React and CSS files with transitive dependencies, conflict protection, diffing, and health checks.
 - `virtari-core/SKILL.md` — Global CSS reset, cascade ordering, base typography, focus, native scrolling and visually hidden helpers.
 - `virtari-primitives/SKILL.md` — Headless React behavior primitives underlying Virtari components, exposed through explicit package subpaths.
 - `virtari-react-accordion/SKILL.md` — Single or multiple disclosure groups, semantic heading triggers, and a data-driven FAQ wrapper.
@@ -91,3 +92,4 @@ These paths are relative to the skill bundle root (ai/skills in a repository che
 - `virtari-foundation-css-utilities/SKILL.md` — Finite generated token-backed utilities, grouped independently from React helpers.
 - `virtari-foundation-stacking-focus-scroll/SKILL.md` — Shared interaction infrastructure beyond component-specific visuals.
 - `virtari-foundation-js-utils/SKILL.md` — Shared class, ref, native-form, direction and keyboard behavior with explicit contracts.
+- `virtari-foundation-source-registry/SKILL.md` — Use Virtari as editable project source through its CLI or the shadcn-compatible GitHub registry.

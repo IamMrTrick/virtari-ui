@@ -1,0 +1,15 @@
+/* ─────────────────────────────────────────────────────────────────────
+ * AlertDialog shares its visual language with Dialog. The components
+ * render the `vds-dialog-*` classes defined in @virtari-packages/react-dialog.
+ * Import that package's styles once at your app root:
+ *
+ *   import "../dialog/Dialog.css";
+ *   import "./AlertDialog.css";
+ *
+ * This file exists for the `./styles` export path (backward compat
+ * with existing apps) and as a place for alertdialog-specific tweaks
+ * if they become needed. It is intentionally empty today.
+ * ───────────────────────────────────────────────────────────────────── */
+@layer design-system.components {
+  /* no-op */
+}

@@ -1,0 +1,244 @@
+@layer tokens.base {
+  /*
+   * ── Three alpha families ──
+   *
+   * 1. black-a*   ALWAYS black, regardless of theme.
+   *               Use for: shadows, modal scrims, dialog overlays.
+   *
+   * 2. white-a*   ALWAYS white, regardless of theme.
+   *               Use for: glass/frost overlays on media, highlights on
+   *               dark hero sections, ripples on dark buttons.
+   *
+   * 3. neutral-a* ADAPTIVE — black tint in light, white tint in dark.
+   *               Use for: ghost button hover, dividers on colored panels,
+   *               interactive overlays where the parent bg is unknown.
+   *
+   * Plus per-intent alpha (primary-a1..12, …) derived from the intent's
+   * own solid-9 step via color-mix. Because the derivation goes through
+   * the runtime primitive, brand themes that override --vds-color-{intent}-9
+   * automatically flow through every alpha step — no per-brand alpha
+   * overrides required.
+   */
+
+  :root,
+  [data-theme] {
+    /* ─── Black alpha (always black) ─── */
+    --vds-color-black-a1:  oklch(0 0 0 / 0.05);
+    --vds-color-black-a2:  oklch(0 0 0 / 0.10);
+    --vds-color-black-a3:  oklch(0 0 0 / 0.15);
+    --vds-color-black-a4:  oklch(0 0 0 / 0.20);
+    --vds-color-black-a5:  oklch(0 0 0 / 0.30);
+    --vds-color-black-a6:  oklch(0 0 0 / 0.40);
+    --vds-color-black-a7:  oklch(0 0 0 / 0.50);
+    --vds-color-black-a8:  oklch(0 0 0 / 0.60);
+    --vds-color-black-a9:  oklch(0 0 0 / 0.70);
+    --vds-color-black-a10: oklch(0 0 0 / 0.80);
+    --vds-color-black-a11: oklch(0 0 0 / 0.90);
+    --vds-color-black-a12: oklch(0 0 0 / 0.95);
+
+    /* ─── White alpha (always white) ─── */
+    --vds-color-white-a1:  oklch(1 0 0 / 0.05);
+    --vds-color-white-a2:  oklch(1 0 0 / 0.10);
+    --vds-color-white-a3:  oklch(1 0 0 / 0.15);
+    --vds-color-white-a4:  oklch(1 0 0 / 0.20);
+    --vds-color-white-a5:  oklch(1 0 0 / 0.30);
+    --vds-color-white-a6:  oklch(1 0 0 / 0.40);
+    --vds-color-white-a7:  oklch(1 0 0 / 0.50);
+    --vds-color-white-a8:  oklch(1 0 0 / 0.60);
+    --vds-color-white-a9:  oklch(1 0 0 / 0.70);
+    --vds-color-white-a10: oklch(1 0 0 / 0.80);
+    --vds-color-white-a11: oklch(1 0 0 / 0.90);
+    --vds-color-white-a12: oklch(1 0 0 / 0.95);
+
+    /* ─── Neutral alpha — light (black tint, industry-tuned) ─── */
+    --vds-color-neutral-a1:  oklch(0 0 0 / 0.012);
+    --vds-color-neutral-a2:  oklch(0 0 0 / 0.024);
+    --vds-color-neutral-a3:  oklch(0 0 0 / 0.059);
+    --vds-color-neutral-a4:  oklch(0 0 0 / 0.090);
+    --vds-color-neutral-a5:  oklch(0 0 0 / 0.122);
+    --vds-color-neutral-a6:  oklch(0 0 0 / 0.149);
+    --vds-color-neutral-a7:  oklch(0 0 0 / 0.192);
+    --vds-color-neutral-a8:  oklch(0 0 0 / 0.267);
+    --vds-color-neutral-a9:  oklch(0 0 0 / 0.447);
+    --vds-color-neutral-a10: oklch(0 0 0 / 0.486);
+    --vds-color-neutral-a11: oklch(0 0 0 / 0.608);
+    --vds-color-neutral-a12: oklch(0 0 0 / 0.875);
+
+    /* ─── Per-intent alpha — derived via color-mix from intent-9.
+         Brand-safe: re-theming --vds-color-{intent}-9 propagates. ─── */
+    --vds-color-primary-a1:  color-mix(in oklch, var(--vds-color-primary-9)  2%, transparent);
+    --vds-color-primary-a2:  color-mix(in oklch, var(--vds-color-primary-9)  4%, transparent);
+    --vds-color-primary-a3:  color-mix(in oklch, var(--vds-color-primary-9)  8%, transparent);
+    --vds-color-primary-a4:  color-mix(in oklch, var(--vds-color-primary-9) 12%, transparent);
+    --vds-color-primary-a5:  color-mix(in oklch, var(--vds-color-primary-9) 16%, transparent);
+    --vds-color-primary-a6:  color-mix(in oklch, var(--vds-color-primary-9) 20%, transparent);
+    --vds-color-primary-a7:  color-mix(in oklch, var(--vds-color-primary-9) 26%, transparent);
+    --vds-color-primary-a8:  color-mix(in oklch, var(--vds-color-primary-9) 35%, transparent);
+    --vds-color-primary-a9:  color-mix(in oklch, var(--vds-color-primary-9) 55%, transparent);
+    --vds-color-primary-a10: color-mix(in oklch, var(--vds-color-primary-9) 62%, transparent);
+    --vds-color-primary-a11: color-mix(in oklch, var(--vds-color-primary-9) 73%, transparent);
+    --vds-color-primary-a12: color-mix(in oklch, var(--vds-color-primary-9) 91%, transparent);
+
+    --vds-color-success-a1:  color-mix(in oklch, var(--vds-color-success-9)  2%, transparent);
+    --vds-color-success-a2:  color-mix(in oklch, var(--vds-color-success-9)  4%, transparent);
+    --vds-color-success-a3:  color-mix(in oklch, var(--vds-color-success-9)  8%, transparent);
+    --vds-color-success-a4:  color-mix(in oklch, var(--vds-color-success-9) 12%, transparent);
+    --vds-color-success-a5:  color-mix(in oklch, var(--vds-color-success-9) 16%, transparent);
+    --vds-color-success-a6:  color-mix(in oklch, var(--vds-color-success-9) 20%, transparent);
+    --vds-color-success-a7:  color-mix(in oklch, var(--vds-color-success-9) 26%, transparent);
+    --vds-color-success-a8:  color-mix(in oklch, var(--vds-color-success-9) 35%, transparent);
+    --vds-color-success-a9:  color-mix(in oklch, var(--vds-color-success-9) 55%, transparent);
+    --vds-color-success-a10: color-mix(in oklch, var(--vds-color-success-9) 62%, transparent);
+    --vds-color-success-a11: color-mix(in oklch, var(--vds-color-success-9) 73%, transparent);
+    --vds-color-success-a12: color-mix(in oklch, var(--vds-color-success-9) 91%, transparent);
+
+    --vds-color-warning-a1:  color-mix(in oklch, var(--vds-color-warning-9)  3%, transparent);
+    --vds-color-warning-a2:  color-mix(in oklch, var(--vds-color-warning-9)  6%, transparent);
+    --vds-color-warning-a3:  color-mix(in oklch, var(--vds-color-warning-9) 11%, transparent);
+    --vds-color-warning-a4:  color-mix(in oklch, var(--vds-color-warning-9) 16%, transparent);
+    --vds-color-warning-a5:  color-mix(in oklch, var(--vds-color-warning-9) 22%, transparent);
+    --vds-color-warning-a6:  color-mix(in oklch, var(--vds-color-warning-9) 28%, transparent);
+    --vds-color-warning-a7:  color-mix(in oklch, var(--vds-color-warning-9) 36%, transparent);
+    --vds-color-warning-a8:  color-mix(in oklch, var(--vds-color-warning-9) 47%, transparent);
+    --vds-color-warning-a9:  color-mix(in oklch, var(--vds-color-warning-9) 70%, transparent);
+    --vds-color-warning-a10: color-mix(in oklch, var(--vds-color-warning-9) 77%, transparent);
+    --vds-color-warning-a11: color-mix(in oklch, var(--vds-color-warning-9) 86%, transparent);
+    --vds-color-warning-a12: color-mix(in oklch, var(--vds-color-warning-9) 95%, transparent);
+
+    --vds-color-danger-a1:  color-mix(in oklch, var(--vds-color-danger-9)  2%, transparent);
+    --vds-color-danger-a2:  color-mix(in oklch, var(--vds-color-danger-9)  4%, transparent);
+    --vds-color-danger-a3:  color-mix(in oklch, var(--vds-color-danger-9)  8%, transparent);
+    --vds-color-danger-a4:  color-mix(in oklch, var(--vds-color-danger-9) 12%, transparent);
+    --vds-color-danger-a5:  color-mix(in oklch, var(--vds-color-danger-9) 16%, transparent);
+    --vds-color-danger-a6:  color-mix(in oklch, var(--vds-color-danger-9) 20%, transparent);
+    --vds-color-danger-a7:  color-mix(in oklch, var(--vds-color-danger-9) 26%, transparent);
+    --vds-color-danger-a8:  color-mix(in oklch, var(--vds-color-danger-9) 35%, transparent);
+    --vds-color-danger-a9:  color-mix(in oklch, var(--vds-color-danger-9) 55%, transparent);
+    --vds-color-danger-a10: color-mix(in oklch, var(--vds-color-danger-9) 62%, transparent);
+    --vds-color-danger-a11: color-mix(in oklch, var(--vds-color-danger-9) 73%, transparent);
+    --vds-color-danger-a12: color-mix(in oklch, var(--vds-color-danger-9) 91%, transparent);
+
+    --vds-color-info-a1:  color-mix(in oklch, var(--vds-color-info-9)  2%, transparent);
+    --vds-color-info-a2:  color-mix(in oklch, var(--vds-color-info-9)  4%, transparent);
+    --vds-color-info-a3:  color-mix(in oklch, var(--vds-color-info-9)  8%, transparent);
+    --vds-color-info-a4:  color-mix(in oklch, var(--vds-color-info-9) 12%, transparent);
+    --vds-color-info-a5:  color-mix(in oklch, var(--vds-color-info-9) 16%, transparent);
+    --vds-color-info-a6:  color-mix(in oklch, var(--vds-color-info-9) 20%, transparent);
+    --vds-color-info-a7:  color-mix(in oklch, var(--vds-color-info-9) 26%, transparent);
+    --vds-color-info-a8:  color-mix(in oklch, var(--vds-color-info-9) 35%, transparent);
+    --vds-color-info-a9:  color-mix(in oklch, var(--vds-color-info-9) 55%, transparent);
+    --vds-color-info-a10: color-mix(in oklch, var(--vds-color-info-9) 62%, transparent);
+    --vds-color-info-a11: color-mix(in oklch, var(--vds-color-info-9) 73%, transparent);
+    --vds-color-info-a12: color-mix(in oklch, var(--vds-color-info-9) 91%, transparent);
+
+    --vds-color-accent-a1:  color-mix(in oklch, var(--vds-color-accent-9)  3%, transparent);
+    --vds-color-accent-a2:  color-mix(in oklch, var(--vds-color-accent-9)  6%, transparent);
+    --vds-color-accent-a3:  color-mix(in oklch, var(--vds-color-accent-9) 11%, transparent);
+    --vds-color-accent-a4:  color-mix(in oklch, var(--vds-color-accent-9) 16%, transparent);
+    --vds-color-accent-a5:  color-mix(in oklch, var(--vds-color-accent-9) 22%, transparent);
+    --vds-color-accent-a6:  color-mix(in oklch, var(--vds-color-accent-9) 28%, transparent);
+    --vds-color-accent-a7:  color-mix(in oklch, var(--vds-color-accent-9) 36%, transparent);
+    --vds-color-accent-a8:  color-mix(in oklch, var(--vds-color-accent-9) 47%, transparent);
+    --vds-color-accent-a9:  color-mix(in oklch, var(--vds-color-accent-9) 70%, transparent);
+    --vds-color-accent-a10: color-mix(in oklch, var(--vds-color-accent-9) 77%, transparent);
+    --vds-color-accent-a11: color-mix(in oklch, var(--vds-color-accent-9) 86%, transparent);
+    --vds-color-accent-a12: color-mix(in oklch, var(--vds-color-accent-9) 95%, transparent);
+  }
+
+  [data-theme="dark"],
+  [data-theme="dark-oled"] {
+    /* Neutral alpha — dark (white tint, industry-tuned) */
+    --vds-color-neutral-a1:  oklch(1 0 0 / 0.000);
+    --vds-color-neutral-a2:  oklch(1 0 0 / 0.035);
+    --vds-color-neutral-a3:  oklch(1 0 0 / 0.070);
+    --vds-color-neutral-a4:  oklch(1 0 0 / 0.110);
+    --vds-color-neutral-a5:  oklch(1 0 0 / 0.130);
+    --vds-color-neutral-a6:  oklch(1 0 0 / 0.170);
+    --vds-color-neutral-a7:  oklch(1 0 0 / 0.230);
+    --vds-color-neutral-a8:  oklch(1 0 0 / 0.330);
+    --vds-color-neutral-a9:  oklch(1 0 0 / 0.390);
+    --vds-color-neutral-a10: oklch(1 0 0 / 0.450);
+    --vds-color-neutral-a11: oklch(1 0 0 / 0.690);
+    --vds-color-neutral-a12: oklch(1 0 0 / 0.930);
+
+    /* Per-intent alpha — dark: slightly higher opacity steps for vividness.
+       Still color-mix-derived, still brand-safe. */
+    --vds-color-primary-a1:  color-mix(in oklch, var(--vds-color-primary-9)  3%, transparent);
+    --vds-color-primary-a2:  color-mix(in oklch, var(--vds-color-primary-9)  6%, transparent);
+    --vds-color-primary-a3:  color-mix(in oklch, var(--vds-color-primary-9) 11%, transparent);
+    --vds-color-primary-a4:  color-mix(in oklch, var(--vds-color-primary-9) 16%, transparent);
+    --vds-color-primary-a5:  color-mix(in oklch, var(--vds-color-primary-9) 22%, transparent);
+    --vds-color-primary-a6:  color-mix(in oklch, var(--vds-color-primary-9) 28%, transparent);
+    --vds-color-primary-a7:  color-mix(in oklch, var(--vds-color-primary-9) 36%, transparent);
+    --vds-color-primary-a8:  color-mix(in oklch, var(--vds-color-primary-9) 47%, transparent);
+    --vds-color-primary-a9:  color-mix(in oklch, var(--vds-color-primary-9) 70%, transparent);
+    --vds-color-primary-a10: color-mix(in oklch, var(--vds-color-primary-9) 77%, transparent);
+    --vds-color-primary-a11: color-mix(in oklch, var(--vds-color-primary-9) 86%, transparent);
+    --vds-color-primary-a12: color-mix(in oklch, var(--vds-color-primary-9) 95%, transparent);
+
+    --vds-color-success-a1:  color-mix(in oklch, var(--vds-color-success-9)  3%, transparent);
+    --vds-color-success-a2:  color-mix(in oklch, var(--vds-color-success-9)  6%, transparent);
+    --vds-color-success-a3:  color-mix(in oklch, var(--vds-color-success-9) 11%, transparent);
+    --vds-color-success-a4:  color-mix(in oklch, var(--vds-color-success-9) 16%, transparent);
+    --vds-color-success-a5:  color-mix(in oklch, var(--vds-color-success-9) 22%, transparent);
+    --vds-color-success-a6:  color-mix(in oklch, var(--vds-color-success-9) 28%, transparent);
+    --vds-color-success-a7:  color-mix(in oklch, var(--vds-color-success-9) 36%, transparent);
+    --vds-color-success-a8:  color-mix(in oklch, var(--vds-color-success-9) 47%, transparent);
+    --vds-color-success-a9:  color-mix(in oklch, var(--vds-color-success-9) 70%, transparent);
+    --vds-color-success-a10: color-mix(in oklch, var(--vds-color-success-9) 77%, transparent);
+    --vds-color-success-a11: color-mix(in oklch, var(--vds-color-success-9) 86%, transparent);
+    --vds-color-success-a12: color-mix(in oklch, var(--vds-color-success-9) 95%, transparent);
+
+    --vds-color-warning-a1:  color-mix(in oklch, var(--vds-color-warning-9)  4%, transparent);
+    --vds-color-warning-a2:  color-mix(in oklch, var(--vds-color-warning-9)  8%, transparent);
+    --vds-color-warning-a3:  color-mix(in oklch, var(--vds-color-warning-9) 14%, transparent);
+    --vds-color-warning-a4:  color-mix(in oklch, var(--vds-color-warning-9) 20%, transparent);
+    --vds-color-warning-a5:  color-mix(in oklch, var(--vds-color-warning-9) 28%, transparent);
+    --vds-color-warning-a6:  color-mix(in oklch, var(--vds-color-warning-9) 36%, transparent);
+    --vds-color-warning-a7:  color-mix(in oklch, var(--vds-color-warning-9) 45%, transparent);
+    --vds-color-warning-a8:  color-mix(in oklch, var(--vds-color-warning-9) 56%, transparent);
+    --vds-color-warning-a9:  color-mix(in oklch, var(--vds-color-warning-9) 80%, transparent);
+    --vds-color-warning-a10: color-mix(in oklch, var(--vds-color-warning-9) 86%, transparent);
+    --vds-color-warning-a11: color-mix(in oklch, var(--vds-color-warning-9) 92%, transparent);
+    --vds-color-warning-a12: color-mix(in oklch, var(--vds-color-warning-9) 97%, transparent);
+
+    --vds-color-danger-a1:  color-mix(in oklch, var(--vds-color-danger-9)  3%, transparent);
+    --vds-color-danger-a2:  color-mix(in oklch, var(--vds-color-danger-9)  6%, transparent);
+    --vds-color-danger-a3:  color-mix(in oklch, var(--vds-color-danger-9) 11%, transparent);
+    --vds-color-danger-a4:  color-mix(in oklch, var(--vds-color-danger-9) 16%, transparent);
+    --vds-color-danger-a5:  color-mix(in oklch, var(--vds-color-danger-9) 22%, transparent);
+    --vds-color-danger-a6:  color-mix(in oklch, var(--vds-color-danger-9) 28%, transparent);
+    --vds-color-danger-a7:  color-mix(in oklch, var(--vds-color-danger-9) 36%, transparent);
+    --vds-color-danger-a8:  color-mix(in oklch, var(--vds-color-danger-9) 47%, transparent);
+    --vds-color-danger-a9:  color-mix(in oklch, var(--vds-color-danger-9) 70%, transparent);
+    --vds-color-danger-a10: color-mix(in oklch, var(--vds-color-danger-9) 77%, transparent);
+    --vds-color-danger-a11: color-mix(in oklch, var(--vds-color-danger-9) 86%, transparent);
+    --vds-color-danger-a12: color-mix(in oklch, var(--vds-color-danger-9) 95%, transparent);
+
+    --vds-color-info-a1:  color-mix(in oklch, var(--vds-color-info-9)  3%, transparent);
+    --vds-color-info-a2:  color-mix(in oklch, var(--vds-color-info-9)  6%, transparent);
+    --vds-color-info-a3:  color-mix(in oklch, var(--vds-color-info-9) 11%, transparent);
+    --vds-color-info-a4:  color-mix(in oklch, var(--vds-color-info-9) 16%, transparent);
+    --vds-color-info-a5:  color-mix(in oklch, var(--vds-color-info-9) 22%, transparent);
+    --vds-color-info-a6:  color-mix(in oklch, var(--vds-color-info-9) 28%, transparent);
+    --vds-color-info-a7:  color-mix(in oklch, var(--vds-color-info-9) 36%, transparent);
+    --vds-color-info-a8:  color-mix(in oklch, var(--vds-color-info-9) 47%, transparent);
+    --vds-color-info-a9:  color-mix(in oklch, var(--vds-color-info-9) 70%, transparent);
+    --vds-color-info-a10: color-mix(in oklch, var(--vds-color-info-9) 77%, transparent);
+    --vds-color-info-a11: color-mix(in oklch, var(--vds-color-info-9) 86%, transparent);
+    --vds-color-info-a12: color-mix(in oklch, var(--vds-color-info-9) 95%, transparent);
+
+    --vds-color-accent-a1:  color-mix(in oklch, var(--vds-color-accent-9)  4%, transparent);
+    --vds-color-accent-a2:  color-mix(in oklch, var(--vds-color-accent-9)  8%, transparent);
+    --vds-color-accent-a3:  color-mix(in oklch, var(--vds-color-accent-9) 14%, transparent);
+    --vds-color-accent-a4:  color-mix(in oklch, var(--vds-color-accent-9) 20%, transparent);
+    --vds-color-accent-a5:  color-mix(in oklch, var(--vds-color-accent-9) 28%, transparent);
+    --vds-color-accent-a6:  color-mix(in oklch, var(--vds-color-accent-9) 36%, transparent);
+    --vds-color-accent-a7:  color-mix(in oklch, var(--vds-color-accent-9) 45%, transparent);
+    --vds-color-accent-a8:  color-mix(in oklch, var(--vds-color-accent-9) 56%, transparent);
+    --vds-color-accent-a9:  color-mix(in oklch, var(--vds-color-accent-9) 80%, transparent);
+    --vds-color-accent-a10: color-mix(in oklch, var(--vds-color-accent-9) 86%, transparent);
+    --vds-color-accent-a11: color-mix(in oklch, var(--vds-color-accent-9) 92%, transparent);
+    --vds-color-accent-a12: color-mix(in oklch, var(--vds-color-accent-9) 95%, transparent);
+  }
+}

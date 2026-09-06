@@ -1,0 +1,960 @@
+@import "./YooptaEditor.tokens.css";
+
+@layer design-system.components {
+  /* ————————————————————————————————————————————————
+     Editor root
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor {
+    inline-size: 100%;
+    font-family: var(--vds-yoopta-font);
+    font-size: var(--vds-yoopta-text-body);
+    line-height: var(--vds-yoopta-leading-body);
+    color: var(--vds-yoopta-color-text);
+    background: var(--vds-yoopta-color-surface);
+    caret-color: var(--vds-yoopta-color-accent);
+    min-block-size: 16rem;
+  }
+
+  .vds-yoopta-editor > div,
+  .vds-yoopta-editor .yoopta-editor,
+  .vds-yoopta-editor .yoopta-slate {
+    inline-size: 100%;
+  }
+
+  .vds-yoopta-editor [contenteditable="true"] {
+    outline: none;
+  }
+
+  /* ————————————————————————————————————————————————
+     Block container
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor .yoopta-block,
+  .vds-yoopta-editor [data-yoopta-block] {
+    position: relative;
+    padding-block: var(--vds-space-1);
+    border-radius: var(--vds-yoopta-radius-block);
+    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+
+  .vds-yoopta-editor [data-block-selected="true"] {
+    background: var(--vds-color-surface-selected, var(--vds-color-primary-bg-subtle));
+  }
+
+  /* ————————————————————————————————————————————————
+     Typography
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor p {
+    margin: 0;
+    padding-block: var(--vds-space-1);
+  }
+  .vds-yoopta-editor h1,
+  .vds-yoopta-editor h2,
+  .vds-yoopta-editor h3,
+  .vds-yoopta-editor h4 {
+    margin: 0;
+    font-weight: var(--vds-font-weight-semibold);
+    line-height: var(--vds-leading-tight);
+    color: var(--vds-yoopta-color-text);
+    padding-block: var(--vds-space-3) var(--vds-space-1);
+  }
+  .vds-yoopta-editor h1 {
+    font-size: var(--vds-text-4xl);
+    letter-spacing: var(--vds-tracking-tight);
+  }
+  .vds-yoopta-editor h2 {
+    font-size: var(--vds-text-3xl);
+    letter-spacing: var(--vds-tracking-tight);
+  }
+  .vds-yoopta-editor h3 {
+    font-size: var(--vds-text-2xl);
+  }
+  .vds-yoopta-editor h4 {
+    font-size: var(--vds-text-xl);
+  }
+
+  .vds-yoopta-editor blockquote {
+    margin: 0;
+    border-inline-start: 3px solid var(--vds-yoopta-color-quote-border);
+    padding-inline-start: var(--vds-space-4);
+    padding-block: var(--vds-space-2);
+    color: var(--vds-yoopta-color-text-muted);
+    font-style: italic;
+  }
+
+  .vds-yoopta-editor hr {
+    border: none;
+    border-block-start: 1px solid var(--vds-yoopta-color-border);
+    margin-block: var(--vds-space-6);
+  }
+
+  /* ————————————————————————————————————————————————
+     Links — match Yoopta's <a> output, override default browser styles
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor a,
+  .vds-yoopta-editor a:visited {
+    color: var(--vds-color-text-link) !important;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklch, var(--vds-color-text-link) 50%, transparent);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
+      text-decoration-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .vds-yoopta-editor a:hover {
+    color: var(--vds-color-text-link-hover) !important;
+    text-decoration-color: var(--vds-color-text-link-hover);
+  }
+
+  /* ————————————————————————————————————————————————
+     Lists
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor ul,
+  .vds-yoopta-editor ol {
+    margin: 0;
+    padding-inline-start: var(--vds-space-6);
+  }
+  .vds-yoopta-editor ul {
+    list-style: disc;
+  }
+  .vds-yoopta-editor ol {
+    list-style: decimal;
+  }
+  .vds-yoopta-editor li {
+    padding-block: var(--vds-space-0-5);
+  }
+  .vds-yoopta-editor li::marker {
+    color: var(--vds-color-text-muted);
+  }
+
+  /* Todo list — Yoopta renders todo as a list with input checkbox */
+  .vds-yoopta-editor [data-element-type="TodoList"] ul,
+  .vds-yoopta-editor [data-element-type="TodoList"] ol {
+    list-style: none;
+    padding-inline-start: 0;
+  }
+  .vds-yoopta-editor [data-element-type="TodoList"] li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--vds-space-2);
+  }
+  .vds-yoopta-editor input[type="checkbox"] {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+    margin-block-start: var(--vds-space-1);
+    accent-color: var(--vds-color-primary-solid);
+    border-radius: var(--vds-yoopta-radius-control);
+    cursor: pointer;
+  }
+  .vds-yoopta-editor [data-checked="true"],
+  .vds-yoopta-editor li[data-checked="true"] > * {
+    color: var(--vds-color-text-muted);
+    text-decoration: line-through;
+  }
+
+  /* ————————————————————————————————————————————————
+     Code blocks
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor pre {
+    background: var(--vds-yoopta-color-code-bg);
+    color: var(--vds-yoopta-color-code-text);
+    font-family: var(--vds-yoopta-font-mono);
+    font-size: var(--vds-text-sm);
+    line-height: var(--vds-leading-relaxed);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    padding: var(--vds-space-4);
+    margin: 0;
+    overflow-x: auto;
+  }
+  .vds-yoopta-editor code {
+    font-family: var(--vds-yoopta-font-mono);
+    font-size: 0.92em;
+  }
+  .vds-yoopta-editor :not(pre) > code {
+    background: var(--vds-yoopta-color-code-inline-bg);
+    color: var(--vds-color-primary-text);
+    padding: 0.125em 0.375em;
+    border-radius: var(--vds-yoopta-radius-control);
+    border: 1px solid var(--vds-yoopta-color-border);
+  }
+
+  /* Code block chrome (language selector, copy button) shipped by @yoopta/code */
+  .vds-yoopta-editor [data-element-type="Code"] {
+    border-radius: var(--vds-yoopta-radius-block);
+  }
+  .vds-yoopta-editor [data-element-type="Code"] select {
+    background: var(--vds-yoopta-color-surface-raised);
+    color: var(--vds-yoopta-color-text);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-control);
+    padding: var(--vds-space-1) var(--vds-space-2);
+    font-size: var(--vds-text-xs);
+    font-family: var(--vds-yoopta-font);
+  }
+
+  /* ————————————————————————————————————————————————
+     Callout tones (Yoopta sets data-theme on the block)
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-element-type="Callout"] > * {
+    display: flex;
+    gap: var(--vds-space-3);
+    align-items: flex-start;
+    padding: var(--vds-space-3) var(--vds-space-4);
+    border-radius: var(--vds-yoopta-radius-block);
+    border: 1px solid var(--vds-yoopta-color-callout-info-border);
+    background: var(--vds-yoopta-color-callout-info-bg);
+    color: var(--vds-yoopta-color-callout-info-text);
+  }
+  .vds-yoopta-editor [data-meta-theme="info"] [data-element-type="Callout"] > *,
+  .vds-yoopta-editor [data-element-type="Callout"][data-theme="info"] > * {
+    border-color: var(--vds-yoopta-color-callout-info-border);
+    background: var(--vds-yoopta-color-callout-info-bg);
+    color: var(--vds-yoopta-color-callout-info-text);
+  }
+  .vds-yoopta-editor [data-meta-theme="success"] [data-element-type="Callout"] > *,
+  .vds-yoopta-editor [data-element-type="Callout"][data-theme="success"] > * {
+    border-color: var(--vds-yoopta-color-callout-success-border);
+    background: var(--vds-yoopta-color-callout-success-bg);
+    color: var(--vds-yoopta-color-callout-success-text);
+  }
+  .vds-yoopta-editor [data-meta-theme="warning"] [data-element-type="Callout"] > *,
+  .vds-yoopta-editor [data-element-type="Callout"][data-theme="warning"] > * {
+    border-color: var(--vds-yoopta-color-callout-warning-border);
+    background: var(--vds-yoopta-color-callout-warning-bg);
+    color: var(--vds-yoopta-color-callout-warning-text);
+  }
+  .vds-yoopta-editor [data-meta-theme="danger"] [data-element-type="Callout"] > *,
+  .vds-yoopta-editor [data-element-type="Callout"][data-theme="danger"] > * {
+    border-color: var(--vds-yoopta-color-callout-danger-border);
+    background: var(--vds-yoopta-color-callout-danger-bg);
+    color: var(--vds-yoopta-color-callout-danger-text);
+  }
+
+  /* ————————————————————————————————————————————————
+     Images, video, embed, file
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor img,
+  .vds-yoopta-editor video,
+  .vds-yoopta-editor iframe {
+    max-inline-size: 100%;
+    border-radius: var(--vds-yoopta-radius-block);
+    border: 1px solid var(--vds-yoopta-color-border);
+  }
+
+  .vds-yoopta-editor__media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-block: var(--vds-space-2);
+  }
+  .vds-yoopta-editor__media img,
+  .vds-yoopta-editor__media video {
+    inline-size: auto;
+    max-inline-size: 100%;
+  }
+
+  .vds-yoopta-editor__upload {
+    margin-block: var(--vds-space-2);
+    padding: var(--vds-space-3);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    background: var(--vds-yoopta-color-surface-raised);
+  }
+
+  .vds-yoopta-editor__picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-3);
+  }
+  .vds-yoopta-editor__picker > [role="tabpanel"] {
+    margin-block-start: 0;
+  }
+
+  .vds-yoopta-editor__embed-row {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2);
+  }
+  .vds-yoopta-editor__embed-row > :first-child {
+    flex: 1;
+    min-inline-size: 0;
+  }
+  .vds-yoopta-editor__embed-hint {
+    margin-block-start: var(--vds-space-2);
+    margin: 0;
+    color: var(--vds-yoopta-color-text-muted);
+    font-size: var(--vds-text-xs);
+  }
+  .vds-yoopta-editor__embed-error {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    margin-block-start: var(--vds-space-2);
+    color: var(--vds-color-danger-text);
+    font-size: var(--vds-text-xs);
+  }
+  .vds-yoopta-editor__upload .vds-file-upload-root,
+  .vds-yoopta-editor__upload [class*="file-upload"] {
+    inline-size: 100%;
+  }
+  .vds-yoopta-editor__upload-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vds-space-2);
+    padding: var(--vds-space-6) var(--vds-space-4);
+    min-block-size: 6rem;
+    border: 1px dashed var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    background: var(--vds-yoopta-color-surface-raised);
+    color: var(--vds-yoopta-color-text-muted);
+    font-size: var(--vds-text-sm);
+    transition:
+      border-color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
+      background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
+      color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+    cursor: pointer;
+  }
+  .vds-yoopta-editor__upload-content:hover,
+  .vds-yoopta-editor__upload-content[data-active] {
+    border-color: var(--vds-color-primary-solid);
+    background: var(--vds-color-primary-bg-subtle);
+    color: var(--vds-color-primary-text);
+  }
+  .vds-yoopta-editor__upload-spinner {
+    animation: vds-yoopta-spin 0.9s linear infinite;
+  }
+  @keyframes vds-yoopta-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .vds-yoopta-editor__file-card {
+    margin-block: var(--vds-space-2);
+  }
+  .vds-yoopta-editor__file-card a {
+    display: flex !important;
+    align-items: center;
+    gap: var(--vds-space-3);
+    padding: var(--vds-space-3) var(--vds-space-4);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    background: var(--vds-yoopta-color-surface-raised);
+    color: var(--vds-yoopta-color-text) !important;
+    text-decoration: none !important;
+    transition: background-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .vds-yoopta-editor__file-card a:hover {
+    background: var(--vds-color-surface-hover);
+  }
+  .vds-yoopta-editor__file-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-0-5);
+    min-inline-size: 0;
+  }
+  .vds-yoopta-editor__file-card-name {
+    font-weight: var(--vds-font-weight-medium);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .vds-yoopta-editor__file-card-size {
+    font-size: var(--vds-text-xs);
+    color: var(--vds-yoopta-color-text-muted);
+  }
+
+  .vds-yoopta-editor [data-element-type="File"] > * {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-3);
+  }
+
+  /* ————————————————————————————————————————————————
+     Tables
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor table {
+    border-collapse: separate;
+    border-spacing: 0;
+    inline-size: 100%;
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-block);
+    overflow: hidden;
+    margin-block: var(--vds-space-2);
+  }
+  .vds-yoopta-editor th,
+  .vds-yoopta-editor td {
+    border-block-start: 1px solid var(--vds-yoopta-color-border);
+    border-inline-start: 1px solid var(--vds-yoopta-color-border);
+    padding: var(--vds-space-2) var(--vds-space-3);
+    text-align: start;
+    vertical-align: top;
+  }
+  .vds-yoopta-editor tr:first-child > th,
+  .vds-yoopta-editor tr:first-child > td {
+    border-block-start: none;
+  }
+  .vds-yoopta-editor th:first-child,
+  .vds-yoopta-editor td:first-child {
+    border-inline-start: none;
+  }
+  .vds-yoopta-editor th {
+    background: var(--vds-yoopta-color-surface-raised);
+    font-weight: var(--vds-font-weight-semibold);
+    color: var(--vds-yoopta-color-text);
+  }
+
+  /* ————————————————————————————————————————————————
+     Accordion — Yoopta blocks rendered via Virtari Accordion compound,
+     so nothing extra needed beyond a small block-level margin.
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor__accordion {
+    margin-block: var(--vds-space-2);
+  }
+  .vds-yoopta-editor__accordion-heading {
+    flex: 1;
+    text-align: start;
+  }
+
+  /* ————————————————————————————————————————————————
+     Tabs
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-element-type="Tabs"] [role="tablist"] {
+    display: flex;
+    gap: var(--vds-space-1);
+    border-block-end: 1px solid var(--vds-yoopta-color-border);
+    margin-block-end: var(--vds-space-2);
+  }
+  .vds-yoopta-editor [data-element-type="Tabs"] [role="tab"] {
+    padding: var(--vds-space-2) var(--vds-space-3);
+    background: transparent;
+    border: none;
+    border-block-end: 2px solid transparent;
+    color: var(--vds-yoopta-color-text-muted);
+    font: inherit;
+    cursor: pointer;
+    transition: color var(--vds-yoopta-duration) var(--vds-yoopta-ease),
+      border-color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .vds-yoopta-editor [data-element-type="Tabs"] [role="tab"][aria-selected="true"] {
+    color: var(--vds-yoopta-color-text);
+    border-block-end-color: var(--vds-yoopta-color-accent);
+  }
+
+  /* ————————————————————————————————————————————————
+     Steps
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-element-type="Steps"] ol {
+    list-style: none;
+    padding: 0;
+  }
+  .vds-yoopta-editor [data-element-type="Steps"] li {
+    position: relative;
+    padding-inline-start: var(--vds-space-8);
+    padding-block: var(--vds-space-3);
+    counter-increment: step;
+  }
+  .vds-yoopta-editor [data-element-type="Steps"] li::before {
+    content: counter(step);
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: var(--vds-space-3);
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: var(--vds-radius-full);
+    background: var(--vds-yoopta-color-accent);
+    color: var(--vds-yoopta-color-accent-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--vds-text-xs);
+    font-weight: var(--vds-font-weight-semibold);
+  }
+
+  /* ————————————————————————————————————————————————
+     Mentions
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-element-type="mention"],
+  .vds-yoopta-editor [data-mention] {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    padding: 0.125em 0.375em;
+    border-radius: var(--vds-yoopta-radius-control);
+    background: var(--vds-color-primary-bg-subtle);
+    color: var(--vds-color-primary-text);
+    font-weight: var(--vds-font-weight-medium);
+  }
+
+  /* ————————————————————————————————————————————————
+     Mark formatting
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor strong { font-weight: var(--vds-font-weight-bold); }
+  .vds-yoopta-editor em { font-style: italic; }
+  .vds-yoopta-editor u { text-decoration: underline; text-underline-offset: 2px; }
+  .vds-yoopta-editor s { text-decoration: line-through; }
+  .vds-yoopta-editor mark {
+    background: var(--vds-color-warning-bg);
+    color: var(--vds-color-warning-text);
+    padding: 0.05em 0.15em;
+    border-radius: var(--vds-yoopta-radius-control);
+  }
+
+  /* ————————————————————————————————————————————————
+     Placeholder
+     ———————————————————————————————————————————————— */
+  .vds-yoopta-editor [data-placeholder]::before,
+  .vds-yoopta-editor .yoopta-placeholder::before {
+    content: attr(data-placeholder);
+    color: var(--vds-yoopta-color-text-placeholder);
+    pointer-events: none;
+    position: absolute;
+  }
+
+  /* ————————————————————————————————————————————————
+     Floating chrome (custom, no @yoopta/ui)
+     ———————————————————————————————————————————————— */
+
+  /* Chrome renders in a portal at <body>, so it cannot reach
+     `.vds-yoopta-editor`-scoped tokens. Use globals only here. */
+
+  /* Floating selection toolbar */
+  .vds-yoo-toolbar {
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    padding: var(--vds-space-1);
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-popover);
+    box-shadow: var(--vds-shadow-md);
+    color: var(--vds-color-text);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+  }
+  .vds-yoo-toolbar-button {
+    background: transparent;
+    color: inherit;
+    border: none;
+    border-radius: var(--vds-yoopta-radius-control);
+    padding: var(--vds-space-1) var(--vds-space-2);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    min-block-size: 1.75rem;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+  .vds-yoo-toolbar-button:hover {
+    background: var(--vds-color-surface-hover);
+  }
+  .vds-yoo-toolbar-button[data-active] {
+    background: var(--vds-color-primary-bg);
+    color: var(--vds-color-primary-text);
+  }
+  .vds-yoo-toolbar-separator {
+    inline-size: 1px;
+    block-size: 1.25rem;
+    background: var(--vds-yoopta-color-border);
+    margin-inline: var(--vds-space-1);
+  }
+
+  /* Action / slash menu (popover content shell) */
+  .vds-yoo-action-menu {
+    min-inline-size: 18rem;
+    max-block-size: 22rem;
+    padding: var(--vds-space-1);
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-popover);
+    box-shadow: var(--vds-shadow-lg);
+    color: var(--vds-color-text);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 70;
+  }
+  .vds-yoo-action-menu-search {
+    padding: var(--vds-space-1);
+    border-block-end: 1px solid var(--vds-yoopta-color-border);
+  }
+  .vds-yoo-action-menu-input {
+    inline-size: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    padding: var(--vds-space-1) var(--vds-space-2);
+  }
+  .vds-yoo-action-menu-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--vds-space-1);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .vds-yoo-action-menu-empty {
+    padding: var(--vds-space-3);
+    color: var(--vds-color-text-muted);
+    text-align: center;
+    font-size: var(--vds-text-sm);
+  }
+  .vds-yoo-action-menu-item {
+    inline-size: 100%;
+    background: transparent;
+    color: inherit;
+    border: none;
+    text-align: start;
+    padding: var(--vds-space-2);
+    border-radius: var(--vds-yoopta-radius-control);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2);
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+  .vds-yoo-action-menu-item[data-active],
+  .vds-yoo-action-menu-item:hover {
+    background: var(--vds-color-surface-hover);
+  }
+  .vds-yoo-action-menu-item-icon {
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    border-radius: var(--vds-yoopta-radius-control);
+    background: var(--vds-color-surface-raised);
+    color: var(--vds-color-text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .vds-yoo-action-menu-item-text {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+  .vds-yoo-action-menu-item-title {
+    color: var(--vds-color-text);
+    font-weight: 500;
+  }
+  .vds-yoo-action-menu-item-desc {
+    color: var(--vds-color-text-muted);
+    font-size: var(--vds-text-xs);
+    line-height: 1.3;
+  }
+
+  /* Block options popover */
+  .vds-yoo-block-options {
+    min-inline-size: 12rem;
+    padding: var(--vds-space-1);
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-popover);
+    box-shadow: var(--vds-shadow-lg);
+    color: var(--vds-color-text);
+    z-index: 70;
+  }
+  .vds-yoo-block-options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .vds-yoo-block-options-separator {
+    block-size: 1px;
+    background: var(--vds-yoopta-color-border);
+    margin-block: var(--vds-space-1);
+  }
+  .vds-yoo-block-options-item {
+    inline-size: 100%;
+    background: transparent;
+    color: inherit;
+    border: none;
+    text-align: start;
+    padding: var(--vds-space-2);
+    border-radius: var(--vds-yoopta-radius-control);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2);
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+  .vds-yoo-block-options-item:hover {
+    background: var(--vds-color-surface-hover);
+  }
+  .vds-yoo-block-options-item[data-variant="danger"] {
+    color: var(--vds-color-danger-text);
+  }
+  .vds-yoo-block-options-item[data-variant="danger"]:hover {
+    background: var(--vds-color-danger-bg);
+  }
+
+  /* Hover plus + drag handle bar (positioned next to a block) */
+  .vds-yoo-block-actions {
+    z-index: 50;
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 2px;
+    padding: 2px;
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-popover);
+    box-shadow: var(--vds-shadow-sm);
+    color: var(--vds-color-text-muted);
+    pointer-events: auto;
+  }
+  .vds-yoo-block-actions[data-frozen] {
+    pointer-events: auto;
+  }
+  .vds-yoo-block-actions-button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    border-radius: var(--vds-yoopta-radius-control);
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+  .vds-yoo-block-actions-button:hover {
+    background: var(--vds-color-surface-hover);
+    color: var(--vds-color-text);
+  }
+  .vds-yoo-block-actions-button[draggable="true"] {
+    cursor: grab;
+  }
+  .vds-yoo-block-actions-button[draggable="true"]:active {
+    cursor: grabbing;
+  }
+
+  /* Table add buttons (right edge = add column, bottom edge = add row).
+     Row/column delete is handled by the drag handles + Backspace. */
+  .vds-yoo-table-add-col,
+  .vds-yoo-table-add-row {
+    z-index: 50;
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-control);
+    color: var(--vds-color-text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+  .vds-yoo-table-add-col {
+    inline-size: 1.25rem;
+  }
+  .vds-yoo-table-add-row {
+    block-size: 1.25rem;
+  }
+  .vds-yoo-table-add-col:hover,
+  .vds-yoo-table-add-row:hover {
+    background: var(--vds-color-primary-bg);
+    color: var(--vds-color-primary-text);
+  }
+
+  /* Suppress the global "Type / to open menu..." placeholder inside table
+     cells — Yoopta's leaf placeholder fires on every empty leaf, but inside
+     a table cell it crowds the layout and reads as a bug. */
+  .vds-yoopta-editor table .yoopta-placeholder::before,
+  .vds-yoopta-editor table [data-placeholder]::before {
+    content: "" !important;
+  }
+
+  /* TodoList — checkbox + line-through when checked */
+  .vds-yoopta-editor__todo {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .vds-yoopta-editor__todo-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--vds-space-2);
+    padding-block: 0.125rem;
+  }
+  .vds-yoopta-editor__todo-check {
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-block-start: 2px;
+    color: var(--vds-yoopta-color-text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--vds-yoopta-duration) var(--vds-yoopta-ease);
+  }
+  .vds-yoopta-editor__todo[data-checked] .vds-yoopta-editor__todo-check {
+    color: var(--vds-color-primary-solid);
+  }
+  .vds-yoopta-editor__todo-check:hover {
+    color: var(--vds-yoopta-color-text);
+  }
+  .vds-yoopta-editor__todo-text {
+    flex: 1;
+    min-inline-size: 0;
+  }
+  .vds-yoopta-editor__todo[data-checked] .vds-yoopta-editor__todo-text {
+    text-decoration: line-through;
+    color: var(--vds-yoopta-color-text-muted);
+  }
+
+  /* Carousel — horizontal scroll-snap rail */
+  .vds-yoopta-editor__carousel {
+    display: flex;
+    gap: var(--vds-space-3);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-block: var(--vds-space-2);
+    scrollbar-width: thin;
+  }
+  .vds-yoopta-editor__carousel-slide {
+    flex: 0 0 auto;
+    inline-size: 18rem;
+    min-block-size: 9rem;
+    scroll-snap-align: start;
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-popover);
+    padding: var(--vds-space-3);
+    background: var(--vds-yoopta-color-surface-raised);
+  }
+
+  /* ————————————————————————————————————————————————
+     Table column/row selection (Notion-style)
+     ———————————————————————————————————————————————— */
+
+  /* Column drag handle on top of column on hover; click to select, drag to reorder */
+  .vds-yoo-table-col-handle,
+  .vds-yoo-table-row-handle {
+    z-index: 50;
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-control);
+    color: var(--vds-color-text-muted);
+    cursor: grab;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+  .vds-yoo-table-col-handle {
+    block-size: 1rem;
+  }
+  .vds-yoo-table-row-handle {
+    inline-size: 1rem;
+  }
+  .vds-yoo-table-col-handle:hover,
+  .vds-yoo-table-row-handle:hover,
+  .vds-yoo-table-col-handle[data-selected],
+  .vds-yoo-table-row-handle[data-selected] {
+    background: var(--vds-color-primary-solid);
+    color: var(--vds-color-on-solid);
+    border-color: var(--vds-color-primary-solid);
+  }
+  .vds-yoo-table-col-handle:active,
+  .vds-yoo-table-row-handle:active {
+    cursor: grabbing;
+  }
+
+  /* Highlight cells when their column or row is selected */
+  .vds-yoopta-editor table td[data-selected],
+  .vds-yoopta-editor table th[data-selected] {
+    background: color-mix(
+      in oklch,
+      var(--vds-color-primary-solid) 12%,
+      transparent
+    );
+    box-shadow: inset 0 0 0 1.5px var(--vds-color-primary-solid);
+  }
+
+  /* Drop indicator line between columns/rows during drag */
+  .vds-yoo-table-drop-line {
+    position: fixed;
+    z-index: 51;
+    background: var(--vds-color-primary-solid);
+    pointer-events: none;
+    border-radius: var(--vds-radius-full, 9999px);
+  }
+  .vds-yoo-table-drop-line[data-axis="vertical"] {
+    inline-size: 2px;
+  }
+  .vds-yoo-table-drop-line[data-axis="horizontal"] {
+    block-size: 2px;
+  }
+
+  /* Highlight color popover */
+  .vds-yoo-highlight-popover {
+    padding: var(--vds-space-2);
+    background: var(--vds-color-surface-overlay);
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-popover);
+    box-shadow: var(--vds-shadow-lg);
+    color: var(--vds-color-text);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-2);
+    z-index: 70;
+  }
+  .vds-yoo-highlight-presets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--vds-space-1);
+  }
+  .vds-yoo-highlight-swatch {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    padding: 0;
+    border: 1px solid var(--vds-yoopta-color-border);
+    border-radius: var(--vds-yoopta-radius-control);
+    cursor: pointer;
+    transition: transform var(--vds-duration-fast) var(--vds-ease-out);
+  }
+  .vds-yoo-highlight-swatch:hover {
+    transform: scale(1.08);
+  }
+  .vds-yoo-highlight-clear {
+    background: transparent;
+    color: var(--vds-color-danger-text);
+    border: none;
+    border-radius: var(--vds-yoopta-radius-control);
+    padding: var(--vds-space-1) var(--vds-space-2);
+    font-family: inherit;
+    font-size: var(--vds-text-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1);
+    justify-content: center;
+  }
+  .vds-yoo-highlight-clear:hover {
+    background: var(--vds-color-danger-bg);
+  }
+}
+
+@layer design-system.components {
+  .vds-yoopta-editor { transition: box-shadow 180ms ease-out; }
+  .vds-yoopta-editor:focus-within { outline: none; box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); }
+  @media (prefers-reduced-motion: reduce) { .vds-yoopta-editor { transition-duration: 0s; } }
+  @media (forced-colors: active) { .vds-yoopta-editor:focus-within { outline: 2px solid Highlight; outline-offset: 2px; box-shadow: none; } }
+}

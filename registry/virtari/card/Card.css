@@ -1,0 +1,142 @@
+@import "./Card.tokens.css";
+
+@layer design-system.components {
+  .vds-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    color: var(--card-text-color);
+    background-color: var(--card-background);
+    border: var(--card-border-width) solid var(--card-border-color);
+    --card-effective-radius: min(
+      var(--card-radius),
+      var(--card-parent-radius, var(--card-radius)),
+      max(var(--card-nested-radius, var(--card-radius)), var(--vds-radius-xs, 0px))
+    );
+    border-radius: var(--card-effective-radius);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+
+    /*
+     * Concentricity host (packages/tokens/src/radii/nesting.css).
+     * The Card is the container everything else nests inside, so it
+     * publishes its own corner + the distance to its children. A direct
+     * child that reaches the inner edge (a media strip) reads
+     * --vds-radius-flush; one that sits inside the padding reads
+     * --vds-radius-inset. All three are declared, including the zero —
+     * a host that omits one inherits it from an outer host and subtracts
+     * the wrong distance.
+     *
+     * -p is 0 here because the slot layout gives the padding to the slots
+     * themselves, not to this box; the simple (slot-less) card overrides
+     * it below, where the padding really is on the container.
+     */
+    --vds-radius-host-r: var(--card-effective-radius);
+    --vds-radius-host-b: var(--card-border-width);
+    --vds-radius-host-p: 0px;
+
+    transition:
+      background-color var(--card-transition-duration)
+        var(--card-transition-easing),
+      border-color var(--card-transition-duration) var(--card-transition-easing),
+      box-shadow var(--card-transition-duration) var(--card-transition-easing),
+      transform var(--card-transition-duration) var(--card-transition-easing);
+  }
+
+  .vds-card[data-interactive] {
+    cursor: pointer;
+  }
+
+  .vds-card[data-interactive]:hover {
+    background-color: var(--card-background-hover);
+    border-color: var(--card-border-color-hover);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(var(--card-hover-translate-y));
+  }
+
+  .vds-card[data-interactive]:focus-visible {
+    outline: var(--card-focus-ring-width) solid var(--card-focus-ring-color);
+    outline-offset: var(--card-focus-ring-offset);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-card[data-interactive] {
+      --card-hover-translate-y: 0px;
+      transition: none;
+    }
+  }
+
+  .vds-card:not(:has(> .vds-card-header, > .vds-card-content, > .vds-card-footer)) {
+    padding-inline: var(--card-padding-inline);
+    padding-block: var(--card-padding-block);
+
+    /* In the slot-less card the padding is on this box, so a direct child
+       really is inset by it. */
+    --vds-radius-host-p: var(--card-padding-inline);
+  }
+
+  .vds-card > :where(.vds-card-header, .vds-card-content, .vds-card-footer) {
+    min-inline-size: 0;
+    padding-inline: var(--card-padding-inline);
+    padding-block: 0;
+
+    /* Slots do not publish a second host channel. Nested Cards measure
+       their actual inset through these slots; leaf geometry can still
+       consume the outer card's explicit flush/inset outputs. */
+  }
+
+  .vds-card
+    > :where(.vds-card-header, .vds-card-content, .vds-card-footer):first-child {
+    padding-block-start: var(--card-padding-block);
+  }
+
+  .vds-card
+    > :where(.vds-card-header, .vds-card-content, .vds-card-footer):last-child {
+    padding-block-end: var(--card-padding-block);
+  }
+
+  .vds-card
+    > :where(.vds-card-header, .vds-card-content, .vds-card-footer)
+    + :where(.vds-card-header, .vds-card-content, .vds-card-footer) {
+    padding-block-start: var(--card-section-gap);
+  }
+
+  .vds-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-header-gap);
+  }
+
+  .vds-card-title {
+    margin: 0;
+    font-family: var(
+      --card-title-font-family,
+      var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif)
+    );
+    font-size: var(--card-title-font-size);
+    font-weight: var(--card-title-font-weight);
+    line-height: var(--card-title-line-height);
+    color: inherit;
+  }
+
+  .vds-card-description {
+    margin: 0;
+    font-size: var(--card-description-font-size);
+    line-height: var(--card-description-line-height);
+    color: var(--card-muted-color);
+  }
+
+  .vds-card-content {
+    min-inline-size: 0;
+  }
+
+  .vds-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: var(--card-footer-gap);
+  }
+}

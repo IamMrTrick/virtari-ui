@@ -1,0 +1,42 @@
+@layer design-system.components {
+  /* Picker root — per-instance size tokens are injected via inline style
+   * (see `internals.ts`). These defaults cover the `md` ramp and are
+   * re-declared on .vds-combobox-content / .vds-drawer-content below so
+   * they're reachable inside portals (popovers render detached). */
+  .vds-language-picker {
+    --language-picker-trigger-flag-size: 1.375rem;
+    --language-picker-option-flag-size: 1.4375rem;
+    --language-picker-trigger-primary-font-size: var(--vds-text-sm, 0.8125rem);
+    --language-picker-trigger-subtitle-font-size: 0.6875rem;
+    --language-picker-option-primary-font-size: var(--vds-text-sm, 0.8125rem);
+    --language-picker-option-subtitle-font-size: 0.6875rem;
+  }
+
+  /* Re-export the trigger vars so the trigger (always inside the root) has them,
+   * and re-export the option vars inside popover/drawer portals so CSS custom
+   * properties survive the portal boundary. */
+  .vds-language-picker,
+  .vds-combobox-content:has(.vds-language-picker-option),
+  .vds-drawer-content:has(.vds-language-picker-drawer-body) {
+    --_lp-gap: var(--vds-space-2-5, 0.625rem);
+    --_lp-stack-gap: 0.0625rem;
+    --_lp-primary-color: var(--vds-color-text, currentColor);
+    --_lp-primary-weight: var(--vds-font-weight-medium, 500);
+    --_lp-subtitle-color: var(--vds-color-text-muted, #6b7280);
+    --_lp-subtitle-weight: var(--vds-font-weight-normal, 400);
+    --_lp-script-stack: var(--vds-font-sans, ui-sans-serif), "Noto Sans",
+      "Noto Sans CJK", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
+  }
+
+  /* LanguageLabel — used standalone; sizing is set inline by `languageLabelVars`. */
+  .vds-language-label {
+    --_lp-gap: 0.625rem;
+    --_lp-stack-gap: 0.0625rem;
+    --_lp-primary-color: var(--vds-color-text, currentColor);
+    --_lp-primary-weight: var(--vds-font-weight-medium, 500);
+    --_lp-subtitle-color: var(--vds-color-text-muted, #6b7280);
+    --_lp-subtitle-weight: var(--vds-font-weight-normal, 400);
+    --_lp-script-stack: var(--vds-font-sans, ui-sans-serif), "Noto Sans",
+      "Noto Sans CJK", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
+  }
+}

@@ -1,0 +1,64 @@
+@layer tokens.brand {
+  /*
+   * ── Brand template ──
+   *
+   * Copy this file to brands/{your-brand}.css, replace "BRAND_ID" with
+   * your brand id, and uncomment + tune the OKLCH values.
+   *
+   * Keep every rule inside `@layer tokens.brand`. That sub-layer is ordered
+   * AFTER `tokens.base` (see colors.css), so these overrides win over the
+   * base primitive scales on the SAME element — including <html data-brand>
+   * and same-element combos like <section data-brand data-theme="dark"> —
+   * regardless of specificity.
+   *
+   * Override ONLY primitive hues. The semantic layer (bg, surface, text,
+   * border, ring, etc.) and per-component tokens reference these
+   * primitives, so the entire system retints automatically.
+   *
+   * What to override:
+   *   • primary-1..12 (light)  — the brand action color
+   *   • primary-1..12 (dark)   — the brand action color in dark mode
+   *   • accent-1..12 (optional) — secondary brand color
+   *   • Any intent (success/warning/danger/info) IF the brand wants a
+   *     custom semantic palette (rarely needed — defaults are tuned).
+   *
+   * Activated by: <html data-brand="BRAND_ID">
+   */
+
+  [data-brand="BRAND_ID"] {
+    /* ── Primary (light) — replace 195 with your primary hue ── */
+    /*
+    --vds-color-primary-1:  oklch(0.985 0.005 195);
+    --vds-color-primary-2:  oklch(0.970 0.010 195);
+    --vds-color-primary-3:  oklch(0.940 0.020 195);
+    --vds-color-primary-4:  oklch(0.905 0.040 195);
+    --vds-color-primary-5:  oklch(0.870 0.070 195);
+    --vds-color-primary-6:  oklch(0.825 0.110 195);
+    --vds-color-primary-7:  oklch(0.770 0.150 195);
+    --vds-color-primary-8:  oklch(0.700 0.190 195);
+    --vds-color-primary-9:  oklch(0.550 0.200 195);
+    --vds-color-primary-10: oklch(0.500 0.205 195);
+    --vds-color-primary-11: oklch(0.450 0.190 195);
+    --vds-color-primary-12: oklch(0.260 0.140 195);
+    */
+  }
+
+  [data-brand="BRAND_ID"][data-theme="dark"],
+  [data-theme="dark"] [data-brand="BRAND_ID"] {
+    /* ── Primary (dark) ── */
+    /*
+    --vds-color-primary-1:  oklch(0.190 0.020 195);
+    --vds-color-primary-2:  oklch(0.215 0.035 195);
+    --vds-color-primary-3:  oklch(0.245 0.060 195);
+    --vds-color-primary-4:  oklch(0.275 0.085 195);
+    --vds-color-primary-5:  oklch(0.310 0.110 195);
+    --vds-color-primary-6:  oklch(0.355 0.135 195);
+    --vds-color-primary-7:  oklch(0.420 0.160 195);
+    --vds-color-primary-8:  oklch(0.500 0.180 195);
+    --vds-color-primary-9:  oklch(0.610 0.200 195);
+    --vds-color-primary-10: oklch(0.665 0.195 195);
+    --vds-color-primary-11: oklch(0.760 0.180 195);
+    --vds-color-primary-12: oklch(0.910 0.080 195);
+    */
+  }
+}

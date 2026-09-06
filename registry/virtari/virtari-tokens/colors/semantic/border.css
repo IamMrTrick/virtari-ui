@@ -1,0 +1,69 @@
+@layer tokens {
+  /*
+   * ── Border semantic layer ──
+   *
+   * Canonical home for every border token.
+   *
+   *   border             = default UI border      (neutral-7)
+   *   border-interactive = boundary of a control  (neutral-9)
+   *   border-muted       = subtle border          (neutral-6)
+   *   border-subtle      = alias of border-muted  (neutral-6)
+   *   border-strong      = strong divider         (neutral-8)
+   *   border-disabled    = disabled element       (neutral-5)
+   *   border-input       = form input border      (neutral-7)
+   *   border-input-hover = form input on hover    (neutral-8)
+   *   border-input-focus = form input on focus    (primary-9)
+   *   border-focus       = generic focus border   (primary-9)
+   *   divider            = horiz/vert separator   (neutral-a6)
+   *   border-{intent}         = per-intent border (intent-7)
+   *   border-{intent}-strong  = per-intent strong (intent-9)
+   */
+
+  :root,
+  [data-theme] {
+    /* ─── Neutral borders ─── */
+    --vds-color-border:          var(--vds-color-neutral-7);
+    --vds-color-border-muted:    var(--vds-color-neutral-6);
+    --vds-color-border-subtle:   var(--vds-color-neutral-6);
+    --vds-color-border-strong:   var(--vds-color-neutral-8);
+    --vds-color-border-disabled: var(--vds-color-neutral-5);
+
+    /* ─── Interactive boundary ───
+     * WCAG 1.4.11 wants the boundary of a control (the thing that tells
+     * you an input IS an input) to clear 3:1 against its surroundings.
+     * `--vds-color-border` is neutral-7 — 1.73:1 light, 2.01:1 dark. It
+     * is a *divider* weight, correct for separating content, wrong for
+     * outlining a control. neutral-9 is the first step that clears the
+     * bar: 4.11:1 light, 3.57:1 dark, 3.89:1 oled.
+     *
+     * Use this on anything a user can operate — input, select, textarea,
+     * checkbox, radio, switch track, slider rail, outlined button. Keep
+     * `--vds-color-border` for cards, dividers and other decoration. */
+    --vds-color-border-interactive: var(--vds-color-neutral-9);
+
+    /* ─── Form input borders ─── */
+    --vds-color-border-input:       var(--vds-color-neutral-7);
+    --vds-color-border-input-hover: var(--vds-color-neutral-8);
+    --vds-color-border-input-focus: var(--vds-color-primary-9);
+
+    /* ─── Focus border ─── */
+    --vds-color-border-focus: var(--vds-color-primary-9);
+
+    /* ─── Divider ─── */
+    --vds-color-divider: var(--vds-color-neutral-a6);
+
+    /* ─── Per-intent borders ─── */
+    --vds-color-border-primary:        var(--vds-color-primary-7);
+    --vds-color-border-primary-strong: var(--vds-color-primary-9);
+    --vds-color-border-success:        var(--vds-color-success-7);
+    --vds-color-border-success-strong: var(--vds-color-success-9);
+    --vds-color-border-warning:        var(--vds-color-warning-7);
+    --vds-color-border-warning-strong: var(--vds-color-warning-9);
+    --vds-color-border-danger:         var(--vds-color-danger-7);
+    --vds-color-border-danger-strong:  var(--vds-color-danger-9);
+    --vds-color-border-info:           var(--vds-color-info-7);
+    --vds-color-border-info-strong:    var(--vds-color-info-9);
+    --vds-color-border-accent:         var(--vds-color-accent-7);
+    --vds-color-border-accent-strong:  var(--vds-color-accent-9);
+  }
+}

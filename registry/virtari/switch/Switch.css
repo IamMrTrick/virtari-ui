@@ -1,0 +1,138 @@
+@layer design-system.components {
+  .vds-switch {
+    /*
+     * ── Config (Proportional) ──
+     * Switch has its own proportional scale — NOT on the height ramp.
+     * Track width is ~1.8x height. Thumb is height minus border offset.
+     */
+    --_switch-width: var(--vds-space-11);
+    --_switch-height: var(--vds-space-6);
+    --_switch-thumb-size: var(--vds-space-5);
+    /*
+     * The track's transparent border IS the thumb's inset. At every size the
+     * thumb exactly fills the padding box in the block axis, so the gap above
+     * and below is --_switch-border-width and nothing else. The thumb is
+     * anchored to the padding box (`left: 0`) too, which means the inline gap
+     * is already that same border — any extra offset here makes the inline gap
+     * larger than the block gap and the round thumb stops being concentric
+     * with the round track (track r − border = thumb r only when the gap is
+     * uniform). It was 1px; concentric requires 0.
+     */
+    --_switch-border-width: 2px;
+    --_switch-thumb-offset: 0px;
+    --_switch-thumb-translate: var(--_switch-thumb-offset);
+    --_switch-thumb-checked-translate: calc(
+      var(--_switch-width) - var(--_switch-thumb-size) -
+        var(--_switch-thumb-offset) - 2 * var(--_switch-border-width)
+    );
+
+    box-sizing: border-box;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: var(--vds-radius-full);
+    border: var(--_switch-border-width) solid transparent;
+    transition: background-color var(--vds-duration-normal) var(--vds-ease-out),
+      box-shadow 180ms ease-out;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    inline-size: var(--_switch-width);
+    block-size: var(--_switch-height);
+    /* WCAG 1.4.11: the track IS the switch's boundary. neutral-6 sat at
+       ~1.4:1 on a light surface, which also hid the white thumb.
+       --vds-color-border-interactive is the first step that clears 3:1. */
+    background-color: var(--vds-color-border-interactive, var(--vds-color-neutral-9));
+
+    &[data-state="checked"] {
+      background-color: var(--vds-color-primary-9);
+    }
+
+    &:dir(rtl) {
+      --_switch-thumb-translate: calc(
+        var(--_switch-width) - var(--_switch-thumb-size) -
+          var(--_switch-thumb-offset) - 2 * var(--_switch-border-width)
+      );
+      --_switch-thumb-checked-translate: var(--_switch-thumb-offset);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
+    }
+
+    &:disabled {
+      opacity: var(--vds-opacity-disabled, 0.5);
+      cursor: not-allowed;
+    }
+
+    @media (forced-colors: active) {
+      forced-color-adjust: none;
+      background-color: Canvas;
+      border-color: ButtonText;
+      &[data-state="checked"] { background-color: Highlight; border-color: Highlight; }
+      &:disabled { border-color: GrayText; }
+    }
+
+    /* ── Sizes ── */
+
+    &[data-size="sm"] {
+      --_switch-width: var(--vds-space-8);
+      --_switch-height: 1.125rem; /* intentional: no matching space token */
+      --_switch-thumb-size: var(--vds-space-3-5);
+    }
+
+    /* md uses defaults */
+
+    &[data-size="lg"] {
+      --_switch-width: var(--vds-space-14);
+      --_switch-height: var(--vds-space-8);
+      --_switch-thumb-size: var(--vds-space-7);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+
+  .vds-switch-thumb {
+    display: block;
+    position: absolute;
+    inset-block-start: 50%;
+    left: 0;
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-color-on-solid);
+    box-shadow: var(--vds-shadow-sm);
+    inline-size: var(--_switch-thumb-size);
+    block-size: var(--_switch-thumb-size);
+    transition: translate var(--vds-duration-normal) var(--vds-ease-spring);
+    translate: var(--_switch-thumb-translate) -50%;
+    pointer-events: none;
+
+    @media (prefers-reduced-motion: reduce) { transition: none; }
+    @media (forced-colors: active) {
+      background-color: ButtonText;
+      box-shadow: none;
+      .vds-switch[data-state="checked"] > & { background-color: HighlightText; }
+      .vds-switch:disabled > & { background-color: GrayText; }
+    }
+
+    .vds-switch[data-state="checked"] > & {
+      translate: var(--_switch-thumb-checked-translate) -50%;
+    }
+
+    .vds-switch[data-dragging] > & {
+      transition: none;
+    }
+  }
+}

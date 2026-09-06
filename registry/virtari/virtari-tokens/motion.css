@@ -1,0 +1,110 @@
+@layer tokens {
+  :root {
+    /* ─── Durations ─── */
+    --vds-duration-fastest: 50ms;
+    --vds-duration-fast: 100ms;
+    --vds-duration-normal: 200ms;
+    --vds-duration-slow: 300ms;
+    --vds-duration-slower: 400ms;
+    --vds-duration-slowest: 500ms;
+
+    /* ─── Easing ─── */
+    --vds-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --vds-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --vds-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --vds-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --vds-ease-spring: cubic-bezier(0.22, 1.2, 0.36, 1);
+    --vds-ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  /* ─── Keyframes ─── */
+  @keyframes vds-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes vds-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes vds-scale-in {
+    from {
+      opacity: 0;
+      scale: 0.95;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  @keyframes vds-scale-out {
+    from {
+      opacity: 1;
+      scale: 1;
+    }
+    to {
+      opacity: 0;
+      scale: 0.95;
+    }
+  }
+
+  @keyframes vds-slide-in-from-top {
+    from { translate: 0 -0.5rem; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-in-from-bottom {
+    from { translate: 0 0.5rem; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-in-from-left {
+    from { translate: -0.5rem 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-in-from-right {
+    from { translate: 0.5rem 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  /* Logical (direction-aware) slide keyframes. The start offset flips via
+     --vds-slide-x-inline when the nearest ancestor resolves to RTL, so the
+     same animation name produces a mirrored motion in Persian/Arabic. */
+  :root { --vds-slide-x-inline: -0.5rem; }
+  :where([dir="rtl"]) { --vds-slide-x-inline: 0.5rem; }
+
+  @keyframes vds-slide-in-from-inline-start {
+    from { translate: var(--vds-slide-x-inline) 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-in-from-inline-end {
+    from { translate: calc(-1 * var(--vds-slide-x-inline)) 0; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
+  }
+
+  @keyframes vds-slide-out-to-inline-start {
+    from { translate: 0 0; opacity: 1; }
+    to { translate: var(--vds-slide-x-inline) 0; opacity: 0; }
+  }
+
+  @keyframes vds-slide-out-to-inline-end {
+    from { translate: 0 0; opacity: 1; }
+    to { translate: calc(-1 * var(--vds-slide-x-inline)) 0; opacity: 0; }
+  }
+
+  /* ─── Respect reduced motion ─── */
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --vds-duration-fastest: 0ms;
+      --vds-duration-fast: 0ms;
+      --vds-duration-normal: 0ms;
+      --vds-duration-slow: 0ms;
+      --vds-duration-slower: 0ms;
+      --vds-duration-slowest: 0ms;
+    }
+  }
+}

@@ -1,0 +1,354 @@
+@import "./LanguagePicker.tokens.css";
+
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * Trigger: [flag] Primary  ← single-line by default.
+   * With showNativeName, a muted subtitle stacks below.
+   * Does NOT force direction — inherits document `dir`.
+   * ───────────────────────────────────────────── */
+  .vds-language-picker-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_lp-gap);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    vertical-align: middle;
+    text-align: start;
+  }
+
+  .vds-combobox-trigger-label:has(.vds-language-picker-trigger[data-has-subtitle="true"]) {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .vds-language-picker-trigger-flag {
+    flex: none;
+    align-self: center;
+  }
+
+  .vds-language-picker-trigger-stack {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--_lp-stack-gap);
+    min-inline-size: 0;
+    flex: 1 1 auto;
+    line-height: 1.15;
+    text-align: start;
+  }
+
+  .vds-language-picker-trigger-primary {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: var(--_lp-primary-weight);
+    font-size: var(--language-picker-trigger-primary-font-size);
+    color: var(--_lp-primary-color);
+    line-height: 1.15;
+    unicode-bidi: isolate;
+  }
+
+  .vds-language-picker-trigger-subtitle {
+    display: block;
+    align-self: flex-start;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: var(--_lp-subtitle-weight);
+    font-size: var(--language-picker-trigger-subtitle-font-size);
+    color: var(--_lp-subtitle-color);
+    font-family: var(--_lp-script-stack);
+    line-height: 1.12;
+    /* plaintext so a Persian `فارسی` reads RTL inside an LTR trigger (and
+     * vice-versa) without flipping layout. */
+    unicode-bidi: plaintext;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Popover option row — must defeat .vds-combobox-item-label's
+   * white-space:nowrap + overflow:hidden so our column stack
+   * actually renders on two lines.
+   * ───────────────────────────────────────────── */
+  .vds-combobox-item-label:has(.vds-language-picker-option),
+  .vds-language-picker-drawer-option .vds-combobox-item-label {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .vds-combobox-item:has(.vds-language-picker-option) {
+    align-items: center;
+    padding-block: var(--vds-space-2-5, 0.625rem);
+  }
+
+  .vds-language-picker-option {
+    display: flex;
+    align-items: center;
+    gap: var(--_lp-gap);
+    inline-size: 100%;
+    min-inline-size: 0;
+    white-space: normal;
+    text-align: start;
+  }
+
+  .vds-language-picker-option-flag {
+    flex: none;
+    align-self: center;
+  }
+
+  /* Fallback mark when a locale has no associated flag (e.g. Esperanto). */
+  .vds-language-mark-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    /* This stands in for a <Flag> in the same list, so it has to carry the
+       flag's corner. It was a hardcoded 0.375rem against the flag's 0.25rem,
+       which showed as two different corner radii among adjacent rows — and it
+       ignored a consumer override of --flag-border-radius entirely. */
+    border-radius: var(--flag-border-radius, var(--vds-radius-2, 0.25rem));
+    background: color-mix(in oklch, var(--vds-color-text, currentColor) 10%, transparent);
+    color: color-mix(in oklch, var(--vds-color-text-muted, #6b7280) 88%, white 12%);
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, currentColor 16%, transparent);
+    overflow: hidden;
+  }
+  .vds-language-mark-fallback > svg {
+    inline-size: 72%;
+    block-size: 72%;
+  }
+  .vds-language-mark-fallback rect {
+    fill: color-mix(in oklch, currentColor 8%, transparent);
+    stroke: color-mix(in oklch, currentColor 20%, transparent);
+  }
+
+  .vds-language-picker-option-names {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--_lp-stack-gap);
+    min-inline-size: 0;
+    line-height: 1.15;
+    text-align: start;
+  }
+
+  .vds-language-picker-option-primary {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: var(--_lp-primary-weight);
+    font-size: var(--language-picker-option-primary-font-size);
+    color: var(--_lp-primary-color);
+    line-height: 1.15;
+    unicode-bidi: isolate;
+  }
+
+  .vds-language-picker-option-subtitle {
+    display: block;
+    align-self: flex-start;
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: var(--_lp-subtitle-weight);
+    font-size: var(--language-picker-option-subtitle-font-size);
+    color: var(--_lp-subtitle-color);
+    font-family: var(--_lp-script-stack);
+    line-height: 1.12;
+    unicode-bidi: plaintext;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Standalone LanguageLabel — same visual, usable anywhere.
+   * ───────────────────────────────────────────── */
+  .vds-language-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_lp-gap);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    vertical-align: middle;
+    text-align: start;
+  }
+
+  .vds-language-label-flag {
+    flex: none;
+    align-self: center;
+  }
+
+  .vds-language-label-stack {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--_lp-stack-gap);
+    min-inline-size: 0;
+    line-height: 1.15;
+    text-align: start;
+  }
+
+  [dir="rtl"] .vds-language-picker-trigger,
+  [dir="rtl"] .vds-language-picker-option,
+  [dir="rtl"] .vds-language-label {
+    direction: rtl;
+  }
+
+  [dir="rtl"] .vds-combobox-item:has(.vds-language-picker-option),
+  [dir="rtl"] button.vds-language-picker-drawer-option {
+    direction: rtl;
+  }
+
+  .vds-language-label-primary {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: var(--_lp-primary-weight);
+    font-size: var(--language-label-primary-font-size);
+    color: var(--_lp-primary-color);
+    line-height: 1.15;
+    unicode-bidi: isolate;
+  }
+
+  .vds-language-label-subtitle {
+    display: block;
+    align-self: flex-start;
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: var(--_lp-subtitle-weight);
+    font-size: var(--language-label-subtitle-font-size);
+    color: var(--_lp-subtitle-color);
+    font-family: var(--_lp-script-stack);
+    line-height: 1.12;
+    unicode-bidi: plaintext;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Drawer overlay.
+   * Layout strategy (crucial — don't fight the native Drawer):
+   *   DrawerHeader  flex:none  → title + (optional desc) + search (fixed at top)
+   *   DrawerBody    flex:1 overflow:auto (NATIVE)  → option list scrolls here
+   *   DrawerFooter  flex:none  → equal-width Cancel / Apply buttons
+   * We intentionally do NOT override DrawerBody's scroll — the native rule
+   * `flex: 1; min-block-size: 0; overflow: auto` already does the right thing.
+   * ───────────────────────────────────────────── */
+  .vds-language-picker-drawer-trigger {
+    appearance: none;
+    font: inherit;
+    text-align: start;
+  }
+
+  /* Header: tighten padding + host the search below the title. */
+  .vds-language-picker-drawer-header {
+    gap: var(--vds-space-2, 0.5rem);
+  }
+
+  .vds-language-picker-drawer-search {
+    margin-block-start: var(--vds-space-2, 0.5rem);
+    border: 1px solid var(--vds-color-border-muted, #e5e7eb);
+    border-radius: var(--vds-radius-input, var(--vds-radius-element, 0.5rem));
+    background-color: var(--vds-color-surface, #fff);
+    padding-inline: var(--vds-space-3, 0.75rem);
+    padding-block: var(--vds-space-2, 0.5rem);
+    transition: box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+  .vds-language-picker-drawer-search:focus-within {
+    border-color: var(--vds-color-border-input-focus, var(--vds-color-primary-solid, #6366f1));
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+
+  /* Body is just a container — list is a flex column that grows into it. */
+  .vds-language-picker-drawer-body {
+    padding-inline: var(--vds-space-3, 0.75rem);
+    padding-block: var(--vds-space-2, 0.5rem);
+  }
+
+  .vds-language-picker-drawer-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  button.vds-language-picker-drawer-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    inline-size: 100%;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding-inline: var(--vds-space-3, 0.75rem);
+    padding-block: var(--vds-space-2-5, 0.625rem);
+    border-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    color: inherit;
+    transition: background-color var(--vds-duration-fast, 100ms)
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+  button.vds-language-picker-drawer-option:hover {
+    background-color: var(--vds-color-bg-muted, #f3f4f6);
+  }
+  button.vds-language-picker-drawer-option[aria-selected="true"] {
+    background-color: var(--vds-color-surface-selected, var(--vds-color-primary-bg, #e0e7ff));
+  }
+  button.vds-language-picker-drawer-option:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+
+  .vds-language-picker-drawer-option > .vds-language-picker-option {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  .vds-language-picker-drawer-option-indicator {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    color: var(--vds-color-icon-primary, var(--vds-color-primary-solid, #6366f1));
+  }
+
+  .vds-language-picker-drawer-empty {
+    padding-block: var(--vds-space-6, 1.5rem);
+    text-align: center;
+    color: var(--vds-color-text-muted, #6b7280);
+    font-size: var(--vds-text-sm, 0.875rem);
+  }
+
+  /* Footer action bar — equal-width buttons. Inherits DrawerFooter's
+   * border + safe-area padding; we just balance the two buttons. */
+  .vds-language-picker-drawer-footer {
+    display: flex;
+    gap: var(--vds-space-2, 0.5rem);
+  }
+  .vds-language-picker-drawer-footer > .vds-button {
+    flex: 1 1 0;
+    min-inline-size: 0;
+  }
+}

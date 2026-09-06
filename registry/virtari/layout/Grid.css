@@ -1,0 +1,12 @@
+@import "./Grid.tokens.css";
+
+@layer design-system.components {
+  .vds-grid {
+    display: grid;
+    gap: var(--grid-gap);
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(var(--grid-min-item-width), 100%), 1fr)
+    );
+  }
+}

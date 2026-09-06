@@ -1,0 +1,300 @@
+@import "./Code.tokens.css";
+@import "../copy-button/CopyButton.css";
+
+@layer design-system.components {
+  /* =========================================================================
+   * Root container — wraps the CM6 editor and chrome (header/caption).
+   * Uses high enough specificity to win against generic resets, but stays
+   * within the design-system.components layer.
+   * ========================================================================= */
+  .vds-code {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--vds-code-bg);
+    color: var(--vds-code-text);
+    border: var(--vds-code-border-width) solid var(--vds-code-border);
+    border-radius: var(--vds-code-radius);
+    box-shadow: var(--vds-code-shadow);
+    font-family: var(--vds-code-font-family);
+    font-size: var(--vds-code-font-size);
+    line-height: var(--vds-code-line-height);
+    letter-spacing: var(--vds-code-letter-spacing);
+
+    /* Concentricity channel. Header / body / caption sit flush against the
+     * shell's inner edge — there is no padding between the shell and its
+     * slots — so a flush child's corner is the shell's radius minus its
+     * border. Follows --vds-code-radius, so `data-radius` modes and the
+     * `embedded` variant (radius 0) carry through automatically. */
+    --vds-radius-host-r: var(--vds-code-radius);
+    --vds-radius-host-b: var(--vds-code-border-width);
+    --vds-radius-host-p: 0px;
+
+    /* Kept, deliberately. CodeMirror paints surfaces we cannot round from
+     * here — the scroller's overflowing content, the gutter background, the
+     * search panel, selection layers — and they are grandchildren, past the
+     * one level the channel reaches. This is the only element that can mask
+     * them against the shell's corner. */
+    overflow: hidden;
+    transition:
+      background-color var(--vds-code-transition-duration) var(--vds-code-transition-easing),
+      border-color var(--vds-code-transition-duration) var(--vds-code-transition-easing);
+  }
+
+  /* =========================================================================
+   * Header — filename / language label + actions (copy)
+   * ========================================================================= */
+  .vds-code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vds-space-2, 0.5rem);
+    padding-block: var(--vds-code-header-padding-block);
+    padding-inline: var(--vds-code-header-padding-inline);
+    background-color: var(--vds-code-header-bg);
+    color: var(--vds-code-header-text);
+    border-block-end: var(--vds-code-border-width) solid var(--vds-code-header-border);
+    font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    font-size: var(--vds-text-xs, 0.75rem);
+    font-weight: var(--vds-font-weight-medium, 500);
+    line-height: 1.4;
+    user-select: none;
+  }
+
+  .vds-code-header-info {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-2, 0.5rem);
+    min-inline-size: 0;
+  }
+
+  .vds-code-header-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    color: var(--vds-color-text-subtle, currentColor);
+  }
+
+  .vds-code-header-icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .vds-code-header-filename {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--vds-code-header-text);
+  }
+
+  .vds-code-header-language {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.6875rem;
+    color: var(--vds-code-header-text);
+  }
+
+  .vds-code-header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    flex-shrink: 0;
+  }
+
+  /* =========================================================================
+   * Body — the CodeMirror surface lives here. CM6 manages its own internal
+   * scrolling; the body itself only enforces an outer max-height when given.
+   * ========================================================================= */
+  .vds-code-body {
+    min-inline-size: 0;
+    position: relative;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    background-color: var(--vds-code-bg);
+
+    /* Squared against whichever of header / caption abuts it, flush where it
+     * meets the shell. The CodeMirror wrapper reads this back with
+     * `border-radius: inherit` so the focus ring follows the same corner
+     * instead of drawing a square one inside a rounded shell. */
+    border-radius: 0;
+  }
+
+  .vds-code-body:first-child {
+    border-start-start-radius: var(--vds-radius-flush);
+    border-start-end-radius: var(--vds-radius-flush);
+  }
+
+  .vds-code-body:last-child {
+    border-end-start-radius: var(--vds-radius-flush);
+    border-end-end-radius: var(--vds-radius-flush);
+  }
+
+  /* =========================================================================
+   * Caption — figcaption-like description below body
+   * ========================================================================= */
+  .vds-code-caption {
+    padding-block: var(--vds-space-2, 0.5rem);
+    padding-inline: var(--vds-code-padding-inline);
+    background-color: var(--vds-code-header-bg);
+    color: var(--vds-code-caption-color);
+    border-block-start: var(--vds-code-border-width) solid var(--vds-code-header-border);
+    font-family: var(--vds-font-sans, ui-sans-serif, system-ui, sans-serif);
+    font-size: var(--vds-code-caption-font-size);
+    line-height: 1.5;
+  }
+
+  /* =========================================================================
+   * Inline code — pure HTML <code> usage in prose
+   * ========================================================================= */
+  .vds-code-inline {
+    display: inline;
+    padding-block: var(--vds-code-inline-padding-block);
+    padding-inline: var(--vds-code-inline-padding-inline);
+    background-color: var(--vds-code-inline-bg);
+    color: var(--vds-code-inline-text);
+    border: var(--vds-code-inline-border-width) solid var(--vds-code-inline-border);
+    border-radius: var(--vds-code-inline-radius);
+    font-family: var(--vds-code-inline-font-family);
+    font-size: var(--vds-code-inline-font-size);
+    line-height: 1.4;
+    white-space: break-spaces;
+    overflow-wrap: anywhere;
+  }
+
+  .vds-code-static {
+    margin: 0;
+    padding: 0;
+    max-block-size: inherit;
+    overflow: auto;
+    overscroll-behavior: contain;
+    font: inherit;
+    color: var(--vds-code-text);
+    background: transparent;
+    text-align: start;
+    tab-size: 2;
+    outline: none;
+  }
+
+  .vds-code-static-content {
+    display: block;
+    inline-size: max-content;
+    min-inline-size: 100%;
+    box-sizing: border-box;
+    padding-block: var(--vds-code-padding-block);
+    font: inherit;
+    color: inherit;
+    white-space: pre;
+  }
+
+  .vds-code-static-line {
+    display: flex;
+    padding-inline: var(--vds-code-padding-inline);
+    min-block-size: 1lh;
+  }
+
+  .vds-code-static-number {
+    flex: 0 0 calc(var(--vds-code-line-digits) * 1ch);
+    padding-inline-end: var(--vds-code-gutter-padding-inline);
+    color: var(--vds-code-gutter-text);
+    text-align: end;
+    user-select: none;
+  }
+
+  .vds-code-static-text { min-inline-size: 0; }
+  .vds-code[data-wrap] .vds-code-static-content { inline-size: 100%; white-space: pre-wrap; }
+  .vds-code[data-wrap] .vds-code-static-text { overflow-wrap: anywhere; }
+  .vds-code-static-line[data-highlighted] { background: var(--vds-code-line-highlight-bg); }
+  .vds-code-static-line[data-diff="add"] { background: var(--vds-code-diff-add-bg); box-shadow: inset 3px 0 var(--vds-code-diff-add-marker); }
+  .vds-code-static-line[data-diff="remove"] { background: var(--vds-code-diff-remove-bg); box-shadow: inset 3px 0 var(--vds-code-diff-remove-marker); }
+  .vds-code-static ::selection { background: var(--vds-code-selection-bg); }
+}
+
+/* =========================================================================
+ * CodeMirror surface tweaks — kept OUTSIDE @layer because CM6 injects its
+ * own theme rules unlayered, which always beat layered rules. We only keep
+ * here what theme.ts cannot reach cleanly: pseudo-element scrollbar styling
+ * and the focus ring around the wrapper. All other CM6 surface properties
+ * are set in theme.ts via EditorView.theme().
+ * ========================================================================= */
+
+.vds-code {
+  transition: box-shadow 180ms ease-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0s;
+  }
+}
+
+.vds-code .cm-editor.cm-focused {
+  outline: none;
+}
+
+.vds-code:has(.cm-focused),
+.vds-code:has(.vds-code-static:focus-visible) {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  @media (forced-colors: active) {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+.vds-code .cm-scroller::-webkit-scrollbar {
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+}
+.vds-code .cm-scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+.vds-code .cm-scroller::-webkit-scrollbar-thumb {
+  background-color: var(--vds-code-scrollbar-thumb);
+  border-radius: var(--vds-radius-full, 9999px);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.vds-code .cm-scroller::-webkit-scrollbar-thumb:hover {
+  background-color: var(--vds-code-scrollbar-thumb-hover);
+}
+
+.vds-code .cm-scroller {
+  scrollbar-color: var(--vds-code-scrollbar-thumb) transparent;
+  scrollbar-width: thin;
+}
+
+.vds-code-body[data-max-height] > div,
+.vds-code-body[data-max-height] .cm-editor,
+.vds-code-body[data-max-height] .cm-scroller { max-height: inherit; }
+
+.vds-code-static { scrollbar-width: thin; scrollbar-color: var(--vds-code-scrollbar-thumb) transparent; }
+
+@media (hover: hover) and (pointer: fine) {
+  .vds-code-static, .vds-code .cm-scroller { scrollbar-color: transparent transparent; }
+  .vds-code-static:hover, .vds-code-static:focus-visible,
+  .vds-code .cm-scroller:hover, .vds-code .cm-scroller:focus-within {
+    scrollbar-color: var(--vds-code-scrollbar-thumb) transparent;
+  }
+  .vds-code .cm-scroller:not(:hover):not(:focus-within)::-webkit-scrollbar-thumb { background-color: transparent; }
+}
+
+@media (forced-colors: active), (prefers-contrast: more) {
+  .vds-code-static, .vds-code .cm-scroller { scrollbar-color: auto; }
+}
+
+/* RTL: diff marker accent */
+[dir="rtl"] .vds-code .cm-line-diff-add,
+[dir="rtl"] .vds-code .cm-line-diff-remove {
+  box-shadow: inset -3px 0 0 0 var(--vds-code-diff-add-marker);
+}
+[dir="rtl"] .vds-code .cm-line-diff-remove {
+  box-shadow: inset -3px 0 0 0 var(--vds-code-diff-remove-marker);
+}
+.vds-code .cm-line-diff-add {
+  box-shadow: inset 3px 0 0 0 var(--vds-code-diff-add-marker);
+}
+.vds-code .cm-line-diff-remove {
+  box-shadow: inset 3px 0 0 0 var(--vds-code-diff-remove-marker);
+}

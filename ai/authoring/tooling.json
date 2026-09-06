@@ -1,0 +1,40 @@
+{
+  "packages": [
+    {
+      "id": "cli",
+      "category": "tooling",
+      "description": "Source-first CLI that installs editable Virtari React and CSS files with transitive dependencies, conflict protection, diffing, and health checks.",
+      "guidance": [
+        "Run virtari init once, import the installed styles/index.css at the application root, then add only the component items the application needs.",
+        "Import installed components from the local target in virtari.json. Source-owned projects must not add @virtari-packages/* runtime imports.",
+        "Use virtari diff and --dry-run before updating customized files. Pass --overwrite only after reviewing local changes.",
+        "The root registry.json is compatible with shadcn GitHub registries; package source remains authoritative and pnpm registry:build regenerates transformed files."
+      ],
+      "pitfalls": [
+        "Third-party React and behavior dependencies remain normal package dependencies; source ownership removes the Virtari black box, not the React runtime.",
+        "Do not edit generated registry files. Change packages/*/src, rebuild the registry, and commit both source and generated output.",
+        "A public Own Your Code release requires a license that grants copying and modification; the current proprietary license does not."
+      ],
+      "related": ["core", "tokens", "utils", "primitives"]
+    }
+  ],
+  "sections": [
+    {
+      "id": "source-registry",
+      "name": "Source-owned installation and registry",
+      "description": "Use Virtari as editable project source through its CLI or the shadcn-compatible GitHub registry.",
+      "sourcePaths": ["docs/source-registry.md", "virtari.schema.json", "registry.json", "packages/cli/bin/virtari.mjs"],
+      "guidance": [
+        "Read virtari.json to locate the installed source tree; the consumer's local source is authoritative after installation.",
+        "Use registry dependencies for transitive Virtari source and dependencies for external npm packages.",
+        "Keep generated imports relative so custom target roots remain portable without TypeScript aliases.",
+        "Use full owner/repository/item addresses for same-repository dependencies in a shadcn GitHub registry."
+      ],
+      "pitfalls": [
+        "Bare registry dependency names resolve to shadcn built-in items rather than sibling GitHub items.",
+        "Do not overwrite consumer edits implicitly; compare, preview, then require an explicit overwrite decision.",
+        "Do not describe source as freely owned while the distribution license forbids copying or modification."
+      ]
+    }
+  ]
+}

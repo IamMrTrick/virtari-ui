@@ -1,0 +1,117 @@
+@layer design-system.components {
+  .vds-checkbox-group {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .vds-checkbox-group > * {
+    min-inline-size: 0;
+  }
+
+  .vds-checkbox-group > * + * {
+    margin-block-start: var(--checkbox-group-gap);
+  }
+
+  .vds-checkbox-group-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vds-space-1, 0.25rem);
+  }
+
+  .vds-checkbox-group-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    font-size: var(--checkbox-group-label-font-size);
+    font-weight: var(--checkbox-group-label-font-weight);
+    color: var(--checkbox-group-label-color);
+    line-height: var(--vds-control-line-height, 1.5);
+  }
+
+  .vds-checkbox-group-required {
+    color: var(--checkbox-group-required-color);
+    font-weight: var(--vds-font-weight-semibold, 600);
+  }
+
+  .vds-checkbox-group-description {
+    font-size: var(--checkbox-group-description-font-size);
+    color: var(--checkbox-group-description-color);
+    line-height: var(--vds-control-line-height, 1.5);
+  }
+
+  .vds-checkbox-group-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--checkbox-group-items-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-checkbox-group[data-orientation="horizontal"] .vds-checkbox-group-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--checkbox-group-items-gap);
+  }
+
+  .vds-checkbox-group-error {
+    margin: 0;
+    font-size: var(--checkbox-group-error-font-size);
+    color: var(--checkbox-group-error-color);
+    line-height: var(--vds-leading-snug, 1.375);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--vds-duration-normal, 200ms)
+      var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-checkbox-group-error[data-empty] {
+    margin-block-start: 0;
+  }
+
+  .vds-checkbox-group-error[data-visible] {
+    grid-template-rows: 1fr;
+  }
+
+  .vds-checkbox-group-error-body {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--checkbox-group-error-gap);
+    min-block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(calc(var(--vds-space-1, 0.25rem) * -1));
+    transition:
+      opacity var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1)),
+      transform var(--vds-duration-normal, 200ms)
+        var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  }
+
+  .vds-checkbox-group-error[data-visible] .vds-checkbox-group-error-body {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .vds-checkbox-group-error-icon {
+    flex-shrink: 0;
+    color: currentColor;
+  }
+
+  .vds-checkbox-group[data-disabled] {
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  /* Dim once: a disabled group propagates `disabled` to every descendant, so
+     without this the group, the field and the control would compound their
+     opacities down to ~0.2. */
+  .vds-checkbox-group[data-disabled] .vds-checkbox-field[data-disabled],
+  .vds-checkbox-group[data-disabled] .vds-checkbox-card[data-disabled],
+  .vds-checkbox-group[data-disabled] .vds-pill-checkbox-item:disabled,
+  .vds-checkbox-group[data-disabled] .vds-checkbox:disabled {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vds-checkbox-group-error, .vds-checkbox-group-error-body { transition: none; transform: none; }
+}

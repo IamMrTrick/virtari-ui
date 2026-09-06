@@ -1,0 +1,642 @@
+@import "./Drawer.tokens.css";
+
+@layer design-system.components {
+  .vds-drawer-overlay {
+    --vds-drawer-duration: var(--vds-duration-slower);
+    --vds-drawer-ease: var(--vds-ease-ios);
+    position: fixed;
+    inset: 0;
+    z-index: var(--vds-z-overlay);
+    background-color: var(--drawer-overlay-bg);
+    opacity: var(--vds-drawer-overlay-opacity, 0);
+    pointer-events: none;
+    will-change: opacity;
+    transition: opacity var(--vds-drawer-duration) var(--vds-drawer-ease);
+  }
+
+  .vds-drawer-overlay[data-open] {
+    pointer-events: auto;
+  }
+
+  .vds-drawer-content {
+    --vds-drawer-open-ease: cubic-bezier(0.22, 1.08, 0.36, 1);
+    --vds-drawer-radius: var(--vds-radius-drawer);
+    --vds-drawer-duration: var(--vds-duration-slower);
+    --vds-drawer-ease: var(--vds-ease-ios);
+    --vds-drawer-shadow: var(--vds-overlay-shadow, var(--vds-shadow-xl));
+    --vds-drawer-shadow-minimized:
+      0 0 0 1px color-mix(in oklch, var(--vds-color-border-muted), transparent 40%),
+      var(--vds-shadow-lg);
+    --vds-drawer-handle-width: 2.875rem;
+    --vds-drawer-handle-thickness: 0.3125rem;
+    --vds-drawer-handle-color: var(--vds-color-border);
+    --vds-drawer-handle-color-active: var(--vds-color-border-strong, var(--vds-color-neutral-8));
+    --vds-drawer-available-size: 100dvh;
+    --vds-drawer-fixed-size: var(--vds-drawer-available-size);
+    --vds-drawer-adaptive-size: clamp(18rem, 32vw, 28rem);
+    --vds-drawer-edge-offset: 0px;
+    --vds-drawer-keyboard-inset: 0px;
+    position: fixed;
+    z-index: var(--vds-z-modal);
+    display: flex;
+    min-block-size: 0;
+    min-inline-size: 0;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 0;
+    background: var(--drawer-background);
+    outline: none;
+    overflow: hidden;
+    overscroll-behavior: contain;
+    scrollbar-gutter: auto;
+    backface-visibility: hidden;
+    will-change: transform;
+    transform-style: preserve-3d;
+    transition: transform var(--vds-drawer-duration) var(--vds-drawer-ease);
+    transform: var(--vds-drawer-transform, var(--vds-drawer-rest-transform));
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    container-type: inline-size;
+    contain: layout paint style;
+
+    &[data-indicator="outside"] {
+      overflow: visible;
+      contain: layout style;
+    }
+
+    &:not([data-open]) {
+      pointer-events: none;
+    }
+
+    &[data-dragging] {
+      transition: none;
+    }
+
+    &[data-stage="minimized"] {
+      box-shadow: var(--vds-drawer-shadow-minimized);
+    }
+
+    &[data-direction="bottom"],
+    &[data-direction="top"] {
+      inset-inline: 0;
+      max-block-size: calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px));
+      max-inline-size: 100vw;
+      touch-action: pan-y;
+    }
+
+    &[data-direction="bottom"][data-size-mode="adaptive"],
+    &[data-direction="top"][data-size-mode="adaptive"] {
+      block-size: auto;
+    }
+
+    &[data-direction="bottom"][data-size-mode="full"],
+    &[data-direction="top"][data-size-mode="full"] {
+      block-size: calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px));
+    }
+
+    &[data-direction="bottom"][data-size-mode="fixed"],
+    &[data-direction="top"][data-size-mode="fixed"] {
+      block-size: min(
+        var(--vds-drawer-fixed-size),
+        calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px))
+      );
+    }
+
+    &[data-direction="bottom"] {
+      inset-block-end: calc(var(--vds-drawer-edge-offset) + var(--vds-drawer-keyboard-inset, 0px));
+      border-start-start-radius: var(--vds-drawer-radius);
+      border-start-end-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: center bottom;
+      --vds-drawer-rest-transform: translate3d(0, 100%, 0);
+    }
+
+    &[data-direction="top"] {
+      inset-block-start: var(--vds-drawer-edge-offset);
+      border-end-start-radius: var(--vds-drawer-radius);
+      border-end-end-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: center top;
+      --vds-drawer-rest-transform: translate3d(0, -100%, 0);
+    }
+
+    &[data-direction="left"],
+    &[data-direction="right"] {
+      inset-block: 0;
+      max-inline-size: var(--vds-drawer-available-size);
+      max-block-size: calc(100dvh - var(--vds-drawer-keyboard-inset, 0px));
+      scrollbar-gutter: auto;
+      touch-action: pan-x;
+    }
+
+    &[data-direction="left"][data-size-mode="adaptive"],
+    &[data-direction="right"][data-size-mode="adaptive"] {
+      inline-size: min(var(--vds-drawer-adaptive-size), var(--vds-drawer-available-size));
+    }
+
+    &[data-direction="left"][data-size-mode="full"],
+    &[data-direction="right"][data-size-mode="full"] {
+      inline-size: var(--vds-drawer-available-size);
+    }
+
+    &[data-direction="left"][data-size-mode="fixed"],
+    &[data-direction="right"][data-size-mode="fixed"] {
+      inline-size: min(var(--vds-drawer-fixed-size), var(--vds-drawer-available-size));
+    }
+
+    &[data-direction="left"] {
+      inset-inline-start: var(--vds-drawer-edge-offset);
+      border-start-end-radius: var(--vds-drawer-radius);
+      border-end-end-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: left center;
+      --vds-drawer-rest-transform: translate3d(-100%, 0, 0);
+    }
+
+    &[data-direction="right"] {
+      /* Compensate for the scroll-lock margin-right that react-remove-scroll
+         applies to body when a modal is open. The variable is set to the
+         real scrollbar width while locked and is absent otherwise. */
+      inset-inline-end: calc(
+        var(--vds-drawer-edge-offset) - var(--removed-body-scroll-bar-size, 0px)
+      );
+      border-start-start-radius: var(--vds-drawer-radius);
+      border-end-start-radius: var(--vds-drawer-radius);
+      box-shadow: var(--vds-drawer-shadow);
+      transform-origin: right center;
+      --vds-drawer-rest-transform: translate3d(100%, 0, 0);
+    }
+
+    /* RTL: inset-inline-* already flips which physical edge the drawer docks
+       to; mirror transform-origin and the rest translation so the slide axis
+       matches the new dock edge. */
+    :dir(rtl) &[data-direction="left"] {
+      transform-origin: right center;
+      --vds-drawer-rest-transform: translate3d(100%, 0, 0);
+    }
+
+    :dir(rtl) &[data-direction="right"] {
+      transform-origin: left center;
+      --vds-drawer-rest-transform: translate3d(-100%, 0, 0);
+    }
+  }
+
+  .vds-drawer-content[data-floating] {
+    border-radius: var(--vds-drawer-radius);
+  }
+
+  /* Outside handles need visible overflow. Give the painted end slots the
+     shell corners so their backgrounds do not square off floating sheets. */
+  .vds-drawer-content[data-indicator="outside"] > :is(.vds-drawer-header, .vds-drawer-body, .vds-drawer-footer):first-child {
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+  }
+
+  .vds-drawer-content[data-indicator="outside"] > :is(.vds-drawer-header, .vds-drawer-body, .vds-drawer-footer):last-child {
+    border-end-start-radius: inherit;
+    border-end-end-radius: inherit;
+  }
+
+  .vds-drawer-content[data-floating][data-direction="bottom"],
+  .vds-drawer-content[data-floating][data-direction="top"] {
+    inset-inline: var(--vds-drawer-edge-offset);
+    max-inline-size: calc(100vw - 2 * var(--vds-drawer-edge-offset));
+  }
+
+  .vds-drawer-content[data-floating][data-direction="left"],
+  .vds-drawer-content[data-floating][data-direction="right"] {
+    inset-block: var(--vds-drawer-edge-offset);
+    max-block-size: calc(100dvh - 2 * var(--vds-drawer-edge-offset) - var(--vds-drawer-keyboard-inset, 0px));
+  }
+
+  /* Resize only along the opening axis. Logical insets keep the docked edge
+     pinned in both LTR and RTL; text retains its original scale. */
+  .vds-drawer-content[data-elastic][data-direction="bottom"],
+  .vds-drawer-content[data-elastic][data-direction="top"] {
+    block-size: var(--vds-drawer-elastic-size);
+  }
+
+  .vds-drawer-content[data-elastic][data-direction="left"],
+  .vds-drawer-content[data-elastic][data-direction="right"] {
+    inline-size: var(--vds-drawer-elastic-size);
+  }
+
+  .vds-drawer-header {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: var(--drawer-header-gap);
+    padding-block: var(--drawer-padding-block);
+    padding-inline: var(--drawer-padding-inline);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    /* Plain (default): a single flat step of contrast vs the drawer body.
+       surface-sunken inverts automatically (slightly darker in light,
+       slightly lighter in dark) because neutral-2 is mode-aware. */
+    background: var(--drawer-header-surface);
+  }
+
+  .vds-drawer-header[data-variant="bordered"] {
+    /* Bordered: uniform with the drawer body, differentiated only by a
+       bottom rule. */
+    background: transparent;
+    border-block-end: var(--drawer-section-border);
+  }
+
+  .vds-drawer-content[data-direction="top"] .vds-drawer-header,
+  .vds-drawer-content[data-direction="left"] .vds-drawer-header,
+  .vds-drawer-content[data-direction="right"] .vds-drawer-header {
+    padding-block-start: max(var(--drawer-padding-block), env(safe-area-inset-top));
+  }
+
+  .vds-drawer-header > .vds-drawer-title,
+  .vds-drawer-header > .vds-drawer-description {
+    padding-inline: 0;
+  }
+
+  .vds-drawer-header > .vds-drawer-description {
+    margin-block-start: 0;
+  }
+
+  .vds-drawer-content[data-direction="bottom"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="inside"],
+  .vds-drawer-content[data-direction="bottom"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="progress"] {
+    margin-block: calc(var(--drawer-header-gap) * -1) var(--drawer-handle-padding-block);
+  }
+
+  .vds-drawer-content[data-direction="top"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="inside"],
+  .vds-drawer-content[data-direction="top"]
+    .vds-drawer-header
+    > .vds-drawer-handle[data-placement="progress"] {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    justify-content: center;
+    padding-block: var(--drawer-handle-padding-block);
+    margin: 0;
+  }
+
+  .vds-drawer-content[data-direction="top"][data-indicator="inside"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="top"][data-indicator="progress"]
+    .vds-drawer-body {
+    padding-block-end: var(--drawer-handle-clearance);
+  }
+
+  .vds-drawer-content[data-direction="left"][data-indicator="inside"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="left"][data-indicator="inside"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="left"][data-indicator="inside"]
+    .vds-drawer-footer,
+  .vds-drawer-content[data-direction="left"][data-indicator="progress"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="left"][data-indicator="progress"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="left"][data-indicator="progress"]
+    .vds-drawer-footer {
+    padding-inline-end: var(--drawer-handle-clearance);
+  }
+
+  .vds-drawer-content[data-direction="right"][data-indicator="inside"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="right"][data-indicator="inside"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="right"][data-indicator="inside"]
+    .vds-drawer-footer,
+  .vds-drawer-content[data-direction="right"][data-indicator="progress"]
+    .vds-drawer-header,
+  .vds-drawer-content[data-direction="right"][data-indicator="progress"]
+    .vds-drawer-body,
+  .vds-drawer-content[data-direction="right"][data-indicator="progress"]
+    .vds-drawer-footer {
+    padding-inline-start: var(--drawer-handle-clearance);
+  }
+
+  .vds-drawer-body {
+    flex: 1;
+    min-block-size: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    user-select: auto;
+    -webkit-user-select: auto;
+    padding-inline: var(--drawer-padding-inline);
+    padding-block: var(--drawer-padding-block);
+    touch-action: auto;
+  }
+
+  /* Slot seam — the container owns the gap between adjacent slots via one
+     named token; a slot never zeroes its own leading edge. The header and
+     footer are tinted surfaces that keep their own interior padding, so the
+     seam is measured from the tint boundary to the body's first line. */
+  .vds-drawer-content
+    > :where(.vds-drawer-header, .vds-drawer-footer)
+    + .vds-drawer-body {
+    padding-block-start: var(--drawer-slot-gap);
+  }
+
+  .vds-drawer-content
+    > .vds-drawer-body:has(+ :where(.vds-drawer-header, .vds-drawer-footer)) {
+    padding-block-end: var(--drawer-slot-gap);
+  }
+
+  .vds-drawer-handle {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--drawer-handle-padding-block);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    &[data-direction="bottom"],
+    &[data-direction="top"] {
+      & .vds-drawer-handle-bar {
+        inline-size: var(--vds-drawer-handle-width);
+        block-size: var(--vds-drawer-handle-thickness);
+      }
+    }
+
+    &[data-direction="left"],
+    &[data-direction="right"] {
+      position: absolute;
+      inset-block: 0;
+      padding-inline: var(--drawer-handle-padding-inline);
+      padding-block: 0;
+      block-size: 100%;
+
+      & .vds-drawer-handle-bar {
+        inline-size: var(--vds-drawer-handle-thickness);
+        block-size: var(--vds-drawer-handle-width);
+      }
+    }
+
+    &[data-direction="left"] {
+      inset-inline-end: 0;
+    }
+
+    &[data-direction="right"] {
+      inset-inline-start: 0;
+    }
+
+    &[data-stage="minimized"] .vds-drawer-handle-bar {
+      background-color: var(--vds-drawer-handle-color-active);
+    }
+  }
+
+  /* Outside: the handle floats beyond the drawer's opening edge as a bare bar,
+     with no chip/pill background. Sits exactly at the boundary plus a small
+     visual gap. */
+  .vds-drawer-handle[data-placement="outside"] {
+    position: absolute;
+    z-index: 2;
+    margin: 0;
+    padding: var(--drawer-handle-offset);
+    background: none;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="bottom"],
+  .vds-drawer-handle[data-placement="outside"][data-direction="top"] {
+    inset-inline-start: 50%;
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="bottom"] {
+    inset-block-start: 0;
+    transform: translate(-50%, calc(-100% - var(--drawer-handle-offset)));
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="top"] {
+    inset-block-end: 0;
+    transform: translate(-50%, calc(100% + var(--drawer-handle-offset)));
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="left"],
+  .vds-drawer-handle[data-placement="outside"][data-direction="right"] {
+    inset-block: auto;
+    inset-block-start: 50%;
+    block-size: auto;
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="left"] {
+    inset-inline-end: 0;
+    transform: translate(calc(100% + var(--drawer-handle-offset)), -50%);
+  }
+
+  .vds-drawer-handle[data-placement="outside"][data-direction="right"] {
+    inset-inline-start: 0;
+    transform: translate(calc(-100% - var(--drawer-handle-offset)), -50%);
+  }
+
+  /* Logical docking mirrors in RTL; physical translations must mirror too. */
+  .vds-drawer-handle:dir(rtl)[data-placement="outside"][data-direction="bottom"] {
+    transform: translate(50%, calc(-100% - var(--drawer-handle-offset)));
+  }
+
+  .vds-drawer-handle:dir(rtl)[data-placement="outside"][data-direction="top"] {
+    transform: translate(50%, calc(100% + var(--drawer-handle-offset)));
+  }
+
+  .vds-drawer-handle:dir(rtl)[data-placement="outside"][data-direction="left"] {
+    transform: translate(calc(-100% - var(--drawer-handle-offset)), -50%);
+  }
+
+  .vds-drawer-handle:dir(rtl)[data-placement="outside"][data-direction="right"] {
+    transform: translate(calc(100% + var(--drawer-handle-offset)), -50%);
+  }
+
+  .vds-drawer-handle-bar {
+    --drawer-handle-tension: 0;
+    position: relative;
+    border-radius: var(--vds-radius-full);
+    background-color: var(--vds-drawer-handle-color);
+    flex-shrink: 0;
+    overflow: hidden;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--vds-color-primary-a3);
+    transition:
+      transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 280ms var(--vds-ease-out),
+      background-color 280ms var(--vds-ease-out);
+
+    .vds-drawer-handle:hover & {
+      background-color: var(--vds-drawer-handle-color-active);
+    }
+  }
+
+  /* Resist overdrag with the handle, leaving the sheet and text stable.
+     Removing data-dragging also releases the cue after a cancelled gesture. */
+  .vds-drawer-content[data-dragging] .vds-drawer-handle-bar {
+    --drawer-handle-tension: var(--vds-drawer-overdrag-progress, 0);
+    transform: scale(
+      calc(1 + 0.32 * var(--drawer-handle-tension)),
+      calc(1 - 0.14 * var(--drawer-handle-tension))
+    );
+    background-color: color-mix(in srgb,
+      var(--vds-color-primary-9) calc(var(--drawer-handle-tension) * 100%),
+      var(--vds-drawer-handle-color-active));
+    box-shadow: 0 0 0 calc(3px * var(--drawer-handle-tension)) var(--vds-color-primary-a3);
+    transition: none;
+  }
+
+  .vds-drawer-content[data-dragging][data-direction="left"] .vds-drawer-handle-bar,
+  .vds-drawer-content[data-dragging][data-direction="right"] .vds-drawer-handle-bar {
+    transform: scale(
+      calc(1 - 0.14 * var(--drawer-handle-tension)),
+      calc(1 + 0.32 * var(--drawer-handle-tension))
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vds-drawer-content .vds-drawer-handle-bar,
+    .vds-drawer-content[data-dragging][data-direction] .vds-drawer-handle-bar {
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* Progress indicator: the bar fills from its center outward as the user drags
+     the drawer toward the close threshold. Reaches full fill right as the
+     drawer is about to dismiss on release. */
+  .vds-drawer-handle[data-placement="progress"] .vds-drawer-handle-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--drawer-handle-progress-color);
+    transform-origin: center;
+    transform: scaleX(var(--vds-drawer-close-progress, 0));
+    transition: transform var(--vds-duration-fast) var(--vds-ease-out);
+    pointer-events: none;
+  }
+
+  /* Left/right drawers have a vertical bar — scale on Y instead. */
+  .vds-drawer-content[data-direction="left"]
+    .vds-drawer-handle[data-placement="progress"]
+    .vds-drawer-handle-bar::after,
+  .vds-drawer-content[data-direction="right"]
+    .vds-drawer-handle[data-placement="progress"]
+    .vds-drawer-handle-bar::after {
+    transform: scaleY(var(--vds-drawer-close-progress, 0));
+  }
+
+  /* While actively dragging, snap the fill updates to the drag frame (no
+     lagging transition). */
+  .vds-drawer-content[data-dragging]
+    .vds-drawer-handle[data-placement="progress"]
+    .vds-drawer-handle-bar::after {
+    transition: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .vds-drawer-header {
+      cursor: grab;
+    }
+
+    .vds-drawer-header:active {
+      cursor: grabbing;
+    }
+
+    .vds-drawer-handle[data-direction="bottom"],
+    .vds-drawer-handle[data-direction="top"] {
+      cursor: ns-resize;
+    }
+
+    .vds-drawer-handle[data-direction="left"],
+    .vds-drawer-handle[data-direction="right"] {
+      cursor: ew-resize;
+    }
+  }
+
+  .vds-drawer-title {
+    padding-inline: var(--drawer-padding-inline);
+    font-family: var(--drawer-title-font-family);
+    font-size: var(--drawer-title-font-size);
+    font-weight: var(--drawer-title-font-weight);
+    line-height: var(--drawer-title-line-height);
+    color: var(--drawer-title-color);
+  }
+
+  .vds-drawer-description {
+    margin-block-start: var(--drawer-label-gap);
+    padding-inline: var(--drawer-padding-inline);
+    font-size: var(--drawer-description-font-size);
+    line-height: var(--drawer-description-line-height);
+    color: var(--drawer-description-color);
+  }
+
+  .vds-drawer-footer {
+    display: flex;
+    gap: var(--drawer-footer-gap);
+    flex-shrink: 0;
+    padding-block: var(--drawer-padding-block);
+    padding-inline: var(--drawer-padding-inline);
+    padding-block-end: max(var(--drawer-padding-block), env(safe-area-inset-bottom));
+    margin-block-start: auto;
+    border-block-start: var(--drawer-section-border);
+    background: var(--drawer-footer-background);
+  }
+
+  @container (inline-size < 26rem) {
+    .vds-drawer-footer {
+      flex-direction: column-reverse;
+
+      & > * {
+        inline-size: 100%;
+      }
+    }
+  }
+
+  /* Keyboard-focus mode — while a virtual keyboard is visible inside a
+     bottom/top drawer, we unstick the header and footer so they scroll
+     together with the body. This maximizes the vertical real estate
+     available for the form inside the clamped visible area. The drag hook
+     is informed via keyboardOpenRef so it treats the drawer content as
+     the active scroll container. */
+  .vds-drawer-content[data-keyboard-open][data-direction="bottom"],
+  .vds-drawer-content[data-keyboard-open][data-direction="top"] {
+    overflow-y: auto;
+    /* Force full-viewport height while a form is being filled — overrides
+       adaptive/fixed size-modes so the user gets maximum space regardless of
+       how short the resting content is. */
+    block-size: calc(var(--vds-drawer-available-size) - var(--vds-drawer-keyboard-inset, 0px));
+  }
+
+  .vds-drawer-content[data-keyboard-open][data-direction="bottom"] .vds-drawer-body,
+  .vds-drawer-content[data-keyboard-open][data-direction="top"] .vds-drawer-body {
+    flex: 0 0 auto;
+    min-block-size: auto;
+    overflow: visible;
+  }
+
+  .vds-drawer-content[data-keyboard-open] .vds-drawer-footer {
+    margin-block-start: 0;
+  }
+
+  [data-vds-drawer-wrapper] {
+    --vds-drawer-duration: var(--vds-duration-slower);
+    --vds-drawer-ease: var(--vds-ease-ios);
+    transition:
+      transform var(--vds-drawer-duration) var(--vds-drawer-ease),
+      border-radius var(--vds-drawer-duration) var(--vds-drawer-ease);
+    transform-origin: center top;
+    will-change: transform, border-radius;
+    overflow: hidden;
+  }
+}

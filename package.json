@@ -19,7 +19,11 @@
     "ai:test": "node --test scripts/tests/ai-catalog.test.mjs",
     "mcp:build": "pnpm --filter @virtari-packages/mcp run build",
     "mcp:start": "pnpm --filter @virtari-packages/mcp run start",
-    "mcp:test": "pnpm --filter @virtari-packages/mcp run test"
+    "mcp:test": "pnpm --filter @virtari-packages/mcp run test",
+    "registry:build": "node scripts/build-source-registry.mjs",
+    "registry:check": "node scripts/build-source-registry.mjs --check",
+    "registry:test": "node scripts/verify-source-registry.mjs && pnpm --filter virtari test",
+    "release:cli:check": "node scripts/check-cli-release.mjs && pnpm registry:check && pnpm registry:test && pnpm --filter virtari pack --dry-run"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",

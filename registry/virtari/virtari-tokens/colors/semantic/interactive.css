@@ -1,0 +1,36 @@
+@layer tokens {
+  /*
+   * ── Interactive semantic layer ──
+   *
+   * Canonical home for focus rings, skeletons, and adaptive hover/active
+   * overlays. The overlays use neutral-a* which resolves to black-tinted
+   * alpha in light mode and white-tinted in dark — so dropping them onto
+   * ANY parent background yields a composited result that matches the
+   * solid neutral scale.
+   */
+
+  :root,
+  [data-theme] {
+    /* ─── Focus rings ─── */
+    --vds-color-ring:         var(--vds-color-primary-9);
+    --vds-color-ring-offset:  var(--vds-color-neutral-1);
+    --vds-color-ring-error:   var(--vds-color-danger-9);
+    --vds-color-ring-success: var(--vds-color-success-9);
+    --vds-color-ring-warning: var(--vds-color-warning-9);
+
+    /* ─── Skeleton / loading ─── */
+    --vds-color-skeleton:          var(--vds-color-neutral-3);
+    --vds-color-skeleton-shimmer:  var(--vds-color-neutral-4);
+
+    /* ─── Adaptive interactive overlays ───
+       Use these when you don't know what color the parent surface is. */
+    --vds-color-hover:            var(--vds-color-neutral-a3);
+    --vds-color-active:           var(--vds-color-neutral-a4);
+    --vds-color-pressed:          var(--vds-color-neutral-a5);
+    --vds-color-disabled-overlay: var(--vds-color-neutral-a3);
+
+    /* ─── Text selection ─── */
+    --vds-color-selection-bg:   var(--vds-color-primary-a4);
+    --vds-color-selection-text: var(--vds-color-text-selection);
+  }
+}

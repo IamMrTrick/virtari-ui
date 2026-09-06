@@ -1,0 +1,217 @@
+@layer design-system.components {
+  /* =========================================================================
+   * 1. Base component tokens
+   *    Checkbox is square, proportional to text — NOT on the height ramp.
+   *    sm (14px) pairs with small text, md (18px) with body, lg (22px) with headings.
+   *    Fallbacks keep the package usable without @virtari-packages/tokens.
+   * ========================================================================= */
+  .vds-checkbox {
+    /* ── Geometry ── */
+    --checkbox-size: 1.125rem;
+    --checkbox-icon-size: 0.75rem;
+    --checkbox-indicator-offset: 0px;
+    /* A small checkbox must remain distinguishable from a circular radio,
+     * even when the global role requests a radius larger than half its size. */
+    --checkbox-radius: min(var(--vds-radius-checkbox, 0.375rem), calc(var(--checkbox-size) / 4));
+    --checkbox-border-width: 2px;
+
+    /* ── Motion ── */
+    --checkbox-transition-duration: var(--vds-duration-fast, 120ms);
+    --checkbox-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* ── Focus ── */
+    --checkbox-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
+    --checkbox-focus-ring-width: var(--vds-focus-ring-width, 2px);
+    --checkbox-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
+
+    /* ── Default palette (unchecked) ── */
+    --checkbox-bg: var(--vds-color-surface, #ffffff);
+    --checkbox-bg-hover: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
+    --checkbox-border-color: var(--vds-color-border-interactive, #6b7280);
+    --checkbox-border-color-hover: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+    --checkbox-mark-color: var(--vds-color-on-solid, #ffffff);
+
+    /* ── Checked / Indeterminate palette ── */
+    --checkbox-bg-checked: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+    --checkbox-bg-checked-hover: var(--vds-color-primary-solid-hover, oklch(0.5 0.2 265));
+    --checkbox-border-color-checked: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+    --checkbox-border-color-checked-hover: var(--vds-color-primary-solid-hover, oklch(0.5 0.2 265));
+  }
+
+  /* =========================================================================
+   * 2. Sizes — redefine geometry tokens only.
+   * ========================================================================= */
+  .vds-checkbox[data-size="sm"] {
+    --checkbox-size: 0.875rem;
+    --checkbox-icon-size: 0.625rem;
+  }
+
+  /* md = defaults */
+
+  .vds-checkbox[data-size="lg"] {
+    --checkbox-size: 1.375rem;
+    --checkbox-icon-size: 0.875rem;
+  }
+
+  /* =========================================================================
+   * 3. Error palette — overrides both unchecked and checked colors
+   *    when [data-error] is set. Focus ring also swaps to danger.
+   * ========================================================================= */
+  .vds-checkbox[data-error] {
+    --checkbox-border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    --checkbox-border-color-hover: var(--vds-color-danger-solid-hover, oklch(0.5 0.195 25));
+    --checkbox-bg-hover: var(--vds-color-danger-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
+
+    --checkbox-bg-checked: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    --checkbox-bg-checked-hover: var(--vds-color-danger-solid-hover, oklch(0.5 0.195 25));
+    --checkbox-border-color-checked: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    --checkbox-border-color-checked-hover: var(--vds-color-danger-solid-hover, oklch(0.5 0.195 25));
+
+    --checkbox-focus-ring-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  /* =========================================================================
+   * 4. Field tokens — label row wrapping a single checkbox + text stack.
+   * ========================================================================= */
+  .vds-checkbox-field {
+    --checkbox-field-gap: var(--vds-space-2, 0.5rem);
+    --checkbox-field-label-gap: var(--vds-space-1, 0.25rem);
+    --checkbox-field-font-size: var(--vds-text-sm, 0.875rem);
+    --checkbox-field-label-color: var(--vds-color-text, #111827);
+    --checkbox-field-description-color: var(--vds-color-text-muted, #6b7280);
+    --checkbox-field-description-font-size: var(--vds-text-xs, 0.75rem);
+    --checkbox-field-label-font-weight: var(--vds-font-weight-medium, 500);
+    --checkbox-field-align-block-start: max(0px, calc((var(--checkbox-field-font-size) * var(--vds-control-line-height, 1.5) - var(--checkbox-field-control-size)) / 2));
+    --checkbox-field-text-offset: 0px;
+  }
+
+  .vds-checkbox-field[data-error] {
+    --checkbox-field-label-color: var(--vds-color-danger-text, oklch(0.45 0.17 25));
+  }
+
+  /* =========================================================================
+   * 5. Group tokens — fieldset wrapper with label / description / error.
+   * ========================================================================= */
+  .vds-checkbox-group {
+    --checkbox-group-gap: var(--vds-space-3, 0.75rem);
+    --checkbox-group-items-gap: var(--vds-space-3, 0.75rem);
+    --checkbox-group-label-font-size: var(--vds-text-sm, 0.875rem);
+    --checkbox-group-label-font-weight: var(--vds-font-weight-semibold, 600);
+    --checkbox-group-label-color: var(--vds-color-text, #111827);
+    --checkbox-group-description-font-size: var(--vds-text-xs, 0.75rem);
+    --checkbox-group-description-color: var(--vds-color-text-muted, #6b7280);
+    --checkbox-group-required-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    --checkbox-group-error-color: var(--vds-color-danger-text, oklch(0.45 0.17 25));
+    --checkbox-group-error-font-size: var(--vds-text-xs, 0.75rem);
+    --checkbox-group-error-gap: var(--vds-space-1, 0.25rem);
+  }
+
+  /* =========================================================================
+   * 6. Card tokens — card-style selection (row + icon-grid layouts).
+   * ========================================================================= */
+  .vds-checkbox-card {
+    --checkbox-card-padding-block: var(--vds-space-3, 0.75rem);
+    --checkbox-card-padding-inline: var(--vds-space-3-5, 0.875rem);
+    --checkbox-card-gap: var(--vds-space-3, 0.75rem);
+    --checkbox-card-radius: var(--vds-radius-checkbox-card, 0.75rem);
+    --checkbox-card-border-width: 1.5px;
+    --checkbox-card-transition-duration: var(--vds-duration-fast, 120ms);
+    --checkbox-card-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* Typography */
+    --checkbox-card-label-font-size: var(--vds-text-sm, 0.875rem);
+    --checkbox-card-label-font-weight: var(--vds-font-weight-semibold, 600);
+    --checkbox-card-label-color: var(--vds-color-text, #111827);
+    --checkbox-card-description-font-size: var(--vds-text-xs, 0.75rem);
+    --checkbox-card-description-color: var(--vds-color-text-muted, #6b7280);
+    --checkbox-card-trailing-color: var(--vds-color-text, #111827);
+    --checkbox-card-trailing-font-size: var(--vds-text-sm, 0.875rem);
+
+    /* Default palette */
+    --checkbox-card-bg: var(--vds-surface-bg, var(--vds-color-surface, #ffffff));
+    --checkbox-card-shadow: var(--vds-surface-shadow, none);
+    --checkbox-card-border-color: var(--vds-surface-border, var(--vds-color-border, #d1d5db));
+
+    /* Hover */
+    --checkbox-card-bg-hover: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 4%, transparent));
+    --checkbox-card-border-color-hover: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+
+    /* Checked (selected) — subtle primary wash + solid border */
+    --checkbox-card-bg-checked: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
+    --checkbox-card-border-color-checked: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+
+    /* Badge ("Recommended" chip) */
+    --checkbox-card-badge-font-size: var(--vds-text-xs, 0.75rem);
+    --checkbox-card-badge-font-weight: var(--vds-font-weight-medium, 500);
+    --checkbox-card-badge-color: var(--vds-color-primary-text, oklch(0.45 0.17 265));
+
+    /* Icon container (for icon-grid layout) */
+    --checkbox-card-icon-size: 2.5rem;
+    /* Mirrors RadioCard's --vds-radius-radio-card-icon, which is this same
+       control-action token. It was pinned to the raw --vds-radius-4 primitive,
+       which is mode-invariant: the checkbox card's icon tile stayed at 8px in
+       sharp mode while its radio twin tightened to 2px. */
+    --checkbox-card-icon-radius: var(--vds-radius-control-action, var(--vds-radius-4, 0.5rem));
+    --checkbox-card-icon-bg: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
+    --checkbox-card-icon-color: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+    --checkbox-card-icon-glyph-size: 1.25rem;
+  }
+
+  /* Error palette for card — danger border + subtle danger tint on icon. */
+  .vds-checkbox-card[data-error] {
+    --checkbox-card-border-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    --checkbox-card-border-color-hover: var(--vds-color-danger-solid-hover, oklch(0.5 0.195 25));
+    --checkbox-card-bg-hover: var(--vds-color-danger-bg-subtle, color-mix(in oklch, currentColor 4%, transparent));
+    --checkbox-card-border-color-checked: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+    --checkbox-card-bg-checked: var(--vds-color-danger-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
+    --checkbox-card-icon-bg: var(--vds-color-danger-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
+    --checkbox-card-icon-color: var(--vds-color-danger-solid, oklch(0.555 0.2 25));
+  }
+
+  /* =========================================================================
+   * 7. Pill checkbox tokens — chip-shaped toggleable tags (multi-select).
+   * ========================================================================= */
+  .vds-pill-checkbox {
+    --pill-checkbox-gap: var(--vds-space-2, 0.5rem);
+
+    --pill-checkbox-item-height: var(--vds-size-sm, 2rem);
+    --pill-checkbox-item-padding-inline: var(--vds-space-3-5, 0.875rem);
+    --pill-checkbox-item-font-size: var(--vds-text-sm, 0.875rem);
+    --pill-checkbox-item-font-weight: var(--vds-font-weight-medium, 500);
+    --pill-checkbox-item-radius: var(--vds-radius-pill-checkbox, 9999px);
+    --pill-checkbox-item-border-width: 1.5px;
+
+    /* Default palette */
+    --pill-checkbox-item-bg: var(--vds-color-surface, #ffffff);
+    --pill-checkbox-item-border-color: var(--vds-color-border-interactive, #6b7280);
+    --pill-checkbox-item-color: var(--vds-color-text, #111827);
+
+    /* Hover */
+    --pill-checkbox-item-bg-hover: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 4%, transparent));
+    --pill-checkbox-item-border-color-hover: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+
+    /* Checked */
+    --pill-checkbox-item-bg-checked: var(--vds-color-primary-bg-subtle, color-mix(in oklch, currentColor 8%, transparent));
+    --pill-checkbox-item-border-color-checked: var(--vds-color-primary-solid, oklch(0.55 0.2 265));
+    --pill-checkbox-item-color-checked: var(--vds-color-primary-text, oklch(0.45 0.17 265));
+
+    --pill-checkbox-transition-duration: var(--vds-duration-fast, 120ms);
+    --pill-checkbox-transition-easing: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    --pill-checkbox-focus-ring-color: var(--vds-color-ring, oklch(0.55 0.2 265));
+    --pill-checkbox-focus-ring-width: var(--vds-focus-ring-width, 2px);
+    --pill-checkbox-focus-ring-offset: var(--vds-focus-ring-offset, 2px);
+  }
+
+  .vds-pill-checkbox[data-size="sm"] {
+    --pill-checkbox-item-height: var(--vds-size-xs, 1.75rem);
+    --pill-checkbox-item-padding-inline: var(--vds-space-3, 0.75rem);
+    --pill-checkbox-item-font-size: var(--vds-text-xs, 0.75rem);
+  }
+
+  .vds-pill-checkbox[data-size="lg"] {
+    --pill-checkbox-item-height: var(--vds-size-md, 2.25rem);
+    --pill-checkbox-item-padding-inline: var(--vds-space-4, 1rem);
+    --pill-checkbox-item-font-size: var(--vds-text-sm, 0.875rem);
+  }
+}

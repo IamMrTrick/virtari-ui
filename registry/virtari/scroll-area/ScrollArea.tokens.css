@@ -1,0 +1,64 @@
+@layer design-system.components {
+  /* ─────────────────────────────────────────────
+   * ScrollArea — tokens
+   * Semantic CSS variables with fallbacks so the
+   * package works standalone if dropped into a
+   * project without @virtari-packages/tokens.
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area-root {
+    /* ── Scrollbar track / thumb ── */
+    --scroll-area-scrollbar-size: var(--vds-space-2-5, 0.625rem); /* md default (10px) */
+    --scroll-area-scrollbar-padding: 2px;
+    --scroll-area-track-inset: var(--vds-space-1, 4px);
+    --scroll-area-track-bg: transparent;
+    --scroll-area-track-bg-hover: var(--vds-color-bg-subtle, rgba(0, 0, 0, 0.04));
+    --scroll-area-thumb-bg: var(--vds-color-border-muted, #d4d4d8);
+    --scroll-area-thumb-bg-hover: var(--vds-color-border-strong, #a1a1aa);
+    --scroll-area-thumb-bg-active: var(--vds-color-border-interactive, #71717a);
+    --scroll-area-thumb-radius: var(--vds-radius-scrollbar-thumb, 6px);
+    --scroll-area-transition-duration: var(--vds-duration-fast, 150ms);
+    --scroll-area-transition-ease: var(--vds-ease-out, cubic-bezier(0, 0, 0.2, 1));
+
+    /* ── Edge mask (gradient fade) ── */
+    --scroll-area-mask-size: 40px;
+    --scroll-area-mask-inline-start: transparent;
+    --scroll-area-mask-inline-end: transparent;
+    --scroll-area-mask-block-start: transparent;
+    --scroll-area-mask-block-end: transparent;
+
+    /* ── Marquee (infinite autoplay) ── */
+    --scroll-area-marquee-duration: 30s;
+    --scroll-area-marquee-direction: normal;
+    --scroll-area-marquee-gap: var(--vds-space-3, 0.75rem);
+
+    /* ── Arrow buttons ── */
+    --scroll-area-arrow-size: var(--vds-size-sm, 2rem);
+    --scroll-area-arrow-icon-size: 1rem;
+    --scroll-area-arrow-bg: var(--vds-color-surface, #ffffff);
+    --scroll-area-arrow-bg-hover: var(--vds-color-surface-hover, #f9fafb);
+    --scroll-area-arrow-bg-active: var(--vds-color-bg-muted, #f3f4f6);
+    --scroll-area-arrow-color: var(--vds-color-text, #111827);
+    --scroll-area-arrow-color-disabled: var(--vds-color-text-muted, #9ca3af);
+    --scroll-area-arrow-border-color: var(--vds-color-border, #d1d5db);
+    --scroll-area-arrow-radius: var(--vds-radius-action, var(--vds-radius-element, 0.5rem));
+    --scroll-area-arrow-shadow: var(--vds-shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 0.05));
+    --scroll-area-arrow-gap: var(--vds-space-1, 0.25rem);
+
+    /* ── Drag cursor ── */
+    --scroll-area-drag-cursor: grab;
+    --scroll-area-drag-cursor-active: grabbing;
+  }
+
+  /* ─────────────────────────────────────────────
+   * Size ramp (scrollbar thickness only)
+   * Matches Button/Input/Select size vocabulary.
+   * ───────────────────────────────────────────── */
+  .vds-scroll-area-root[data-size="sm"] {
+    --scroll-area-scrollbar-size: var(--vds-space-2, 0.5rem); /* 8px */
+  }
+  /* No [data-size="md"] block: the base above already is md, so restating it
+   * here would only be a second place to keep in sync. */
+  .vds-scroll-area-root[data-size="lg"] {
+    --scroll-area-scrollbar-size: var(--vds-space-3, 0.75rem); /* 12px */
+  }
+}

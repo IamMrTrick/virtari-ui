@@ -1,0 +1,161 @@
+@import "./Fieldset.tokens.css";
+
+@layer design-system.components {
+  .vds-fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fieldset-gap);
+    padding: var(--fieldset-padding);
+    padding-block-start: calc(var(--fieldset-padding) * 0.75);
+    background: var(--fieldset-bg);
+    border: var(--fieldset-border-width) solid var(--fieldset-border-color);
+    border-radius: var(--fieldset-border-radius);
+    margin: 0;
+    min-inline-size: 0;
+    transition: border-color var(--vds-transition-base, 200ms ease-out);
+  }
+
+  /* ── Legend ── */
+  .vds-fieldset-legend {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-1, 0.25rem);
+    padding-inline: var(--fieldset-legend-px);
+    font-size: var(--fieldset-legend-size);
+    font-weight: var(--fieldset-legend-weight);
+    color: var(--fieldset-legend-color);
+    line-height: var(--vds-leading-snug, 1.375);
+    float: none;
+    inline-size: max-content;
+  }
+
+  .vds-fieldset-required {
+    color: var(--fieldset-required-color);
+    font-size: 0.9em;
+  }
+
+  /* ── Description ── */
+  .vds-fieldset-description {
+    margin: 0;
+    font-size: var(--fieldset-desc-size);
+    color: var(--fieldset-desc-color);
+    line-height: var(--vds-leading-relaxed, 1.625);
+  }
+
+  /* ── Disabled cascade ── */
+  .vds-fieldset[data-disabled] {
+    opacity: var(--vds-opacity-disabled, 0.5);
+    cursor: not-allowed;
+  }
+
+  .vds-fieldset[data-disabled] * {
+    pointer-events: none;
+  }
+
+  /*
+   * Dim once. A disabled <fieldset> disables every control inside it and each
+   * of those applies --vds-opacity-disabled itself; without this reset the
+   * opacities multiply and the group becomes unreadable.
+   */
+  .vds-fieldset[data-disabled] :disabled,
+  .vds-fieldset[data-disabled] [data-disabled],
+  .vds-fieldset[data-disabled] [aria-disabled="true"] {
+    opacity: 1;
+  }
+
+  .vds-field {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .vds-field > * + * {
+    margin-block-start: var(--field-gap);
+  }
+
+  .vds-field-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--field-label-gap);
+    margin: 0;
+    font-size: var(--field-label-size);
+    font-weight: var(--field-label-weight);
+    color: var(--field-label-color);
+    line-height: var(--vds-control-line-height, 1);
+  }
+
+  .vds-field-required {
+    color: var(--field-required-color);
+    font-size: 0.9em;
+  }
+
+  .vds-field-control,
+  .vds-field-after-control,
+  .vds-field-meta {
+    min-inline-size: 0;
+  }
+
+  .vds-field-meta {
+    display: block;
+  }
+
+  .vds-field-meta > * + * {
+    margin-block-start: var(--field-meta-stack-gap);
+  }
+
+  .vds-field-meta-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--field-meta-gap);
+    min-inline-size: 0;
+  }
+
+  .vds-field-meta-slot {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--field-meta-gap);
+    min-inline-size: 0;
+    flex: 1 1 0;
+    flex-wrap: wrap;
+  }
+
+  .vds-field-meta-slot[data-align="end"] {
+    justify-content: flex-end;
+    margin-inline-start: auto;
+    text-align: end;
+  }
+
+  .vds-field-meta-slot[data-align="start"] {
+    justify-content: flex-start;
+    text-align: start;
+  }
+
+  .vds-field-meta-item {
+    min-inline-size: 0;
+    font-size: var(--field-meta-size);
+    line-height: var(--field-meta-line-height);
+  }
+
+  .vds-field-meta-item--description {
+    color: var(--field-description-color);
+  }
+
+  .vds-field-meta-item--error {
+    color: var(--field-error-color);
+  }
+
+  .vds-field-meta-item--counter {
+    color: var(--field-counter-color);
+    white-space: nowrap;
+  }
+
+  .vds-field[data-disabled] {
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  /* Dim once - see the fieldset rule above. */
+  .vds-field[data-disabled] :disabled,
+  .vds-field[data-disabled] [data-disabled],
+  .vds-field[data-disabled] [aria-disabled="true"] {
+    opacity: 1;
+  }
+}

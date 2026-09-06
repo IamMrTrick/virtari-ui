@@ -1,0 +1,674 @@
+@import "../fieldset/Fieldset.css";
+
+/* Non-geometric pulse: do not transform editable controls on iOS. */
+@keyframes vds-typing-pulse {
+  0% {
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  }
+  35% {
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2), 0 0 0 6px var(--vds-color-primary-a3);
+  }
+  100% {
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  }
+}
+
+@keyframes vds-pw-reveal {
+  0% {
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  }
+  55% {
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2), 0 0 0 6px var(--vds-color-primary-a3);
+  }
+  100% {
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  }
+}
+
+@keyframes vds-pw-hide {
+  0% {
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  }
+  45% {
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2), 0 0 0 6px var(--vds-color-primary-a3);
+  }
+  100% {
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes vds-typing-pulse { 0%, 100% { box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); } }
+  @keyframes vds-pw-reveal    { 0%, 100% { box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); } }
+  @keyframes vds-pw-hide      { 0%, 100% { box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2); } }
+}
+
+@layer design-system.components {
+  .vds-input {
+    box-shadow: var(--vds-field-shadow, none);
+    /*
+     * ── Public config ──
+     * Height uses shared --vds-size-* tokens (same as Button, Select, Toggle).
+     * Override these to customize.
+     */
+    --input-height: var(--vds-size-md);
+    --input-padding-inline: var(--vds-space-3);
+    --input-padding-block: 0;
+    --input-font-size: var(--vds-text-sm);
+    --input-line-height: var(--vds-control-line-height, 1.5);
+    --input-optical-offset: var(--vds-control-optical-offset, 0px);
+    --input-radius: var(--vds-radius-input, var(--vds-radius-element));
+
+    /*
+     * ── Legacy private aliases ──
+     * Kept so packages that already override --_input-* (ColorPicker, Editor)
+     * and the iOS auto-zoom guard in @virtari-packages/core keep working.
+     * New code should set the public --input-* names above.
+     */
+    --_input-height: var(--input-height);
+    --_input-px: var(--input-padding-inline);
+    --_input-py: var(--input-padding-block);
+    --_input-font-size: var(--input-font-size);
+    --_input-line-height: var(--input-line-height);
+    --_input-optical-offset: var(--input-optical-offset);
+    --_input-radius: var(--input-radius);
+
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    display: block;
+    inline-size: 100%;
+    font-family: var(--vds-font-sans);
+    border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
+    background-color: var(--vds-field-bg, var(--vds-color-surface-field, var(--vds-color-surface)));
+    color: var(--vds-color-text);
+    -webkit-touch-callout: default;
+    -webkit-user-select: text;
+    user-select: text;
+    transition:
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow 180ms ease-out;
+
+    block-size: var(--_input-height);
+    padding-inline: var(--_input-px);
+    padding-block-start: calc(var(--_input-py) + var(--_input-optical-offset));
+    padding-block-end: var(--_input-py);
+    font-size: var(--_input-font-size);
+    line-height: var(--_input-line-height);
+    border-radius: var(--_input-radius);
+
+    &::placeholder {
+      color: var(--vds-color-text-placeholder, var(--vds-color-neutral-11));
+    }
+
+    &:focus-visible {
+      border-color: var(--vds-color-primary-9);
+      outline: none;
+      box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+      @media (forced-colors: active) {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
+    }
+
+    &.vds-input--pulse {
+      animation: vds-typing-pulse 140ms var(--vds-ease-out) forwards;
+    }
+
+    &:disabled {
+      opacity: var(--vds-opacity-disabled, 0.5);
+      cursor: not-allowed;
+    }
+
+    &[aria-invalid="true"] {
+      border-color: var(--vds-color-danger-9);
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 4px var(--vds-color-danger-a4), 0 0 12px 2px var(--vds-color-danger-a2);
+        @media (forced-colors: active) {
+          outline: 2px solid Highlight;
+          outline-offset: 2px;
+          box-shadow: none;
+        }
+      }
+
+      transition: box-shadow 180ms ease-out;
+
+      @media (prefers-reduced-motion: reduce) {
+        transition-duration: 0s;
+      }
+    }
+
+    /* ── Sizes (same ramp as Button) ── */
+
+    /* Every size keeps the base --input-radius: the radius is a mode
+       (`data-radius`), not a function of the control's height. */
+
+    &[data-size="2xs"] {
+      --input-height: var(--vds-size-2xs);
+      --input-padding-inline: var(--vds-space-1-5);
+      --input-font-size: var(--vds-text-xs);
+    }
+
+    &[data-size="xs"] {
+      --input-height: var(--vds-size-xs);
+      --input-padding-inline: var(--vds-space-2);
+      --input-font-size: var(--vds-text-xs);
+    }
+
+    &[data-size="sm"] {
+      --input-height: var(--vds-size-sm);
+      --input-padding-inline: var(--vds-space-2-5);
+      --input-font-size: var(--vds-text-sm);
+    }
+
+    /* md uses defaults above */
+
+    &[data-size="lg"] {
+      --input-height: var(--vds-size-lg);
+      --input-padding-inline: var(--vds-space-4);
+      --input-font-size: var(--vds-text-base);
+    }
+
+    &[data-size="xl"] {
+      --input-height: var(--vds-size-xl);
+      --input-padding-inline: var(--vds-space-5);
+      --input-font-size: var(--vds-text-lg);
+    }
+
+    &[data-size="2xl"] {
+      --input-height: var(--vds-size-2xl);
+      --input-padding-inline: var(--vds-space-6);
+      --input-font-size: var(--vds-text-xl);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+
+  /* One slot contract: outer inset + icon + text gap, mirrored by logical edges.
+     Geometry is inherited by siblings; the native input keeps its own identity. */
+  :is(.vds-input-wrapper, .vds-input-field-control, .vds-input-group) {
+    --input-slot-inset: var(--vds-space-3);
+    --input-slot-font-size: var(--vds-text-sm);
+    --input-icon-size: 1.125rem;
+    --input-icon-gap: var(--vds-space-2);
+    --input-action-size: var(--vds-space-8);
+    &:has(> .vds-input[data-size="2xs"]) {
+      --input-slot-inset: var(--vds-space-1-5);
+      --input-slot-font-size: var(--vds-text-xs);
+      --input-icon-size: 0.75rem;
+      --input-icon-gap: var(--vds-space-1);
+      --input-action-size: var(--vds-space-5);
+    }
+    &:has(> .vds-input[data-size="xs"]) {
+      --input-slot-inset: var(--vds-space-2);
+      --input-slot-font-size: var(--vds-text-xs);
+      --input-icon-size: 0.875rem;
+      --input-icon-gap: var(--vds-space-1-5);
+      --input-action-size: var(--vds-space-6);
+    }
+    &:has(> .vds-input[data-size="sm"]) {
+      --input-slot-inset: var(--vds-space-2-5);
+      --input-icon-size: 1rem;
+      --input-action-size: var(--vds-space-7);
+    }
+    &:has(> .vds-input[data-size="lg"]) {
+      --input-slot-inset: var(--vds-space-4);
+      --input-slot-font-size: var(--vds-text-base);
+      --input-icon-size: 1.25rem;
+      --input-action-size: var(--vds-space-9);
+    }
+    &:has(> .vds-input[data-size="xl"]) {
+      --input-slot-inset: var(--vds-space-5);
+      --input-slot-font-size: var(--vds-text-lg);
+      --input-icon-size: 1.375rem;
+      --input-action-size: var(--vds-space-10);
+    }
+    &:has(> .vds-input[data-size="2xl"]) {
+      --input-slot-inset: var(--vds-space-6);
+      --input-slot-font-size: var(--vds-text-xl);
+      --input-icon-size: 1.5rem;
+      --input-action-size: var(--vds-space-12);
+    }
+  }
+
+  .vds-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    min-inline-size: 0;
+
+    & > .vds-input-icon {
+      position: absolute;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      inset-block: 0;
+      inline-size: var(--input-icon-size);
+      color: var(--vds-color-text-muted);
+      pointer-events: none;
+      & > :is(svg, img) {
+        display: block;
+        inline-size: 100%;
+        block-size: var(--input-icon-size);
+        flex: none;
+      }
+    }
+
+    & > .vds-input-icon:is([data-side="start"], :first-child:not([data-side])) {
+      inset-inline-start: var(--input-slot-inset);
+    }
+    & > .vds-input-icon:is([data-side="end"], :last-child:not([data-side])) {
+      inset-inline-end: var(--input-slot-inset);
+    }
+    &:has(> .vds-input-icon:is([data-side="start"], :first-child:not([data-side]))) > .vds-input,
+    &[data-icon-start] > .vds-input {
+      padding-inline-start: calc(var(--input-slot-inset) + var(--input-icon-size) + var(--input-icon-gap));
+    }
+    &:has(> .vds-input-icon:is([data-side="end"], :last-child:not([data-side]))) > .vds-input,
+    &[data-icon-end] > .vds-input {
+      padding-inline-end: calc(var(--input-slot-inset) + var(--input-icon-size) + var(--input-icon-gap));
+    }
+  }
+
+  /* ── InputGroup — merges input border with inline addons ── */
+  .vds-input-group {
+    /*
+     * The group's outer corner. The input and the addons are siblings, so the
+     * radius they have to agree on lives on their common ancestor — hardcoding
+     * the token in each rule meant an --input-radius override on .vds-input
+     * rounded the field but not the addon welded to it.
+     */
+    --input-radius: var(--vds-radius-input, var(--vds-radius-element));
+
+    display: flex;
+    align-items: stretch;
+    inline-size: 100%;
+    min-inline-size: 0;
+
+    & > .vds-input {
+      --input-radius: inherit;
+      flex: 1;
+      min-inline-size: 0;
+      border-radius: 0;
+    }
+
+    & > .vds-input:first-child {
+      border-start-start-radius: var(--_input-radius);
+      border-end-start-radius: var(--_input-radius);
+    }
+
+    & > .vds-input:last-child {
+      border-start-end-radius: var(--_input-radius);
+      border-end-end-radius: var(--_input-radius);
+    }
+
+    & > .vds-input-addon[data-side="start"] + .vds-input {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+    }
+
+    & > .vds-input:has(+ .vds-input-addon[data-side="end"]) {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+
+    /* The focus ring is drawn outside the box (canonical offset), so lift the
+       focused member above its neighbours or the next addon paints over it. */
+    & > .vds-input:focus-visible {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  /* ── InputAddon — the bordered text box that attaches to the input ── */
+  .vds-input-addon {
+    box-sizing: border-box;
+    font-family: var(--vds-font-sans);
+    line-height: var(--vds-control-line-height, 1.5);
+    display: inline-flex;
+    align-items: center;
+    padding-inline: var(--input-slot-inset, var(--vds-space-3));
+    font-size: var(--input-slot-font-size, var(--vds-text-sm));
+    color: var(--vds-color-text-muted);
+    background-color: var(--vds-color-surface-raised);
+    border: 1px solid var(--vds-field-border, var(--vds-color-border-interactive, var(--vds-color-neutral-9)));
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    /* Reads the group's --input-radius so the welded corner always matches the
+       field it is welded to; falls back to the token when used standalone. */
+    &[data-side="start"] {
+      border-inline-end: none;
+      border-start-start-radius: var(--input-radius, var(--vds-radius-input, var(--vds-radius-element)));
+      border-end-start-radius: var(--input-radius, var(--vds-radius-input, var(--vds-radius-element)));
+    }
+
+    &[data-side="end"] {
+      border-inline-start: none;
+      border-start-end-radius: var(--input-radius, var(--vds-radius-input, var(--vds-radius-element)));
+      border-end-end-radius: var(--input-radius, var(--vds-radius-input, var(--vds-radius-element)));
+    }
+  }
+
+  .vds-input-field-control {
+    position: relative;
+    min-inline-size: 0;
+
+    /*
+     * The field and its inline action button are siblings, so the geometry
+     * they share has to live on their common ancestor for both to read it.
+     * --input-action-inset is the gap between the field's border box and the
+     * action button; --input-action-size is the button's inline size.
+     */
+    --input-radius: var(--vds-radius-input, var(--vds-radius-element));
+    --input-action-inset: var(--vds-space-1);
+  }
+
+  .vds-input-field-control[data-pw-anim="reveal"] > .vds-input {
+    animation: vds-pw-reveal 180ms var(--vds-ease-out) both;
+  }
+
+  .vds-input-field-control[data-pw-anim="hide"] > .vds-input {
+    animation: vds-pw-hide 160ms var(--vds-ease-in) both;
+  }
+
+  /* nicer password dots — only when field has a value, not on placeholder */
+  .vds-input[type="password"]:not(:placeholder-shown) {
+    letter-spacing: 0.15em;
+  }
+
+  .vds-input-field-control[data-has-action] > .vds-input {
+    padding-inline-end: calc(var(--input-action-inset) + var(--input-action-size) + var(--input-icon-gap));
+  }
+
+  .vds-input-field-action {
+    position: absolute;
+    inset-inline-end: var(--input-action-inset);
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--input-action-size);
+    /*
+     * Two insets, not one: the button is centred, so subtracting a single
+     * --input-action-inset left --input-action-inset/2 above and below while
+     * the inline-end gap was the full inset. The radius below subtracts the
+     * full inset, which is only the concentric answer if the gap is that inset
+     * on every side.
+     */
+    block-size: calc(100% - 2 * var(--input-action-inset));
+    padding: 0;
+    border: 0;
+    /*
+     * Concentric with the field: the action sits --input-action-inset inside
+     * the field's corner, so its own corner is that much tighter. Floored at
+     * 0px only — a floor at or above the field radius (the old
+     * --vds-radius-action) made the calc() dead code and turned the button
+     * into a full circle in pill mode.
+     */
+    border-radius: max(
+      0px,
+      calc(var(--input-radius) - var(--input-action-inset))
+    );
+    background: transparent;
+    color: var(--vds-color-text-muted);
+    cursor: pointer;
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      box-shadow 180ms ease-out;
+    @media (prefers-reduced-motion: reduce) {
+      transition-duration: 0s;
+    }
+  }
+
+  .vds-input-field-action > svg {
+    inline-size: var(--input-icon-size);
+    block-size: var(--input-icon-size);
+    max-block-size: 100%;
+    flex: none;
+  }
+
+  .vds-input-field-action:hover {
+    background-color: var(--vds-color-surface-hover);
+    color: var(--vds-color-text);
+  }
+
+  .vds-input-field-action:disabled {
+    cursor: not-allowed;
+    opacity: var(--vds-opacity-disabled, 0.5);
+  }
+
+  .vds-input-field-action:disabled:hover {
+    background: transparent;
+    color: var(--vds-color-text-muted);
+  }
+
+  .vds-input-field-action:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--vds-color-primary-a4), 0 0 12px 2px var(--vds-color-primary-a2);
+    @media (forced-colors: active) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+
+  .vds-input-field-strength {
+    display: flex;
+    align-items: center;
+    gap: var(--vds-space-2);
+    min-inline-size: 0;
+  }
+
+  .vds-input-field-strength-bar {
+    display: block;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    block-size: 0.25rem;
+    border-radius: var(--vds-radius-full, 9999px);
+    background: var(--vds-color-surface-raised);
+    overflow: hidden;
+  }
+
+  .vds-input-field-strength-fill {
+    display: block;
+    block-size: 100%;
+    inline-size: calc(var(--vds-input-strength-score, 0) * 25%);
+    border-radius: inherit;
+    background: var(--vds-color-danger-8);
+    transition:
+      inline-size var(--vds-duration-fast) var(--vds-ease-out),
+      background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-input-field-strength[data-score="2"] .vds-input-field-strength-fill {
+    background: var(--vds-color-warning-8, #f59e0b);
+  }
+
+  .vds-input-field-strength[data-score="3"] .vds-input-field-strength-fill {
+    background: var(--vds-color-primary-8, #2563eb);
+  }
+
+  .vds-input-field-strength[data-score="4"] .vds-input-field-strength-fill {
+    background: var(--vds-color-success-8, #16a34a);
+  }
+
+  .vds-input-field-strength-label {
+    flex: none;
+    font-size: var(--vds-text-xs);
+    color: var(--vds-color-text-muted);
+    white-space: nowrap;
+  }
+
+  .vds-password-input-root {
+    display: grid;
+    gap: var(--vds-space-2);
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .vds-password-input-control {
+    inline-size: 100%;
+  }
+
+  .vds-password-strength {
+    --_password-strength-color: var(--vds-color-border-strong, var(--vds-color-border));
+    --_password-strength-text: var(--vds-color-text-muted);
+
+    display: grid;
+    gap: var(--vds-space-3);
+    min-inline-size: 0;
+  }
+
+  .vds-password-strength[data-has-requirements] {
+    padding: var(--vds-space-3);
+    border-radius: var(--vds-radius-card, var(--vds-radius-element));
+    background: var(--vds-color-surface-raised);
+  }
+
+  .vds-password-strength[data-color="danger"] {
+    --_password-strength-text: var(--vds-color-danger-text);
+    --_password-strength-color: var(--vds-color-danger-solid, var(--vds-color-danger-8, #dc2626));
+  }
+
+  .vds-password-strength[data-color="warning"] {
+    --_password-strength-text: var(--vds-color-warning-text);
+    --_password-strength-color: var(--vds-color-warning-solid, var(--vds-color-warning-8, #f59e0b));
+  }
+
+  .vds-password-strength[data-color="primary"] {
+    --_password-strength-text: var(--vds-color-primary-text);
+    --_password-strength-color: var(--vds-color-primary-solid, var(--vds-color-primary-8, #2563eb));
+  }
+
+  .vds-password-strength[data-color="success"] {
+    --_password-strength-text: var(--vds-color-success-text);
+    --_password-strength-color: var(--vds-color-success-solid, var(--vds-color-success-8, #16a34a));
+  }
+
+  .vds-password-strength-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vds-space-2);
+    min-inline-size: 0;
+    font-size: var(--vds-text-xs);
+    line-height: var(--vds-leading-normal, 1.5);
+  }
+
+  .vds-password-strength-title {
+    min-inline-size: 0;
+    color: var(--vds-color-text-muted);
+  }
+
+  .vds-password-strength-value {
+    min-inline-size: 0;
+    color: var(--_password-strength-text);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    overflow-wrap: anywhere;
+  }
+
+  .vds-password-strength-meter {
+    display: grid;
+    gap: var(--vds-space-1);
+    min-inline-size: 0;
+  }
+
+  .vds-password-strength-track {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--vds-space-1);
+    block-size: 0.25rem;
+  }
+
+  .vds-password-strength-segment {
+    display: block;
+    min-inline-size: 0;
+    border-radius: var(--vds-radius-full, 9999px);
+    background: var(--vds-color-border);
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-password-strength-segment[data-active] {
+    background: var(--_password-strength-color);
+  }
+
+  .vds-password-requirements-label {
+    color: var(--vds-color-text);
+    font-size: var(--vds-text-xs);
+    font-weight: var(--vds-font-weight-semibold, 600);
+    line-height: var(--vds-leading-tight, 1.25);
+  }
+
+  .vds-password-requirements {
+    display: grid;
+    gap: var(--vds-space-1-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .vds-password-requirement {
+    display: grid;
+    grid-template-columns: 0.875rem minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--vds-space-2);
+    min-block-size: 1rem;
+    min-inline-size: 0;
+    color: var(--vds-color-text);
+    font-size: var(--vds-text-xs);
+    line-height: var(--vds-leading-snug, 1.375);
+    transition: color var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-password-requirement-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    border: 1px solid var(--vds-color-border-strong, var(--vds-color-border));
+    border-radius: var(--vds-radius-checkbox, var(--vds-radius-2, 0.25rem));
+    background: transparent;
+    color: transparent;
+    transition:
+      background-color var(--vds-duration-fast) var(--vds-ease-out),
+      border-color var(--vds-duration-fast) var(--vds-ease-out),
+      color var(--vds-duration-fast) var(--vds-ease-out),
+      opacity var(--vds-duration-fast) var(--vds-ease-out);
+  }
+
+  .vds-password-requirement[data-met] .vds-password-requirement-icon {
+    border-color: var(--vds-color-success-solid, var(--vds-color-success-8, #16a34a));
+    background: var(--vds-color-success-solid, var(--vds-color-success-8, #16a34a));
+    color: var(--vds-color-on-success, #ffffff);
+  }
+
+  .vds-password-strength-feedback {
+    margin: 0;
+    color: var(--vds-color-text-muted);
+    font-size: var(--vds-text-xs);
+    line-height: var(--vds-leading-normal, 1.5);
+    overflow-wrap: anywhere;
+  }
+}
+
+[data-vds-no-micro] .vds-input--pulse { animation: none; }
+
+@layer design-system.components {
+  .vds-input:hover:not(:disabled):not([data-disabled]):not([aria-invalid="true"]):not([data-invalid]):not(:focus-within) {
+    border-color: var(--vds-field-border-hover, var(--vds-color-neutral-10));
+  }
+}

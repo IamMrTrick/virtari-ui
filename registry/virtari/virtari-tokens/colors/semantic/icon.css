@@ -1,0 +1,40 @@
+@layer tokens {
+  /*
+   * ── Icon semantic layer (NEW domain) ──
+   *
+   * Icons need their own scale separate from text:
+   *   • Icons sometimes need higher visual weight than body text
+   *     (e.g. a status icon should pop, a body paragraph shouldn't)
+   *   • Icon-only theming is common (e.g. dim all icons, leave text)
+   *   • Status indicators are usually icon-only and need intent colors
+   *
+   * Defaults track text scale, so dropping these into existing
+   * components without overriding still works visually.
+   */
+
+  :root,
+  [data-theme] {
+    /* ─── Default neutrals ─── */
+    --vds-color-icon:           var(--vds-color-text);
+    --vds-color-icon-muted:     var(--vds-color-text-muted);
+    --vds-color-icon-subtle:    var(--vds-color-text-subtle);
+    --vds-color-icon-disabled:  var(--vds-color-text-disabled);
+    --vds-color-icon-inverse:   var(--vds-color-text-inverse);
+
+    /* ─── Icon on solid intent backgrounds ─── */
+    --vds-color-icon-on-primary: var(--vds-color-on-primary);
+    --vds-color-icon-on-success: var(--vds-color-on-success);
+    --vds-color-icon-on-warning: var(--vds-color-on-warning);
+    --vds-color-icon-on-danger:  var(--vds-color-on-danger);
+    --vds-color-icon-on-info:    var(--vds-color-on-info);
+    --vds-color-icon-on-accent:  var(--vds-color-on-accent);
+
+    /* ─── Intent-colored icons (status indicators, alerts) ─── */
+    --vds-color-icon-primary: var(--vds-color-primary-9);
+    --vds-color-icon-success: var(--vds-color-success-9);
+    --vds-color-icon-warning: var(--vds-color-warning-9);
+    --vds-color-icon-danger:  var(--vds-color-danger-9);
+    --vds-color-icon-info:    var(--vds-color-info-9);
+    --vds-color-icon-accent:  var(--vds-color-accent-9);
+  }
+}
