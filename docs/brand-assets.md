@@ -1,5 +1,10 @@
 # Virtari documentation identity
 
+The Virtari logo, wordmark, symbol, and app-icon artwork are proprietary brand
+assets and are excluded from the repository's MIT License. See
+[`BRAND_ASSETS_LICENSE.md`](../BRAND_ASSETS_LICENSE.md) for the exact file list
+and permitted use boundary.
+
 The user supplied the assets from the VirtariPlatform application. The original source files were `src/components/branding/Logo.tsx`, `src/components/loaders/VirtariLogoLoader.tsx`, `src/components/loaders/virtari-logo-loader.css`, and its `public` icon assets.
 
 The documentation keeps the original vector paths and two-part loading animation. `apps/docs/src/components/branding` contains the React components. `apps/docs/public/brand` contains downloadable vector marks; the original favicon, touch icons, PNG app icons and symbol sprite are in `apps/docs/public`. Only the manifest's application name, description and start URL are changed for this application.

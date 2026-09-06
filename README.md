@@ -191,4 +191,6 @@ license notice. Registry installs place the notice at `src/virtari/LICENSE`.
 
 ## License
 
-[MIT](./LICENSE) © 2026 Virtari.
+Source code and documentation are [MIT licensed](./LICENSE) © 2026 Virtari.
+The Virtari logo, wordmark, symbol, and app-icon artwork are proprietary and
+excluded from MIT; see [Virtari brand assets](./BRAND_ASSETS_LICENSE.md).

@@ -105,7 +105,7 @@ contracts of React, browsers, accessibility, or third-party behavior packages.
 The registry therefore keeps dependency declarations explicit and installs only
 what a selected component needs.
 
-The repository, generated registry, and CLI use the MIT License. Consumers may
+The component source, generated registry, and CLI use the MIT License. Consumers may
 copy, modify, merge, publish, and redistribute installed source while retaining
 the license notice. Every registry item installs that notice at
 `src/virtari/LICENSE`. The release workflow verifies that package manifests and

@@ -8,11 +8,20 @@ const writeMode = process.argv.includes("--write");
 const canonicalRepository = "git+https://github.com/Virtari-Packages/virtari-design-system.git";
 const staleRepository = /IamMrTrick\/virtari-design-system/g;
 const rootLicense = fs.readFileSync(path.join(root, "LICENSE"), "utf8");
+const brandLicensePath = path.join(root, "BRAND_ASSETS_LICENSE.md");
 const failures = [];
 const normalizeEol = (value) => value.replace(/\r\n/g, "\n");
 
 if (!/^MIT License\r?\n/.test(rootLicense) || !rootLicense.includes("Permission is hereby granted")) {
   failures.push("The root LICENSE is not the canonical MIT license.");
+}
+if (!fs.existsSync(brandLicensePath)) {
+  failures.push("BRAND_ASSETS_LICENSE.md must define the proprietary Virtari artwork boundary.");
+} else {
+  const brandLicense = fs.readFileSync(brandLicensePath, "utf8");
+  if (!brandLicense.includes("excluded from the repository's MIT License") || !brandLicense.includes("All rights reserved")) {
+    failures.push("BRAND_ASSETS_LICENSE.md must preserve the proprietary brand-asset exception.");
+  }
 }
 
 const packageDirs = fs
@@ -59,6 +68,7 @@ const maintainedTextFiles = [
   "README.md",
   "CONTRIBUTING.md",
   "AGENT_GUIDE.md",
+  "BRAND_ASSETS_LICENSE.md",
   "docs/source-registry.md",
   "scripts/add-package-metadata.mjs",
   "scripts/sync-package-docs.mjs",
@@ -77,7 +87,7 @@ for (const relativePath of maintainedTextFiles) {
   const original = content;
   for (const [pattern, replacement] of replacements) content = content.replace(pattern, replacement);
   if (writeMode && content !== original) fs.writeFileSync(filePath, content);
-  if (!writeMode && /proprietary|UNLICENSED|SEE LICENSE IN LICENSE|IamMrTrick\/virtari-design-system/i.test(content)) {
+  if (!writeMode && /UNLICENSED|SEE LICENSE IN LICENSE|IamMrTrick\/virtari-design-system/i.test(content)) {
     failures.push(`${relativePath} contains stale license or repository language.`);
   }
 }

@@ -186,3 +186,5 @@ Short, conventional prefixes keep history scannable:
 ## License
 
 Contributions are accepted under the repository's [MIT License](./LICENSE).
+Virtari brand artwork is excluded; see
+[Virtari brand assets](./BRAND_ASSETS_LICENSE.md).

@@ -169036,8 +169036,8 @@
     },
     {
       "id": "docs/brand-assets.md",
-      "sha256": "eeca6c4057fa7a811db08407d9094dcb56e4305076166bec12202291f706326e",
-      "bytes": 1166,
+      "sha256": "ff8d1166697d98bed83ae9a50ec08b9bc6609043e8c39f306a0134d4082708b9",
+      "bytes": 1417,
       "kind": "md"
     },
     {
@@ -169210,8 +169210,8 @@
     },
     {
       "id": "docs/source-registry.md",
-      "sha256": "1794223286f0b8b2aa399f5f55987fab88adf84b9e8786ccf8975f6c8043fd32",
-      "bytes": 4084,
+      "sha256": "af4c5d4bec6649e8044405437a6b5a40ed09d625a6ee9da34222d46153d96e49",
+      "bytes": 4090,
       "kind": "md"
     },
     {
@@ -169228,8 +169228,8 @@
     },
     {
       "id": "packages/cli/package.json",
-      "sha256": "d7ab5b355abdc1bbe86388d242f6e1a18536e7728fd42406646902253b7f746a",
-      "bytes": 1012,
+      "sha256": "f969fa6718204a0a2a3b2279cb73c1c2f431df8f217db9253c96e0080407078c",
+      "bytes": 1010,
       "kind": "json"
     },
     {
