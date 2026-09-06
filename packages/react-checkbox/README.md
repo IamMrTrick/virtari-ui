@@ -81,8 +81,8 @@ All components use logical CSS properties (`margin-inline`, `padding-block`, …
 
 ## Links
 
-- [Repository](https://github.com/Virtari-Packages/virtari-design-system)
-- [Issues](https://github.com/Virtari-Packages/virtari-design-system/issues)
+- [Repository](https://github.com/IamMrTrick/virtari-ui)
+- [Issues](https://github.com/IamMrTrick/virtari-ui/issues)
 - [Changelog](./CHANGELOG.md)
 
 ## License

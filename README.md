@@ -65,7 +65,7 @@ an explicit `--overwrite` update. See the [source registry contract](./docs/sour
 The registry can also be consumed with the official shadcn CLI:
 
 ```bash
-pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.1
+pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.1
 ```
 
 ## Legacy package installation

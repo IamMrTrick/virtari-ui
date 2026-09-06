@@ -166028,7 +166028,7 @@
       "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
       "startLine": 56,
       "endLine": 60,
-      "code": "<Section title={text(\"Use the shadcn CLI\", \"استفاده با CLI خود shadcn\")}>\n      <p className=\"docs-prose\">{text(\"The public registry also follows shadcn's GitHub registry protocol. Pinning the release tag keeps installation reproducible.\", \"رجیستری عمومی با پروتکل GitHub رجیستری shadcn هم سازگار است. پین‌کردن تگ انتشار، نصب را قابل‌بازتولید نگه می‌دارد.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"shell\" code=\"pnpm dlx shadcn@latest add Virtari-Packages/virtari-design-system/button#cli-v0.1.1\" />\n      <Button asChild variant=\"soft\" rightSection={<IconArrowRight className=\"docs-directional-icon\" size={16}/>}><a href={href(\"button\")}>{text(\"Open component documentation\", \"مشاهدهٔ مستندات کامپوننت‌ها\")}</a></Button>\n    </Section>",
+      "code": "<Section title={text(\"Use the shadcn CLI\", \"استفاده با CLI خود shadcn\")}>\n      <p className=\"docs-prose\">{text(\"The public registry also follows shadcn's GitHub registry protocol. Pinning the release tag keeps installation reproducible.\", \"رجیستری عمومی با پروتکل GitHub رجیستری shadcn هم سازگار است. پین‌کردن تگ انتشار، نصب را قابل‌بازتولید نگه می‌دارد.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"shell\" code=\"pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.1\" />\n      <Button asChild variant=\"soft\" rightSection={<IconArrowRight className=\"docs-directional-icon\" size={16}/>}><a href={href(\"button\")}>{text(\"Open component documentation\", \"مشاهدهٔ مستندات کامپوننت‌ها\")}</a></Button>\n    </Section>",
       "imports": [
         "import { Badge } from \"@virtari-packages/react-badge\";",
         "import { Button } from \"@virtari-packages/react-button\";",
@@ -169040,8 +169040,8 @@
     },
     {
       "id": "apps/docs/src/pages/SourceInstallationPage.tsx",
-      "sha256": "f392229c457bb9bccfde8a928fff49e3e91fe51c7aad63c3c7645968fdb5f6ce",
-      "bytes": 6923,
+      "sha256": "b7bf78b2baba70977e8fbecbee6356bb4c8930c1642f60c7d9a38e88063bfd01",
+      "bytes": 6906,
       "kind": "tsx"
     },
     {
@@ -169382,8 +169382,8 @@
     },
     {
       "id": "docs/source-registry.md",
-      "sha256": "29e051b78a5581c4d24e2eee9d5611743db5c221f9d461413ab6dfe15876c438",
-      "bytes": 4489,
+      "sha256": "02086ede91492f3a5dc92431c59e0fd9586c7ffde29a66ea92219bf41bd866d0",
+      "bytes": 4438,
       "kind": "md"
     },
     {
@@ -169394,20 +169394,20 @@
     },
     {
       "id": "packages/cli/bin/virtari.mjs",
-      "sha256": "86b0ada08213672987bb0723e8a2447d5dd829b8dc142193f0294d0b3ec0311a",
-      "bytes": 18668,
+      "sha256": "3dd494e4cc94c4affb95deb4e71eb9671998dc1a15622a9380c2dd282c12d0d7",
+      "bytes": 18634,
       "kind": "mjs"
     },
     {
       "id": "packages/cli/package.json",
-      "sha256": "5e9e564c82ab5708a23f593c728780aa55e76f2be8da635ef359cca474806098",
-      "bytes": 1010,
+      "sha256": "e21b754a216fbbe3df0fd6c9d520ec5b4c0ddcd2c3b44a6d051b141ee2cd3ae3",
+      "bytes": 959,
       "kind": "json"
     },
     {
       "id": "packages/core/package.json",
-      "sha256": "e225da3a6b7dcf40b927687265b1b35d73de4cc10aae3651ff555a79c7eeaf07",
-      "bytes": 1083,
+      "sha256": "c1d07c154d4c0b1283bfb0497310d3c0f9d7eee886edbf98cc5b13407ec6033e",
+      "bytes": 1032,
       "kind": "json"
     },
     {
@@ -169442,8 +169442,8 @@
     },
     {
       "id": "packages/primitives/package.json",
-      "sha256": "5dee5eff45bcd00efc6a37d46dd6933c016e161ee0978e538e2c3e57b71e38c6",
-      "bytes": 15298,
+      "sha256": "70f8388386374bab5564cda460d95f541c611b46533f33b0885f067f78cccec9",
+      "bytes": 15247,
       "kind": "json"
     },
     {
@@ -170078,8 +170078,8 @@
     },
     {
       "id": "packages/react-accordion/package.json",
-      "sha256": "2092cf1a05242d12f3957ea88655c1cc0a016140b805c85d5164bdb738b90094",
-      "bytes": 1968,
+      "sha256": "4ba336d6454670fda6f43a84c2d50aebe25eb006d2385915c6568515d732a09e",
+      "bytes": 1917,
       "kind": "json"
     },
     {
@@ -170114,8 +170114,8 @@
     },
     {
       "id": "packages/react-alert-dialog/package.json",
-      "sha256": "373e14cc191e792807d32e155611acafe9d55984b763aa652b563983006d026b",
-      "bytes": 1758,
+      "sha256": "aa5caf94fa7468b9410e07a1ecd793b7f6cd89c4d60485ca9c85bba3af0ceb34",
+      "bytes": 1707,
       "kind": "json"
     },
     {
@@ -170138,8 +170138,8 @@
     },
     {
       "id": "packages/react-alert/package.json",
-      "sha256": "87c4301af73643b117b30439f5879180572425f2e2d5227eb0fe297269ee2a06",
-      "bytes": 1798,
+      "sha256": "6b41bcd84f5eb64109302ff03dee0545d55552260c0b0b7d94d30b14434ed853",
+      "bytes": 1747,
       "kind": "json"
     },
     {
@@ -170168,8 +170168,8 @@
     },
     {
       "id": "packages/react-avatar/package.json",
-      "sha256": "0b2881a65b5e393a3a2a5a904f46be1f41bba7664d9d3ae4e6f7e06bd2671b2b",
-      "bytes": 1706,
+      "sha256": "36757a8df3520034cc906a41438d8d282ba46c61b1ce514568572da8d55909da",
+      "bytes": 1655,
       "kind": "json"
     },
     {
@@ -170192,8 +170192,8 @@
     },
     {
       "id": "packages/react-badge/package.json",
-      "sha256": "f8371161a59f1de4ed32355f8bb80c2680e6497973afbf669995946d93853bd9",
-      "bytes": 1798,
+      "sha256": "fea37b6c086b0c347eca5036e454329718f38895dc23c40a4acc8220efa4f799",
+      "bytes": 1747,
       "kind": "json"
     },
     {
@@ -170222,8 +170222,8 @@
     },
     {
       "id": "packages/react-bottom-nav/package.json",
-      "sha256": "e11c8a933f3b7b4fa628543e0b5cadb86a9b00a94382559db755ce990deba775",
-      "bytes": 1994,
+      "sha256": "618017cdeea0838697e42f205a9925b1dc6da3e9b4cfcde2bca3fce467571194",
+      "bytes": 1943,
       "kind": "json"
     },
     {
@@ -170282,8 +170282,8 @@
     },
     {
       "id": "packages/react-breadcrumb/package.json",
-      "sha256": "162311c5f27c901fb4cc6c5c574b1669e426fedac8fde96d04f2a724c438ba73",
-      "bytes": 1965,
+      "sha256": "dcda42b0747284a7b94ee5d7bb27d018f74f66f5a5e5b830cfd3e4962201ad59",
+      "bytes": 1914,
       "kind": "json"
     },
     {
@@ -170312,8 +170312,8 @@
     },
     {
       "id": "packages/react-button-group/package.json",
-      "sha256": "8509735a9ebb2b92356c2f3e66cc8ae4ff71387ec443b9be2b27a27fe92faa4d",
-      "bytes": 1941,
+      "sha256": "cd93eda6b4bf997984b1467f25f46b85ca719b13a98e5c56c2f86315b004feef",
+      "bytes": 1890,
       "kind": "json"
     },
     {
@@ -170342,8 +170342,8 @@
     },
     {
       "id": "packages/react-button/package.json",
-      "sha256": "cbbc1be568c8b6a00f14912ec0d02bdde5ebbc8d2870b80e0741766d6dc35e48",
-      "bytes": 2007,
+      "sha256": "0ec33cd85afc13c5f5be6540cb7d66a11b1f26c84dfc865a8a77727b8ab9c280",
+      "bytes": 1956,
       "kind": "json"
     },
     {
@@ -170390,8 +170390,8 @@
     },
     {
       "id": "packages/react-card/package.json",
-      "sha256": "b8431b347517ac8d8e9b3881baf13154c8789cf12ca091e040701f09c8dc4b55",
-      "bytes": 1639,
+      "sha256": "a768671df79d8071c4a1a714ccad91d8eec08eb3b222ea00ea54deaf2f54fdb9",
+      "bytes": 1588,
       "kind": "json"
     },
     {
@@ -170426,8 +170426,8 @@
     },
     {
       "id": "packages/react-carousel/package.json",
-      "sha256": "afb57650087087102c876e2921f882fb3bd364b28e8c863819c32d2f6ddec423",
-      "bytes": 1950,
+      "sha256": "d161c9a94bc596dd0fbacd309a60069fc94be05768fe30a9caf9739d2de389c9",
+      "bytes": 1899,
       "kind": "json"
     },
     {
@@ -170456,8 +170456,8 @@
     },
     {
       "id": "packages/react-checkbox/package.json",
-      "sha256": "4ae4439f48ca206de7fddc66811575e3532e43a5312d07266672932c5c43892d",
-      "bytes": 1957,
+      "sha256": "7fddfe4128b2e8a45fb322ee150a19d6e080446e53fc8221be91627211ac6456",
+      "bytes": 1906,
       "kind": "json"
     },
     {
@@ -170540,8 +170540,8 @@
     },
     {
       "id": "packages/react-chip/package.json",
-      "sha256": "840844e1ce73d7fb306f90b787446829249602ad038d88f2342d75e0f782910a",
-      "bytes": 1787,
+      "sha256": "80cc66758f8f9de120036238e5d28e2caf42a1df1ce377a7b2002fffe2389743",
+      "bytes": 1736,
       "kind": "json"
     },
     {
@@ -170570,8 +170570,8 @@
     },
     {
       "id": "packages/react-code/package.json",
-      "sha256": "725cbe086f4762494136500a1af9160bc160701402bb2d61f7b30abd020e2d5d",
-      "bytes": 2618,
+      "sha256": "8aa393af246dabb1b13ed6210490d7e646943bf95aa5677717bd0e666c08f825",
+      "bytes": 2567,
       "kind": "json"
     },
     {
@@ -170642,8 +170642,8 @@
     },
     {
       "id": "packages/react-collapsible/package.json",
-      "sha256": "3012a4dd15ef4a17dac518ac10899fe80d10723db66a30bb6c18fe5937ff6dc5",
-      "bytes": 1746,
+      "sha256": "2287d5ce67f982cac5a4e0670b8ce35151d3b0cb87700bb265ff200c766f4c40",
+      "bytes": 1695,
       "kind": "json"
     },
     {
@@ -170666,8 +170666,8 @@
     },
     {
       "id": "packages/react-color-picker/package.json",
-      "sha256": "0141c5d14e9724cc6ee05927b45b80764aaeb98b4bb9cc6a5e706c857371780d",
-      "bytes": 2146,
+      "sha256": "dea3e9f2ee4355287cdccb4377d701cd1107d589aef8de0be30cc8db77ca69fa",
+      "bytes": 2095,
       "kind": "json"
     },
     {
@@ -170714,8 +170714,8 @@
     },
     {
       "id": "packages/react-command/package.json",
-      "sha256": "66fcd61ced7b54f55b370f2c30a1f94e7581648d65fed60946d106f2a1883b74",
-      "bytes": 1966,
+      "sha256": "a70163bd241aaad8b0eb216198678a7d1d6b20510d8bcce283a45b72f0bcca53",
+      "bytes": 1915,
       "kind": "json"
     },
     {
@@ -170756,8 +170756,8 @@
     },
     {
       "id": "packages/react-copy-button/package.json",
-      "sha256": "799a8ae15d87ae20a427547665d44c5f105157100d665b4a022d9cc9e28cd8ec",
-      "bytes": 1838,
+      "sha256": "dd8779e8b52657d7840098f3180122e76b394d0e908d89dafed32800a28a5cc6",
+      "bytes": 1787,
       "kind": "json"
     },
     {
@@ -170786,8 +170786,8 @@
     },
     {
       "id": "packages/react-data-table/package.json",
-      "sha256": "f295e41a1236523e133a16507a5694832300413fb2a4976ecfddd948336b40e2",
-      "bytes": 3529,
+      "sha256": "01082debd2fca5aafe3803ea9265ac3e9ad9477b6c0b861a34a3893a86e21ab2",
+      "bytes": 3478,
       "kind": "json"
     },
     {
@@ -171200,8 +171200,8 @@
     },
     {
       "id": "packages/react-date-picker/package.json",
-      "sha256": "5705c6aabb7c5a22dfa7a6659dbd89074ecc7ec83ab6e87b70443cc13a670916",
-      "bytes": 4098,
+      "sha256": "0b7305edab9b9048ff2a8e528f9cb9a4269cc1bb54fabcc166b77d2c35b486e0",
+      "bytes": 4047,
       "kind": "json"
     },
     {
@@ -171338,8 +171338,8 @@
     },
     {
       "id": "packages/react-dialog/package.json",
-      "sha256": "e919857b52432e2d113a087c5d3908d60001f93874190920b61630dd1faf7ab8",
-      "bytes": 1935,
+      "sha256": "31846f12d2ce1bd413d326c663d238c6bf6bfcdbcf494c6af3869a396c2a1c3a",
+      "bytes": 1884,
       "kind": "json"
     },
     {
@@ -171368,8 +171368,8 @@
     },
     {
       "id": "packages/react-drawer/package.json",
-      "sha256": "8b1860da80708f5c397bb00ba661cf679c9053c042c2f62616dd4948316edc29",
-      "bytes": 1733,
+      "sha256": "60dccfa418961cb048208320b24200f6499f761ea1e1f009717d9fa4a1bff57d",
+      "bytes": 1682,
       "kind": "json"
     },
     {
@@ -171416,8 +171416,8 @@
     },
     {
       "id": "packages/react-dropdown-menu/package.json",
-      "sha256": "333b2f48821c1845d1abfb98d30b4c33ffc1a7a6f1ebcb9ecc57d3716981f768",
-      "bytes": 1766,
+      "sha256": "4ace5c1220c0ea977c37485f4ed972fcc6a43491a23160374932d0f245146753",
+      "bytes": 1715,
       "kind": "json"
     },
     {
@@ -171440,8 +171440,8 @@
     },
     {
       "id": "packages/react-editor/package.json",
-      "sha256": "bb1223a09eff48d7f0d3816abb1049a7eb500d0ef59b3f6734a1b74a100697cf",
-      "bytes": 3451,
+      "sha256": "ca324da0030dc880d2752b5b56a9728ce8140333cde77c3a99112c1a52b0e080",
+      "bytes": 3400,
       "kind": "json"
     },
     {
@@ -171632,8 +171632,8 @@
     },
     {
       "id": "packages/react-empty-state/package.json",
-      "sha256": "d6dc7ce67e982a27afd3bb6adbaa44d55840b0b7df8a9225e98f1d0f69d781a1",
-      "bytes": 1830,
+      "sha256": "432af1351ccc7ac068fe2111dbad81d65a048b1d3e1d57de4d4b3c390420b4e2",
+      "bytes": 1779,
       "kind": "json"
     },
     {
@@ -171662,8 +171662,8 @@
     },
     {
       "id": "packages/react-fieldset/package.json",
-      "sha256": "22a3fb0e671b2905e3fc283158f20a5566a1fd65e81c69fd123c73cda0af1c9f",
-      "bytes": 1784,
+      "sha256": "b63b4ea3939e678de7a6e94f6319b27adca184fd87963cfa6fe9d24c5748cc28",
+      "bytes": 1733,
       "kind": "json"
     },
     {
@@ -171698,8 +171698,8 @@
     },
     {
       "id": "packages/react-file-upload/package.json",
-      "sha256": "8d91dcf31a3d97d4d5fc31d27d33a8fe8690250c37833cfcde25f4889104748c",
-      "bytes": 2013,
+      "sha256": "beddd3674710ae4d712ea713d10ff3eb8d5dc502f6d77f49c256030e4502d87b",
+      "bytes": 1962,
       "kind": "json"
     },
     {
@@ -171746,8 +171746,8 @@
     },
     {
       "id": "packages/react-flag/package.json",
-      "sha256": "07f32ec01f93dcedd608d44eabe465dc81f1e777e786a6f9b46702d4f9e08e52",
-      "bytes": 2004,
+      "sha256": "a0400c6a9cfd907e44666287d9c08b02620a21ebc8f3f344e90c5ac0452d274d",
+      "bytes": 1953,
       "kind": "json"
     },
     {
@@ -173420,8 +173420,8 @@
     },
     {
       "id": "packages/react-flow/package.json",
-      "sha256": "3babcff11dc1221dfdec18a5061c23c96003ef359eff83a9e045239235d0f3ba",
-      "bytes": 1906,
+      "sha256": "6c909b46a206698055f61c9219066ac1a43a2184cd75283a13f6c1aa02bbb343",
+      "bytes": 1855,
       "kind": "json"
     },
     {
@@ -173474,8 +173474,8 @@
     },
     {
       "id": "packages/react-form/package.json",
-      "sha256": "f2be680cd30a10b42f8370b08813987fe6184c8f83b94c68e0979130197cc73c",
-      "bytes": 1918,
+      "sha256": "9b0e418baadb1616dfcf32bfe753416b5fe2b38ae8d028ef0684c83cd75f60e2",
+      "bytes": 1867,
       "kind": "json"
     },
     {
@@ -173552,8 +173552,8 @@
     },
     {
       "id": "packages/react-header/package.json",
-      "sha256": "160943b57333d8a2028d3a85edf74348360fb155a1433a5369b2c3075cfb2ecc",
-      "bytes": 1758,
+      "sha256": "9453c413efd547ff2d03355ef71e0bb1232b1fff3795894718c44f676f94a25f",
+      "bytes": 1707,
       "kind": "json"
     },
     {
@@ -173600,8 +173600,8 @@
     },
     {
       "id": "packages/react-icons/package.json",
-      "sha256": "e59f9dbe0c702b8c97e4dcb74274e765c7f2212ac77fb24e88df2057de7e2a0b",
-      "bytes": 1815,
+      "sha256": "976ebe74b0a8820f627e16325afb37ae82af079e2f97ae53d75a71fd1d593920",
+      "bytes": 1764,
       "kind": "json"
     },
     {
@@ -173636,8 +173636,8 @@
     },
     {
       "id": "packages/react-input/package.json",
-      "sha256": "9c4a5c5cac94abfb5b4c58abbba4d3abc3b7e9f7592a52028746f5a44179edfa",
-      "bytes": 1754,
+      "sha256": "29e94ab45f4fda2155b2319f41fe5d9bba91930815240e877c4f6edb98e77698",
+      "bytes": 1703,
       "kind": "json"
     },
     {
@@ -173684,8 +173684,8 @@
     },
     {
       "id": "packages/react-kbd/package.json",
-      "sha256": "8dd1832fc91168e6e5d37a63c8b4983f4a99e753a4d510996b742ade185be3fe",
-      "bytes": 1631,
+      "sha256": "927ffa58c73538f500592fb73097cf585ac80f2914ad2b62876d62ca33dbbcf4",
+      "bytes": 1580,
       "kind": "json"
     },
     {
@@ -173708,8 +173708,8 @@
     },
     {
       "id": "packages/react-label/package.json",
-      "sha256": "f5a4851a74e613c2c16fbea9b3593bbff21f01c1b975a0efaba631e9e22fef44",
-      "bytes": 1698,
+      "sha256": "b9c522b8eb83b1e3b590c1128180feabeaff7e01286b95d4bcd951bf21c4dbee",
+      "bytes": 1647,
       "kind": "json"
     },
     {
@@ -173732,8 +173732,8 @@
     },
     {
       "id": "packages/react-language-picker/package.json",
-      "sha256": "2d2b222d1fd89d9b1d5dc6cb17c0d5b61c0b7b552f01c21768818c8f88919ba7",
-      "bytes": 2238,
+      "sha256": "10ab9247994ab4f6c2546fb143a3e8d2fb72f68cd1375fa527f8d5bb09508c5c",
+      "bytes": 2187,
       "kind": "json"
     },
     {
@@ -173792,8 +173792,8 @@
     },
     {
       "id": "packages/react-layout/package.json",
-      "sha256": "b9856910e5bb30c8644bb81b84d51821703d37af7287db2f3ebda7f9e6972846",
-      "bytes": 1652,
+      "sha256": "8e6eb57c00cd2b35138d2ef255ef079b7f520c14b5eab823ab1de2829fac87d5",
+      "bytes": 1601,
       "kind": "json"
     },
     {
@@ -173978,8 +173978,8 @@
     },
     {
       "id": "packages/react-nav/package.json",
-      "sha256": "1c41dd716abed5e68bf8d1fc21f4aa63f9e1baa70c5d8232625541cb600a0826",
-      "bytes": 1813,
+      "sha256": "ea21c033c016b6da2ed1179e84fee2ee903dbfad869624e97843f72c925aefae",
+      "bytes": 1762,
       "kind": "json"
     },
     {
@@ -174038,8 +174038,8 @@
     },
     {
       "id": "packages/react-number-input/package.json",
-      "sha256": "fb020da349c63aa628290689117e7d5185dd1e8aefef531b3b375d3d8f242d57",
-      "bytes": 1940,
+      "sha256": "2244eda9582c77cabeffc21c89db92a31af9bd6bad4d5da9d5e92e71185f92d8",
+      "bytes": 1889,
       "kind": "json"
     },
     {
@@ -174074,8 +174074,8 @@
     },
     {
       "id": "packages/react-otp-input/package.json",
-      "sha256": "91020312da37b21afbcf54633dea7f7c6559913fa9502e3f1bf1e3b5a292e752",
-      "bytes": 1814,
+      "sha256": "240e24a65a6b72815e586c3f66f11adb85f0179cbb7feeb13609c7be7ca92696",
+      "bytes": 1763,
       "kind": "json"
     },
     {
@@ -174104,8 +174104,8 @@
     },
     {
       "id": "packages/react-pagination/package.json",
-      "sha256": "71ad02a60fd27d777bbafced494790997cdd43befdca8434e1ec8e786f8db4fc",
-      "bytes": 1921,
+      "sha256": "2d4d8efca634279fa92346f1acec7318cf3d6e13cba2a4f9b5b53fe8d485e139",
+      "bytes": 1870,
       "kind": "json"
     },
     {
@@ -174146,8 +174146,8 @@
     },
     {
       "id": "packages/react-phone-input/package.json",
-      "sha256": "f333f8c3a49123fca2ee47707f09a9ab898e1d8d229f594ec5b61bac213a81a6",
-      "bytes": 2246,
+      "sha256": "069c358010f319ed78f24efcaf07a23cc8673aece6cf6585b1466882c8845de4",
+      "bytes": 2195,
       "kind": "json"
     },
     {
@@ -174212,8 +174212,8 @@
     },
     {
       "id": "packages/react-popover/package.json",
-      "sha256": "0269ffea870a316a2c2b5693049d43f8784b4094674afe77e7693de5bbe7fcf5",
-      "bytes": 1714,
+      "sha256": "dcbd126e0d28fbda443a0aabd416e1be7cdd963e1c5178fa51ab84cfc952299b",
+      "bytes": 1663,
       "kind": "json"
     },
     {
@@ -174242,8 +174242,8 @@
     },
     {
       "id": "packages/react-progress/package.json",
-      "sha256": "3fed3e0a692fed010901f5fb235cf6ed3921818fe2e8182d4e3f80c3516df2a7",
-      "bytes": 1831,
+      "sha256": "a5f9527713ec5c5790486e6568d607f02878450079257e6450782f4bf61505ab",
+      "bytes": 1780,
       "kind": "json"
     },
     {
@@ -174272,8 +174272,8 @@
     },
     {
       "id": "packages/react-radio-group/package.json",
-      "sha256": "3f0a028232883cb7c072b133bf0a06921719ff0bd62f15dfb6558b9bd7263ae3",
-      "bytes": 1991,
+      "sha256": "a9d960bce193d1672c479999f3279423cbb38f24529bf5b200340e697915631b",
+      "bytes": 1940,
       "kind": "json"
     },
     {
@@ -174362,8 +174362,8 @@
     },
     {
       "id": "packages/react-scroll-area/package.json",
-      "sha256": "2a0214db007c969312caf8e064eca80432a008e2b97083de23cc8494ba382864",
-      "bytes": 2002,
+      "sha256": "229aaa2d95e420ea38d49d8b717d25a22cece644d5aea98993be58ac2a24a3ec",
+      "bytes": 1951,
       "kind": "json"
     },
     {
@@ -174422,8 +174422,8 @@
     },
     {
       "id": "packages/react-segmented-control/package.json",
-      "sha256": "e6739e89fb126626a0142e73ab527752946211cdfce4a770251e87f41089e34d",
-      "bytes": 1992,
+      "sha256": "49d60dd358431090816c39c1837805bb64b56b043472bded3da4369130caff39",
+      "bytes": 1941,
       "kind": "json"
     },
     {
@@ -174458,8 +174458,8 @@
     },
     {
       "id": "packages/react-select/package.json",
-      "sha256": "d1dfa186b280ecd559f6dcf01711c20d709595feac5f6a417fd2dc268e70f365",
-      "bytes": 2560,
+      "sha256": "1c3a60423b3781a51b80f6d72be257e75693724105571e4679017996dc34c5ac",
+      "bytes": 2509,
       "kind": "json"
     },
     {
@@ -174524,8 +174524,8 @@
     },
     {
       "id": "packages/react-separator/package.json",
-      "sha256": "352437c357652a0e2fda16687caa553314b7070f95968367068ba4839af3c0ac",
-      "bytes": 1730,
+      "sha256": "1b458cf64e4fa6fba58265ff751416a0b123a073249928d758ddfb995919a5ad",
+      "bytes": 1679,
       "kind": "json"
     },
     {
@@ -174548,8 +174548,8 @@
     },
     {
       "id": "packages/react-sidebar/package.json",
-      "sha256": "867e512cc98b246712d474ad3444fa82a92c642a41e473e78d9a2f6ce8f93ca8",
-      "bytes": 1769,
+      "sha256": "a15b6d54e4a9254a277dd11fcd2206226471794621edaf1090b58460fb6d9053",
+      "bytes": 1718,
       "kind": "json"
     },
     {
@@ -174590,8 +174590,8 @@
     },
     {
       "id": "packages/react-skeleton/package.json",
-      "sha256": "68c0b175b22b2ee17835823a09c890c3327bad41e0a63b114a90bdf3dc202fb4",
-      "bytes": 1671,
+      "sha256": "d430e3c2f6d4b64e97b083d8af631adb58f67675ab4fd7f7d6c3ce9a013e38d0",
+      "bytes": 1620,
       "kind": "json"
     },
     {
@@ -174614,8 +174614,8 @@
     },
     {
       "id": "packages/react-slider/package.json",
-      "sha256": "3fc9b0e1322c6ece5be809a2396c7fc51eceb26e02a4a7c6bfcccd3599c7b6d1",
-      "bytes": 1706,
+      "sha256": "903db1f8d3f59c1be963bc7315ae35498420c1b41f6fe1e8be2df4ae16c8b9ab",
+      "bytes": 1655,
       "kind": "json"
     },
     {
@@ -174638,8 +174638,8 @@
     },
     {
       "id": "packages/react-spinner/package.json",
-      "sha256": "22582e4747d73ed72e12a93e7a51fe1ee59bf6529b074c31268ba3ce52c8fa77",
-      "bytes": 1769,
+      "sha256": "b972676eb30ac207b24343de8226d2b71e43df984e961e71a632c4ccb1f87029",
+      "bytes": 1718,
       "kind": "json"
     },
     {
@@ -174668,8 +174668,8 @@
     },
     {
       "id": "packages/react-stepper/package.json",
-      "sha256": "0e99fd44ccc5f88bd51fb7eed34538660f7a7881d4a30f79ac6861bef1819292",
-      "bytes": 1795,
+      "sha256": "65fa1584b37c5e68e22a6641d4b0f479680f5c12edd2fcbc2a2f58ae1c87615d",
+      "bytes": 1744,
       "kind": "json"
     },
     {
@@ -174704,8 +174704,8 @@
     },
     {
       "id": "packages/react-switch/package.json",
-      "sha256": "a80fc1f38a8d505690cb2312d7a7fbf84380aeaefe8e975c317e95ce54d90892",
-      "bytes": 1741,
+      "sha256": "9780952900db65fe52c528bd2553ce0a95cff1b7225721fa2622f20b0e8776d3",
+      "bytes": 1690,
       "kind": "json"
     },
     {
@@ -174734,8 +174734,8 @@
     },
     {
       "id": "packages/react-table/package.json",
-      "sha256": "ff47fce25730d77c78aa5fb119e36beeac965a79eab053518fa1da4f5457489e",
-      "bytes": 1925,
+      "sha256": "2f05582bc96aec89629a3af5f464fdd274ec0e85c07fc499d7c18c1008bf774c",
+      "bytes": 1874,
       "kind": "json"
     },
     {
@@ -174764,8 +174764,8 @@
     },
     {
       "id": "packages/react-tabs/package.json",
-      "sha256": "bfacb7e60ddebaefc0c1a4d7cbc13c876aee1ecc573c0768a8d80a78445df5ac",
-      "bytes": 1912,
+      "sha256": "fbfce74c9a5b04fd1778d87fcd74841966e8e46919848d85d21e76d7339e7c3d",
+      "bytes": 1861,
       "kind": "json"
     },
     {
@@ -174830,8 +174830,8 @@
     },
     {
       "id": "packages/react-tag-input/package.json",
-      "sha256": "417141a0df0da579bd8751f145018fb5acaa1f122b8408e86c4a9dd6739de982",
-      "bytes": 1877,
+      "sha256": "6c7ac1ec88f119feb2dd3fb631bf73dcba08ebb72c07b1be70f224e308ea823f",
+      "bytes": 1826,
       "kind": "json"
     },
     {
@@ -174860,8 +174860,8 @@
     },
     {
       "id": "packages/react-text/package.json",
-      "sha256": "5cec96684f378f567610efd2708f2027b3debc56c254e46e8c8dbac60bee9e82",
-      "bytes": 1994,
+      "sha256": "ee8ecda05b362b0239b8865836c42ccfcb88a4420bd2b001128032fd7cd1e96c",
+      "bytes": 1943,
       "kind": "json"
     },
     {
@@ -174908,8 +174908,8 @@
     },
     {
       "id": "packages/react-textarea/package.json",
-      "sha256": "a91a26006af1bef74e64ca9cadd2e5f4f8e4f4d691c172f201ec6342fa6a1ca6",
-      "bytes": 1726,
+      "sha256": "30f8b24f8de4c9d58247af2a3d101e33f64ac41d4c04549a8a6751d3aaac80c4",
+      "bytes": 1675,
       "kind": "json"
     },
     {
@@ -174938,8 +174938,8 @@
     },
     {
       "id": "packages/react-timeline/package.json",
-      "sha256": "7a353c7224659581bef8bb50a2463a1874b4373f982194befd2dc3232f76b630",
-      "bytes": 1811,
+      "sha256": "7b66ea0a0dd80bbdb920c2a7583b0f51175426af7ec49c8d4eb794e07409850e",
+      "bytes": 1760,
       "kind": "json"
     },
     {
@@ -174968,8 +174968,8 @@
     },
     {
       "id": "packages/react-toast/package.json",
-      "sha256": "e01fe451d839a5c40dbbbd15e875660ea35372757e15eba78e066ba324f1e406",
-      "bytes": 1824,
+      "sha256": "c2b23a78e0837976b1454f57ec2439a2953ed4dcd83a8eb379453cb3207973ea",
+      "bytes": 1773,
       "kind": "json"
     },
     {
@@ -175040,8 +175040,8 @@
     },
     {
       "id": "packages/react-toggle/package.json",
-      "sha256": "538e1a366ad1f0ffbd5e63395972303bf04b20259f0e67d7e17e5d02ae6c1c40",
-      "bytes": 1706,
+      "sha256": "0b79aa2cca7a66550d2c2a09b243f8d811d6bfbc0770a30b73342e28ae988d2e",
+      "bytes": 1655,
       "kind": "json"
     },
     {
@@ -175064,8 +175064,8 @@
     },
     {
       "id": "packages/react-tooltip/package.json",
-      "sha256": "718e32787f15185af62d358adb97355168ab5aed2fee4c0a964d67579ad57f48",
-      "bytes": 1820,
+      "sha256": "25b632c577850560136e41ecefe12db7861a9678063a8471191d8e619a0c73d6",
+      "bytes": 1769,
       "kind": "json"
     },
     {
@@ -175094,8 +175094,8 @@
     },
     {
       "id": "packages/react-tree-view/package.json",
-      "sha256": "85e72eda7453783443879ee63db5ce0911ce3882d0408af18ec16c5ed0037a23",
-      "bytes": 1828,
+      "sha256": "959be986e8ebc5e670a18e3fa482a16b3371b2e84a726a77868d1bc815998464",
+      "bytes": 1777,
       "kind": "json"
     },
     {
@@ -175130,8 +175130,8 @@
     },
     {
       "id": "packages/react-visually-hidden/package.json",
-      "sha256": "eaa8ebd00d4ac60158587d9264024f4c0a83df823c1a3c65af62a4cc2783a9f8",
-      "bytes": 1678,
+      "sha256": "3bcfbde1c75d8c671634e4670477c18a0a90dc115c76de011a035335cdc455ab",
+      "bytes": 1627,
       "kind": "json"
     },
     {
@@ -175148,8 +175148,8 @@
     },
     {
       "id": "packages/react-yoopta-editor/package.json",
-      "sha256": "5999a0b51a5b7c23ee0cd8e306f73d259c25088aff8dcfa5477f965dcad841fb",
-      "bytes": 3423,
+      "sha256": "f5971e9b690337a6a1a2e94527ceac85d3c41c6fb165c18a9c1f9bcefb5d35c5",
+      "bytes": 3372,
       "kind": "json"
     },
     {
@@ -175298,8 +175298,8 @@
     },
     {
       "id": "packages/tokens/package.json",
-      "sha256": "4df857376504fd6ae68141a8b1d26f3a8d6a3a6830ac292478a860fc70fdf471",
-      "bytes": 2908,
+      "sha256": "64a77eba4314795e38b870462ae594f089b390634f960c1851fd2df8f343991c",
+      "bytes": 2857,
       "kind": "json"
     },
     {
@@ -175568,8 +175568,8 @@
     },
     {
       "id": "packages/utilities/package.json",
-      "sha256": "9966053fbf4d6e51b5ed68d54bbbe4601441ef691da6f65eff1d269f47df5988",
-      "bytes": 1280,
+      "sha256": "cc0148695c8035908d50aa82c1bb010a2722ae251143cf2ce47ef736ea40881d",
+      "bytes": 1229,
       "kind": "json"
     },
     {
@@ -175586,8 +175586,8 @@
     },
     {
       "id": "packages/utils/package.json",
-      "sha256": "484c22791a89d6c783a50bec1cf69469934828cc2fef2ce28f7f865bd945c01b",
-      "bytes": 1395,
+      "sha256": "950879356393b3a0f409cf516667a419e24650eb24a0ec910c5c6808f357337a",
+      "bytes": 1344,
       "kind": "json"
     },
     {
@@ -175646,8 +175646,8 @@
     },
     {
       "id": "registry.json",
-      "sha256": "fe499baf6bb3c032e7c1c14f3d68f22e5919608e9489157f62bdd6557f567aa0",
-      "bytes": 296753,
+      "sha256": "73cd1a703fc5686d4144d95ebfaa9147e6965cf52125e2cf2f82abb69b0b12ee",
+      "bytes": 284360,
       "kind": "json"
     },
     {

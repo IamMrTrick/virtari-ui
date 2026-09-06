@@ -4,14 +4,14 @@
   "description": "Virtari rich text editor - Lexical-powered editor with a core API and optional productivity features.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/Virtari-Packages/virtari-design-system/tree/main/packages/react-editor#readme",
+  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/react-editor#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
+    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
     "directory": "packages/react-editor"
   },
   "bugs": {
-    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
+    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

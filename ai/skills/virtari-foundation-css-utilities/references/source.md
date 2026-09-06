@@ -410,14 +410,14 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   "description": "Utility CSS classes (spacing, sizing, layout, z-index) driven by Virtari tokens.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/Virtari-Packages/virtari-design-system/tree/main/packages/utilities#readme",
+  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/utilities#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
+    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
     "directory": "packages/utilities"
   },
   "bugs": {
-    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
+    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

@@ -4,14 +4,14 @@
   "description": "Virtari code — read-only viewer, live editor, and inline snippet powered by CodeMirror 6 with token-driven theming.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/Virtari-Packages/virtari-design-system/tree/main/packages/react-code#readme",
+  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/react-code#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
+    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
     "directory": "packages/react-code"
   },
   "bugs": {
-    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
+    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

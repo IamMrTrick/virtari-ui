@@ -4,14 +4,14 @@
   "description": "Virtari React Flow wrapper — token-aware surfaces, node shells, labeled edges, layout helpers, and persistence hooks for workflow builders.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/Virtari-Packages/virtari-design-system/tree/main/packages/react-flow#readme",
+  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/react-flow#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
+    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
     "directory": "packages/react-flow"
   },
   "bugs": {
-    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
+    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

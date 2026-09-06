@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const registry = JSON.parse(await readFile(path.join(root, "registry.json"), "utf8"));
-const repository = "Virtari-Packages/virtari-design-system";
+const repository = "IamMrTrick/virtari-ui";
 const failures = [];
 const names = new Set();
 const targets = new Map();

@@ -14,7 +14,7 @@ if (manifest.license !== "MIT") failures.push("The CLI package manifest must dec
 if (!/^MIT License\r?\n/.test(rootLicense) || !rootLicense.includes("Permission is hereby granted")) failures.push("The repository LICENSE must contain the canonical MIT grant.");
 if (manifest.name !== "virtari") failures.push("The public CLI package name must remain virtari.");
 if (manifest.bin?.virtari !== "bin/virtari.mjs") failures.push("The published virtari command must point to bin/virtari.mjs.");
-if (manifest.repository?.url !== "git+https://github.com/Virtari-Packages/virtari-design-system.git") failures.push("The npm repository URL must exactly identify the publishing GitHub repository.");
+if (manifest.repository?.url !== "git+https://github.com/IamMrTrick/virtari-ui.git") failures.push("The npm repository URL must exactly identify the publishing GitHub repository.");
 const tag = process.env.GITHUB_REF_NAME;
 if (tag?.startsWith("cli-v") && tag !== `cli-v${manifest.version}`) failures.push(`Tag ${tag} does not match CLI version ${manifest.version}.`);
 

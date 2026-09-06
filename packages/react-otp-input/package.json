@@ -4,14 +4,14 @@
   "description": "Virtari otp-input — one-time password / PIN code input with keyboard navigation.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/Virtari-Packages/virtari-design-system/tree/main/packages/react-otp-input#readme",
+  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/react-otp-input#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
+    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
     "directory": "packages/react-otp-input"
   },
   "bugs": {
-    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
+    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

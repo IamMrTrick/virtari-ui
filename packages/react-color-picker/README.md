@@ -56,8 +56,8 @@ import "@virtari-packages/tokens";
 
 ## Links
 
-- [Repository](https://github.com/Virtari-Packages/virtari-design-system)
-- [Issues](https://github.com/Virtari-Packages/virtari-design-system/issues)
+- [Repository](https://github.com/IamMrTrick/virtari-ui)
+- [Issues](https://github.com/IamMrTrick/virtari-ui/issues)
 
 ## License
 

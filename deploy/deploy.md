@@ -115,7 +115,7 @@ corepack enable
 Clone the repository:
 
 ```bash
-git clone https://github.com/Virtari-Packages/virtari-design-system.git /opt/virtari-design-system
+git clone https://github.com/IamMrTrick/virtari-ui.git /opt/virtari-design-system
 cd /opt/virtari-design-system
 ```
 

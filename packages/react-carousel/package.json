@@ -4,14 +4,14 @@
   "description": "Virtari carousel — Swiper.js wrapped with Virtari design tokens, RTL-safe and a11y-first.",
   "license": "MIT",
   "author": "Virtari",
-  "homepage": "https://github.com/Virtari-Packages/virtari-design-system/tree/main/packages/react-carousel#readme",
+  "homepage": "https://github.com/IamMrTrick/virtari-ui/tree/main/packages/react-carousel#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git",
+    "url": "git+https://github.com/IamMrTrick/virtari-ui.git",
     "directory": "packages/react-carousel"
   },
   "bugs": {
-    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
+    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
   },
   "keywords": [
     "virtari",

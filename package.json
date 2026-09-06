@@ -53,13 +53,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Virtari-Packages/virtari-design-system.git"
+    "url": "git+https://github.com/IamMrTrick/virtari-ui.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
+    "url": "https://github.com/IamMrTrick/virtari-ui/issues"
   },
-  "homepage": "https://github.com/Virtari-Packages/virtari-design-system#readme"
+  "homepage": "https://github.com/IamMrTrick/virtari-ui#readme"
 }
