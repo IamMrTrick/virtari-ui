@@ -1,0 +1,9 @@
+# Working on Virtari
+
+Start with `ai/skills/virtari-design-system/SKILL.md`, then read the focused package or foundation skill for the task. Package source and export maps are authoritative; the generated catalog is a searchable snapshot. Do not assume generic README snippets describe the current API.
+
+Reuse existing Virtari components and semantic token roles. Check `docs/design-language.md`, `docs/surface-styles.md` and `docs/nested-surfaces.md` for design changes. Preserve native form semantics, consumer handlers, focus, keyboard navigation, RTL and scoped theme behavior. Package guidance records known limitations; documentation does not mean those limitations are fixed.
+
+After changing package source, documentation examples or authored guidance, run `pnpm ai:build`, `pnpm ai:check` and `pnpm ai:test`. For MCP changes also run `pnpm mcp:build` and `pnpm mcp:test`. Run component checks appropriate to the behavioral change. Edit `ai/authoring/*.json` for curated guidance; never manually patch generated catalogs or skills.
+
+Do not run `sync:metadata` as part of knowledge generation: its legacy README generator overwrites package documentation. The AI build has its own deterministic generator.

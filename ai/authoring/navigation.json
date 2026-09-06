@@ -1,0 +1,239 @@
+{
+  "packages": [
+    {
+      "id": "primitives",
+      "category": "layout",
+      "description": "Headless React behavior primitives underlying Virtari components, exposed through explicit package subpaths.",
+      "guidance": [
+        "Import from an exported subpath such as @virtari-packages/primitives/dialog, /tabs, /slot or /direction. There is no package-root export and no styles export.",
+        "Prefer the styled react-* component for product UI; use primitives when intentionally authoring a new reusable behavior wrapper and supply the matching visual, focus and state styles.",
+        "Read the selected subpath barrel and implementation before composing Root, Trigger, Content, Portal or other parts: each primitive has its own supported composition and required context.",
+        "Slot requires one valid element, merges classes/styles and composes refs. Custom child components must forward the received ref and DOM props to their actual interactive element.",
+        "Use DirectionProvider from /direction for shared logical direction; behavior must receive the same direction as CSS. Use the specific primitive's value/defaultValue or open/defaultOpen contract instead of synchronizing duplicated local state."
+      ],
+      "pitfalls": [
+        "A styled package name and a primitive subpath do not guarantee identical APIs or defaults; do not import every primitive from @virtari-packages/primitives.",
+        "Slot runs the child event handler before the slot handler, but Slot itself does not skip the second handler when defaultPrevented is true. Inspect the behavior wrapper's event composition before relying on cancellation.",
+        "An asChild anchor cannot inherit native button disabled behavior; preserve correct semantics, an accessible name and deliberate disabled-event handling.",
+        "Headless behavior is not a promise that arbitrary compositions meet accessibility requirements. Keep provider nesting, focus restoration, keyboard bindings and labels intact."
+      ],
+      "related": ["utils", "react-tabs", "react-segmented-control", "react-scroll-area"]
+    },
+    {
+      "id": "react-bottom-nav",
+      "category": "navigation",
+      "description": "Mobile navigation landmark with route-aware items, notification badges, optional FAB and safe-area positioning.",
+      "guidance": [
+        "Compose BottomNav with BottomNavItem and optionally BottomNavFab; items require an icon and should have a visible label or an explicit accessible name.",
+        "Use currentPath and matchStrategy on BottomNav for route matching, or active on an individual item. href renders an anchor; otherwise the item renders a type=button control and needs an action handler.",
+        "The defaults are variant=material, size=md, position=fixed and safeArea=true. Reserve content space for the fixed bar; safe-area padding inside the bar does not reserve space in the page layout.",
+        "Use notch with an actual central BottomNavFab. The moving shared indicator only applies to material and underline variants; floating always receives elevation.",
+        "autoHide observes window scrolling. A controlled hidden value overrides autoHide; use that contract when the application's scrolling owner is an inner viewport."
+      ],
+      "pitfalls": [
+        "The current BottomNavItem asChild implementation slots its own internal span, not a consumer router-link element. Use the supported href/button branches until router-child composition is implemented and verified.",
+        "An active button has data-active but receives no automatic aria-current; choose navigation links for destinations and provide the appropriate state semantics for actual actions.",
+        "Do not add role=tablist merely because the component is visually called bottom tabs: it renders navigation destinations, not associated tabpanels.",
+        "autoHide is window-specific and checks reduced-motion at effect setup; do not claim inner ScrollArea scrolling or live preference changes are observed."
+      ],
+      "related": ["react-nav", "react-header", "react-icons", "react-badge"]
+    },
+    {
+      "id": "react-breadcrumb",
+      "category": "navigation",
+      "description": "Breadcrumb landmark supporting compound links and current-page content, array-driven collapsing and optional structured data.",
+      "guidance": [
+        "Use either items on Breadcrumb or the BreadcrumbList > BreadcrumbItem > BreadcrumbLink/BreadcrumbPage composition. Providing items takes precedence over children.",
+        "The array renderer treats the last item as the current page even when it has href; omit href for other intentionally non-link entries. Give a non-string label an explicit name when generating SEO data.",
+        "Place BreadcrumbSeparator between item siblings in BreadcrumbList; separators are presentational. Use BreadcrumbHome for the home shortcut and localize its label when icon-only.",
+        "maxItems with itemsBeforeCollapse and itemsAfterCollapse controls array-mode collapsing. BreadcrumbEllipsis with items creates a dropdown; without items it is only decorative.",
+        "Use BreadcrumbLink asChild with one router-link element that forwards props/ref. Keep leading icons explicitly decorative so the component can place its icon and label slots consistently."
+      ],
+      "pitfalls": [
+        "seo only works with items. seoBaseUrl resolves relative URLs but does not make untrusted content safe.",
+        "The current SEO script is inserted using JSON.stringify and dangerouslySetInnerHTML without escaping HTML script terminators. Keep seo disabled for untrusted item content, especially during SSR, until safe script serialization is implemented.",
+        "Do not render a second nested anchor inside BreadcrumbLink or make BreadcrumbPage clickable; use actual links for ancestors and current-page semantics for the final location."
+      ],
+      "related": ["react-nav", "react-dropdown-menu", "react-icons", "primitives"]
+    },
+    {
+      "id": "react-header",
+      "category": "layout",
+      "description": "Application header composed from coordinated top/main/bottom rows and start/center/end sections.",
+      "guidance": [
+        "Compose Header > HeaderTop/HeaderMain/HeaderBottom > HeaderStart/HeaderCenter/HeaderEnd. HeaderRow with slot is the explicit equivalent; rows require an enclosing Header context.",
+        "Use at most one row per slot because sticky-height registration is keyed by top, main and bottom. Preserve semantic DOM order when arranging the rows.",
+        "Choose sticky=none, always, smart or collapse per row. Header measures sticky row heights and exposes stack offsets; use Header stickyOffset only for content outside that stack.",
+        "Set center on the row for a genuinely centered middle section with equal outer tracks. Use width, gutter, gap and height presets before arbitrary blockSize; contained=false enables edge-to-edge content.",
+        "Smart and collapse modes observe the nearest vertically scrolling ancestor. An explicit collapseAt is a position in that container's scroll space.",
+        "Use row as=nav with an accessible label only when that row itself is navigation; otherwise compose the Nav component inside header sections."
+      ],
+      "pitfalls": [
+        "HeaderRow does not work as a standalone band outside Header; the context access intentionally throws.",
+        "Duplicate slot registration overwrites a measured height rather than creating an arbitrary-length sticky stack.",
+        "CSS sticky depends on ancestor overflow and available height. Test the actual page scroll owner rather than compensating for a broken container with hardcoded top offsets.",
+        "transparent overrides the selected background; it does not ensure foreground contrast over arbitrary images."
+      ],
+      "related": ["react-layout", "react-nav", "react-sidebar", "react-bottom-nav"]
+    },
+    {
+      "id": "react-nav",
+      "category": "navigation",
+      "description": "Site-navigation disclosure system with semantic links, inline submenus, floating submenus and collapsed rail presentation.",
+      "guidance": [
+        "Compose Nav > NavList > NavItem. Use declarative label/icon/href/submenu props for simple entries or compound NavLink/NavTrigger with NavIcon, NavLabel, NavBadge and NavChevron for custom content.",
+        "NavItem's submenu content must use NavSubmenu and nested list/item composition. Its open/onOpenChange pair controls disclosure state; there is no defaultOpen prop on NavItem.",
+        "The default orientation is vertical, with inline submenus. Horizontal orientation defaults to popover; collapsed forces popover for every submenu regardless of per-item submenuMode.",
+        "Pass currentPath and exact or startsWith matching, or active explicitly. NavLink sets aria-current=page when active; it renders a real anchor and supports one router-link child through asChild.",
+        "Keep the disclosure navigation semantics: nav, ul, links and aria-expanded buttons. Use application DropdownMenu for command menus rather than assigning menubar/menuitem roles to this site navigation.",
+        "A successful NavLink click closes ancestor floating submenus unless the consumer prevents default. Inline submenus remain open. String labels automatically supply collapsed-mode accessible labels and native titles."
+      ],
+      "pitfalls": [
+        "Any declarative NavItem content prop switches it out of compound mode; do not mix an intended custom children tree with label/icon/submenu props and expect both to render.",
+        "NavTrigger rendered outside NavItem is only a styled button, with no disclosure state or aria-controls wiring.",
+        "The floating vertical submenu default is physically right-start. For an RTL rail choose an appropriate placement explicitly instead of assuming that physical side mirrors automatically.",
+        "NavKbd is a plain kbd slot and does not interpret mod+k. Supply a platform-aware shortcut label from utils or use KbdShortcut where suitable.",
+        "In custom collapsed composition, preserve a readable accessible name yourself; the convenience naming only derives from string declarative labels."
+      ],
+      "related": ["react-sidebar", "react-header", "react-collapsible", "react-dropdown-menu", "react-kbd", "utils"]
+    },
+    {
+      "id": "react-sidebar",
+      "category": "layout",
+      "description": "Application sidebar shell with independent header/body/footer regions, logical placement and controlled or internal collapse state.",
+      "guidance": [
+        "Compose SidebarHeader, SidebarBody and SidebarFooter inside Sidebar; place the actual Nav component in the body. Use useSidebar inside the provider to pass its collapsed state to Nav.",
+        "side=start/end is logical and follows RTL. full-height uses the viewport height; below-header should receive stickyOffset matching the external header. Use blockSize for embedded panels.",
+        "Use size or inlineSize for expanded width, railSize for collapsed width, background=none/surface/subtle/muted and bordered for the component's surface controls.",
+        "Use collapsed/onCollapsedChange together for controlled state, or defaultCollapsed for initial internal state. collapsible=false disables the trigger and makes state-setting helpers inert.",
+        "SidebarTrigger reads its owning Sidebar context and is disabled outside it. Use a separate controlled button for external toggles. useSidebar throws outside context; useSidebarOptional returns null. Wire an explicit sidebar id and aria-controls when the trigger should identify its controlled region.",
+        "The default shortcut is Ctrl/Cmd+B using the physical KeyB code and is suppressed for text-editable targets. Turn shortcut off or assign distinct shortcutKey values when multiple sidebars are mounted."
+      ],
+      "pitfalls": [
+        "Collapsing Sidebar changes the shell; it does not automatically synchronize a nested Nav's collapsed prop.",
+        "SidebarBody already has overflow-y:auto. When composing a custom ScrollArea, deliberately assign one scrolling owner and constrain its available height to avoid nested scrollbars.",
+        "The shell is an aside by default. If changed to nav, provide a landmark label and avoid redundant nested unlabeled navigation landmarks.",
+        "The global shortcut accepts Ctrl or Meta rather than consulting the shared platform detector; do not describe this as per-platform exclusive key matching."
+      ],
+      "related": ["react-nav", "react-header", "react-scroll-area", "react-layout", "react-kbd"]
+    },
+    {
+      "id": "react-scroll-area",
+      "category": "layout",
+      "description": "Native scrolling viewport with styled smart-hiding scrollbars, optional edge masks, arrows, drag, infinite-scroll sentinel and marquee.",
+      "guidance": [
+        "Use ScrollArea with a constrained block/inline size and shrinking flex/grid ancestors. orientation chooses vertical, horizontal or both; smart is the default scrollbar type and reveals overflow scrollbars on scroll, hover or keyboard focus.",
+        "Use viewportRef to read or restore native scroll position and viewportProps for viewport labels, events and tabIndex. The component ref targets the inner primitive root, while className/style belong to the outer wrapper.",
+        "Use scrollHideDelay to change the smart reveal delay, default 900ms. Keep the default focusable viewport or supply an appropriate explicit keyboard-access policy.",
+        "Horizontal orientation enables wheelToHorizontal by default; opt out when vertical wheel scrolling should continue to the page. Arrow buttons are supported only on a single axis and arrowStep=page moves 85 percent of the viewport.",
+        "onEndReached uses an IntersectionObserver sentinel and endThreshold; consumers must guard fetching against duplicate requests, loading state and exhaustion.",
+        "Marquee is a distinct presentation mode: it duplicates children, disables drag/arrows/wheel conversion/infinite scroll, and can pause on hover/focus. Use it for noninteractive repeated content."
+      ],
+      "pitfalls": [
+        "Content that grows without a bounded viewport cannot overflow; adding ScrollArea alone does not create an internally scrolling page.",
+        "Do not restore scrollTop on the public root ref: obtain the actual native viewport through viewportRef.",
+        "The marquee's duplicate copy is aria-hidden but not inert, so duplicated interactive descendants can still enter the tab order. Avoid interactive controls and duplicate IDs in marquee content.",
+        "arrows are ignored for orientation=both. Enabling marquee overrides the other interaction features rather than combining them.",
+        "JavaScript arrow scrolling requests smooth behavior directly; CSS reduced-motion rules alone do not prove that this path avoids animated scrolling."
+      ],
+      "related": ["react-layout", "react-sidebar", "react-carousel", "primitives", "utils"]
+    },
+    {
+      "id": "react-segmented-control",
+      "category": "navigation",
+      "description": "Single-value segmented radio control sharing the Tabs segmented track and nested-radius styling.",
+      "guidance": [
+        "Use SegmentedControl with SegmentedControlItem value children for a single mutually exclusive setting or filter. It is a radiogroup, not a tablist, and does not manage tabpanels.",
+        "Use value/onValueChange or defaultValue, and the inherited radio-group name, required and disabled props where form semantics are needed. Supply aria-label or aria-labelledby for the group.",
+        "Set size=sm/md/lg, orientation=horizontal/vertical and fullWidth on the root. Use the item's icon prop for the dedicated decorative icon slot and an accessible text label.",
+        "Direction resolves explicit dir, primitive DirectionProvider, then inherited DOM direction. Keep behavioral direction and surrounding layout direction aligned.",
+        "Import this package's styles entry; it includes the shared Tabs styling. Preserve the generated track's data-radius-host and let the shared track/item radius roles derive nested corners."
+      ],
+      "pitfalls": [
+        "The selected state is data-state=checked because items are radios, unlike Tabs' active state. Do not target only the Tabs active selector when customizing a shared appearance.",
+        "Do not create a separate capsule radius for each item or assign the same outer radius everywhere; the track and inset item/indicator use coordinated geometry.",
+        "This is single selection; use another control for independent multiple toggles. Use Tabs when the selection exposes an associated content panel.",
+        "Size vocabulary is smaller than TabsList: 2xs, xs, xl, 2xl and 3xl are not SegmentedControl sizes."
+      ],
+      "related": ["react-tabs", "react-radio-group", "react-toggle", "primitives", "utils"]
+    },
+    {
+      "id": "react-tabs",
+      "category": "navigation",
+      "description": "Accessible tablist and panel composition with shared visual variants, direction-aware indicators and optional responsive/swipe layouts.",
+      "guidance": [
+        "Compose Tabs > TabsList > TabsTrigger with matching TabsContent value strings under the same root. Put variant, size, fullWidth, animatedIndicator and autoScroll on TabsList, not Tabs.",
+        "Use value/onValueChange for controlled selection or defaultValue for the initial selected panel. Supply an accessible name for TabsList and retain trigger/content IDs and aria relationships generated by the primitive.",
+        "The default activationMode is automatic; use manual when moving focus should not immediately activate expensive content. The primitive handles roving focus and direction-sensitive orientation keys.",
+        "collapseAt is a container-width threshold in pixels that changes a vertical root to horizontal. Root swipeable only acts in horizontal orientation; it is separate from the carousel-style TabsPanels feature.",
+        "Use TabsPanels with direct TabsContent children in trigger order for carousel panels. mountStrategy=all keeps every panel mounted; adjacent limits mounting to the active panel and its neighbors. touchOnly defaults true.",
+        "Direction resolves explicit dir, DirectionProvider, then DOM inheritance. Segmented track and item/indicator radii share the system's shape roles and inset geometry; preserve data-radius-host and token-derived styles."
+      ],
+      "pitfalls": [
+        "Tabs visually styled as pills still represent tabpanel switching, not route navigation or a form radiogroup.",
+        "Avoid simultaneously enabling root swipeable and TabsPanels swipe handling without interaction testing; they are independent gesture implementations.",
+        "TabsPanels relies on direct child panels and DOM relationships; arbitrary wrappers or mismatched trigger/panel order can break carousel activation.",
+        "forceMount retains panel content beyond its active lifetime; verify focusability and screen-reader exposure in any custom offscreen animation instead of assuming mount preservation implies invisibility.",
+        "The pill shape preset intentionally keeps many container radii finite. Uniform design language means shared semantic radius roles, not one numerical radius for every variant."
+      ],
+      "related": ["react-segmented-control", "react-nav", "react-scroll-area", "primitives", "utils"]
+    },
+    {
+      "id": "react-pagination",
+      "category": "navigation",
+      "description": "Controlled zero-based pagination with page buttons, page-size selection, range information and compound or default layouts.",
+      "guidance": [
+        "Use Pagination.Root or PaginationRoot with page, pageSize, total and onPageChange. page is zero-based, while rendered page labels are one-based; total means total row count.",
+        "Compose Pagination.Prev, Pages, Next, Info and PageSize within the root, or use Pagination.Default/PaginationDefault for the supplied layout.",
+        "Update application state in onPageChange and onPageSizeChange. The root clamps the displayed/requested page to available bounds, but it does not fetch data or mutate caller state.",
+        "Use pageSizeOptions on the root or options on PaginationPageSize. Reset or reconcile the current page when the size/filter/data count changes in the consumer.",
+        "Use PaginationInfo renderLabel and explicit previous/next children and aria-label values for localization; the built-in defaults are English.",
+        "computePageRange is a public pure helper for numbered ranges and ellipses. Use its exact signature and PageRangeItem type rather than recreating pagination arithmetic."
+      ],
+      "pitfalls": [
+        "Do not pass page=1 expecting the first page, or pass a page count as total.",
+        "Changing page size only calls onPageSizeChange; it does not automatically reset page or make remote requests.",
+        "PaginationPages currently fixes numerical order to LTR and generates English Page N accessible labels with no formatter prop. Full localization requires an intentional custom composition or component extension.",
+        "Pagination is an exported namespace object, not a callable JSX component; use Pagination.Root or Pagination.Default."
+      ],
+      "related": ["react-data-table", "react-table", "react-select", "react-button"]
+    },
+    {
+      "id": "react-stepper",
+      "category": "navigation",
+      "description": "Ordered progress-step display with automatic step statuses, optional error overrides and coordinated indicators/connectors.",
+      "guidance": [
+        "Compose Stepper with direct StepperStep children and a zero-based activeStep. Stepper injects each direct child's index and derives complete/active/pending status from that order.",
+        "Give every step a label and optional description; use status=error for a failed step or indicator to replace its number/check/error graphic.",
+        "Use orientation, size, variant, tone, animation and line on Stepper. The active list item receives aria-current=step; give the ordered list an appropriate localized aria-label.",
+        "Treat this as progress presentation. Implement validated next/back actions and actual form/page state separately; the component itself does not navigate or validate steps."
+      ],
+      "pitfalls": [
+        "A clickable li is not automatically an accessible step navigation button. Compose deliberate interactive content when users can revisit steps.",
+        "Wrappers and fragments are not recursively expanded into StepperStep children for index injection. Keep steps directly under the root and use stable React keys.",
+        "activeStep is not automatically clamped. Choose a deliberate completed-workflow representation when it exceeds the final index and ensure progress text describes that state.",
+        "A custom indicator can replace the visible number/error icon; preserve understandable status information rather than relying on color alone."
+      ],
+      "related": ["react-form", "react-button", "react-progress", "react-tabs"]
+    },
+    {
+      "id": "react-tree-view",
+      "category": "navigation",
+      "description": "Hierarchical item display with controlled expansion and optional single/multiple selection; current keyboard behavior is limited.",
+      "guidance": [
+        "Compose TreeView with TreeViewItem id and label; nest child TreeViewItem elements directly inside a parent item. The item creates its own group wrapper when expanded.",
+        "Use expandedIds/onExpandedChange and selectedIds/onSelectionChange for controlled arrays, or defaultExpandedIds/defaultSelectedIds for initial internal state.",
+        "selectionMode defaults none. single toggles the selected item off when selected again; multiple toggles each item independently, without range selection.",
+        "Give the root tree an accessible label, use stable unique item IDs, and keep decorative graphics in the icon slot. Use disabled to suppress row interaction.",
+        "The current handlers support Enter/Space and physical ArrowRight/ArrowLeft for expansion. Clicking a parent can both select and expand; keyboard Enter/Space selects instead of expanding when a selection mode is enabled."
+      ],
+      "pitfalls": [
+        "This implementation does not provide full tree keyboard navigation: no roving focus, Up/Down, Home/End, typeahead, parent/child focus traversal or RTL arrow inversion. Do not claim complete tree-pattern conformance or use it unreviewed for keyboard-critical file navigation.",
+        "Each enabled inner row has tabIndex=0 while treeitem semantics are on its containing li. Focus and accessibility behavior need a dedicated upgrade before parity with a fully accessible desktop-style tree.",
+        "Do not add TreeViewGroup inside a parent TreeViewItem expecting it to be the only group wrapper; the item already generates one and increments depth.",
+        "Collapsed descendants unmount. Store durable child state outside the collapsed subtree when it must survive reopening."
+      ],
+      "related": ["react-nav", "react-collapsible", "react-scroll-area", "react-checkbox"]
+    }
+  ]
+}

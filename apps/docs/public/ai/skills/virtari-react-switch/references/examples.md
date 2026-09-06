@@ -1,0 +1,152 @@
+# Existing examples
+
+- [SwitchPage.tsx](examples/SwitchPage.tsx.md)
+
+All documentation sections importing this package (some demonstrate another package):
+
+- `badge/1` — Live playground; source `apps/docs/src/pages/BadgePage.tsx` lines 228–328.
+- `badge/2` — Variants; source `apps/docs/src/pages/BadgePage.tsx` lines 334–354.
+- `badge/3` — Colors; source `apps/docs/src/pages/BadgePage.tsx` lines 360–382.
+- `badge/4` — Color × Variant matrix; source `apps/docs/src/pages/BadgePage.tsx` lines 388–426.
+- `badge/5` — Sizes; source `apps/docs/src/pages/BadgePage.tsx` lines 432–489.
+- `badge/6` — Shape; source `apps/docs/src/pages/BadgePage.tsx` lines 495–509.
+- `badge/7` — Status dot; source `apps/docs/src/pages/BadgePage.tsx` lines 515–541.
+- `badge/8` — Icons — leading and trailing; source `apps/docs/src/pages/BadgePage.tsx` lines 547–567.
+- `badge/9` — Removable chips; source `apps/docs/src/pages/BadgePage.tsx` lines 577–613.
+- `badge/10` — Interactive; source `apps/docs/src/pages/BadgePage.tsx` lines 619–634.
+- `badge/11` — Polymorphic via asChild; source `apps/docs/src/pages/BadgePage.tsx` lines 640–664.
+- `badge/12` — Composition patterns; source `apps/docs/src/pages/BadgePage.tsx` lines 670–703.
+- `badge/13` — API reference; source `apps/docs/src/pages/BadgePage.tsx` lines 709–729.
+- `badge/14` — Accessibility; source `apps/docs/src/pages/BadgePage.tsx` lines 735–765.
+- `bottom-nav/1` — Overview; source `apps/docs/src/pages/BottomNavPage.tsx` lines 156–163.
+- `bottom-nav/2` — Variants; source `apps/docs/src/pages/BottomNavPage.tsx` lines 165–184.
+- `bottom-nav/3` — Sizes; source `apps/docs/src/pages/BottomNavPage.tsx` lines 186–200.
+- `bottom-nav/4` — Badges; source `apps/docs/src/pages/BottomNavPage.tsx` lines 202–209.
+- `bottom-nav/5` — Centre FAB; source `apps/docs/src/pages/BottomNavPage.tsx` lines 211–239.
+- `bottom-nav/6` — Floating + elevated; source `apps/docs/src/pages/BottomNavPage.tsx` lines 241–263.
+- `bottom-nav/7` — RTL; source `apps/docs/src/pages/BottomNavPage.tsx` lines 265–274.
+- `bottom-nav/8` — Playground; source `apps/docs/src/pages/BottomNavPage.tsx` lines 276–350.
+- `bottom-nav/9` — Usage; source `apps/docs/src/pages/BottomNavPage.tsx` lines 352–367.
+- `button/1` — Live playground; source `apps/docs/src/pages/ButtonPage.tsx` lines 245–360.
+- `button/2` — Variants; source `apps/docs/src/pages/ButtonPage.tsx` lines 366–398.
+- `button/3` — Colors; source `apps/docs/src/pages/ButtonPage.tsx` lines 404–424.
+- `button/4` — Color × Variant matrix; source `apps/docs/src/pages/ButtonPage.tsx` lines 443–483.
+- `button/5` — Sizes; source `apps/docs/src/pages/ButtonPage.tsx` lines 489–544.
+- `button/6` — Icons — left and right sections; source `apps/docs/src/pages/ButtonPage.tsx` lines 550–571.
+- `button/7` — Icon-only buttons; source `apps/docs/src/pages/ButtonPage.tsx` lines 577–598.
+- `button/8` — Loading state; source `apps/docs/src/pages/ButtonPage.tsx` lines 617–656.
+- `button/9` — Disabled; source `apps/docs/src/pages/ButtonPage.tsx` lines 662–677.
+- `button/10` — Full width; source `apps/docs/src/pages/ButtonPage.tsx` lines 683–702.
+- `button/11` — Visual effects; source `apps/docs/src/pages/ButtonPage.tsx` lines 708–784.
+- `button/12` — Attention animations; source `apps/docs/src/pages/ButtonPage.tsx` lines 793–824.
+- `button/13` — Polymorphic via asChild; source `apps/docs/src/pages/ButtonPage.tsx` lines 830–860.
+- `button/14` — API reference; source `apps/docs/src/pages/ButtonPage.tsx` lines 866–890.
+- `button/15` — Accessibility; source `apps/docs/src/pages/ButtonPage.tsx` lines 896–925.
+- `code/1` — Overview; source `apps/docs/src/pages/CodePage.tsx` lines 263–286.
+- `code/2` — Languages; source `apps/docs/src/pages/CodePage.tsx` lines 289–311.
+- `code/3` — Sizes; source `apps/docs/src/pages/CodePage.tsx` lines 314–329.
+- `code/4` — Variants; source `apps/docs/src/pages/CodePage.tsx` lines 332–348.
+- `code/5` — Line numbers & line highlighting; source `apps/docs/src/pages/CodePage.tsx` lines 351–362.
+- `code/6` — Unified diff; source `apps/docs/src/pages/CodePage.tsx` lines 365–376.
+- `code/7` — Filename header & copy button; source `apps/docs/src/pages/CodePage.tsx` lines 379–390.
+- `code/8` — Word wrap; source `apps/docs/src/pages/CodePage.tsx` lines 393–407.
+- `code/9` — Max height; source `apps/docs/src/pages/CodePage.tsx` lines 410–422.
+- `code/10` — Live editor; source `apps/docs/src/pages/CodePage.tsx` lines 425–468.
+- `code/11` — Inline code; source `apps/docs/src/pages/CodePage.tsx` lines 471–482.
+- `code/12` — In context — embedded inside a Card; source `apps/docs/src/pages/CodePage.tsx` lines 485–505.
+- `data-table/1` — Basic; source `apps/docs/src/pages/DataTablePage.tsx` lines 1087–1092.
+- `data-table/2` — Excel-like resize; source `apps/docs/src/pages/DataTablePage.tsx` lines 1093–1098.
+- `data-table/3` — Virtualized 10,000 rows; source `apps/docs/src/pages/DataTablePage.tsx` lines 1099–1104.
+- `data-table/4` — Row selection + pagination; source `apps/docs/src/pages/DataTablePage.tsx` lines 1105–1110.
+- `data-table/5` — Pinned columns; source `apps/docs/src/pages/DataTablePage.tsx` lines 1111–1116.
+- `data-table/6` — Column reorder (drag-and-drop); source `apps/docs/src/pages/DataTablePage.tsx` lines 1117–1122.
+- `data-table/7` — Server-side; source `apps/docs/src/pages/DataTablePage.tsx` lines 1123–1128.
+- `data-table/8` — Grouping + aggregation; source `apps/docs/src/pages/DataTablePage.tsx` lines 1129–1134.
+- `data-table/9` — Inline cell editing; source `apps/docs/src/pages/DataTablePage.tsx` lines 1135–1140.
+- `data-table/10` — Per-column filters; source `apps/docs/src/pages/DataTablePage.tsx` lines 1141–1146.
+- `data-table/11` — Density, bordered, striped; source `apps/docs/src/pages/DataTablePage.tsx` lines 1147–1152.
+- `data-table/12` — Grid interaction mode (beta); source `apps/docs/src/pages/DataTablePage.tsx` lines 1153–1158.
+- `data-table/13` — View modes — Table / Board / List; source `apps/docs/src/pages/DataTablePage.tsx` lines 1159–1164.
+- `data-table/14` — Bulk actions bar; source `apps/docs/src/pages/DataTablePage.tsx` lines 1165–1170.
+- `data-table/15` — Toolbar action buttons; source `apps/docs/src/pages/DataTablePage.tsx` lines 1171–1176.
+- `data-table/16` — Cell primitives library; source `apps/docs/src/pages/DataTablePage.tsx` lines 1177–1182.
+- `data-table/17` — Filter drawer (advanced); source `apps/docs/src/pages/DataTablePage.tsx` lines 1183–1188.
+- `data-table/18` — Customize view drawer; source `apps/docs/src/pages/DataTablePage.tsx` lines 1189–1194.
+- `data-table-users/page` — data-table-users page; source `apps/docs/src/pages/DataTableUsersPage.tsx` lines 1–1553.
+- `drawer/1` — Overview; source `apps/docs/src/pages/DrawerPage.tsx` lines 1296–1306.
+- `drawer/2` — Quick start; source `apps/docs/src/pages/DrawerPage.tsx` lines 1308–1346.
+- `drawer/3` — Anatomy; source `apps/docs/src/pages/DrawerPage.tsx` lines 1348–1378.
+- `drawer/4` — Pattern — Responsive detail panel; source `apps/docs/src/pages/DrawerPage.tsx` lines 1382–1408.
+- `drawer/5` — Pattern — Product filters; source `apps/docs/src/pages/DrawerPage.tsx` lines 1410–1417.
+- `drawer/6` — Pattern — Cart summary; source `apps/docs/src/pages/DrawerPage.tsx` lines 1419–1426.
+- `drawer/7` — Pattern — Mobile navigation; source `apps/docs/src/pages/DrawerPage.tsx` lines 1428–1435.
+- `drawer/8` — Pattern — Notification center; source `apps/docs/src/pages/DrawerPage.tsx` lines 1437–1444.
+- `drawer/9` — Direction; source `apps/docs/src/pages/DrawerPage.tsx` lines 1448–1470.
+- `drawer/10` — Size modes; source `apps/docs/src/pages/DrawerPage.tsx` lines 1472–1497.
+- `drawer/11` — Offset — floating sheet; source `apps/docs/src/pages/DrawerPage.tsx` lines 1499–1520.
+- `drawer/12` — Open states — staged drawer; source `apps/docs/src/pages/DrawerPage.tsx` lines 1522–1556.
+- `drawer/13` — Minimized lane; source `apps/docs/src/pages/DrawerPage.tsx` lines 1558–1589.
+- `drawer/14` — Indicator & header; source `apps/docs/src/pages/DrawerPage.tsx` lines 1591–1633.
+- `drawer/15` — Behavior flags; source `apps/docs/src/pages/DrawerPage.tsx` lines 1635–1666.
+- `drawer/16` — Mobile keyboard (IME); source `apps/docs/src/pages/DrawerPage.tsx` lines 1668–1687.
+- `drawer/17` — Accessibility; source `apps/docs/src/pages/DrawerPage.tsx` lines 1689–1708.
+- `drawer/18` — Playground; source `apps/docs/src/pages/DrawerPage.tsx` lines 1710–1715.
+- `drawer/19` — Installation & imports; source `apps/docs/src/pages/DrawerPage.tsx` lines 1717–1729.
+- `drawer/20` — API reference; source `apps/docs/src/pages/DrawerPage.tsx` lines 1731–1775.
+- `input/1` — All Sizes; source `apps/docs/src/pages/InputPage.tsx` lines 38–69.
+- `input/2` — Field API; source `apps/docs/src/pages/InputPage.tsx` lines 71–102.
+- `input/3` — Password; source `apps/docs/src/pages/InputPage.tsx` lines 104–143.
+- `input/4` — Typing Pulse; source `apps/docs/src/pages/InputPage.tsx` lines 145–150.
+- `input/5` — States; source `apps/docs/src/pages/InputPage.tsx` lines 152–158.
+- `input/6` — Usage; source `apps/docs/src/pages/InputPage.tsx` lines 160–212.
+- `number-input/1` — Sizes; source `apps/docs/src/pages/NumberInputPage.tsx` lines 108–123.
+- `number-input/2` — Stepper variants; source `apps/docs/src/pages/NumberInputPage.tsx` lines 125–144.
+- `number-input/3` — Field API; source `apps/docs/src/pages/NumberInputPage.tsx` lines 146–178.
+- `number-input/4` — Precision and clamping; source `apps/docs/src/pages/NumberInputPage.tsx` lines 180–205.
+- `number-input/5` — Typing Pulse; source `apps/docs/src/pages/NumberInputPage.tsx` lines 207–212.
+- `number-input/6` — Mouse Wheel; source `apps/docs/src/pages/NumberInputPage.tsx` lines 214–219.
+- `number-input/7` — Usage; source `apps/docs/src/pages/NumberInputPage.tsx` lines 221–247.
+- `sizing/1` — Size System; source `apps/docs/src/pages/SizingPage.tsx` lines 29–41.
+- `sizing/2` — Height-Ramp Components; source `apps/docs/src/pages/SizingPage.tsx` lines 43–71.
+- `sizing/3` — Proportional Components; source `apps/docs/src/pages/SizingPage.tsx` lines 73–107.
+- `sizing/4` — Target size guidance; source `apps/docs/src/pages/SizingPage.tsx` lines 109–113.
+- `switch/1` — Sizes; source `apps/docs/src/pages/SwitchPage.tsx` lines 7–13.
+- `switch/2` — States; source `apps/docs/src/pages/SwitchPage.tsx` lines 15–22.
+- `switch/3` — Usage; source `apps/docs/src/pages/SwitchPage.tsx` lines 24–32.
+- `table/1` — Live playground; source `apps/docs/src/pages/TablePage.tsx` lines 167–245.
+- `table/2` — Variants; source `apps/docs/src/pages/TablePage.tsx` lines 302–316.
+- `table/3` — Row styles; source `apps/docs/src/pages/TablePage.tsx` lines 324–338.
+- `table/4` — Sizes; source `apps/docs/src/pages/TablePage.tsx` lines 346–360.
+- `table/5` — Density; source `apps/docs/src/pages/TablePage.tsx` lines 368–382.
+- `table/6` — Selection & hover; source `apps/docs/src/pages/TablePage.tsx` lines 392–424.
+- `table/7` — Sortable headers; source `apps/docs/src/pages/TablePage.tsx` lines 462–488.
+- `table/8` — Sticky header; source `apps/docs/src/pages/TablePage.tsx` lines 501–532.
+- `table/9` — Sticky columns; source `apps/docs/src/pages/TablePage.tsx` lines 549–581.
+- `table/10` — Alignment & numeric cells; source `apps/docs/src/pages/TablePage.tsx` lines 589–629.
+- `table/11` — Footer & caption; source `apps/docs/src/pages/TablePage.tsx` lines 637–668.
+- `table/12` — Loading state; source `apps/docs/src/pages/TablePage.tsx` lines 678–705.
+- `table/13` — RTL-safe by default; source `apps/docs/src/pages/TablePage.tsx` lines 713–749.
+- `table/14` — API; source `apps/docs/src/pages/TablePage.tsx` lines 784–854.
+- `table/15` — Usage; source `apps/docs/src/pages/TablePage.tsx` lines 862–891.
+- `textarea/1` — Basic; source `apps/docs/src/pages/TextareaPage.tsx` lines 31–35.
+- `textarea/2` — Field API; source `apps/docs/src/pages/TextareaPage.tsx` lines 37–66.
+- `textarea/3` — Sizes; source `apps/docs/src/pages/TextareaPage.tsx` lines 68–74.
+- `textarea/4` — Typing Pulse; source `apps/docs/src/pages/TextareaPage.tsx` lines 76–81.
+- `textarea/5` — Disabled; source `apps/docs/src/pages/TextareaPage.tsx` lines 83–87.
+- `textarea/6` — Usage; source `apps/docs/src/pages/TextareaPage.tsx` lines 89–104.
+- `toast/1` — Live Toaster controls; source `apps/docs/src/pages/ToastPage.tsx` lines 260–381.
+- `toast/2` — Variants; source `apps/docs/src/pages/ToastPage.tsx` lines 387–450.
+- `toast/3` — Positions; source `apps/docs/src/pages/ToastPage.tsx` lines 460–488.
+- `toast/4` — Title & description combinations; source `apps/docs/src/pages/ToastPage.tsx` lines 494–552.
+- `toast/5` — Action buttons; source `apps/docs/src/pages/ToastPage.tsx` lines 558–654.
+- `toast/6` — toast.promise(); source `apps/docs/src/pages/ToastPage.tsx` lines 669–688.
+- `toast/7` — toast.undo() & toast.confirm(); source `apps/docs/src/pages/ToastPage.tsx` lines 694–748.
+- `toast/8` — Custom content; source `apps/docs/src/pages/ToastPage.tsx` lines 754–832.
+- `toast/9` — Stacking & expand; source `apps/docs/src/pages/ToastPage.tsx` lines 854–867.
+- `toast/10` — Timer mode — sequential queue; source `apps/docs/src/pages/ToastPage.tsx` lines 892–930.
+- `toast/11` — useToast() hook; source `apps/docs/src/pages/ToastPage.tsx` lines 943–978.
+- `toast/12` — Imperative API — full reference; source `apps/docs/src/pages/ToastPage.tsx` lines 984–1023.
+- `toast/13` — Low-level primitives (power users); source `apps/docs/src/pages/ToastPage.tsx` lines 1030–1089.
+- `toast/14` — Accessibility; source `apps/docs/src/pages/ToastPage.tsx` lines 1095–1141.
+
+MCP: `get_record({collection:"examples",id:"<example ID>"})`; then `read_source` for full page context. A section fragment may reference imports, state, helper components, assets, docs CSS or shared page scaffolding.

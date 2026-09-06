@@ -1,0 +1,237 @@
+{
+  "sections": [
+    {
+      "id": "foundation-imports",
+      "name": "Foundation imports and cascade",
+      "description": "The actual package exports and stylesheet dependency order that every integration needs.",
+      "sourcePaths": ["packages/tokens/package.json", "packages/tokens/src/index.css", "packages/core/package.json", "packages/core/src/index.css", "packages/core/src/layers.css", "packages/utilities/package.json", "packages/react-layout/package.json"],
+      "guidance": [
+        "Import CSS with import '@virtari-packages/core'; import '@virtari-packages/tokens'; then each React package's documented /styles export. Core establishes cascade layer order before any layer is populated. Import '@virtari-packages/utilities' when using vds-u-* classes.",
+        "Core declares top-level layers in this order: reset, tokens, base, components, design-system, utilities. React layout uses design-system.components; generated utility CSS uses utilities.",
+        "Tokens is a CSS package. Its root exports dist/tokens.css; supported granular entries are listed in package.json, including /colors, /spacing, /sizing, /typography, /radii, /layout, /motion and /transition.",
+        "Core depends on tokens as a package, but core/src/index.css does not import token CSS. Installing a dependency does not load its styles.",
+        "Utility CSS uses a tokens peer dependency and does not load the token sheet for the consumer. Utils is a separate JavaScript/React helper package.",
+        "Use package.json exports and source entry files to validate an import before generating consumer code; generic README boilerplate is not authoritative."
+      ],
+      "pitfalls": [
+        "@virtari-packages/core/styles and @virtari-packages/tokens/styles are not exported. Neither foundation package exposes React component named imports.",
+        "Unlayered application CSS outranks normal layered styles; declaring a layer name does not make an arbitrary override harmless.",
+        "Granular source CSS contains imports, layers, custom media or modern syntax. The consumer build must support any source features it imports."
+      ]
+    },
+    {
+      "id": "colors",
+      "name": "Colors, themes and brands",
+      "description": "Use semantic purpose rather than reconstructing palettes or guessing theme behavior.",
+      "sourcePaths": ["packages/tokens/src/colors.css", "packages/tokens/src/colors/primitives/neutral.css", "packages/tokens/src/colors/primitives/intents.css", "packages/tokens/src/colors/primitives/alphas.css", "packages/tokens/src/colors/semantic/index.css", "packages/tokens/src/colors/aliases.css", "packages/tokens/src/brands/virtari.css", "packages/tokens/src/brands/_template.css"],
+      "guidance": [
+        "The color cascade is primitives in tokens.base, brand overrides in tokens.brand, then purpose-based semantic variables and compatibility aliases in tokens. Preserve this order.",
+        "Set data-theme='light', 'dark' or 'dark-oled' on the root or a scope. Prefer --vds-color-bg, --vds-color-text and the relevant surface, interactive, status or data-viz roles in component CSS.",
+        "Twelve-step neutral and intent scales, alpha families, absolute black/white anchors and legacy scales coexist. Retrieve their actual values from the token inventory instead of converting names to guessed hex colors.",
+        "Twelve-step neutral roles progress from canvas and surfaces (1–5), through boundaries (6–8), solids (9–10), to text (11–12). Dark raised surfaces use lighter steps.",
+        "Use alpha tokens for overlays on existing color; assess the composited foreground/background, especially on tinted or translucent hosts.",
+        "A brand customization belongs in the primitive hue layer. Use the template as a starting point and validate both themes plus nested scopes."
+      ],
+      "pitfalls": [
+        "A numeric palette step or a semantic token name alone does not prove contrast against an arbitrary consumer background.",
+        "The current brands/virtari.css declares an empty default scope. It does not redeclare every default primitive and must not be assumed to reset a custom ancestor brand.",
+        "dark-oled changes the full neutral elevation scale, not only the canvas; inspect actual declarations rather than the outdated canvas-only source comment."
+      ]
+    },
+    {
+      "id": "surface-styles",
+      "name": "Surface styles and field tones",
+      "description": "One scoped appearance contract for quiet borders, tonal fills, shadows and stronger tinted fields.",
+      "sourcePaths": ["packages/tokens/src/surface-styles.css", "packages/tokens/src/colors/semantic/background.css", "packages/tokens/src/colors/semantic/border.css", "docs/surface-styles.md"],
+      "guidance": [
+        "Use data-surface-style='tonal', 'bordered' or 'elevated'. The default token intent is tonal. Components consume --vds-surface-*, --vds-overlay-*, --vds-navigation-bg and --vds-field-* roles.",
+        "Bordered uses neutral-a4 decorative surface boundaries, neutral-a6 field boundaries and neutral-a8 field hover boundaries. Elevated uses shadow-sm surfaces, shadow-lg overlays and shadow-xs fields.",
+        "Use data-field-tone='strong' on a field or group to select neutral-a4 alpha fill; use data-field-tone='default' to reset within that group. Strong deepens light surfaces and lifts dark surfaces while retaining host tint.",
+        "Colors rebind at theme, style and tone boundaries. The internal numeric intent flags retain the chosen mode through nested theme scopes; use the public attributes rather than writing those flags.",
+        "Stronger contrast and forced colors preferences replace quiet boundary roles without removing semantic errors, selection or focus indicators."
+      ],
+      "pitfalls": [
+        "Bordered does not mean heavy borders. Quiet decorative borders are not a guaranteed 3:1 control boundary on every host.",
+        "Style and tone are independent of radius mode. Do not encode a radius personality into a surface appearance name.",
+        "Do not overwrite a component's validation or explicit outline behavior merely to force the global tonal mode."
+      ]
+    },
+    {
+      "id": "sizing",
+      "name": "Control and floating-surface sizing",
+      "description": "Separate control height, overlay width and spacing scales.",
+      "sourcePaths": ["packages/tokens/src/sizing.css", "packages/tokens/src/layout/primitives.css"],
+      "guidance": [
+        "The shared control-height scale --vds-size-{2xs,xs,sm,md,lg,xl,2xl,3xl} is 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3.25 and 4rem. At a 16px root these are 24, 28, 32, 36, 40, 44, 52 and 64px.",
+        "Use --vds-surface-width-{xs,sm,md,lg,xl,2xl} for floating panels: 20, 24, 32, 48, 64 and 80rem. Bound the panel to the available viewport.",
+        "Content containers have their own --vds-container-width-* scale, including prose=65ch. A matching t-shirt name does not imply the same value as a floating surface.",
+        "Use shared size roles to align a row of controls; verify multiline content and text enlargement rather than hiding overflow to enforce a height."
+      ],
+      "pitfalls": [
+        "Do not use --vds-space-96 as a dialog-width role merely because it currently equals 24rem. Spacing and dimension intent must remain independent.",
+        "Not every component implements every global size. Verify the individual prop union before using 2xs or 3xl.",
+        "A CSS height alone does not establish touch-target compliance; the target's width, actual hit area, spacing, zoom and surrounding targets also matter."
+      ]
+    },
+    {
+      "id": "spacing",
+      "name": "Spacing and grouping hierarchy",
+      "description": "Primitive distances plus semantic interior and page-layout relationships.",
+      "sourcePaths": ["packages/tokens/src/spacing.css", "packages/tokens/src/spacing/semantic.css", "packages/tokens/src/design-language.css", "packages/tokens/src/layout/semantic.css"],
+      "guidance": [
+        "Use the 35-key --vds-space-* primitive scale for supported one-off geometry. Keys 0-5, 1-5, 2-5 and 3-5 denote half steps, not negative values.",
+        "Prefer semantic interior roles: surface padding=space-6, slot gap=space-4, stack gap=space-3, cluster gap=space-2 and label gap=space-1-5. At a 16px root the default hierarchy is 24 > 16 > 12 > 8 > 6px.",
+        "Control inline padding and control-emphasis padding have different roles: 12px and 16px defaults. Height comes from sizing, not these padding roles.",
+        "Page-region rhythm belongs to --vds-section-*, --vds-row-* and --vds-container-* roles. Interior grouping is not a substitute for page layout.",
+        "Use logical padding/margin/gaps so a layout survives RTL. Scope compact spacing overrides to a deliberate density context and preserve grouping distinctions."
+      ],
+      "pitfalls": [
+        "Giving every relationship the same gap obscures which heading, hint or action belongs to which group.",
+        "A CSS alias resolves where it is declared. Do not assume changing only a low-level primitive on an arbitrary descendant recomputes all inherited aliases; override the intended semantic/component role and inspect the computed result."
+      ]
+    },
+    {
+      "id": "shape",
+      "name": "Radius roles and concentric nesting",
+      "description": "Stable component families with deliberate differences and bounded nested geometry.",
+      "sourcePaths": ["packages/tokens/src/radii/primitives.css", "packages/tokens/src/radii/modes.css", "packages/tokens/src/radii/components.css", "packages/tokens/src/radii/nesting.css", "docs/radius-audit.md"],
+      "guidance": [
+        "Use data-radius='sharp', 'soft', 'round' or 'pill'; soft is the default. Component-specific --vds-radius-* roles are the integration contract, not arbitrary border-radius literals.",
+        "Soft semantic xs/sm/md/lg/xl/2xl resolves to 4/8/12/20/28/32px at a 16px root. Inputs and segmented tracks use control geometry; cards and modal sheets use different surface roles.",
+        "Pill deliberately rounds action-like roles and segmented tracks fully while keeping text fields and many compact controls finite. Badge/chip and pill selections stay capsule-shaped across modes.",
+        "A radius host declares data-radius-host and all three --vds-radius-host-r, -b and -p inputs. Direct children can consume --vds-radius-flush=max(0, radius-border) or --vds-radius-inset=max(0, radius-border-padding).",
+        "The generic inset/flush outputs are registered non-inheriting leaf geometry; a nested host must use an independent radius input. Card-to-Card nesting uses its own measured channel."
+      ],
+      "pitfalls": [
+        "Consistency means shared rules, not an identical radius for a keycap, checkbox, card and modal.",
+        "Do not derive a host's own host-r from that same element's inherited inset output: this can form a custom-property cycle.",
+        "Reset all host inputs, including zero values, when creating nested hosts; otherwise outer border or padding values can leak into the subtraction.",
+        "Explicit component variants can intentionally override a default radius. Inspect the variant before treating every differing computed radius as a bug."
+      ]
+    },
+    {
+      "id": "typography",
+      "name": "Typography, bidi and text alignment",
+      "description": "Shared font, text-size and line-box roles without universal optical-offset assumptions.",
+      "sourcePaths": ["packages/tokens/src/typography.css", "packages/tokens/src/fonts.css", "packages/core/src/base.css"],
+      "guidance": [
+        "Typography supplies normal/medium/semibold/bold weights, sans/Latin/mono stacks, xs through 6xl sizes, six line-height roles and six tracking roles.",
+        "The default sans stack starts Vazirmatn then Inter; the Latin stack starts Inter; the mono stack starts JetBrains Mono. The root font import fetches Vazirmatn and Inter from Google Fonts.",
+        "Shared control line-height defaults to 1.5 in both LTR and RTL. Optical and indicator offsets default to 0px. Center line boxes with component layout; only introduce measured, font-specific optical adjustments.",
+        "Keep meaningful labels visible, allow translated text to wrap where the component permits it, and set dir on a semantic scope. Use explicit LTR isolation for addresses, code or email when appropriate.",
+        "Core includes an iOS-support-gated minimum 1rem font-size rule for input, textarea and select-trigger to reduce focus zoom. Verify the actual component and device."
+      ],
+      "pitfalls": [
+        "No single transform offset can optically center all fonts or scripts. Glyph metrics and line-box alignment are different concerns.",
+        "The root tokens import has a network font dependency. An offline or restrictive-CSP application must supply an approved font-loading strategy; JetBrains Mono is named but not fetched by fonts.css.",
+        "Do not use placeholder text as the only field label or truncate necessary instructions merely to preserve a compact demonstration."
+      ]
+    },
+    {
+      "id": "motion",
+      "name": "Motion, transitions and effects",
+      "description": "Reusable duration/easing pairs with reduced-motion behavior and explicit effect roles.",
+      "sourcePaths": ["packages/tokens/src/motion.css", "packages/tokens/src/transition.css", "packages/tokens/src/shadows.css", "packages/tokens/src/opacity.css", "packages/tokens/src/filter.css", "packages/tokens/src/gradient.css", "packages/tokens/src/design-language.css"],
+      "guidance": [
+        "Use duration roles 50/100/200/300/400/500ms and easing roles in, out, in-out, bounce, spring or ios. Transition presets pair a duration with easing, for example transition: opacity var(--vds-transition-base).",
+        "Reduced-motion sets shared duration roles to 0ms at the root. New animation code must use those roles or implement equivalent reduced-motion handling.",
+        "Fade, scale and physical/logical slide keyframes are available from the motion token sheet. Prefer inline-start/inline-end names for direction-dependent UI movement.",
+        "Prefer semantic disabled colors; when opacity is needed use --vds-opacity-disabled rather than a new literal. It currently aliases opacity-50.",
+        "Shadows, elevation aliases, gradients and blur/backdrop values are distinct. Filter tokens contain complete blur(...) expressions, not bare lengths. Use effects only when the intended surface calls for them."
+      ],
+      "pitfalls": [
+        "A token called spring is a cubic-bezier timing function, not a physics simulation or JavaScript lerp engine.",
+        "Root reduced-motion durations do not disable an unrelated hardcoded animation duration.",
+        "Current logical slide/fade variables explicitly override RTL but lack an explicit nested LTR reset. Validate nested direction scopes before relying on these variables there.",
+        "Changing an element's opacity dims its text, border and focus treatment together. It does not disable interaction or communicate disabled semantics."
+      ]
+    },
+    {
+      "id": "layout-utilities",
+      "name": "React layout utilities",
+      "description": "Semantic page primitives and small reusable arrangements instead of repeated bespoke wrappers.",
+      "sourcePaths": ["packages/react-layout/src/index.ts", "packages/react-layout/src/Main.tsx", "packages/react-layout/src/Section.tsx", "packages/react-layout/src/Container.tsx", "packages/react-layout/src/Row.tsx", "packages/react-layout/src/Col.tsx", "packages/react-layout/src/Grid.tsx", "packages/react-layout/src/Stack.tsx", "packages/react-layout/src/Sidebar.tsx", "packages/tokens/src/layout/semantic.css"],
+      "guidance": [
+        "Import Main, Section, Container, Row, Col, Stack, Cluster, Grid, Sidebar and Center from '@virtari-packages/react-layout'; load '@virtari-packages/react-layout/styles'.",
+        "Use Main for the document's dominant landmark; it defaults id='main', tabIndex=-1, padding='none' and gutter='none'. Section owns page bands and an optional inner container.",
+        "Use Stack for vertical rhythm, Cluster for inline groups and Grid for intrinsic auto-fit cards. Grid accepts minItemWidth; Container accepts maxInlineSize for deliberate width overrides.",
+        "Row supports grid or flex; Col supports base/sm/md/lg/xl spans, start placement and flex grow/shrink/basis. Use actual prop types rather than inventing Tailwind-like props.",
+        "The layout Sidebar is a wrapping two-child split using .vds-split and --split-* variables. It is distinct from the app-chrome react-sidebar package.",
+        "Use the shared --vds-app-chrome-row role to align page and sidebar chrome where those components consume it."
+      ],
+      "pitfalls": [
+        "Avoid multiple visible main landmarks. Using a div arrangement does not supply semantic section names or heading hierarchy automatically.",
+        "Stack recursive applies descendant sibling margins as well as the outer gap; do not enable it indiscriminately around components that already own their internal spacing.",
+        "Visual reverse/order does not reorder reading or tab order; preserve a meaningful DOM sequence.",
+        "The split Sidebar expects two meaningful children and is not a collapsible navigation widget."
+      ]
+    },
+    {
+      "id": "css-utilities",
+      "name": "CSS utilities and selector grammar",
+      "description": "Finite generated token-backed utilities, grouped independently from React helpers.",
+      "sourcePaths": ["packages/utilities/scripts/generate.mjs", "packages/utilities/package.json", "packages/tokens/src/breakpoints.css", "packages/core/src/utilities.css"],
+      "guidance": [
+        "The canonical generator emits vds-u-* classes in the utilities layer. Import '@virtari-packages/utilities'. Supported families are display, spacing, gap, flex/alignment, grid, logical sizing, position/inset, overflow and semantic z-index.",
+        "Spacing fragments are m/p (all), mi/pi (inline), mb/pb (block), mis/pis and mie/pie (inline start/end), mbs/pbs and mbe/pbe (block start/end). Example: vds-u-pi-4 is padding-inline: var(--vds-space-4).",
+        "Margin supports auto; padding does not. Decimal keys use dashes, for example vds-u-gap-1-5. Gap and numeric size utilities use a smaller 18-key subset of the 35-key spacing scale.",
+        "Widths/heights use inline-size/block-size. Supported fractions are 1/2, 1/3, 2/3, 1/4 and 3/4. Author vds-u-w-1/2 in markup; escaping belongs to the emitted CSS selector.",
+        "Use sm:, md:, lg:, xl: or 2xl: prefixes before the whole class, such as md:vds-u-grid-cols-3. Minimum widths are 640, 768, 1024, 1280 and 1536px, compiled from custom media at build time.",
+        "Grid utilities support 1–12 columns, 1–6 rows and spans; auto-fit/auto-fill use a 16rem minimum capped to available width.",
+        "Core separately provides vds-sr-only, vds-visually-hidden and vds-not-sr-only. These are not part of the vds-u-* generator and must not be mistaken for display:none."
+      ],
+      "pitfalls": [
+        "This is not a Tailwind parser or JIT runtime: arbitrary brackets, hover: variants, negative spacing, inferred color/radius/typography classes and unsupported scale keys do not exist unless present in the actual inventory.",
+        "mb means margin-block, not margin-bottom; pb means padding-block, not padding-bottom. Use mbe/pbe for block-end.",
+        "Utility numeric width/height intentionally reference spacing tokens; component floating-panel width roles remain a separate semantic contract.",
+        "Overflow-x/y utilities use physical CSS axes; do not describe every generated declaration as logical.",
+        "Breakpoint thresholds are compiled media conditions, not live runtime CSS custom-property values."
+      ]
+    },
+    {
+      "id": "stacking-focus-scroll",
+      "name": "Stacking, focus and native scrolling",
+      "description": "Shared interaction infrastructure beyond component-specific visuals.",
+      "sourcePaths": ["packages/tokens/src/z-index.css", "packages/tokens/src/sizing.css", "packages/core/src/base.css", "packages/core/src/reset.css"],
+      "guidance": [
+        "Use semantic --vds-z-* roles. Overlay=1300 and modal=1400 sit below dropdown=1500 and popover=1600; toast=1700 and tooltip=1800 remain above these roles.",
+        "Global focus-visible uses the shared ring color and 2px width/offset roles. A component may draw an equivalent shadow or inset indicator where its geometry requires it.",
+        "Core styles native scrollbars and reveals desktop fine-pointer thumbs on hover/focus-within; the ScrollArea component owns its separate activity-driven smart hiding.",
+        "Use the accessible hiding helpers for supplementary screen-reader content and keep keyboard-focusable content reachable."
+      ],
+      "pitfalls": [
+        "A high z-index cannot escape its stacking context. Test overlays opened from inside modals, and use the component's portal contract.",
+        "Never remove a focus outline without preserving a visible, unclipped replacement.",
+        "Native scroll styling alone does not create an independently constrained scroll viewport or implement ScrollArea's activity state."
+      ]
+    },
+    {
+      "id": "js-utils",
+      "name": "JavaScript and React utilities",
+      "description": "Shared class, ref, native-form, direction and keyboard behavior with explicit contracts.",
+      "sourcePaths": ["packages/utils/src/index.ts", "packages/utils/src/cn.ts", "packages/utils/src/useComposedRefs.ts", "packages/utils/src/useFormReset.ts", "packages/utils/src/useDirection.ts", "packages/utils/src/useHotkey.ts", "packages/utils/src/keyboard.ts", "packages/utils/src/keyboardPlatform.ts"],
+      "guidance": [
+        "Import helpers from '@virtari-packages/utils'. cn joins truthy string arguments; useComposedRefs combines object/callback refs and supports React 19 callback cleanup.",
+        "useFormReset(ref, onReset, formId?) associates with the nearest form or an explicit document form ID and runs after cancellable native reset listeners via a microtask.",
+        "useDirection(ref?) initially returns ltr for stable server markup, reads computed client direction, then observes dir changes on the target and its current ancestors.",
+        "Bind platform-neutral shortcuts with useHotkey('mod+k', handler). Use formatCombo for visible keys, ariaKeyShortcuts for the bound action and shortcutLabel for spoken labels from the same combination.",
+        "mod resolves to Meta on detected Apple hardware and Control elsewhere. useKeyboardPlatform provides hydration-stable display; getKeyboardPlatform is the direct runtime lookup.",
+        "useHotkey defaults enabled and preventDefault to true, allows neither editable targets nor repeated keydown by default, and ignores already prevented and IME composition events. Scope target and opt into allowInInputs or allowRepeat only deliberately."
+      ],
+      "pitfalls": [
+        "cn is not clsx object syntax or tailwind-merge. It does not deduplicate or resolve conflicting classes.",
+        "useDirection observes dir attributes, not arbitrary class/style/media changes or reparenting. Set dir explicitly for live locale changes.",
+        "A displayed Kbd does not bind a shortcut. Bind behavior and expose the matching accessible shortcut on the action.",
+        "Hotkey grammar splits on '+', has one final key and exact modifier matching; do not promise arbitrary key sequences or chord support.",
+        "Calling formatCombo directly during server/client initial rendering can produce different platform text. Prefer useKeyboardPlatform when hydration consistency matters."
+      ]
+    }
+  ],
+  "packages": [
+    {"id":"tokens","category":"foundations","description":"CSS design tokens with theme, surface, radius, spacing, layout, typography and motion roles.","guidance":["Load '@virtari-packages/tokens' once, or use only package.json-listed granular exports with their dependencies.","Retrieve exact token names, values and scopes from source-derived inventories; use semantic/component roles for application intent.","Validate theme/style/tone/radius combinations on the actual composed host."],"pitfalls":["CSS package: no React named exports and no /styles entry.","Root import loads external Google Fonts CSS.","Some alias families resolve only at their declaration scope; do not assume every low-level descendant override propagates transitively."],"related":["core","utilities","react-layout","react-text"]},
+    {"id":"core","category":"foundations","description":"Global CSS reset, cascade ordering, base typography, focus, native scrolling and visually hidden helpers.","guidance":["Import '@virtari-packages/core' before token CSS to establish layer order first; the only public export is the root stylesheet.","Core declares reset, tokens, base, components, design-system and utilities layer order.","Preserve focus visibility, forced-colors support and native input semantics when adding application overrides."],"pitfalls":["Generic README examples for named JS imports and /styles do not match current package exports.","The tokens dependency does not automatically load token CSS.","Core does not include the full generated vds-u-* utility catalog."],"related":["tokens","utilities","react-scroll-area","react-visually-hidden"]},
+    {"id":"utilities","category":"utilities","description":"Finite generated vds-u-* CSS classes for layout, spacing, sizing, positioning, overflow and z-index.","guidance":["Import '@virtari-packages/utilities' with token CSS; there is no separate /styles entry.","Use exact catalog entries and breakpoint prefixes, such as vds-u-pi-4 and md:vds-u-grid-cols-3.","The generator at packages/utilities/scripts/generate.mjs is the authoritative class source; rebuild rather than editing dist."],"pitfalls":["Do not invent Tailwind syntax, color utilities, arbitrary values or state variants.","Logical mb/pb means both block edges, not physical bottom.","Only the documented scale subsets are generated for gap and sizing."],"related":["tokens","core","react-layout","utils"]},
+    {"id":"utils","category":"utilities","description":"JavaScript and React helpers for class joining, refs, native reset, direction and platform-aware shortcuts.","guidance":["Import named helpers from '@virtari-packages/utils'; it has no stylesheet.","Use the same mod-based shortcut string for binding, visual keys and spoken/ARIA labels.","Keep native form cancellation and React ref cleanup contracts intact when composing controls."],"pitfalls":["cn accepts truthy strings, not object syntax or conflict-merging semantics.","Direction updates are driven by dir attribute observation.","Shortcut presentation does not itself register a key handler."],"related":["react-kbd","react-command","react-form","react-layout","utilities"]},
+    {"id":"react-layout","category":"layout","description":"Semantic page regions and composable Stack, Cluster, Grid, split Sidebar and Center arrangements.","guidance":["Import components from '@virtari-packages/react-layout' and CSS from '@virtari-packages/react-layout/styles'.","Choose Main/Section/Container for page structure and Stack/Cluster/Grid or Row/Col for internal arrangements.","Use the actual responsive span and semantic gap props; scope layout token overrides for deliberate page requirements."],"pitfalls":["The layout Sidebar is a two-child split, not react-sidebar app navigation.","Avoid duplicate visible Main landmarks.","Recursive Stack margins and visual ordering can conflict with child component geometry or reading order."],"related":["tokens","utilities","utils","react-sidebar","react-header"]}
+  ]
+}

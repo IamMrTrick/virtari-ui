@@ -1,0 +1,277 @@
+{
+  "packages": [
+    {
+      "id": "react-alert",
+      "category": "feedback",
+      "description": "Compose inline information, success, warning and error messages with icon, title, description and optional dismissal.",
+      "guidance": [
+        "Compose AlertIcon and AlertContent inside Alert, with AlertTitle and AlertDescription inside the content. Add AlertClose only when the consumer implements dismissal state.",
+        "Use variant for intent (info, success, warning, danger), appearance for fill (soft, solid, outline), and size sm/md/lg. Defaults are info, soft and md.",
+        "The default role is alert for danger and status for other variants. Override role deliberately when the surrounding live-region behavior requires it; avoid duplicate announcements.",
+        "AlertTitle renders h5. Check the surrounding heading hierarchy. Localize AlertClose aria-label, whose default is Dismiss. Use the alert and action radius tokens rather than one shared raw radius."
+      ],
+      "pitfalls": [
+        "AlertClose only renders a button; it does not remove or hide the Alert automatically.",
+        "AlertIcon is aria-hidden by default. Put essential meaning in visible title or description text, not only in the icon."
+      ],
+      "related": ["react-button", "react-icons", "react-text"]
+    },
+    {
+      "id": "react-avatar",
+      "category": "display",
+      "description": "Show an image or required text fallback with stable optional identity colors and five sizes.",
+      "guidance": [
+        "Provide fallback explicitly; it is rendered as supplied, not derived from a name. Supply an appropriate alt for the image, or an empty alt when adjacent text already identifies the person.",
+        "Use size xs/sm/md/lg/xl. The avatar remains circular through shape themes because it represents identity rather than a rectangular surface.",
+        "Use color=auto with a stable colorKey such as an application user ID for deterministic assignment to chart slots 1–8. Without colorKey the hash uses fallback. Explicit colors are neutral or strings 1–8.",
+        "The package composes AvatarPrimitive Root, Image and Fallback internally. Pass src and root attributes to Avatar rather than attempting to supply custom image children."
+      ],
+      "pitfalls": [
+        "Automatic color assignment has only eight buckets and does not guarantee a unique color per user.",
+        "A short fallback can collide across users; choose a stable colorKey when color consistency matters."
+      ],
+      "related": ["react-chip", "react-badge", "tokens"]
+    },
+    {
+      "id": "react-badge",
+      "category": "display",
+      "description": "Show compact status labels, counts, presence dots and removable tags with independent intent and appearance.",
+      "guidance": [
+        "Use color for primary/success/warning/danger/info/accent/neutral intent and variant for soft/solid/outline/subtle/soft-outline appearance. Default is primary soft at size md; sizes are xs/sm/md/lg.",
+        "Use leftSection and rightSection for controlled icon spacing. dot replaces leftSection; onRemove replaces rightSection. dotOnly suppresses label and both sections.",
+        "Use shape=pill for the badge role or shape=square for the navigation-item radius role. Square does not mean a guaranteed zero radius; it follows the active theme.",
+        "Give removable badges a contextual, localized removeLabel. The remove button stops click propagation before invoking onRemove. Provide an accessible name or adjacent explanation for meaningful dot-only status."
+      ],
+      "pitfalls": [
+        "Deprecated variants default/secondary map to neutral soft, and destructive maps to danger soft; use the explicit current color and variant API.",
+        "An onClick on the default span enables visual interaction styling but does not provide button keyboard semantics. Use asChild with a real interactive element when appropriate, and never nest the remove button inside another button."
+      ],
+      "related": ["react-chip", "react-button", "react-icons"]
+    },
+    {
+      "id": "react-card",
+      "category": "display",
+      "description": "Compose themed surfaces with separate header, content and footer spacing and geometry-aware nested card radii.",
+      "guidance": [
+        "Compose CardHeader, CardTitle, CardDescription, CardContent and CardFooter. The root is the surface shell; use section slots for padding rather than adding duplicate root padding.",
+        "Choose surface/outline/soft/ghost variants and sm/md/lg sizes. Defaults are surface and md. Surface styling and geometry follow shared tokens and the active surface/radius theme.",
+        "Use Card for nested cards. It measures the nearest ancestor .vds-card and the actual inset, observes relevant geometry/theme changes, and computes a child radius capped by its parent with a small-radius floor.",
+        "CardTitle is h3. Keep semantic heading order correct in the surrounding page. Use links or buttons within the card for actions."
+      ],
+      "pitfalls": [
+        "interactive changes presentation only; Card remains a div without automatic keyboard activation, navigation, role or tab stop.",
+        "Do not manually set --card-parent-radius or --card-nested-radius; these are maintained by the nested-card hook. The hook tracks Card ancestors, not every arbitrary rounded container."
+      ],
+      "related": ["react-layout", "react-text", "tokens"]
+    },
+    {
+      "id": "react-chip",
+      "category": "display",
+      "description": "Compose compact labels, identity chips and removable selections using explicit icon, label and remove slots.",
+      "guidance": [
+        "Compose ChipIcon, ChipLabel and optional ChipRemove within Chip. Use the slots to preserve tokenized spacing, centered alignment and circular icon/remove geometry.",
+        "Chip variant is intent (default, primary, success, warning, danger, info); appearance is soft/solid/outline. Sizes are sm/md/lg; defaults are default, soft and md.",
+        "Implement removal state in ChipRemove onClick and localize its aria-label, whose default is Remove. Chip does not manage selection or dismissal state.",
+        "Use asChild with one suitable semantic child for whole-chip interactions. Keep removal and whole-chip actions as valid separate interactive controls."
+      ],
+      "pitfalls": [
+        "interactive only sets a data attribute. disabled sets aria-disabled but does not suppress handlers or automatically disable ChipRemove; implement the actual behavior for your semantic control.",
+        "Chip and Badge use different prop vocabulary: Chip variant is intent, while Badge color is intent. Do not copy Badge variant names into Chip."
+      ],
+      "related": ["react-badge", "react-avatar", "react-toggle", "react-tag-input"]
+    },
+    {
+      "id": "react-code",
+      "category": "display",
+      "description": "Render inline code, read-only code blocks and controlled CodeMirror editors with Virtari styling.",
+      "guidance": [
+        "Use InlineCode for short code within prose, CodeBlock code=string for read-only examples, and CodeEditor value/onValueChange for editable code. CodeEditor is controlled and its ref points to the wrapper div.",
+        "CodeBlock and CodeEditor share card/minimal/embedded variants and sm/md/lg sizes. Use embedded for a flush region with no radius; card and minimal follow the code radius contract.",
+        "CodeBlock highlightLines uses one-based line numbers; diff=unified colors lines beginning with plus or minus without computing a diff. wrap controls long-line wrapping; maxHeight accepts pixels as a number or a CSS string.",
+        "For CodeEditor use minLines/maxLines, tabSize and insertSpaces for editing geometry; append CodeMirror extensions via extensions when needed. Wrapper HTML attributes are not automatically attributes of the internal editor; provide internal labeling through an EditorView.contentAttributes extension when necessary.",
+        "Read KNOWN_LANGUAGES and resolveLanguage for actual language support. Unknown languages render as plain text; bash/shell/sh currently resolve to empty extensions. CodeBlock copyable defaults true and copies the original code string."
+      ],
+      "pitfalls": [
+        "CodeEditor is a CodeMirror contenteditable editor, not a native textarea or a successful HTML form control. Manage submission and accessible labeling explicitly.",
+        "Do not assume every accepted language string has syntax highlighting. CodeBlock does not expose an extensions prop; only CodeEditor does.",
+        "The copy button uses Clipboard APIs through react-copy-button; clipboard availability and permissions remain host-browser concerns."
+      ],
+      "related": ["react-copy-button", "react-textarea", "react-card", "react-text"]
+    },
+    {
+      "id": "react-empty-state",
+      "category": "feedback",
+      "description": "Compose empty or no-results views with a decorative illustration, clear title, description and recovery actions.",
+      "guidance": [
+        "Compose EmptyStateIcon, EmptyStateTitle, EmptyStateDescription and EmptyStateActions. Use real Button components for the actions and keep the explanation specific to the current state.",
+        "Choose size sm/md/lg and orientation vertical/horizontal. Defaults are md and vertical.",
+        "EmptyStateTitle renders h3, the description renders p, and the icon slot is aria-hidden. Put essential information in text and verify the surrounding heading hierarchy.",
+        "The root is a plain div. If results change dynamically and need announcement, explicitly choose an appropriate status region in the consuming screen."
+      ],
+      "pitfalls": [
+        "EmptyState does not fetch data, detect emptiness, expose a built-in status role or wire recovery actions.",
+        "Avoid placing essential labels or interactive controls inside the aria-hidden icon slot."
+      ],
+      "related": ["react-button", "react-icons", "react-text"]
+    },
+    {
+      "id": "react-flag",
+      "category": "display",
+      "description": "Render supported country and region SVG flags through static named imports or lazy code-based selection.",
+      "guidance": [
+        "Use a named export such as FlagIr for a known flag, or Flag code=CountryCode for runtime selection. Consult countryCodes and hasFlag before accepting untrusted or free-form code values.",
+        "Codes are the literal generated manifest keys, including lowercase country codes and selected regions. Flag uses a cached lazy loader and Suspense; fallback customizes the loading placeholder.",
+        "Sizes are 2xs/xs/sm/md/lg/xl/2xl or a numeric inline size. rounded=true uses the theme-aware small flag radius, false gives hard corners, and full gives the circular treatment.",
+        "Supply title when the flag conveys information independently. Without title, generated flags are decorative. Do not use a flag as the only visible description of a language choice."
+      ],
+      "pitfalls": [
+        "An unsupported runtime code is not automatically converted into a fallback flag; fallback is the Suspense loading node, not an invalid-code recovery API.",
+        "Do not equate every country flag with one language. Use react-language-picker or explicit localized text for language selection."
+      ],
+      "related": ["react-language-picker", "react-phone-input", "react-icons"]
+    },
+    {
+      "id": "react-icons",
+      "category": "display",
+      "description": "Use the exported Tabler icon set through a Virtari wrapper with token sizes, semantic colors and accessible labeling.",
+      "guidance": [
+        "Import Icon and a named Tabler component from this package, then pass the component through icon, for example Icon icon={IconSearch}. Use xs/sm/md/lg/xl sizes for shared sizing or a number for an explicit size.",
+        "IconProvider supplies size, color and stroke defaults. An explicit Icon prop wins; nested providers replace the context value rather than merging each property with their parent.",
+        "Use semantic color current/muted/subtle/primary/secondary/success/warning/danger/info. secondary intentionally uses the subtle icon role. Icons inherit currentColor by default.",
+        "Icons without label are aria-hidden and not focusable. Supply label for a meaningful standalone image; for icon-only buttons, name the button and normally leave the icon decorative."
+      ],
+      "pitfalls": [
+        "Although IconColor permits arbitrary strings, the wrapper only emits data-color and CSS recognizes its named colors. Use style color or a supported semantic color for a custom CSS color.",
+        "Direct Tabler exports do not acquire the Virtari wrapper class, token size or wrapper accessibility defaults automatically."
+      ],
+      "related": ["react-button", "react-input", "react-text", "tokens"]
+    },
+    {
+      "id": "react-kbd",
+      "category": "display",
+      "description": "Display semantic keycaps and platform-aware keyboard shortcut labels without binding keyboard events.",
+      "guidance": [
+        "Use Kbd for literal key text and KbdShortcut combo=mod+k for a shortcut using the same grammar as useHotkey. KbdShortcut detects the platform unless platform is explicitly provided.",
+        "Use platform=mac or platform=other only for a known remote platform or demonstration. The display uses Mac symbols or other-platform names with appropriate separators, and a hidden spoken label.",
+        "Keep the shortcut presentation left-to-right within RTL UI. Use the dedicated --vds-radius-kbd role for keycaps; they are intentionally smaller and less rounded than a button or segmented rail.",
+        "Pair display with utils useHotkey for actual registration and ariaKeyShortcuts on the interactive control where appropriate. Customize aria-label on KbdShortcut for a localized spoken description."
+      ],
+      "pitfalls": [
+        "KbdShortcut is display only. Rendering it does not register a shortcut or open a command dialog.",
+        "Do not hardcode the Command symbol for every OS or substitute raw platform sniffing in each screen; use the shared utils platform contract."
+      ],
+      "related": ["utils", "react-command", "react-button"]
+    },
+    {
+      "id": "react-progress",
+      "category": "feedback",
+      "description": "Show determinate or indeterminate progress with tokenized tracks, optional percentages and restrained animation.",
+      "guidance": [
+        "For determinate progress pass a finite percentage value in 0–100 with the default maximum and a meaningful aria-label or aria-labelledby. Omit value or pass null for the primitive indeterminate state.",
+        "Use color primary/success/warning/danger/info/accent/contrast or a CSS color string. Unlike Icon, custom color strings are applied as --progress-fill-color.",
+        "Choose solid/striped/gradient appearance and xs/sm/md/lg/xl thickness. animated=true selects pulse; explicit pulse or glow select the animation. The striped variant animates independently of the animated prop.",
+        "showLabel displays a rounded percentage only when a value exists, and CSS hides that label at xs/sm/md sizes. Use external text when the value must remain visible at compact sizes."
+      ],
+      "pitfalls": [
+        "The inherited primitive max prop currently does not normalize the visual width or label: the wrapper writes value directly as a percentage. Normalize external ranges to 0–100 before passing value and leave max at its default.",
+        "animated=false is not a global motion-off switch: striped and indeterminate styles still animate. The package CSS has no local reduced-motion override; do not claim it independently enforces reduced-motion preferences."
+      ],
+      "related": ["react-spinner", "react-text", "tokens"]
+    },
+    {
+      "id": "react-separator",
+      "category": "display",
+      "description": "Separate adjacent regions with decorative or semantic horizontal and vertical rules and optional horizontal labels.",
+      "guidance": [
+        "Separator defaults to horizontal and decorative=true. Set decorative=false when a structural separator should be exposed to assistive technology.",
+        "Use orientation=vertical in a container with an established height. label is rendered only for horizontal separators.",
+        "A labeled horizontal separator renders a wrapper div with two decorative line spans and the label between them; keep the label short and meaningful."
+      ],
+      "pitfalls": [
+        "The labeled horizontal branch currently does not spread remaining HTML props onto its wrapper, so id, style, event handlers and extra ARIA attributes passed there are not forwarded. Use an outer wrapper if those attributes are required.",
+        "A label does not turn the separator into a button, heading or navigation control."
+      ],
+      "related": ["react-layout", "react-text"]
+    },
+    {
+      "id": "react-skeleton",
+      "category": "feedback",
+      "description": "Reserve loading geometry using rectangular or circular placeholders sized to the forthcoming content.",
+      "guidance": [
+        "Set width and height to CSS strings or numbers interpreted as pixels. With neither specified the CSS default is full inline width and 1rem block height.",
+        "Use circle with equal width and height for an avatar placeholder. The regular skeleton follows --vds-radius-md and circle uses the full-radius token.",
+        "Treat skeleton shapes as decorative and place aria-busy on the region being updated. Supply one useful loading announcement separately if needed rather than repeating a status label on every skeleton.",
+        "Reserve dimensions close to the final content to reduce layout movement when loading finishes."
+      ],
+      "pitfalls": [
+        "Skeleton is a div and does not set aria-hidden, aria-busy or a status role automatically.",
+        "Its CSS includes an infinite opacity pulse and no local reduced-motion rule. A consumer must not assume this component alone handles the preference."
+      ],
+      "related": ["react-avatar", "react-card", "react-spinner", "react-visually-hidden"]
+    },
+    {
+      "id": "react-spinner",
+      "category": "feedback",
+      "description": "Display accessible indeterminate activity with six visual variants, token sizes and localized status text.",
+      "guidance": [
+        "Use variant ring/segments/dots/bars/ripple/orbit and size xs/sm/md/lg/xl. Defaults are ring, md and primary.",
+        "Use color primary/success/warning/danger/info/accent/neutral/current. current inherits surrounding color, useful inside a correctly labeled button.",
+        "The wrapper is a span with role=status and aria-label from label, defaulting to Loading. Localize label and avoid multiple competing live status regions for one operation.",
+        "Use speed slow/normal/fast when a specific rhythm is needed. The component includes a prefers-reduced-motion rule; retain it when customizing animation."
+      ],
+      "pitfalls": [
+        "Spinner communicates indeterminate activity, not a percentage. Use Progress for measurable completion.",
+        "Rendering Spinner does not disable its surrounding button or set aria-busy on a form; the consuming control owns those states."
+      ],
+      "related": ["react-button", "react-progress", "react-visually-hidden"]
+    },
+    {
+      "id": "react-text",
+      "category": "display",
+      "description": "Apply shared typography while keeping text element semantics and heading levels separate from visual size.",
+      "guidance": [
+        "Text defaults to a p at size 3 and supports as=p/span/div/label/strong/em or asChild. Heading defaults to h2; set level for semantic hierarchy and size independently for visual hierarchy.",
+        "Text and Heading sizes are strings 1 through 9, not sm/md/lg. Heading default sizes for levels 1–6 are 8/7/6/5/4/3.",
+        "Use normal/medium/semibold/bold weights and semantic tones. Use align=start/end for directional alignment and choose leading and wrapping according to the actual content.",
+        "truncate and nowrap may hide information visually; provide another available way to read essential full content. Use asChild with one child that accepts the forwarded props and preserves valid HTML semantics."
+      ],
+      "pitfalls": [
+        "Changing Heading size does not change its semantic heading level. Do not choose h1–h6 merely to obtain a font size.",
+        "Text and Heading do not have identical leading values: Text additionally supports loose; Heading has tracking. Use react-label for form labels when native label-specific props are needed."
+      ],
+      "related": ["react-label", "react-layout", "tokens"]
+    },
+    {
+      "id": "react-timeline",
+      "category": "display",
+      "description": "Compose ordered event histories with indicators, connectors, status tones, timestamps and optional content cards.",
+      "guidance": [
+        "Timeline renders an ol and TimelineItem renders li. Compose indicator, connector, content and optional opposite content; use TimelineTitle, Description, Meta, Media, Badge and Time within content as needed.",
+        "Use orientation vertical/horizontal, align start/center/alternate, connector gap/touch, density compact/comfortable/spacious and size sm/md/lg. Defaults are vertical, start, gap, comfortable and md.",
+        "Item status complete/active/pending/error/warning selects a default tone of success/primary/neutral/danger/warning respectively; tone explicitly overrides that mapping. active also sets aria-current=step.",
+        "Choose variant default/compact/card/minimal on the root and effect none/pulse/glow/ping/spotlight on individual items. The CSS includes reduced-motion handling. TimelineCard is a styled slot with the card radius token, not the geometry-observing Card component.",
+        "Override the root default aria-label=Timeline with localized contextual text. Supply machine-readable dateTime through TimelineTime, and verify the h3 TimelineTitle fits the page heading hierarchy."
+      ],
+      "pitfalls": [
+        "interactive on TimelineItem only marks styling. It does not create a button, tab stop or keyboard behavior; place semantic controls inside content.",
+        "A timeline is not a managed Stepper: it does not calculate status, navigation, current item or timestamps from a data model."
+      ],
+      "related": ["react-stepper", "react-card", "react-badge", "react-text"]
+    },
+    {
+      "id": "react-visually-hidden",
+      "category": "display",
+      "description": "Keep short accessible text in the accessibility tree while visually hiding it with the shared core utility.",
+      "guidance": [
+        "Use VisuallyHidden around supplementary labels for icon controls or equivalent text for a visual indicator. It renders a span with class vds-visually-hidden.",
+        "Load the shared core stylesheet: the hiding rule lives in packages/core/src/utilities.css. This React package has no standalone styles export.",
+        "Use asChild with a single compatible child when a different semantic element is needed, and ensure the content remains appropriate for screen-reader reading order."
+      ],
+      "pitfalls": [
+        "Do not add aria-hidden or display:none to text that is intended to provide the accessible name; those remove it from assistive technology.",
+        "This is not a focus-revealing skip-link primitive. Do not hide ordinary keyboard-focusable controls with it without implementing an appropriate visible focus treatment."
+      ],
+      "related": ["core", "react-icons", "react-button", "react-kbd"]
+    }
+  ]
+}

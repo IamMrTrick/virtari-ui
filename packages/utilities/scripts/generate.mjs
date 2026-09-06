@@ -382,4 +382,7 @@ function main() {
   );
 }
 
-main();
+// Shared by the AI catalog: inventory the exact rules used by the CSS build.
+export { rules, BREAKPOINTS };
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

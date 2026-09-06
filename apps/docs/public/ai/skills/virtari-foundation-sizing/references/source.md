@@ -1,0 +1,161 @@
+## packages/tokens/src/sizing.css
+
+```css
+@layer tokens {
+  :root {
+    /*
+     * ── Component Size Scale ──
+     * Shared height ramp for interactive components (buttons, inputs, selects, etc.)
+     * Change these to resize all components globally.
+     *
+     * Size  Height  Pixels  WCAG AA (24px)  WCAG AAA (44px)  Apple HIG  Google MD
+     * ───── ─────── ─────── ─────────────── ──────────────── ────────── ─────────
+     * 2xs   1.5rem  24px    ⚠ minimum        ✗                ✗          ✗
+     * xs    1.75rem 28px    ✓                ✗                ✗          ✗
+     * sm    2rem    32px    ✓                ✗                ✗          ✗
+     * md    2.25rem 36px    ✓                ✗                ✗          ✗
+     * lg    2.5rem  40px    ✓                ✗                ✗          ✗
+     * xl    2.75rem 44px    ✓                ✓                ✓ (44pt)   ✗
+     * 2xl   3.25rem 52px    ✓                ✓                ✓          ✓ (48dp)
+     * 3xl   4rem    64px    ✓                ✓                ✓          ✓
+     */
+    --vds-size-2xs: 1.5rem;
+    --vds-size-xs: 1.75rem;
+    --vds-size-sm: 2rem;
+    --vds-size-md: 2.25rem;
+    --vds-size-lg: 2.5rem;
+    --vds-size-xl: 2.75rem;
+    --vds-size-2xl: 3.25rem;
+    --vds-size-3xl: 4rem;
+
+    /*
+     * ── Surface Width Ramp ──
+     * The inline-size of anything that floats over the page: dialog,
+     * alert-dialog, drawer, sheet, popover, dropdown, command palette,
+     * toast.
+     *
+     * These are widths, not gaps. NEVER reach for --vds-space-* to set an
+     * inline-size — `--vds-space-96` happens to equal 24rem today, and the
+     * day someone retunes the spacing ramp every dialog in the system
+     * resizes. The two scales answer different questions and are allowed
+     * to move independently.
+     *
+     * Size  Width  Pixels  Typical use
+     * ───── ────── ─────── ─────────────────────────────────────────────
+     * xs    20rem  320px   confirm prompt, compact popover
+     * sm    24rem  384px   single-field dialog, toast, dropdown
+     * md    32rem  512px   default dialog / drawer — start here
+     * lg    48rem  768px   form with two columns, command palette
+     * xl    64rem  1024px  detail panel, side-by-side editor
+     * 2xl   80rem  1280px  full-bleed workspace overlay
+     *
+     * Pair with `max-inline-size: 100%` (or `min()`) so a fixed width
+     * never overflows a narrow viewport.
+     */
+    --vds-surface-width-xs:  20rem;
+    --vds-surface-width-sm:  24rem;
+    --vds-surface-width-md:  32rem;
+    --vds-surface-width-lg:  48rem;
+    --vds-surface-width-xl:  64rem;
+    --vds-surface-width-2xl: 80rem;
+
+    /*
+     * ── Focus Ring Geometry ──
+     * The colour lives in colors/semantic/interactive.css
+     * (--vds-color-ring); the shape lives here.
+     *
+     * One width and one offset for the whole system. Forty component CSS
+     * files had been restating the same `2px` literal, which is how a
+     * design system ends up with 2px rings on buttons and 1px rings on
+     * the inputs beside them the first time someone retunes one of them.
+     * A focus indicator is a wayfinding device: it has to look like the
+     * same object everywhere, or it stops reading as "you are here".
+     *
+     * 2px fully enclosing the control also meets the area half of WCAG
+     * 2.2 SC 2.4.13 (Focus Appearance); the contrast half is on
+     * --vds-color-ring against whatever the ring sits between.
+     *
+     *   outline: var(--vds-focus-ring-width) solid var(--vds-color-ring);
+     *   outline-offset: var(--vds-focus-ring-offset);
+     *
+     * Use a negative offset (`calc(var(--vds-focus-ring-offset) * -1)`)
+     * for a control clipped by an overflow container, so the ring draws
+     * inside the box instead of being cut off.
+     */
+    --vds-focus-ring-width:  2px;
+    --vds-focus-ring-offset: 2px;
+  }
+}
+
+```
+
+## packages/tokens/src/layout/primitives.css
+
+```css
+@layer tokens {
+  :root {
+    /*
+     * ── Primitive Layout Scales ──
+     * Raw values. Components should not consume these directly —
+     * use the semantic tokens in semantic.css or a component token
+     * from components.css instead.
+     */
+
+    /* Container (content max-width) ramp */
+    --vds-container-width-xs:    20rem;   /* 320px  — tight form */
+    --vds-container-width-sm:    40rem;   /* 640px  — short reading */
+    --vds-container-width-md:    48rem;   /* 768px  — narrow article */
+    --vds-container-width-lg:    64rem;   /* 1024px — default content */
+    --vds-container-width-xl:    80rem;   /* 1280px — wide content */
+    --vds-container-width-2xl:   96rem;   /* 1536px — max app canvas */
+    --vds-container-width-prose: 65ch;    /* Optimal reading measure */
+    --vds-container-width-full:  100%;
+
+    /* Section block-padding ramp (vertical rhythm) */
+    --vds-section-padding-none: 0;
+    --vds-section-padding-xs:   var(--vds-space-4);   /* 1rem   */
+    --vds-section-padding-sm:   var(--vds-space-8);   /* 2rem   */
+    --vds-section-padding-md:   var(--vds-space-12);  /* 3rem   */
+    --vds-section-padding-lg:   var(--vds-space-16);  /* 4rem   */
+    --vds-section-padding-xl:   var(--vds-space-24);  /* 6rem   */
+    --vds-section-padding-2xl:  var(--vds-space-32);  /* 8rem   */
+    --vds-section-padding-3xl:  var(--vds-space-40);  /* 10rem  */
+
+    /* Section inline-gutter ramp (horizontal breathing room inside container) */
+    --vds-section-gutter-none: 0;
+    --vds-section-gutter-xs:   var(--vds-space-3);    /* 0.75rem */
+    --vds-section-gutter-sm:   var(--vds-space-4);    /* 1rem    */
+    --vds-section-gutter-md:   var(--vds-space-6);    /* 1.5rem  */
+    --vds-section-gutter-lg:   var(--vds-space-8);    /* 2rem    */
+    --vds-section-gutter-xl:   var(--vds-space-12);   /* 3rem    */
+
+    /* Row gap ramp (gap between columns) */
+    --vds-row-gap-none: 0;
+    --vds-row-gap-xs:   var(--vds-space-2);   /* 0.5rem  */
+    --vds-row-gap-sm:   var(--vds-space-3);   /* 0.75rem */
+    --vds-row-gap-md:   var(--vds-space-4);   /* 1rem    */
+    --vds-row-gap-lg:   var(--vds-space-6);   /* 1.5rem  */
+    --vds-row-gap-xl:   var(--vds-space-8);   /* 2rem    */
+    --vds-row-gap-2xl:  var(--vds-space-12);  /* 3rem    */
+
+    /* Column-count constants — divisors that factor into 12 for clean spans */
+    --vds-row-cols-1:  1;
+    --vds-row-cols-2:  2;
+    --vds-row-cols-3:  3;
+    --vds-row-cols-4:  4;
+    --vds-row-cols-6:  6;
+    --vds-row-cols-8:  8;
+    --vds-row-cols-12: 12;
+
+    /* Sidebar width ramp — expanded state. Aligned with common app chrome widths. */
+    --vds-sidebar-width-sm:   12rem;   /* 192px — compact, icon+short-label */
+    --vds-sidebar-width-md:   16rem;   /* 256px — default app chrome       */
+    --vds-sidebar-width-lg:   20rem;   /* 320px — comfortable, nested nav  */
+    --vds-sidebar-width-xl:   24rem;   /* 384px — wide, file-tree style    */
+
+    /* Sidebar rail (collapsed icon-only) — sized to fit a 1.75rem icon + comfortable hit target */
+    --vds-sidebar-rail-width: 3.5rem;  /* 56px */
+  }
+}
+
+```

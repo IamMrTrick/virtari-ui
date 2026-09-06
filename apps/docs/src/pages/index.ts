@@ -53,6 +53,8 @@ export { DataTableProductsPage } from "./DataTableProductsPage";
 export { DataTableOrdersPage } from "./DataTableOrdersPage";
 export { TablePage } from "./TablePage";
 export { UtilitiesPage } from "./UtilitiesPage";
+export { TokensReferencePage } from "./TokensReferencePage";
+export { AiIntegrationPage } from "./AiIntegrationPage";
 export { RTLPage } from "./RTLPage";
 export { IconsPage } from "./IconsPage";
 export { HeadingPage } from "./HeadingPage";
@@ -75,6 +77,8 @@ export { CarouselPage } from "./CarouselPage";
 export { FlowPage } from "./FlowPage";
 
 export const PAGE_META: Record<string, { title: string; description: string }> = {
+  "tokens-reference": { title: "Token reference", description: "Every source variable, expression and scoped definition, searchable by category." },
+  "ai-integration": { title: "AI integration", description: "Focused Agent Skills, a local MCP server and source-backed examples." },
   guidelines: { title: "Design guidelines", description: "Practical patterns for understandable forms, clear actions and predictable keyboard use." },
   brand: { title: "Brand", description: "Virtari marks, app icons and loading states." },
   introduction: { title: "Introduction", description: "Overview of the Virtari Design System." },

@@ -1,4 +1,6 @@
 {
+  "tokens-reference": { "title": "Token reference", "description": "Every source variable, expression and scoped definition, searchable by category." },
+  "ai-integration": { "title": "AI integration", "description": "Focused Agent Skills, a local MCP server and source-backed examples." },
   "introduction": {
     "title": "Introduction",
     "description": "Overview of the Virtari Design System."

@@ -1,0 +1,134 @@
+{
+  "packages": [
+    {
+      "id": "react-carousel",
+      "category": "data",
+      "description": "Swiper-backed carousel with Virtari navigation, pagination, effects and horizontal or vertical tracks.",
+      "guidance": [
+        "Compose Carousel with CarouselSlide children. The ref is CarouselRef/SwiperRef: access the engine through ref.current.swiper or onSwiper, not a DOM-element ref.",
+        "Import the package /styles entry; it includes Carousel.tokens.css and the minimal Swiper track CSS. Effect-specific Swiper CSS is still needed for effects such as fade, cube or coverflow. Import button styles for the navigation controls in applications that do not already load them globally.",
+        "Use orientation='vertical' with a definite container block size. The wrapper fills its parent; an unconstrained height does not define a usable vertical viewport.",
+        "Navigation is a boolean and defaults to false; enable it deliberately and use prevIcon/nextIcon plus localized prevLabel/nextLabel to customize its controls. Pagination accepts a boolean or Swiper PaginationOptions; paginationLook and paginationPosition only change its appearance.",
+        "The wrapper selects Swiper modules from feature props. Use effect, autoplay, keyboard, mousewheel, freeMode, thumbs, grid, virtual and zoom rather than a modules prop, which is omitted from the public API.",
+        "Use rtl for explicit direction and verify the inherited direction when composing in scoped RTL layouts. color affects navigation and pagination chrome; it does not recolor slide content. variant and shape are carousel-specific axes, not the Button variant API."
+      ],
+      "pitfalls": [
+        "Reduced-motion CSS shortens transitions but does not stop the Swiper autoplay timer. Applications enabling autoplay must also provide pause behavior and respect the user's motion preference.",
+        "The forwarded Swiper props are spread after the wrapper's onBeforeInit. Supplying onBeforeInit replaces the internal callback that binds navigation refs; preserve that wiring or avoid replacing it.",
+        "The wrapper className is applied to its outer div while most other inherited Swiper attributes are forwarded to the inner Swiper. Do not assume the ref, className and style target the same element.",
+        "Swiper integration is interactive browser behavior. Validate actual hydration, keyboard focus and effect CSS in the consuming framework; the package does not provide a separate SSR adapter."
+      ],
+      "related": ["react-button", "react-icons", "react-card", "tokens"]
+    },
+    {
+      "id": "react-data-table",
+      "category": "data",
+      "description": "Composable TanStack table with controlled state, server requests, virtualization, editing, filters, alternate views and optional drag-and-drop.",
+      "guidance": [
+        "DataTable is a namespace, not a renderable root component: use DataTable.Root, ScrollArea, Table, Header and Body, or their individually exported equivalents. Root accepts either columns plus data, or an external TanStack table instance; these branches are mutually exclusive.",
+        "Keep columns and data references stable when they have not changed. Import ColumnDef, createColumnHelper and flexRender from the package. Customize the actual column definitions and cell renderers instead of rebuilding table infrastructure around untyped rows.",
+        "Each managed state has controlled, default and onChange forms, including sorting, filters, selection, sizing, visibility, pagination and grouping. In the external-table branch configure those states on the external table; root state props do not rebuild that table.",
+        "For mode='server', supply the current page data and total rowCount and handle onDataRequest. Root emits request state after a 150 ms debounce; fetching, stale-response cancellation and errors remain application responsibilities. The simple hook turns off client sorting, filtering, pagination and grouping in this mode; an external table must be configured accordingly.",
+        "Use DataTable.ScrollArea for its shared scroll ref, sticky bands and virtualizer. virtualization={{estimateRowSize, overscan}} uses the current row model, so it does not automatically disable client pagination. Give the scroll area a bounded viewport.",
+        "onCellEdit receives a TanStack Row, column ID and next value, and may return a promise. Update the application's data or backend explicitly; use row.original to access the domain record. The editing helper tracks pending state but does not mutate source data.",
+        "Import /styles for styles and embedded tokens. Import drag-and-drop helpers and DataTableCustomizeDrawer from /dnd and install its optional @dnd-kit peers only when needed. DataTablePagination is an adapter to react-pagination; use the standalone pagination package for granular controls.",
+        "useDataTablePreferences exposes statePairs for composition with Root, with controlled value/onValueChange, an adapter or a localStorage storageKey. Use a key scoped to the actual user and table; this is UI preference storage, not data persistence."
+      ],
+      "pitfalls": [
+        "The simple useDataTable options do not expose getRowId or getSubRows. For stable identity across server pages, reordering, or hierarchical data, build an external TanStack table with those options and pass table to Root. Default index IDs are not persistent domain IDs.",
+        "When virtualization is enabled, DataTable.Body ignores its render-prop children and renders the internal virtual body. Grid keyboard navigation only sees mounted rows, so virtualized navigation needs explicit verification.",
+        "The current grid navigation listener does not skip interactive descendants, check defaultPrevented or mirror horizontal arrows for RTL. Embedded input editing and RTL grid mode are known limitations; use ordinary table interaction unless these behaviors are addressed and tested.",
+        "Column pinning follows physical left/right TanStack offsets. Do not assume these offsets behave like the logical start/end API of react-table.",
+        "DataTableRoot's accepted props are explicitly enumerated rather than generic div attributes. Put table labels and table ARIA attributes on DataTable.Table, and toolbar labels on Toolbar; do not assume arbitrary Root attributes are forwarded.",
+        "A rejected asynchronous cell edit exits through the rejection before closing the editor. Provide error handling and user feedback in the application's mutation flow; no built-in error message is promised."
+      ],
+      "related": ["react-table", "react-pagination", "react-checkbox", "react-input", "react-drawer", "react-tabs"]
+    },
+    {
+      "id": "react-table",
+      "category": "data",
+      "description": "Native semantic table primitives with independent frame, row treatment, density, sorting indicators and sticky columns.",
+      "guidance": [
+        "Compose TableCaption, TableHeader, TableBody, TableFooter, TableRow, TableHead and TableCell inside Table. Table renders a scrolling div containing a real table; keep valid native table nesting and place the caption before the header.",
+        "Table's ref and generic HTML props target the outer region. Use tableRef and tableProps for the actual table element, including an accessible name when there is no caption. Label the outer scroll region separately when it is exposed as a region.",
+        "Choose frame variant='surface|plain|bordered|ghost', rows='divided|striped|none', size='sm|md|lg', and density='compact|normal|comfortable' independently. Use component token roles to theme these axes instead of replacing cell spacing with arbitrary CSS.",
+        "TableHead sortable adds focusability, a sort indicator, aria-sort and Enter/Space activation. Supply onClick to change application sorting and keep sortDirection synchronized; the primitive does not reorder data.",
+        "Use align='start|center|end' and sticky='start|end' on corresponding head and body cells for logical alignment. numeric applies tabular numerals and end alignment. Use wrap when cell content must break across lines.",
+        "For controlled filtering, server pagination, selection, virtualization and editable data, use react-data-table rather than expecting those behaviors from these presentation primitives."
+      ],
+      "pitfalls": [
+        "loading only sets a visual dimming attribute. Announce busy/loading state and provide meaningful empty/error content explicitly.",
+        "selected on TableRow paints selection and sets aria-selected; it does not implement selection controls, row activation or a keyboard grid. Preserve appropriate native-table semantics for the intended interaction.",
+        "A sticky column only knows its chosen edge. Multiple columns pinned to the same edge require cumulative offsets; use DataTable for automatic column-width-aware offsets.",
+        "The internal caption ID is not automatically assigned as the outer region's aria-labelledby. Provide explicit labels rather than assuming caption context labels both elements."
+      ],
+      "related": ["react-data-table", "react-text", "react-checkbox", "tokens"]
+    },
+    {
+      "id": "react-editor",
+      "category": "editors",
+      "description": "Lexical rich-text editor with a composable core, optional productivity chrome, source modes and field integration.",
+      "guidance": [
+        "Use Editor or EditorField from the root export for assembled UI. Use EditorComposer plus EditorSurface from /core for custom composition; EditorParts is an alternate namespace for the assembled package parts. Load /styles, which includes editor tokens and imports the shared Virtari control styles listed at the top of Editor.css.",
+        "Editor defaults to preset='pro'; EditorComposer defaults to 'core'. Feature overrides are merged through resolveEditorFeatures. The core preset already includes links, lists, code and history; it is not plain text.",
+        "initialValue and initialValueFormat='json|html|markdown' initialize the Lexical state. This is not a controlled value/onValueChange contract. Capture changes with onChange and use editorRef for explicit document operations; keep the editor identity stable during ordinary typing.",
+        "EditorComposer changeSerialization explicitly enables html, markdown or json in onChange and optionally debounces serialization. All three are false by default: onChange still includes text metrics, editorState, editor and tags, but callers must not expect populated serialization fields unless enabled.",
+        "Use EditorField for a visible label plus description/error/counter association. A bare EditorSurface needs an accessible label or aria-labelledby. Its ref points to the editor stage wrapper; editorRef is the separate Lexical instance reference.",
+        "mode/defaultMode/onModeChange control rich-text, markdown and HTML presentation. Source-mode change payloads contain the edited source in its matching field and json=null; do not assume every mode produces identical serialized output.",
+        "readOnly updates Lexical editability. If using characterLimit, choose maxLength and charset deliberately; UTF-16 code units and UTF-8 bytes are not user-perceived grapheme counts."
+      ],
+      "pitfalls": [
+        "Top-level EditorProps inherits changeSerialization, but Editor currently does not forward it to EditorComposer. Use custom Composer composition for serialization options or explicitly serialize from editorState; do not document the top-level prop as working until fixed.",
+        "EditorSurface accepts placeholderText but currently does not apply it. Give the contenteditable an explicit accessible label; placeholder text is not a label.",
+        "HTML initialization calls DOMParser. Treat editor initialization and DOM-backed tools as browser interactions and verify the consumer's SSR/hydration boundary rather than claiming unconditional SSR support.",
+        "The editor does not provide a native form value, required-field validation or a hidden input automatically. Serialize into application form state and implement submission/validation there.",
+        "Comments are held in local component state and reported through onCommentsChange, without an initialComments or controlled comments prop. This is not persistent collaborative commenting.",
+        "HTML parsing and export are format conversion, not a general untrusted-HTML sanitizer. Validate stored content and URLs in the consuming application's rendering pipeline."
+      ],
+      "related": ["react-fieldset", "react-yoopta-editor", "react-code", "react-tabs", "react-file-upload"]
+    },
+    {
+      "id": "react-flow",
+      "category": "data",
+      "description": "React Flow canvas wrapper, node shells, badge edges, simple layered layout and browser persistence helpers.",
+      "guidance": [
+        "Install the @xyflow/react peer and import its ReactFlowProvider, node/edge state helpers and engine APIs directly when needed; Virtari does not re-export the complete engine. Load the Virtari /styles entry, which imports the engine CSS and Flow tokens.",
+        "FlowCanvas extends ReactFlowProps and forwards engine state/callbacks. Place it in a container with definite dimensions. Compose custom nodes from FlowNodeShell, Header, Body, Footer and text/stat/action parts, plus FlowHandle.",
+        "Defaults include fitView, a 24-by-24 snap grid, zoom range 0.72 to 1.2, and disabled wheel and double-click zoom. Override these explicitly when a workflow needs other navigation behavior; showControls, showMiniMap and showBackground only govern built-in visual helpers.",
+        "Register FlowBadgeEdge in edgeTypes under the chosen edge type and pass data.label/data.tone. Keep nodeTypes and edgeTypes references stable between renders. Custom node controls must use the engine's nodrag/nopan conventions when they should not move the canvas.",
+        "layoutElements returns a promise of nodes and edges, with direction='TB|BT|LR|RL' and measured dimensions or defaultWidth/defaultHeight. Apply returned node positions to state after measurement and then fit the viewport; the helper does not update React state itself.",
+        "Call useFlowPersistence under ReactFlowProvider, supplying setNodes, setEdges and storageKey. save/restore/clear operate on the engine snapshot and viewport in localStorage. Use a distinct key for each graph and catch storage/parse failures at the application boundary."
+      ],
+      "pitfalls": [
+        "Automatic colorMode watches only document.documentElement's data-theme and treats everything except light as dark. For a scoped light/dark preview, pass colorMode explicitly; it does not discover the nearest theme scope.",
+        "FlowBadgeEdge currently uses fixed hexadecimal strokes and fixed path geometry in JavaScript. Its colors are not fully governed by semantic tokens, even though the node shells and label styles use token roles.",
+        "layoutElements is a simple layered placement helper, not a graph optimization or edge-routing engine. Cyclic or unresolved nodes are assigned fallback levels; it does not promise minimal crossings or polished layout for arbitrary graphs.",
+        "useFlowPersistence does not validate the parsed snapshot, catch JSON/storage errors, migrate schemas, or synchronize to a server. Browser storage being present does not guarantee writes are permitted.",
+        "No dedicated SSR adapter is supplied. Test actual canvas measurement and provider initialization at the consuming framework's client boundary."
+      ],
+      "related": ["react-card", "react-button", "react-icons", "react-layout", "tokens"]
+    },
+    {
+      "id": "react-yoopta-editor",
+      "category": "editors",
+      "description": "Yoopta block editor with Virtari chrome and plugins, distinct document state and extension exports.",
+      "guidance": [
+        "Use YooptaEditor with a YooptaContentValue and onChange(value, options). The document is a keyed block object, not Lexical JSON, HTML, Markdown or an array of strings. STARTER_CONTENT is a full playground document; omitting value creates an empty paragraph.",
+        "The wrapper creates one engine instance and preserves identity when a parent echoes the current document. A different external document is applied without saving history and remounts the block view; undefined after initialization retains current content, while an empty object replaces it with an empty paragraph.",
+        "readOnly is applied to the existing editor instance on rerender. autoFocus, placeholder and onPathChange are explicit wrapper props; className/style apply to the outer container.",
+        "Load the package /styles entry for Virtari chrome and tokens. The editor imports KaTeX CSS as a module side effect; the consuming bundler must handle CSS imports.",
+        "YOOPTA_PLUGINS, YOOPTA_MARKS, createYooptaEditor, Blocks, Elements, Marks and Paths are public extension building blocks. For custom plugins or upload handlers, compose the underlying Yoopta editor using these exports; the assembled wrapper does not expose a plugins or upload prop.",
+        "Keep external updates intentional and preserve selection while persisting ordinary edits. Serialize application form state explicitly; the wrapper has no native input name or automatic form submission value."
+      ],
+      "pitfalls": [
+        "Built-in image, video and file handlers create browser object URLs. These are previews, not uploaded or durable assets; persisting the document does not preserve their contents after the browser session. No remote storage service is implemented.",
+        "The wrapper does not accept arbitrary HTML/ARIA attributes, dir, an editor ref or a label prop. Do not invent these props; accessible labeling or deeper locale/direction integration requires supported underlying-engine composition or a wrapper improvement.",
+        "The mounted editor has an internal 100-pixel bottom padding. Outer style changes do not necessarily control the internal content padding.",
+        "Deep comparison of external values uses JSON.stringify; large documents incur serialization work. Avoid constructing unrelated external document values on every parent render.",
+        "DOM selection, portals, uploads and block layout are browser behaviors. Verify client initialization and hydration in the target framework; the wrapper provides no SSR-specific adapter.",
+        "This package and react-editor use different engines and document formats. They are not interchangeable controlled-input implementations and have no built-in bidirectional migration."
+      ],
+      "related": ["react-editor", "react-file-upload", "react-popover", "react-tabs", "react-tooltip"]
+    }
+  ]
+}

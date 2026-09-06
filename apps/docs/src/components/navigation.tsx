@@ -19,6 +19,8 @@ const ICONS: Record<string, ReactNode> = {
   "bottom-nav": <IconLayoutBottombar {...navIconProps} />,
   sidebar: <IconLayoutSidebar {...navIconProps} />,
   utilities: <IconTool {...navIconProps} />,
+  "tokens-reference": <IconRuler {...navIconProps} />,
+  "ai-integration": <IconTerminal2 {...navIconProps} />,
   rtl: <IconLanguage {...navIconProps} />,
 
   button: <IconClick {...navIconProps} />,
@@ -104,10 +106,10 @@ export const NAV_ITEMS: NavGroupData[] = [
       "icons",
       "composition",
       "layout",
-      "utilities",
       "rtl",
     ],
   },
+  { groupKey: "groups.utilities", items: ["utilities", "tokens-reference", "ai-integration"] },
   {
     groupKey: "groups.formControls",
     items: [

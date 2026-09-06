@@ -13,7 +13,13 @@
     "changeset": "changeset",
     "version": "changeset version",
     "release": "pnpm run build && changeset publish",
-    "sync:metadata": "node scripts/add-package-metadata.mjs && node scripts/sync-package-docs.mjs"
+    "sync:metadata": "node scripts/add-package-metadata.mjs && node scripts/sync-package-docs.mjs",
+    "ai:build": "node scripts/build-ai-catalog.mjs",
+    "ai:check": "node scripts/build-ai-catalog.mjs --check",
+    "ai:test": "node --test scripts/tests/ai-catalog.test.mjs",
+    "mcp:build": "pnpm --filter @virtari-packages/mcp run build",
+    "mcp:start": "pnpm --filter @virtari-packages/mcp run start",
+    "mcp:test": "pnpm --filter @virtari-packages/mcp run test"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
