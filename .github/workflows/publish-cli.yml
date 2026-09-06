@@ -49,12 +49,29 @@ jobs:
       - name: Verify release contents
         run: pnpm release:cli:check
 
+      - name: Check for an existing release
+        id: release
+        working-directory: packages/cli
+        shell: bash
+        run: |
+          package_name="$(node -p "require('./package.json').name")"
+          package_version="$(node -p "require('./package.json').version")"
+          if npm view "${package_name}@${package_version}" version --json >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Stage package for 2FA approval
-        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'stage'
+        if: steps.release.outputs.exists != 'true' && github.event_name == 'workflow_dispatch' && inputs.mode == 'stage'
         working-directory: packages/cli
         run: npm stage publish --access public
 
       - name: Publish package
-        if: github.event_name == 'push' || inputs.mode == 'direct'
+        if: steps.release.outputs.exists != 'true' && (github.event_name == 'push' || inputs.mode == 'direct')
         working-directory: packages/cli
         run: npm publish --access public
+
+      - name: Record existing release
+        if: steps.release.outputs.exists == 'true'
+        run: echo "The requested CLI version is already public on npm; no publish was needed." >> "$GITHUB_STEP_SUMMARY"
