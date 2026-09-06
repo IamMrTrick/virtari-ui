@@ -13,6 +13,10 @@ Shared font, text-size and line-box roles without universal optical-offset assum
 - Keep meaningful labels visible, allow translated text to wrap where the component permits it, and set dir on a semantic scope. Use explicit LTR isolation for addresses, code or email when appropriate.
 - Core includes an iOS-support-gated minimum 1rem font-size rule for input, textarea and select-trigger to reduce focus zoom. Verify the actual component and device.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - No single transform offset can optically center all fonts or scripts. Glyph metrics and line-box alignment are different concerns.

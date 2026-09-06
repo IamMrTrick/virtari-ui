@@ -12,6 +12,10 @@ Use Virtari as editable project source through its CLI or the shadcn-compatible 
 - Keep generated imports relative so custom target roots remain portable without TypeScript aliases.
 - Use full owner/repository/item addresses for same-repository dependencies in a shadcn GitHub registry.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - Bare registry dependency names resolve to shadcn built-in items rather than sibling GitHub items.

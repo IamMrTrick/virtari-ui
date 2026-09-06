@@ -12,6 +12,10 @@ Shared interaction infrastructure beyond component-specific visuals.
 - Core styles native scrollbars and reveals desktop fine-pointer thumbs on hover/focus-within; the ScrollArea component owns its separate activity-driven smart hiding.
 - Use the accessible hiding helpers for supplementary screen-reader content and keep keyboard-focusable content reachable.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - A high z-index cannot escape its stacking context. Test overlays opened from inside modals, and use the component's portal contract.

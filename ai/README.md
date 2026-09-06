@@ -8,7 +8,9 @@ Load foundation CSS in this order: `@virtari-packages/core` first (it declares c
 
 Open `ai/skills/virtari-design-system/SKILL.md` to choose a package or foundation skill. Each package has `ai/skills/virtari-<package-folder>/SKILL.md`; foundation skills cover colors, shape, spacing, sizing, typography, motion, surfaces, imports, CSS utilities, layout, scrolling/focus and JavaScript utilities.
 
-Copy the **entire selected skill directory**, including `references`, to the skill location supported by your AI host. A repository copy is also directly readable by coding agents. Merely placing skills in this repository does not register them in every client. The router's index names other skills; install the selected ones alongside it as needed. References include export maps, source type declarations, package rules, known limitations and dedicated documentation examples.
+For consumer projects, the public CLI carries the same generated bundle. `virtari init` installs all skills under `.agents/skills` and adds a managed `AGENTS.md` block by default. `virtari skills list`, `virtari skills add`, and `virtari skills sync` provide explicit discovery, focused installation, and refresh workflows. The managed contract requires component discovery before implementation and prohibits application-local token or utility invention.
+
+Copy the **entire selected skill directory**, including `references`, to the skill location supported by your AI host when the host does not read project-local skills. A repository copy is also directly readable by coding agents. The router's index names other skills; install the selected ones alongside it as needed. References include export maps, source type declarations, package rules, known limitations and dedicated documentation examples.
 
 ## Connect MCP locally
 

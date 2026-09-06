@@ -12,6 +12,10 @@ Separate control height, overlay width and spacing scales.
 - Content containers have their own --vds-container-width-* scale, including prose=65ch. A matching t-shirt name does not imply the same value as a floating surface.
 - Use shared size roles to align a row of controls; verify multiline content and text enlargement rather than hiding overflow to enforce a height.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - Do not use --vds-space-96 as a dialog-width role merely because it currently equals 24rem. Spacing and dimension intent must remain independent.

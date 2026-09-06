@@ -14,6 +14,10 @@ The actual package exports and stylesheet dependency order that every integratio
 - Utility CSS uses a tokens peer dependency and does not load the token sheet for the consumer. Utils is a separate JavaScript/React helper package.
 - Use package.json exports and source entry files to validate an import before generating consumer code; generic README boilerplate is not authoritative.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - @virtari-packages/core/styles and @virtari-packages/tokens/styles are not exported. Neither foundation package exposes React component named imports.

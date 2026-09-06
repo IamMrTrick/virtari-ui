@@ -19,6 +19,24 @@ pnpm dlx virtari@latest add virtari-all
 resolves only the requested components and their transitive source dependencies.
 It also adds required third-party packages to `package.json`.
 
+By default, `init` also copies the generated Virtari skill bundle into
+`.agents/skills` and writes a managed instruction block to `AGENTS.md`. This
+gives coding agents a discovery-first contract: inspect `virtari.json`, the
+local target, and the registry before building UI; install an existing item;
+otherwise compose with exact Virtari primitives, utilities, and semantic
+variables. Application code must not invent a parallel token vocabulary.
+
+```bash
+pnpm dlx virtari@latest skills list
+pnpm dlx virtari@latest skills add
+pnpm dlx virtari@latest skills sync
+```
+
+`skills add` installs every skill when no names are supplied and accepts one or
+more focused skill names otherwise. `skills sync` refreshes generated skill
+files from the current CLI release. Use `init --no-skills` to opt out or
+`--skills-dir <project-relative-path>` to choose the destination.
+
 `virtari-utilities` installs the generated token-backed utility stylesheet.
 `virtari-all` resolves the shared foundation, utilities, every component, and
 their transitive primitives. Prefer individual items when an application only
@@ -44,9 +62,9 @@ The default target can be changed before installation:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v0.1.3/virtari.schema.json",
+  "$schema": "https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v0.1.4/virtari.schema.json",
   "target": "src/design-system",
-  "registry": "https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v0.1.3/registry.json",
+  "registry": "https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v0.1.4/registry.json",
   "install": true
 }
 ```
@@ -78,7 +96,7 @@ The root `registry.json` follows the public shadcn source-registry schema. A
 consumer can use the standard shadcn CLI without installing the Virtari CLI:
 
 ```bash
-pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.3
+pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.4
 ```
 
 Registry dependencies use full same-repository GitHub addresses because bare

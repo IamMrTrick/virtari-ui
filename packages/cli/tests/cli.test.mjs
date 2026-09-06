@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -25,7 +25,7 @@ function run(cwd, args, expectedStatus = 0) {
 
 test("init and add install type-safe editable source without internal package imports", async (t) => {
   const cwd = await fixture(t);
-  run(cwd, ["init", "--registry", registry, "--no-install"]);
+  run(cwd, ["init", "--registry", registry, "--no-install", "--no-skills"]);
   run(cwd, ["add", "button", "--no-install"]);
 
   const button = await readFile(path.join(cwd, "src/virtari/components/button/Button.tsx"), "utf8");
@@ -69,7 +69,7 @@ test("init and add install type-safe editable source without internal package im
 
 test("diff detects consumer edits and add refuses to overwrite them", async (t) => {
   const cwd = await fixture(t);
-  run(cwd, ["init", "--registry", registry, "--no-install"]);
+  run(cwd, ["init", "--registry", registry, "--no-install", "--no-skills"]);
   run(cwd, ["add", "button", "--no-install"]);
   const buttonPath = path.join(cwd, "src/virtari/components/button/Button.tsx");
   await writeFile(buttonPath, `${await readFile(buttonPath, "utf8")}\n// consumer edit\n`);
@@ -92,4 +92,19 @@ test("registry targets cannot escape the consumer project", async (t) => {
   await writeFile(registryPath, JSON.stringify({ items: [{ name: "unsafe", type: "registry:item", files: [{ path: "../payload.txt", type: "registry:file", target: "~/src/virtari/payload.txt" }] }] }));
   const sourceResult = run(cwd, ["add", "unsafe", "--no-install"], 1);
   assert.match(sourceResult.stderr, /Unsafe registry source path/);
+});
+
+test("skills add installs the portable bundle and project-wide Virtari contract", async (t) => {
+  const cwd = await fixture(t);
+  const result = run(cwd, ["skills", "add"]);
+  assert.match(result.stdout, /Installed \d+ AI skills/);
+
+  const skills = await readdir(path.join(cwd, ".agents/skills"));
+  assert.ok(skills.includes("virtari-design-system"));
+  assert.ok(skills.includes("virtari-react-layout"));
+  const router = await readFile(path.join(cwd, ".agents/skills/virtari-design-system/SKILL.md"), "utf8");
+  const contract = await readFile(path.join(cwd, "AGENTS.md"), "utf8");
+  assert.match(router, /Discover before implementation/);
+  assert.match(router, /Do not declare new custom properties/);
+  assert.match(contract, /Search the local Virtari target or Registry before creating a component/);
 });

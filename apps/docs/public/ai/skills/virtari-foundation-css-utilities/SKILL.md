@@ -16,6 +16,10 @@ Finite generated token-backed utilities, grouped independently from React helper
 - vds-u-flex sets display only. Composed Card defaults to column direction; add vds-u-flex-row when demonstrating a horizontal flex row, plus wrapping when required by the content.
 - Core separately provides vds-sr-only, vds-visually-hidden and vds-not-sr-only. These are not part of the vds-u-* generator and must not be mistaken for display:none.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - This is not a Tailwind parser or JIT runtime: arbitrary brackets, hover: variants, negative spacing, inferred color/radius/typography classes and unsupported scale keys do not exist unless present in the actual inventory.

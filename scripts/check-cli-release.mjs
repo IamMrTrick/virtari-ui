@@ -14,6 +14,13 @@ if (manifest.license !== "MIT") failures.push("The CLI package manifest must dec
 if (!/^MIT License\r?\n/.test(rootLicense) || !rootLicense.includes("Permission is hereby granted")) failures.push("The repository LICENSE must contain the canonical MIT grant.");
 if (manifest.name !== "virtari") failures.push("The public CLI package name must remain virtari.");
 if (manifest.bin?.virtari !== "bin/virtari.mjs") failures.push("The published virtari command must point to bin/virtari.mjs.");
+if (!manifest.files?.includes("skills")) failures.push("The CLI package must publish the generated skill bundle.");
+try {
+  const routerSkill = await readFile(path.join(root, "packages/cli/skills/virtari-design-system/SKILL.md"), "utf8");
+  if (!routerSkill.includes("Discover before implementation")) failures.push("The published router skill must enforce discovery before implementation.");
+} catch {
+  failures.push("The generated router skill is missing from packages/cli/skills.");
+}
 if (manifest.repository?.url !== "git+https://github.com/IamMrTrick/virtari-ui.git") failures.push("The npm repository URL must exactly identify the publishing GitHub repository.");
 const tag = process.env.GITHUB_REF_NAME;
 if (tag?.startsWith("cli-v") && tag !== `cli-v${manifest.version}`) failures.push(`Tag ${tag} does not match CLI version ${manifest.version}.`);

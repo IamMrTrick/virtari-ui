@@ -4,7 +4,7 @@
     {
       "id": "cli",
       "name": "virtari",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "category": "tooling",
       "description": "Source-first CLI that installs editable Virtari React and CSS files with transitive dependencies, conflict protection, diffing, and health checks.",
       "publicSymbols": [],
@@ -154426,7 +154426,7 @@
     },
     {
       "id": "ai-integration/2",
-      "title": "{text(\"Install focused skills\", \"نصب اسکیل‌های موضوعی\")}",
+      "title": "{text(\"Install project-aware skills\", \"نصب اسکیل‌های آگاه از پروژه\")}",
       "page": "ai-integration",
       "packageIds": [
         "react-code",
@@ -154434,8 +154434,8 @@
       ],
       "sourceId": "apps/docs/src/pages/AiIntegrationPage.tsx",
       "startLine": 24,
-      "endLine": 28,
-      "code": "<Section title={text(\"Install focused skills\", \"نصب اسکیل‌های موضوعی\")}>\n      <p className=\"docs-prose\">{text(\"Start with ai/skills/virtari-design-system/SKILL.md. Choose the package or foundation skill for the task, then copy its entire directory, including references, into the skill location supported by your host. Install referenced skills alongside it when needed. Coding agents can also read them directly in this repository.\", \"از ai/skills/virtari-design-system/SKILL.md شروع کنید. اسکیل پکیج یا مبنای مرتبط با کار را انتخاب کنید و کل پوشهٔ آن، شامل references، را در مسیر اسکیل مورد پشتیبانی میزبان قرار دهید. اسکیل‌های مرتبط را در صورت نیاز کنار آن نصب کنید. ایجنت کدنویسی می‌تواند فایل‌ها را مستقیماً از همین مخزن هم بخواند.\")}</p>\n      <ReferenceCode label={text(\"Package skill example\", \"نمونهٔ اسکیل پکیج\")} code=\"ai/skills/virtari-react-input/SKILL.md\" />\n      <p className=\"docs-prose\">{text(\"Package source and export maps are authoritative. Read the known limitations and design rules before adapting an example. An extracted example may depend on page imports, state and helper components; read the full source context rather than treating every section as a standalone app.\", \"منبع پکیج و export map مرجع نهایی‌اند. پیش از تغییر نمونه، محدودیت‌های شناخته‌شده و قواعد طراحی را بخوانید. نمونهٔ استخراج‌شده ممکن است به importها، state و کامپوننت‌های کمکی صفحه وابسته باشد؛ متن کامل منبع را بخوانید و هر بخش را اپلیکیشن مستقل فرض نکنید.\")}</p>\n    </Section>",
+      "endLine": 30,
+      "code": "<Section title={text(\"Install project-aware skills\", \"نصب اسکیل‌های آگاه از پروژه\")}>\n      <p className=\"docs-prose\">{text(\"The Virtari CLI ships the complete generated skill bundle. init installs it into .agents/skills and adds a managed AGENTS.md contract by default, so an agent reads the router skill before implementing UI.\", \"CLI ویرتاری کل مجموعهٔ اسکیل‌های تولیدشده را همراه خود دارد. دستور init به‌صورت پیش‌فرض آن را در .agents/skills نصب می‌کند و قرارداد مدیریت‌شدهٔ AGENTS.md را اضافه می‌کند تا ایجنت پیش از ساخت UI اسکیل اصلی را بخواند.\")}</p>\n      <ReferenceCode label={text(\"Install and maintain skills\", \"نصب و نگهداری اسکیل‌ها\")} code={\"pnpm dlx virtari@latest init\\npnpm dlx virtari@latest skills list\\npnpm dlx virtari@latest skills add\\npnpm dlx virtari@latest skills sync\"} />\n      <p className=\"docs-prose\">{text(\"The required workflow searches virtari.json, installed source, and the registry first. If a component exists, the agent adds and imports it. If none exists, it composes semantic HTML with Virtari layout primitives and exact utilities. Reusable component CSS consumes existing --vds-* variables; it does not invent variables, raw design values, arbitrary utilities, or Tailwind classes.\", \"روال الزامی ابتدا virtari.json، سورس نصب‌شده و رجیستری را جست‌وجو می‌کند. اگر کامپوننت وجود داشته باشد، ایجنت آن را اضافه و ایمپورت می‌کند. اگر وجود نداشته باشد، HTML معنایی را با primitiveهای لایه‌بندی و utilityهای دقیق ویرتاری ترکیب می‌کند. CSS کامپوننت قابل‌استفادهٔ مجدد فقط متغیرهای فعلی --vds-* را مصرف می‌کند و متغیر، مقدار خام طراحی، utility دلخواه یا کلاس Tailwind جدید نمی‌سازد.\")}</p>\n      <ReferenceCode label={text(\"Router skill\", \"اسکیل اصلی\")} code=\".agents/skills/virtari-design-system/SKILL.md\" />\n      <p className=\"docs-prose\">{text(\"Pass one or more skill names to skills add for a focused install, omit names for the complete bundle, use --skills-dir for another project-local destination, or init --no-skills to opt out.\", \"برای نصب محدود، نام یک یا چند اسکیل را به skills add بدهید؛ برای کل مجموعه نام را حذف کنید، برای مسیر محلی دیگر از --skills-dir و برای انصراف از init --no-skills استفاده کنید.\")}</p>\n    </Section>",
       "imports": [
         "import { InlineCode as VirtariInlineCode } from \"@virtari-packages/react-code\";",
         "import { Stack } from \"@virtari-packages/react-layout\";",
@@ -154452,8 +154452,8 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/AiIntegrationPage.tsx",
-      "startLine": 29,
-      "endLine": 35,
+      "startLine": 31,
+      "endLine": 37,
       "code": "<Section title={text(\"Connect a local MCP server\", \"اتصال سرور محلی MCP\")}\n      description={text(\"Requires Node.js 20+ and pnpm. Run these commands from the repository root, then configure a host that supports local stdio MCP.\", \"به Node.js 20 یا جدیدتر و pnpm نیاز دارید. دستورها را از ریشهٔ مخزن اجرا کنید؛ سپس میزبانی را تنظیم کنید که MCP محلی با stdio را پشتیبانی کند.\")}>\n      <ReferenceCode label={text(\"Build and verify\", \"ساخت و بررسی\")} code={setup} />\n      <ReferenceCode label={text(\"Host configuration example\", \"نمونهٔ تنظیمات میزبان\")} code={config} />\n      <p className=\"docs-prose\">{text(\"Replace the absolute path with your checkout path. On Windows, forward slashes work in this JSON path too. This is a common host configuration shape; use your host's equivalent settings when its format differs. Launch the built Node executable so stdout remains reserved for protocol messages.\", \"مسیر مطلق را با مسیر مخزن خود جایگزین کنید. در ویندوز هم می‌توانید در این مسیر JSON از اسلش رو به جلو استفاده کنید. این یک قالب رایج تنظیمات است؛ اگر میزبان قالب دیگری دارد، از تنظیمات معادل آن استفاده کنید. فایل ساخته‌شده را با Node اجرا کنید تا stdout مخصوص پیام‌های پروتکل بماند.\")}</p>\n      <p className=\"docs-prose\">{text(\"This server is read-only: it lists records and reads allowlisted source text. It does not run project commands or write files. Local stdio is not a remote HTTP URL. Browser-only or cloud clients need a separately deployed compatible service; this setup does not deploy one.\", \"سرور فقط خواندنی است: رکوردها و متن منابع مجاز را می‌خواند. دستور پروژه اجرا نمی‌کند و فایل نمی‌نویسد. stdio محلی یک آدرس HTTP نیست. کلاینت‌های صرفاً مرورگری یا ابری به سرویس سازگار جداگانه نیاز دارند؛ این تنظیمات چنین سرویسی منتشر نمی‌کند.\")}</p>\n    </Section>",
       "imports": [
         "import { InlineCode as VirtariInlineCode } from \"@virtari-packages/react-code\";",
@@ -154471,8 +154471,8 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/AiIntegrationPage.tsx",
-      "startLine": 36,
-      "endLine": 42,
+      "startLine": 38,
+      "endLine": 44,
       "code": "<Section title={text(\"Agent reading workflow\", \"روش مطالعه برای ایجنت\")}>\n      <ol className=\"docs-reference-links\">\n        <li><VirtariInlineCode>list_records</VirtariInlineCode> — {text(\"choose packages, sections, tokens, utilities, examples or sources; search and follow nextOffset.\", \"مجموعهٔ packages، sections، tokens، utilities، examples یا sources را انتخاب، جست‌وجو و nextOffset را دنبال کنید.\")}</li>\n        <li><VirtariInlineCode>get_record</VirtariInlineCode> — {text(\"read an exact ID, its API references, guidance and limitations.\", \"شناسهٔ دقیق، ارجاع API، راهنما و محدودیت‌های آن را بخوانید.\")}</li>\n        <li><VirtariInlineCode>read_source</VirtariInlineCode> — {text(\"read the source ID in bounded chunks until you have its imports and complete example context.\", \"منبع را با شناسهٔ آن در بخش‌های محدود بخوانید تا importها و متن کامل نمونه در دسترس باشد.\")}</li>\n      </ol>\n    </Section>",
       "imports": [
         "import { InlineCode as VirtariInlineCode } from \"@virtari-packages/react-code\";",
@@ -154490,8 +154490,8 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/AiIntegrationPage.tsx",
-      "startLine": 43,
-      "endLine": 46,
+      "startLine": 45,
+      "endLine": 48,
       "code": "<Section title={text(\"Keep knowledge current\", \"به‌روز نگه‌داشتن دانش\")}>\n      <ReferenceCode label={text(\"After source or guidance changes\", \"پس از تغییر منبع یا راهنما\")} code={\"pnpm ai:build\\npnpm ai:check\\npnpm ai:test\\npnpm mcp:build\\npnpm mcp:test\"} />\n      <p className=\"docs-prose\">{text(\"Edit package source and ai/authoring guidance, then regenerate. Do not patch generated catalogs or skills. ai:check detects drift; MCP checks validate the real transport. See ai/README.md and apps/mcp/README.md in the repository for the complete maintenance and compatibility notes.\", \"منبع پکیج و راهنمای ai/authoring را ویرایش و سپس دوباره تولید کنید. فهرست‌ها و اسکیل‌های تولیدشده را دستی تغییر ندهید. ai:check اختلاف با منبع و تست‌های MCP ارتباط واقعی را بررسی می‌کنند. جزئیات نگهداری و سازگاری در ai/README.md و apps/mcp/README.md مخزن است.\")}</p>\n    </Section>",
       "imports": [
         "import { InlineCode as VirtariInlineCode } from \"@virtari-packages/react-code\";",
@@ -165977,9 +165977,9 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
-      "startLine": 30,
-      "endLine": 37,
-      "code": "<Section\n      title={text(\"Install editable source\", \"نصب سورس قابل‌ویرایش\")}\n      description={text(\"Virtari places ordinary React and CSS files in your project, following the same source-ownership idea as shadcn.\", \"ویرتاری فایل‌های عادی React و CSS را با همان ایدهٔ مالکیت سورس shadcn داخل پروژهٔ شما قرار می‌دهد.\")}\n    >\n      <CodeBlock renderer=\"static\" language=\"shell\" code={\"pnpm dlx virtari@latest init\\npnpm dlx virtari@latest add button\"} />\n      <p className=\"docs-prose\">{text(\"The default destination is \", \"مسیر پیش‌فرض \")}<InlineCode>src/virtari</InlineCode>{text(\". Import the shared foundation once, then import each local component from that directory.\", \" است. استایل پایه را یک‌بار و سپس هر کامپوننت محلی را از همین مسیر ایمپورت کنید.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"tsx\" filename=\"App.tsx\" code={'import \"./virtari/styles/index.css\";\\nimport { Button } from \"./virtari/components/button\";\\n\\nexport function App() {\\n  return <Button>Continue</Button>;\\n}'} />\n    </Section>",
+      "startLine": 31,
+      "endLine": 39,
+      "code": "<Section\n      title={text(\"Install editable source\", \"نصب سورس قابل‌ویرایش\")}\n      description={text(\"Virtari places ordinary React and CSS files in your project, following the same source-ownership idea as shadcn.\", \"ویرتاری فایل‌های عادی React و CSS را با همان ایدهٔ مالکیت سورس shadcn داخل پروژهٔ شما قرار می‌دهد.\")}\n    >\n      <CodeBlock renderer=\"static\" language=\"shell\" code={\"pnpm dlx virtari@latest init\\npnpm dlx virtari@latest add button\"} />\n      <p className=\"docs-prose\">{text(\"The default destination is \", \"مسیر پیش‌فرض \")}<InlineCode>src/virtari</InlineCode>{text(\". Import the shared foundation once, then import each local component from that directory.\", \" است. استایل پایه را یک‌بار و سپس هر کامپوننت محلی را از همین مسیر ایمپورت کنید.\")}</p>\n      <p className=\"docs-prose\">{text(\"The same init command installs AI skills in \", \"همین دستور init اسکیل‌های AI را در \")}<InlineCode>.agents/skills</InlineCode>{text(\" and adds a managed AGENTS.md contract. Agents must discover and install existing Virtari components first; missing components must use the current Virtari structure, exact utilities, and existing --vds-* variables.\", \" نصب می‌کند و یک قرارداد مدیریت‌شده به AGENTS.md می‌افزاید. ایجنت‌ها باید ابتدا کامپوننت موجود ویرتاری را پیدا و نصب کنند؛ کامپوننت غایب باید با ساختار فعلی ویرتاری، utilityهای دقیق و متغیرهای موجود --vds-* ساخته شود.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"tsx\" filename=\"App.tsx\" code={'import \"./virtari/styles/index.css\";\\nimport { Button } from \"./virtari/components/button\";\\n\\nexport function App() {\\n  return <Button>Continue</Button>;\\n}'} />\n    </Section>",
       "imports": [
         "import { Badge } from \"@virtari-packages/react-badge\";",
         "import { Button } from \"@virtari-packages/react-button\";",
@@ -166002,8 +166002,8 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
-      "startLine": 39,
-      "endLine": 48,
+      "startLine": 41,
+      "endLine": 50,
       "code": "<Section title={text(\"Choose any scope\", \"انتخاب هر محدوده\")}\n      description={text(\"Install one component, several related components, optional utility classes, or the complete collection.\", \"یک کامپوننت، چند کامپوننت مرتبط، کلاس‌های utility اختیاری یا کل مجموعه را نصب کنید.\")}>\n      <div className=\"docs-install-options\">\n        {installScopes.map(scope => <div className=\"docs-install-option\" key={scope.command}>\n          <Badge variant=\"soft\" size=\"sm\">{scope.label}</Badge>\n          <CodeBlock renderer=\"static\" language=\"shell\" code={scope.command} />\n        </div>)}\n      </div>\n      <CodeBlock renderer=\"static\" language=\"shell\" filename={text(\"Discover all registry items\", \"مشاهدهٔ تمام آیتم‌های رجیستری\")} code=\"pnpm dlx virtari@latest list\" />\n    </Section>",
       "imports": [
         "import { Badge } from \"@virtari-packages/react-badge\";",
@@ -166027,8 +166027,8 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
-      "startLine": 50,
-      "endLine": 60,
+      "startLine": 52,
+      "endLine": 62,
       "code": "<Section\n      title={text(\"Next.js App Router\", \"Next.js App Router\")}\n      description={text(\"Virtari is verified with Next.js 16 and React 19. The CLI copies the component source into the application, so it works with the App Router without a Virtari runtime package.\", \"ویرتاری با Next.js 16 و React 19 تست شده است. CLI سورس کامپوننت‌ها را داخل اپلیکیشن کپی می‌کند؛ بنابراین با App Router و بدون پکیج runtime ویرتاری کار می‌کند.\")}\n    >\n      <Badge color=\"success\" variant=\"soft\" dot>{text(\"Next.js supported\", \"پشتیبانی‌شده در Next.js\")}</Badge>\n      <CodeBlock renderer=\"static\" language=\"shell\" code={\"pnpm create next-app@latest my-app --ts --app --src-dir\\ncd my-app\\npnpm dlx virtari@latest init\\npnpm dlx virtari@latest add button badge card input\"} />\n      <p className=\"docs-prose\">{text(\"Import the shared stylesheet once in the root layout. With the default \", \"استایل مشترک را یک‌بار در layout ریشه ایمپورت کنید. با مسیر پیش‌فرض \")}<InlineCode>src/virtari</InlineCode>{text(\" destination, the relative path from \", \"، مسیر نسبی از \")}<InlineCode>src/app/layout.tsx</InlineCode>{text(\" is:\", \" این است:\")}</p>\n      <CodeBlock renderer=\"static\" language=\"tsx\" filename=\"src/app/layout.tsx\" code={'import \"../virtari/styles/index.css\";\\nimport \"./globals.css\";'} />\n      <p className=\"docs-prose\">{text(\"Pages can remain Server Components. Put interactive Virtari controls inside a Client Component; the client boundary also covers its local Virtari imports.\", \"صفحه می‌تواند Server Component باقی بماند. کنترل‌های تعاملی ویرتاری را داخل یک Client Component قرار دهید؛ همان مرز client ایمپورت‌های محلی ویرتاری را هم پوشش می‌دهد.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"tsx\" filename=\"src/components/CallToAction.tsx\" code={'\"use client\";\\n\\nimport { Button } from \"@/virtari/components/button\";\\n\\nexport function CallToAction() {\\n  return <Button onClick={() => alert(\"Ready\")}>Get started</Button>;\\n}'} />\n    </Section>",
       "imports": [
         "import { Badge } from \"@virtari-packages/react-badge\";",
@@ -166052,9 +166052,9 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
-      "startLine": 62,
-      "endLine": 67,
-      "code": "<Section title={text(\"What is copied\", \"چه چیزهایی کپی می‌شوند\")}>\n      <Stack gap=\"sm\">\n        {guarantees.map(item => <Cluster key={item} align=\"start\"><IconCheck aria-hidden=\"true\" size={18}/><span>{item}</span></Cluster>)}\n      </Stack>\n      <CodeBlock renderer=\"static\" language=\"plaintext\" code={\"src/virtari/\\n├── LICENSE\\n├── styles/\\n│   ├── index.css\\n│   ├── core/\\n│   └── tokens/\\n├── components/\\n│   └── button/\\n└── lib/\"} />\n    </Section>",
+      "startLine": 64,
+      "endLine": 70,
+      "code": "<Section title={text(\"What is copied\", \"چه چیزهایی کپی می‌شوند\")}>\n      <Stack gap=\"sm\">\n        {guarantees.map(item => <Cluster key={item} align=\"start\"><IconCheck aria-hidden=\"true\" size={18}/><span>{item}</span></Cluster>)}\n      </Stack>\n      <CodeBlock renderer=\"static\" language=\"plaintext\" code={\"src/virtari/\\n├── LICENSE\\n├── styles/\\n│   ├── index.css\\n│   ├── core/\\n│   └── tokens/\\n├── components/\\n│   └── button/\\n└── lib/\\n\\n.agents/skills/\\n├── virtari-design-system/\\n├── virtari-react-layout/\\n└── ...\\n\\nAGENTS.md\"} />\n      <CodeBlock renderer=\"static\" language=\"shell\" filename={text(\"Manage AI skills\", \"مدیریت اسکیل‌های AI\")} code={\"pnpm dlx virtari@latest skills list\\npnpm dlx virtari@latest skills add\\npnpm dlx virtari@latest skills sync\"} />\n    </Section>",
       "imports": [
         "import { Badge } from \"@virtari-packages/react-badge\";",
         "import { Button } from \"@virtari-packages/react-button\";",
@@ -166077,8 +166077,8 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
-      "startLine": 69,
-      "endLine": 72,
+      "startLine": 72,
+      "endLine": 75,
       "code": "<Section title={text(\"Customize and update safely\", \"شخصی‌سازی و به‌روزرسانی امن\")}>\n      <p className=\"docs-prose\">{text(\"After installation the files belong to the application. Edit markup, props, CSS, tokens, and motion directly. Before replacing an edited component, inspect the upstream change.\", \"بعد از نصب، فایل‌ها متعلق به اپلیکیشن هستند. مارکاپ، پراپ‌ها، CSS، توکن‌ها و حرکت را مستقیم تغییر دهید. پیش از جایگزینی کامپوننت ویرایش‌شده، تغییر نسخهٔ جدید را بررسی کنید.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"shell\" code={\"pnpm dlx virtari@latest diff button\\npnpm dlx virtari@latest add button --dry-run\\npnpm dlx virtari@latest add button --overwrite\\npnpm dlx virtari@latest doctor\"} />\n    </Section>",
       "imports": [
         "import { Badge } from \"@virtari-packages/react-badge\";",
@@ -166102,9 +166102,9 @@
         "react-layout"
       ],
       "sourceId": "apps/docs/src/pages/SourceInstallationPage.tsx",
-      "startLine": 74,
-      "endLine": 78,
-      "code": "<Section title={text(\"Use the shadcn CLI\", \"استفاده با CLI خود shadcn\")}>\n      <p className=\"docs-prose\">{text(\"The public registry also follows shadcn's GitHub registry protocol. Pinning the release tag keeps installation reproducible.\", \"رجیستری عمومی با پروتکل GitHub رجیستری shadcn هم سازگار است. پین‌کردن تگ انتشار، نصب را قابل‌بازتولید نگه می‌دارد.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"shell\" code=\"pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.3\" />\n      <Button asChild variant=\"soft\" rightSection={<IconArrowRight className=\"docs-directional-icon\" size={16}/>}><a href={href(\"button\")}>{text(\"Open component documentation\", \"مشاهدهٔ مستندات کامپوننت‌ها\")}</a></Button>\n    </Section>",
+      "startLine": 77,
+      "endLine": 81,
+      "code": "<Section title={text(\"Use the shadcn CLI\", \"استفاده با CLI خود shadcn\")}>\n      <p className=\"docs-prose\">{text(\"The public registry also follows shadcn's GitHub registry protocol. Pinning the release tag keeps installation reproducible.\", \"رجیستری عمومی با پروتکل GitHub رجیستری shadcn هم سازگار است. پین‌کردن تگ انتشار، نصب را قابل‌بازتولید نگه می‌دارد.\")}</p>\n      <CodeBlock renderer=\"static\" language=\"shell\" code=\"pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.4\" />\n      <Button asChild variant=\"soft\" rightSection={<IconArrowRight className=\"docs-directional-icon\" size={16}/>}><a href={href(\"button\")}>{text(\"Open component documentation\", \"مشاهدهٔ مستندات کامپوننت‌ها\")}</a></Button>\n    </Section>",
       "imports": [
         "import { Badge } from \"@virtari-packages/react-badge\";",
         "import { Button } from \"@virtari-packages/react-button\";",
@@ -168749,8 +168749,8 @@
     },
     {
       "id": "apps/docs/src/pages/AiIntegrationPage.tsx",
-      "sha256": "f4be94ad620a4b10b4f3fa37ff5459fb0889e3dd971239a0e88b54ab1f8c240c",
-      "bytes": 8656,
+      "sha256": "9a678c1f16f5d3e599b530b0f38704d50fed20c7968727cacafa83b993d3e186",
+      "bytes": 9507,
       "kind": "tsx"
     },
     {
@@ -169115,8 +169115,8 @@
     },
     {
       "id": "apps/docs/src/pages/SourceInstallationPage.tsx",
-      "sha256": "e6db0357747ae6689b97d1e29af2915319fe1d72cbbef3dae161573c4ccd3755",
-      "bytes": 8786,
+      "sha256": "48957288b8cba71fa000f954d489672d0a9a9faa1bad972e0d0ae85d6fa4e814",
+      "bytes": 10190,
       "kind": "tsx"
     },
     {
@@ -169463,8 +169463,8 @@
     },
     {
       "id": "docs/source-registry.md",
-      "sha256": "55284df41b9c544a67c0681e29bf13bf0456f2745de168fcc4d872b96dd51232",
-      "bytes": 4438,
+      "sha256": "9df9538e1e7dac15e988e1d8a9513fc02b7050d9c5398f5ccd72f8599dc737ac",
+      "bytes": 5302,
       "kind": "md"
     },
     {
@@ -169475,14 +169475,14 @@
     },
     {
       "id": "packages/cli/bin/virtari.mjs",
-      "sha256": "3dd494e4cc94c4affb95deb4e71eb9671998dc1a15622a9380c2dd282c12d0d7",
-      "bytes": 18634,
+      "sha256": "292a61822e0f9f5f4600c7e337977e56682271711b1079206e39304aae5cacb2",
+      "bytes": 27055,
       "kind": "mjs"
     },
     {
       "id": "packages/cli/package.json",
-      "sha256": "73dcb55b84d68e11cb266dabe5f2e1d3c2ba8e2913e68e1a9a971880647617e6",
-      "bytes": 959,
+      "sha256": "e501f506e053bf02a8dd7920f8351fd3537a2318120fdb7d55991ec41690bfec",
+      "bytes": 973,
       "kind": "json"
     },
     {
@@ -175727,14 +175727,14 @@
     },
     {
       "id": "registry.json",
-      "sha256": "1502970121033eee88bb69f443c7ab3c31ca213f67809062b1ea17b5b71fb2eb",
+      "sha256": "6836e5cdfcb5047b7f4380efb905c8af008d487fbbf1559bbe33a1131087e0b4",
       "bytes": 284360,
       "kind": "json"
     },
     {
       "id": "virtari.schema.json",
-      "sha256": "c39529cdd074874f73739a59863885a2beec67c2c6faf2456424851fca3fcaeb",
-      "bytes": 741,
+      "sha256": "cdef0f9048ea9e29dd46392b7cdc8cfffa6f2cea8cd29da71d8c31700919d1cd",
+      "bytes": 1415,
       "kind": "json"
     }
   ]

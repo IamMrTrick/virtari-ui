@@ -1,6 +1,6 @@
 # Discovery index
 
-These paths are relative to the skill bundle root (ai/skills in a repository checkout). Select matching skills in your host; this index does not require every skill to be loaded or installed.
+These paths are relative to the installed skill bundle root. Load the focused skill that matches the task; do not load every package at once.
 
 ## Packages
 

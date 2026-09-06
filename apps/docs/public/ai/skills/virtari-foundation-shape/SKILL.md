@@ -13,6 +13,10 @@ Stable component families with deliberate differences and bounded nested geometr
 - A radius host declares data-radius-host and all three --vds-radius-host-r, -b and -p inputs. Direct children can consume --vds-radius-flush=max(0, radius-border) or --vds-radius-inset=max(0, radius-border-padding).
 - The generic inset/flush outputs are registered non-inheriting leaf geometry; a nested host must use an independent radius input. Card-to-Card nesting uses its own measured channel.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - Consistency means shared rules, not an identical radius for a keycap, checkbox, card and modal.

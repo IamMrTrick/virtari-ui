@@ -15,6 +15,10 @@ Shared class, ref, native-form, direction and keyboard behavior with explicit co
 - mod resolves to Meta on detected Apple hardware and Control elsewhere. useKeyboardPlatform provides hydration-stable display; getKeyboardPlatform is the direct runtime lookup.
 - useHotkey defaults enabled and preventDefault to true, allows neither editable targets nor repeated keydown by default, and ignores already prevented and IME composition events. Scope target and opt into allowInInputs or allowRepeat only deliberately.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - cn is not clsx object syntax or tailwind-merge. It does not deduplicate or resolve conflicting classes.

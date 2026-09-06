@@ -12,10 +12,10 @@ All documentation sections importing this package (some demonstrate another pack
 - `accordion/6` — FAQ (SEO-friendly); source `apps/docs/src/pages/AccordionPage.tsx` lines 214–244.
 - `accordion/7` — Usage; source `apps/docs/src/pages/AccordionPage.tsx` lines 247–267.
 - `ai-integration/1` — {text("One reference, three ways to read it", "یک مرجع، سه راه برای خواندن")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 15–23.
-- `ai-integration/2` — {text("Install focused skills", "نصب اسکیل‌های موضوعی")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 24–28.
-- `ai-integration/3` — {text("Connect a local MCP server", "اتصال سرور محلی MCP")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 29–35.
-- `ai-integration/4` — {text("Agent reading workflow", "روش مطالعه برای ایجنت")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 36–42.
-- `ai-integration/5` — {text("Keep knowledge current", "به‌روز نگه‌داشتن دانش")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 43–46.
+- `ai-integration/2` — {text("Install project-aware skills", "نصب اسکیل‌های آگاه از پروژه")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 24–30.
+- `ai-integration/3` — {text("Connect a local MCP server", "اتصال سرور محلی MCP")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 31–37.
+- `ai-integration/4` — {text("Agent reading workflow", "روش مطالعه برای ایجنت")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 38–44.
+- `ai-integration/5` — {text("Keep knowledge current", "به‌روز نگه‌داشتن دانش")}; source `apps/docs/src/pages/AiIntegrationPage.tsx` lines 45–48.
 - `alert-dialog/1` — Overview; source `apps/docs/src/pages/AlertDialogPage.tsx` lines 68–89.
 - `alert-dialog/2` — Basic; source `apps/docs/src/pages/AlertDialogPage.tsx` lines 97–125.
 - `alert-dialog/3` — Sizes; source `apps/docs/src/pages/AlertDialogPage.tsx` lines 133–159.
@@ -437,12 +437,12 @@ All documentation sections importing this package (some demonstrate another pack
 - `slider/2` — Range; source `apps/docs/src/pages/SliderPage.tsx` lines 14–18.
 - `slider/3` — Disabled; source `apps/docs/src/pages/SliderPage.tsx` lines 20–24.
 - `slider/4` — Usage; source `apps/docs/src/pages/SliderPage.tsx` lines 26–37.
-- `source-installation/1` — {text("Install editable source", "نصب سورس قابل‌ویرایش")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 30–37.
-- `source-installation/2` — {text("Choose any scope", "انتخاب هر محدوده")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 39–48.
-- `source-installation/3` — {text("Next.js App Router", "Next.js App Router")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 50–60.
-- `source-installation/4` — {text("What is copied", "چه چیزهایی کپی می‌شوند")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 62–67.
-- `source-installation/5` — {text("Customize and update safely", "شخصی‌سازی و به‌روزرسانی امن")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 69–72.
-- `source-installation/6` — {text("Use the shadcn CLI", "استفاده با CLI خود shadcn")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 74–78.
+- `source-installation/1` — {text("Install editable source", "نصب سورس قابل‌ویرایش")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 31–39.
+- `source-installation/2` — {text("Choose any scope", "انتخاب هر محدوده")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 41–50.
+- `source-installation/3` — {text("Next.js App Router", "Next.js App Router")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 52–62.
+- `source-installation/4` — {text("What is copied", "چه چیزهایی کپی می‌شوند")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 64–70.
+- `source-installation/5` — {text("Customize and update safely", "شخصی‌سازی و به‌روزرسانی امن")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 72–75.
+- `source-installation/6` — {text("Use the shadcn CLI", "استفاده با CLI خود shadcn")}; source `apps/docs/src/pages/SourceInstallationPage.tsx` lines 77–81.
 - `spinner/1` — Variants; source `apps/docs/src/pages/SpinnerPage.tsx` lines 31–68.
 - `spinner/2` — Sizes; source `apps/docs/src/pages/SpinnerPage.tsx` lines 71–90.
 - `spinner/3` — Colors; source `apps/docs/src/pages/SpinnerPage.tsx` lines 93–143.

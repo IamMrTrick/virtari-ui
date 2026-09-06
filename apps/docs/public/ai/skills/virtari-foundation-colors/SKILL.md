@@ -15,6 +15,10 @@ Use semantic purpose rather than reconstructing palettes or guessing theme behav
 - A brand customization belongs in the primitive hue layer. Use the template as a starting point and validate both themes plus nested scopes.
 - Supporting text roles prioritize readability: neutral text-subtle shares neutral-11 with text-muted, intent text-muted follows its readable text role, and light warning text uses warning-12. Use type weight and spacing for hierarchy rather than reducing text opacity.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - A numeric palette step or a semantic token name alone does not prove contrast against an arbitrary consumer background.

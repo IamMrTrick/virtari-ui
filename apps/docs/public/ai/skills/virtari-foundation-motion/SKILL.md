@@ -13,6 +13,10 @@ Reusable duration/easing pairs with reduced-motion behavior and explicit effect 
 - Prefer semantic disabled colors; when opacity is needed use --vds-opacity-disabled rather than a new literal. It currently aliases opacity-50.
 - Shadows, elevation aliases, gradients and blur/backdrop values are distinct. Filter tokens contain complete blur(...) expressions, not bare lengths. Use effects only when the intended surface calls for them.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - A token called spring is a cubic-bezier timing function, not a physics simulation or JavaScript lerp engine.

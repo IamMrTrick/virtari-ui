@@ -20,6 +20,27 @@
       "type": "boolean",
       "description": "Install third-party dependencies after adding source.",
       "default": true
+    },
+    "skills": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Install the portable Virtari Agent Skills bundle and project-level AI contract.",
+      "properties": {
+        "directory": {
+          "type": "string",
+          "description": "Project-relative directory that receives portable Agent Skills.",
+          "default": ".agents/skills"
+        },
+        "install": {
+          "type": "boolean",
+          "description": "Install and validate Virtari skills during initialization.",
+          "default": true
+        }
+      },
+      "default": {
+        "directory": ".agents/skills",
+        "install": true
+      }
     }
   }
 }

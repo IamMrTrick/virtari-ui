@@ -14,6 +14,10 @@ Semantic page primitives and small reusable arrangements instead of repeated bes
 - The layout Sidebar is a wrapping two-child split using .vds-split and --split-* variables. It is distinct from the app-chrome react-sidebar package.
 - Use the shared --vds-app-chrome-row role to align page and sidebar chrome where those components consume it.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - Avoid multiple visible main landmarks. Using a div arrangement does not supply semantic section names or heading hierarchy automatically.

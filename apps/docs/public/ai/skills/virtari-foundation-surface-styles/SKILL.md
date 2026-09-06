@@ -13,6 +13,10 @@ One scoped appearance contract for quiet borders, tonal fills, shadows and stron
 - Colors rebind at theme, style and tone boundaries. The internal numeric intent flags retain the chosen mode through nested theme scopes; use the public attributes rather than writing those flags.
 - Stronger contrast and forced colors preferences replace quiet boundary roles without removing semantic errors, selection or focus indicators.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - Bordered does not mean heavy borders. Quiet decorative borders are not a guaranteed 3:1 control boundary on every host.

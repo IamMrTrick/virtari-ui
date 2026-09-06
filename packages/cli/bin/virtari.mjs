@@ -6,12 +6,18 @@ import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 const CLI_MANIFEST = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
 const DEFAULT_REGISTRY = `https://raw.githubusercontent.com/IamMrTrick/virtari-ui/cli-v${CLI_MANIFEST.version}/registry.json`;
 const CONFIG_NAME = "virtari.json";
 const TRACKING_PATH = ".virtari/installed.json";
 const SOURCE_PREFIX = "src/virtari";
+const DEFAULT_SKILLS_DIRECTORY = ".agents/skills";
+const SKILLS_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../skills");
+const AGENT_CONTRACT_PATH = "AGENTS.md";
+const AGENT_CONTRACT_START = "<!-- virtari:ai:start -->";
+const AGENT_CONTRACT_END = "<!-- virtari:ai:end -->";
 
 function fail(message) {
   const error = new Error(message);
@@ -28,18 +34,21 @@ function parseArguments(argv) {
     overwrite: false,
     dryRun: false,
     install: true,
+    skills: true,
+    skillsDir: undefined,
     json: false,
   };
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
-    if (argument === "--cwd" || argument === "--registry" || argument === "--target") {
+    if (argument === "--cwd" || argument === "--registry" || argument === "--target" || argument === "--skills-dir") {
       const value = argv[index + 1];
       if (!value || value.startsWith("--")) fail(`${argument} requires a value.`);
-      options[argument.slice(2)] = value;
+      options[argument === "--skills-dir" ? "skillsDir" : argument.slice(2)] = value;
       index += 1;
     } else if (argument === "--overwrite") options.overwrite = true;
     else if (argument === "--dry-run") options.dryRun = true;
     else if (argument === "--no-install") options.install = false;
+    else if (argument === "--no-skills") options.skills = false;
     else if (argument === "--json") options.json = true;
     else if (argument === "--help" || argument === "-h") options.help = true;
     else if (argument === "--version" || argument === "-v") options.version = true;
@@ -54,14 +63,18 @@ function printHelp() {
   console.log(`Virtari source CLI
 
 Usage:
-  virtari init [--target src/virtari] [--registry <url-or-path>] [--no-install]
+  virtari init [--target src/virtari] [--registry <url-or-path>] [--skills-dir .agents/skills] [--no-skills] [--no-install]
   virtari add <item...> [--overwrite] [--dry-run] [--no-install]
   virtari list [--json]
   virtari diff <item...> [--json]
   virtari doctor [--json]
+  virtari skills list [--json]
+  virtari skills add [skill...] [--skills-dir .agents/skills] [--overwrite] [--dry-run]
+  virtari skills sync [skill...] [--skills-dir .agents/skills] [--dry-run]
 
-Every installed component is ordinary source code in your project. Use --dry-run
-to preview changes and diff before updating edited components.`);
+Init installs portable AI skills and a project contract by default. Every
+installed component remains ordinary source code. Use --dry-run to preview
+changes and diff before updating edited components.`);
 }
 
 function isUrl(value) {
@@ -150,6 +163,11 @@ async function readConfig(cwd, required = true) {
   if (!config.target || path.isAbsolute(config.target)) fail(`${CONFIG_NAME} target must be a project-relative path.`);
   const target = path.resolve(cwd, config.target);
   if (target !== cwd && !target.startsWith(`${cwd}${path.sep}`)) fail(`${CONFIG_NAME} target must stay inside the project.`);
+  if (config.skills != null) {
+    if (typeof config.skills !== "object" || Array.isArray(config.skills)) fail(`${CONFIG_NAME} skills must be an object.`);
+    if (config.skills.directory != null) safeProjectDirectory(cwd, config.skills.directory, `${CONFIG_NAME} skills.directory`);
+    if (config.skills.install != null && typeof config.skills.install !== "boolean") fail(`${CONFIG_NAME} skills.install must be a boolean.`);
+  }
   return config;
 }
 
@@ -196,6 +214,90 @@ async function atomicWrite(destination, content) {
   const temporary = `${destination}.virtari-${process.pid}.tmp`;
   await writeFile(temporary, content, "utf8");
   await rename(temporary, destination);
+}
+
+function safeProjectDirectory(cwd, declared, label) {
+  if (!declared || path.isAbsolute(declared)) fail(`${label} must be a project-relative path.`);
+  const destination = path.resolve(cwd, declared);
+  const root = path.resolve(cwd);
+  if (destination !== root && !destination.startsWith(`${root}${path.sep}`)) fail(`${label} must stay inside the project.`);
+  return destination;
+}
+
+async function listBundledSkills() {
+  if (!existsSync(SKILLS_ROOT)) fail("The published package does not contain the Virtari skill bundle.");
+  return (await readdir(SKILLS_ROOT, { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory() && /^virtari-[a-z0-9-]+$/.test(entry.name))
+    .map((entry) => entry.name)
+    .sort();
+}
+
+async function listFilesRecursive(directory, prefix = "") {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const relative = path.join(prefix, entry.name);
+    if (entry.isDirectory()) files.push(...await listFilesRecursive(path.join(directory, entry.name), relative));
+    else if (entry.isFile()) files.push(relative);
+  }
+  return files;
+}
+
+function agentContract(skillsDirectory) {
+  const router = path.posix.join(skillsDirectory.replace(/\\/g, "/"), "virtari-design-system/SKILL.md");
+  return `${AGENT_CONTRACT_START}
+## Virtari UI contract
+
+Before implementing or reviewing UI, read \`${router}\` and follow its discovery-first workflow.
+Search the local Virtari target or Registry before creating a component. Add an existing component with the Virtari CLI instead of cloning it with raw markup.
+When no component exists, compose Virtari layout primitives and exact utilities. Reusable component CSS must consume existing Virtari semantic variables; do not invent foundation variables, spacing values, colors, radii, shadows, or motion constants in application code.
+${AGENT_CONTRACT_END}`;
+}
+
+async function writeAgentContract(cwd, skillsDirectory, dryRun) {
+  const destination = path.join(cwd, AGENT_CONTRACT_PATH);
+  const block = agentContract(skillsDirectory);
+  if (!existsSync(destination)) {
+    if (!dryRun) await atomicWrite(destination, `${block}\n`);
+    return true;
+  }
+  const current = await readFile(destination, "utf8");
+  const start = current.indexOf(AGENT_CONTRACT_START);
+  const end = current.indexOf(AGENT_CONTRACT_END);
+  if ((start === -1) !== (end === -1) || (start !== -1 && end < start)) fail(`${AGENT_CONTRACT_PATH} contains an incomplete Virtari managed block.`);
+  const next = start === -1
+    ? `${current.trimEnd()}\n\n${block}\n`
+    : `${current.slice(0, start)}${block}${current.slice(end + AGENT_CONTRACT_END.length)}`;
+  if (next === current) return false;
+  if (!dryRun) await atomicWrite(destination, next);
+  return true;
+}
+
+async function installSkills({ cwd, config, names, skillsDirectory, overwrite, dryRun }) {
+  const available = await listBundledSkills();
+  const requested = names.length ? names : available;
+  const unknown = requested.filter((name) => !available.includes(name));
+  if (unknown.length) fail(`Unknown Virtari skill: ${unknown.join(", ")}`);
+  const relativeRoot = skillsDirectory ?? config?.skills?.directory ?? DEFAULT_SKILLS_DIRECTORY;
+  const targetRoot = safeProjectDirectory(cwd, relativeRoot, "Skills directory");
+  const changed = [];
+  const unchanged = [];
+  const conflicts = [];
+  for (const name of requested) {
+    const sourceRoot = path.join(SKILLS_ROOT, name);
+    for (const relative of await listFilesRecursive(sourceRoot)) {
+      const source = path.join(sourceRoot, relative);
+      const destination = path.join(targetRoot, name, relative);
+      const content = await readFile(source, "utf8");
+      if (!existsSync(destination)) changed.push([destination, content]);
+      else if (await readFile(destination, "utf8") === content) unchanged.push(destination);
+      else if (overwrite) changed.push([destination, content]);
+      else conflicts.push(path.relative(cwd, destination));
+    }
+  }
+  if (conflicts.length) fail(`Edited skill files would be overwritten:\n${conflicts.map((file) => `  ${file}`).join("\n")}\nPass --overwrite only after reviewing local changes.`);
+  if (!dryRun) for (const [destination, content] of changed) await atomicWrite(destination, content);
+  const contractChanged = await writeAgentContract(cwd, relativeRoot, dryRun);
+  return { skills: requested, written: changed.length, unchanged: unchanged.length, contractChanged, directory: relativeRoot };
 }
 
 function parseDependency(specifier) {
@@ -313,14 +415,33 @@ async function commandInit(options) {
       target: options.target ?? SOURCE_PREFIX,
       registry: options.registry ?? DEFAULT_REGISTRY,
       install: true,
+      skills: {
+        directory: options.skillsDir ?? DEFAULT_SKILLS_DIRECTORY,
+        install: options.skills,
+      },
     };
     if (!options.dryRun) await atomicWrite(configPath, `${JSON.stringify(config, null, 2)}\n`);
+  } else {
+    const nextSkills = {
+      directory: options.skillsDir ?? config.skills?.directory ?? DEFAULT_SKILLS_DIRECTORY,
+      install: config.skills?.install ?? options.skills,
+    };
+    if (options.skillsDir) nextSkills.directory = options.skillsDir;
+    if (!config.skills || config.skills.directory !== nextSkills.directory || config.skills.install !== nextSkills.install) {
+      config.skills = nextSkills;
+      if (!options.dryRun) await atomicWrite(configPath, `${JSON.stringify(config, null, 2)}\n`);
+    }
   }
   const registryData = await readJson(options.registry ?? config.registry ?? DEFAULT_REGISTRY, options.cwd);
   validateRegistry(registryData.value);
   const plan = await createPlan({ cwd: options.cwd, registryData, config, itemNames: ["virtari-base"] });
   const result = await installPlan({ cwd: options.cwd, registryData, config, plan, overwrite: options.overwrite, dryRun: options.dryRun, install: options.install && config.install !== false });
+  const skillsEnabled = options.skills && config.skills?.install !== false;
+  const skillResult = skillsEnabled
+    ? await installSkills({ cwd: options.cwd, config, names: [], skillsDirectory: options.skillsDir, overwrite: options.overwrite, dryRun: options.dryRun })
+    : null;
   console.log(`Initialized Virtari in ${path.relative(process.cwd(), options.cwd) || "."} (${result.written} files).`);
+  if (skillResult) console.log(`${options.dryRun ? "Would install" : "Installed"} ${skillResult.skills.length} AI skills in ${skillResult.directory} (${skillResult.written} files, ${skillResult.unchanged} unchanged).`);
 }
 
 async function loadContext(options) {
@@ -347,6 +468,27 @@ async function commandList(options) {
   const rows = registryData.value.items.map((item) => ({ name: item.name, type: item.type, description: item.description ?? "" }));
   if (options.json) console.log(JSON.stringify(rows, null, 2));
   else for (const row of rows) console.log(`${row.name.padEnd(24)} ${row.description}`);
+}
+
+async function commandSkills(action, names, options) {
+  if (action === "list") {
+    const rows = await listBundledSkills();
+    if (options.json) console.log(JSON.stringify(rows, null, 2));
+    else for (const name of rows) console.log(name);
+    return;
+  }
+  if (action !== "add" && action !== "sync") fail('Skills requires "list", "add", or "sync".');
+  const config = await readConfig(options.cwd, false);
+  const result = await installSkills({
+    cwd: options.cwd,
+    config,
+    names,
+    skillsDirectory: options.skillsDir,
+    overwrite: action === "sync" ? true : options.overwrite,
+    dryRun: options.dryRun,
+  });
+  const verb = options.dryRun ? "Would install" : "Installed";
+  console.log(`${verb} ${result.skills.length} AI skills in ${result.directory} (${result.written} files, ${result.unchanged} unchanged).`);
 }
 
 async function commandDiff(names, options) {
@@ -386,6 +528,12 @@ async function commandDoctor(options) {
   const leakedImports = await scanForInternalImports(target);
   for (const file of leakedImports) issues.push(`Package import remains: ${path.relative(options.cwd, file)}`);
   if (!existsSync(path.join(options.cwd, TRACKING_PATH))) issues.push(`Missing ${TRACKING_PATH}; run virtari add again to restore update metadata.`);
+  if (config.skills?.install !== false) {
+    const skillsDirectory = config.skills?.directory ?? DEFAULT_SKILLS_DIRECTORY;
+    if (!existsSync(path.join(options.cwd, skillsDirectory, "virtari-design-system", "SKILL.md"))) issues.push(`Missing Virtari AI skills; run virtari skills add.`);
+    const agentContractPath = path.join(options.cwd, AGENT_CONTRACT_PATH);
+    if (!existsSync(agentContractPath) || !((await readFile(agentContractPath, "utf8")).includes(AGENT_CONTRACT_START))) issues.push(`Missing Virtari instructions in ${AGENT_CONTRACT_PATH}; run virtari skills add.`);
+  }
   const result = { ok: issues.length === 0, target: config.target, issues };
   if (options.json) console.log(JSON.stringify(result, null, 2));
   else if (result.ok) console.log(`Virtari source is healthy at ${config.target}.`);
@@ -406,6 +554,10 @@ async function main() {
   if (command === "list") return commandList(options);
   if (command === "diff") return commandDiff(names, options);
   if (command === "doctor") return commandDoctor(options);
+  if (command === "skills") {
+    const [action, ...skillNames] = names;
+    return commandSkills(action, skillNames, options);
+  }
   fail(`Unknown command: ${command}`);
 }
 

@@ -13,6 +13,10 @@ Primitive distances plus semantic interior and page-layout relationships.
 - Page-region rhythm belongs to --vds-section-*, --vds-row-* and --vds-container-* roles. Interior grouping is not a substitute for page layout.
 - Use logical padding/margin/gaps so a layout survives RTL. Scope compact spacing overrides to a deliberate density context and preserve grouping distinctions.
 
+## Required usage
+
+Use only names present in the source reference or MCP inventory. Do not invent CSS variables, utility classes, token values, arbitrary values, or Tailwind syntax. If the existing inventory cannot express a reusable design need, treat it as an upstream Virtari design-system change and update the authoritative token or utility source before application code consumes it.
+
 ## Pitfalls
 
 - Giving every relationship the same gap obscures which heading, hint or action belongs to which group.

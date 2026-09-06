@@ -17,6 +17,7 @@ export function SourceInstallationPage() {
     text("Internal imports are relative; installed code has no Virtari package dependency at runtime.", "ایمپورت‌های داخلی نسبی‌اند و کد نصب‌شده در زمان اجرا به پکیج ویرتاری وابسته نیست."),
     text("Changed files are protected until you explicitly review and overwrite them.", "فایل‌های تغییرکرده تا زمانی که خودتان بررسی و overwrite را تأیید نکنید محفوظ می‌مانند."),
     text("Required third-party packages are added to the host project's package.json.", "پکیج‌های جانبی لازم به package.json پروژهٔ میزبان افزوده می‌شوند."),
+    text("Portable AI skills and the Virtari project contract are installed by default.", "اسکیل‌های قابل‌انتقال AI و قرارداد پروژهٔ ویرتاری به‌صورت پیش‌فرض نصب می‌شوند."),
   ];
 
   const installScopes = [
@@ -33,6 +34,7 @@ export function SourceInstallationPage() {
     >
       <CodeBlock renderer="static" language="shell" code={"pnpm dlx virtari@latest init\npnpm dlx virtari@latest add button"} />
       <p className="docs-prose">{text("The default destination is ", "مسیر پیش‌فرض ")}<InlineCode>src/virtari</InlineCode>{text(". Import the shared foundation once, then import each local component from that directory.", " است. استایل پایه را یک‌بار و سپس هر کامپوننت محلی را از همین مسیر ایمپورت کنید.")}</p>
+      <p className="docs-prose">{text("The same init command installs AI skills in ", "همین دستور init اسکیل‌های AI را در ")}<InlineCode>.agents/skills</InlineCode>{text(" and adds a managed AGENTS.md contract. Agents must discover and install existing Virtari components first; missing components must use the current Virtari structure, exact utilities, and existing --vds-* variables.", " نصب می‌کند و یک قرارداد مدیریت‌شده به AGENTS.md می‌افزاید. ایجنت‌ها باید ابتدا کامپوننت موجود ویرتاری را پیدا و نصب کنند؛ کامپوننت غایب باید با ساختار فعلی ویرتاری، utilityهای دقیق و متغیرهای موجود --vds-* ساخته شود.")}</p>
       <CodeBlock renderer="static" language="tsx" filename="App.tsx" code={'import "./virtari/styles/index.css";\nimport { Button } from "./virtari/components/button";\n\nexport function App() {\n  return <Button>Continue</Button>;\n}'} />
     </Section>
 
@@ -63,7 +65,8 @@ export function SourceInstallationPage() {
       <Stack gap="sm">
         {guarantees.map(item => <Cluster key={item} align="start"><IconCheck aria-hidden="true" size={18}/><span>{item}</span></Cluster>)}
       </Stack>
-      <CodeBlock renderer="static" language="plaintext" code={"src/virtari/\n├── LICENSE\n├── styles/\n│   ├── index.css\n│   ├── core/\n│   └── tokens/\n├── components/\n│   └── button/\n└── lib/"} />
+      <CodeBlock renderer="static" language="plaintext" code={"src/virtari/\n├── LICENSE\n├── styles/\n│   ├── index.css\n│   ├── core/\n│   └── tokens/\n├── components/\n│   └── button/\n└── lib/\n\n.agents/skills/\n├── virtari-design-system/\n├── virtari-react-layout/\n└── ...\n\nAGENTS.md"} />
+      <CodeBlock renderer="static" language="shell" filename={text("Manage AI skills", "مدیریت اسکیل‌های AI")} code={"pnpm dlx virtari@latest skills list\npnpm dlx virtari@latest skills add\npnpm dlx virtari@latest skills sync"} />
     </Section>
 
     <Section title={text("Customize and update safely", "شخصی‌سازی و به‌روزرسانی امن")}>
@@ -73,7 +76,7 @@ export function SourceInstallationPage() {
 
     <Section title={text("Use the shadcn CLI", "استفاده با CLI خود shadcn")}>
       <p className="docs-prose">{text("The public registry also follows shadcn's GitHub registry protocol. Pinning the release tag keeps installation reproducible.", "رجیستری عمومی با پروتکل GitHub رجیستری shadcn هم سازگار است. پین‌کردن تگ انتشار، نصب را قابل‌بازتولید نگه می‌دارد.")}</p>
-      <CodeBlock renderer="static" language="shell" code="pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.3" />
+      <CodeBlock renderer="static" language="shell" code="pnpm dlx shadcn@latest add IamMrTrick/virtari-ui/button#cli-v0.1.4" />
       <Button asChild variant="soft" rightSection={<IconArrowRight className="docs-directional-icon" size={16}/>}><a href={href("button")}>{text("Open component documentation", "مشاهدهٔ مستندات کامپوننت‌ها")}</a></Button>
     </Section>
   </>;
