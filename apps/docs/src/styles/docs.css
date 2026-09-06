@@ -512,3 +512,5 @@
 .docs-principle-card .vds-card-content { margin-block-start: auto; }
 .docs-principle-icon { display: grid; place-items: center; inline-size: 44px; block-size: 44px; background: var(--vds-color-primary-a3); color: var(--vds-color-primary-11); border-radius: var(--vds-radius-control-action); margin-block-end: 12px; }
 .docs-principle-card .vds-card-description { line-height: 1.75; }
+.docs-brand-preview { display: grid; place-items: center; min-block-size: 10rem; padding: var(--vds-space-6); color: var(--vds-color-text); }
+.docs-brand-preview svg { max-inline-size: 100%; }

@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Card, CardHeader, CardTitle, CardContent } from "@virtari-packages/react-card";
-import { Input } from "@virtari-packages/react-input";
-import { Textarea } from "@virtari-packages/react-textarea";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@virtari-packages/react-select";
+import { InputField } from "@virtari-packages/react-input";
+import { TextareaField } from "@virtari-packages/react-textarea";
+import { Select, SelectField, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@virtari-packages/react-select";
 import { Grid, Stack } from "@virtari-packages/react-layout";
 
 /** Same component composition under each surface style; geometry stays shared. */
@@ -23,20 +23,24 @@ export function SurfaceStylesExample() {
             <CardHeader><CardTitle>{mode.label}</CardTitle></CardHeader>
             <CardContent>
               <Stack gap="md">
-                <Input
+                <InputField
+                  label={fa ? "نام پروژه" : "Project name"}
                   aria-label={`${mode.label}: ${fa ? "نام" : "Name"}`}
                   placeholder={fa ? "نام پروژه" : "Project name"}
                 />
-                <Select defaultValue="team">
-                  <SelectTrigger aria-label={`${mode.label}: ${fa ? "دسترسی" : "Access"}`}>
+                <SelectField label={fa ? "دسترسی" : "Access"}>
+                  {({ controlId, describedBy }) => <Select defaultValue="team">
+                  <SelectTrigger id={controlId} aria-describedby={describedBy} aria-label={`${mode.label}: ${fa ? "دسترسی" : "Access"}`}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent data-surface-style={mode.id}>
                     <SelectItem value="team">{fa ? "تیم" : "Team"}</SelectItem>
                     <SelectItem value="private">{fa ? "خصوصی" : "Private"}</SelectItem>
                   </SelectContent>
-                </Select>
-                <Textarea
+                </Select>}
+                </SelectField>
+                <TextareaField
+                  label={fa ? "توضیحات (اختیاری)" : "Description (optional)"}
                   aria-label={`${mode.label}: ${fa ? "توضیحات" : "Description"}`}
                   placeholder={fa ? "توضیحات" : "Description"}
                   rows={2}

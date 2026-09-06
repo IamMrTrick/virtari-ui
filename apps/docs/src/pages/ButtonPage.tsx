@@ -576,25 +576,25 @@ function IconOnlySection() {
   return (
     <Section
       title="Icon-only buttons"
-      description="Auto-detected from non-text content. No prop needed. The button becomes square (aspect-ratio 1) and padding collapses. Always pass an aria-label."
+      description="Use iconOnly for explicit square geometry, especially with custom icon components. Native SVGs and accessible-named single icons are also inferred. Always provide an accessible name."
     >
       <Row>
         {SIZES.map((s) => (
-          <Button key={s} size={s} aria-label="Add"><IconPlus /></Button>
+          <Button iconOnly key={s} size={s} aria-label="Add"><IconPlus /></Button>
         ))}
       </Row>
 
       <Row>
-        <Button variant="outline" aria-label="Search"><IconSearch /></Button>
-        <Button variant="ghost" aria-label="Search"><IconSearch /></Button>
-        <Button variant="soft" aria-label="Search"><IconSearch /></Button>
-        <Button color="danger" aria-label="Delete"><IconTrash /></Button>
-        <Button color="contrast" aria-label="Add"><IconPlus /></Button>
+        <Button iconOnly variant="outline" aria-label="Search"><IconSearch /></Button>
+        <Button iconOnly variant="ghost" aria-label="Search"><IconSearch /></Button>
+        <Button iconOnly variant="soft" aria-label="Search"><IconSearch /></Button>
+        <Button iconOnly color="danger" aria-label="Delete"><IconTrash /></Button>
+        <Button iconOnly color="contrast" aria-label="Add"><IconPlus /></Button>
       </Row>
 
       <pre className="docs-code">{`// Square, padding collapses automatically
-<Button aria-label="Search"><SearchIcon /></Button>
-<Button size="lg" variant="outline" aria-label="Add"><PlusIcon /></Button>`}</pre>
+<Button iconOnly aria-label="Search"><SearchIcon /></Button>
+<Button iconOnly size="lg" variant="outline" aria-label="Add"><PlusIcon /></Button>`}</pre>
     </Section>
   );
 }
@@ -672,7 +672,7 @@ function DisabledSection() {
         <Button disabled color="danger">Danger disabled</Button>
         <Button disabled color="contrast">Contrast disabled</Button>
         <Button disabled leftSection={<IconPlus />}>With icon</Button>
-        <Button disabled aria-label="Add"><IconPlus /></Button>
+        <Button iconOnly disabled aria-label="Add"><IconPlus /></Button>
       </Row>
     </Section>
   );
@@ -882,6 +882,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loadingText?: string;                     // sr-only status (default "Loading")
   leftSection?: ReactNode;
   rightSection?: ReactNode;
+  iconOnly?:   boolean;
   fullWidth?:   boolean;
   effect?:      "shine" | "raised" | "glow" | "glass" | "outline-glow";
   animation?:   "pulse" | "bounce" | "shake" | "jiggle";

@@ -28,7 +28,8 @@
  */
 
 @layer tokens {
-  :root {
+  :root,
+  [data-theme] {
     /* ─── Bare intent names ───
      * `var(--vds-color-primary)` is what anyone writes on first guess, so
      * it should resolve rather than fall through to a hex fallback. Each
@@ -155,7 +156,8 @@
    * Contrast on the editor canvas (neutral-1): light ≥7.0:1, dark ≥8.9:1.
    */
 
-  :root {
+  :root,
+  [data-theme] {
     --vds-color-sky-11:     oklch(0.450 0.130 240);
     --vds-color-emerald-11: oklch(0.440 0.130 165);
     --vds-color-violet-11:  oklch(0.455 0.175 295);

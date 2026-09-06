@@ -16,7 +16,8 @@
    *   on-solid          = text on solid neutral bg (always white)
    */
 
-  :root {
+  :root,
+  [data-theme] {
     /* ─── Core scale ─── */
     --vds-color-text:          var(--vds-color-neutral-12);
     --vds-color-text-muted:    var(--vds-color-neutral-11);

@@ -4,6 +4,10 @@ Set `data-surface-style="bordered"`, `"tonal"` or `"elevated"` on the document r
 
 All default editable shells use the same field background, border color, hover border and resting shadow roles. Border width remains 1px in every style, including transparent borders, to avoid changes in height or text placement. Semantic focus, invalid and selection cues remain visible. Explicit component variants such as outline and ghost are deliberate overrides.
 
+Bordered mode uses quiet neutral alpha boundaries (a4 on surfaces, a6 on fields and a8 on hover). An explicit field outline retains its border in every mode, using the same alpha scale. Increased contrast preferences restore stronger boundaries; forced colors uses system colors. A subtle decorative border is not a claim of WCAG boundary contrast.
+
+Use `data-field-tone="strong"` on a field or group for a transparent fill that retains its surrounding color. It deepens a light container and lifts a dark one. Nested `data-field-tone="default"` restores the current appearance's resting field fill. The attribute works across Input, NumberInput, PhoneInput, Select, Combobox, DateField, Textarea, TagInput and OTP. Theme, appearance and tone boundaries can nest in either order; light, dark and OLED colors resolve locally. Custom host colors still need their own contrast assessment.
+
 Cards and persistent panels use `--vds-surface-bg`, `--vds-surface-border` and `--vds-surface-shadow`. Menus and temporary panels use `--vds-overlay-bg` and `--vds-overlay-shadow`; navigation uses `--vds-navigation-bg`. A tonal layer must remain distinguishable from the layer behind it. Content separators and semantic indicators are not decorative container borders and retain their colors.
 
 Scoped styles also work on a container. Portalled content is outside that container's CSS inheritance, so apply the same attribute to the portalled content, or put the mode on the document root. The comparison example in Introduction demonstrates this.

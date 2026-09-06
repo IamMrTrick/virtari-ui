@@ -13,6 +13,7 @@ import { CommandDialog, CommandInput, CommandList, CommandGroup, CommandItem, Co
 import { IconMenu2, IconSettings, IconSearch, IconArrowLeft, IconArrowRight, IconCopy, IconSun, IconMoon } from "@virtari-packages/react-icons";
 import { toast } from "@virtari-packages/react-toast";
 import { SettingsDrawer } from "./SettingsDrawer";
+import { Logo } from "./branding/Logo";
 import { NAV_ITEMS, DOC_PATHS, getPageIcon } from "./navigation";
 import type { RadiusMode, Direction, SurfaceStyle } from "../App";
 import type { Locale } from "../i18n";
@@ -92,7 +93,10 @@ export function Layout(p: Props) {
       <HeaderMain blockSize="var(--docs-header-height)" background="none" gutter="md" width="full" contained={false}>
         <HeaderStart>
           <Button variant="ghost" color="contrast" className="docs-mobile-menu" aria-label={t("layout.toggleSidebar")} onClick={p.onToggleSidebar}><IconMenu2 size={20}/></Button>
-          <a href={p.hrefFor("introduction")} className="docs-wordmark" aria-label={t("brand.homeLabel")}><span className="docs-brand-symbol" aria-hidden="true">V</span><span>Virtari</span></a>
+          <a href={p.hrefFor("introduction")} className="docs-wordmark" aria-label={t("brand.homeLabel")}>
+            <Logo height={32} className="docs-brand-wordmark" />
+            <Logo variant="mark" height={28} className="docs-brand-mark" />
+          </a>
           <Nav className="docs-top-nav" orientation="horizontal" size="sm" variant="filled" aria-label={label("Explore documentation", "مرور مستندات")}>
             <NavList>
               <NavItem href={p.hrefFor("introduction")} label={label("Docs", "مستندات")} />

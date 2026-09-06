@@ -124,8 +124,8 @@
    * 2. Appearance variants (trigger)
    * ───────────────────────────────────────────── */
   .vds-combobox-trigger[data-appearance="outline"] {
-    --combobox-trigger-border-color: var(--vds-color-border-interactive, #6b7280);
-    --combobox-trigger-border-color-hover: var(--vds-color-neutral-10, #4b5563);
+    --combobox-trigger-border-color: var(--vds-outline-field-border, var(--vds-color-neutral-a6));
+    --combobox-trigger-border-color-hover: var(--vds-outline-field-border-hover, var(--vds-color-neutral-a8));
     --combobox-trigger-bg: transparent;
     --combobox-trigger-shadow: none;
     --combobox-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);

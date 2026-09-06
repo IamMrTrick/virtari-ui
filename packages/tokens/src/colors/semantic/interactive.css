@@ -9,7 +9,8 @@
    * solid neutral scale.
    */
 
-  :root {
+  :root,
+  [data-theme] {
     /* ─── Focus rings ─── */
     --vds-color-ring:         var(--vds-color-primary-9);
     --vds-color-ring-offset:  var(--vds-color-neutral-1);

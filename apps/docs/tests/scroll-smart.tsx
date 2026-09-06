@@ -13,6 +13,7 @@ function App() {
   const primitive = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const consumerEvents = useRef(0);
+  const [ancestorDirection, setAncestorDirection] = useState<"ltr" | "rtl">("rtl");
   const [report, setReport] = useState("Ready. Click Run and keep the pointer on the button while checks run.");
   const [running, setRunning] = useState(false);
   async function run() {
@@ -57,6 +58,19 @@ function App() {
       button.current?.focus({ preventScroll: true });
       await wait(220);
       check(opacity() < .01, "Leaving the region hides its track again");
+      setAncestorDirection("rtl");
+      await wait(100);
+      const inherited = document.querySelector<HTMLElement>(".inherited-direction .vds-scroll-area-viewport")!;
+      const explicit = document.querySelector<HTMLElement>(".explicit-direction .vds-scroll-area-viewport")!;
+      check(getComputedStyle(inherited).direction === "rtl", "An omitted direction inherits RTL from the ancestor through to the viewport");
+      check(getComputedStyle(explicit).direction === "ltr", "Explicit LTR overrides an RTL ancestor");
+      setAncestorDirection("ltr");
+      await wait(100);
+      check(getComputedStyle(inherited).direction === "ltr", "Changing the ancestor to LTR updates an existing viewport");
+      setAncestorDirection("rtl");
+      await wait(100);
+      check(getComputedStyle(inherited).direction === "rtl", "Changing back to RTL does not leave the inherited direction locked");
+      check(getComputedStyle(explicit).direction === "ltr", "An explicit direction remains stable across ancestor direction changes");
       const failed = lines.filter(line => line.startsWith("FAIL")).length;
       setReport(`${lines.join("\n")}\n\n${lines.length - failed}/${lines.length} passed`);
     } catch (error) { check(false, String(error)); }
@@ -72,6 +86,10 @@ function App() {
         <div style={{ padding: 24 }}>{Array.from({ length: 24 }, (_, index) => <p key={index} style={{ marginBlock: 16 }}>Document paragraph {index + 1} — متن آزمایشی</p>)}</div>
       </ScrollArea>
       <ScrollArea className="fitting" style={surface} viewportProps={{ role: "region", "aria-label": "Short document" }}><p style={{ padding: 24 }}>Everything fits.</p></ScrollArea>
+    </div>
+    <div dir={ancestorDirection} style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+      <ScrollArea className="inherited-direction" style={surface} viewportProps={{ "aria-label": "Inherited direction" }}><p style={{ padding: 24 }}>جهت این متن از والد گرفته می‌شود.</p></ScrollArea>
+      <ScrollArea className="explicit-direction" dir="ltr" style={surface} viewportProps={{ "aria-label": "Explicit direction" }}><p style={{ padding: 24 }}>This explicitly remains left to right.</p></ScrollArea>
     </div>
     <pre id="report" aria-live="polite" style={{ whiteSpace: "pre-wrap" }}>{report}</pre>
   </main>;

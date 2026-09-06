@@ -5,6 +5,8 @@ const navIconProps = { size: 16, stroke: 1.75 } as const;
 
 const ICONS: Record<string, ReactNode> = {
   introduction: <IconBook2 {...navIconProps} />,
+  guidelines: <IconBook2 {...navIconProps} />,
+  brand: <IconPalette {...navIconProps} />,
 
   sizing: <IconRuler {...navIconProps} />,
   colors: <IconPalette {...navIconProps} />,
@@ -91,10 +93,11 @@ const FALLBACK_ICON = <IconCircle {...navIconProps} />;
 export type NavGroupData = { groupKey: string; items: string[] };
 
 export const NAV_ITEMS: NavGroupData[] = [
-  { groupKey: "groups.overview", items: ["introduction"] },
+  { groupKey: "groups.overview", items: ["introduction", "guidelines"] },
   {
     groupKey: "groups.foundations",
     items: [
+      "brand",
       "sizing",
       "colors",
       "typography",

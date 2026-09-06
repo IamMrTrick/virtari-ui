@@ -93,7 +93,7 @@ function renderMetaRow(
   };
 
   return (
-    <div className="vds-field-meta-row" data-kind={kind}>
+    <div key={kind} className="vds-field-meta-row" data-kind={kind}>
       {renderItems(startItems, "start")}
       {renderItems(endItems, "end")}
     </div>

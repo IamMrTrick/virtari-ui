@@ -26,7 +26,8 @@
    * Dark mode uses higher L for elevation (raised = lighter — modern).
    */
 
-  :root {
+  :root,
+  [data-theme="light"] {
     /* ── Absolute anchors ──
      * Used by alpha primitives, shadows, scrims, and any component
      * that truly wants pure black or white regardless of theme. */

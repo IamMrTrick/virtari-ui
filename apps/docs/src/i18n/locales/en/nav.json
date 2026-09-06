@@ -71,5 +71,7 @@
   "stepper": "Stepper",
   "timeline": "Timeline",
   "tag-input": "Tag Input",
-  "flow": "React Flow"
+  "flow": "React Flow",
+  "guidelines": "Design guidelines",
+  "brand": "Brand"
 }

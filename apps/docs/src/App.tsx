@@ -6,6 +6,8 @@ import { SUPPORTED_LOCALES, isLocale, DEFAULT_LOCALE, type Locale } from "./i18n
 import {
   PAGE_META,
   IntroductionPage,
+  DesignGuidelinesPage,
+  BrandingPage,
   ButtonPage,
   ButtonGroupPage,
   BadgePage,
@@ -82,6 +84,8 @@ import {
 
 const PAGES: Record<string, () => React.JSX.Element> = {
   introduction: IntroductionPage,
+  guidelines: DesignGuidelinesPage,
+  brand: BrandingPage,
   sizing: SizingPage,
   colors: ColorsPage,
   typography: TypographyPage,

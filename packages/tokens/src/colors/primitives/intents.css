@@ -15,7 +15,8 @@
    * Brand themes override these in packages/tokens/src/brands/*.css.
    */
 
-  :root {
+  :root,
+  [data-theme="light"] {
     /* ── Primary (indigo) — light ──
      * Steps 9-11 follow the same monotonic-chroma rule as every other
      * intent: chroma peaks at step 9 (base solid) and decreases toward

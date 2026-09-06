@@ -19,7 +19,8 @@
    *   border-{intent}-strong  = per-intent strong (intent-9)
    */
 
-  :root {
+  :root,
+  [data-theme] {
     /* ─── Neutral borders ─── */
     --vds-color-border:          var(--vds-color-neutral-7);
     --vds-color-border-muted:    var(--vds-color-neutral-6);

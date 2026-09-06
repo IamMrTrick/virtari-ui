@@ -25,7 +25,8 @@
    * a white-tinted scrim reads as a highlight, not a dim.
    */
 
-  :root {
+  :root,
+  [data-theme] {
     /* ─── Color-scheme signaling ───
      * Must state exactly one scheme here, and it must be the scheme the
      * tokens are actually in.
@@ -54,7 +55,8 @@
     color-scheme: dark;
   }
 
-  :root {
+  :root,
+  [data-theme] {
     /* ─── Backgrounds ─── */
     --vds-color-bg:          color-mix(in oklch, var(--vds-color-neutral-1) 96%, var(--vds-color-primary-3));
     --vds-color-bg-subtle:   var(--vds-color-neutral-2);

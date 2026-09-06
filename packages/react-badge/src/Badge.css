@@ -57,6 +57,7 @@
     flex-shrink: 0;
   }
 
+  .vds-badge > svg,
   .vds-badge-section > svg {
     display: block;
     flex-shrink: 0;

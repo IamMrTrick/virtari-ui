@@ -20,7 +20,8 @@
    * overrides required.
    */
 
-  :root {
+  :root,
+  [data-theme] {
     /* ─── Black alpha (always black) ─── */
     --vds-color-black-a1:  oklch(0 0 0 / 0.05);
     --vds-color-black-a2:  oklch(0 0 0 / 0.10);
@@ -144,7 +145,8 @@
     --vds-color-accent-a12: color-mix(in oklch, var(--vds-color-accent-9) 95%, transparent);
   }
 
-  [data-theme="dark"] {
+  [data-theme="dark"],
+  [data-theme="dark-oled"] {
     /* Neutral alpha — dark (white tint, industry-tuned) */
     --vds-color-neutral-a1:  oklch(1 0 0 / 0.000);
     --vds-color-neutral-a2:  oklch(1 0 0 / 0.035);

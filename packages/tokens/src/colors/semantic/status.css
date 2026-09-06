@@ -22,7 +22,8 @@
    * canonical names here.
    */
 
-  :root {
+  :root,
+  [data-theme] {
     /* ─── On-colors (text/icon on solid intent backgrounds) ───
      * Hand-picked defaults cover every brand tuning within our palette.
      * The @supports block below upgrades to contrast-color() where the
@@ -138,7 +139,8 @@
    * both roles is 0.005 wide: real, but it would not survive a brand retune.
    * In DARK mode the ladder lightens toward 11, so both roles agree and
    * warning-11 is 11.73:1 under black — no exception needed there. */
-  :root {
+  :root,
+  [data-theme] {
     /* darker than solid-hover (L 0.650) so a press still reads as a press;
      * 5.27:1 under black ink. */
     --vds-color-warning-solid-active-tone: oklch(0.600 0.145 85);
@@ -164,7 +166,8 @@
    *
    * Derived from step 9 with color-mix rather than hardcoded, so a brand
    * that retunes its solid gets correct interaction states for free. */
-  :root {
+  :root,
+  [data-theme] {
     --vds-color-primary-solid-hover-tone:  var(--vds-color-primary-10);
     --vds-color-primary-solid-active-tone: var(--vds-color-primary-11);
     --vds-color-success-solid-hover-tone:  var(--vds-color-success-10);

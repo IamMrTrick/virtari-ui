@@ -79,8 +79,8 @@
   .vds-date-picker[data-appearance="outline"] .vds-date-picker-group,
   .vds-date-range-picker[data-appearance="outline"] .vds-date-range-picker-group {
     --date-field-bg: transparent;
-    --date-field-border-color: var(--vds-color-border-interactive, #6b7280);
-    --date-field-border-color-hover: var(--vds-color-neutral-10, #4b5563);
+    --date-field-border-color: var(--vds-outline-field-border, var(--vds-color-neutral-a6));
+    --date-field-border-color-hover: var(--vds-outline-field-border-hover, var(--vds-color-neutral-a8));
     --date-field-shadow: none;
   }
 

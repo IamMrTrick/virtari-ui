@@ -40,7 +40,8 @@
     --vds-color-chart-8: oklch(0.820 0.150 95);
   }
 
-  :root {
+  :root,
+  [data-theme] {
     /* ─── Muted variants (30% alpha — area fills) ─── */
     --vds-color-chart-1-muted: color-mix(in oklch, var(--vds-color-chart-1) 30%, transparent);
     --vds-color-chart-2-muted: color-mix(in oklch, var(--vds-color-chart-2) 30%, transparent);

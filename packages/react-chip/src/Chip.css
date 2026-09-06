@@ -84,6 +84,13 @@
     border-radius: inherit;
   }
 
+  .vds-chip > svg {
+    display: block;
+    inline-size: var(--chip-icon-size);
+    block-size: var(--chip-icon-size);
+    flex-shrink: 0;
+  }
+
   /* ── Label (optional wrapper) ── */
   .vds-chip-label {
     display: inline-block;

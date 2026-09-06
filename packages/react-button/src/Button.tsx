@@ -1,12 +1,13 @@
 import { cn } from "@virtari-packages/utils";
 import {
   Children,
+  cloneElement,
   forwardRef,
   isValidElement,
   useContext,
   type ReactNode,
 } from "react";
-import { Slot, Slottable } from "@virtari-packages/primitives/slot";
+import { Slot } from "@virtari-packages/primitives/slot";
 import { ButtonGroupContext } from "./context";
 
 /** Intent palette — orthogonal to variant. Picks the hue family. */
@@ -71,6 +72,8 @@ export interface ButtonProps
   leftSection?: ReactNode;
   /** Element placed after children */
   rightSection?: ReactNode;
+  /** Explicit square icon geometry; useful for opaque custom icon components. */
+  iconOnly?: boolean;
   /** Take full width of parent */
   fullWidth?: boolean;
   /** Visual effect (requires effects CSS import) */
@@ -79,12 +82,16 @@ export interface ButtonProps
   animation?: ButtonAnimation;
 }
 
-function hasReadableText(node: ReactNode): boolean {
+function hasReadableText(node: ReactNode, namedOpaqueIcon = false): boolean {
   return Children.toArray(node).some((child) => {
     if (typeof child === "string") return child.trim().length > 0;
     if (typeof child === "number") return true;
     if (isValidElement<{ children?: ReactNode }>(child)) {
-      return hasReadableText(child.props.children);
+      if (child.type === "svg") return false;
+      // An opaque component may render text. Do not classify it as an icon
+      // just because its rendered children are not visible to React here.
+      if (typeof child.type !== "string" && child.props.children == null) return !namedOpaqueIcon;
+      return hasReadableText(child.props.children, namedOpaqueIcon);
     }
     return false;
   });
@@ -100,6 +107,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   leftSection,
   rightSection,
   fullWidth = false,
+  iconOnly: iconOnlyProp,
   effect,
   animation,
   disabled: disabledProp,
@@ -119,13 +127,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   // Backward compat: variant="destructive" -> color="danger" + variant="solid".
   const resolvedColor = variant === "destructive" ? "danger" : color;
   const resolvedVariant = variant === "destructive" ? "solid" : variant;
-  const hasTextContent = hasReadableText(children);
-  const hasBareVisualChild = children != null && !hasTextContent;
+  const slotChild = asChild && isValidElement<React.HTMLAttributes<HTMLElement> & { disabled?: boolean }>(children) ? children : null;
+  const contentChildren = slotChild ? slotChild.props.children : children;
+  const hasAccessibleName = Boolean(props['aria-label'] || props['aria-labelledby'] || slotChild?.props['aria-label'] || slotChild?.props['aria-labelledby']);
+  const hasTextContent = hasReadableText(contentChildren, hasAccessibleName && Children.count(contentChildren) === 1);
+  const hasBareVisualChild = Children.toArray(contentChildren).length > 0 && !hasTextContent;
   const visualSlotCount =
     Number(leftSection != null) +
     Number(rightSection != null) +
     Number(hasBareVisualChild);
-  const iconOnly = visualSlotCount === 1 && !hasTextContent;
+  const iconOnly = iconOnlyProp ?? (visualSlotCount === 1 && !hasTextContent);
 
   const buttonContent = (
     <>
@@ -135,9 +146,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
             {leftSection}
           </span>
         )}
-        {children != null ? (
+        {contentChildren != null ? (
           <span className="vds-button-label">
-            {asChild ? <Slottable>{children}</Slottable> : children}
+            {contentChildren}
           </span>
         ) : null}
         {rightSection && (
@@ -167,8 +178,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
           aria-disabled={isDisabled || undefined}
           aria-label={loading ? loadingText : undefined}
           {...props}
+          onClickCapture={(event) => {
+            if (isDisabled) { event.preventDefault(); event.stopPropagation(); return; }
+            props.onClickCapture?.(event as unknown as React.MouseEvent<HTMLButtonElement>);
+          }}
         >
-          {children}
+          {slotChild ? cloneElement(slotChild, {
+            'aria-busy': loading || slotChild.props['aria-busy'],
+            'aria-disabled': isDisabled || slotChild.props['aria-disabled'],
+            ...(isDisabled ? { tabIndex: -1 } : {}),
+            ...(slotChild.type === 'button' ? { disabled: isDisabled || slotChild.props.disabled } : {}),
+          }, buttonContent) : children}
         </Slot>
       ) : (
         <button

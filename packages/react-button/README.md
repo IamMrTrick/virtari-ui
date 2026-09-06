@@ -38,8 +38,14 @@ yarn add @virtari-packages/react-button
 ## Usage
 
 ```tsx
-import { /* … */ } from "@virtari-packages/react-button";
+import { Button } from "@virtari-packages/react-button";
+
+<Button leftSection={<PlusIcon />}>Create</Button>
+<Button iconOnly aria-label="Create"><PlusIcon /></Button>
+<Button asChild leftSection={<ArrowIcon />}><a href="/account">Account</a></Button>
 ```
+
+Labels and icon sections share the same centered content layout, including `asChild` links and loading states. `iconOnly` explicitly chooses square geometry; set it to `false` when a named custom child renders visible text. Single native SVGs and accessible-named single opaque icons retain automatic detection.
 
 ### Import styles
 

@@ -12,7 +12,8 @@
    * components without overriding still works visually.
    */
 
-  :root {
+  :root,
+  [data-theme] {
     /* ─── Default neutrals ─── */
     --vds-color-icon:           var(--vds-color-text);
     --vds-color-icon-muted:     var(--vds-color-text-muted);

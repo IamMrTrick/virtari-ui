@@ -290,5 +290,13 @@
   "tag-input": {
     "title": "Tag Input",
     "description": "Multi-value text input \u2014 Enter or comma to add, Backspace to remove, max-tags limit, custom validation, and chip rendering."
+  },
+  "guidelines": {
+    "title": "Design guidelines",
+    "description": "Practical patterns for understandable forms, clear actions and predictable keyboard use."
+  },
+  "brand": {
+    "title": "Brand",
+    "description": "Virtari marks, app icons and loading states."
   }
 }

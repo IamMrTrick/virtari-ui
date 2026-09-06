@@ -3,11 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="Virtari design foundations, React components and practical interaction guidelines." />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="stylesheet" href="/virtari-logo-loader.css" />
+    <script>
+      try {
+        const settings = JSON.parse(localStorage.getItem("virtari.docs.settings") || "{}");
+        document.documentElement.dataset.theme = settings.dark === false ? "light" : "dark";
+      } catch { /* The loader also works without local storage. */ }
+    </script>
     <title>Virtari Design System</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="virtari-splash" role="status" aria-label="Loading Virtari documentation">
+        <svg class="virtari-splash__svg" viewBox="0 0 1798 1553" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="virtari-splash__shape virtari-splash__shape--left" d="M0 259.155L543.053 260.239L728.487 671.243C756.959 737.821 755.683 814.288 725.031 879.738L493.681 1379.22L0 259.155Z" />
+          <path class="virtari-splash__shape virtari-splash__shape--right" d="M1797.93 0H1233.4L554.532 1552.76H917.46C1040.36 1552.76 1152.02 1477.38 1203.45 1359.75L1797.93 0Z" />
+        </svg>
+      </div>
+    </div>
+    <noscript><p>Enable JavaScript to explore the Virtari documentation.</p></noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -110,8 +110,8 @@
 
   /* outline — same as soft default but flat surface */
   :is(.vds-select-trigger, .vds-select-control)[data-appearance="outline"] {
-    --select-trigger-border-color: var(--vds-color-border-interactive, #6b7280);
-    --select-trigger-border-color-hover: var(--vds-color-neutral-10, #4b5563);
+    --select-trigger-border-color: var(--vds-outline-field-border, var(--vds-color-neutral-a6));
+    --select-trigger-border-color-hover: var(--vds-outline-field-border-hover, var(--vds-color-neutral-a8));
     --select-trigger-bg: transparent;
     --select-trigger-shadow: none;
     --select-trigger-bg-hover: var(--vds-color-surface-hover, #f9fafb);

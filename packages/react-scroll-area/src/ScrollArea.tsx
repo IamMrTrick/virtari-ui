@@ -12,7 +12,7 @@ import {
   type Ref,
 } from "react";
 import * as ScrollAreaPrimitive from "@virtari-packages/primitives/scroll-area";
-import { cn, useComposedRefs } from "@virtari-packages/utils";
+import { cn, useComposedRefs, useDirection } from "@virtari-packages/utils";
 import { ScrollAreaArrow } from "./ScrollAreaArrow";
 import { useDragScroll } from "./hooks/use-drag-scroll";
 import { useEdgeState, type EdgeState } from "./hooks/use-edge-state";
@@ -130,6 +130,7 @@ export function ScrollArea({
   ...rootProps
 }: ScrollAreaProps) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const inheritedDirection = useDirection(rootRef);
   const viewportRef = useRef<HTMLDivElement>(null);
   const mergedViewportRef = useComposedRefs(viewportRef, externalViewportRef);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -279,7 +280,7 @@ export function ScrollArea({
         ref={ref}
         type={type === "smart" ? "auto" : type}
         scrollHideDelay={scrollHideDelay}
-        dir={dir}
+        dir={dir ?? inheritedDirection}
         className="vds-scroll-area"
         {...rootProps}
       >

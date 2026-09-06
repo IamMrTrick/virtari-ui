@@ -6,6 +6,7 @@ import { Button } from "@virtari-packages/react-button";
 import { IconPalette, IconLayout, IconTypography, IconArrowRight } from "@virtari-packages/react-icons";
 import { Section } from "../components";
 import { SurfaceStylesExample } from "../components/SurfaceStylesExample";
+import { FieldToneExample } from "../components/FieldToneExample";
 
 export function IntroductionPage() {
   const { t, i18n } = useTranslation("introduction");
@@ -39,6 +40,16 @@ export function IntroductionPage() {
       <Section title={label("Three surface styles, one system", "سه سبک سطح، یک سیستم")}>
         <p className="docs-prose">{label("The same fields and nested cards in each style. Change radius in Settings to compare their shape together.", "همان ورودی‌ها و کارت‌های تو‌در‌تو در هر سه سبک. با تغییر رادیوس در تنظیمات، شکل همه را هم‌زمان مقایسه کنید.")}</p>
         <SurfaceStylesExample/>
+      </Section>
+      <Section title={label("Fields on colored surfaces", "ورودی‌ها روی سطوح رنگی")}
+        description={label("Field tone works independently from border, shadow and radius. A deeper transparent fill retains the color of its container.", "شدت رنگ ورودی مستقل از بوردر، سایه و رادیوس است. سطح شفاف قوی‌تر، رنگ ظرف خودش را حفظ می‌کند.")}>
+        <FieldToneExample />
+        <pre className="docs-code">{'<Card data-surface-style="tonal" data-field-tone="strong">\n  <CardContent>\n    <InputField label="Workspace" />\n  </CardContent>\n</Card>'}</pre>
+        <p className="docs-prose">{label("Use visible labels and connected help, then test contrast against your actual background. Stronger contrast preferences restore clear control boundaries.", "از برچسب قابل‌مشاهده و راهنمای متصل استفاده کنید و کنتراست را روی زمینهٔ واقعی بسنجید. تنظیم کنتراست بیشتر، مرز کنترل‌ها را واضح‌تر می‌کند.")}</p>
+        <Cluster>
+          <Button asChild variant="soft" rightSection={<IconArrowRight className="docs-directional-icon" />}><a href={href("guidelines")}>{label("Read the interaction guidelines", "راهنمای طراحی تعامل")}</a></Button>
+          <Button asChild variant="ghost" color="contrast"><a href={href("brand")}>{label("Explore the Virtari identity", "هویت بصری ویرتاری")}</a></Button>
+        </Cluster>
       </Section>
       <Section title={t("whatIs.title")}>
         <p className="docs-prose">
