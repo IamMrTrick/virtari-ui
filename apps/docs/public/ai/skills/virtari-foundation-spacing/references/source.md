@@ -63,42 +63,7 @@
 ```css
 @layer tokens {
   :root {
-    /*
-     * ── Semantic Interior Spacing ──
-     *
-     * The raw scale in ../spacing.css answers "how big". These answer
-     * "how far apart, and why" — for the space *inside* a component.
-     * (The space *between* page regions is layout/semantic.css:
-     * --vds-section-gap, --vds-row-gap, --vds-container-gutter.)
-     *
-     * Interior spacing is a hierarchy, not a set of independent numbers.
-     * Reading a card, an eye has to resolve four nested groupings, and it
-     * does that by gap size alone. So the gaps must be strictly ordered:
-     *
-     *   surface-padding  1.5rem   the edge of the thing
-     *     slot-gap       1rem       header ↔ body ↔ footer
-     *       stack-gap    0.75rem      siblings within one slot
-     *         cluster-gap  0.5rem       chips/icons/actions on one line
-     *           label-gap  0.375rem       title ↔ its own description
-     *
-     * Each level is smaller than the one containing it, and by enough to
-     * be seen as smaller. Break that ordering — a 1rem gap between
-     * siblings inside a slot whose slots are 1rem apart — and the
-     * grouping collapses: the reader can no longer tell which heading
-     * owns which paragraph. This is the single most common way a
-     * component "looks off" without anyone being able to say why.
-     *
-     * Components should consume these rather than reaching for
-     * --vds-space-* directly, so a surface can be retuned as a whole
-     * (Card, Dialog and Popover all breathing the same way) by
-     * overriding one token on a scoped wrapper.
-     *
-     * Override on a wrapper, not at :root, when a density mode is wanted:
-     *
-     *   .compact { --vds-surface-padding-inline: var(--vds-space-4);
-     *              --vds-surface-padding-block:  var(--vds-space-4);
-     *              --vds-slot-gap:               var(--vds-space-3); }
-     */
+    /* Semantic Interior Spacing */
 
     /* ─── The edge ───
      * Padding between a surface's border and its content. Inline and

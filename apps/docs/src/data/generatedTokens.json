@@ -44185,7 +44185,7 @@
       "line": 263
     },
     {
-      "id": "packages/react-tabs/src/Tabs.css:490:5",
+      "id": "packages/react-tabs/src/Tabs.css:469:5",
       "name": "--tabs-boxed-curve-origin-x",
       "value": "0%",
       "selector": ".vds-tabs-list[data-variant=\"boxed\"]:not([data-orientation=\"vertical\"])\n    .vds-tabs-trigger::before",
@@ -44194,10 +44194,10 @@
       ],
       "category": "component",
       "sourceId": "packages/react-tabs/src/Tabs.css",
-      "line": 490
+      "line": 469
     },
     {
-      "id": "packages/react-tabs/src/Tabs.css:495:5",
+      "id": "packages/react-tabs/src/Tabs.css:474:5",
       "name": "--tabs-boxed-curve-origin-x",
       "value": "100%",
       "selector": ".vds-tabs-list[data-variant=\"boxed\"]:not([data-orientation=\"vertical\"])\n    .vds-tabs-trigger::after",
@@ -44206,10 +44206,10 @@
       ],
       "category": "component",
       "sourceId": "packages/react-tabs/src/Tabs.css",
-      "line": 495
+      "line": 474
     },
     {
-      "id": "packages/react-tabs/src/Tabs.css:503:5",
+      "id": "packages/react-tabs/src/Tabs.css:482:5",
       "name": "--tabs-boxed-curve-origin-x",
       "value": "100%",
       "selector": ".vds-tabs-list:dir(rtl)[data-variant=\"boxed\"]:not([data-orientation=\"vertical\"])\n    .vds-tabs-trigger::before",
@@ -44218,10 +44218,10 @@
       ],
       "category": "component",
       "sourceId": "packages/react-tabs/src/Tabs.css",
-      "line": 503
+      "line": 482
     },
     {
-      "id": "packages/react-tabs/src/Tabs.css:507:5",
+      "id": "packages/react-tabs/src/Tabs.css:486:5",
       "name": "--tabs-boxed-curve-origin-x",
       "value": "0%",
       "selector": ".vds-tabs-list:dir(rtl)[data-variant=\"boxed\"]:not([data-orientation=\"vertical\"])\n    .vds-tabs-trigger::after",
@@ -44230,10 +44230,10 @@
       ],
       "category": "component",
       "sourceId": "packages/react-tabs/src/Tabs.css",
-      "line": 507
+      "line": 486
     },
     {
-      "id": "packages/react-tabs/src/Tabs.css:522:5",
+      "id": "packages/react-tabs/src/Tabs.css:501:5",
       "name": "--tabs-boxed-curve-shadow-x",
       "value": "calc(var(--tabs-boxed-curve) / 2)",
       "selector": ".vds-tabs-list[data-variant=\"boxed\"][data-orientation=\"vertical\"]",
@@ -44242,10 +44242,10 @@
       ],
       "category": "component",
       "sourceId": "packages/react-tabs/src/Tabs.css",
-      "line": 522
+      "line": 501
     },
     {
-      "id": "packages/react-tabs/src/Tabs.css:573:5",
+      "id": "packages/react-tabs/src/Tabs.css:552:5",
       "name": "--tabs-boxed-curve-shadow-x",
       "value": "calc(-1 * var(--tabs-boxed-curve) / 2)",
       "selector": ".vds-tabs-list:dir(rtl)[data-variant=\"boxed\"][data-orientation=\"vertical\"]",
@@ -44254,10 +44254,10 @@
       ],
       "category": "component",
       "sourceId": "packages/react-tabs/src/Tabs.css",
-      "line": 573
+      "line": 552
     },
     {
-      "id": "packages/react-tabs/src/Tabs.css:612:5",
+      "id": "packages/react-tabs/src/Tabs.css:591:5",
       "name": "--tabs-static-inline-sign",
       "value": "1",
       "selector": ".vds-tabs-list[data-orientation=\"vertical\"]",
@@ -44266,10 +44266,10 @@
       ],
       "category": "component",
       "sourceId": "packages/react-tabs/src/Tabs.css",
-      "line": 612
+      "line": 591
     },
     {
-      "id": "packages/react-tabs/src/Tabs.css:615:5",
+      "id": "packages/react-tabs/src/Tabs.css:594:5",
       "name": "--tabs-static-inline-sign",
       "value": "-1",
       "selector": ".vds-tabs-list[data-orientation=\"vertical\"]:dir(rtl)",
@@ -44278,7 +44278,7 @@
       ],
       "category": "component",
       "sourceId": "packages/react-tabs/src/Tabs.css",
-      "line": 615
+      "line": 594
     },
     {
       "id": "packages/react-tabs/src/Tabs.tokens.css:14:5",
@@ -52639,9 +52639,201 @@
       "line": 66
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:38:5",
+      "id": "packages/tokens/src/colors/aliases.css:11:5",
       "name": "--vds-color-primary",
       "value": "var(--vds-color-primary-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 11
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:12:5",
+      "name": "--vds-color-secondary",
+      "value": "var(--vds-color-neutral-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 12
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:13:5",
+      "name": "--vds-color-success",
+      "value": "var(--vds-color-success-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 13
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:14:5",
+      "name": "--vds-color-warning",
+      "value": "var(--vds-color-warning-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 14
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:15:5",
+      "name": "--vds-color-danger",
+      "value": "var(--vds-color-danger-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 15
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:16:5",
+      "name": "--vds-color-info",
+      "value": "var(--vds-color-info-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 16
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:17:5",
+      "name": "--vds-color-accent",
+      "value": "var(--vds-color-accent-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 17
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:25:5",
+      "name": "--vds-color-neutral-solid",
+      "value": "var(--vds-color-neutral-9)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 25
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:26:5",
+      "name": "--vds-color-neutral-solid-hover",
+      "value": "var(--vds-color-neutral-10)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 26
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:27:5",
+      "name": "--vds-color-neutral-bg",
+      "value": "var(--vds-color-neutral-3)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 27
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:28:5",
+      "name": "--vds-color-neutral-text",
+      "value": "var(--vds-color-neutral-11)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 28
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:33:5",
+      "name": "--vds-color-primary-emphasis",
+      "value": "var(--vds-color-primary-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 33
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:34:5",
+      "name": "--vds-color-success-emphasis",
+      "value": "var(--vds-color-success-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 34
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:35:5",
+      "name": "--vds-color-warning-emphasis",
+      "value": "var(--vds-color-warning-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 35
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:36:5",
+      "name": "--vds-color-danger-emphasis",
+      "value": "var(--vds-color-danger-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 36
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:37:5",
+      "name": "--vds-color-info-emphasis",
+      "value": "var(--vds-color-info-solid)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 37
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:38:5",
+      "name": "--vds-color-accent-emphasis",
+      "value": "var(--vds-color-accent-solid)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52651,33 +52843,9 @@
       "line": 38
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:39:5",
-      "name": "--vds-color-secondary",
-      "value": "var(--vds-color-neutral-solid)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 39
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:40:5",
-      "name": "--vds-color-success",
-      "value": "var(--vds-color-success-solid)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 40
-    },
-    {
       "id": "packages/tokens/src/colors/aliases.css:41:5",
-      "name": "--vds-color-warning",
-      "value": "var(--vds-color-warning-solid)",
+      "name": "--vds-color-primary-on-emphasis",
+      "value": "var(--vds-color-on-primary)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52688,8 +52856,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:42:5",
-      "name": "--vds-color-danger",
-      "value": "var(--vds-color-danger-solid)",
+      "name": "--vds-color-success-on-emphasis",
+      "value": "var(--vds-color-on-success)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52700,8 +52868,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:43:5",
-      "name": "--vds-color-info",
-      "value": "var(--vds-color-info-solid)",
+      "name": "--vds-color-warning-on-emphasis",
+      "value": "var(--vds-color-on-warning)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52712,8 +52880,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:44:5",
-      "name": "--vds-color-accent",
-      "value": "var(--vds-color-accent-solid)",
+      "name": "--vds-color-danger-on-emphasis",
+      "value": "var(--vds-color-on-danger)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52723,57 +52891,93 @@
       "line": 44
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:52:5",
-      "name": "--vds-color-neutral-solid",
-      "value": "var(--vds-color-neutral-9)",
+      "id": "packages/tokens/src/colors/aliases.css:45:5",
+      "name": "--vds-color-info-on-emphasis",
+      "value": "var(--vds-color-on-info)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 52
+      "line": 45
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:53:5",
-      "name": "--vds-color-neutral-solid-hover",
-      "value": "var(--vds-color-neutral-10)",
+      "id": "packages/tokens/src/colors/aliases.css:46:5",
+      "name": "--vds-color-accent-on-emphasis",
+      "value": "var(--vds-color-on-accent)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 53
+      "line": 46
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:54:5",
-      "name": "--vds-color-neutral-bg",
-      "value": "var(--vds-color-neutral-3)",
+      "id": "packages/tokens/src/colors/aliases.css:50:5",
+      "name": "--vds-color-bg-emphasis",
+      "value": "var(--vds-color-bg-inverse)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 54
+      "line": 50
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:55:5",
-      "name": "--vds-color-neutral-text",
-      "value": "var(--vds-color-neutral-11)",
+      "id": "packages/tokens/src/colors/aliases.css:51:5",
+      "name": "--vds-color-on-emphasis",
+      "value": "var(--vds-color-text-inverse)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 55
+      "line": 51
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:57:5",
+      "name": "--vds-color-primary-muted",
+      "value": "var(--vds-color-primary-bg)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 57
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:58:5",
+      "name": "--vds-color-success-muted",
+      "value": "var(--vds-color-success-bg)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 58
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:59:5",
+      "name": "--vds-color-warning-muted",
+      "value": "var(--vds-color-warning-bg)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 59
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:60:5",
-      "name": "--vds-color-primary-emphasis",
-      "value": "var(--vds-color-primary-solid)",
+      "name": "--vds-color-danger-muted",
+      "value": "var(--vds-color-danger-bg)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52784,8 +52988,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:61:5",
-      "name": "--vds-color-success-emphasis",
-      "value": "var(--vds-color-success-solid)",
+      "name": "--vds-color-info-muted",
+      "value": "var(--vds-color-info-bg)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52796,8 +53000,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:62:5",
-      "name": "--vds-color-warning-emphasis",
-      "value": "var(--vds-color-warning-solid)",
+      "name": "--vds-color-accent-muted",
+      "value": "var(--vds-color-accent-bg)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52807,21 +53011,9 @@
       "line": 62
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:63:5",
-      "name": "--vds-color-danger-emphasis",
-      "value": "var(--vds-color-danger-solid)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 63
-    },
-    {
       "id": "packages/tokens/src/colors/aliases.css:64:5",
-      "name": "--vds-color-info-emphasis",
-      "value": "var(--vds-color-info-solid)",
+      "name": "--vds-color-primary-subtle",
+      "value": "var(--vds-color-primary-bg)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52832,8 +53024,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:65:5",
-      "name": "--vds-color-accent-emphasis",
-      "value": "var(--vds-color-accent-solid)",
+      "name": "--vds-color-success-subtle",
+      "value": "var(--vds-color-success-bg)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52843,9 +53035,33 @@
       "line": 65
     },
     {
+      "id": "packages/tokens/src/colors/aliases.css:66:5",
+      "name": "--vds-color-warning-subtle",
+      "value": "var(--vds-color-warning-bg)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 66
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:67:5",
+      "name": "--vds-color-danger-subtle",
+      "value": "var(--vds-color-danger-bg)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 67
+    },
+    {
       "id": "packages/tokens/src/colors/aliases.css:68:5",
-      "name": "--vds-color-primary-on-emphasis",
-      "value": "var(--vds-color-on-primary)",
+      "name": "--vds-color-info-subtle",
+      "value": "var(--vds-color-info-bg)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52856,8 +53072,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:69:5",
-      "name": "--vds-color-success-on-emphasis",
-      "value": "var(--vds-color-on-success)",
+      "name": "--vds-color-accent-subtle",
+      "value": "var(--vds-color-accent-bg)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52867,33 +53083,9 @@
       "line": 69
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:70:5",
-      "name": "--vds-color-warning-on-emphasis",
-      "value": "var(--vds-color-on-warning)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 70
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:71:5",
-      "name": "--vds-color-danger-on-emphasis",
-      "value": "var(--vds-color-on-danger)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 71
-    },
-    {
       "id": "packages/tokens/src/colors/aliases.css:72:5",
-      "name": "--vds-color-info-on-emphasis",
-      "value": "var(--vds-color-on-info)",
+      "name": "--vds-color-primary-muted-text",
+      "value": "var(--vds-color-primary-text-muted)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52904,8 +53096,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:73:5",
-      "name": "--vds-color-accent-on-emphasis",
-      "value": "var(--vds-color-on-accent)",
+      "name": "--vds-color-success-muted-text",
+      "value": "var(--vds-color-success-text-muted)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52915,9 +53107,45 @@
       "line": 73
     },
     {
+      "id": "packages/tokens/src/colors/aliases.css:74:5",
+      "name": "--vds-color-warning-muted-text",
+      "value": "var(--vds-color-warning-text-muted)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 74
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:75:5",
+      "name": "--vds-color-danger-muted-text",
+      "value": "var(--vds-color-danger-text-muted)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 75
+    },
+    {
+      "id": "packages/tokens/src/colors/aliases.css:76:5",
+      "name": "--vds-color-info-muted-text",
+      "value": "var(--vds-color-info-text-muted)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/aliases.css",
+      "line": 76
+    },
+    {
       "id": "packages/tokens/src/colors/aliases.css:77:5",
-      "name": "--vds-color-bg-emphasis",
-      "value": "var(--vds-color-bg-inverse)",
+      "name": "--vds-color-accent-muted-text",
+      "value": "var(--vds-color-accent-text-muted)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -52927,69 +53155,45 @@
       "line": 77
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:78:5",
-      "name": "--vds-color-on-emphasis",
-      "value": "var(--vds-color-text-inverse)",
+      "id": "packages/tokens/src/colors/aliases.css:81:5",
+      "name": "--vds-color-primary-border",
+      "value": "var(--vds-color-border-primary)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 78
+      "line": 81
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:84:5",
-      "name": "--vds-color-primary-muted",
-      "value": "var(--vds-color-primary-bg)",
+      "id": "packages/tokens/src/colors/aliases.css:82:5",
+      "name": "--vds-color-primary-contrast",
+      "value": "var(--vds-color-on-primary)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 84
+      "line": 82
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:85:5",
-      "name": "--vds-color-success-muted",
-      "value": "var(--vds-color-success-bg)",
+      "id": "packages/tokens/src/colors/aliases.css:83:5",
+      "name": "--vds-color-border-default",
+      "value": "var(--vds-color-border)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 85
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:86:5",
-      "name": "--vds-color-warning-muted",
-      "value": "var(--vds-color-warning-bg)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 86
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:87:5",
-      "name": "--vds-color-danger-muted",
-      "value": "var(--vds-color-danger-bg)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 87
+      "line": 83
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:88:5",
-      "name": "--vds-color-info-muted",
-      "value": "var(--vds-color-info-bg)",
+      "name": "--vds-color-overlay",
+      "value": "var(--vds-color-scrim)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -53000,8 +53204,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:89:5",
-      "name": "--vds-color-accent-muted",
-      "value": "var(--vds-color-accent-bg)",
+      "name": "--vds-color-overlay-light",
+      "value": "var(--vds-color-scrim-light)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -53011,81 +53215,33 @@
       "line": 89
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:91:5",
-      "name": "--vds-color-primary-subtle",
-      "value": "var(--vds-color-primary-bg)",
+      "id": "packages/tokens/src/colors/aliases.css:90:5",
+      "name": "--vds-color-overlay-strong",
+      "value": "var(--vds-color-scrim-strong)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 91
+      "line": 90
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:92:5",
-      "name": "--vds-color-success-subtle",
-      "value": "var(--vds-color-success-bg)",
+      "id": "packages/tokens/src/colors/aliases.css:98:5",
+      "name": "--vds-color-primary-50",
+      "value": "var(--vds-color-primary-1)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 92
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:93:5",
-      "name": "--vds-color-warning-subtle",
-      "value": "var(--vds-color-warning-bg)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 93
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:94:5",
-      "name": "--vds-color-danger-subtle",
-      "value": "var(--vds-color-danger-bg)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 94
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:95:5",
-      "name": "--vds-color-info-subtle",
-      "value": "var(--vds-color-info-bg)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 95
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:96:5",
-      "name": "--vds-color-accent-subtle",
-      "value": "var(--vds-color-accent-bg)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 96
+      "line": 98
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:99:5",
-      "name": "--vds-color-primary-muted-text",
-      "value": "var(--vds-color-primary-text-muted)",
+      "name": "--vds-color-primary-100",
+      "value": "var(--vds-color-primary-2)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -53096,8 +53252,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:100:5",
-      "name": "--vds-color-success-muted-text",
-      "value": "var(--vds-color-success-text-muted)",
+      "name": "--vds-color-primary-200",
+      "value": "var(--vds-color-primary-3)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -53108,8 +53264,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:101:5",
-      "name": "--vds-color-warning-muted-text",
-      "value": "var(--vds-color-warning-text-muted)",
+      "name": "--vds-color-primary-500",
+      "value": "var(--vds-color-primary-9)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -53120,8 +53276,8 @@
     },
     {
       "id": "packages/tokens/src/colors/aliases.css:102:5",
-      "name": "--vds-color-danger-muted-text",
-      "value": "var(--vds-color-danger-text-muted)",
+      "name": "--vds-color-primary-700",
+      "value": "var(--vds-color-primary-11)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -53131,163 +53287,7 @@
       "line": 102
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:103:5",
-      "name": "--vds-color-info-muted-text",
-      "value": "var(--vds-color-info-text-muted)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 103
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:104:5",
-      "name": "--vds-color-accent-muted-text",
-      "value": "var(--vds-color-accent-text-muted)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 104
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:108:5",
-      "name": "--vds-color-primary-border",
-      "value": "var(--vds-color-border-primary)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 108
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:109:5",
-      "name": "--vds-color-primary-contrast",
-      "value": "var(--vds-color-on-primary)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 109
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:110:5",
-      "name": "--vds-color-border-default",
-      "value": "var(--vds-color-border)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 110
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:115:5",
-      "name": "--vds-color-overlay",
-      "value": "var(--vds-color-scrim)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 115
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:116:5",
-      "name": "--vds-color-overlay-light",
-      "value": "var(--vds-color-scrim-light)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 116
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:117:5",
-      "name": "--vds-color-overlay-strong",
-      "value": "var(--vds-color-scrim-strong)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 117
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:125:5",
-      "name": "--vds-color-primary-50",
-      "value": "var(--vds-color-primary-1)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 125
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:126:5",
-      "name": "--vds-color-primary-100",
-      "value": "var(--vds-color-primary-2)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 126
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:127:5",
-      "name": "--vds-color-primary-200",
-      "value": "var(--vds-color-primary-3)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 127
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:128:5",
-      "name": "--vds-color-primary-500",
-      "value": "var(--vds-color-primary-9)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 128
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:129:5",
-      "name": "--vds-color-primary-700",
-      "value": "var(--vds-color-primary-11)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 129
-    },
-    {
-      "id": "packages/tokens/src/colors/aliases.css:161:5",
+      "id": "packages/tokens/src/colors/aliases.css:111:5",
       "name": "--vds-color-sky-11",
       "value": "oklch(0.450 0.130 240)",
       "selector": ":root,\n  [data-theme]",
@@ -53296,10 +53296,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 161
+      "line": 111
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:162:5",
+      "id": "packages/tokens/src/colors/aliases.css:112:5",
       "name": "--vds-color-emerald-11",
       "value": "oklch(0.440 0.130 165)",
       "selector": ":root,\n  [data-theme]",
@@ -53308,10 +53308,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 162
+      "line": 112
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:163:5",
+      "id": "packages/tokens/src/colors/aliases.css:113:5",
       "name": "--vds-color-violet-11",
       "value": "oklch(0.455 0.175 295)",
       "selector": ":root,\n  [data-theme]",
@@ -53320,10 +53320,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 163
+      "line": 113
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:168:5",
+      "id": "packages/tokens/src/colors/aliases.css:118:5",
       "name": "--vds-color-sky-11",
       "value": "oklch(0.770 0.125 240)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
@@ -53332,10 +53332,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 168
+      "line": 118
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:169:5",
+      "id": "packages/tokens/src/colors/aliases.css:119:5",
       "name": "--vds-color-emerald-11",
       "value": "oklch(0.765 0.140 165)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
@@ -53344,10 +53344,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 169
+      "line": 119
     },
     {
-      "id": "packages/tokens/src/colors/aliases.css:170:5",
+      "id": "packages/tokens/src/colors/aliases.css:120:5",
       "name": "--vds-color-violet-11",
       "value": "oklch(0.775 0.150 295)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
@@ -53356,7 +53356,7 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/aliases.css",
-      "line": 170
+      "line": 120
     },
     {
       "id": "packages/tokens/src/colors/primitives/alphas.css:26:5",
@@ -56527,7 +56527,7 @@
       "line": 108
     },
     {
-      "id": "packages/tokens/src/colors/primitives/intents.css:142:5",
+      "id": "packages/tokens/src/colors/primitives/intents.css:115:5",
       "name": "--vds-color-primary-1",
       "value": "oklch(0.190 0.020 265)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
@@ -56536,12 +56536,288 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 142
+      "line": 115
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:116:5",
+      "name": "--vds-color-primary-2",
+      "value": "oklch(0.215 0.035 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 116
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:117:5",
+      "name": "--vds-color-primary-3",
+      "value": "oklch(0.245 0.060 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 117
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:118:5",
+      "name": "--vds-color-primary-4",
+      "value": "oklch(0.275 0.085 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 118
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:119:5",
+      "name": "--vds-color-primary-5",
+      "value": "oklch(0.310 0.110 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 119
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:120:5",
+      "name": "--vds-color-primary-6",
+      "value": "oklch(0.355 0.135 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 120
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:121:5",
+      "name": "--vds-color-primary-7",
+      "value": "oklch(0.420 0.160 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 121
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:122:5",
+      "name": "--vds-color-primary-8",
+      "value": "oklch(0.500 0.180 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 122
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:123:5",
+      "name": "--vds-color-primary-9",
+      "value": "oklch(0.575 0.200 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 123
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:124:5",
+      "name": "--vds-color-primary-10",
+      "value": "oklch(0.665 0.195 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 124
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:125:5",
+      "name": "--vds-color-primary-11",
+      "value": "oklch(0.760 0.180 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 125
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:126:5",
+      "name": "--vds-color-primary-12",
+      "value": "oklch(0.910 0.080 265)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 126
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:129:5",
+      "name": "--vds-color-success-1",
+      "value": "oklch(0.180 0.018 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 129
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:130:5",
+      "name": "--vds-color-success-2",
+      "value": "oklch(0.205 0.030 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 130
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:131:5",
+      "name": "--vds-color-success-3",
+      "value": "oklch(0.235 0.050 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 131
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:132:5",
+      "name": "--vds-color-success-4",
+      "value": "oklch(0.265 0.070 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 132
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:133:5",
+      "name": "--vds-color-success-5",
+      "value": "oklch(0.300 0.090 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 133
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:134:5",
+      "name": "--vds-color-success-6",
+      "value": "oklch(0.345 0.110 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 134
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:135:5",
+      "name": "--vds-color-success-7",
+      "value": "oklch(0.405 0.130 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 135
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:136:5",
+      "name": "--vds-color-success-8",
+      "value": "oklch(0.485 0.155 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 136
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:137:5",
+      "name": "--vds-color-success-9",
+      "value": "oklch(0.535 0.170 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 137
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:138:5",
+      "name": "--vds-color-success-10",
+      "value": "oklch(0.660 0.165 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 138
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:139:5",
+      "name": "--vds-color-success-11",
+      "value": "oklch(0.755 0.150 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 139
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/intents.css:140:5",
+      "name": "--vds-color-success-12",
+      "value": "oklch(0.905 0.080 155)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
+      "line": 140
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:143:5",
-      "name": "--vds-color-primary-2",
-      "value": "oklch(0.215 0.035 265)",
+      "name": "--vds-color-warning-1",
+      "value": "oklch(0.180 0.020 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56552,8 +56828,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:144:5",
-      "name": "--vds-color-primary-3",
-      "value": "oklch(0.245 0.060 265)",
+      "name": "--vds-color-warning-2",
+      "value": "oklch(0.205 0.035 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56564,8 +56840,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:145:5",
-      "name": "--vds-color-primary-4",
-      "value": "oklch(0.275 0.085 265)",
+      "name": "--vds-color-warning-3",
+      "value": "oklch(0.240 0.055 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56576,8 +56852,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:146:5",
-      "name": "--vds-color-primary-5",
-      "value": "oklch(0.310 0.110 265)",
+      "name": "--vds-color-warning-4",
+      "value": "oklch(0.275 0.075 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56588,8 +56864,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:147:5",
-      "name": "--vds-color-primary-6",
-      "value": "oklch(0.355 0.135 265)",
+      "name": "--vds-color-warning-5",
+      "value": "oklch(0.315 0.095 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56600,8 +56876,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:148:5",
-      "name": "--vds-color-primary-7",
-      "value": "oklch(0.420 0.160 265)",
+      "name": "--vds-color-warning-6",
+      "value": "oklch(0.360 0.115 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56612,8 +56888,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:149:5",
-      "name": "--vds-color-primary-8",
-      "value": "oklch(0.500 0.180 265)",
+      "name": "--vds-color-warning-7",
+      "value": "oklch(0.420 0.135 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56624,8 +56900,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:150:5",
-      "name": "--vds-color-primary-9",
-      "value": "oklch(0.575 0.200 265)",
+      "name": "--vds-color-warning-8",
+      "value": "oklch(0.495 0.150 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56636,8 +56912,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:151:5",
-      "name": "--vds-color-primary-10",
-      "value": "oklch(0.665 0.195 265)",
+      "name": "--vds-color-warning-9",
+      "value": "oklch(0.700 0.155 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56648,8 +56924,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:152:5",
-      "name": "--vds-color-primary-11",
-      "value": "oklch(0.760 0.180 265)",
+      "name": "--vds-color-warning-10",
+      "value": "oklch(0.745 0.150 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56660,8 +56936,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:153:5",
-      "name": "--vds-color-primary-12",
-      "value": "oklch(0.910 0.080 265)",
+      "name": "--vds-color-warning-11",
+      "value": "oklch(0.815 0.140 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56671,21 +56947,21 @@
       "line": 153
     },
     {
-      "id": "packages/tokens/src/colors/primitives/intents.css:156:5",
-      "name": "--vds-color-success-1",
-      "value": "oklch(0.180 0.018 155)",
+      "id": "packages/tokens/src/colors/primitives/intents.css:154:5",
+      "name": "--vds-color-warning-12",
+      "value": "oklch(0.925 0.085 85)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 156
+      "line": 154
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:157:5",
-      "name": "--vds-color-success-2",
-      "value": "oklch(0.205 0.030 155)",
+      "name": "--vds-color-danger-1",
+      "value": "oklch(0.190 0.020 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56696,8 +56972,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:158:5",
-      "name": "--vds-color-success-3",
-      "value": "oklch(0.235 0.050 155)",
+      "name": "--vds-color-danger-2",
+      "value": "oklch(0.215 0.035 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56708,8 +56984,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:159:5",
-      "name": "--vds-color-success-4",
-      "value": "oklch(0.265 0.070 155)",
+      "name": "--vds-color-danger-3",
+      "value": "oklch(0.245 0.055 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56720,8 +56996,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:160:5",
-      "name": "--vds-color-success-5",
-      "value": "oklch(0.300 0.090 155)",
+      "name": "--vds-color-danger-4",
+      "value": "oklch(0.275 0.080 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56732,8 +57008,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:161:5",
-      "name": "--vds-color-success-6",
-      "value": "oklch(0.345 0.110 155)",
+      "name": "--vds-color-danger-5",
+      "value": "oklch(0.310 0.105 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56744,8 +57020,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:162:5",
-      "name": "--vds-color-success-7",
-      "value": "oklch(0.405 0.130 155)",
+      "name": "--vds-color-danger-6",
+      "value": "oklch(0.355 0.130 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56756,8 +57032,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:163:5",
-      "name": "--vds-color-success-8",
-      "value": "oklch(0.485 0.155 155)",
+      "name": "--vds-color-danger-7",
+      "value": "oklch(0.420 0.155 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56768,8 +57044,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:164:5",
-      "name": "--vds-color-success-9",
-      "value": "oklch(0.535 0.170 155)",
+      "name": "--vds-color-danger-8",
+      "value": "oklch(0.500 0.180 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56780,8 +57056,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:165:5",
-      "name": "--vds-color-success-10",
-      "value": "oklch(0.660 0.165 155)",
+      "name": "--vds-color-danger-9",
+      "value": "oklch(0.585 0.200 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56792,8 +57068,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:166:5",
-      "name": "--vds-color-success-11",
-      "value": "oklch(0.755 0.150 155)",
+      "name": "--vds-color-danger-10",
+      "value": "oklch(0.670 0.195 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56804,8 +57080,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:167:5",
-      "name": "--vds-color-success-12",
-      "value": "oklch(0.905 0.080 155)",
+      "name": "--vds-color-danger-11",
+      "value": "oklch(0.770 0.175 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56815,21 +57091,21 @@
       "line": 167
     },
     {
-      "id": "packages/tokens/src/colors/primitives/intents.css:170:5",
-      "name": "--vds-color-warning-1",
-      "value": "oklch(0.180 0.020 85)",
+      "id": "packages/tokens/src/colors/primitives/intents.css:168:5",
+      "name": "--vds-color-danger-12",
+      "value": "oklch(0.910 0.085 25)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 170
+      "line": 168
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:171:5",
-      "name": "--vds-color-warning-2",
-      "value": "oklch(0.205 0.035 85)",
+      "name": "--vds-color-info-1",
+      "value": "oklch(0.185 0.015 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56840,8 +57116,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:172:5",
-      "name": "--vds-color-warning-3",
-      "value": "oklch(0.240 0.055 85)",
+      "name": "--vds-color-info-2",
+      "value": "oklch(0.210 0.025 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56852,8 +57128,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:173:5",
-      "name": "--vds-color-warning-4",
-      "value": "oklch(0.275 0.075 85)",
+      "name": "--vds-color-info-3",
+      "value": "oklch(0.240 0.045 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56864,8 +57140,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:174:5",
-      "name": "--vds-color-warning-5",
-      "value": "oklch(0.315 0.095 85)",
+      "name": "--vds-color-info-4",
+      "value": "oklch(0.270 0.060 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56876,8 +57152,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:175:5",
-      "name": "--vds-color-warning-6",
-      "value": "oklch(0.360 0.115 85)",
+      "name": "--vds-color-info-5",
+      "value": "oklch(0.305 0.080 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56888,8 +57164,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:176:5",
-      "name": "--vds-color-warning-7",
-      "value": "oklch(0.420 0.135 85)",
+      "name": "--vds-color-info-6",
+      "value": "oklch(0.350 0.095 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56900,8 +57176,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:177:5",
-      "name": "--vds-color-warning-8",
-      "value": "oklch(0.495 0.150 85)",
+      "name": "--vds-color-info-7",
+      "value": "oklch(0.410 0.115 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56912,8 +57188,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:178:5",
-      "name": "--vds-color-warning-9",
-      "value": "oklch(0.700 0.155 85)",
+      "name": "--vds-color-info-8",
+      "value": "oklch(0.490 0.135 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56924,8 +57200,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:179:5",
-      "name": "--vds-color-warning-10",
-      "value": "oklch(0.745 0.150 85)",
+      "name": "--vds-color-info-9",
+      "value": "oklch(0.535 0.140 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56936,8 +57212,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:180:5",
-      "name": "--vds-color-warning-11",
-      "value": "oklch(0.815 0.140 85)",
+      "name": "--vds-color-info-10",
+      "value": "oklch(0.670 0.135 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56948,8 +57224,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:181:5",
-      "name": "--vds-color-warning-12",
-      "value": "oklch(0.925 0.085 85)",
+      "name": "--vds-color-info-11",
+      "value": "oklch(0.760 0.120 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56959,21 +57235,21 @@
       "line": 181
     },
     {
-      "id": "packages/tokens/src/colors/primitives/intents.css:184:5",
-      "name": "--vds-color-danger-1",
-      "value": "oklch(0.190 0.020 25)",
+      "id": "packages/tokens/src/colors/primitives/intents.css:182:5",
+      "name": "--vds-color-info-12",
+      "value": "oklch(0.905 0.075 210)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 184
+      "line": 182
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:185:5",
-      "name": "--vds-color-danger-2",
-      "value": "oklch(0.215 0.035 25)",
+      "name": "--vds-color-accent-1",
+      "value": "oklch(0.185 0.020 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56984,8 +57260,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:186:5",
-      "name": "--vds-color-danger-3",
-      "value": "oklch(0.245 0.055 25)",
+      "name": "--vds-color-accent-2",
+      "value": "oklch(0.215 0.035 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -56996,8 +57272,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:187:5",
-      "name": "--vds-color-danger-4",
-      "value": "oklch(0.275 0.080 25)",
+      "name": "--vds-color-accent-3",
+      "value": "oklch(0.245 0.060 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -57008,8 +57284,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:188:5",
-      "name": "--vds-color-danger-5",
-      "value": "oklch(0.310 0.105 25)",
+      "name": "--vds-color-accent-4",
+      "value": "oklch(0.275 0.085 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -57020,8 +57296,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:189:5",
-      "name": "--vds-color-danger-6",
-      "value": "oklch(0.355 0.130 25)",
+      "name": "--vds-color-accent-5",
+      "value": "oklch(0.315 0.110 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -57032,8 +57308,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:190:5",
-      "name": "--vds-color-danger-7",
-      "value": "oklch(0.420 0.155 25)",
+      "name": "--vds-color-accent-6",
+      "value": "oklch(0.360 0.130 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -57044,8 +57320,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:191:5",
-      "name": "--vds-color-danger-8",
-      "value": "oklch(0.500 0.180 25)",
+      "name": "--vds-color-accent-7",
+      "value": "oklch(0.420 0.150 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -57056,8 +57332,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:192:5",
-      "name": "--vds-color-danger-9",
-      "value": "oklch(0.585 0.200 25)",
+      "name": "--vds-color-accent-8",
+      "value": "oklch(0.500 0.165 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -57068,8 +57344,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:193:5",
-      "name": "--vds-color-danger-10",
-      "value": "oklch(0.670 0.195 25)",
+      "name": "--vds-color-accent-9",
+      "value": "oklch(0.580 0.180 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -57080,8 +57356,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:194:5",
-      "name": "--vds-color-danger-11",
-      "value": "oklch(0.770 0.175 25)",
+      "name": "--vds-color-accent-10",
+      "value": "oklch(0.715 0.175 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -57092,8 +57368,8 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:195:5",
-      "name": "--vds-color-danger-12",
-      "value": "oklch(0.910 0.085 25)",
+      "name": "--vds-color-accent-11",
+      "value": "oklch(0.795 0.155 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
@@ -57103,94 +57379,22 @@
       "line": 195
     },
     {
-      "id": "packages/tokens/src/colors/primitives/intents.css:198:5",
-      "name": "--vds-color-info-1",
-      "value": "oklch(0.185 0.015 210)",
+      "id": "packages/tokens/src/colors/primitives/intents.css:196:5",
+      "name": "--vds-color-accent-12",
+      "value": "oklch(0.920 0.080 45)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 198
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:199:5",
-      "name": "--vds-color-info-2",
-      "value": "oklch(0.210 0.025 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 199
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:200:5",
-      "name": "--vds-color-info-3",
-      "value": "oklch(0.240 0.045 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 200
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:201:5",
-      "name": "--vds-color-info-4",
-      "value": "oklch(0.270 0.060 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 201
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:202:5",
-      "name": "--vds-color-info-5",
-      "value": "oklch(0.305 0.080 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 202
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:203:5",
-      "name": "--vds-color-info-6",
-      "value": "oklch(0.350 0.095 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 203
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:204:5",
-      "name": "--vds-color-info-7",
-      "value": "oklch(0.410 0.115 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 204
+      "line": 196
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:205:5",
-      "name": "--vds-color-info-8",
-      "value": "oklch(0.490 0.135 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "name": "--vds-color-primary-1",
+      "value": "oklch(0.080 0.015 265)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57200,9 +57404,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:206:5",
-      "name": "--vds-color-info-9",
-      "value": "oklch(0.535 0.140 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "name": "--vds-color-success-1",
+      "value": "oklch(0.075 0.012 155)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57212,9 +57416,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:207:5",
-      "name": "--vds-color-info-10",
-      "value": "oklch(0.670 0.135 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "name": "--vds-color-warning-1",
+      "value": "oklch(0.080 0.015 85)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57224,9 +57428,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:208:5",
-      "name": "--vds-color-info-11",
-      "value": "oklch(0.760 0.120 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "name": "--vds-color-danger-1",
+      "value": "oklch(0.080 0.015 25)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57236,210 +57440,6 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/intents.css:209:5",
-      "name": "--vds-color-info-12",
-      "value": "oklch(0.905 0.075 210)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 209
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:212:5",
-      "name": "--vds-color-accent-1",
-      "value": "oklch(0.185 0.020 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 212
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:213:5",
-      "name": "--vds-color-accent-2",
-      "value": "oklch(0.215 0.035 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 213
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:214:5",
-      "name": "--vds-color-accent-3",
-      "value": "oklch(0.245 0.060 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 214
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:215:5",
-      "name": "--vds-color-accent-4",
-      "value": "oklch(0.275 0.085 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 215
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:216:5",
-      "name": "--vds-color-accent-5",
-      "value": "oklch(0.315 0.110 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 216
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:217:5",
-      "name": "--vds-color-accent-6",
-      "value": "oklch(0.360 0.130 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 217
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:218:5",
-      "name": "--vds-color-accent-7",
-      "value": "oklch(0.420 0.150 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 218
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:219:5",
-      "name": "--vds-color-accent-8",
-      "value": "oklch(0.500 0.165 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 219
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:220:5",
-      "name": "--vds-color-accent-9",
-      "value": "oklch(0.580 0.180 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 220
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:221:5",
-      "name": "--vds-color-accent-10",
-      "value": "oklch(0.715 0.175 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 221
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:222:5",
-      "name": "--vds-color-accent-11",
-      "value": "oklch(0.795 0.155 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 222
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:223:5",
-      "name": "--vds-color-accent-12",
-      "value": "oklch(0.920 0.080 45)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 223
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:232:5",
-      "name": "--vds-color-primary-1",
-      "value": "oklch(0.080 0.015 265)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 232
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:233:5",
-      "name": "--vds-color-success-1",
-      "value": "oklch(0.075 0.012 155)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 233
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:234:5",
-      "name": "--vds-color-warning-1",
-      "value": "oklch(0.080 0.015 85)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 234
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:235:5",
-      "name": "--vds-color-danger-1",
-      "value": "oklch(0.080 0.015 25)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 235
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/intents.css:236:5",
       "name": "--vds-color-info-1",
       "value": "oklch(0.075 0.012 210)",
       "selector": "[data-theme=\"dark-oled\"]",
@@ -57448,10 +57448,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 236
+      "line": 209
     },
     {
-      "id": "packages/tokens/src/colors/primitives/intents.css:237:5",
+      "id": "packages/tokens/src/colors/primitives/intents.css:210:5",
       "name": "--vds-color-accent-1",
       "value": "oklch(0.080 0.015 45)",
       "selector": "[data-theme=\"dark-oled\"]",
@@ -57460,13 +57460,241 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/primitives/intents.css",
-      "line": 237
+      "line": 210
     },
     {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:34:5",
+      "id": "packages/tokens/src/colors/primitives/neutral.css:9:5",
       "name": "--vds-color-white",
       "value": "oklch(1 0 0)",
       "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 9
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:10:5",
+      "name": "--vds-color-black",
+      "value": "oklch(0 0 0)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 10
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:13:5",
+      "name": "--vds-color-neutral-1",
+      "value": "oklch(0.985 0.002 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 13
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:14:5",
+      "name": "--vds-color-neutral-2",
+      "value": "oklch(0.975 0.003 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 14
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:15:5",
+      "name": "--vds-color-neutral-3",
+      "value": "oklch(0.945 0.004 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 15
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:16:5",
+      "name": "--vds-color-neutral-4",
+      "value": "oklch(0.920 0.005 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 16
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:17:5",
+      "name": "--vds-color-neutral-5",
+      "value": "oklch(0.890 0.006 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 17
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:18:5",
+      "name": "--vds-color-neutral-6",
+      "value": "oklch(0.855 0.007 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 18
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:19:5",
+      "name": "--vds-color-neutral-7",
+      "value": "oklch(0.810 0.008 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 19
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:20:5",
+      "name": "--vds-color-neutral-8",
+      "value": "oklch(0.745 0.010 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 20
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:21:5",
+      "name": "--vds-color-neutral-9",
+      "value": "oklch(0.580 0.014 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 21
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:22:5",
+      "name": "--vds-color-neutral-10",
+      "value": "oklch(0.530 0.014 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 22
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:23:5",
+      "name": "--vds-color-neutral-11",
+      "value": "oklch(0.430 0.013 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 23
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:24:5",
+      "name": "--vds-color-neutral-12",
+      "value": "oklch(0.180 0.012 270)",
+      "selector": ":root,\n  [data-theme=\"light\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 24
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:29:5",
+      "name": "--vds-color-neutral-1",
+      "value": "oklch(0.178 0.005 270)",
+      "selector": "[data-theme=\"dark\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 29
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:30:5",
+      "name": "--vds-color-neutral-2",
+      "value": "oklch(0.210 0.005 270)",
+      "selector": "[data-theme=\"dark\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 30
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:31:5",
+      "name": "--vds-color-neutral-3",
+      "value": "oklch(0.245 0.006 270)",
+      "selector": "[data-theme=\"dark\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 31
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:32:5",
+      "name": "--vds-color-neutral-4",
+      "value": "oklch(0.275 0.007 270)",
+      "selector": "[data-theme=\"dark\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 32
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:33:5",
+      "name": "--vds-color-neutral-5",
+      "value": "oklch(0.305 0.008 270)",
+      "selector": "[data-theme=\"dark\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 33
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:34:5",
+      "name": "--vds-color-neutral-6",
+      "value": "oklch(0.345 0.009 270)",
+      "selector": "[data-theme=\"dark\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57476,9 +57704,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/neutral.css:35:5",
-      "name": "--vds-color-black",
-      "value": "oklch(0 0 0)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
+      "name": "--vds-color-neutral-7",
+      "value": "oklch(0.395 0.010 270)",
+      "selector": "[data-theme=\"dark\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57487,10 +57715,34 @@
       "line": 35
     },
     {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:36:5",
+      "name": "--vds-color-neutral-8",
+      "value": "oklch(0.460 0.011 270)",
+      "selector": "[data-theme=\"dark\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 36
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:37:5",
+      "name": "--vds-color-neutral-9",
+      "value": "oklch(0.530 0.013 270)",
+      "selector": "[data-theme=\"dark\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 37
+    },
+    {
       "id": "packages/tokens/src/colors/primitives/neutral.css:38:5",
-      "name": "--vds-color-neutral-1",
-      "value": "oklch(0.985 0.002 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
+      "name": "--vds-color-neutral-10",
+      "value": "oklch(0.580 0.013 270)",
+      "selector": "[data-theme=\"dark\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57500,9 +57752,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/neutral.css:39:5",
-      "name": "--vds-color-neutral-2",
-      "value": "oklch(0.975 0.003 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
+      "name": "--vds-color-neutral-11",
+      "value": "oklch(0.720 0.011 270)",
+      "selector": "[data-theme=\"dark\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57512,9 +57764,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/neutral.css:40:5",
-      "name": "--vds-color-neutral-3",
-      "value": "oklch(0.945 0.004 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
+      "name": "--vds-color-neutral-12",
+      "value": "oklch(0.930 0.008 270)",
+      "selector": "[data-theme=\"dark\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57523,106 +57775,10 @@
       "line": 40
     },
     {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:41:5",
-      "name": "--vds-color-neutral-4",
-      "value": "oklch(0.920 0.005 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 41
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:42:5",
-      "name": "--vds-color-neutral-5",
-      "value": "oklch(0.890 0.006 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 42
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:43:5",
-      "name": "--vds-color-neutral-6",
-      "value": "oklch(0.855 0.007 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 43
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:44:5",
-      "name": "--vds-color-neutral-7",
-      "value": "oklch(0.810 0.008 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 44
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:45:5",
-      "name": "--vds-color-neutral-8",
-      "value": "oklch(0.745 0.010 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 45
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:46:5",
-      "name": "--vds-color-neutral-9",
-      "value": "oklch(0.580 0.014 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 46
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:47:5",
-      "name": "--vds-color-neutral-10",
-      "value": "oklch(0.530 0.014 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 47
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:48:5",
-      "name": "--vds-color-neutral-11",
-      "value": "oklch(0.430 0.013 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 48
-    },
-    {
       "id": "packages/tokens/src/colors/primitives/neutral.css:49:5",
-      "name": "--vds-color-neutral-12",
-      "value": "oklch(0.180 0.012 270)",
-      "selector": ":root,\n  [data-theme=\"light\"]",
+      "name": "--vds-color-neutral-1",
+      "value": "oklch(0 0 0)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57631,10 +57787,58 @@
       "line": 49
     },
     {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:50:5",
+      "name": "--vds-color-neutral-2",
+      "value": "oklch(0.150 0.005 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 50
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:51:5",
+      "name": "--vds-color-neutral-3",
+      "value": "oklch(0.200 0.006 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 51
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:52:5",
+      "name": "--vds-color-neutral-4",
+      "value": "oklch(0.245 0.007 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 52
+    },
+    {
+      "id": "packages/tokens/src/colors/primitives/neutral.css:53:5",
+      "name": "--vds-color-neutral-5",
+      "value": "oklch(0.285 0.008 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens.base"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
+      "line": 53
+    },
+    {
       "id": "packages/tokens/src/colors/primitives/neutral.css:54:5",
-      "name": "--vds-color-neutral-1",
-      "value": "oklch(0.178 0.005 270)",
-      "selector": "[data-theme=\"dark\"]",
+      "name": "--vds-color-neutral-6",
+      "value": "oklch(0.330 0.009 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57644,9 +57848,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/neutral.css:55:5",
-      "name": "--vds-color-neutral-2",
-      "value": "oklch(0.210 0.005 270)",
-      "selector": "[data-theme=\"dark\"]",
+      "name": "--vds-color-neutral-7",
+      "value": "oklch(0.385 0.010 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57656,9 +57860,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/neutral.css:56:5",
-      "name": "--vds-color-neutral-3",
-      "value": "oklch(0.245 0.006 270)",
-      "selector": "[data-theme=\"dark\"]",
+      "name": "--vds-color-neutral-8",
+      "value": "oklch(0.455 0.011 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57668,9 +57872,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/neutral.css:57:5",
-      "name": "--vds-color-neutral-4",
-      "value": "oklch(0.275 0.007 270)",
-      "selector": "[data-theme=\"dark\"]",
+      "name": "--vds-color-neutral-9",
+      "value": "oklch(0.525 0.013 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57680,9 +57884,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/neutral.css:58:5",
-      "name": "--vds-color-neutral-5",
-      "value": "oklch(0.305 0.008 270)",
-      "selector": "[data-theme=\"dark\"]",
+      "name": "--vds-color-neutral-10",
+      "value": "oklch(0.580 0.013 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57692,9 +57896,9 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/neutral.css:59:5",
-      "name": "--vds-color-neutral-6",
-      "value": "oklch(0.345 0.009 270)",
-      "selector": "[data-theme=\"dark\"]",
+      "name": "--vds-color-neutral-11",
+      "value": "oklch(0.720 0.011 270)",
+      "selector": "[data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens.base"
       ],
@@ -57704,210 +57908,6 @@
     },
     {
       "id": "packages/tokens/src/colors/primitives/neutral.css:60:5",
-      "name": "--vds-color-neutral-7",
-      "value": "oklch(0.395 0.010 270)",
-      "selector": "[data-theme=\"dark\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 60
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:61:5",
-      "name": "--vds-color-neutral-8",
-      "value": "oklch(0.460 0.011 270)",
-      "selector": "[data-theme=\"dark\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 61
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:62:5",
-      "name": "--vds-color-neutral-9",
-      "value": "oklch(0.530 0.013 270)",
-      "selector": "[data-theme=\"dark\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 62
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:63:5",
-      "name": "--vds-color-neutral-10",
-      "value": "oklch(0.580 0.013 270)",
-      "selector": "[data-theme=\"dark\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 63
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:64:5",
-      "name": "--vds-color-neutral-11",
-      "value": "oklch(0.720 0.011 270)",
-      "selector": "[data-theme=\"dark\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 64
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:65:5",
-      "name": "--vds-color-neutral-12",
-      "value": "oklch(0.930 0.008 270)",
-      "selector": "[data-theme=\"dark\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 65
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:74:5",
-      "name": "--vds-color-neutral-1",
-      "value": "oklch(0 0 0)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 74
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:75:5",
-      "name": "--vds-color-neutral-2",
-      "value": "oklch(0.150 0.005 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 75
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:76:5",
-      "name": "--vds-color-neutral-3",
-      "value": "oklch(0.200 0.006 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 76
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:77:5",
-      "name": "--vds-color-neutral-4",
-      "value": "oklch(0.245 0.007 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 77
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:78:5",
-      "name": "--vds-color-neutral-5",
-      "value": "oklch(0.285 0.008 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 78
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:79:5",
-      "name": "--vds-color-neutral-6",
-      "value": "oklch(0.330 0.009 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 79
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:80:5",
-      "name": "--vds-color-neutral-7",
-      "value": "oklch(0.385 0.010 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 80
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:81:5",
-      "name": "--vds-color-neutral-8",
-      "value": "oklch(0.455 0.011 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 81
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:82:5",
-      "name": "--vds-color-neutral-9",
-      "value": "oklch(0.525 0.013 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 82
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:83:5",
-      "name": "--vds-color-neutral-10",
-      "value": "oklch(0.580 0.013 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 83
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:84:5",
-      "name": "--vds-color-neutral-11",
-      "value": "oklch(0.720 0.011 270)",
-      "selector": "[data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens.base"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 84
-    },
-    {
-      "id": "packages/tokens/src/colors/primitives/neutral.css:85:5",
       "name": "--vds-color-neutral-12",
       "value": "oklch(0.945 0.008 270)",
       "selector": "[data-theme=\"dark-oled\"]",
@@ -57916,10 +57916,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/primitives/neutral.css",
-      "line": 85
+      "line": 60
     },
     {
-      "id": "packages/tokens/src/colors/semantic/background.css:61:5",
+      "id": "packages/tokens/src/colors/semantic/background.css:37:5",
       "name": "--vds-color-bg",
       "value": "color-mix(in oklch, var(--vds-color-neutral-1) 96%, var(--vds-color-primary-3))",
       "selector": ":root,\n  [data-theme]",
@@ -57928,10 +57928,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 61
+      "line": 37
     },
     {
-      "id": "packages/tokens/src/colors/semantic/background.css:62:5",
+      "id": "packages/tokens/src/colors/semantic/background.css:38:5",
       "name": "--vds-color-bg-subtle",
       "value": "var(--vds-color-neutral-2)",
       "selector": ":root,\n  [data-theme]",
@@ -57940,10 +57940,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 62
+      "line": 38
     },
     {
-      "id": "packages/tokens/src/colors/semantic/background.css:63:5",
+      "id": "packages/tokens/src/colors/semantic/background.css:39:5",
       "name": "--vds-color-bg-muted",
       "value": "var(--vds-color-neutral-3)",
       "selector": ":root,\n  [data-theme]",
@@ -57952,10 +57952,10 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 63
+      "line": 39
     },
     {
-      "id": "packages/tokens/src/colors/semantic/background.css:64:5",
+      "id": "packages/tokens/src/colors/semantic/background.css:40:5",
       "name": "--vds-color-bg-disabled",
       "value": "var(--vds-color-neutral-3)",
       "selector": ":root,\n  [data-theme]",
@@ -57964,12 +57964,204 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 64
+      "line": 40
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:41:5",
+      "name": "--vds-color-bg-inverse",
+      "value": "var(--vds-color-neutral-12)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 41
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:46:5",
+      "name": "--vds-color-surface-container-low",
+      "value": "color-mix(in oklch, var(--vds-color-neutral-2) 82%, var(--vds-color-primary-3))",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 46
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:47:5",
+      "name": "--vds-color-surface-container",
+      "value": "color-mix(in oklch, var(--vds-color-neutral-3) 84%, var(--vds-color-primary-3))",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 47
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:48:5",
+      "name": "--vds-color-surface-container-high",
+      "value": "color-mix(in oklch, var(--vds-color-neutral-4) 88%, var(--vds-color-primary-4))",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 48
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:49:5",
+      "name": "--vds-color-surface-field",
+      "value": "color-mix(in oklch, var(--vds-color-neutral-3) 90%, var(--vds-color-primary-3))",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 49
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:50:5",
+      "name": "--vds-color-primary-container",
+      "value": "var(--vds-color-primary-4)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 50
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:51:5",
+      "name": "--vds-color-on-primary-container",
+      "value": "var(--vds-color-primary-12)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 51
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:52:5",
+      "name": "--vds-color-on-surface-variant",
+      "value": "var(--vds-color-neutral-11)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 52
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:53:5",
+      "name": "--vds-color-surface",
+      "value": "var(--vds-color-bg)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 53
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:54:5",
+      "name": "--vds-color-surface-sunken",
+      "value": "var(--vds-color-surface-container)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 54
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:55:5",
+      "name": "--vds-color-surface-raised",
+      "value": "var(--vds-color-surface-container-low)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 55
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:56:5",
+      "name": "--vds-color-surface-overlay",
+      "value": "var(--vds-color-surface-container-low)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 56
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:57:5",
+      "name": "--vds-color-surface-hover",
+      "value": "var(--vds-color-neutral-3)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 57
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:58:5",
+      "name": "--vds-color-surface-active",
+      "value": "var(--vds-color-neutral-4)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 58
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:59:5",
+      "name": "--vds-color-surface-selected",
+      "value": "var(--vds-color-primary-3)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 59
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/background.css:60:5",
+      "name": "--vds-color-surface-inverse",
+      "value": "var(--vds-color-neutral-12)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/background.css",
+      "line": 60
     },
     {
       "id": "packages/tokens/src/colors/semantic/background.css:65:5",
-      "name": "--vds-color-bg-inverse",
-      "value": "var(--vds-color-neutral-12)",
+      "name": "--vds-color-scrim",
+      "value": "var(--vds-color-black-a7)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -57979,33 +58171,33 @@
       "line": 65
     },
     {
-      "id": "packages/tokens/src/colors/semantic/background.css:70:5",
-      "name": "--vds-color-surface-container-low",
-      "value": "color-mix(in oklch, var(--vds-color-neutral-2) 82%, var(--vds-color-primary-3))",
+      "id": "packages/tokens/src/colors/semantic/background.css:66:5",
+      "name": "--vds-color-scrim-light",
+      "value": "var(--vds-color-black-a4)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 70
+      "line": 66
     },
     {
-      "id": "packages/tokens/src/colors/semantic/background.css:71:5",
-      "name": "--vds-color-surface-container",
-      "value": "color-mix(in oklch, var(--vds-color-neutral-3) 84%, var(--vds-color-primary-3))",
+      "id": "packages/tokens/src/colors/semantic/background.css:67:5",
+      "name": "--vds-color-scrim-strong",
+      "value": "var(--vds-color-black-a9)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 71
+      "line": 67
     },
     {
       "id": "packages/tokens/src/colors/semantic/background.css:72:5",
-      "name": "--vds-color-surface-container-high",
-      "value": "color-mix(in oklch, var(--vds-color-neutral-4) 88%, var(--vds-color-primary-4))",
+      "name": "--vds-color-shadow-tint-low",
+      "value": "var(--vds-color-black-a3)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -58016,8 +58208,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/background.css:73:5",
-      "name": "--vds-color-surface-field",
-      "value": "color-mix(in oklch, var(--vds-color-neutral-3) 90%, var(--vds-color-primary-3))",
+      "name": "--vds-color-shadow-tint",
+      "value": "var(--vds-color-black-a5)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -58028,8 +58220,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/background.css:74:5",
-      "name": "--vds-color-primary-container",
-      "value": "var(--vds-color-primary-4)",
+      "name": "--vds-color-shadow-tint-strong",
+      "value": "var(--vds-color-black-a7)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -58039,33 +58231,9 @@
       "line": 74
     },
     {
-      "id": "packages/tokens/src/colors/semantic/background.css:75:5",
-      "name": "--vds-color-on-primary-container",
-      "value": "var(--vds-color-primary-12)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 75
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:76:5",
-      "name": "--vds-color-on-surface-variant",
-      "value": "var(--vds-color-neutral-11)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 76
-    },
-    {
       "id": "packages/tokens/src/colors/semantic/background.css:77:5",
-      "name": "--vds-color-surface",
-      "value": "var(--vds-color-bg)",
+      "name": "--vds-color-highlight-tint",
+      "value": "var(--vds-color-white-a3)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -58076,174 +58244,6 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/background.css:78:5",
-      "name": "--vds-color-surface-sunken",
-      "value": "var(--vds-color-surface-container)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 78
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:79:5",
-      "name": "--vds-color-surface-raised",
-      "value": "var(--vds-color-surface-container-low)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 79
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:80:5",
-      "name": "--vds-color-surface-overlay",
-      "value": "var(--vds-color-surface-container-low)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 80
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:81:5",
-      "name": "--vds-color-surface-hover",
-      "value": "var(--vds-color-neutral-3)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 81
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:82:5",
-      "name": "--vds-color-surface-active",
-      "value": "var(--vds-color-neutral-4)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 82
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:83:5",
-      "name": "--vds-color-surface-selected",
-      "value": "var(--vds-color-primary-3)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 83
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:84:5",
-      "name": "--vds-color-surface-inverse",
-      "value": "var(--vds-color-neutral-12)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 84
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:89:5",
-      "name": "--vds-color-scrim",
-      "value": "var(--vds-color-black-a7)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 89
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:90:5",
-      "name": "--vds-color-scrim-light",
-      "value": "var(--vds-color-black-a4)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 90
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:91:5",
-      "name": "--vds-color-scrim-strong",
-      "value": "var(--vds-color-black-a9)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 91
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:96:5",
-      "name": "--vds-color-shadow-tint-low",
-      "value": "var(--vds-color-black-a3)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 96
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:97:5",
-      "name": "--vds-color-shadow-tint",
-      "value": "var(--vds-color-black-a5)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 97
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:98:5",
-      "name": "--vds-color-shadow-tint-strong",
-      "value": "var(--vds-color-black-a7)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 98
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:101:5",
-      "name": "--vds-color-highlight-tint",
-      "value": "var(--vds-color-white-a3)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 101
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/background.css:102:5",
       "name": "--vds-color-highlight-tint-strong",
       "value": "var(--vds-color-white-a7)",
       "selector": ":root,\n  [data-theme]",
@@ -58252,7 +58252,7 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/background.css",
-      "line": 102
+      "line": 78
     },
     {
       "id": "packages/tokens/src/colors/semantic/border.css:25:5",
@@ -59311,9 +59311,213 @@
       "line": 34
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:45:5",
+      "id": "packages/tokens/src/colors/semantic/status.css:24:5",
       "name": "--vds-color-on-primary",
       "value": "var(--vds-color-white)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 24
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:25:5",
+      "name": "--vds-color-on-success",
+      "value": "var(--vds-color-white)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 25
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:26:5",
+      "name": "--vds-color-on-warning",
+      "value": "var(--vds-color-black)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 26
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:27:5",
+      "name": "--vds-color-on-danger",
+      "value": "var(--vds-color-white)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 27
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:28:5",
+      "name": "--vds-color-on-info",
+      "value": "var(--vds-color-white)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 28
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:29:5",
+      "name": "--vds-color-on-accent",
+      "value": "var(--vds-color-white)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 29
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:32:5",
+      "name": "--vds-color-primary-bg-subtle",
+      "value": "var(--vds-color-primary-2)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 32
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:33:5",
+      "name": "--vds-color-primary-bg",
+      "value": "var(--vds-color-primary-3)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 33
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:34:5",
+      "name": "--vds-color-primary-bg-hover",
+      "value": "var(--vds-color-primary-4)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 34
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:35:5",
+      "name": "--vds-color-primary-bg-active",
+      "value": "var(--vds-color-primary-5)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 35
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:36:5",
+      "name": "--vds-color-primary-solid",
+      "value": "var(--vds-color-primary-9)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 36
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:37:5",
+      "name": "--vds-color-primary-solid-hover",
+      "value": "var(--vds-color-primary-solid-hover-tone)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 37
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:38:5",
+      "name": "--vds-color-primary-solid-active",
+      "value": "var(--vds-color-primary-solid-active-tone)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 38
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:39:5",
+      "name": "--vds-color-primary-text",
+      "value": "var(--vds-color-primary-11)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 39
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:40:5",
+      "name": "--vds-color-primary-text-muted",
+      "value": "var(--vds-color-primary-text)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 40
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:43:5",
+      "name": "--vds-color-success-bg-subtle",
+      "value": "var(--vds-color-success-2)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 43
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:44:5",
+      "name": "--vds-color-success-bg",
+      "value": "var(--vds-color-success-3)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 44
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:45:5",
+      "name": "--vds-color-success-bg-hover",
+      "value": "var(--vds-color-success-4)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59324,8 +59528,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:46:5",
-      "name": "--vds-color-on-success",
-      "value": "var(--vds-color-white)",
+      "name": "--vds-color-success-bg-active",
+      "value": "var(--vds-color-success-5)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59336,8 +59540,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:47:5",
-      "name": "--vds-color-on-warning",
-      "value": "var(--vds-color-black)",
+      "name": "--vds-color-success-solid",
+      "value": "var(--vds-color-success-9)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59348,8 +59552,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:48:5",
-      "name": "--vds-color-on-danger",
-      "value": "var(--vds-color-white)",
+      "name": "--vds-color-success-solid-hover",
+      "value": "var(--vds-color-success-solid-hover-tone)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59360,8 +59564,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:49:5",
-      "name": "--vds-color-on-info",
-      "value": "var(--vds-color-white)",
+      "name": "--vds-color-success-solid-active",
+      "value": "var(--vds-color-success-solid-active-tone)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59372,8 +59576,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:50:5",
-      "name": "--vds-color-on-accent",
-      "value": "var(--vds-color-white)",
+      "name": "--vds-color-success-text",
+      "value": "var(--vds-color-success-11)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59383,21 +59587,21 @@
       "line": 50
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:53:5",
-      "name": "--vds-color-primary-bg-subtle",
-      "value": "var(--vds-color-primary-2)",
+      "id": "packages/tokens/src/colors/semantic/status.css:51:5",
+      "name": "--vds-color-success-text-muted",
+      "value": "var(--vds-color-success-text)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 53
+      "line": 51
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:54:5",
-      "name": "--vds-color-primary-bg",
-      "value": "var(--vds-color-primary-3)",
+      "name": "--vds-color-warning-bg-subtle",
+      "value": "var(--vds-color-warning-2)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59408,8 +59612,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:55:5",
-      "name": "--vds-color-primary-bg-hover",
-      "value": "var(--vds-color-primary-4)",
+      "name": "--vds-color-warning-bg",
+      "value": "var(--vds-color-warning-3)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59420,8 +59624,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:56:5",
-      "name": "--vds-color-primary-bg-active",
-      "value": "var(--vds-color-primary-5)",
+      "name": "--vds-color-warning-bg-hover",
+      "value": "var(--vds-color-warning-4)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59432,8 +59636,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:57:5",
-      "name": "--vds-color-primary-solid",
-      "value": "var(--vds-color-primary-9)",
+      "name": "--vds-color-warning-bg-active",
+      "value": "var(--vds-color-warning-5)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59444,8 +59648,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:58:5",
-      "name": "--vds-color-primary-solid-hover",
-      "value": "var(--vds-color-primary-solid-hover-tone)",
+      "name": "--vds-color-warning-solid",
+      "value": "var(--vds-color-warning-9)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59456,8 +59660,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:59:5",
-      "name": "--vds-color-primary-solid-active",
-      "value": "var(--vds-color-primary-solid-active-tone)",
+      "name": "--vds-color-warning-solid-hover",
+      "value": "var(--vds-color-warning-10)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59467,33 +59671,21 @@
       "line": 59
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:60:5",
-      "name": "--vds-color-primary-text",
-      "value": "var(--vds-color-primary-11)",
+      "id": "packages/tokens/src/colors/semantic/status.css:62:5",
+      "name": "--vds-color-warning-solid-active",
+      "value": "var(--vds-color-warning-solid-active-tone)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 60
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:61:5",
-      "name": "--vds-color-primary-text-muted",
-      "value": "var(--vds-color-primary-text)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 61
+      "line": 62
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:64:5",
-      "name": "--vds-color-success-bg-subtle",
-      "value": "var(--vds-color-success-2)",
+      "name": "--vds-color-warning-text",
+      "value": "var(--vds-color-warning-12)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59504,8 +59696,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:65:5",
-      "name": "--vds-color-success-bg",
-      "value": "var(--vds-color-success-3)",
+      "name": "--vds-color-warning-text-muted",
+      "value": "var(--vds-color-warning-text)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59515,33 +59707,9 @@
       "line": 65
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:66:5",
-      "name": "--vds-color-success-bg-hover",
-      "value": "var(--vds-color-success-4)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 66
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:67:5",
-      "name": "--vds-color-success-bg-active",
-      "value": "var(--vds-color-success-5)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 67
-    },
-    {
       "id": "packages/tokens/src/colors/semantic/status.css:68:5",
-      "name": "--vds-color-success-solid",
-      "value": "var(--vds-color-success-9)",
+      "name": "--vds-color-danger-bg-subtle",
+      "value": "var(--vds-color-danger-2)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59552,8 +59720,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:69:5",
-      "name": "--vds-color-success-solid-hover",
-      "value": "var(--vds-color-success-solid-hover-tone)",
+      "name": "--vds-color-danger-bg",
+      "value": "var(--vds-color-danger-3)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59564,8 +59732,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:70:5",
-      "name": "--vds-color-success-solid-active",
-      "value": "var(--vds-color-success-solid-active-tone)",
+      "name": "--vds-color-danger-bg-hover",
+      "value": "var(--vds-color-danger-4)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59576,8 +59744,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:71:5",
-      "name": "--vds-color-success-text",
-      "value": "var(--vds-color-success-11)",
+      "name": "--vds-color-danger-bg-active",
+      "value": "var(--vds-color-danger-5)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59588,8 +59756,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:72:5",
-      "name": "--vds-color-success-text-muted",
-      "value": "var(--vds-color-success-text)",
+      "name": "--vds-color-danger-solid",
+      "value": "var(--vds-color-danger-9)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59599,9 +59767,33 @@
       "line": 72
     },
     {
+      "id": "packages/tokens/src/colors/semantic/status.css:73:5",
+      "name": "--vds-color-danger-solid-hover",
+      "value": "var(--vds-color-danger-solid-hover-tone)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 73
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:74:5",
+      "name": "--vds-color-danger-solid-active",
+      "value": "var(--vds-color-danger-solid-active-tone)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 74
+    },
+    {
       "id": "packages/tokens/src/colors/semantic/status.css:75:5",
-      "name": "--vds-color-warning-bg-subtle",
-      "value": "var(--vds-color-warning-2)",
+      "name": "--vds-color-danger-text",
+      "value": "var(--vds-color-danger-11)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59612,8 +59804,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:76:5",
-      "name": "--vds-color-warning-bg",
-      "value": "var(--vds-color-warning-3)",
+      "name": "--vds-color-danger-text-muted",
+      "value": "var(--vds-color-danger-text)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59623,33 +59815,9 @@
       "line": 76
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:77:5",
-      "name": "--vds-color-warning-bg-hover",
-      "value": "var(--vds-color-warning-4)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 77
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:78:5",
-      "name": "--vds-color-warning-bg-active",
-      "value": "var(--vds-color-warning-5)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 78
-    },
-    {
       "id": "packages/tokens/src/colors/semantic/status.css:79:5",
-      "name": "--vds-color-warning-solid",
-      "value": "var(--vds-color-warning-9)",
+      "name": "--vds-color-info-bg-subtle",
+      "value": "var(--vds-color-info-2)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59660,8 +59828,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:80:5",
-      "name": "--vds-color-warning-solid-hover",
-      "value": "var(--vds-color-warning-10)",
+      "name": "--vds-color-info-bg",
+      "value": "var(--vds-color-info-3)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59671,9 +59839,33 @@
       "line": 80
     },
     {
+      "id": "packages/tokens/src/colors/semantic/status.css:81:5",
+      "name": "--vds-color-info-bg-hover",
+      "value": "var(--vds-color-info-4)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 81
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:82:5",
+      "name": "--vds-color-info-bg-active",
+      "value": "var(--vds-color-info-5)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 82
+    },
+    {
       "id": "packages/tokens/src/colors/semantic/status.css:83:5",
-      "name": "--vds-color-warning-solid-active",
-      "value": "var(--vds-color-warning-solid-active-tone)",
+      "name": "--vds-color-info-solid",
+      "value": "var(--vds-color-info-9)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59683,9 +59875,21 @@
       "line": 83
     },
     {
+      "id": "packages/tokens/src/colors/semantic/status.css:84:5",
+      "name": "--vds-color-info-solid-hover",
+      "value": "var(--vds-color-info-solid-hover-tone)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 84
+    },
+    {
       "id": "packages/tokens/src/colors/semantic/status.css:85:5",
-      "name": "--vds-color-warning-text",
-      "value": "var(--vds-color-warning-12)",
+      "name": "--vds-color-info-solid-active",
+      "value": "var(--vds-color-info-solid-active-tone)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59696,8 +59900,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:86:5",
-      "name": "--vds-color-warning-text-muted",
-      "value": "var(--vds-color-warning-text)",
+      "name": "--vds-color-info-text",
+      "value": "var(--vds-color-info-11)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59707,21 +59911,21 @@
       "line": 86
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:89:5",
-      "name": "--vds-color-danger-bg-subtle",
-      "value": "var(--vds-color-danger-2)",
+      "id": "packages/tokens/src/colors/semantic/status.css:87:5",
+      "name": "--vds-color-info-text-muted",
+      "value": "var(--vds-color-info-text)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 89
+      "line": 87
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:90:5",
-      "name": "--vds-color-danger-bg",
-      "value": "var(--vds-color-danger-3)",
+      "name": "--vds-color-accent-bg-subtle",
+      "value": "var(--vds-color-accent-2)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59732,8 +59936,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:91:5",
-      "name": "--vds-color-danger-bg-hover",
-      "value": "var(--vds-color-danger-4)",
+      "name": "--vds-color-accent-bg",
+      "value": "var(--vds-color-accent-3)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59744,8 +59948,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:92:5",
-      "name": "--vds-color-danger-bg-active",
-      "value": "var(--vds-color-danger-5)",
+      "name": "--vds-color-accent-bg-hover",
+      "value": "var(--vds-color-accent-4)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59756,8 +59960,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:93:5",
-      "name": "--vds-color-danger-solid",
-      "value": "var(--vds-color-danger-9)",
+      "name": "--vds-color-accent-bg-active",
+      "value": "var(--vds-color-accent-5)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59768,8 +59972,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:94:5",
-      "name": "--vds-color-danger-solid-hover",
-      "value": "var(--vds-color-danger-solid-hover-tone)",
+      "name": "--vds-color-accent-solid",
+      "value": "var(--vds-color-accent-9)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59780,8 +59984,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:95:5",
-      "name": "--vds-color-danger-solid-active",
-      "value": "var(--vds-color-danger-solid-active-tone)",
+      "name": "--vds-color-accent-solid-hover",
+      "value": "var(--vds-color-accent-solid-hover-tone)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59792,8 +59996,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:96:5",
-      "name": "--vds-color-danger-text",
-      "value": "var(--vds-color-danger-11)",
+      "name": "--vds-color-accent-solid-active",
+      "value": "var(--vds-color-accent-solid-active-tone)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59804,8 +60008,8 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:97:5",
-      "name": "--vds-color-danger-text-muted",
-      "value": "var(--vds-color-danger-text)",
+      "name": "--vds-color-accent-text",
+      "value": "var(--vds-color-accent-11)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59815,105 +60019,21 @@
       "line": 97
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:100:5",
-      "name": "--vds-color-info-bg-subtle",
-      "value": "var(--vds-color-info-2)",
+      "id": "packages/tokens/src/colors/semantic/status.css:98:5",
+      "name": "--vds-color-accent-text-muted",
+      "value": "var(--vds-color-accent-text)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 100
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:101:5",
-      "name": "--vds-color-info-bg",
-      "value": "var(--vds-color-info-3)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 101
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:102:5",
-      "name": "--vds-color-info-bg-hover",
-      "value": "var(--vds-color-info-4)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 102
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:103:5",
-      "name": "--vds-color-info-bg-active",
-      "value": "var(--vds-color-info-5)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 103
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:104:5",
-      "name": "--vds-color-info-solid",
-      "value": "var(--vds-color-info-9)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 104
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:105:5",
-      "name": "--vds-color-info-solid-hover",
-      "value": "var(--vds-color-info-solid-hover-tone)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 105
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:106:5",
-      "name": "--vds-color-info-solid-active",
-      "value": "var(--vds-color-info-solid-active-tone)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 106
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:107:5",
-      "name": "--vds-color-info-text",
-      "value": "var(--vds-color-info-11)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 107
+      "line": 98
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:108:5",
-      "name": "--vds-color-info-text-muted",
-      "value": "var(--vds-color-info-text)",
+      "name": "--vds-color-warning-solid-active-tone",
+      "value": "oklch(0.600 0.145 85)",
       "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
@@ -59923,34 +60043,10 @@
       "line": 108
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:111:5",
-      "name": "--vds-color-accent-bg-subtle",
-      "value": "var(--vds-color-accent-2)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 111
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:112:5",
-      "name": "--vds-color-accent-bg",
-      "value": "var(--vds-color-accent-3)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 112
-    },
-    {
       "id": "packages/tokens/src/colors/semantic/status.css:113:5",
-      "name": "--vds-color-accent-bg-hover",
-      "value": "var(--vds-color-accent-4)",
-      "selector": ":root,\n  [data-theme]",
+      "name": "--vds-color-warning-solid-active-tone",
+      "value": "var(--vds-color-warning-11)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -59960,9 +60056,9 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:114:5",
-      "name": "--vds-color-accent-bg-active",
-      "value": "var(--vds-color-accent-5)",
-      "selector": ":root,\n  [data-theme]",
+      "name": "--vds-color-warning-text",
+      "value": "var(--vds-color-warning-11)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -59971,82 +60067,10 @@
       "line": 114
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:115:5",
-      "name": "--vds-color-accent-solid",
-      "value": "var(--vds-color-accent-9)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 115
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:116:5",
-      "name": "--vds-color-accent-solid-hover",
-      "value": "var(--vds-color-accent-solid-hover-tone)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 116
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:117:5",
-      "name": "--vds-color-accent-solid-active",
-      "value": "var(--vds-color-accent-solid-active-tone)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 117
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:118:5",
-      "name": "--vds-color-accent-text",
-      "value": "var(--vds-color-accent-11)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 118
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:119:5",
-      "name": "--vds-color-accent-text-muted",
-      "value": "var(--vds-color-accent-text)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 119
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:129:5",
-      "name": "--vds-color-warning-solid-active-tone",
-      "value": "oklch(0.600 0.145 85)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 129
-    },
-    {
       "id": "packages/tokens/src/colors/semantic/status.css:134:5",
-      "name": "--vds-color-warning-solid-active-tone",
-      "value": "var(--vds-color-warning-11)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "name": "--vds-color-primary-solid-hover-tone",
+      "value": "var(--vds-color-primary-10)",
+      "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
@@ -60056,9 +60080,9 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:135:5",
-      "name": "--vds-color-warning-text",
-      "value": "var(--vds-color-warning-11)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "name": "--vds-color-primary-solid-active-tone",
+      "value": "var(--vds-color-primary-11)",
+      "selector": ":root,\n  [data-theme]",
       "conditions": [
         "@layer tokens"
       ],
@@ -60067,10 +60091,190 @@
       "line": 135
     },
     {
-      "id": "packages/tokens/src/colors/semantic/status.css:155:5",
-      "name": "--vds-color-primary-solid-hover-tone",
-      "value": "var(--vds-color-primary-10)",
+      "id": "packages/tokens/src/colors/semantic/status.css:136:5",
+      "name": "--vds-color-success-solid-hover-tone",
+      "value": "var(--vds-color-success-10)",
       "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 136
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:137:5",
+      "name": "--vds-color-success-solid-active-tone",
+      "value": "var(--vds-color-success-11)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 137
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:138:5",
+      "name": "--vds-color-danger-solid-hover-tone",
+      "value": "var(--vds-color-danger-10)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 138
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:139:5",
+      "name": "--vds-color-danger-solid-active-tone",
+      "value": "var(--vds-color-danger-11)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 139
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:140:5",
+      "name": "--vds-color-info-solid-hover-tone",
+      "value": "var(--vds-color-info-10)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 140
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:141:5",
+      "name": "--vds-color-info-solid-active-tone",
+      "value": "var(--vds-color-info-11)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 141
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:142:5",
+      "name": "--vds-color-accent-solid-hover-tone",
+      "value": "var(--vds-color-accent-10)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 142
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:143:5",
+      "name": "--vds-color-accent-solid-active-tone",
+      "value": "var(--vds-color-accent-11)",
+      "selector": ":root,\n  [data-theme]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 143
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:148:5",
+      "name": "--vds-color-primary-solid-hover-tone",
+      "value": "color-mix(in oklch, var(--vds-color-primary-9), black 8%)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 148
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:149:5",
+      "name": "--vds-color-primary-solid-active-tone",
+      "value": "color-mix(in oklch, var(--vds-color-primary-9), black 16%)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 149
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:150:5",
+      "name": "--vds-color-success-solid-hover-tone",
+      "value": "color-mix(in oklch, var(--vds-color-success-9), black 8%)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 150
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:151:5",
+      "name": "--vds-color-success-solid-active-tone",
+      "value": "color-mix(in oklch, var(--vds-color-success-9), black 16%)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 151
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:152:5",
+      "name": "--vds-color-danger-solid-hover-tone",
+      "value": "color-mix(in oklch, var(--vds-color-danger-9), black 8%)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 152
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:153:5",
+      "name": "--vds-color-danger-solid-active-tone",
+      "value": "color-mix(in oklch, var(--vds-color-danger-9), black 16%)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 153
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:154:5",
+      "name": "--vds-color-info-solid-hover-tone",
+      "value": "color-mix(in oklch, var(--vds-color-info-9), black 8%)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "colors",
+      "sourceId": "packages/tokens/src/colors/semantic/status.css",
+      "line": 154
+    },
+    {
+      "id": "packages/tokens/src/colors/semantic/status.css:155:5",
+      "name": "--vds-color-info-solid-active-tone",
+      "value": "color-mix(in oklch, var(--vds-color-info-9), black 16%)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -60080,9 +60284,9 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:156:5",
-      "name": "--vds-color-primary-solid-active-tone",
-      "value": "var(--vds-color-primary-11)",
-      "selector": ":root,\n  [data-theme]",
+      "name": "--vds-color-accent-solid-hover-tone",
+      "value": "color-mix(in oklch, var(--vds-color-accent-9), black 8%)",
+      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -60092,210 +60296,6 @@
     },
     {
       "id": "packages/tokens/src/colors/semantic/status.css:157:5",
-      "name": "--vds-color-success-solid-hover-tone",
-      "value": "var(--vds-color-success-10)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 157
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:158:5",
-      "name": "--vds-color-success-solid-active-tone",
-      "value": "var(--vds-color-success-11)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 158
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:159:5",
-      "name": "--vds-color-danger-solid-hover-tone",
-      "value": "var(--vds-color-danger-10)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 159
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:160:5",
-      "name": "--vds-color-danger-solid-active-tone",
-      "value": "var(--vds-color-danger-11)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 160
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:161:5",
-      "name": "--vds-color-info-solid-hover-tone",
-      "value": "var(--vds-color-info-10)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 161
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:162:5",
-      "name": "--vds-color-info-solid-active-tone",
-      "value": "var(--vds-color-info-11)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 162
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:163:5",
-      "name": "--vds-color-accent-solid-hover-tone",
-      "value": "var(--vds-color-accent-10)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 163
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:164:5",
-      "name": "--vds-color-accent-solid-active-tone",
-      "value": "var(--vds-color-accent-11)",
-      "selector": ":root,\n  [data-theme]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 164
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:169:5",
-      "name": "--vds-color-primary-solid-hover-tone",
-      "value": "color-mix(in oklch, var(--vds-color-primary-9), black 8%)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 169
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:170:5",
-      "name": "--vds-color-primary-solid-active-tone",
-      "value": "color-mix(in oklch, var(--vds-color-primary-9), black 16%)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 170
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:171:5",
-      "name": "--vds-color-success-solid-hover-tone",
-      "value": "color-mix(in oklch, var(--vds-color-success-9), black 8%)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 171
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:172:5",
-      "name": "--vds-color-success-solid-active-tone",
-      "value": "color-mix(in oklch, var(--vds-color-success-9), black 16%)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 172
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:173:5",
-      "name": "--vds-color-danger-solid-hover-tone",
-      "value": "color-mix(in oklch, var(--vds-color-danger-9), black 8%)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 173
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:174:5",
-      "name": "--vds-color-danger-solid-active-tone",
-      "value": "color-mix(in oklch, var(--vds-color-danger-9), black 16%)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 174
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:175:5",
-      "name": "--vds-color-info-solid-hover-tone",
-      "value": "color-mix(in oklch, var(--vds-color-info-9), black 8%)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 175
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:176:5",
-      "name": "--vds-color-info-solid-active-tone",
-      "value": "color-mix(in oklch, var(--vds-color-info-9), black 16%)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 176
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:177:5",
-      "name": "--vds-color-accent-solid-hover-tone",
-      "value": "color-mix(in oklch, var(--vds-color-accent-9), black 8%)",
-      "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "colors",
-      "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 177
-    },
-    {
-      "id": "packages/tokens/src/colors/semantic/status.css:178:5",
       "name": "--vds-color-accent-solid-active-tone",
       "value": "color-mix(in oklch, var(--vds-color-accent-9), black 16%)",
       "selector": "[data-theme=\"dark\"],\n  [data-theme=\"dark-oled\"]",
@@ -60304,7 +60304,7 @@
       ],
       "category": "colors",
       "sourceId": "packages/tokens/src/colors/semantic/status.css",
-      "line": 178
+      "line": 157
     },
     {
       "id": "packages/tokens/src/colors/semantic/text.css:22:5",
@@ -63109,10 +63109,142 @@
       "line": 151
     },
     {
-      "id": "packages/tokens/src/radii/modes.css:27:5",
+      "id": "packages/tokens/src/radii/modes.css:5:5",
       "name": "--vds-radius-xs",
       "value": "var(--vds-radius-2)",
       "selector": ":root,\n  [data-radius=\"soft\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 5
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:6:5",
+      "name": "--vds-radius-sm",
+      "value": "var(--vds-radius-4)",
+      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 6
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:7:5",
+      "name": "--vds-radius-md",
+      "value": "var(--vds-radius-5)",
+      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 7
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:8:5",
+      "name": "--vds-radius-lg",
+      "value": "1.25rem",
+      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 8
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:9:5",
+      "name": "--vds-radius-xl",
+      "value": "1.75rem",
+      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 9
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:10:5",
+      "name": "--vds-radius-2xl",
+      "value": "2rem",
+      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 10
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:18:5",
+      "name": "--vds-radius-element",
+      "value": "var(--vds-radius-sm)",
+      "selector": ":root,\n  [data-radius]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 18
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:19:5",
+      "name": "--vds-radius-surface",
+      "value": "var(--vds-radius-lg)",
+      "selector": ":root,\n  [data-radius]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 19
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:20:5",
+      "name": "--vds-radius-badge",
+      "value": "var(--vds-radius-full)",
+      "selector": ":root,\n  [data-radius]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 20
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:25:5",
+      "name": "--vds-radius-xs",
+      "value": "var(--vds-radius-0)",
+      "selector": "[data-radius=\"sharp\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 25
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:26:5",
+      "name": "--vds-radius-sm",
+      "value": "var(--vds-radius-1)",
+      "selector": "[data-radius=\"sharp\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 26
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:27:5",
+      "name": "--vds-radius-md",
+      "value": "var(--vds-radius-1)",
+      "selector": "[data-radius=\"sharp\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63122,9 +63254,9 @@
     },
     {
       "id": "packages/tokens/src/radii/modes.css:28:5",
-      "name": "--vds-radius-sm",
-      "value": "var(--vds-radius-4)",
-      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "name": "--vds-radius-lg",
+      "value": "var(--vds-radius-2)",
+      "selector": "[data-radius=\"sharp\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63134,9 +63266,9 @@
     },
     {
       "id": "packages/tokens/src/radii/modes.css:29:5",
-      "name": "--vds-radius-md",
-      "value": "var(--vds-radius-5)",
-      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "name": "--vds-radius-xl",
+      "value": "var(--vds-radius-2)",
+      "selector": "[data-radius=\"sharp\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63146,9 +63278,9 @@
     },
     {
       "id": "packages/tokens/src/radii/modes.css:30:5",
-      "name": "--vds-radius-lg",
-      "value": "1.25rem",
-      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "name": "--vds-radius-2xl",
+      "value": "var(--vds-radius-3)",
+      "selector": "[data-radius=\"sharp\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63157,34 +63289,46 @@
       "line": 30
     },
     {
-      "id": "packages/tokens/src/radii/modes.css:31:5",
-      "name": "--vds-radius-xl",
-      "value": "1.75rem",
-      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "id": "packages/tokens/src/radii/modes.css:37:5",
+      "name": "--vds-radius-xs",
+      "value": "var(--vds-radius-3)",
+      "selector": "[data-radius=\"round\"]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "radii",
       "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 31
+      "line": 37
     },
     {
-      "id": "packages/tokens/src/radii/modes.css:32:5",
-      "name": "--vds-radius-2xl",
-      "value": "2rem",
-      "selector": ":root,\n  [data-radius=\"soft\"]",
+      "id": "packages/tokens/src/radii/modes.css:38:5",
+      "name": "--vds-radius-sm",
+      "value": "var(--vds-radius-4)",
+      "selector": "[data-radius=\"round\"]",
       "conditions": [
         "@layer tokens"
       ],
       "category": "radii",
       "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 32
+      "line": 38
+    },
+    {
+      "id": "packages/tokens/src/radii/modes.css:39:5",
+      "name": "--vds-radius-md",
+      "value": "var(--vds-radius-6)",
+      "selector": "[data-radius=\"round\"]",
+      "conditions": [
+        "@layer tokens"
+      ],
+      "category": "radii",
+      "sourceId": "packages/tokens/src/radii/modes.css",
+      "line": 39
     },
     {
       "id": "packages/tokens/src/radii/modes.css:40:5",
-      "name": "--vds-radius-element",
-      "value": "var(--vds-radius-sm)",
-      "selector": ":root,\n  [data-radius]",
+      "name": "--vds-radius-lg",
+      "value": "var(--vds-radius-7)",
+      "selector": "[data-radius=\"round\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63194,9 +63338,9 @@
     },
     {
       "id": "packages/tokens/src/radii/modes.css:41:5",
-      "name": "--vds-radius-surface",
-      "value": "var(--vds-radius-lg)",
-      "selector": ":root,\n  [data-radius]",
+      "name": "--vds-radius-xl",
+      "value": "2rem",
+      "selector": "[data-radius=\"round\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63206,9 +63350,9 @@
     },
     {
       "id": "packages/tokens/src/radii/modes.css:42:5",
-      "name": "--vds-radius-badge",
-      "value": "var(--vds-radius-full)",
-      "selector": ":root,\n  [data-radius]",
+      "name": "--vds-radius-2xl",
+      "value": "2.5rem",
+      "selector": "[data-radius=\"round\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63219,8 +63363,8 @@
     {
       "id": "packages/tokens/src/radii/modes.css:47:5",
       "name": "--vds-radius-xs",
-      "value": "var(--vds-radius-0)",
-      "selector": "[data-radius=\"sharp\"]",
+      "value": "var(--vds-radius-4)",
+      "selector": "[data-radius=\"pill\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63231,8 +63375,8 @@
     {
       "id": "packages/tokens/src/radii/modes.css:48:5",
       "name": "--vds-radius-sm",
-      "value": "var(--vds-radius-1)",
-      "selector": "[data-radius=\"sharp\"]",
+      "value": "var(--vds-radius-5)",
+      "selector": "[data-radius=\"pill\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63243,8 +63387,8 @@
     {
       "id": "packages/tokens/src/radii/modes.css:49:5",
       "name": "--vds-radius-md",
-      "value": "var(--vds-radius-1)",
-      "selector": "[data-radius=\"sharp\"]",
+      "value": "var(--vds-radius-6)",
+      "selector": "[data-radius=\"pill\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63255,8 +63399,8 @@
     {
       "id": "packages/tokens/src/radii/modes.css:50:5",
       "name": "--vds-radius-lg",
-      "value": "var(--vds-radius-2)",
-      "selector": "[data-radius=\"sharp\"]",
+      "value": "var(--vds-radius-7)",
+      "selector": "[data-radius=\"pill\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63267,8 +63411,8 @@
     {
       "id": "packages/tokens/src/radii/modes.css:51:5",
       "name": "--vds-radius-xl",
-      "value": "var(--vds-radius-2)",
-      "selector": "[data-radius=\"sharp\"]",
+      "value": "2rem",
+      "selector": "[data-radius=\"pill\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63279,8 +63423,8 @@
     {
       "id": "packages/tokens/src/radii/modes.css:52:5",
       "name": "--vds-radius-2xl",
-      "value": "var(--vds-radius-3)",
-      "selector": "[data-radius=\"sharp\"]",
+      "value": "2.5rem",
+      "selector": "[data-radius=\"pill\"]",
       "conditions": [
         "@layer tokens"
       ],
@@ -63289,151 +63433,7 @@
       "line": 52
     },
     {
-      "id": "packages/tokens/src/radii/modes.css:59:5",
-      "name": "--vds-radius-xs",
-      "value": "var(--vds-radius-3)",
-      "selector": "[data-radius=\"round\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 59
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:60:5",
-      "name": "--vds-radius-sm",
-      "value": "var(--vds-radius-4)",
-      "selector": "[data-radius=\"round\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 60
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:61:5",
-      "name": "--vds-radius-md",
-      "value": "var(--vds-radius-6)",
-      "selector": "[data-radius=\"round\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 61
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:62:5",
-      "name": "--vds-radius-lg",
-      "value": "var(--vds-radius-7)",
-      "selector": "[data-radius=\"round\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 62
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:63:5",
-      "name": "--vds-radius-xl",
-      "value": "2rem",
-      "selector": "[data-radius=\"round\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 63
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:64:5",
-      "name": "--vds-radius-2xl",
-      "value": "2.5rem",
-      "selector": "[data-radius=\"round\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 64
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:69:5",
-      "name": "--vds-radius-xs",
-      "value": "var(--vds-radius-4)",
-      "selector": "[data-radius=\"pill\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 69
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:70:5",
-      "name": "--vds-radius-sm",
-      "value": "var(--vds-radius-5)",
-      "selector": "[data-radius=\"pill\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 70
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:71:5",
-      "name": "--vds-radius-md",
-      "value": "var(--vds-radius-6)",
-      "selector": "[data-radius=\"pill\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 71
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:72:5",
-      "name": "--vds-radius-lg",
-      "value": "var(--vds-radius-7)",
-      "selector": "[data-radius=\"pill\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 72
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:73:5",
-      "name": "--vds-radius-xl",
-      "value": "2rem",
-      "selector": "[data-radius=\"pill\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 73
-    },
-    {
-      "id": "packages/tokens/src/radii/modes.css:74:5",
-      "name": "--vds-radius-2xl",
-      "value": "2.5rem",
-      "selector": "[data-radius=\"pill\"]",
-      "conditions": [
-        "@layer tokens"
-      ],
-      "category": "radii",
-      "sourceId": "packages/tokens/src/radii/modes.css",
-      "line": 74
-    },
-    {
-      "id": "packages/tokens/src/radii/nesting.css:126:5",
+      "id": "packages/tokens/src/radii/nesting.css:45:5",
       "name": "--vds-radius-flush",
       "value": "max(\n      0px,\n      var(--vds-radius-host-r) - var(--vds-radius-host-b)\n    )",
       "selector": "[data-radius-host] > *",
@@ -63442,10 +63442,10 @@
       ],
       "category": "radii",
       "sourceId": "packages/tokens/src/radii/nesting.css",
-      "line": 126
+      "line": 45
     },
     {
-      "id": "packages/tokens/src/radii/nesting.css:130:5",
+      "id": "packages/tokens/src/radii/nesting.css:49:5",
       "name": "--vds-radius-inset",
       "value": "max(\n      0px,\n      var(--vds-radius-host-r) - var(--vds-radius-host-b) -\n        var(--vds-radius-host-p)\n    )",
       "selector": "[data-radius-host] > *",
@@ -63454,7 +63454,7 @@
       ],
       "category": "radii",
       "sourceId": "packages/tokens/src/radii/nesting.css",
-      "line": 130
+      "line": 49
     },
     {
       "id": "packages/tokens/src/radii/primitives.css:15:5",
@@ -63757,7 +63757,7 @@
       "line": 26
     },
     {
-      "id": "packages/tokens/src/sizing.css:52:5",
+      "id": "packages/tokens/src/sizing.css:29:5",
       "name": "--vds-surface-width-xs",
       "value": "20rem",
       "selector": ":root",
@@ -63766,10 +63766,10 @@
       ],
       "category": "sizing",
       "sourceId": "packages/tokens/src/sizing.css",
-      "line": 52
+      "line": 29
     },
     {
-      "id": "packages/tokens/src/sizing.css:53:5",
+      "id": "packages/tokens/src/sizing.css:30:5",
       "name": "--vds-surface-width-sm",
       "value": "24rem",
       "selector": ":root",
@@ -63778,10 +63778,10 @@
       ],
       "category": "sizing",
       "sourceId": "packages/tokens/src/sizing.css",
-      "line": 53
+      "line": 30
     },
     {
-      "id": "packages/tokens/src/sizing.css:54:5",
+      "id": "packages/tokens/src/sizing.css:31:5",
       "name": "--vds-surface-width-md",
       "value": "32rem",
       "selector": ":root",
@@ -63790,10 +63790,10 @@
       ],
       "category": "sizing",
       "sourceId": "packages/tokens/src/sizing.css",
-      "line": 54
+      "line": 31
     },
     {
-      "id": "packages/tokens/src/sizing.css:55:5",
+      "id": "packages/tokens/src/sizing.css:32:5",
       "name": "--vds-surface-width-lg",
       "value": "48rem",
       "selector": ":root",
@@ -63802,10 +63802,10 @@
       ],
       "category": "sizing",
       "sourceId": "packages/tokens/src/sizing.css",
-      "line": 55
+      "line": 32
     },
     {
-      "id": "packages/tokens/src/sizing.css:56:5",
+      "id": "packages/tokens/src/sizing.css:33:5",
       "name": "--vds-surface-width-xl",
       "value": "64rem",
       "selector": ":root",
@@ -63814,10 +63814,10 @@
       ],
       "category": "sizing",
       "sourceId": "packages/tokens/src/sizing.css",
-      "line": 56
+      "line": 33
     },
     {
-      "id": "packages/tokens/src/sizing.css:57:5",
+      "id": "packages/tokens/src/sizing.css:34:5",
       "name": "--vds-surface-width-2xl",
       "value": "80rem",
       "selector": ":root",
@@ -63826,10 +63826,10 @@
       ],
       "category": "sizing",
       "sourceId": "packages/tokens/src/sizing.css",
-      "line": 57
+      "line": 34
     },
     {
-      "id": "packages/tokens/src/sizing.css:82:5",
+      "id": "packages/tokens/src/sizing.css:37:5",
       "name": "--vds-focus-ring-width",
       "value": "2px",
       "selector": ":root",
@@ -63838,10 +63838,10 @@
       ],
       "category": "sizing",
       "sourceId": "packages/tokens/src/sizing.css",
-      "line": 82
+      "line": 37
     },
     {
-      "id": "packages/tokens/src/sizing.css:83:5",
+      "id": "packages/tokens/src/sizing.css:38:5",
       "name": "--vds-focus-ring-offset",
       "value": "2px",
       "selector": ":root",
@@ -63850,10 +63850,10 @@
       ],
       "category": "sizing",
       "sourceId": "packages/tokens/src/sizing.css",
-      "line": 83
+      "line": 38
     },
     {
-      "id": "packages/tokens/src/spacing/semantic.css:45:5",
+      "id": "packages/tokens/src/spacing/semantic.css:10:5",
       "name": "--vds-surface-padding-inline",
       "value": "var(--vds-space-6)",
       "selector": ":root",
@@ -63862,10 +63862,10 @@
       ],
       "category": "spacing",
       "sourceId": "packages/tokens/src/spacing/semantic.css",
-      "line": 45
+      "line": 10
     },
     {
-      "id": "packages/tokens/src/spacing/semantic.css:46:5",
+      "id": "packages/tokens/src/spacing/semantic.css:11:5",
       "name": "--vds-surface-padding-block",
       "value": "var(--vds-space-6)",
       "selector": ":root",
@@ -63874,10 +63874,10 @@
       ],
       "category": "spacing",
       "sourceId": "packages/tokens/src/spacing/semantic.css",
-      "line": 46
+      "line": 11
     },
     {
-      "id": "packages/tokens/src/spacing/semantic.css:51:5",
+      "id": "packages/tokens/src/spacing/semantic.css:16:5",
       "name": "--vds-slot-gap",
       "value": "var(--vds-space-4)",
       "selector": ":root",
@@ -63886,10 +63886,10 @@
       ],
       "category": "spacing",
       "sourceId": "packages/tokens/src/spacing/semantic.css",
-      "line": 51
+      "line": 16
     },
     {
-      "id": "packages/tokens/src/spacing/semantic.css:55:5",
+      "id": "packages/tokens/src/spacing/semantic.css:20:5",
       "name": "--vds-stack-gap",
       "value": "var(--vds-space-3)",
       "selector": ":root",
@@ -63898,10 +63898,10 @@
       ],
       "category": "spacing",
       "sourceId": "packages/tokens/src/spacing/semantic.css",
-      "line": 55
+      "line": 20
     },
     {
-      "id": "packages/tokens/src/spacing/semantic.css:61:5",
+      "id": "packages/tokens/src/spacing/semantic.css:26:5",
       "name": "--vds-cluster-gap",
       "value": "var(--vds-space-2)",
       "selector": ":root",
@@ -63910,10 +63910,10 @@
       ],
       "category": "spacing",
       "sourceId": "packages/tokens/src/spacing/semantic.css",
-      "line": 61
+      "line": 26
     },
     {
-      "id": "packages/tokens/src/spacing/semantic.css:68:5",
+      "id": "packages/tokens/src/spacing/semantic.css:33:5",
       "name": "--vds-label-gap",
       "value": "var(--vds-space-1-5)",
       "selector": ":root",
@@ -63922,10 +63922,10 @@
       ],
       "category": "spacing",
       "sourceId": "packages/tokens/src/spacing/semantic.css",
-      "line": 68
+      "line": 33
     },
     {
-      "id": "packages/tokens/src/spacing/semantic.css:89:5",
+      "id": "packages/tokens/src/spacing/semantic.css:54:5",
       "name": "--vds-control-padding-inline",
       "value": "var(--vds-space-3)",
       "selector": ":root",
@@ -63934,10 +63934,10 @@
       ],
       "category": "spacing",
       "sourceId": "packages/tokens/src/spacing/semantic.css",
-      "line": 89
+      "line": 54
     },
     {
-      "id": "packages/tokens/src/spacing/semantic.css:90:5",
+      "id": "packages/tokens/src/spacing/semantic.css:55:5",
       "name": "--vds-control-padding-inline-emphasis",
       "value": "var(--vds-space-4)",
       "selector": ":root",
@@ -63946,7 +63946,7 @@
       ],
       "category": "spacing",
       "sourceId": "packages/tokens/src/spacing/semantic.css",
-      "line": 90
+      "line": 55
     },
     {
       "id": "packages/tokens/src/spacing.css:18:5",

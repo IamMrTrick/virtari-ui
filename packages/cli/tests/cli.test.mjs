@@ -30,9 +30,11 @@ test("init and add install type-safe editable source without internal package im
 
   const button = await readFile(path.join(cwd, "src/virtari/components/button/Button.tsx"), "utf8");
   const buttonIndex = await readFile(path.join(cwd, "src/virtari/components/button/index.ts"), "utf8");
+  const installedLicense = await readFile(path.join(cwd, "src/virtari/LICENSE"), "utf8");
   const config = JSON.parse(await readFile(path.join(cwd, "virtari.json"), "utf8"));
   const manifest = JSON.parse(await readFile(path.join(cwd, "package.json"), "utf8"));
   assert.equal(config.target, "src/virtari");
+  assert.match(installedLicense, /^MIT License/);
   assert.match(button, /\.\.\/\.\.\/lib\/utils/);
   assert.doesNotMatch(button, /(?:from\s*|import\s*)["']@virtari-packages\//);
   assert.match(buttonIndex, /import "\.\/Button\.css"/);

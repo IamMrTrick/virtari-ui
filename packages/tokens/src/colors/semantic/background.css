@@ -1,29 +1,5 @@
 @layer tokens {
-  /*
-   * ── Background / surface / scrim semantic layer ──
-   *
-   * Canonical home for every neutral-family and overlay-family token.
-   * Values consume the mode-aware 12-step primitives directly, so there
-   * are no `light-dark()` wrappers — primitives already mode-switch.
-   *
-   * Elevation model (applies in both light & dark modes thanks to the
-   * inverted luminance ladder in dark — higher step = lighter in dark,
-   * darker in light):
-   *
-   *   bg               = canvas          (neutral-1)
-   *   bg-subtle        = muted canvas    (neutral-2)
-   *   bg-muted         = container       (neutral-3)
-   *   surface          = flat surface    (neutral-1)
-   *   surface-sunken   = inset           (neutral-2)
-   *   surface-raised   = elevated        (neutral-2)
-   *   surface-overlay  = popover/menu    (neutral-2)
-   *   surface-hover    = hover state     (neutral-3)
-   *   surface-active   = active state    (neutral-4)
-   *   surface-selected = primary-tinted  (primary-3)
-   *
-   * Overlay/scrim always uses black-alpha regardless of theme —
-   * a white-tinted scrim reads as a highlight, not a dim.
-   */
+  /* Background / surface / scrim semantic layer */
 
   :root,
   [data-theme] {

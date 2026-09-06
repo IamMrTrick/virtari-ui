@@ -105,15 +105,12 @@ contracts of React, browsers, accessibility, or third-party behavior packages.
 The registry therefore keeps dependency declarations explicit and installs only
 what a selected component needs.
 
-The repository currently has a proprietary license that forbids redistribution.
-A public source registry must not be released with an "Own Your Code" promise
-until the project adopts a license that grants consumers the intended rights.
-The public CLI workflow enforces this as a release gate and uses npm trusted
-publishing with OIDC after the package is connected to the workflow on npm.
-The GitHub registry route also requires a public repository. If the monorepo
-stays private, publish the generated registry from a separate public repository
-and point the CLI configuration to that location. Private registry access may
-provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
+The repository, generated registry, and CLI use the MIT License. Consumers may
+copy, modify, merge, publish, and redistribute installed source while retaining
+the license notice. Every registry item installs that notice at
+`src/virtari/LICENSE`. The release workflow verifies that package manifests and
+license files remain consistent before publishing through npm trusted
+publishing with OIDC.
 
 ````
 
@@ -157,13 +154,28 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
   "homepage": "https://github.com/Virtari-Packages/virtari-design-system",
   "items": [
     {
+      "name": "virtari-license",
+      "type": "registry:file",
+      "title": "Virtari MIT License",
+      "description": "The MIT terms that apply to Virtari source copied into an application.",
+      "author": "Virtari",
+      "files": [
+        {
+          "path": "registry/virtari/virtari-license/LICENSE",
+          "type": "registry:file",
+          "target": "~/src/virtari/LICENSE"
+        }
+      ]
+    },
+    {
       "name": "virtari-base",
       "type": "registry:base",
       "title": "Virtari Base",
       "description": "Virtari cascade layers, design tokens, global reset, primitives, and shared React utilities.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-core#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/virtari-core#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -181,6 +193,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Base reset, layers, and global primitives for the Virtari design system.",
       "author": "Virtari",
       "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-tokens#cli-v0.1.0"
       ],
       "files": [
@@ -226,7 +239,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -252,7 +266,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -274,7 +289,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Arrow behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -300,7 +316,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-is-hydrated#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -329,7 +346,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -358,7 +376,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -382,7 +401,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -424,6 +444,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/compose-refs/index.ts"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -443,6 +466,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/context/index.ts"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -463,7 +489,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -499,6 +526,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/direction/index.ts"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -512,7 +542,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-escape-keydown#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-escape-keydown#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -540,7 +571,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-menu#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -577,6 +609,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/event-handlers/types.ts"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -596,6 +631,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/focus-guards/index.ts"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -607,7 +645,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -629,7 +668,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Id behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -651,7 +691,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Label behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -688,7 +729,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -724,6 +766,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/number/number.ts"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -745,7 +790,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -778,7 +824,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "dependencies": [
         "@floating-ui/react-dom@^2.1.8"
@@ -804,7 +851,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -827,7 +875,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -854,7 +903,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Primitive behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -877,7 +927,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-context#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -908,7 +959,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -945,6 +997,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/rect/observe-element-rect.ts"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -962,7 +1017,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-id#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -992,7 +1048,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1037,7 +1094,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "dependencies": [
         "aria-hidden@^1.2.6",
@@ -1063,7 +1121,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Separator behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1094,7 +1153,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1116,7 +1176,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Slot behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-compose-refs#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1144,7 +1205,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1173,7 +1235,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-presence#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-roving-focus#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1206,7 +1269,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1230,7 +1294,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-event-handlers#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1263,7 +1328,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-controllable-state#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1295,6 +1361,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/use-callback-ref/use-callback-ref.tsx"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -1305,7 +1374,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-use-effect-event#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1332,7 +1402,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Use Effect Event behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1354,7 +1425,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Use Escape Keydown behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-callback-ref#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1389,6 +1461,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/use-is-hydrated/use-is-hydrated.tsx"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -1408,6 +1483,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/use-layout-effect/use-layout-effect.tsx"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -1427,6 +1505,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/primitives/use-previous/use-previous.tsx"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -1436,7 +1517,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Use Rect behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-rect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1458,7 +1540,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Use Size behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-use-layout-effect#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1480,7 +1563,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "Headless Visually Hidden behavior used by Virtari components.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-primitive#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ],
       "files": [
         {
@@ -1550,7 +1634,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-use-previous#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-rect#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-use-size#cli-v0.1.0",
-        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0"
+        "Virtari-Packages/virtari-design-system/primitive-visually-hidden#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -1563,6 +1648,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-accordion#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -1606,6 +1692,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -1641,6 +1728,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-alert-dialog#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -1671,6 +1759,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-avatar#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -1701,6 +1790,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -1736,6 +1826,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -1798,6 +1889,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -1833,6 +1925,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -1883,6 +1976,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -1917,6 +2011,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -1958,6 +2053,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/button#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -1997,6 +2093,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-checkbox#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -2080,6 +2177,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -2115,6 +2213,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/copy-button#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -2206,6 +2305,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-collapsible#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -2241,6 +2341,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -2293,6 +2394,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/kbd#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -2341,6 +2443,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -2389,6 +2492,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/switch#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -2757,6 +2861,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/radio-group#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -2892,6 +2997,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -2930,6 +3036,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-dialog#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -2981,6 +3088,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-dropdown-menu#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -3024,6 +3132,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/textarea#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -3210,6 +3319,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -3244,6 +3354,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -3286,6 +3397,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/progress#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -3338,6 +3450,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -4742,6 +4855,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -4801,6 +4915,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/label#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -4878,6 +4993,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -4927,6 +5043,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -4971,6 +5088,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5020,6 +5138,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5050,6 +5169,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-label#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5083,6 +5203,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/flag#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5142,6 +5263,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5307,6 +5429,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -5371,6 +5494,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5410,6 +5534,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5446,6 +5571,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5494,6 +5620,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/select#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -5563,6 +5690,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5598,6 +5726,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-progress#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5635,6 +5764,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -5723,6 +5853,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-scroll-area#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5785,6 +5916,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-radio-group#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5830,6 +5962,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-popover#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-select#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -5899,6 +6032,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-separator#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5928,6 +6062,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -5972,6 +6107,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6003,6 +6139,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-slider#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6032,6 +6169,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6066,6 +6204,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6106,6 +6245,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-switch#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6140,6 +6280,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6176,6 +6317,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-tabs#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6241,6 +6383,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/chip#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6276,6 +6419,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6326,6 +6470,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/fieldset#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6360,6 +6505,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6396,6 +6542,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/icons#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-toast#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -6469,6 +6616,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-toggle#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6500,6 +6648,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/primitive-direction#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/primitive-tooltip#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6534,6 +6683,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "author": "Virtari",
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6574,6 +6724,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "registryDependencies": [
         "Virtari-Packages/virtari-design-system/primitive-slot#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "files": [
@@ -6608,6 +6759,7 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/tabs#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/virtari-utils#cli-v0.1.0"
       ],
       "dependencies": [
@@ -6990,6 +7142,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/styles/tokens/z-index.css"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -7044,6 +7199,9 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
           "type": "registry:file",
           "target": "~/src/virtari/lib/utils/useHotkey.ts"
         }
+      ],
+      "registryDependencies": [
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0"
       ]
     },
     {
@@ -7053,7 +7211,6 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
       "description": "The complete Virtari source component collection. Prefer individual items for smaller applications.",
       "author": "Virtari",
       "registryDependencies": [
-        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/accordion#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/alert#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/alert-dialog#cli-v0.1.0",
@@ -7119,6 +7276,8 @@ provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
         "Virtari-Packages/virtari-design-system/toggle#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/tooltip#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/tree-view#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-base#cli-v0.1.0",
+        "Virtari-Packages/virtari-design-system/virtari-license#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/visually-hidden#cli-v0.1.0",
         "Virtari-Packages/virtari-design-system/yoopta-editor#cli-v0.1.0"
       ]

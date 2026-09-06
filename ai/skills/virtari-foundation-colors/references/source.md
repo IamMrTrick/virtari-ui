@@ -1,34 +1,7 @@
 ## packages/tokens/src/colors.css
 
 ```css
-/*
- * Colors — four-tier architecture.
- *
- *   primitives.css   Raw scales (12-step neutral + intents, three alpha
- *                    families, legacy 50-950). Mode-aware where it makes
- *                    sense (12-step), mode-independent where it doesn't
- *                    (legacy & always-black/always-white alpha).
- *
- *   brands/          Brand override layer. Each [data-brand="..."] file
- *                    overrides ONLY primitive hues. Defaults to virtari.
- *
- *   semantic/        Purpose-based aliases (bg, surface, text, icon,
- *                    border, interactive states, status intents,
- *                    data-viz). Components consume these.
- *
- *   aliases.css      Compatibility names that point at the semantic layer
- *                    (`--vds-color-primary` → `--vds-color-primary-solid`,
- *                    the `*-emphasis` / `*-muted` families, the `overlay*`
- *                    spelling of `scrim*`), plus the three extra
- *                    syntax-highlight hues. Loads last so it can only ever
- *                    forward to a name the semantic layer already defines.
- *
- * Component CSS files define their own --{name}-* tokens scoped to
- * .vds-{name}, referencing semantic tokens with fallbacks.
- *
- * Order matters: primitives must load before brands (so brands can
- * override them) before semantic (so semantic resolves the final values).
- */
+/* Colors — four-tier architecture. */
 
 /*
  * Sub-layer order within `tokens` (the top-level order lives in
@@ -61,32 +34,7 @@
 
 ```css
 @layer tokens.base {
-  /*
-   * ── Neutral 12-step scale ──
-   *
-   * Hand-tuned OKLCH scale for neutral surfaces, borders and text.
-   * Each step has a specific semantic role (industry-standard 12-step):
-   *
-   *   1   App canvas
-   *   2   Subtle bg (cards on app)
-   *   3   UI element rest
-   *   4   UI element hover
-   *   5   UI element active / pressed
-   *   6   Subtle border
-   *   7   UI border / focus border
-   *   8   Hovered border / strong divider
-   *   9   Solid neutral bg
-   *   10  Solid neutral hover
-   *   11  Low-contrast text
-   *   12  High-contrast text
-   *
-   * Curve is non-linear (perceptually tuned). Steps 1-4 are tight
-   * for surface elevation; 8→9 is the big jump from borders to solids;
-   * 11→12 widens for max text contrast.
-   *
-   * hue 270 = slight cool tint (avoids yellow cast on warm displays)
-   * Dark mode uses higher L for elevation (raised = lighter — modern).
-   */
+  /* Neutral 12-step scale */
 
   :root,
   [data-theme="light"] {
@@ -263,34 +211,7 @@
     --vds-color-accent-12: oklch(0.275 0.090 45);
   }
 
-  /* ── Intent solids — dark mode ──
-   *
-   * Step 9 carries `on-{intent}` — white on every intent but warning — so
-   * its lightness is not a free parameter: it is capped by the 4.5:1 that
-   * white needs against it. The dark ladder used to sit above that cap
-   * (3.30–4.01:1 across primary/success/info/danger/accent), because it
-   * was derived by lightening the light ladder for elevation without
-   * re-checking the ink that sits on top.
-   *
-   * Each step 9 below is the *highest* L on the scale's 0.005 grid that
-   * still clears 4.5:1 with chroma and hue held exactly, so the brand
-   * character is unchanged and the 8 → 9 → 10 ladder stays monotonic.
-   * Before → after, with white contrast, sRGB gamut-mapped:
-   *
-   *   primary  0.610 → 0.575   3.94 → 4.56
-   *   success  0.610 → 0.545   3.54 → 4.65
-   *   danger   0.620 → 0.585   4.01 → 4.64
-   *   info     0.620 → 0.555   3.49 → 4.57
-   *   accent   0.665 → 0.580   3.27 → 4.59
-   *
-   * warning is untouched: it carries black ink (7.78:1), not white.
-   *
-   * The selector also covers dark-oled. It always should have: the OLED
-   * block below deliberately overrides step 1 *only*, which is only
-   * coherent if steps 2–12 already come from this ladder. While this read
-   * `[data-theme="dark"]` alone, an OLED page got the light-mode intent
-   * ramp on a pure-black canvas.
-   */
+  /* Intent solids — dark mode */
   [data-theme="dark"],
   [data-theme="dark-oled"] {
     /* Primary */
@@ -672,34 +593,7 @@
 ## packages/tokens/src/colors/aliases.css
 
 ```css
-/*
- * ── Compatibility alias layer ──
- *
- * Every family in this file exists because something in this repository
- * types those names. Before this file existed those `var()` lookups
- * resolved to nothing, so components silently fell through to their
- * hardcoded hex fallbacks — unbrandable, un-themeable, and invisible in
- * review.
- *
- * Two comments (colors/semantic/background.css, colors/semantic/status.css)
- * used to promise a `_legacy.css`. That file was never written; this is it,
- * under a more honest name — most of these are not legacy at all, they are
- * simply the names components actually type.
- *
- * Rules for this file:
- *   • Aliases only. Every value is a `var()` at the canonical semantic name.
- *     If you need a new *role*, add it to the semantic file that owns the
- *     domain (border.css, text.css, …), not here.
- *   • Don't invent a new *shape*. A shape earns its place only once real
- *     code asks for it. But once it is here it is completed across all six
- *     intents, because a compat layer where `--vds-color-primary-muted`
- *     resolves and `--vds-color-danger-muted` doesn't is worse than no
- *     compat layer at all.
- *   • The syntax-highlight ramps at the bottom are the one exception —
- *     they are real primitives, not aliases, so they live in `tokens.base`.
- *
- * Prefer the canonical names in new code. These stay for compatibility.
- */
+/* Compatibility alias layer */
 
 @layer tokens {
   :root,
@@ -805,30 +699,7 @@
 }
 
 @layer tokens.base {
-  /*
-   * ── Syntax-highlight hues (sky / emerald / violet) ──
-   *
-   * Not aliases — three extra hues the six-intent palette doesn't carry,
-   * needed so `react-editor` can colour property / selector / variable
-   * tokens distinctly from keyword (primary), string (success) and
-   * number (danger).
-   *
-   * Only step 11 exists. Step 11 is the "low-contrast text" step: it is
-   * the one step in the ladder tuned to be *readable body-sized text on
-   * the canvas in both modes*, which is exactly and only what syntax
-   * highlighting needs. Adding the other eleven steps would be inventing
-   * surface/border roles nothing consumes.
-   *
-   * Derived on the same curve as the intent step-11s (light L≈0.44–0.46,
-   * dark L≈0.77) so they sit at the same optical weight next to
-   * primary-11 / success-11 / danger-11 in the same code block.
-   *
-   *   sky      h=240  (bluer than info's 210, cooler than primary's 265)
-   *   emerald  h=165  (greener than success's 155)
-   *   violet   h=295  (past primary's indigo, before magenta)
-   *
-   * Contrast on the editor canvas (neutral-1): light ≥7.0:1, dark ≥8.9:1.
-   */
+  /* Syntax-highlight hues (sky / emerald / violet) */
 
   :root,
   [data-theme] {
@@ -879,31 +750,7 @@
 
 ```css
 @layer tokens.brand {
-  /*
-   * ── Brand template ──
-   *
-   * Copy this file to brands/{your-brand}.css, replace "BRAND_ID" with
-   * your brand id, and uncomment + tune the OKLCH values.
-   *
-   * Keep every rule inside `@layer tokens.brand`. That sub-layer is ordered
-   * AFTER `tokens.base` (see colors.css), so these overrides win over the
-   * base primitive scales on the SAME element — including <html data-brand>
-   * and same-element combos like <section data-brand data-theme="dark"> —
-   * regardless of specificity.
-   *
-   * Override ONLY primitive hues. The semantic layer (bg, surface, text,
-   * border, ring, etc.) and per-component tokens reference these
-   * primitives, so the entire system retints automatically.
-   *
-   * What to override:
-   *   • primary-1..12 (light)  — the brand action color
-   *   • primary-1..12 (dark)   — the brand action color in dark mode
-   *   • accent-1..12 (optional) — secondary brand color
-   *   • Any intent (success/warning/danger/info) IF the brand wants a
-   *     custom semantic palette (rarely needed — defaults are tuned).
-   *
-   * Activated by: <html data-brand="BRAND_ID">
-   */
+  /* Brand template */
 
   [data-brand="BRAND_ID"] {
     /* ── Primary (light) — replace 195 with your primary hue ── */

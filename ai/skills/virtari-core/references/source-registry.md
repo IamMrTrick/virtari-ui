@@ -102,12 +102,9 @@ contracts of React, browsers, accessibility, or third-party behavior packages.
 The registry therefore keeps dependency declarations explicit and installs only
 what a selected component needs.
 
-The repository currently has a proprietary license that forbids redistribution.
-A public source registry must not be released with an "Own Your Code" promise
-until the project adopts a license that grants consumers the intended rights.
-The public CLI workflow enforces this as a release gate and uses npm trusted
-publishing with OIDC after the package is connected to the workflow on npm.
-The GitHub registry route also requires a public repository. If the monorepo
-stays private, publish the generated registry from a separate public repository
-and point the CLI configuration to that location. Private registry access may
-provide `VIRTARI_REGISTRY_TOKEN` without storing credentials in `virtari.json`.
+The repository, generated registry, and CLI use the MIT License. Consumers may
+copy, modify, merge, publish, and redistribute installed source while retaining
+the license notice. Every registry item installs that notice at
+`src/virtari/LICENSE`. The release workflow verifies that package manifests and
+license files remain consistent before publishing through npm trusted
+publishing with OIDC.

@@ -12,7 +12,7 @@ Thanks for working on Virtari. This guide covers the day-to-day workflow, conven
 ## Getting started
 
 ```bash
-git clone https://github.com/IamMrTrick/virtari-design-system.git
+git clone https://github.com/Virtari-Packages/virtari-design-system.git
 cd virtari-design-system
 pnpm install
 pnpm run build
@@ -185,4 +185,4 @@ Short, conventional prefixes keep history scannable:
 
 ## License
 
-This is proprietary software. By contributing you assign copyright of your contributions to the project owner, under the terms of the repository's [LICENSE](./LICENSE).
+Contributions are accepted under the repository's [MIT License](./LICENSE).

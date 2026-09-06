@@ -1,30 +1,5 @@
 @layer tokens.base {
-  /*
-   * ── Neutral 12-step scale ──
-   *
-   * Hand-tuned OKLCH scale for neutral surfaces, borders and text.
-   * Each step has a specific semantic role (industry-standard 12-step):
-   *
-   *   1   App canvas
-   *   2   Subtle bg (cards on app)
-   *   3   UI element rest
-   *   4   UI element hover
-   *   5   UI element active / pressed
-   *   6   Subtle border
-   *   7   UI border / focus border
-   *   8   Hovered border / strong divider
-   *   9   Solid neutral bg
-   *   10  Solid neutral hover
-   *   11  Low-contrast text
-   *   12  High-contrast text
-   *
-   * Curve is non-linear (perceptually tuned). Steps 1-4 are tight
-   * for surface elevation; 8→9 is the big jump from borders to solids;
-   * 11→12 widens for max text contrast.
-   *
-   * hue 270 = slight cool tint (avoids yellow cast on warm displays)
-   * Dark mode uses higher L for elevation (raised = lighter — modern).
-   */
+  /* Neutral 12-step scale */
 
   :root,
   [data-theme="light"] {

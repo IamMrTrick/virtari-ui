@@ -1087,7 +1087,7 @@ const MenuSubTrigger = React.forwardRef<MenuSubTriggerElement, MenuSubTriggerPro
 
               const contentRect = context.content?.getBoundingClientRect();
               if (contentRect) {
-                // TODO: make sure to update this when we change positioning logic
+                // Keep this index aligned with the positioning logic above.
                 const side = context.content?.dataset.side as Side;
                 const rightSide = side === 'right';
                 const bleed = rightSide ? -5 : +5;

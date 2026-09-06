@@ -13,7 +13,7 @@
       "pitfalls": [
         "Third-party React and behavior dependencies remain normal package dependencies; source ownership removes the Virtari black box, not the React runtime.",
         "Do not edit generated registry files. Change packages/*/src, rebuild the registry, and commit both source and generated output.",
-        "A public Own Your Code release requires a license that grants copying and modification; the current proprietary license does not."
+        "Preserve the MIT notice when distributing substantial portions of Virtari source."
       ],
       "related": ["core", "tokens", "utils", "primitives"]
     }
@@ -33,7 +33,7 @@
       "pitfalls": [
         "Bare registry dependency names resolve to shadcn built-in items rather than sibling GitHub items.",
         "Do not overwrite consumer edits implicitly; compare, preview, then require an explicit overwrite decision.",
-        "Do not describe source as freely owned while the distribution license forbids copying or modification."
+        "Generated registry files must carry the same MIT terms as their authoritative package source."
       ]
     }
   ]

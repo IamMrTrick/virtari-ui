@@ -434,28 +434,7 @@
     border-color: var(--tabs-boxed-border);
   }
 
-  /* ─────────────────────────────────────────────
-   * Inverted curves — rendered via radial-gradient for hair-thin precise
-   * joins. The technique: each curve pseudo is a square filled with a 3-zone
-   * radial gradient whose circle is centered at the pseudo's corner adjacent
-   * to the tab body. Zones (inside → out):
-   *
-   *   1. transparent        → inside the circle (the list bg + list border
-   *                            show through untouched)
-   *   2. border-color ring  → exactly `list-border-width` wide, sitting on
-   *                            the circle boundary (the curve's outline,
-   *                            meeting the tab's side border tangentially
-   *                            at the top and the list's horizontal border
-   *                            tangentially at the bottom)
-   *   3. tab-bg             → outside the circle (the flare of the active
-   *                            tab extending down to the list border line)
-   *
-   * Why this beats the border+radius+box-shadow approach: the gradient is
-   * evaluated with continuous math and sub-pixel antialiasing, so the arc
-   * and the two horizontal/vertical tangent lines merge into one unbroken
-   * line without the rasterization seams and double-pixel artifacts that
-   * the multi-layer technique produces where the radius meets the border.
-   * ───────────────────────────────────────────── */
+  /* Inverted curves — rendered via radial-gradient for hair-thin precise */
   .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::before,
   .vds-tabs-list[data-variant="boxed"] .vds-tabs-trigger::after {
     content: "";

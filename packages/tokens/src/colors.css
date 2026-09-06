@@ -1,31 +1,4 @@
-/*
- * Colors — four-tier architecture.
- *
- *   primitives.css   Raw scales (12-step neutral + intents, three alpha
- *                    families, legacy 50-950). Mode-aware where it makes
- *                    sense (12-step), mode-independent where it doesn't
- *                    (legacy & always-black/always-white alpha).
- *
- *   brands/          Brand override layer. Each [data-brand="..."] file
- *                    overrides ONLY primitive hues. Defaults to virtari.
- *
- *   semantic/        Purpose-based aliases (bg, surface, text, icon,
- *                    border, interactive states, status intents,
- *                    data-viz). Components consume these.
- *
- *   aliases.css      Compatibility names that point at the semantic layer
- *                    (`--vds-color-primary` → `--vds-color-primary-solid`,
- *                    the `*-emphasis` / `*-muted` families, the `overlay*`
- *                    spelling of `scrim*`), plus the three extra
- *                    syntax-highlight hues. Loads last so it can only ever
- *                    forward to a name the semantic layer already defines.
- *
- * Component CSS files define their own --{name}-* tokens scoped to
- * .vds-{name}, referencing semantic tokens with fallbacks.
- *
- * Order matters: primitives must load before brands (so brands can
- * override them) before semantic (so semantic resolves the final values).
- */
+/* Colors — four-tier architecture. */
 
 /*
  * Sub-layer order within `tokens` (the top-level order lives in

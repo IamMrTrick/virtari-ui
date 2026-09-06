@@ -33,29 +33,7 @@
 
 ```css
 @layer tokens {
-  /*
-   * ── T-shirt semantic scale ──
-   * Purpose-based, mode-reactive tokens. Prefer these in component CSS.
-   *
-   *   xs   tightest interactive (tiny chips, compact controls)
-   *   sm   compact interactive  (small controls, item details)
-   *   md   field shell          (input, select, textarea)
-   *   lg   small surface        (card, dropdown-menu, popover)
-   *   xl   large surface        (dialog, drawer, toast)
-   *   2xl  extra-large surface
-   *   full fully rounded (pill/circle)
-   *
-   * ── Modes ──
-   * Set `data-radius` on <html> or any container to switch the personality.
-   *   sharp  — minimal rounding → enterprise, technical, dense
-   *   soft   — branded rounding → default (= :root)
-   *   round  — noticeable rounding → friendly, modern, consumer
-   *   pill   — roundest personality → button/pill affordances go fully rounded
-   *
-   * ── Back-compat aliases ──
-   * --vds-radius-element / --vds-radius-surface / --vds-radius-badge remain
-   * thin aliases. Component tokens decide what becomes truly full in pill.
-   */
+  /* T-shirt semantic scale */
   :root,
   [data-radius="soft"] {
     --vds-radius-xs:   var(--vds-radius-2);  /* 4px  */
@@ -273,88 +251,7 @@
 ## packages/tokens/src/radii/nesting.css
 
 ```css
-/*
- * ── Radius nesting (the concentricity channel) ──
- *
- * Rounded corners nest badly. Put a 12px-radius panel inside a
- * 12px-radius card with 16px of padding and the inner corner does not
- * follow the outer one — it bulges, because two concentric arcs are only
- * parallel when their radii differ by exactly the distance between them.
- * The eye reads the mismatch instantly even when it can't name it. Every
- * design system that draws a card with something rounded inside it hits
- * this, and most solve it by hand-tuning a literal per component, which
- * then silently rots the moment `data-radius` changes the mode.
- *
- * The rule is one subtraction:
- *
- *   inner radius = outer radius − distance from the outer edge
- *
- * There are two distances worth naming:
- *
- *   flush   the child touches the host's inner edge — a media strip
- *           across the top of a card, a sticky header inside a dialog,
- *           a table filling a panel. Distance = the host's border.
- *
- *   inset   the child sits inside the host's padding — a code block in
- *           a card, a nested field in a picker, a highlighted row in a
- *           menu. Distance = the host's border + its padding.
- *
- * ── Using it ──
- *
- * The host carries `data-radius-host` in its markup, and declares what it
- * is on the element that draws the corner:
- *
- *   .vds-card {
- *     border-radius: var(--vds-radius-card);
- *     border: 1px solid var(--vds-color-border);
- *     padding: var(--vds-surface-padding-block) var(--vds-surface-padding-inline);
- *
- *     --vds-radius-host-r: var(--vds-radius-card);
- *     --vds-radius-host-b: 1px;
- *     --vds-radius-host-p: var(--vds-surface-padding-inline);
- *   }
- *
- * A direct child then reads the answer:
- *
- *   .vds-card__media  { border-radius: var(--vds-radius-flush); }
- *   .vds-card__code   { border-radius: var(--vds-radius-inset); }
- *
- * The host's own radius still comes from the component token, so radius
- * modes (`data-radius="sharp|soft|round|pill"`) keep working — the
- * children just follow whatever the host landed on.
- *
- * ── Why exactly one level ──
- *
- * `--vds-radius-inset` and `--vds-radius-flush` are registered with
- * `inherits: false`. Only the host's *direct children* are given a
- * value; anything deeper computes the initial `0px` — a square corner —
- * rather than inheriting a number that would be wrong for it. A
- * grandchild is not concentric with the host (there is another border
- * and another padding in between), so failing flat is the correct
- * failure. If a grandchild needs concentric corners, its own parent
- * becomes a host.
- *
- * Registering `--vds-radius-host-r/-b/-p` as `<length>` matters too: it
- * keeps the subtraction valid. Unregistered, a host that set the radius
- * but not the padding would produce an invalid `calc()` and CSS would
- * drop the child's whole `border-radius` declaration; registered, the
- * missing input is `0px` and the corner is merely un-inset.
- *
- * Those three DO inherit — the direct-child rule has to be able to read
- * them. Which means: always set all three on a host, even the zeroes. A
- * host nested inside another host that declares only `-r` will inherit
- * the outer host's `-b` and `-p` and subtract the wrong distance. The
- * `0px` initial only protects a host with no host above it.
- *
- * ── Nested hosts ──
- *
- * These outputs are for leaf geometry. A child that publishes its own
- * host-r must not derive that same host-r from --vds-radius-inset: that
- * would create a custom-property cycle on the child. Card-to-Card nesting
- * uses a pooled layout observer and a separate --card-nested-radius input
- * instead. It measures intervening slots/wrappers and never changes these
- * generic channels.
- */
+/* Radius nesting (the concentricity channel) */
 
 @property --vds-radius-host-r {
   syntax: "<length>";

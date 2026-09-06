@@ -1,26 +1,5 @@
 @layer tokens {
-  /*
-   * ── Status (intent) semantic layer ──
-   *
-   * Canonical home for every intent token. Each intent
-   * (primary/success/warning/danger/info/accent) is expanded to full
-   * 12-step role coverage:
-   *
-   *   {intent}-bg-subtle    app-level intent tint   (intent-2)
-   *   {intent}-bg           component muted bg      (intent-3)
-   *   {intent}-bg-hover     hover on muted bg       (intent-4)
-   *   {intent}-bg-active    active on muted bg      (intent-5)
-   *   {intent}-solid        emphasis bg (CTAs)      (intent-9)
-   *   {intent}-solid-hover  solid hover             (mode-aware solid tone)
-   *   {intent}-solid-active solid active            (mode-aware solid tone)
-   *   {intent}-text         readable intent text    (intent-11; light warning-12)
-   *   {intent}-text-muted   supporting intent text  (same readable text role)
-   *   on-{intent}           text/icon on *-solid    (white or black)
-   *
-   * The `*-emphasis`, `*-on-emphasis`, `*-muted`, `*-muted-text` and
-   * `*-subtle` spellings live in ../aliases.css and forward to the
-   * canonical names here.
-   */
+  /* Status (intent) semantic layer */
 
   :root,
   [data-theme] {

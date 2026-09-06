@@ -5,7 +5,7 @@
 A production-grade, multi-brand React + CSS design system.
 Token-driven, accessibility-first, RTL-safe, and available as editable project source through a shadcn-compatible registry.
 
-[![License: Proprietary](https://img.shields.io/badge/license-Proprietary-lightgrey.svg)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![pnpm](https://img.shields.io/badge/pnpm-10-f69220.svg)](https://pnpm.io/)
 [![Changesets](https://img.shields.io/badge/versioning-changesets-5b9dd9.svg)](https://github.com/changesets/changesets)
 
@@ -185,10 +185,10 @@ No npm token is required — the built-in `GITHUB_TOKEN` (with `packages: write`
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full flow.
 
-The public source-registry release has one additional gate: the repository must
-adopt a license that grants consumers the promised right to copy and modify the
-installed source.
+The source registry and CLI are released under MIT, so installed component
+source can be used, modified, merged, and redistributed with the required
+license notice. Registry installs place the notice at `src/virtari/LICENSE`.
 
 ## License
 
-Proprietary. See [LICENSE](./LICENSE). Unauthorized redistribution is prohibited.
+[MIT](./LICENSE) © 2026 Virtari.

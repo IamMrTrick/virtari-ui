@@ -117,7 +117,7 @@ interface SelectSharedProps {
   form?: string;
 }
 
-// TODO: Should improve typing somewhat, but this would be a breaking change.
+// The loose type is retained for compatibility with existing consumers.
 // Consider using in the next major version (along with some testing to be sure
 // it works as expected and doesn't cause problems)
 type _FutureSelectProps = SelectSharedProps & SelectControlProps;

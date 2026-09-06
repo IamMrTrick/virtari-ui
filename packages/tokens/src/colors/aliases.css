@@ -1,31 +1,4 @@
-/*
- * ── Compatibility alias layer ──
- *
- * Every family in this file exists because something in this repository
- * types those names. Before this file existed those `var()` lookups
- * resolved to nothing, so components silently fell through to their
- * hardcoded hex fallbacks — unbrandable, un-themeable, and invisible in
- * review.
- *
- * Two comments (colors/semantic/background.css, colors/semantic/status.css)
- * used to promise a `_legacy.css`. That file was never written; this is it,
- * under a more honest name — most of these are not legacy at all, they are
- * simply the names components actually type.
- *
- * Rules for this file:
- *   • Aliases only. Every value is a `var()` at the canonical semantic name.
- *     If you need a new *role*, add it to the semantic file that owns the
- *     domain (border.css, text.css, …), not here.
- *   • Don't invent a new *shape*. A shape earns its place only once real
- *     code asks for it. But once it is here it is completed across all six
- *     intents, because a compat layer where `--vds-color-primary-muted`
- *     resolves and `--vds-color-danger-muted` doesn't is worse than no
- *     compat layer at all.
- *   • The syntax-highlight ramps at the bottom are the one exception —
- *     they are real primitives, not aliases, so they live in `tokens.base`.
- *
- * Prefer the canonical names in new code. These stay for compatibility.
- */
+/* Compatibility alias layer */
 
 @layer tokens {
   :root,
@@ -131,30 +104,7 @@
 }
 
 @layer tokens.base {
-  /*
-   * ── Syntax-highlight hues (sky / emerald / violet) ──
-   *
-   * Not aliases — three extra hues the six-intent palette doesn't carry,
-   * needed so `react-editor` can colour property / selector / variable
-   * tokens distinctly from keyword (primary), string (success) and
-   * number (danger).
-   *
-   * Only step 11 exists. Step 11 is the "low-contrast text" step: it is
-   * the one step in the ladder tuned to be *readable body-sized text on
-   * the canvas in both modes*, which is exactly and only what syntax
-   * highlighting needs. Adding the other eleven steps would be inventing
-   * surface/border roles nothing consumes.
-   *
-   * Derived on the same curve as the intent step-11s (light L≈0.44–0.46,
-   * dark L≈0.77) so they sit at the same optical weight next to
-   * primary-11 / success-11 / danger-11 in the same code block.
-   *
-   *   sky      h=240  (bluer than info's 210, cooler than primary's 265)
-   *   emerald  h=165  (greener than success's 155)
-   *   violet   h=295  (past primary's indigo, before magenta)
-   *
-   * Contrast on the editor canvas (neutral-1): light ≥7.0:1, dark ≥8.9:1.
-   */
+  /* Syntax-highlight hues (sky / emerald / violet) */
 
   :root,
   [data-theme] {

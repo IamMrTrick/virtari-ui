@@ -1,27 +1,5 @@
 @layer tokens {
-  /*
-   * ── T-shirt semantic scale ──
-   * Purpose-based, mode-reactive tokens. Prefer these in component CSS.
-   *
-   *   xs   tightest interactive (tiny chips, compact controls)
-   *   sm   compact interactive  (small controls, item details)
-   *   md   field shell          (input, select, textarea)
-   *   lg   small surface        (card, dropdown-menu, popover)
-   *   xl   large surface        (dialog, drawer, toast)
-   *   2xl  extra-large surface
-   *   full fully rounded (pill/circle)
-   *
-   * ── Modes ──
-   * Set `data-radius` on <html> or any container to switch the personality.
-   *   sharp  — minimal rounding → enterprise, technical, dense
-   *   soft   — branded rounding → default (= :root)
-   *   round  — noticeable rounding → friendly, modern, consumer
-   *   pill   — roundest personality → button/pill affordances go fully rounded
-   *
-   * ── Back-compat aliases ──
-   * --vds-radius-element / --vds-radius-surface / --vds-radius-badge remain
-   * thin aliases. Component tokens decide what becomes truly full in pill.
-   */
+  /* T-shirt semantic scale */
   :root,
   [data-radius="soft"] {
     --vds-radius-xs:   var(--vds-radius-2);  /* 4px  */

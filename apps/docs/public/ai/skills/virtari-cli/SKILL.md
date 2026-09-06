@@ -26,6 +26,6 @@ Use the existing package and its composition API. Verify the installed version a
 
 - Third-party React and behavior dependencies remain normal package dependencies; source ownership removes the Virtari black box, not the React runtime.
 - Do not edit generated registry files. Change packages/*/src, rebuild the registry, and commit both source and generated output.
-- A public Own Your Code release requires a license that grants copying and modification; the current proprietary license does not.
+- Preserve the MIT notice when distributing substantial portions of Virtari source.
 
 Related package IDs: `core`, `tokens`, `utils`, `primitives`. Discover their focused skills from the catalog; do not load all packages at once.

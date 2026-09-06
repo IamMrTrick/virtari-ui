@@ -33,6 +33,9 @@ jobs:
       - name: Typecheck
         run: pnpm run typecheck
 
+      - name: Verify license and source comments
+        run: pnpm license:check && pnpm comments:check
+
       - name: Verify AI knowledge snapshot and skills
         run: pnpm ai:check && pnpm ai:test
 

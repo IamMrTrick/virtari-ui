@@ -1,13 +1,4 @@
-/**
- * Sync LICENSE and README.md across every publishable package.
- *
- * - LICENSE: always overwritten from the root LICENSE so all packages ship the
- *   same proprietary notice.
- * - README.md: regenerated from the starter template below. Any existing
- *   hand-written README listed in KEEP_README is preserved verbatim.
- *
- * Run: `node scripts/sync-package-docs.mjs`
- */
+/** Sync the root MIT license and generated package READMEs. */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,7 +8,7 @@ const ROOT = path.resolve(__dirname, "..");
 const PACKAGES_DIR = path.join(ROOT, "packages");
 const ROOT_LICENSE = path.join(ROOT, "LICENSE");
 
-const REPO_URL = "https://github.com/IamMrTrick/virtari-design-system";
+const REPO_URL = "https://github.com/Virtari-Packages/virtari-design-system";
 const REGISTRY = "https://npm.pkg.github.com";
 
 /** Directory names under packages/ whose READMEs you do not want auto-regenerated. */
@@ -67,7 +58,7 @@ Create or edit \`.npmrc\` at the root of the consuming project:
 Export a token with \`read:packages\` permission (locally or in CI):
 
 \`\`\`bash
-export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxx
+export GITHUB_TOKEN=your-read-packages-token
 \`\`\`
 
 Then install as you would any scoped package:
@@ -112,7 +103,7 @@ All components use logical CSS properties (\`margin-inline\`, \`padding-block\`,
 
 ## License
 
-Proprietary. See [LICENSE](./LICENSE).
+[MIT](./LICENSE) © 2026 Virtari.
 `;
 }
 

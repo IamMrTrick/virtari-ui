@@ -108,34 +108,7 @@
     --vds-color-accent-12: oklch(0.275 0.090 45);
   }
 
-  /* ── Intent solids — dark mode ──
-   *
-   * Step 9 carries `on-{intent}` — white on every intent but warning — so
-   * its lightness is not a free parameter: it is capped by the 4.5:1 that
-   * white needs against it. The dark ladder used to sit above that cap
-   * (3.30–4.01:1 across primary/success/info/danger/accent), because it
-   * was derived by lightening the light ladder for elevation without
-   * re-checking the ink that sits on top.
-   *
-   * Each step 9 below is the *highest* L on the scale's 0.005 grid that
-   * still clears 4.5:1 with chroma and hue held exactly, so the brand
-   * character is unchanged and the 8 → 9 → 10 ladder stays monotonic.
-   * Before → after, with white contrast, sRGB gamut-mapped:
-   *
-   *   primary  0.610 → 0.575   3.94 → 4.56
-   *   success  0.610 → 0.545   3.54 → 4.65
-   *   danger   0.620 → 0.585   4.01 → 4.64
-   *   info     0.620 → 0.555   3.49 → 4.57
-   *   accent   0.665 → 0.580   3.27 → 4.59
-   *
-   * warning is untouched: it carries black ink (7.78:1), not white.
-   *
-   * The selector also covers dark-oled. It always should have: the OLED
-   * block below deliberately overrides step 1 *only*, which is only
-   * coherent if steps 2–12 already come from this ladder. While this read
-   * `[data-theme="dark"]` alone, an OLED page got the light-mode intent
-   * ramp on a pure-black canvas.
-   */
+  /* Intent solids — dark mode */
   [data-theme="dark"],
   [data-theme="dark-oled"] {
     /* Primary */

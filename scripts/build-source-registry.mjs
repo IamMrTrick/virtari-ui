@@ -272,6 +272,22 @@ async function createOutput() {
   const output = new Map();
   const items = [];
 
+  const license = normalizeSource(await readFile(path.join(root, "LICENSE"), "utf8"));
+  const licensePath = "registry/virtari/virtari-license/LICENSE";
+  output.set(licensePath, license);
+  items.push({
+    name: "virtari-license",
+    type: "registry:file",
+    title: "Virtari MIT License",
+    description: "The MIT terms that apply to Virtari source copied into an application.",
+    author: "Virtari",
+    files: [{
+      path: licensePath,
+      type: "registry:file",
+      target: "~/src/virtari/LICENSE",
+    }],
+  });
+
   const baseCss = '@import "./core/index.css";\n@import "./tokens/index.css";\n';
   output.set("registry/virtari/virtari-base/index.css", baseCss);
   items.push({
@@ -338,6 +354,12 @@ async function createOutput() {
     author: "Virtari",
     registryDependencies: [registryAddress("virtari-base"), ...allComponents],
   });
+
+  const licenseAddress = registryAddress("virtari-license");
+  for (const item of items) {
+    if (item.name === "virtari-license") continue;
+    item.registryDependencies = [...new Set([licenseAddress, ...(item.registryDependencies ?? [])])].sort();
+  }
 
   const registry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",

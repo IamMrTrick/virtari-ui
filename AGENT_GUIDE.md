@@ -349,4 +349,4 @@ Check https://github.com/orgs/Virtari-Packages/packages for the current publishe
 - Repo: https://github.com/Virtari-Packages/virtari-design-system
 - Published packages: https://github.com/orgs/Virtari-Packages/packages
 - Demo app (source): `apps/docs/` in the repo — every component has a live example page
-- License: Proprietary (UNLICENSED on npm). Internal use only.
+- License: MIT.

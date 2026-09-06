@@ -16,6 +16,6 @@ Use Virtari as editable project source through its CLI or the shadcn-compatible 
 
 - Bare registry dependency names resolve to shadcn built-in items rather than sibling GitHub items.
 - Do not overwrite consumer edits implicitly; compare, preview, then require an explicit overwrite decision.
-- Do not describe source as freely owned while the distribution license forbids copying or modification.
+- Generated registry files must carry the same MIT terms as their authoritative package source.
 
 Read [source reference](references/source.md) for exact definitions. Query MCP `list_records` in `tokens` or `utilities` for filtered, paginated inventory; use `get_record` for this section ID `source-registry`. Values are source expressions: theme, inherited scope and CSS cascade determine the final computed value.

@@ -23,6 +23,10 @@
     "registry:build": "node scripts/build-source-registry.mjs",
     "registry:check": "node scripts/build-source-registry.mjs --check",
     "registry:test": "node scripts/verify-source-registry.mjs && pnpm --filter virtari test",
+    "license:sync": "node scripts/check-license.mjs --write",
+    "license:check": "node scripts/check-license.mjs",
+    "comments:fix": "node scripts/check-source-comments.mjs --write",
+    "comments:check": "node scripts/check-source-comments.mjs",
     "release:cli:check": "node scripts/check-cli-release.mjs && pnpm registry:check && pnpm registry:test && pnpm --filter virtari pack --dry-run"
   },
   "devDependencies": {
@@ -53,7 +57,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Virtari-Packages/virtari-design-system/issues"
   },

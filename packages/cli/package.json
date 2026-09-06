@@ -19,7 +19,7 @@
     "bin",
     "README.md"
   ],
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "engines": {
     "node": ">=20.10"
   },
