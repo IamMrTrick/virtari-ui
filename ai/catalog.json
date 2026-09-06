@@ -4,7 +4,7 @@
     {
       "id": "cli",
       "name": "virtari",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "category": "tooling",
       "description": "Source-first CLI that installs editable Virtari React and CSS files with transitive dependencies, conflict protection, diffing, and health checks.",
       "publicSymbols": [],
@@ -169463,7 +169463,7 @@
     },
     {
       "id": "docs/source-registry.md",
-      "sha256": "9df9538e1e7dac15e988e1d8a9513fc02b7050d9c5398f5ccd72f8599dc737ac",
+      "sha256": "26269c0330994d18689fcfdb00d2eb8257daaa0a7cc69ece18ba075fd3b92ae2",
       "bytes": 5302,
       "kind": "md"
     },
@@ -169481,7 +169481,7 @@
     },
     {
       "id": "packages/cli/package.json",
-      "sha256": "e501f506e053bf02a8dd7920f8351fd3537a2318120fdb7d55991ec41690bfec",
+      "sha256": "3cfce738d0d4d99c459469ecbf945e79a12f9dcdf250afcb1cc2ca0eeba4b84d",
       "bytes": 973,
       "kind": "json"
     },
@@ -169565,8 +169565,8 @@
     },
     {
       "id": "packages/primitives/src/avatar/avatar.tsx",
-      "sha256": "c427968e1d8be4cdb47febb57d69c86f68f574baadce3813e998c5c2f6d7b4dd",
-      "bytes": 6450,
+      "sha256": "a8aab0b9547c675664518314e6769a371c13289003d81ac75f65b99a544d648c",
+      "bytes": 6507,
       "kind": "tsx"
     },
     {
@@ -170093,8 +170093,8 @@
     },
     {
       "id": "packages/primitives/src/use-is-hydrated/use-is-hydrated.tsx",
-      "sha256": "0b383536336ed6ec2d8a4df857498dcf84c35b877eb7c7ab73a06112058db9e1",
-      "bytes": 309,
+      "sha256": "bd85b271d232122a52c5e75b995a369bf715871ddc66e9a56f5f1fee5355bea5",
+      "bytes": 286,
       "kind": "tsx"
     },
     {
@@ -175727,8 +175727,8 @@
     },
     {
       "id": "registry.json",
-      "sha256": "6836e5cdfcb5047b7f4380efb905c8af008d487fbbf1559bbe33a1131087e0b4",
-      "bytes": 284360,
+      "sha256": "8a9ea8158ebe8c970f5281d325aaf564057abe97ce19816434934e3cdd75ed09",
+      "bytes": 284286,
       "kind": "json"
     },
     {
